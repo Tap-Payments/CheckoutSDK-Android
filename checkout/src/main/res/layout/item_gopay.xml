@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<company.tap.tapuilibrary.atoms.TapChip
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="8dp"
+    app:cardUseCompatPadding="true"
+    app:cardPreventCornerOverlap="false"
+    app:contentPadding="@dimen/margin_basic_10dp"
+    android:id="@+id/tapcard_Chip"
+    app:cardBackgroundColor="@color/glowingShadow"
+
+
+    >
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <company.tap.tapuilibrary.atoms.TapImageView
+            android:id="@+id/imageView_goPay"
+            android:layout_width="@dimen/margin_basic_20dp"
+            android:layout_height="@dimen/margin_basic_20dp"
+            android:layout_marginStart="@dimen/margin_basic_25dp"
+            android:layout_marginTop="@dimen/margin_basic_10dp"
+            android:layout_marginBottom="@dimen/margin_basic_10dp"
+            android:src="@drawable/tap" />
+
+        <company.tap.tapuilibrary.atoms.TapTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:fontFamily="sans-serif"
+            android:textStyle="normal"
+            android:textColor="#ffffff"
+            android:gravity="center_horizontal"
+            tools:text="goPay"
+            android:text="goPay"
+            android:layout_marginTop="13dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="22dp"
+            android:layout_marginStart="@dimen/margin_basic_4dp"
+            />
+    </LinearLayout>
+</company.tap.tapuilibrary.atoms.TapChip>

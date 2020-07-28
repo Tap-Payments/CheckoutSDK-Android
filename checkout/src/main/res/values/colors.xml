@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="view_color">#dfdfdf</color>
+    <color name="glowingShadow">#2ACE00</color>
+    <color name="gray_background">#f4f4f4</color>
+</resources>

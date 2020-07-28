@@ -1,6 +1,7 @@
 package company.tap.checkout.viewholders
 
 import android.view.View
+import company.tap.checkout.enums.SectionType
 
 /**
  *
@@ -10,6 +11,6 @@ import android.view.View
  */
 interface TapBaseViewHolder {
     val view: View
-    val type: ViewHolderType
+    val type: SectionType
     fun bindViewComponents()
 }

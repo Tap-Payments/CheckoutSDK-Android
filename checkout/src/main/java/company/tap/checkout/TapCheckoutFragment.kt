@@ -5,9 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import company.tap.checkout.viewholders.BusinessViewHolder
-import company.tap.checkout.viewholders.ViewHolderType
+import androidx.fragment.app.viewModels
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import company.tap.checkout.enums.SectionType
+import company.tap.checkout.viewmodels.TapLayoutManager
+import company.tap.taplocalizationkit.LocalizationManager
+import company.tap.tapuilibrary.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.views.TapBottomSheetDialog
+import kotlin.collections.ArrayList
 
 /**
  *
@@ -15,7 +20,9 @@ import company.tap.tapuilibrary.views.TapBottomSheetDialog
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class TapCheckoutFragment : TapBottomSheetDialog() {
+class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
+
+    private val layoutManager: TapLayoutManager by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,14 +34,25 @@ class TapCheckoutFragment : TapBottomSheetDialog() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val checkoutLayout: LinearLayout = view.findViewById(R.id.sdk_container)
+        LocalizationManager.loadTapLocale(resources, R.raw.lang)
+        layoutManager.initLayoutManager(requireContext(), childFragmentManager, checkoutLayout)
 
-        val layoutManager = TapLayoutManager(context)
-        layoutManager.initViewHolders()
+        val enabledSections = ArrayList<SectionType>()
+        enabledSections.add(SectionType.BUSINESS)
+        enabledSections.add(SectionType.AMOUNT_ITEMS)
 
-        val enabledSections = ArrayList<ViewHolderType>()
-        enabledSections.add(ViewHolderType.BUSINESS)
-
-        val checkoutLayout = view.findViewById<LinearLayout>(R.id.sdk_container)
-        checkoutLayout.addView(layoutManager.getLayout(enabledSections))
+        layoutManager.displayStartupLayout(enabledSections)
+        setBottomSheetInterface(this)
     }
+
+    override fun onShow() {
+        bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        bottomSheetDialog.behavior.skipCollapsed = true
+        bottomSheetLayout?.let {
+            layoutManager.setBottomSheetLayout(it)
+        }
+    }
+
+
 }

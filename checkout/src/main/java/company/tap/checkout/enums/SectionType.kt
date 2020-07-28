@@ -1,4 +1,4 @@
-package company.tap.checkout.viewholders
+package company.tap.checkout.enums
 
 /**
  *
@@ -6,11 +6,12 @@ package company.tap.checkout.viewholders
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-enum class ViewHolderType {
+enum class SectionType {
     BUSINESS,
     AMOUNT_ITEMS,
     SELECT,
     CARD,
+    PAYMENT_INPUT,
     SAVE_CARD,
     GOLOGIN_SIGNIN,
     FRAGMENT

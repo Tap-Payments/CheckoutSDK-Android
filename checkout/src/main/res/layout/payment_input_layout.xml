@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <company.tap.tapuilibrary.views.TapSelectionTabLayout
+        android:id="@+id/sections_tablayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/gray_background" />
+
+    <LinearLayout
+        android:paddingStart="30dp"
+        android:paddingEnd="15dp"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:id="@+id/payment_input_layout"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="44dp"
+            android:orientation="horizontal" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/clear_text"
+                android:src="@drawable/delete_text"
+                android:layout_width="44dp"
+                android:layout_height="match_parent"/>
+
+            <LinearLayout
+                android:id="@+id/scanner_options"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:padding="10dp"
+                    android:src="@drawable/scan_gray" />
+
+                <ImageView
+                    android:padding="10dp"
+                    android:src="@drawable/nfc_gray"
+                    android:layout_width="44dp"
+                    android:layout_height="match_parent"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
