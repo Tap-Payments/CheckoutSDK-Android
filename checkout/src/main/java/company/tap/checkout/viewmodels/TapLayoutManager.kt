@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.transition.*
 import company.tap.checkout.enums.SectionType
 import company.tap.checkout.interfaces.BaseLayoutManager
+import company.tap.checkout.utils.AnimationEngine
+import company.tap.checkout.utils.AnimationEngine.Type.*
 import company.tap.checkout.viewholders.*
 
 /**
@@ -77,13 +79,7 @@ class TapLayoutManager : ViewModel(),
     }
 
     override fun displayGoPayLogin() {
-        TransitionManager.beginDelayedTransition(bottomSheetLayout,
-            TransitionSet()
-                .setOrdering(TransitionSet.ORDERING_SEQUENTIAL)
-                .addTransition(Fade())
-                .addTransition(ChangeBounds())
-                .addTransition(Slide())
-        )
+        AnimationEngine.applyTransition(bottomSheetLayout, SLIDE)
         goPayViewHolder = GoPayViewHolder(context, bottomSheetLayout)
         removeViews(cardViewHolder, paymentInputViewHolder, saveCardSwitch)
         addViews(goPayViewHolder)
