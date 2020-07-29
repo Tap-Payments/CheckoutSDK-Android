@@ -3,15 +3,20 @@ package company.tap.checkout.viewholders
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
+import android.transition.Fade
 import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.annotation.IntRange
+import androidx.core.widget.doAfterTextChanged
+import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardinputwidget.widget.inline.InlineCardInput
 import company.tap.checkout.R
 import company.tap.checkout.enums.SectionType
-import company.tap.checkout.viewholders.PaymentInputViewHolder.PaymentType.*
+import company.tap.checkout.viewholders.PaymentInputViewHolder.PaymentType.CARD
+import company.tap.checkout.viewholders.PaymentInputViewHolder.PaymentType.MOBILE
 import company.tap.tapcardvalidator_android.CardBrand
 import company.tap.tapuilibrary.interfaces.TapSelectionTabLayoutInterface
 import company.tap.tapuilibrary.models.SectionTabItem
@@ -24,7 +29,8 @@ import company.tap.tapuilibrary.views.TapSelectionTabLayout
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder, TapSelectionTabLayoutInterface {
+class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
+    TapSelectionTabLayoutInterface, CardInputListener {
 
     override val view: View =
         LayoutInflater.from(context).inflate(R.layout.payment_input_layout, null)
@@ -33,23 +39,44 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder, 
 
     private val tabLayout: TapSelectionTabLayout
     private val paymentInputContainer: LinearLayout
+    private val paymentLayoutContainer: LinearLayout
     private val clearText: ImageView
     private val scannerOptions: LinearLayout
     private var selectedType = CARD
+    private var shouldShowScannerOptions = true
     private val cardInputWidget = InlineCardInput(context)
     private val mobilePaymentView = TapMobilePaymentView(context, null)
+    private var lastFocusField = CardInputListener.FocusField.FOCUS_CARD
+    private var lastCardInput = ""
 
     init {
         tabLayout = view.findViewById(R.id.sections_tablayout)
         paymentInputContainer = view.findViewById(R.id.payment_input_layout)
+        paymentLayoutContainer = view.findViewById(R.id.payment_layout_container)
         scannerOptions = view.findViewById(R.id.scanner_options)
         clearText = view.findViewById(R.id.clear_text)
         bindViewComponents()
     }
 
+    fun setCardNumber(cardNumber: String?) {
+        cardInputWidget.setCardNumber(cardNumber)
+    }
+
+    fun setExpDate(
+        @IntRange(from = 1, to = 12) month: Int,
+        @IntRange(from = 0, to = 9999) year: Int
+    ) {
+        cardInputWidget.setExpiryDate(month, year)
+    }
+
+    fun setCvc(cvcCode: String?) {
+        cardInputWidget.setCvcCode(cvcCode)
+    }
+
     override fun bindViewComponents() {
         initTabLayout()
         initCardInput()
+        initMobileInput()
         initClearText()
     }
 
@@ -68,22 +95,39 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder, 
         }
     }
 
+    private fun initMobileInput() {
+        mobilePaymentView.mobileInputEditText.doAfterTextChanged {
+            it?.let {
+                if (it.isEmpty())
+                    clearText.visibility = View.GONE
+                else
+                    clearText.visibility = View.VISIBLE
+            }
+        }
+    }
+
     private fun initCardInput() {
         cardInputWidget.holderNameEnabled = false
         paymentInputContainer.addView(cardInputWidget)
         cardInputWidget.setCardNumberTextWatcher(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 s?.let {
-                    if (it.isEmpty())
-                        scannerOptions.visibility = View.VISIBLE
-                    else
-                        scannerOptions.visibility = View.GONE
+                    lastCardInput = it.toString()
+                    shouldShowScannerOptions = it.isEmpty()
+                    controlScannerOptions()
                 }
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
+    }
+
+    private fun controlScannerOptions() {
+        if (shouldShowScannerOptions)
+            scannerOptions.visibility = View.VISIBLE
+        else
+            scannerOptions.visibility = View.GONE
     }
 
     private fun getCardList(): ArrayList<SectionTabItem> {
@@ -136,17 +180,45 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder, 
     }
 
     private fun swapInputViews(position: Int) {
-        TransitionManager.beginDelayedTransition(paymentInputContainer)
+        TransitionManager.beginDelayedTransition(paymentLayoutContainer, Fade())
         paymentInputContainer.removeAllViews()
         if (position == 0) {
+            selectedType = CARD
+            scannerOptions.visibility = View.VISIBLE
+            clearText.visibility = View.VISIBLE
             paymentInputContainer.addView(cardInputWidget)
+            checkForFocus()
         } else {
+            selectedType = MOBILE
+            scannerOptions.visibility = View.GONE
+            if (mobilePaymentView.mobileInputEditText.text.isEmpty())
+                clearText.visibility = View.INVISIBLE
+            else
+                clearText.visibility = View.VISIBLE
+
             paymentInputContainer.addView(mobilePaymentView)
         }
+    }
+
+    private fun checkForFocus() {
+        shouldShowScannerOptions =
+            lastFocusField == CardInputListener.FocusField.FOCUS_CARD
+                    && lastCardInput.isEmpty()
+        controlScannerOptions()
     }
 
     enum class PaymentType {
         CARD,
         MOBILE
+    }
+
+    override fun onCardComplete() {}
+
+    override fun onCvcComplete() {}
+
+    override fun onExpirationComplete() {}
+
+    override fun onFocusChange(focusField: String) {
+        lastFocusField = focusField
     }
 }

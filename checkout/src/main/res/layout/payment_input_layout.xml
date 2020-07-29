@@ -10,6 +10,7 @@
         android:background="@color/gray_background" />
 
     <LinearLayout
+        android:id="@+id/payment_layout_container"
         android:paddingStart="30dp"
         android:paddingEnd="15dp"
         android:background="@color/white"

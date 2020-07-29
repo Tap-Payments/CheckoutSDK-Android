@@ -1,6 +1,7 @@
 package company.tap.checkout.viewmodels
 
 import android.content.Context
+import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.fragment.app.FragmentManager
@@ -9,7 +10,6 @@ import androidx.transition.TransitionManager
 import company.tap.checkout.enums.SectionType
 import company.tap.checkout.interfaces.BaseLayoutManager
 import company.tap.checkout.viewholders.*
-import company.tap.tapuilibrary.datasource.AmountViewDataSource
 
 /**
  *
@@ -29,6 +29,7 @@ class TapLayoutManager : ViewModel(),
     private lateinit var itemsViewHolder: ItemsViewHolder
     private lateinit var cardViewHolder: CardViewHolder
     private lateinit var paymentInputViewHolder: PaymentInputViewHolder
+    private lateinit var saveCardSwitch: SwitchViewHolder
 
     fun initLayoutManager(
         context: Context,
@@ -42,6 +43,7 @@ class TapLayoutManager : ViewModel(),
         amountViewHolder = AmountViewHolder(context)
         cardViewHolder = CardViewHolder(context)
         paymentInputViewHolder = PaymentInputViewHolder(context)
+        saveCardSwitch = SwitchViewHolder(context)
         initAmountAction()
     }
 
@@ -54,10 +56,13 @@ class TapLayoutManager : ViewModel(),
     }
 
     override fun displayStartupLayout(enabledSections: ArrayList<SectionType>) {
-        sdkLayout.addView(businessViewHolder.view)
-        sdkLayout.addView(amountViewHolder.view)
-        sdkLayout.addView(cardViewHolder.view)
-        sdkLayout.addView(paymentInputViewHolder.view)
+        addViews(
+            businessViewHolder,
+            amountViewHolder,
+            cardViewHolder,
+            paymentInputViewHolder,
+            saveCardSwitch
+        )
     }
 
     fun setBottomSheetLayout(bottomSheetLayout: FrameLayout) {
@@ -71,23 +76,28 @@ class TapLayoutManager : ViewModel(),
     override fun controlCurrency(display: Boolean) {
         TransitionManager.beginDelayedTransition(bottomSheetLayout)
         if (display)
-            sdkLayout.addView(itemsViewHolder.view)
+            addViews(itemsViewHolder)
         else
-            sdkLayout.removeView(itemsViewHolder.view)
+            removeViews(itemsViewHolder)
         itemsViewHolder.displayed = !display
         amountViewHolder.changeGroupAction(!display)
     }
 
+    override fun displayOTP() {}
 
-    override fun displayOTP() {
-        TODO("Not yet implemented")
+    override fun displayRedirect(url: String) {}
+
+    override fun displaySaveCardOptions() {}
+
+    private fun removeViews(vararg viewHolders: TapBaseViewHolder) {
+        viewHolders.forEach {
+            sdkLayout.removeView(it.view)
+        }
     }
 
-    override fun displayRedirect(url: String) {
-        TODO("Not yet implemented")
-    }
-
-    override fun displaySaveCardOptions() {
-        TODO("Not yet implemented")
+    private fun addViews(vararg viewHolders: TapBaseViewHolder) {
+        viewHolders.forEach {
+            sdkLayout.addView(it.view)
+        }
     }
 }
