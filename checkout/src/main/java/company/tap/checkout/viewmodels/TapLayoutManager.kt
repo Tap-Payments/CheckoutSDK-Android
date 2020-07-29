@@ -72,6 +72,10 @@ class TapLayoutManager : ViewModel(),
         )
     }
 
+    private fun NMNM(){
+        print("A7la nmnm dah kda kda")
+    }
+
     fun setBottomSheetLayout(bottomSheetLayout: FrameLayout) {
         this.bottomSheetLayout = bottomSheetLayout
     }

@@ -7,6 +7,9 @@ import android.widget.FrameLayout
 import androidx.transition.*
 import company.tap.checkout.R
 import company.tap.checkout.enums.SectionType
+import company.tap.checkout.utils.AnimationEngine
+import company.tap.checkout.utils.AnimationEngine.Type
+import company.tap.checkout.utils.AnimationEngine.Type.*
 import company.tap.tapuilibrary.datasource.GoPayLoginDataSource
 import company.tap.tapuilibrary.interfaces.GoPayLoginInterface
 import company.tap.tapuilibrary.organisms.GoPayLoginInput
@@ -40,27 +43,13 @@ class GoPayViewHolder(context: Context, private val bottomSheet: FrameLayout) : 
     }
 
     override fun onChangeClicked() {
-        TransitionManager.beginDelayedTransition(
-            bottomSheet,
-            TransitionSet()
-                .setOrdering(TransitionSet.ORDERING_SEQUENTIAL)
-                .addTransition(Fade())
-                .addTransition(ChangeBounds())
-                .addTransition(Slide())
-        )
+        AnimationEngine.applyTransition(bottomSheet, SLIDE)
         goPayLoginInput.visibility = View.VISIBLE
         goPayPasswordInput.visibility = View.GONE
     }
 
     override fun onEmailValidated() {
-        TransitionManager.beginDelayedTransition(
-            bottomSheet,
-            TransitionSet()
-                .setOrdering(TransitionSet.ORDERING_SEQUENTIAL)
-                .addTransition(Fade())
-                .addTransition(ChangeBounds())
-                .addTransition(Slide())
-        )
+        AnimationEngine.applyTransition(bottomSheet, SLIDE)
         goPayLoginInput.visibility = View.GONE
         goPayPasswordInput.visibility = View.VISIBLE
     }
