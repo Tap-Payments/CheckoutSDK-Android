@@ -12,7 +12,7 @@ import company.tap.checkout.enums.SectionType
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class ItemsViewHolder(context: Context, private val fragmentManager: FragmentManager) : TapBaseViewHolder {
+class ItemsViewHolder(context: Context) : TapBaseViewHolder {
     override val view = LayoutInflater.from(context).inflate(R.layout.currency_fragment_layout, null)
 
     override val type = SectionType.SELECT

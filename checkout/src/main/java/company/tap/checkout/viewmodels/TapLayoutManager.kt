@@ -48,7 +48,7 @@ class TapLayoutManager : ViewModel(),
     private fun initAmountAction() {
         amountViewHolder.setOnItemsClickListener {
             if (!this::itemsViewHolder.isInitialized)
-                itemsViewHolder = ItemsViewHolder(context, fragmentManager)
+                itemsViewHolder = ItemsViewHolder(context)
             controlCurrency(itemsViewHolder.displayed)
         }
     }
@@ -70,21 +70,13 @@ class TapLayoutManager : ViewModel(),
 
     override fun controlCurrency(display: Boolean) {
         TransitionManager.beginDelayedTransition(bottomSheetLayout)
-        if (display) {
+        if (display)
             sdkLayout.addView(itemsViewHolder.view)
-            AmountViewDataSource(
-                selectedCurr = "SR1000,000.000",
-                currentCurr = "KD1000,000.000",
-                itemCount = "22 ITEMS"
-            )
-        }
-
         else
             sdkLayout.removeView(itemsViewHolder.view)
         itemsViewHolder.displayed = !display
         amountViewHolder.changeGroupAction(!display)
     }
-
 
 
     override fun displayOTP() {

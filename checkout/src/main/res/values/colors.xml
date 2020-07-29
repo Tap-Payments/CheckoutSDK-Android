@@ -3,4 +3,5 @@
     <color name="view_color">#dfdfdf</color>
     <color name="glowingShadow">#2ACE00</color>
     <color name="gray_background">#f4f4f4</color>
+    <color name="chip_back">#fff</color>
 </resources>

@@ -3,16 +3,19 @@ package company.tap.checkout.viewholders
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
+import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
-import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardinputwidget.widget.inline.InlineCardInput
 import company.tap.checkout.R
 import company.tap.checkout.enums.SectionType
+import company.tap.checkout.viewholders.PaymentInputViewHolder.PaymentType.*
 import company.tap.tapcardvalidator_android.CardBrand
+import company.tap.tapuilibrary.interfaces.TapSelectionTabLayoutInterface
 import company.tap.tapuilibrary.models.SectionTabItem
+import company.tap.tapuilibrary.views.TapMobilePaymentView
 import company.tap.tapuilibrary.views.TapSelectionTabLayout
 
 /**
@@ -21,9 +24,10 @@ import company.tap.tapuilibrary.views.TapSelectionTabLayout
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder {
+class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder, TapSelectionTabLayoutInterface {
 
-    override val view = LayoutInflater.from(context).inflate(R.layout.payment_input_layout, null)
+    override val view: View =
+        LayoutInflater.from(context).inflate(R.layout.payment_input_layout, null)
 
     override val type = SectionType.PAYMENT_INPUT
 
@@ -31,7 +35,9 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder {
     private val paymentInputContainer: LinearLayout
     private val clearText: ImageView
     private val scannerOptions: LinearLayout
+    private var selectedType = CARD
     private val cardInputWidget = InlineCardInput(context)
+    private val mobilePaymentView = TapMobilePaymentView(context, null)
 
     init {
         tabLayout = view.findViewById(R.id.sections_tablayout)
@@ -50,36 +56,37 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder {
     private fun initTabLayout() {
         tabLayout.addSection(getCardList())
         tabLayout.addSection(getMobileList())
+        tabLayout.setTabLayoutInterface(this)
     }
 
     private fun initClearText() {
         clearText.setOnClickListener {
-            cardInputWidget.clear()
+            when (selectedType) {
+                CARD -> cardInputWidget.clear()
+                MOBILE -> mobilePaymentView.clearNumber()
+            }
         }
     }
 
     private fun initCardInput() {
         cardInputWidget.holderNameEnabled = false
         paymentInputContainer.addView(cardInputWidget)
-        cardInputWidget.setCardNumberTextWatcher(object : TextWatcher{
+        cardInputWidget.setCardNumberTextWatcher(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 s?.let {
-                    if (s.isEmpty())
+                    if (it.isEmpty())
                         scannerOptions.visibility = View.VISIBLE
                     else
                         scannerOptions.visibility = View.GONE
                 }
             }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
     }
 
-    private fun getCardList(): ArrayList<SectionTabItem>{
+    private fun getCardList(): ArrayList<SectionTabItem> {
         val items = ArrayList<SectionTabItem>()
         items.add(
             SectionTabItem(
@@ -105,7 +112,7 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder {
         return items
     }
 
-    private fun getMobileList(): ArrayList<SectionTabItem>{
+    private fun getMobileList(): ArrayList<SectionTabItem> {
         val items = ArrayList<SectionTabItem>()
         items.add(
             SectionTabItem(
@@ -122,5 +129,24 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder {
             )
         )
         return items
+    }
+
+    override fun onTabSelected(position: Int?) {
+        position?.let { swapInputViews(it) }
+    }
+
+    private fun swapInputViews(position: Int) {
+        TransitionManager.beginDelayedTransition(paymentInputContainer)
+        paymentInputContainer.removeAllViews()
+        if (position == 0) {
+            paymentInputContainer.addView(cardInputWidget)
+        } else {
+            paymentInputContainer.addView(mobilePaymentView)
+        }
+    }
+
+    enum class PaymentType {
+        CARD,
+        MOBILE
     }
 }
