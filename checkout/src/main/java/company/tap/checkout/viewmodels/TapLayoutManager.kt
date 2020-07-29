@@ -1,12 +1,11 @@
 package company.tap.checkout.viewmodels
 
 import android.content.Context
-import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
-import androidx.transition.TransitionManager
+import androidx.transition.*
 import company.tap.checkout.enums.SectionType
 import company.tap.checkout.interfaces.BaseLayoutManager
 import company.tap.checkout.viewholders.*
@@ -30,6 +29,7 @@ class TapLayoutManager : ViewModel(),
     private lateinit var cardViewHolder: CardViewHolder
     private lateinit var paymentInputViewHolder: PaymentInputViewHolder
     private lateinit var saveCardSwitch: SwitchViewHolder
+    private lateinit var goPayViewHolder: GoPayViewHolder
 
     fun initLayoutManager(
         context: Context,
@@ -45,6 +45,7 @@ class TapLayoutManager : ViewModel(),
         paymentInputViewHolder = PaymentInputViewHolder(context)
         saveCardSwitch = SwitchViewHolder(context)
         initAmountAction()
+        initCardsGroup()
     }
 
     private fun initAmountAction() {
@@ -52,6 +53,12 @@ class TapLayoutManager : ViewModel(),
             if (!this::itemsViewHolder.isInitialized)
                 itemsViewHolder = ItemsViewHolder(context)
             controlCurrency(itemsViewHolder.displayed)
+        }
+    }
+
+    private fun initCardsGroup() {
+        cardViewHolder.view.groupAction.setOnClickListener {
+            displayGoPayLogin()
         }
     }
 
@@ -70,15 +77,35 @@ class TapLayoutManager : ViewModel(),
     }
 
     override fun displayGoPayLogin() {
-        TODO("Not yet implemented")
+        TransitionManager.beginDelayedTransition(bottomSheetLayout,
+            TransitionSet()
+                .setOrdering(TransitionSet.ORDERING_SEQUENTIAL)
+                .addTransition(Fade())
+                .addTransition(ChangeBounds())
+                .addTransition(Slide())
+        )
+        goPayViewHolder = GoPayViewHolder(context, bottomSheetLayout)
+        removeViews(cardViewHolder, paymentInputViewHolder, saveCardSwitch)
+        addViews(goPayViewHolder)
     }
 
     override fun controlCurrency(display: Boolean) {
         TransitionManager.beginDelayedTransition(bottomSheetLayout)
-        if (display)
+        if (display) {
             addViews(itemsViewHolder)
-        else
+            removeViews(
+                cardViewHolder,
+                paymentInputViewHolder,
+                saveCardSwitch
+            )
+        } else {
             removeViews(itemsViewHolder)
+            addViews(
+                cardViewHolder,
+                paymentInputViewHolder,
+                saveCardSwitch
+            )
+        }
         itemsViewHolder.displayed = !display
         amountViewHolder.changeGroupAction(!display)
     }

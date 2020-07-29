@@ -13,6 +13,6 @@ enum class SectionType {
     CARD,
     PAYMENT_INPUT,
     SAVE_CARD,
-    GOLOGIN_SIGNIN,
+    GOPAY_SIGNIN,
     FRAGMENT
 }

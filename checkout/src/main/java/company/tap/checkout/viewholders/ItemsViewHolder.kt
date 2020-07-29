@@ -17,7 +17,7 @@ class ItemsViewHolder(context: Context) : TapBaseViewHolder {
 
     override val type = SectionType.SELECT
 
-    var displayed: Boolean = false
+    var displayed: Boolean = true
 
     init {
         bindViewComponents()
