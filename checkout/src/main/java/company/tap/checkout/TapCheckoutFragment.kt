@@ -10,6 +10,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import company.tap.checkout.enums.SectionType
 import company.tap.checkout.viewmodels.TapLayoutManager
 import company.tap.taplocalizationkit.LocalizationManager
+
 import company.tap.tapuilibrary.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.views.TapBottomSheetDialog
 import kotlin.collections.ArrayList
@@ -46,12 +47,24 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         setBottomSheetInterface(this)
     }
 
+    override fun onDismiss() {
+        TODO("Not yet implemented")
+    }
+
     override fun onShow() {
         bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
         bottomSheetDialog.behavior.skipCollapsed = true
         bottomSheetLayout?.let {
             layoutManager.setBottomSheetLayout(it)
         }
+    }
+
+    override fun onSlide(slideOffset: Float) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onStateChanged(newState: Int) {
+        TODO("Not yet implemented")
     }
 
 
