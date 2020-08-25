@@ -1,6 +1,7 @@
 package company.tap.checkout.viewholders
 
 import android.content.Context
+import android.graphics.Color
 import android.text.Editable
 import android.text.TextWatcher
 import android.transition.Fade
@@ -22,6 +23,11 @@ import company.tap.tapuilibrary.interfaces.TapSelectionTabLayoutInterface
 import company.tap.tapuilibrary.models.SectionTabItem
 import company.tap.tapuilibrary.views.TapMobilePaymentView
 import company.tap.tapuilibrary.views.TapSelectionTabLayout
+import company.tap.thememanager.manager.ThemeManager
+import company.tap.thememanager.theme.ChipTheme
+import kotlinx.android.synthetic.main.item_knet.view.*
+import kotlinx.android.synthetic.main.item_knet.view.tapcard_Chip
+import kotlinx.android.synthetic.main.item_saved_card.view.*
 
 /**
  *
@@ -56,6 +62,8 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
         scannerOptions = view.findViewById(R.id.scanner_options)
         clearText = view.findViewById(R.id.clear_text)
         bindViewComponents()
+        setThemeInlineCardInput()
+        setThemeMobilePaymentView()
     }
 
     fun setCardNumber(cardNumber: String?) {
@@ -221,4 +229,21 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
     override fun onFocusChange(focusField: String) {
         lastFocusField = focusField
     }
+
+
+    fun setThemeInlineCardInput(){
+        var chipTheme = ChipTheme()
+//        chipTheme.outlineSpotShadowColor = ThemeManager.getValue("inlineCard.commonAttributes.")
+        chipTheme.cardCornerRadius = ThemeManager.getValue("inlineCard.commonAttributes.cornerRadius")
+        chipTheme.textColor = Color.parseColor(ThemeManager.getValue("inlineCard.textFields.textColor"))
+        chipTheme.textSize = ThemeManager.getFontSize("inlineCard.textFields.font").toFloat()
+        cardInputWidget.tapcard_Chip.setTheme(chipTheme)
+    }
+    fun setThemeMobilePaymentView(){
+        var chipTheme = ChipTheme()
+//        chipTheme
+        // Mobile payment view have edit text and image
+//        mobilePaymentView.tapcard_Chip.view.tapcard_Chip.setTheme(chipTheme)
+    }
 }
+

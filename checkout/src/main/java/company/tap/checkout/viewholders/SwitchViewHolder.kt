@@ -25,7 +25,7 @@ class SwitchViewHolder(context: Context) : TapBaseViewHolder {
 
     init {
         bindViewComponents()
-        setThemeView()
+//        setThemeView()
     }
 
     override fun bindViewComponents() {

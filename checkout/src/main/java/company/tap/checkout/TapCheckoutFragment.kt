@@ -48,7 +48,6 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
     }
 
     override fun onDismiss() {
-        TODO("Not yet implemented")
     }
 
     override fun onShow() {
@@ -60,11 +59,9 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
     }
 
     override fun onSlide(slideOffset: Float) {
-        TODO("Not yet implemented")
     }
 
     override fun onStateChanged(newState: Int) {
-        TODO("Not yet implemented")
     }
 
 
