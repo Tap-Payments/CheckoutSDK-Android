@@ -54,7 +54,7 @@ class BusinessViewHolder(context: Context) : TapBaseViewHolder {
     fun setThemeToBusinessName(){
         val textViewTheme = TextViewTheme()
         textViewTheme.textColor = Color.parseColor(ThemeManager.getValue("merchantHeaderView.titleLabelColor"))
-        textViewTheme.textSize = ThemeManager.getFontSize("merchantHeaderView.titleLabelFont").toFloat()
+        textViewTheme.textSize = ThemeManager.getFontSize("merchantHeaderView.titleLabelFont")
         textViewTheme.font = ThemeManager.getFontName("merchantHeaderView.titleLabelFont")
         view.businessName.setTheme(textViewTheme)
     }
@@ -62,7 +62,7 @@ class BusinessViewHolder(context: Context) : TapBaseViewHolder {
     fun setThemeToPaymentFor(){
         val textViewTheme = TextViewTheme()
         textViewTheme.textColor = Color.parseColor(ThemeManager.getValue("merchantHeaderView.subTitleLabelColor"))
-        textViewTheme.textSize = ThemeManager.getFontSize("merchantHeaderView.subTitleLabelFont").toFloat()
+        textViewTheme.textSize = ThemeManager.getFontSize("merchantHeaderView.subTitleLabelFont")
         textViewTheme.font = ThemeManager.getFontName("merchantHeaderView.subTitleLabelFont")
         view.paymentFor.setTheme(textViewTheme)
     }
@@ -70,7 +70,7 @@ class BusinessViewHolder(context: Context) : TapBaseViewHolder {
     fun setThemeToBusinessPlaceholder(){
         val textViewTheme = TextViewTheme()
         textViewTheme.textColor = Color.parseColor(ThemeManager.getValue("merchantHeaderView.merchantLogoPlaceHolderColor"))
-        textViewTheme.textSize = ThemeManager.getFontSize("merchantHeaderView.merchantLogoPlaceHolderFont").toFloat()
+        textViewTheme.textSize = ThemeManager.getFontSize("merchantHeaderView.merchantLogoPlaceHolderFont")
         textViewTheme.font = ThemeManager.getFontName("merchantHeaderView.merchantLogoPlaceHolderFont")
         view.businessPlaceholder.setTheme(textViewTheme)
     }

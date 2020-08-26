@@ -8,6 +8,7 @@ import company.tap.checkout.utils.CurrentTheme
 import company.tap.tapuilibrary.atoms.TapButton
 import company.tap.tapuilibrary.datasource.AmountViewDataSource
 import company.tap.tapuilibrary.views.TapAmountSectionView
+
 import company.tap.thememanager.manager.ThemeManager
 import company.tap.thememanager.theme.ButtonTheme
 import company.tap.thememanager.theme.TextViewTheme
@@ -69,7 +70,7 @@ class AmountViewHolder(context: Context) : TapBaseViewHolder {
     fun setThemeToSelectedCurrency(){
         val textViewTheme = TextViewTheme()
         textViewTheme.textColor = Color.parseColor(ThemeManager.getValue("amountSectionView.convertedAmountLabelColor"))
-        textViewTheme.textSize = ThemeManager.getFontSize("amountSectionView.convertedAmountLabelFont").toFloat()
+        textViewTheme.textSize = ThemeManager.getFontSize("amountSectionView.convertedAmountLabelFont")
         textViewTheme.font = ThemeManager.getFontName("amountSectionView.convertedAmountLabelFont")
         view.selectedCurrency.setTheme(textViewTheme)
     }
@@ -77,14 +78,14 @@ class AmountViewHolder(context: Context) : TapBaseViewHolder {
     fun setThemeToCurrentCurrency(){
         val textViewTheme = TextViewTheme()
         textViewTheme.textColor = Color.parseColor(ThemeManager.getValue("amountSectionView.originalAmountLabelColor"))
-        textViewTheme.textSize = ThemeManager.getFontSize("amountSectionView.originalAmountLabelFont").toFloat()
+        textViewTheme.textSize = ThemeManager.getFontSize("amountSectionView.originalAmountLabelFont")
         textViewTheme.font = ThemeManager.getFontName("amountSectionView.originalAmountLabelFont")
         view.currentCurrency.setTheme(textViewTheme)
     }
     fun setThemeToItemCount(){
         val buttonTheme = ButtonTheme()
         buttonTheme.textColor = Color.parseColor(ThemeManager.getValue("amountSectionView.originalAmountLabelColor"))
-        buttonTheme.textSize = ThemeManager.getFontSize("amountSectionView.itemsLabelFont").toFloat()
+        buttonTheme.textSize = ThemeManager.getFontSize("amountSectionView.itemsLabelFont")
 //        buttonTheme. = ThemeManager.getFontName("amountSectionView.originalAmountLabelFont")
         view.itemCount.setTheme(buttonTheme)
     }
