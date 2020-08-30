@@ -4,8 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.Constraints
+
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
 import androidx.transition.*
@@ -28,7 +27,7 @@ class TapLayoutManager : ViewModel(),
 
     private lateinit var context: Context
     private lateinit var fragmentManager: FragmentManager
-    private lateinit var sdkLayout: ConstraintLayout
+    private lateinit var sdkLayout: LinearLayout
     private lateinit var bottomSheetLayout: FrameLayout
     private lateinit var businessViewHolder: BusinessViewHolder
     private lateinit var amountViewHolder: AmountViewHolder
@@ -42,7 +41,7 @@ class TapLayoutManager : ViewModel(),
     fun initLayoutManager(
         context: Context,
         fragmentManager: FragmentManager,
-        sdkLayout: ConstraintLayout
+        sdkLayout: LinearLayout
     ) {
         this.context = context
         this.fragmentManager = fragmentManager
