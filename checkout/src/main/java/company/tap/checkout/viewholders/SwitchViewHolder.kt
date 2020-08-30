@@ -76,7 +76,7 @@ class SwitchViewHolder(context: Context) : TapBaseViewHolder {
         textViewTheme1.textColor = Color.parseColor(ThemeManager.getValue("TapSwitchView"))
         textViewTheme1.textSize = ThemeManager.getFontSize("TapSwitchView").toFloat()
         textViewTheme1.font = ThemeManager.getFontName("TapSwitchView")
-        view.savegoPay.setTheme(textViewTheme1)
+//        view.savegoPay.setTheme(textViewTheme1)
 
 
         view.alertgoPaySignup.textSize = ThemeManager.getFontSize("TapSwitchView").toFloat()
@@ -84,7 +84,7 @@ class SwitchViewHolder(context: Context) : TapBaseViewHolder {
         textViewTheme2.textColor = Color.parseColor(ThemeManager.getValue("TapSwitchView"))
         textViewTheme2.textSize = ThemeManager.getFontSize("TapSwitchView").toFloat()
         textViewTheme2.font = ThemeManager.getFontName("TapSwitchView")
-        view.alertgoPaySignup.setTheme(textViewTheme2)
+//        view.alertgoPaySignup.setTheme(textViewTheme2)
 
     }
 }

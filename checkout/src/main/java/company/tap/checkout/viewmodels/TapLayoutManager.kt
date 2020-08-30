@@ -1,16 +1,21 @@
 package company.tap.checkout.viewmodels
 
 import android.content.Context
+import android.graphics.Color
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.Constraints
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
 import androidx.transition.*
 import company.tap.checkout.enums.SectionType
 import company.tap.checkout.interfaces.BaseLayoutManager
+import company.tap.checkout.interfaces.OnCardSelectedActionListener
 import company.tap.checkout.utils.AnimationEngine
 import company.tap.checkout.utils.AnimationEngine.Type.*
 import company.tap.checkout.viewholders.*
+import kotlinx.android.synthetic.main.action_button_animation.view.*
 
 /**
  *
@@ -19,11 +24,11 @@ import company.tap.checkout.viewholders.*
  *
  */
 class TapLayoutManager : ViewModel(),
-    BaseLayoutManager {
+    BaseLayoutManager, OnCardSelectedActionListener {
 
     private lateinit var context: Context
     private lateinit var fragmentManager: FragmentManager
-    private lateinit var sdkLayout: LinearLayout
+    private lateinit var sdkLayout: ConstraintLayout
     private lateinit var bottomSheetLayout: FrameLayout
     private lateinit var businessViewHolder: BusinessViewHolder
     private lateinit var amountViewHolder: AmountViewHolder
@@ -32,20 +37,22 @@ class TapLayoutManager : ViewModel(),
     private lateinit var paymentInputViewHolder: PaymentInputViewHolder
     private lateinit var saveCardSwitch: SwitchViewHolder
     private lateinit var goPayViewHolder: GoPayViewHolder
+    private lateinit var tabAnimatedActionButtonViewHolder: TabAnimatedActionButtonViewHolder
 
     fun initLayoutManager(
         context: Context,
         fragmentManager: FragmentManager,
-        sdkLayout: LinearLayout
+        sdkLayout: ConstraintLayout
     ) {
         this.context = context
         this.fragmentManager = fragmentManager
         this.sdkLayout = sdkLayout
         businessViewHolder = BusinessViewHolder(context)
         amountViewHolder = AmountViewHolder(context)
-        cardViewHolder = CardViewHolder(context)
+        cardViewHolder = CardViewHolder(context, this)
         paymentInputViewHolder = PaymentInputViewHolder(context)
         saveCardSwitch = SwitchViewHolder(context)
+        tabAnimatedActionButtonViewHolder = TabAnimatedActionButtonViewHolder(context)
         initAmountAction()
         initCardsGroup()
     }
@@ -70,7 +77,8 @@ class TapLayoutManager : ViewModel(),
             amountViewHolder,
             cardViewHolder,
             paymentInputViewHolder,
-            saveCardSwitch
+            saveCardSwitch,
+            tabAnimatedActionButtonViewHolder
         )
     }
 
@@ -96,14 +104,16 @@ class TapLayoutManager : ViewModel(),
             removeViews(
                 cardViewHolder,
                 paymentInputViewHolder,
-                saveCardSwitch
+                saveCardSwitch,
+                tabAnimatedActionButtonViewHolder
             )
         } else {
             removeViews(itemsViewHolder)
             addViews(
                 cardViewHolder,
                 paymentInputViewHolder,
-                saveCardSwitch
+                saveCardSwitch,
+                tabAnimatedActionButtonViewHolder
             )
         }
         itemsViewHolder.displayed = !display
@@ -127,4 +137,23 @@ class TapLayoutManager : ViewModel(),
             sdkLayout.addView(it.view)
         }
     }
+
+    private fun activateActionButton(){
+        tabAnimatedActionButtonViewHolder.activateButton()
+    }
+
+    private fun unActivateActionButton(){
+        tabAnimatedActionButtonViewHolder.bindViewComponents()
+        tabAnimatedActionButtonViewHolder.view.actionButton.isClickable = false
+    }
+
+    override fun onCardSelectedAction(isSelected: Boolean) {
+        if (isSelected){
+            activateActionButton()
+            tabAnimatedActionButtonViewHolder.view.actionButton.setOnClickListener { tabAnimatedActionButtonViewHolder.setOnClickAction() }
+        }
+        else unActivateActionButton()
+    }
+
+
 }

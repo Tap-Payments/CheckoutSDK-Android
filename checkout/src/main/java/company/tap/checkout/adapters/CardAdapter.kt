@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.R
+import company.tap.checkout.interfaces.OnCardSelectedActionListener
 
 /**
  *
@@ -15,7 +16,7 @@ import company.tap.checkout.R
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class CardAdapter(private val arrayList: ArrayList<Int>) :
+class CardAdapter(private val arrayList: ArrayList<Int>, private val onCardSelectedActionListener: OnCardSelectedActionListener? = null) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>()  {
 
     private var selectedPosition = -1
@@ -68,6 +69,7 @@ class CardAdapter(private val arrayList: ArrayList<Int>) :
                 holder.itemView.setBackgroundResource(R.drawable.border_unclick)
             (holder as SavedViewHolder)
             holder.itemView.setOnClickListener {
+                onCardSelectedActionListener?.onCardSelectedAction(false)
                 selectedPosition = position
                 notifyDataSetChanged()
             }
@@ -79,6 +81,7 @@ class CardAdapter(private val arrayList: ArrayList<Int>) :
                 holder.itemView.setBackgroundResource(R.drawable.border_unclick)
             (holder as SingleViewHolder)
             holder.itemView.setOnClickListener {
+                onCardSelectedActionListener?.onCardSelectedAction(false)
                 selectedPosition = position
                 notifyDataSetChanged()
             }
@@ -90,6 +93,7 @@ class CardAdapter(private val arrayList: ArrayList<Int>) :
                 holder.itemView.setBackgroundResource(R.drawable.border_gopay_unclick)
             (holder as GoPayViewHolder)
             holder.itemView.setOnClickListener {
+                onCardSelectedActionListener?.onCardSelectedAction(true)
                 selectedPosition = position
                 notifyDataSetChanged()
             }

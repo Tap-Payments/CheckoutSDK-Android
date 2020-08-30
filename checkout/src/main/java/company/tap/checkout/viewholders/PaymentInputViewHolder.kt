@@ -237,7 +237,7 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
         chipTheme.cardCornerRadius = ThemeManager.getValue("inlineCard.commonAttributes.cornerRadius")
         chipTheme.textColor = Color.parseColor(ThemeManager.getValue("inlineCard.textFields.textColor"))
         chipTheme.textSize = ThemeManager.getFontSize("inlineCard.textFields.font").toFloat()
-        cardInputWidget.tapcard_Chip.setTheme(chipTheme)
+//        cardInputWidget.tapcard_Chip.setTheme(chipTheme)
     }
     fun setThemeMobilePaymentView(){
         var chipTheme = ChipTheme()

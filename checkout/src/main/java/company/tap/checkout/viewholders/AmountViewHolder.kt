@@ -71,7 +71,7 @@ class AmountViewHolder(context: Context) : TapBaseViewHolder {
         textViewTheme.textColor = Color.parseColor(ThemeManager.getValue("amountSectionView.convertedAmountLabelColor"))
         textViewTheme.textSize = ThemeManager.getFontSize("amountSectionView.convertedAmountLabelFont").toFloat()
         textViewTheme.font = ThemeManager.getFontName("amountSectionView.convertedAmountLabelFont")
-        view.selectedCurrency.setTheme(textViewTheme)
+//        view.selectedCurrency.setTheme(textViewTheme)
     }
 
     fun setThemeToCurrentCurrency(){
@@ -79,14 +79,14 @@ class AmountViewHolder(context: Context) : TapBaseViewHolder {
         textViewTheme.textColor = Color.parseColor(ThemeManager.getValue("amountSectionView.originalAmountLabelColor"))
         textViewTheme.textSize = ThemeManager.getFontSize("amountSectionView.originalAmountLabelFont").toFloat()
         textViewTheme.font = ThemeManager.getFontName("amountSectionView.originalAmountLabelFont")
-        view.currentCurrency.setTheme(textViewTheme)
+//        view.currentCurrency.setTheme(textViewTheme)
     }
     fun setThemeToItemCount(){
         val buttonTheme = ButtonTheme()
         buttonTheme.textColor = Color.parseColor(ThemeManager.getValue("amountSectionView.originalAmountLabelColor"))
         buttonTheme.textSize = ThemeManager.getFontSize("amountSectionView.itemsLabelFont").toFloat()
 //        buttonTheme. = ThemeManager.getFontName("amountSectionView.originalAmountLabelFont")
-        view.itemCount.setTheme(buttonTheme)
+//        view.itemCount.setTheme(buttonTheme)
     }
 
 
