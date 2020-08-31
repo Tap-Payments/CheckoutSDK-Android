@@ -5,19 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.gson.Gson
+import company.tap.checkout.apiresponse.DummyResponse
+import company.tap.checkout.apiresponse.getJsonDataFromAsset
 import company.tap.checkout.enums.SectionType
-import company.tap.checkout.interfaces.OnCardSelectedActionListener
 import company.tap.checkout.viewmodels.TapLayoutManager
 import company.tap.taplocalizationkit.LocalizationManager
-
 import company.tap.tapuilibrary.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.views.TapBottomSheetDialog
-import kotlinx.android.synthetic.main.checkout_sdk_layout.*
-import kotlin.collections.ArrayList
 
 /**
  *
@@ -48,7 +45,18 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface{
         enabledSections.add(SectionType.AMOUNT_ITEMS)
 
         layoutManager.displayStartupLayout(enabledSections)
+        //This is for getting response from business engine . Currently dummy reponse from assets json is used
+        getBusinessHeaderData()
+
         setBottomSheetInterface(this)
+    }
+
+    private fun getBusinessHeaderData() {
+        val jsonFileString = activity?.applicationContext?.let { getJsonDataFromAsset(it, "dummyapiresponse.json") }
+        val gson = Gson()
+        val dummyInitApiResponse: DummyResponse = gson.fromJson(jsonFileString, DummyResponse::class.java)
+        // Pass the api response data to LayoutManager
+        layoutManager.getDatafromAPI(dummyInitApiResponse)
     }
 
     override fun onDismiss() {

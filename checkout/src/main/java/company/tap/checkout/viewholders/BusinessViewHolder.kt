@@ -5,6 +5,7 @@ import android.graphics.Color
 import company.tap.checkout.R
 import company.tap.checkout.enums.SectionType
 import company.tap.checkout.utils.CurrentTheme
+import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.datasource.HeaderDataSource
 import company.tap.tapuilibrary.views.TapHeaderSectionView
 import company.tap.thememanager.manager.ThemeManager
@@ -23,21 +24,30 @@ class BusinessViewHolder(context: Context) : TapBaseViewHolder {
 
     override val type = SectionType.BUSINESS
 
+    var merchantName:String?=null
+    var merchantLogo:String?=null
+
     init {
         bindViewComponents()
         setThemeToView(context)
     }
 
     override fun bindViewComponents() {
-        view.setHeaderDataSource(
-            HeaderDataSource(
-                businessName = "Tap payments",
-                businessFor = "Payment For",
-                businessImageResources = "https://www.gotapnow.com/web/tapimg.aspx?cst=1124340"
-            )
-        )
+
+        if(merchantName!=null)
+        view.setHeaderDataSource(getHeaderDataSourceFromAPI())
     }
 
+    private fun getHeaderDataSourceFromAPI():HeaderDataSource{
+        //ToDO add Local string from localization Payment For
+        return HeaderDataSource(
+                businessName = merchantName,
+                businessFor = "Payment For",
+                businessImageResources = merchantLogo
+            )
+    }
+
+ // TODO remove all the themes  from viewHolder
     private fun setThemeToView(context: Context){
 
         ///we will set static value with current theme and when we use it we will check current theme first
@@ -52,7 +62,7 @@ class BusinessViewHolder(context: Context) : TapBaseViewHolder {
     fun setThemeToBusinessName(){
         val textViewTheme = TextViewTheme()
         textViewTheme.textColor = Color.parseColor(ThemeManager.getValue("merchantHeaderView.titleLabelColor"))
-        textViewTheme.textSize = ThemeManager.getFontSize("merchantHeaderView.titleLabelFont").toFloat()
+//        textViewTheme.textSize = ThemeManager.getFontSize("merchantHeaderView.titleLabelFont").toFloat()
         textViewTheme.font = ThemeManager.getFontName("merchantHeaderView.titleLabelFont")
 //        view.businessName.setTheme(textViewTheme)
     }
@@ -60,7 +70,7 @@ class BusinessViewHolder(context: Context) : TapBaseViewHolder {
     fun setThemeToPaymentFor(){
         val textViewTheme = TextViewTheme()
         textViewTheme.textColor = Color.parseColor(ThemeManager.getValue("merchantHeaderView.subTitleLabelColor"))
-        textViewTheme.textSize = ThemeManager.getFontSize("merchantHeaderView.subTitleLabelFont").toFloat()
+//        textViewTheme.textSize = ThemeManager.getFontSize("merchantHeaderView.subTitleLabelFont").toFloat()
         textViewTheme.font = ThemeManager.getFontName("merchantHeaderView.subTitleLabelFont")
 //        view.paymentFor.setTheme(textViewTheme)
     }
@@ -68,10 +78,20 @@ class BusinessViewHolder(context: Context) : TapBaseViewHolder {
     fun setThemeToBusinessPlaceholder(){
         val textViewTheme = TextViewTheme()
         textViewTheme.textColor = Color.parseColor(ThemeManager.getValue("merchantHeaderView.merchantLogoPlaceHolderColor"))
-        textViewTheme.textSize = ThemeManager.getFontSize("merchantHeaderView.merchantLogoPlaceHolderFont").toFloat()
+    //    textViewTheme.textSize = ThemeManager.getFontSize("merchantHeaderView.merchantLogoPlaceHolderFont").toFloat()
         textViewTheme.font = ThemeManager.getFontName("merchantHeaderView.merchantLogoPlaceHolderFont")
 //        view.businessPlaceholder.setTheme(textViewTheme)
     }
 
+    /**
+     * Sets data from API through LayoutManager
+     * @param merchantLogoApi represents the merchant Logo from the Url
+     * @param merchantNameApi represents the merchant business name
+     * */
+    fun setDatafromAPI(merchantLogoApi :String ,merchantNameApi :String){
+        merchantLogo = merchantLogoApi
+        merchantName = merchantNameApi
+        bindViewComponents()
+    }
 
 }

@@ -1,13 +1,13 @@
 package company.tap.checkout.viewmodels
 
 import android.content.Context
-import android.graphics.Color
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
 import androidx.transition.*
+import company.tap.checkout.apiresponse.DummyResponse
 import company.tap.checkout.enums.SectionType
 import company.tap.checkout.interfaces.BaseLayoutManager
 import company.tap.checkout.interfaces.OnCardSelectedActionListener
@@ -46,7 +46,7 @@ class TapLayoutManager : ViewModel(),
         this.context = context
         this.fragmentManager = fragmentManager
         this.sdkLayout = sdkLayout
-        businessViewHolder = BusinessViewHolder(context)
+        businessViewHolder =  BusinessViewHolder(context)
         amountViewHolder = AmountViewHolder(context)
         cardViewHolder = CardViewHolder(context, this)
         paymentInputViewHolder = PaymentInputViewHolder(context)
@@ -71,6 +71,7 @@ class TapLayoutManager : ViewModel(),
     }
 
     override fun displayStartupLayout(enabledSections: ArrayList<SectionType>) {
+        //Todo based on api response logic for swicth case
         addViews(
             businessViewHolder,
             amountViewHolder,
@@ -124,6 +125,12 @@ class TapLayoutManager : ViewModel(),
     override fun displayRedirect(url: String) {}
 
     override fun displaySaveCardOptions() {}
+
+    override fun getDatafromAPI(dummyInitapiResponse: DummyResponse) {
+        println("dummy response value is ${dummyInitapiResponse?.data?.merchant?.logo}")
+        businessViewHolder.setDatafromAPI(dummyInitapiResponse?.data?.merchant?.logo,dummyInitapiResponse?.data?.merchant.name)
+
+    }
 
     private fun removeViews(vararg viewHolders: TapBaseViewHolder) {
         viewHolders.forEach {

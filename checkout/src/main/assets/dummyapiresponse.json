@@ -1,0 +1,24 @@
+{
+  "status":"success",
+  "data":{
+    "merchant":{
+      "name":"Tap Payments",
+      "logo":"https://avatars3.githubusercontent.com/u/19837565?s=200&v=4"
+    },
+    "sdk_settings":{
+      "status_display_duration":5,
+      "otp_resend_interval":60,
+      "otp_resend_attempts":3
+    },
+    "live_mode":false,
+    "livemode":false,
+    "permissions":[
+      "pci",
+      "merchant_checkout",
+      "threeDSecure_disabled",
+      "kfast"
+    ],
+    "verified_application":true,
+    "encryption_key":"-----BEGIN PUBLIC KEY-----",
+    "session_token":"gg" }
+}

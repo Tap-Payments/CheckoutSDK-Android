@@ -45,7 +45,7 @@ class CardViewHolder(private val context: Context,private val onCardSelectedActi
     fun setThemeToLeftButton(){
         val buttonTheme = TextViewTheme()
         buttonTheme.textColor = Color.parseColor(ThemeManager.getValue("horizontalList.headers.gatewayHeader.leftButton.labelTextColor"))
-        buttonTheme.textSize = ThemeManager.getFontSize("horizontalList.headers.gatewayHeader.leftButton.labelTextFont").toFloat()
+//        buttonTheme.textSize = ThemeManager.getFontSize("horizontalList.headers.gatewayHeader.leftButton.labelTextFont").toFloat()
         buttonTheme.font = ThemeManager.getFontName("horizontalList.headers.gatewayHeader.leftButton.labelTextFont")
 //        view.groupName.setTheme(buttonTheme)
     }
@@ -53,7 +53,7 @@ class CardViewHolder(private val context: Context,private val onCardSelectedActi
     fun setThemeToRightButton(){
         val buttonTheme = TextViewTheme()
         buttonTheme.textColor = Color.parseColor(ThemeManager.getValue("horizontalList.headers.gatewayHeader.rightButton.labelTextColor"))
-        buttonTheme.textSize = ThemeManager.getFontSize("horizontalList.headers.gatewayHeader.rightButton.labelTextFont").toFloat()
+ //       buttonTheme.textSize = ThemeManager.getFontSize("horizontalList.headers.gatewayHeader.rightButton.labelTextFont").toFloat()
         buttonTheme.font = ThemeManager.getFontName("horizontalList.headers.gatewayHeader.rightButton.labelTextFont")
 //        view.groupAction.setTheme(buttonTheme)
     }

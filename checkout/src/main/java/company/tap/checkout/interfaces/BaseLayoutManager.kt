@@ -1,5 +1,6 @@
 package company.tap.checkout.interfaces
 
+import company.tap.checkout.apiresponse.DummyResponse
 import company.tap.checkout.enums.SectionType
 
 /**
@@ -15,4 +16,5 @@ interface BaseLayoutManager {
     fun displayOTP()
     fun displayRedirect(url: String)
     fun displaySaveCardOptions()
+    fun getDatafromAPI(dummyResponse: DummyResponse)
 }
