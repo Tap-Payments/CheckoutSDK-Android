@@ -5,9 +5,13 @@ import android.graphics.Color
 import company.tap.checkout.R
 import company.tap.checkout.enums.SectionType
 import company.tap.checkout.utils.CurrentTheme
+import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.atoms.TapButton
 import company.tap.tapuilibrary.datasource.AmountViewDataSource
+import company.tap.tapuilibrary.datasource.HeaderDataSource
 import company.tap.tapuilibrary.views.TapAmountSectionView
+
+
 import company.tap.thememanager.manager.ThemeManager
 import company.tap.thememanager.theme.ButtonTheme
 import company.tap.thememanager.theme.TextViewTheme
@@ -24,6 +28,10 @@ class AmountViewHolder(context: Context) : TapBaseViewHolder {
 
     override val type = SectionType.AMOUNT_ITEMS
 
+    private var selectedCurren:String?=null
+    private var currentCurren:String?=null
+    private var itemCountt :String?=null
+    private var originalAmount :String?=null
     init {
         bindViewComponents()
         CurrentTheme.initAppTheme(R.raw.defaultlighttheme, context)
@@ -34,12 +42,14 @@ class AmountViewHolder(context: Context) : TapBaseViewHolder {
     }
 
     override fun bindViewComponents() {
-        changeDataSource(
-            AmountViewDataSource(
-                selectedCurr = "SR1000,000.000",
-                currentCurr = "KD1000,000.000",
-                itemCount = (ThemeManager.getValue("amountSectionView.itemsNumberButtonCorner") as Int).toString() + " ITEMS"
-            )
+        view.setAmountViewDataSource(getAmountDataSourceFromAPIs())
+    }
+
+    private fun getAmountDataSourceFromAPIs(): AmountViewDataSource {
+        return AmountViewDataSource(
+            selectedCurr = originalAmount +" "+ selectedCurren,
+            currentCurr = currentCurren,
+            itemCount = itemCountt  + "  "+ LocalizationManager.getValue("items","Common")
         )
     }
 
@@ -51,17 +61,17 @@ class AmountViewHolder(context: Context) : TapBaseViewHolder {
         if (isOpen)
             changeDataSource(
                 AmountViewDataSource(
-                    selectedCurr = "SR1000,000.000",
-                    currentCurr = "KD1000,000.000",
-                    itemCount = (ThemeManager.getValue("amountSectionView.itemsNumberButtonCorner") as kotlin.Int).toString() +" ITEMS"
+                    selectedCurr = originalAmount +" "+ selectedCurren,
+                    currentCurr = currentCurren,
+                    itemCount = itemCountt + "  "+ LocalizationManager.getValue("items","Common")
                 )
             )
         else
             changeDataSource(
                 AmountViewDataSource(
-                    selectedCurr = "SR1000,000.000",
-                    currentCurr = "KD1000,000.000",
-                    itemCount = "Close"
+                    selectedCurr = originalAmount +" "+ selectedCurren,
+                    currentCurr = currentCurren,
+                    itemCount = LocalizationManager.getValue("close","Common")
                 )
             )
     }
@@ -119,5 +129,28 @@ class AmountViewHolder(context: Context) : TapBaseViewHolder {
         view.findViewById<TapButton>(R.id.textView_itemcount).setOnClickListener {
             onItemsClickListener()
         }
+    }
+
+    private fun getAmountDataSourceFromAPI(): AmountViewDataSource {
+        return AmountViewDataSource(
+            selectedCurr =selectedCurren,
+            currentCurr = currentCurren,
+            itemCount = itemCountt
+        )
+    }
+
+    /**
+     * Sets data from API through LayoutManager
+     * @param selectedCurrencyApi represents the currency set by the Merchant.
+     * @param currentCurrencyApi represents the currency which by default.
+     * @param itemCountApi represents the itemsCount for the Merchant.
+     * @param originalAmountApi represents the default amount from API.
+     * */
+    fun setDatafromAPI(originalAmountApi:String,selectedCurrencyApi :String ,currentCurrencyApi :String, itemCountApi:String){
+        selectedCurren = selectedCurrencyApi
+        currentCurren = currentCurrencyApi
+        itemCountt  = itemCountApi
+        originalAmount = originalAmountApi
+        bindViewComponents()
     }
 }

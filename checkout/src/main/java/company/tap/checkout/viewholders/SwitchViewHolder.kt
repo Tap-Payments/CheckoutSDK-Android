@@ -4,8 +4,8 @@ import android.content.Context
 import android.graphics.Color
 import company.tap.checkout.enums.SectionType
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibrary.atoms.TapSwitch
 import company.tap.tapuilibrary.datasource.TapSwitchDataSource
+
 import company.tap.tapuilibrary.views.TapCardSwitch
 import company.tap.thememanager.manager.ThemeManager
 import company.tap.thememanager.theme.SwitchTheme
@@ -41,51 +41,6 @@ class SwitchViewHolder(context: Context) : TapBaseViewHolder {
     }
 
 
-    fun setThemeView(){
-        view.switchSaveMobile.textSize = ThemeManager.getFontSize("TapSwitchView").toFloat()
-        var switchTheme = SwitchTheme()
-        switchTheme.textSize = ThemeManager.getFontSize("TapSwitchView").toFloat()
-        switchTheme.textColor = Color.parseColor(ThemeManager.getValue("TapSwitchView"))
-        view.switchSaveMobile.setTheme(switchTheme)
 
-
-        view.saveTextView.textSize = ThemeManager.getFontSize("TapSwitchView").toFloat()
-         var textViewTheme = TextViewTheme()
-        textViewTheme.textColor = Color.parseColor(ThemeManager.getValue("TapSwitchView"))
-        textViewTheme.textSize = ThemeManager.getFontSize("TapSwitchView").toFloat()
-        textViewTheme.font = ThemeManager.getFontName("TapSwitchView")
-        view.saveTextView.setTheme(textViewTheme)
-
-
-        view.switchSaveMerchant.textSize = ThemeManager.getFontSize("TapSwitchView").toFloat()
-        var switchTheme1 = SwitchTheme()
-        switchTheme1.textSize = ThemeManager.getFontSize("TapSwitchView").toFloat()
-        switchTheme1.textColor = Color.parseColor(ThemeManager.getValue("TapSwitchView"))
-        view.switchSaveMerchant.setTheme(switchTheme1)
-
-
-        view.switchgoPayCheckout.textSize = ThemeManager.getFontSize("TapSwitchView").toFloat()
-        var switchTheme2 = SwitchTheme()
-        switchTheme2.textSize = ThemeManager.getFontSize("TapSwitchView").toFloat()
-        switchTheme2.textColor = Color.parseColor(ThemeManager.getValue("TapSwitchView"))
-        view.switchgoPayCheckout.setTheme(switchTheme2)
-
-
-        view.savegoPay.textSize = ThemeManager.getFontSize("TapSwitchView").toFloat()
-        var textViewTheme1 = TextViewTheme()
-        textViewTheme1.textColor = Color.parseColor(ThemeManager.getValue("TapSwitchView"))
-        textViewTheme1.textSize = ThemeManager.getFontSize("TapSwitchView").toFloat()
-        textViewTheme1.font = ThemeManager.getFontName("TapSwitchView")
-//        view.savegoPay.setTheme(textViewTheme1)
-
-
-        view.alertgoPaySignup.textSize = ThemeManager.getFontSize("TapSwitchView").toFloat()
-        var textViewTheme2 = TextViewTheme()
-        textViewTheme2.textColor = Color.parseColor(ThemeManager.getValue("TapSwitchView"))
-        textViewTheme2.textSize = ThemeManager.getFontSize("TapSwitchView").toFloat()
-        textViewTheme2.font = ThemeManager.getFontName("TapSwitchView")
-//        view.alertgoPaySignup.setTheme(textViewTheme2)
-
-    }
 }
 

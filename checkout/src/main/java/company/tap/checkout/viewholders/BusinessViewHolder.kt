@@ -8,6 +8,7 @@ import company.tap.checkout.utils.CurrentTheme
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.datasource.HeaderDataSource
 import company.tap.tapuilibrary.views.TapHeaderSectionView
+
 import company.tap.thememanager.manager.ThemeManager
 import company.tap.thememanager.theme.TextViewTheme
 
@@ -24,8 +25,8 @@ class BusinessViewHolder(context: Context) : TapBaseViewHolder {
 
     override val type = SectionType.BUSINESS
 
-    var merchantName:String?=null
-    var merchantLogo:String?=null
+    private var merchantName:String?=null
+   private var merchantLogo:String?=null
 
     init {
         bindViewComponents()
@@ -38,11 +39,10 @@ class BusinessViewHolder(context: Context) : TapBaseViewHolder {
         view.setHeaderDataSource(getHeaderDataSourceFromAPI())
     }
 
-    private fun getHeaderDataSourceFromAPI():HeaderDataSource{
-        //ToDO add Local string from localization Payment For
+    private fun getHeaderDataSourceFromAPI(): HeaderDataSource {
         return HeaderDataSource(
                 businessName = merchantName,
-                businessFor = "Payment For",
+                businessFor = LocalizationManager.getValue("paymentFor","TapMerchantSection"),
                 businessImageResources = merchantLogo
             )
     }

@@ -6,9 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import company.tap.checkout.R
 import company.tap.checkout.enums.SectionType
-import company.tap.tapuilibrary.adapters.context
 import company.tap.tapuilibrary.datasource.ActionButtonDataSource
-import company.tap.tapuilibrary.enums.ActionButtonState
+
+
 import kotlinx.android.synthetic.main.action_button_animation.view.*
 
 /**
@@ -29,10 +29,10 @@ class TabAnimatedActionButtonViewHolder (context: Context) : TapBaseViewHolder {
     }
 
     override fun bindViewComponents() {
-        view.actionButton.setButtonDataSource(getSuccessDataSource(Color.GRAY, "Pay", Color.WHITE ))
+      //  view.actionButton.setButtonDataSource(getSuccessDataSource(Color.GRAY, "Pay", Color.WHITE ))
     }
     fun activateButton(){
-        view.actionButton.setButtonDataSource(getSuccessDataSource(Color.GREEN,"", Color.WHITE))
+      //  view.actionButton.(getSuccessDataSource(Color.GREEN,"", Color.WHITE))
     }
 
      fun getSuccessDataSource(backgroundColor: Int, text: String, textColor: Int): ActionButtonDataSource {
@@ -46,12 +46,12 @@ class TabAnimatedActionButtonViewHolder (context: Context) : TapBaseViewHolder {
         )
     }
     fun setOnClickAction(){
-        view.actionButton.addChildView(
+       /* view.actionButton.addChildView(
             view.actionButton.getImageView(
                 R.drawable.loader,
                 1
-            ) {  })
-        view.actionButton.changeButtonState(ActionButtonState.LOADING)
+            ) {  })*/
+      //  view.actionButton.changeButtonState(ActionButtonState.LOADING)
     }
     fun setActionButtonTheme(){
 
