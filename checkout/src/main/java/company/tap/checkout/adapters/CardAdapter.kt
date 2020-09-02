@@ -5,8 +5,10 @@ import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
+import company.tap.cardbusinesskit.testmodels.Payment_methods
 import company.tap.checkout.R
 import company.tap.checkout.interfaces.OnCardSelectedActionListener
 
@@ -16,7 +18,7 @@ import company.tap.checkout.interfaces.OnCardSelectedActionListener
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class CardAdapter(private val arrayList: ArrayList<Int>, private val onCardSelectedActionListener: OnCardSelectedActionListener? = null) :
+class CardAdapter(private val arrayList: List<Payment_methods>, private val onCardSelectedActionListener: OnCardSelectedActionListener? = null) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>()  {
 
     private var selectedPosition = -1
@@ -50,9 +52,11 @@ class CardAdapter(private val arrayList: ArrayList<Int>, private val onCardSelec
 
 
     override fun getItemViewType(position: Int): Int {
-        return if (arrayList[position] == 1 || arrayList[position] == 3 || arrayList[position] == 5) {
+
+
+        return if (arrayList[position].equals(1)|| arrayList[position].equals(3) || arrayList[position].equals(5)) {
             TYPE_SINGLE
-        } else if (arrayList[position] == 2) {
+        } else if (arrayList[position].equals(2)) {
             TYPE_GO_PAY
         } else {
             TYPE_SAVED_CARD

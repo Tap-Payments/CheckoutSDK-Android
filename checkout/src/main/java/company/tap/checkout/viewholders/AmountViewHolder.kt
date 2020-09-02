@@ -47,7 +47,7 @@ class AmountViewHolder(context: Context) : TapBaseViewHolder {
 
     private fun getAmountDataSourceFromAPIs(): AmountViewDataSource {
         return AmountViewDataSource(
-            selectedCurr = originalAmount +" "+ selectedCurren,
+            selectedCurr = selectedCurren +" "+ originalAmount,
             currentCurr = currentCurren,
             itemCount = itemCountt  + "  "+ LocalizationManager.getValue("items","Common")
         )
@@ -61,7 +61,7 @@ class AmountViewHolder(context: Context) : TapBaseViewHolder {
         if (isOpen)
             changeDataSource(
                 AmountViewDataSource(
-                    selectedCurr = originalAmount +" "+ selectedCurren,
+                    selectedCurr = selectedCurren +" "+  originalAmount,
                     currentCurr = currentCurren,
                     itemCount = itemCountt + "  "+ LocalizationManager.getValue("items","Common")
                 )
@@ -69,7 +69,7 @@ class AmountViewHolder(context: Context) : TapBaseViewHolder {
         else
             changeDataSource(
                 AmountViewDataSource(
-                    selectedCurr = originalAmount +" "+ selectedCurren,
+                    selectedCurr = selectedCurren +" "+ originalAmount,
                     currentCurr = currentCurren,
                     itemCount = LocalizationManager.getValue("close","Common")
                 )
@@ -131,13 +131,6 @@ class AmountViewHolder(context: Context) : TapBaseViewHolder {
         }
     }
 
-    private fun getAmountDataSourceFromAPI(): AmountViewDataSource {
-        return AmountViewDataSource(
-            selectedCurr =selectedCurren,
-            currentCurr = currentCurren,
-            itemCount = itemCountt
-        )
-    }
 
     /**
      * Sets data from API through LayoutManager

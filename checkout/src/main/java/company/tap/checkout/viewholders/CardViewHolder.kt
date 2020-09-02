@@ -4,13 +4,14 @@ import android.content.Context
 import android.graphics.Color
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import company.tap.cardbusinesskit.testmodels.Payment_methods
 import company.tap.checkout.adapters.CardAdapter
 import company.tap.checkout.enums.SectionType
 import company.tap.checkout.interfaces.OnCardSelectedActionListener
+import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.atoms.TapChipGroup
 
 import company.tap.thememanager.manager.ThemeManager
-import company.tap.thememanager.theme.ButtonTheme
 import company.tap.thememanager.theme.TextViewTheme
 
 /**
@@ -25,7 +26,8 @@ class CardViewHolder(private val context: Context,private val onCardSelectedActi
 
     override val type = SectionType.CARD
 
-    private val paymentsList: ArrayList<Int> = arrayListOf(1, 2, 3, 4, 5, 6)
+   // private var paymentsList: ArrayList<Int> = arrayListOf(1, 2, 3, 4, 5, 6)
+    private var paymentsList: List<Payment_methods>? = null
 
     init {
         bindViewComponents()
@@ -35,10 +37,11 @@ class CardViewHolder(private val context: Context,private val onCardSelectedActi
 
     override fun bindViewComponents() {
         view.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.headers.gatewayHeader.backgroundColor")))
-        view.groupName.text = "Select"
-        view.groupAction.text = "Edit"
+        view.groupName.text =  LocalizationManager.getValue("GatewayHeader","HorizontalHeaders","leftTitle")
+        view.groupAction.text = LocalizationManager.getValue("GatewayHeader","HorizontalHeaders","rightTitle")
         view.chipsRecycler.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-        view.chipsRecycler.adapter = CardAdapter(paymentsList, onCardSelectedActionListener)
+        view.chipsRecycler.adapter =
+            paymentsList?.let { CardAdapter(it, onCardSelectedActionListener) }
     }
 
 
@@ -75,5 +78,12 @@ class CardViewHolder(private val context: Context,private val onCardSelectedActi
             }
         },
      */
-
+    /**
+     * Sets data from API through LayoutManager
+     * @param paymentMethodsApi represents the list of payment methods available from API
+     * */
+    fun setDatafromAPI(paymentMethodsApi: List<Payment_methods>){
+        paymentsList = paymentMethodsApi
+        bindViewComponents()
+    }
 }

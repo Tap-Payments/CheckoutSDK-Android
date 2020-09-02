@@ -131,7 +131,7 @@ class TapLayoutManager : ViewModel(),
         println("dummy response value is ${dummyInitapiResponse}")
         businessViewHolder.setDatafromAPI(dummyInitapiResponse.merchant.logo,dummyInitapiResponse.merchant.name)
         amountViewHolder.setDatafromAPI(dummyInitapiResponse.order.original_amount.toString(),dummyInitapiResponse.order.trx_currency,dummyInitapiResponse.order.trx_currency,dummyInitapiResponse?.order.items.size.toString())
-
+        cardViewHolder.setDatafromAPI(dummyInitapiResponse.payment_methods)
     }
 
     private fun removeViews(vararg viewHolders: TapBaseViewHolder) {
