@@ -2,15 +2,17 @@ package company.tap.checkout.viewholders
 
 import android.content.Context
 import android.graphics.Color
+import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.cardbusinesskit.testmodels.Payment_methods
+import company.tap.checkout.R
 import company.tap.checkout.adapters.CardAdapter
 import company.tap.checkout.enums.SectionType
 import company.tap.checkout.interfaces.OnCardSelectedActionListener
+import company.tap.checkout.utils.AnimationEngine
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.atoms.TapChipGroup
-
 import company.tap.thememanager.manager.ThemeManager
 import company.tap.thememanager.theme.TextViewTheme
 
@@ -20,7 +22,10 @@ import company.tap.thememanager.theme.TextViewTheme
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class CardViewHolder(private val context: Context,private val onCardSelectedActionListener: OnCardSelectedActionListener? = null ) : TapBaseViewHolder {
+class CardViewHolder(
+    private val context: Context,
+    private val onCardSelectedActionListener: OnCardSelectedActionListener? = null
+) : TapBaseViewHolder {
 
     override val view = TapChipGroup(context, null)
 
@@ -37,11 +42,28 @@ class CardViewHolder(private val context: Context,private val onCardSelectedActi
 
     override fun bindViewComponents() {
         view.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.headers.gatewayHeader.backgroundColor")))
-        view.groupName.text =  LocalizationManager.getValue("GatewayHeader","HorizontalHeaders","leftTitle")
-        view.groupAction.text = LocalizationManager.getValue("GatewayHeader","HorizontalHeaders","rightTitle")
-        view.chipsRecycler.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+        view.groupName.text =  LocalizationManager.getValue(
+            "GatewayHeader",
+            "HorizontalHeaders",
+            "leftTitle"
+        )
+        view.groupAction.text = LocalizationManager.getValue(
+            "GatewayHeader",
+            "HorizontalHeaders",
+            "rightTitle"
+        )
+        view.chipsRecycler.layoutManager = LinearLayoutManager(
+            context,
+            RecyclerView.HORIZONTAL,
+            false
+        )
         view.chipsRecycler.adapter =
             paymentsList?.let { CardAdapter(it, onCardSelectedActionListener) }
+         println("paymentList supported currency ${paymentsList?.get(0)?.supported_currencies}")
+        view.groupAction.setOnClickListener {
+            val animation = AnimationUtils.loadAnimation(this.view.context, R.anim.shake)
+            view.chipsRecycler.startAnimation(animation)
+        }
     }
 
 

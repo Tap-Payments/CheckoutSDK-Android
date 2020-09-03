@@ -26,7 +26,7 @@
         android:layout_marginStart="@dimen/margin_basic_15dp"
         android:layout_marginTop="@dimen/margin_basic_10dp"
         android:layout_marginBottom="@dimen/margin_basic_14dp"
-        android:src="@drawable/amex" />
+        tools:src="@drawable/amex" />
     
     <company.tap.tapuilibrary.atoms.TapTextView
        android:id="@+id/textView_carddetails"
