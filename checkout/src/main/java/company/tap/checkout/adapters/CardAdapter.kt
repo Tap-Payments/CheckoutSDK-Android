@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
@@ -99,9 +100,11 @@ class CardAdapter(
             val paymentMethods: Payment_methods = arrayList[position]
             println("arrayList pay $paymentMethods")
             holder.bind(paymentMethods)
-
-
-
+            holder.itemView.deleteImageView.setOnClickListener {
+                Toast.makeText(adaptercontext,"Do u want to delete ", Toast.LENGTH_SHORT).show()
+              //  holder.itemView.startAnimation(null)
+                holder.itemView.animation = null
+            }
 
         } else if (getItemViewType(position) == TYPE_SINGLE) {
 
@@ -133,8 +136,11 @@ class CardAdapter(
 
     internal class SavedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         private var imageView1: ImageView? = null
+        private var delImageView: ImageView? = null
         init {
             imageView1 = itemView.findViewById(R.id.imageView_amex)
+            delImageView = itemView.findViewById(R.id.deleteImageView)
+
 
         }
 
@@ -142,8 +148,7 @@ class CardAdapter(
 
             println("payments image val ${paymentMethods.image.toUri()}")
             val imageView: ImageView = itemView.imageView_amex
-
-                Glide.with(itemView.context)
+            Glide.with(itemView.context)
                     .load(paymentMethods.image)
                     .into(imageView)
 

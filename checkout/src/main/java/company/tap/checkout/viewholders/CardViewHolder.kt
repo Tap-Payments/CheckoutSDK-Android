@@ -2,7 +2,9 @@ package company.tap.checkout.viewholders
 
 import android.content.Context
 import android.graphics.Color
+import android.view.View
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.cardbusinesskit.testmodels.Payment_methods
@@ -15,6 +17,7 @@ import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.atoms.TapChipGroup
 import company.tap.thememanager.manager.ThemeManager
 import company.tap.thememanager.theme.TextViewTheme
+import kotlinx.android.synthetic.main.item_saved_card.view.*
 
 /**
  *
@@ -63,7 +66,9 @@ class CardViewHolder(
         view.groupAction.setOnClickListener {
             val animation = AnimationUtils.loadAnimation(this.view.context, R.anim.shake)
             view.chipsRecycler.startAnimation(animation)
+            view.deleteImageView?.visibility = View.VISIBLE
         }
+
     }
 
 

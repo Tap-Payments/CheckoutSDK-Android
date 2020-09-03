@@ -13,6 +13,16 @@
     app:elevation="8dp"
     app:contentPadding="@dimen/margin_basic_10dp"
     >
+  <ImageView
+      android:id="@+id/deleteImageView"
+      android:layout_width="20dp"
+      android:layout_height="12dp"
+      android:elevation="15dp"
+      android:src="@drawable/btn_close_normal"
+      android:visibility="gone"
+      android:layout_gravity="top"
+      android:layout_marginLeft="95dp"
+      />
   <LinearLayout
     android:orientation="horizontal"
     android:layout_width="match_parent"
