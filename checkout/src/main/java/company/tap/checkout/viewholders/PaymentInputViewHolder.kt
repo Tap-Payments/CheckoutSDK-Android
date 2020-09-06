@@ -42,7 +42,7 @@ import kotlinx.android.synthetic.main.item_saved_card.view.*
  *
  */
 class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
-    TapSelectionTabLayoutInterface, CardInputListener, OnCardSelectedActionListener {
+    TapSelectionTabLayoutInterface, CardInputListener {
 
     override val view: View =
         LayoutInflater.from(context).inflate(R.layout.payment_input_layout, null)
@@ -64,7 +64,6 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
     private var nfcButton : ImageView? = null
     private var mobileNumberEditText : EditText? = null
     private var alertMessage : TapTextView? = null
-    private var clearView : ImageView? = null
     private var linearLayoutPay : LinearLayout? = null
 
     init {
@@ -111,10 +110,11 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
         nfcButton = view.findViewById(R.id.nfc_button)
         mobileNumberEditText = view.findViewById(R.id.mobile_number)
         alertMessage = view.findViewById(R.id.textview_alert_message)
-        clearView = view.findViewById(R.id.clear_text)
+
         linearLayoutPay = view.findViewById(R.id.linear_paylayout)
         cardInputWidget.clearFocus()
-        clearView?.setOnClickListener {
+        clearText?.visibility = View.GONE
+        clearText?.setOnClickListener {
             tabLayout.resetBehaviour()
 
             mobilePaymentView.clearNumber()
@@ -124,11 +124,7 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
           //  alert_text.visibility= View.GONE
             nfcButton?.visibility =View.VISIBLE
             cardScannerBtn?.visibility =View.VISIBLE
-            clearView?.visibility= View.GONE
-
-
-
-
+            clearText.visibility= View.GONE
         }
         // alertMessage?.visibility = View.GONE
         nfcButton?.setOnClickListener {
@@ -238,17 +234,21 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
     }
 
     private fun swapInputViews(position: Int) {
-      //  TransitionManager.beginDelayedTransition(paymentLayoutContainer, Fade())
+     // TransitionManager.beginDelayedTransition(paymentLayoutContainer, Fade())
+      TransitionManager.beginDelayedTransition(paymentInputContainer, Fade())
         paymentInputContainer.removeAllViews()
         if (position == 0) {
             selectedType = CARD
-            scannerOptions.visibility = View.VISIBLE
+            nfcButton?.visibility = View.VISIBLE
+            cardScannerBtn?.visibility = View.VISIBLE
+
             clearText.visibility = View.VISIBLE
             paymentInputContainer.addView(cardInputWidget)
             checkForFocus()
         } else {
             selectedType = MOBILE
-            scannerOptions.visibility = View.GONE
+            nfcButton?.visibility = View.GONE
+            cardScannerBtn?.visibility = View.GONE
             if (mobilePaymentView.mobileInputEditText.text.isEmpty())
                 clearText.visibility = View.INVISIBLE
             else
@@ -262,7 +262,7 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
         shouldShowScannerOptions =
             lastFocusField == CardInputListener.FocusField.FOCUS_CARD
                     && lastCardInput.isEmpty()
-        //controlScannerOptions()
+        controlScannerOptions()
     }
 
     enum class PaymentType {
@@ -299,11 +299,6 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
 //        mobilePaymentView.tapcard_Chip.view.tapcard_Chip.setTheme(chipTheme)
     }
 
-    override fun onCardSelectedAction(isSelected: Boolean) {
-        if (isSelected) {
-            tabLayout.visibility = View.GONE
 
-        }
-    }
 }
 
