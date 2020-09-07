@@ -2,6 +2,7 @@ package company.tap.checkout.viewholders
 
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.text.Editable
 import android.text.TextWatcher
 import android.transition.Fade
@@ -13,9 +14,12 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.annotation.IntRange
 import androidx.core.widget.doAfterTextChanged
+import com.google.gson.Gson
+import company.tap.cardbusinesskit.testmodels.DummyResp
 import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardinputwidget.widget.inline.InlineCardInput
 import company.tap.checkout.R
+import company.tap.checkout.apiresponse.getJsonDataFromAsset
 import company.tap.checkout.enums.SectionType
 import company.tap.checkout.viewholders.PaymentInputViewHolder.PaymentType.CARD
 import company.tap.checkout.viewholders.PaymentInputViewHolder.PaymentType.MOBILE
@@ -25,6 +29,7 @@ import company.tap.tapuilibrary.interfaces.TapSelectionTabLayoutInterface
 import company.tap.tapuilibrary.models.SectionTabItem
 import company.tap.tapuilibrary.views.TapMobilePaymentView
 import company.tap.tapuilibrary.views.TapSelectionTabLayout
+
 
 /**
  *
@@ -58,7 +63,8 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
     private var mobileNumberEditText: EditText? = null
     private var alertMessage: TapTextView? = null
     private var linearLayoutPay: LinearLayout? = null
-
+    private var tabPosition: Int? = null
+   private var dummyInitApiResponse: DummyResp?=null
     init {
         tabLayout = view.findViewById(R.id.sections_tablayout)
         paymentInputContainer = view.findViewById(R.id.payment_input_layout)
@@ -115,8 +121,13 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
              tapCardInputView.setCvcCode("")*/
             cardInputWidget.clear()
             //  alert_text.visibility= View.GONE
-            nfcButton?.visibility = View.VISIBLE
-            cardScannerBtn?.visibility = View.VISIBLE
+
+            if(tabPosition ==1){
+                nfcButton?.visibility = View.INVISIBLE
+                cardScannerBtn?.visibility = View.INVISIBLE
+
+            }
+
             clearText.visibility = View.GONE
         }
         // alertMessage?.visibility = View.GONE
@@ -164,8 +175,16 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (s.toString().isEmpty())
+                    clearText.visibility = View.GONE
+                else
+                    clearText.visibility = View.VISIBLE
+            }
+
         })
+
+
     }
 
     private fun controlScannerOptions() {
@@ -173,6 +192,16 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
             nfcButton?.visibility = View.VISIBLE
             cardScannerBtn?.visibility = View.VISIBLE
         } else {
+            val jsonFileString = this.let { getJsonDataFromAsset(
+                it.context,
+                "dummyapiresponse.json"
+            ) }
+            val gson = Gson()
+            val dummyInitApiResponse: DummyResp = gson.fromJson(
+                jsonFileString,
+                DummyResp::class.java
+            )
+
             nfcButton?.visibility = View.GONE
             cardScannerBtn?.visibility = View.GONE
         }
@@ -180,6 +209,17 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
 
     private fun getCardList(): ArrayList<SectionTabItem> {
         val items = ArrayList<SectionTabItem>()
+        val resID: Int = context.resources.getIdentifier( dummyInitApiResponse.payment_methods.get(0).image, "drawable", context.packageName)
+        val drawable: Drawable = res.getDrawable(resID)
+       // icon.setImageDrawable(drawable)
+        items.add(
+            SectionTabItem(
+               resID,
+                null,
+                dummyInitApiResponse.payment_methods.get(0).name
+            )
+        )
+
         items.add(
             SectionTabItem(
                 context.resources.getDrawable(
@@ -236,7 +276,7 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
             nfcButton?.visibility = View.VISIBLE
             cardScannerBtn?.visibility = View.VISIBLE
 
-            clearText.visibility = View.VISIBLE
+            clearText.visibility = View.GONE
             paymentInputContainer.addView(cardInputWidget)
             checkForFocus()
         } else {
@@ -250,6 +290,7 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
 
             paymentInputContainer.addView(mobilePaymentView)
         }
+        tabPosition = position
     }
 
     private fun checkForFocus() {
