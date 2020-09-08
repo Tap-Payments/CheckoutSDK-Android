@@ -3,6 +3,7 @@ package company.tap.checkoutsdk
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import company.tap.checkout.TapCheckoutFragment
+import company.tap.tapuilibrary.themekit.ThemeManager
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -11,6 +12,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         launchSDK.setOnClickListener {
+            ThemeManager.loadTapTheme(resources, R.raw.default_light_theme)
             val tapCheckoutFragment = TapCheckoutFragment()
             tapCheckoutFragment.show(supportFragmentManager, null)
         }
