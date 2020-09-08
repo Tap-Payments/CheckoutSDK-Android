@@ -2,7 +2,10 @@ package company.tap.checkout.viewholders
 
 
 import android.content.Context
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.os.StrictMode
 import android.text.Editable
 import android.text.TextWatcher
 import android.transition.Fade
@@ -29,6 +32,7 @@ import company.tap.tapuilibrary.interfaces.TapSelectionTabLayoutInterface
 import company.tap.tapuilibrary.models.SectionTabItem
 import company.tap.tapuilibrary.views.TapMobilePaymentView
 import company.tap.tapuilibrary.views.TapSelectionTabLayout
+import java.net.URL
 
 
 /**
@@ -71,6 +75,20 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
         //  paymentLayoutContainer = view.findViewById(R.id.payment_layout_container)
         //    scannerOptions = view.findViewById(R.id.scanner_options)
         clearText = view.findViewById(R.id.clear_text)
+        val jsonFileString = this.let { getJsonDataFromAsset(
+            it.context,
+            "dummyapiresponse.json"
+        ) }
+        val policy = StrictMode.ThreadPolicy.Builder()
+            .permitAll().build()
+        StrictMode.setThreadPolicy(policy)
+        val gson = Gson()
+        dummyInitApiResponse = gson.fromJson(
+            jsonFileString,
+            DummyResp::class.java
+        )
+        println("api response in payment input ${dummyInitApiResponse?.payment_methods} ")
+
         bindViewComponents()
 
     }
@@ -192,15 +210,6 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
             nfcButton?.visibility = View.VISIBLE
             cardScannerBtn?.visibility = View.VISIBLE
         } else {
-            val jsonFileString = this.let { getJsonDataFromAsset(
-                it.context,
-                "dummyapiresponse.json"
-            ) }
-            val gson = Gson()
-            val dummyInitApiResponse: DummyResp = gson.fromJson(
-                jsonFileString,
-                DummyResp::class.java
-            )
 
             nfcButton?.visibility = View.GONE
             cardScannerBtn?.visibility = View.GONE
@@ -209,18 +218,28 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
 
     private fun getCardList(): ArrayList<SectionTabItem> {
         val items = ArrayList<SectionTabItem>()
-        val resID: Int = context.resources.getIdentifier( dummyInitApiResponse.payment_methods.get(0).image, "drawable", context.packageName)
-        val drawable: Drawable = res.getDrawable(resID)
-       // icon.setImageDrawable(drawable)
-        items.add(
-            SectionTabItem(
-               resID,
-                null,
-                dummyInitApiResponse.payment_methods.get(0).name
-            )
+        val url = URL(
+            dummyInitApiResponse?.payment_methods?.get(
+                0
+            )?.image
         )
+        val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
 
-        items.add(
+        println("bmp id " + bmp)
+        val drawable: Drawable = BitmapDrawable(context.resources, bmp)
+
+        drawable.let {
+            SectionTabItem(
+                drawable, context.resources.getDrawable(R.drawable.ic_visa_black),
+                CardBrand.visa
+            )
+        }.let {
+            items.add(
+                it
+            )
+        }
+
+      /*  items.add(
             SectionTabItem(
                 context.resources.getDrawable(
                     R.drawable.ic_visa
@@ -240,7 +259,7 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
                     R.drawable.amex
                 ), context.resources.getDrawable(R.drawable.amex_gray), CardBrand.americanExpress
             )
-        )
+        )*/
         return items
     }
 
