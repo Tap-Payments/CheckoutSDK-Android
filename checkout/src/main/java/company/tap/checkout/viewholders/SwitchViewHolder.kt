@@ -1,15 +1,10 @@
 package company.tap.checkout.viewholders
 
 import android.content.Context
-import android.graphics.Color
 import company.tap.checkout.enums.SectionType
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibrary.datasource.TapSwitchDataSource
-
-import company.tap.tapuilibrary.views.TapCardSwitch
-import company.tap.thememanager.manager.ThemeManager
-import company.tap.thememanager.theme.SwitchTheme
-import company.tap.thememanager.theme.TextViewTheme
+import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
+import company.tap.tapuilibrary.uikit.views.TapCardSwitch
 
 /**
  *
@@ -31,7 +26,7 @@ class SwitchViewHolder(context: Context) : TapBaseViewHolder {
     override fun bindViewComponents() {
         view.setSwitchDataSource(
             TapSwitchDataSource(
-                switchSave = LocalizationManager.getValue("cardSaveLabel","TapCardInputKit"),
+                switchSave = LocalizationManager.getValue("cardSaveLabel", "TapCardInputKit"),
                 switchSaveMerchantCheckout = "Save for [merchant_name] Checkouts",
                 switchSavegoPayCheckout = "By enabling goPay, your mobile number will be saved with Tap Payments to get faster and more secure checkouts in multiple apps and websites.",
                 savegoPayText = "Save for goPay Checkouts",
@@ -39,7 +34,6 @@ class SwitchViewHolder(context: Context) : TapBaseViewHolder {
             )
         )
     }
-
 
 
 }

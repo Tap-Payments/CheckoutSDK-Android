@@ -1,23 +1,17 @@
 package company.tap.checkout.viewholders
 
 import android.content.Context
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import company.tap.checkout.R
 import company.tap.checkout.enums.SectionType
 import company.tap.checkout.utils.AnimationEngine
-import company.tap.checkout.utils.AnimationEngine.Type.*
-import company.tap.tapuilibrary.datasource.GoPayLoginDataSource
-import company.tap.tapuilibrary.interfaces.GoPayLoginInterface
-import company.tap.tapuilibrary.organisms.GoPayLoginInput
-import company.tap.tapuilibrary.organisms.GoPayPasswordInput
-
-
-import company.tap.thememanager.manager.ThemeManager
-import company.tap.thememanager.theme.TextViewTheme
+import company.tap.checkout.utils.AnimationEngine.Type.SLIDE
+import company.tap.tapuilibrary.uikit.datasource.GoPayLoginDataSource
+import company.tap.tapuilibrary.uikit.interfaces.GoPayLoginInterface
+import company.tap.tapuilibrary.uikit.organisms.GoPayLoginInput
+import company.tap.tapuilibrary.uikit.organisms.GoPayPasswordInput
 
 
 /**
@@ -64,11 +58,11 @@ class GoPayViewHolder(context: Context, private val bottomSheet: FrameLayout) : 
     }
 
 
-    fun setThemeToGoPayLoginInput(){
+    fun setThemeToGoPayLoginInput() {
 //        goPayLoginInput.textInput.
     }
 
-    fun setThemeToGoPayPasswordInput(){
+    fun setThemeToGoPayPasswordInput() {
 
     }
 

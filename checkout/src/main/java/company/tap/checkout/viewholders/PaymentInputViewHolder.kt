@@ -15,6 +15,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.annotation.IntRange
 import androidx.core.widget.doAfterTextChanged
 import com.google.gson.Gson
@@ -27,11 +28,12 @@ import company.tap.checkout.enums.SectionType
 import company.tap.checkout.viewholders.PaymentInputViewHolder.PaymentType.CARD
 import company.tap.checkout.viewholders.PaymentInputViewHolder.PaymentType.MOBILE
 import company.tap.tapcardvalidator_android.CardBrand
-import company.tap.tapuilibrary.atoms.TapTextView
-import company.tap.tapuilibrary.interfaces.TapSelectionTabLayoutInterface
-import company.tap.tapuilibrary.models.SectionTabItem
-import company.tap.tapuilibrary.views.TapMobilePaymentView
-import company.tap.tapuilibrary.views.TapSelectionTabLayout
+import company.tap.tapuilibrary.uikit.atoms.TapTextView
+import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
+import company.tap.tapuilibrary.uikit.models.SectionTabItem
+import company.tap.tapuilibrary.uikit.views.TapMobilePaymentView
+import company.tap.tapuilibrary.uikit.views.TapSelectionTabLayout
+
 import java.net.URL
 
 
@@ -68,17 +70,20 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
     private var alertMessage: TapTextView? = null
     private var linearLayoutPay: LinearLayout? = null
     private var tabPosition: Int? = null
-   private var dummyInitApiResponse: DummyResp?=null
+    private var dummyInitApiResponse: DummyResp? = null
+
     init {
         tabLayout = view.findViewById(R.id.sections_tablayout)
         paymentInputContainer = view.findViewById(R.id.payment_input_layout)
         //  paymentLayoutContainer = view.findViewById(R.id.payment_layout_container)
         //    scannerOptions = view.findViewById(R.id.scanner_options)
         clearText = view.findViewById(R.id.clear_text)
-        val jsonFileString = this.let { getJsonDataFromAsset(
-            it.context,
-            "dummyapiresponse.json"
-        ) }
+        val jsonFileString = this.let {
+            getJsonDataFromAsset(
+                it.context,
+                "dummyapiresponse.json"
+            )
+        }
         val policy = StrictMode.ThreadPolicy.Builder()
             .permitAll().build()
         StrictMode.setThreadPolicy(policy)
@@ -140,7 +145,7 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
             cardInputWidget.clear()
             //  alert_text.visibility= View.GONE
 
-            if(tabPosition ==1){
+            if (tabPosition == 1) {
                 nfcButton?.visibility = View.INVISIBLE
                 cardScannerBtn?.visibility = View.INVISIBLE
 
@@ -150,12 +155,13 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
         }
         // alertMessage?.visibility = View.GONE
         nfcButton?.setOnClickListener {
-
+            Toast.makeText(context, "u clicked nfc", Toast.LENGTH_SHORT).show()
 
         }
         cardScannerBtn?.setOnClickListener {
             // val cardFragment = CardScannerFragment()
             tabLayout.visibility = View.GONE
+            Toast.makeText(context, "u clicked card scanner", Toast.LENGTH_SHORT).show()
 
         }
     }
@@ -239,27 +245,27 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
             )
         }
 
-      /*  items.add(
-            SectionTabItem(
-                context.resources.getDrawable(
-                    R.drawable.ic_visa
-                ), context.resources.getDrawable(R.drawable.ic_visa_black), CardBrand.visa
-            )
-        )
-        items.add(
-            SectionTabItem(
-                context.resources.getDrawable(
-                    R.drawable.mastercard
-                ), context.resources.getDrawable(R.drawable.mastercard_gray), CardBrand.masterCard
-            )
-        )
-        items.add(
-            SectionTabItem(
-                context.resources.getDrawable(
-                    R.drawable.amex
-                ), context.resources.getDrawable(R.drawable.amex_gray), CardBrand.americanExpress
-            )
-        )*/
+        /*  items.add(
+              SectionTabItem(
+                  context.resources.getDrawable(
+                      R.drawable.ic_visa
+                  ), context.resources.getDrawable(R.drawable.ic_visa_black), CardBrand.visa
+              )
+          )
+          items.add(
+              SectionTabItem(
+                  context.resources.getDrawable(
+                      R.drawable.mastercard
+                  ), context.resources.getDrawable(R.drawable.mastercard_gray), CardBrand.masterCard
+              )
+          )
+          items.add(
+              SectionTabItem(
+                  context.resources.getDrawable(
+                      R.drawable.amex
+                  ), context.resources.getDrawable(R.drawable.amex_gray), CardBrand.americanExpress
+              )
+          )*/
         return items
     }
 

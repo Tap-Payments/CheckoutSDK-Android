@@ -1,17 +1,14 @@
 package company.tap.checkout.utils
 
 import android.content.Context
-import android.content.SharedPreferences
-import android.view.View
-import android.widget.Toast
-import company.tap.checkout.R
-import company.tap.thememanager.manager.ThemeManager
-
-object CurrentTheme  {
-    private  var currentTheme :Int?= null
+import company.tap.tapuilibrary.themekit.ThemeManager
 
 
-     fun initAppTheme(theme: Int, context: Context) {
+object CurrentTheme {
+    private var currentTheme: Int? = null
+
+
+    fun initAppTheme(theme: Int, context: Context) {
         currentTheme = theme
 //        ThemeManager.loadTapTheme(this, "https://kar-tempo.s3.ap-south-1.amazonaws.com/theme-tap.json")
         ThemeManager.loadTapTheme(context.resources, theme)

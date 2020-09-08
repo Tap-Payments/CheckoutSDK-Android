@@ -13,9 +13,8 @@ import company.tap.checkout.apiresponse.getJsonDataFromAsset
 import company.tap.checkout.enums.SectionType
 import company.tap.checkout.viewmodels.TapLayoutManager
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibrary.interfaces.TapBottomDialogInterface
-
-import company.tap.tapuilibrary.views.TapBottomSheetDialog
+import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
+import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
 
 
 /**

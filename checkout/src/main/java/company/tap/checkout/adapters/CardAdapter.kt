@@ -15,7 +15,6 @@ import com.bumptech.glide.Glide
 import company.tap.cardbusinesskit.testmodels.Payment_methods
 import company.tap.checkout.R
 import company.tap.checkout.interfaces.OnCardSelectedActionListener
-import company.tap.tapuilibrary.adapters.context
 import kotlinx.android.synthetic.main.item_saved_card.view.*
 
 
@@ -147,7 +146,7 @@ class CardAdapter(
         fun bind(paymentMethods: Payment_methods) {
 
             println("payments image val ${paymentMethods.image.toUri()}")
-            val imageView: ImageView = itemView.imageView_amex
+            val imageView: ImageView = itemView.imageView_amex as ImageView
             Glide.with(itemView.context)
                     .load(paymentMethods.image)
                     .into(imageView)

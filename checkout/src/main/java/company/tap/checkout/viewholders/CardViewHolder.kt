@@ -1,10 +1,8 @@
 package company.tap.checkout.viewholders
 
 import android.content.Context
-import android.graphics.Color
 import android.view.View
 import android.view.animation.AnimationUtils
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.cardbusinesskit.testmodels.Payment_methods
@@ -12,11 +10,8 @@ import company.tap.checkout.R
 import company.tap.checkout.adapters.CardAdapter
 import company.tap.checkout.enums.SectionType
 import company.tap.checkout.interfaces.OnCardSelectedActionListener
-import company.tap.checkout.utils.AnimationEngine
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibrary.atoms.TapChipGroup
-import company.tap.thememanager.manager.ThemeManager
-import company.tap.thememanager.theme.TextViewTheme
+import company.tap.tapuilibrary.uikit.atoms.TapChipGroup
 import kotlinx.android.synthetic.main.item_saved_card.view.*
 
 /**
@@ -34,18 +29,16 @@ class CardViewHolder(
 
     override val type = SectionType.CARD
 
-   // private var paymentsList: ArrayList<Int> = arrayListOf(1, 2, 3, 4, 5, 6)
+    // private var paymentsList: ArrayList<Int> = arrayListOf(1, 2, 3, 4, 5, 6)
     private var paymentsList: List<Payment_methods>? = null
 
     init {
         bindViewComponents()
-        setThemeToLeftButton()
-        setThemeToRightButton()
+
     }
 
     override fun bindViewComponents() {
-        view.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.headers.gatewayHeader.backgroundColor")))
-        view.groupName.text =  LocalizationManager.getValue(
+        view.groupName.text = LocalizationManager.getValue(
             "GatewayHeader",
             "HorizontalHeaders",
             "leftTitle"
@@ -62,7 +55,7 @@ class CardViewHolder(
         )
         view.chipsRecycler.adapter =
             paymentsList?.let { CardAdapter(it, onCardSelectedActionListener) }
-         println("paymentList supported currency ${paymentsList?.get(0)?.supported_currencies}")
+        println("paymentList supported currency ${paymentsList?.get(0)?.supported_currencies}")
         view.groupAction.setOnClickListener {
             val animation = AnimationUtils.loadAnimation(this.view.context, R.anim.shake)
             view.chipsRecycler.startAnimation(animation)
@@ -71,23 +64,6 @@ class CardViewHolder(
 
     }
 
-
-
-    fun setThemeToLeftButton(){
-        val buttonTheme = TextViewTheme()
-        buttonTheme.textColor = Color.parseColor(ThemeManager.getValue("horizontalList.headers.gatewayHeader.leftButton.labelTextColor"))
-//        buttonTheme.textSize = ThemeManager.getFontSize("horizontalList.headers.gatewayHeader.leftButton.labelTextFont").toFloat()
-        buttonTheme.font = ThemeManager.getFontName("horizontalList.headers.gatewayHeader.leftButton.labelTextFont")
-//        view.groupName.setTheme(buttonTheme)
-    }
-
-    fun setThemeToRightButton(){
-        val buttonTheme = TextViewTheme()
-        buttonTheme.textColor = Color.parseColor(ThemeManager.getValue("horizontalList.headers.gatewayHeader.rightButton.labelTextColor"))
- //       buttonTheme.textSize = ThemeManager.getFontSize("horizontalList.headers.gatewayHeader.rightButton.labelTextFont").toFloat()
-        buttonTheme.font = ThemeManager.getFontName("horizontalList.headers.gatewayHeader.rightButton.labelTextFont")
-//        view.groupAction.setTheme(buttonTheme)
-    }
 
     /*
     horizontalList
@@ -109,7 +85,7 @@ class CardViewHolder(
      * Sets data from API through LayoutManager
      * @param paymentMethodsApi represents the list of payment methods available from API
      * */
-    fun setDatafromAPI(paymentMethodsApi: List<Payment_methods>){
+    fun setDatafromAPI(paymentMethodsApi: List<Payment_methods>) {
         paymentsList = paymentMethodsApi
         bindViewComponents()
     }
