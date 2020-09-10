@@ -163,8 +163,8 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
             val appCompatActivity = it.context as AppCompatActivity
 
             val fm: FragmentManager = appCompatActivity.getSupportFragmentManager()
-            val newFrame: Fragment = NFCFragment()
-            fm.beginTransaction().replace(R.id.fragment_container_nfc, newFrame).commit()
+            val nfcfrag: Fragment = NFCFragment()
+            fm.beginTransaction().replace(R.id.fragment_container_nfc, nfcfrag).commit()
             Toast.makeText(context, "u clicked nfc", Toast.LENGTH_SHORT).show()
 
         }
