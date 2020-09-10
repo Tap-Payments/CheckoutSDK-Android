@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<company.tap.tapuilibrary.atoms.TapChip
+<company.tap.tapuilibrary.uikit.atoms.TapChip
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -29,7 +29,7 @@
     android:layout_height="match_parent"
    >
 
-    <company.tap.tapuilibrary.atoms.TapImageView
+    <company.tap.tapuilibrary.uikit.atoms.TapImageView
         android:id="@+id/imageView_amex"
         android:layout_width="18dp"
         android:layout_height="18dp"
@@ -38,7 +38,7 @@
         android:layout_marginBottom="@dimen/margin_basic_14dp"
         tools:src="@drawable/amex" />
     
-    <company.tap.tapuilibrary.atoms.TapTextView
+    <company.tap.tapuilibrary.uikit.atoms.TapTextView
        android:id="@+id/textView_carddetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -54,4 +54,4 @@
         android:layout_marginEnd="10dp"
         />
   </LinearLayout>
-</company.tap.tapuilibrary.atoms.TapChip>
+</company.tap.tapuilibrary.uikit.atoms.TapChip>

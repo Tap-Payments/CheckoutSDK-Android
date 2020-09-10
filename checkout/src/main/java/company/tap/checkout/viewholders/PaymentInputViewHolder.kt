@@ -17,7 +17,10 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.IntRange
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.google.gson.Gson
 import company.tap.cardbusinesskit.testmodels.DummyResp
 import company.tap.cardinputwidget.widget.CardInputListener
@@ -29,11 +32,11 @@ import company.tap.checkout.viewholders.PaymentInputViewHolder.PaymentType.CARD
 import company.tap.checkout.viewholders.PaymentInputViewHolder.PaymentType.MOBILE
 import company.tap.tapcardvalidator_android.CardBrand
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
+import company.tap.tapuilibrary.uikit.fragment.NFCFragment
 import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
 import company.tap.tapuilibrary.uikit.models.SectionTabItem
 import company.tap.tapuilibrary.uikit.views.TapMobilePaymentView
 import company.tap.tapuilibrary.uikit.views.TapSelectionTabLayout
-
 import java.net.URL
 
 
@@ -60,7 +63,7 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
     //  private val scannerOptions: LinearLayout
     private var selectedType = CARD
     private var shouldShowScannerOptions = true
-    private val cardInputWidget = InlineCardInput(context)
+   private val cardInputWidget = InlineCardInput(context)
     private val mobilePaymentView = TapMobilePaymentView(context, null)
     private var lastFocusField = CardInputListener.FocusField.FOCUS_CARD
     private var lastCardInput = ""
@@ -80,8 +83,8 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
         clearText = view.findViewById(R.id.clear_text)
         val jsonFileString = this.let {
             getJsonDataFromAsset(
-                it.context,
-                "dummyapiresponse.json"
+                    it.context,
+                    "dummyapiresponse.json"
             )
         }
         val policy = StrictMode.ThreadPolicy.Builder()
@@ -89,8 +92,8 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
         StrictMode.setThreadPolicy(policy)
         val gson = Gson()
         dummyInitApiResponse = gson.fromJson(
-            jsonFileString,
-            DummyResp::class.java
+                jsonFileString,
+                DummyResp::class.java
         )
         println("api response in payment input ${dummyInitApiResponse?.payment_methods} ")
 
@@ -103,8 +106,8 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
     }
 
     fun setExpDate(
-        @IntRange(from = 1, to = 12) month: Int,
-        @IntRange(from = 0, to = 9999) year: Int
+            @IntRange(from = 1, to = 12) month: Int,
+            @IntRange(from = 0, to = 9999) year: Int
     ) {
         cardInputWidget.setExpiryDate(month, year)
     }
@@ -155,6 +158,13 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
         }
         // alertMessage?.visibility = View.GONE
         nfcButton?.setOnClickListener {
+            val nfcFragment = NFCFragment()
+
+            val appCompatActivity = it.context as AppCompatActivity
+
+            val fm: FragmentManager = appCompatActivity.getSupportFragmentManager()
+            val newFrame: Fragment = NFCFragment()
+            fm.beginTransaction().replace(R.id.fragment_container_nfc, newFrame).commit()
             Toast.makeText(context, "u clicked nfc", Toast.LENGTH_SHORT).show()
 
         }
@@ -225,9 +235,9 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
     private fun getCardList(): ArrayList<SectionTabItem> {
         val items = ArrayList<SectionTabItem>()
         val url = URL(
-            dummyInitApiResponse?.payment_methods?.get(
-                0
-            )?.image
+                dummyInitApiResponse?.payment_methods?.get(
+                        0
+                )?.image
         )
         val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
 
@@ -236,12 +246,12 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
 
         drawable.let {
             SectionTabItem(
-                drawable, context.resources.getDrawable(R.drawable.ic_visa_black),
-                CardBrand.visa
+                    drawable, context.resources.getDrawable(R.drawable.ic_visa_black),
+                    CardBrand.visa
             )
         }.let {
             items.add(
-                it
+                    it
             )
         }
 
@@ -272,18 +282,18 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
     private fun getMobileList(): ArrayList<SectionTabItem> {
         val items = ArrayList<SectionTabItem>()
         items.add(
-            SectionTabItem(
-                context.resources.getDrawable(
-                    R.drawable.zain_gray
-                ), context.resources.getDrawable(R.drawable.zain_dark), CardBrand.zain
-            )
+                SectionTabItem(
+                        context.resources.getDrawable(
+                                R.drawable.zain_gray
+                        ), context.resources.getDrawable(R.drawable.zain_dark), CardBrand.zain
+                )
         )
         items.add(
-            SectionTabItem(
-                context.resources.getDrawable(
-                    R.drawable.ooredoo
-                ), context.resources.getDrawable(R.drawable.ooredoo_gray), CardBrand.ooredoo
-            )
+                SectionTabItem(
+                        context.resources.getDrawable(
+                                R.drawable.ooredoo
+                        ), context.resources.getDrawable(R.drawable.ooredoo_gray), CardBrand.ooredoo
+                )
         )
         return items
     }

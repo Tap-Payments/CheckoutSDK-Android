@@ -66,7 +66,7 @@ class TapLayoutManager : ViewModel(),
     }
 
     private fun initCardsGroup() {
-        cardViewHolder.view.groupAction.setOnClickListener {
+        cardViewHolder.view.setOnClickListener {
             displayGoPayLogin()
         }
     }
