@@ -158,7 +158,7 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
         }
         // alertMessage?.visibility = View.GONE
         nfcButton?.setOnClickListener {
-            val nfcFragment = NFCFragment()
+           //ToDO check this fragment crash
 
             val appCompatActivity = it.context as AppCompatActivity
 
