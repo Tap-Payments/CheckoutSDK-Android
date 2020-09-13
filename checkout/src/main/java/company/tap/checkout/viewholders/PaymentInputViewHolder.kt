@@ -3,6 +3,7 @@ package company.tap.checkout.viewholders
 
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.StrictMode
@@ -12,6 +13,7 @@ import android.transition.Fade
 import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -31,6 +33,8 @@ import company.tap.checkout.enums.SectionType
 import company.tap.checkout.viewholders.PaymentInputViewHolder.PaymentType.CARD
 import company.tap.checkout.viewholders.PaymentInputViewHolder.PaymentType.MOBILE
 import company.tap.tapcardvalidator_android.CardBrand
+import company.tap.tapcardvalidator_android.CardValidationState
+import company.tap.tapcardvalidator_android.CardValidator
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
 import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
@@ -158,7 +162,7 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
         }
         // alertMessage?.visibility = View.GONE
         nfcButton?.setOnClickListener {
-           //ToDO check this fragment crash
+            val nfcFragment = NFCFragment()
 
             val appCompatActivity = it.context as AppCompatActivity
 
@@ -205,6 +209,7 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
                     lastCardInput = it.toString()
                     shouldShowScannerOptions = it.isEmpty()
                     controlScannerOptions()
+                    cardBrandDetection(s.toString())
                 }
             }
 
@@ -218,6 +223,26 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
 
         })
 
+
+    }
+
+    // Logic to detect the cardBrand Name from the CardValidator Kit
+    private fun cardBrandDetection(cardTyped:String) {
+        if (cardTyped.isNullOrEmpty())
+            tabLayout.resetBehaviour()
+        val card = CardValidator.validate(cardTyped.toString())
+        if (card.cardBrand != null) {
+            tabLayout.selectTab(
+                card.cardBrand,
+                card.validationState == CardValidationState.valid
+            )
+
+
+            nfcButton?.visibility = View.GONE
+            cardScannerBtn?.visibility = View.GONE
+
+
+        }
 
     }
 
