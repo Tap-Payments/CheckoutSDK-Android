@@ -92,15 +92,20 @@ class AmountViewHolder(context: Context) : TapBaseViewHolder {
 
     /*
      "amountSectionView": {
+
+     /////// currency
         "originalAmountLabelFont" : "Roboto-Regular,20",
         "originalAmountLabelColor" : "greyishBrown",
 
+////// selected
         "convertedAmountLabelFont" : "Roboto-Light,14",
         "convertedAmountLabelColor" : "brownGrey",
 
         "itemsLabelFont" : "Roboto-Light,9",
         "itemsLabelColor" : "greyishBrown",
 
+
+///// button
         "itemsNumberButtonBackgroundColor" : "whiteTwo",
         "itemsNumberButtonBorder" : {
             "color" : "veryLightPinkTwo",

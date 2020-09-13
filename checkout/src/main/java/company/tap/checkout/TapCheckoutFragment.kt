@@ -22,7 +22,7 @@ import company.tap.tapuilibrary.views.TapBottomSheetDialog
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface{
+class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
 
     private val layoutManager: TapLayoutManager by viewModels()
 
