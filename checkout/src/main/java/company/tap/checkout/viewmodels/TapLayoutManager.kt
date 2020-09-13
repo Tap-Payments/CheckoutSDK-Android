@@ -7,7 +7,8 @@ import android.widget.LinearLayout
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
 import androidx.transition.*
-import company.tap.checkout.apiresponse.DummyResponse
+import company.tap.cardbusinesskit.testmodels.DummyResp
+
 import company.tap.checkout.enums.SectionType
 import company.tap.checkout.interfaces.BaseLayoutManager
 import company.tap.checkout.interfaces.OnCardSelectedActionListener
@@ -65,7 +66,7 @@ class TapLayoutManager : ViewModel(),
     }
 
     private fun initCardsGroup() {
-        cardViewHolder.view.groupAction.setOnClickListener {
+        cardViewHolder.view.setOnClickListener {
             displayGoPayLogin()
         }
     }
@@ -126,10 +127,11 @@ class TapLayoutManager : ViewModel(),
 
     override fun displaySaveCardOptions() {}
 
-    override fun getDatafromAPI(dummyInitapiResponse: DummyResponse) {
-        println("dummy response value is ${dummyInitapiResponse?.data?.merchant?.logo}")
-        businessViewHolder.setDatafromAPI(dummyInitapiResponse?.data?.merchant?.logo,dummyInitapiResponse?.data?.merchant.name)
-
+    override fun getDatafromAPI(dummyInitapiResponse: DummyResp) {
+        println("dummy response value is ${dummyInitapiResponse}")
+        businessViewHolder.setDatafromAPI(dummyInitapiResponse.merchant.logo,dummyInitapiResponse.merchant.name)
+        amountViewHolder.setDatafromAPI(dummyInitapiResponse.order.original_amount.toString(),dummyInitapiResponse.order.trx_currency,dummyInitapiResponse.order.trx_currency,dummyInitapiResponse?.order.items.size.toString())
+        cardViewHolder.setDatafromAPI(dummyInitapiResponse.payment_methods)
     }
 
     private fun removeViews(vararg viewHolders: TapBaseViewHolder) {

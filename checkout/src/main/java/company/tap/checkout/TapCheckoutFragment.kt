@@ -8,13 +8,14 @@ import android.widget.LinearLayout
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.gson.Gson
-import company.tap.checkout.apiresponse.DummyResponse
+import company.tap.cardbusinesskit.testmodels.DummyResp
 import company.tap.checkout.apiresponse.getJsonDataFromAsset
 import company.tap.checkout.enums.SectionType
 import company.tap.checkout.viewmodels.TapLayoutManager
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibrary.interfaces.TapBottomDialogInterface
-import company.tap.tapuilibrary.views.TapBottomSheetDialog
+import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
+import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
+
 
 /**
  *
@@ -54,7 +55,7 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
     private fun getBusinessHeaderData() {
         val jsonFileString = activity?.applicationContext?.let { getJsonDataFromAsset(it, "dummyapiresponse.json") }
         val gson = Gson()
-        val dummyInitApiResponse: DummyResponse = gson.fromJson(jsonFileString, DummyResponse::class.java)
+        val dummyInitApiResponse: DummyResp = gson.fromJson(jsonFileString, DummyResp::class.java)
         // Pass the api response data to LayoutManager
         layoutManager.getDatafromAPI(dummyInitApiResponse)
     }
