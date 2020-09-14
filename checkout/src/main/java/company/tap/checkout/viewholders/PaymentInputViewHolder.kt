@@ -67,7 +67,7 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
     private val clearText: ImageView
 
     //  private val scannerOptions: LinearLayout
-    private var selectedType = CARD
+     var selectedType = CARD
     private var shouldShowScannerOptions = true
    private val cardInputWidget = InlineCardInput(context)
     private val mobilePaymentView = TapMobilePaymentView(context, null)
@@ -80,6 +80,8 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
     private var linearLayoutPay: LinearLayout? = null
     private var tabPosition: Int? = null
     private var dummyInitApiResponse: DummyResp? = null
+    private var switchViewHolder = SwitchViewHolder(context)
+    private var imageURL: String? = null
 
     init {
         tabLayout = view.findViewById(R.id.sections_tablayout)
@@ -87,7 +89,7 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
         //  paymentLayoutContainer = view.findViewById(R.id.payment_layout_container)
         //    scannerOptions = view.findViewById(R.id.scanner_options)
         clearText = view.findViewById(R.id.clear_text)
-        val jsonFileString = this.let {
+       /* val jsonFileString = this.let {
             getJsonDataFromAsset(
                     it.context,
                     "dummyapiresponse.json"
@@ -101,8 +103,8 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
                 jsonFileString,
                 DummyResp::class.java
         )
-        println("api response in payment input ${dummyInitApiResponse?.payment_methods} ")
-
+        println("api response in payment input ${dummyInitApiResponse?.payment_methods} ")*/
+        switchViewHolder = SwitchViewHolder(context)
         bindViewComponents()
 
     }
@@ -264,27 +266,24 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
 
     private fun getCardList(): ArrayList<SectionTabItem> {
         val items = ArrayList<SectionTabItem>()
-        val url = URL(
-                dummyInitApiResponse?.payment_methods?.get(
-                        0
-                )?.image
-        )
-        val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
+        if(imageURL!=null) {
+            val url = URL(imageURL)
+            val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
 
-        println("bmp id " + bmp)
-        val drawable: Drawable = BitmapDrawable(context.resources, bmp)
+            println("bmp id " + bmp)
+            val drawable: Drawable = BitmapDrawable(context.resources, bmp)
 
-        drawable.let {
-            SectionTabItem(
+            drawable.let {
+                SectionTabItem(
                     drawable, context.resources.getDrawable(R.drawable.ic_visa_black),
                     CardBrand.visa
-            )
-        }.let {
-            items.add(
+                )
+            }.let {
+                items.add(
                     it
-            )
+                )
+            }
         }
-
         /*  items.add(
               SectionTabItem(
                   context.resources.getDrawable(
@@ -343,6 +342,7 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
 
             clearText.visibility = View.GONE
             paymentInputContainer.addView(cardInputWidget)
+            switchViewHolder?.bindViewComponents()
             checkForFocus()
         } else {
             selectedType = MOBILE
@@ -354,6 +354,7 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
                 clearText.visibility = View.VISIBLE
 
             paymentInputContainer.addView(mobilePaymentView)
+            switchViewHolder?.bindViewComponents()
         }
         tabPosition = position
     }
@@ -378,6 +379,14 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
 
     override fun onFocusChange(focusField: String) {
         lastFocusField = focusField
+    }
+    /**
+     * Sets data from API through LayoutManager
+     * @param imageURLApi represents the images of payment methods.
+     * */
+    fun setDatafromAPI(imageURLApi: String) {
+        imageURL = imageURLApi
+        bindViewComponents()
     }
 
 

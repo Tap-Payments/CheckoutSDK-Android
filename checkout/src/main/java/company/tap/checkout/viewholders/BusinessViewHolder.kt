@@ -26,7 +26,7 @@ class BusinessViewHolder(context: Context) : TapBaseViewHolder {
 
     init {
         bindViewComponents()
-        setThemeToView(context)
+
     }
 
     override fun bindViewComponents() {
@@ -41,15 +41,6 @@ class BusinessViewHolder(context: Context) : TapBaseViewHolder {
             businessFor = LocalizationManager.getValue("paymentFor", "TapMerchantSection"),
             businessImageResources = merchantLogo
         )
-    }
-
-    // TODO remove all the themes  from viewHolder
-    private fun setThemeToView(context: Context) {
-
-        ///we will set static value with current theme and when we use it we will check current theme first
-        CurrentTheme.initAppTheme(R.raw.defaultlighttheme, context)
-//        ThemeManager.loadTapTheme(context.resources,R.raw.defaultlighttheme )
-
     }
 
 

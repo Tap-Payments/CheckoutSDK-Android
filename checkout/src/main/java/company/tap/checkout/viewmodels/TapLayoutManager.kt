@@ -35,7 +35,7 @@ class TapLayoutManager : ViewModel(),
     private lateinit var itemsViewHolder: ItemsViewHolder
     private lateinit var cardViewHolder: CardViewHolder
     private lateinit var paymentInputViewHolder: PaymentInputViewHolder
-    private lateinit var saveCardSwitch: SwitchViewHolder
+    private lateinit var saveCardSwitchHolder: SwitchViewHolder
     private lateinit var goPayViewHolder: GoPayViewHolder
     private lateinit var tabAnimatedActionButtonViewHolder: TabAnimatedActionButtonViewHolder
 
@@ -51,7 +51,7 @@ class TapLayoutManager : ViewModel(),
         amountViewHolder = AmountViewHolder(context)
         cardViewHolder = CardViewHolder(context, this)
         paymentInputViewHolder = PaymentInputViewHolder(context)
-        saveCardSwitch = SwitchViewHolder(context)
+        saveCardSwitchHolder = SwitchViewHolder(context)
         tabAnimatedActionButtonViewHolder = TabAnimatedActionButtonViewHolder(context)
         initAmountAction()
         initCardsGroup()
@@ -78,7 +78,7 @@ class TapLayoutManager : ViewModel(),
             amountViewHolder,
             cardViewHolder,
             paymentInputViewHolder,
-            saveCardSwitch,
+            saveCardSwitchHolder,
             tabAnimatedActionButtonViewHolder
         )
     }
@@ -94,7 +94,7 @@ class TapLayoutManager : ViewModel(),
     override fun displayGoPayLogin() {
         AnimationEngine.applyTransition(bottomSheetLayout, SLIDE)
         goPayViewHolder = GoPayViewHolder(context, bottomSheetLayout)
-        removeViews(cardViewHolder, paymentInputViewHolder, saveCardSwitch)
+        removeViews(cardViewHolder, paymentInputViewHolder, saveCardSwitchHolder)
         addViews(goPayViewHolder)
     }
 
@@ -105,7 +105,7 @@ class TapLayoutManager : ViewModel(),
             removeViews(
                 cardViewHolder,
                 paymentInputViewHolder,
-                saveCardSwitch,
+                saveCardSwitchHolder,
                 tabAnimatedActionButtonViewHolder
             )
         } else {
@@ -113,7 +113,7 @@ class TapLayoutManager : ViewModel(),
             addViews(
                 cardViewHolder,
                 paymentInputViewHolder,
-                saveCardSwitch,
+                saveCardSwitchHolder,
                 tabAnimatedActionButtonViewHolder
             )
         }
@@ -132,6 +132,8 @@ class TapLayoutManager : ViewModel(),
         businessViewHolder.setDatafromAPI(dummyInitapiResponse.merchant.logo,dummyInitapiResponse.merchant.name)
         amountViewHolder.setDatafromAPI(dummyInitapiResponse.order.original_amount.toString(),dummyInitapiResponse.order.trx_currency,dummyInitapiResponse.order.trx_currency,dummyInitapiResponse?.order.items.size.toString())
         cardViewHolder.setDatafromAPI(dummyInitapiResponse.payment_methods)
+        paymentInputViewHolder.setDatafromAPI(dummyInitapiResponse.payment_methods.get(0).image)
+        saveCardSwitchHolder.setDatafromAPI(dummyInitapiResponse.merchant.name,paymentInputViewHolder.selectedType)
     }
 
     private fun removeViews(vararg viewHolders: TapBaseViewHolder) {
