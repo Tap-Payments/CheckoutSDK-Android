@@ -3,7 +3,6 @@ package company.tap.checkout.viewholders
 
 import android.content.Context
 import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.StrictMode
@@ -13,8 +12,6 @@ import android.transition.Fade
 import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
-import android.view.WindowManager
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -23,22 +20,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.google.gson.Gson
-import company.tap.cardbusinesskit.testmodels.DummyResp
 import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardinputwidget.widget.inline.InlineCardInput
 import company.tap.checkout.R
-import company.tap.checkout.apiresponse.getJsonDataFromAsset
 import company.tap.checkout.enums.SectionType
 import company.tap.checkout.viewholders.PaymentInputViewHolder.PaymentType.CARD
 import company.tap.checkout.viewholders.PaymentInputViewHolder.PaymentType.MOBILE
 import company.tap.tapcardvalidator_android.CardBrand
 import company.tap.tapcardvalidator_android.CardValidationState
 import company.tap.tapcardvalidator_android.CardValidator
-import company.tap.tapuilibrary.uikit.atoms.TapTextView
-import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
-
 import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
 import company.tap.tapuilibrary.uikit.models.SectionTabItem
 import company.tap.tapuilibrary.uikit.views.TapMobilePaymentView
@@ -67,22 +58,21 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
     private val clearText: ImageView
 
     //  private val scannerOptions: LinearLayout
-     var selectedType = CARD
+    var selectedType = CARD
     private var shouldShowScannerOptions = true
-   private val cardInputWidget = InlineCardInput(context)
+    private val cardInputWidget = InlineCardInput(context)
     private val mobilePaymentView = TapMobilePaymentView(context, null)
     private var lastFocusField = CardInputListener.FocusField.FOCUS_CARD
     private var lastCardInput = ""
     private var cardScannerBtn: ImageView? = null
     private var nfcButton: ImageView? = null
-    private var mobileNumberEditText: EditText? = null
-    private var alertMessage: TapTextView? = null
+
     private var linearLayoutPay: LinearLayout? = null
     private var tabPosition: Int? = null
-    private var dummyInitApiResponse: DummyResp? = null
+
     private var switchViewHolder = SwitchViewHolder(context)
     private var imageURL: String? = null
-    private var isadded:Boolean = false
+    private var isadded: Boolean = false
 
     init {
         tabLayout = view.findViewById(R.id.sections_tablayout)
@@ -93,7 +83,7 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
         val policy = StrictMode.ThreadPolicy.Builder()
             .permitAll().build()
         StrictMode.setThreadPolicy(policy)
-       // switchViewHolder = SwitchViewHolder(context)
+        // switchViewHolder = SwitchViewHolder(context)
         bindViewComponents()
 
     }
@@ -103,8 +93,8 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
     }
 
     fun setExpDate(
-            @IntRange(from = 1, to = 12) month: Int,
-            @IntRange(from = 0, to = 9999) year: Int
+        @IntRange(from = 1, to = 12) month: Int,
+        @IntRange(from = 0, to = 9999) year: Int
     ) {
         cardInputWidget.setExpiryDate(month, year)
     }
@@ -114,7 +104,7 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
     }
 
     override fun bindViewComponents() {
-       // initTabLayout()
+        // initTabLayout()
         initCardInput()
         initMobileInput()
         initClearText()
@@ -131,7 +121,7 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
     private fun initializeCardForm() {
         cardScannerBtn = view.findViewById(R.id.card_scanner_button)
         nfcButton = view.findViewById(R.id.nfc_button)
-      //  mobileNumberEditText = view.findViewById(R.id.mobile_number)
+        //  mobileNumberEditText = view.findViewById(R.id.mobile_number)
 //        alertMessage = view.findViewById(R.id.textview_alert_message)
 
         linearLayoutPay = view.findViewById(R.id.linear_paylayout)
@@ -156,7 +146,7 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
         }
 
         nfcButton?.setOnClickListener {
-          //  val nfcFragment = NFCFragment()
+            //  val nfcFragment = NFCFragment()
 
             val appCompatActivity = it.context as AppCompatActivity
 
@@ -167,12 +157,12 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
 
         }
         cardScannerBtn?.setOnClickListener {
-          /*   val cardFragment = CardScannerFragment()
-            val appCompatActivity = it.context as AppCompatActivity
+            /*   val cardFragment = CardScannerFragment()
+              val appCompatActivity = it.context as AppCompatActivity
 
-            val fm: FragmentManager = appCompatActivity.getSupportFragmentManager()
-            fm.beginTransaction().replace(R.id.fragment_container_nfc, cardFragment).commit()
-            tabLayout.visibility = View.GONE*/
+              val fm: FragmentManager = appCompatActivity.getSupportFragmentManager()
+              fm.beginTransaction().replace(R.id.fragment_container_nfc, cardFragment).commit()
+              tabLayout.visibility = View.GONE*/
             Toast.makeText(context, "u clicked card scanner", Toast.LENGTH_SHORT).show()
 
         }
@@ -200,8 +190,8 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
 
     private fun initCardInput() {
         cardInputWidget.holderNameEnabled = false
-       // paymentInputContainer.removeView(cardInputWidget)
-      //  paymentInputContainer.addView(cardInputWidget)
+        // paymentInputContainer.removeView(cardInputWidget)
+        //  paymentInputContainer.addView(cardInputWidget)
         cardInputWidget.setCardNumberTextWatcher(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 s?.let {
@@ -224,8 +214,9 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
 
 
     }
-// Lo
-    private fun cardBrandDetection(cardTyped:String) {
+
+    // Logic to show the switches when card details are valid
+    private fun cardBrandDetection(cardTyped: String) {
         if (cardTyped.isNullOrEmpty())
             tabLayout.resetBehaviour()
         val card = CardValidator.validate(cardTyped.toString())
@@ -257,9 +248,9 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
 
     private fun getCardList(): ArrayList<SectionTabItem> {
         val items = ArrayList<SectionTabItem>()
-        if(imageURL!=null) {
+        if (imageURL != null) {
             val url = URL(imageURL)
-            if(url!=null){
+            if (url != null) {
                 val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
                 println("bmp id " + bmp)
                 val drawable: Drawable = BitmapDrawable(context.resources, bmp)
@@ -305,24 +296,24 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
     private fun getMobileList(): ArrayList<SectionTabItem> {
         val items = ArrayList<SectionTabItem>()
         items.add(
-                SectionTabItem(
-                        context.resources.getDrawable(
-                                R.drawable.zain_gray
-                        ), context.resources.getDrawable(R.drawable.zain_dark), CardBrand.zain
-                )
+            SectionTabItem(
+                context.resources.getDrawable(
+                    R.drawable.zain_gray
+                ), context.resources.getDrawable(R.drawable.zain_dark), CardBrand.zain
+            )
         )
         items.add(
-                SectionTabItem(
-                        context.resources.getDrawable(
-                                R.drawable.ooredoo
-                        ), context.resources.getDrawable(R.drawable.ooredoo_gray), CardBrand.ooredoo
-                )
+            SectionTabItem(
+                context.resources.getDrawable(
+                    R.drawable.ooredoo
+                ), context.resources.getDrawable(R.drawable.ooredoo_gray), CardBrand.ooredoo
+            )
         )
         return items
     }
 
     override fun onTabSelected(position: Int?) {
-        tabPosition=position
+        tabPosition = position
         position?.let { swapInputViews(it) }
     }
 
@@ -332,15 +323,17 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
         paymentInputContainer.removeAllViews()
         if (position == 0) {
             selectedType = CARD
+            switchViewHolder.setSwitchLocals(selectedType)
             nfcButton?.visibility = View.VISIBLE
             cardScannerBtn?.visibility = View.VISIBLE
 
             clearText.visibility = View.GONE
             paymentInputContainer.addView(cardInputWidget)
-            switchViewHolder.setSwitchLocals(selectedType)
             checkForFocus()
         } else {
             selectedType = MOBILE
+            switchViewHolder.setSwitchLocals(selectedType)
+
             nfcButton?.visibility = View.GONE
             cardScannerBtn?.visibility = View.GONE
             if (mobilePaymentView.mobileNumber.text.isEmpty())
@@ -349,7 +342,6 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
                 clearText.visibility = View.VISIBLE
 
             paymentInputContainer.addView(mobilePaymentView)
-            switchViewHolder.setSwitchLocals(selectedType)
         }
         tabPosition = position
     }
@@ -375,13 +367,14 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
     override fun onFocusChange(focusField: String) {
         lastFocusField = focusField
     }
+
     /**
      * Sets data from API through LayoutManager
      * @param imageURLApi represents the images of payment methods.
      * */
     fun setDatafromAPI(imageURLApi: String) {
         imageURL = imageURLApi
-       initTabLayout()
+        initTabLayout()
     }
 
 

@@ -60,7 +60,7 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder {
             }
 
         }
-        view.invalidate()
+
     }
 
     private fun getSwitchDataSourceFromAPI(
@@ -88,7 +88,7 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder {
         merchantName = merchantNameApi
         paymentName = paymentType
        // bindViewComponents()
-        paymentName?.let { setSwitchLocals(it) }
+       paymentName?.let { setSwitchLocals(it) }
     }
 
 
