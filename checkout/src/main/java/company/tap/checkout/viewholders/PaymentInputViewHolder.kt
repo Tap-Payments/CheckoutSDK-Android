@@ -89,6 +89,9 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
         //  paymentLayoutContainer = view.findViewById(R.id.payment_layout_container)
         //    scannerOptions = view.findViewById(R.id.scanner_options)
         clearText = view.findViewById(R.id.clear_text)
+        val policy = StrictMode.ThreadPolicy.Builder()
+            .permitAll().build()
+        StrictMode.setThreadPolicy(policy)
        /* val jsonFileString = this.let {
             getJsonDataFromAsset(
                     it.context,
@@ -133,7 +136,10 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
     }
 
     private fun initTabLayout() {
-        tabLayout.addSection(getCardList())
+        if(imageURL!=null){
+            tabLayout.addSection(getCardList())
+
+        }
         tabLayout.addSection(getMobileList())
         tabLayout.setTabLayoutInterface(this)
     }
@@ -210,6 +216,7 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
 
     private fun initCardInput() {
         cardInputWidget.holderNameEnabled = false
+        paymentInputContainer.removeView(cardInputWidget)
         paymentInputContainer.addView(cardInputWidget)
         cardInputWidget.setCardNumberTextWatcher(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -268,21 +275,24 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
         val items = ArrayList<SectionTabItem>()
         if(imageURL!=null) {
             val url = URL(imageURL)
-            val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
+            if(url!=null){
+                val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
+                println("bmp id " + bmp)
+                val drawable: Drawable = BitmapDrawable(context.resources, bmp)
 
-            println("bmp id " + bmp)
-            val drawable: Drawable = BitmapDrawable(context.resources, bmp)
-
-            drawable.let {
-                SectionTabItem(
-                    drawable, context.resources.getDrawable(R.drawable.ic_visa_black),
-                    CardBrand.visa
-                )
-            }.let {
-                items.add(
-                    it
-                )
+                drawable.let {
+                    SectionTabItem(
+                        drawable, context.resources.getDrawable(R.drawable.ic_visa_black),
+                        CardBrand.visa
+                    )
+                }.let {
+                    items.add(
+                        it
+                    )
+                }
             }
+
+
         }
         /*  items.add(
               SectionTabItem(
