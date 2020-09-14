@@ -7,6 +7,8 @@ import android.view.View
 import company.tap.checkout.R
 import company.tap.checkout.enums.SectionType
 import company.tap.tapuilibrary.uikit.datasource.ActionButtonDataSource
+import company.tap.tapuilibrary.uikit.enums.ActionButtonState
+import kotlinx.android.synthetic.main.action_button_animation.view.*
 
 /**
  * Created by OlaMonir on 8/25/20.
@@ -49,15 +51,12 @@ class TabAnimatedActionButtonViewHolder(context: Context) : TapBaseViewHolder {
     }
 
     fun setOnClickAction() {
-        /* view.actionButton.addChildView(
+         /*view.actionButton.addChildView(
              view.actionButton.getImageView(
                  R.drawable.loader,
                  1
              ) {  })*/
-        //  view.actionButton.changeButtonState(ActionButtonState.LOADING)
+          view.actionButton.changeButtonState(ActionButtonState.LOADING)
     }
 
-    fun setActionButtonTheme() {
-
-    }
 }
