@@ -13,7 +13,7 @@ import company.tap.checkout.interfaces.OnCardSelectedActionListener
 
 
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibrary.uikit.atoms.TapChipGroup
+import company.tap.tapuilibrary.atoms.TapChipGroup
 import kotlinx.android.synthetic.main.item_saved_card.view.*
 
 

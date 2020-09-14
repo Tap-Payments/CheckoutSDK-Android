@@ -31,12 +31,14 @@ import company.tap.checkout.enums.SectionType
 import company.tap.checkout.viewholders.PaymentInputViewHolder.PaymentType.CARD
 import company.tap.checkout.viewholders.PaymentInputViewHolder.PaymentType.MOBILE
 import company.tap.tapcardvalidator_android.CardBrand
-import company.tap.tapuilibrary.uikit.atoms.TapTextView
+import company.tap.tapuilibrary.atoms.TapTextView
+import company.tap.tapuilibrary.interfaces.TapSelectionTabLayoutInterface
+import company.tap.tapuilibrary.models.SectionTabItem
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
 import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
-import company.tap.tapuilibrary.uikit.models.SectionTabItem
-import company.tap.tapuilibrary.uikit.views.TapMobilePaymentView
-import company.tap.tapuilibrary.uikit.views.TapSelectionTabLayout
+import company.tap.tapuilibrary.views.TapMobilePaymentView
+import company.tap.tapuilibrary.views.TapSelectionTabLayout
+
 import java.net.URL
 
 

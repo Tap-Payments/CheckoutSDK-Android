@@ -6,10 +6,9 @@ import company.tap.checkout.R
 import company.tap.checkout.enums.SectionType
 import company.tap.checkout.utils.CurrentTheme
 import company.tap.taplocalizationkit.LocalizationManager
-
-import company.tap.tapuilibrary.uikit.atoms.TapButton
-import company.tap.tapuilibrary.uikit.datasource.AmountViewDataSource
-import company.tap.tapuilibrary.uikit.views.TapAmountSectionView
+import company.tap.tapuilibrary.atoms.TapButton
+import company.tap.tapuilibrary.datasource.AmountViewDataSource
+import company.tap.tapuilibrary.views.TapAmountSectionView
 
 
 /**

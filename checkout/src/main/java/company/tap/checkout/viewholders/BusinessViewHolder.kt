@@ -1,12 +1,15 @@
 package company.tap.checkout.viewholders
 
 import android.content.Context
+import android.graphics.Color
 import company.tap.checkout.R
 import company.tap.checkout.enums.SectionType
 import company.tap.checkout.utils.CurrentTheme
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibrary.uikit.datasource.HeaderDataSource
-import company.tap.tapuilibrary.uikit.views.TapHeaderSectionView
+import company.tap.tapuilibrary.datasource.HeaderDataSource
+import company.tap.tapuilibrary.views.TapHeaderSectionView
+import company.tap.thememanager.manager.ThemeManager
+import company.tap.thememanager.theme.TextViewTheme
 
 
 /**
