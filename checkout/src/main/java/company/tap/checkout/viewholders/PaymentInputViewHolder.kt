@@ -3,6 +3,7 @@ package company.tap.checkout.viewholders
 
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.StrictMode
@@ -12,6 +13,7 @@ import android.transition.Fade
 import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -31,14 +33,16 @@ import company.tap.checkout.enums.SectionType
 import company.tap.checkout.viewholders.PaymentInputViewHolder.PaymentType.CARD
 import company.tap.checkout.viewholders.PaymentInputViewHolder.PaymentType.MOBILE
 import company.tap.tapcardvalidator_android.CardBrand
-import company.tap.tapuilibrary.atoms.TapTextView
-import company.tap.tapuilibrary.interfaces.TapSelectionTabLayoutInterface
-import company.tap.tapuilibrary.models.SectionTabItem
+import company.tap.tapcardvalidator_android.CardValidationState
+import company.tap.tapcardvalidator_android.CardValidator
+import company.tap.tapuilibrary.uikit.atoms.TapTextView
+import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
-import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
-import company.tap.tapuilibrary.views.TapMobilePaymentView
-import company.tap.tapuilibrary.views.TapSelectionTabLayout
 
+import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
+import company.tap.tapuilibrary.uikit.models.SectionTabItem
+import company.tap.tapuilibrary.uikit.views.TapMobilePaymentView
+import company.tap.tapuilibrary.uikit.views.TapSelectionTabLayout
 import java.net.URL
 
 
@@ -135,8 +139,8 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
     private fun initializeCardForm() {
         cardScannerBtn = view.findViewById(R.id.card_scanner_button)
         nfcButton = view.findViewById(R.id.nfc_button)
-        mobileNumberEditText = view.findViewById(R.id.mobile_number)
-        alertMessage = view.findViewById(R.id.textview_alert_message)
+      //  mobileNumberEditText = view.findViewById(R.id.mobile_number)
+//        alertMessage = view.findViewById(R.id.textview_alert_message)
 
         linearLayoutPay = view.findViewById(R.id.linear_paylayout)
         cardInputWidget.clearFocus()
@@ -158,9 +162,9 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
 
             clearText.visibility = View.GONE
         }
-        // alertMessage?.visibility = View.GONE
+
         nfcButton?.setOnClickListener {
-           //ToDO check this fragment crash
+          //  val nfcFragment = NFCFragment()
 
             val appCompatActivity = it.context as AppCompatActivity
 
@@ -171,8 +175,12 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
 
         }
         cardScannerBtn?.setOnClickListener {
-            // val cardFragment = CardScannerFragment()
-            tabLayout.visibility = View.GONE
+          /*   val cardFragment = CardScannerFragment()
+            val appCompatActivity = it.context as AppCompatActivity
+
+            val fm: FragmentManager = appCompatActivity.getSupportFragmentManager()
+            fm.beginTransaction().replace(R.id.fragment_container_nfc, cardFragment).commit()
+            tabLayout.visibility = View.GONE*/
             Toast.makeText(context, "u clicked card scanner", Toast.LENGTH_SHORT).show()
 
         }
@@ -188,7 +196,7 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
     }
 
     private fun initMobileInput() {
-        mobilePaymentView.mobileInputEditText.doAfterTextChanged {
+        mobilePaymentView.mobileNumber.doAfterTextChanged {
             it?.let {
                 if (it.isEmpty())
                     clearText.visibility = View.GONE
@@ -207,6 +215,7 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
                     lastCardInput = it.toString()
                     shouldShowScannerOptions = it.isEmpty()
                     controlScannerOptions()
+                    cardBrandDetection(s.toString())
                 }
             }
 
@@ -220,6 +229,25 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
 
         })
 
+
+    }
+// Lo
+    private fun cardBrandDetection(cardTyped:String) {
+        if (cardTyped.isNullOrEmpty())
+            tabLayout.resetBehaviour()
+        val card = CardValidator.validate(cardTyped.toString())
+        if (card.cardBrand != null) {
+            tabLayout.selectTab(
+                card.cardBrand,
+                card.validationState == CardValidationState.valid
+            )
+
+
+            nfcButton?.visibility = View.GONE
+            cardScannerBtn?.visibility = View.GONE
+
+
+        }
 
     }
 
@@ -320,7 +348,7 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
             selectedType = MOBILE
             nfcButton?.visibility = View.GONE
             cardScannerBtn?.visibility = View.GONE
-            if (mobilePaymentView.mobileInputEditText.text.isEmpty())
+            if (mobilePaymentView.mobileNumber.text.isEmpty())
                 clearText.visibility = View.INVISIBLE
             else
                 clearText.visibility = View.VISIBLE
