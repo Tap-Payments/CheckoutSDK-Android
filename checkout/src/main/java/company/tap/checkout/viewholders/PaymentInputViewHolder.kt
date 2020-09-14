@@ -82,6 +82,7 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
     private var dummyInitApiResponse: DummyResp? = null
     private var switchViewHolder = SwitchViewHolder(context)
     private var imageURL: String? = null
+    private var isadded:Boolean = false
 
     init {
         tabLayout = view.findViewById(R.id.sections_tablayout)
@@ -92,22 +93,7 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
         val policy = StrictMode.ThreadPolicy.Builder()
             .permitAll().build()
         StrictMode.setThreadPolicy(policy)
-       /* val jsonFileString = this.let {
-            getJsonDataFromAsset(
-                    it.context,
-                    "dummyapiresponse.json"
-            )
-        }
-        val policy = StrictMode.ThreadPolicy.Builder()
-            .permitAll().build()
-        StrictMode.setThreadPolicy(policy)
-        val gson = Gson()
-        dummyInitApiResponse = gson.fromJson(
-                jsonFileString,
-                DummyResp::class.java
-        )
-        println("api response in payment input ${dummyInitApiResponse?.payment_methods} ")*/
-        switchViewHolder = SwitchViewHolder(context)
+       // switchViewHolder = SwitchViewHolder(context)
         bindViewComponents()
 
     }
@@ -128,7 +114,7 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
     }
 
     override fun bindViewComponents() {
-        initTabLayout()
+       // initTabLayout()
         initCardInput()
         initMobileInput()
         initClearText()
@@ -136,10 +122,8 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
     }
 
     private fun initTabLayout() {
-        if(imageURL!=null){
-            tabLayout.addSection(getCardList())
 
-        }
+        tabLayout.addSection(getCardList())
         tabLayout.addSection(getMobileList())
         tabLayout.setTabLayoutInterface(this)
     }
@@ -216,8 +200,8 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
 
     private fun initCardInput() {
         cardInputWidget.holderNameEnabled = false
-        paymentInputContainer.removeView(cardInputWidget)
-        paymentInputContainer.addView(cardInputWidget)
+       // paymentInputContainer.removeView(cardInputWidget)
+      //  paymentInputContainer.addView(cardInputWidget)
         cardInputWidget.setCardNumberTextWatcher(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 s?.let {
@@ -291,7 +275,7 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
                     )
                 }
             }
-
+            isadded = true
 
         }
         /*  items.add(
@@ -338,6 +322,7 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
     }
 
     override fun onTabSelected(position: Int?) {
+        tabPosition=position
         position?.let { swapInputViews(it) }
     }
 
@@ -352,7 +337,7 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
 
             clearText.visibility = View.GONE
             paymentInputContainer.addView(cardInputWidget)
-            switchViewHolder?.bindViewComponents()
+            switchViewHolder.setSwitchLocals(selectedType)
             checkForFocus()
         } else {
             selectedType = MOBILE
@@ -364,7 +349,7 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
                 clearText.visibility = View.VISIBLE
 
             paymentInputContainer.addView(mobilePaymentView)
-            switchViewHolder?.bindViewComponents()
+            switchViewHolder.setSwitchLocals(selectedType)
         }
         tabPosition = position
     }
@@ -396,7 +381,7 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
      * */
     fun setDatafromAPI(imageURLApi: String) {
         imageURL = imageURLApi
-        bindViewComponents()
+       initTabLayout()
     }
 
 

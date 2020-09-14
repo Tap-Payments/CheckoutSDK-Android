@@ -29,13 +29,13 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder {
     }
 
     override fun bindViewComponents() {
-        setSwitchLocals()
+       // setSwitchLocals()
 
     }
-    // Function is responsible for setting the data to switch based on user selection
-    private fun setSwitchLocals() {
-        if (merchantName != null && paymentName!= null){
-            if(paymentName?.name == "CARD"){
+    // Function / Logic is responsible for setting the data to switch based on user selection
+    fun setSwitchLocals(payName:PaymentInputViewHolder.PaymentType) {
+        if ( payName!= null){
+            if(payName.name == "CARD"){
                 switchString = LocalizationManager.getValue("cardSaveLabel", "TapCardInputKit")
                 view.setSwitchDataSource(getSwitchDataSourceFromAPI(
                     switchString,
@@ -44,10 +44,10 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder {
                     alertgoPaySignupString
                 ))
 
-            }else if( paymentName?.name == "MOBILE") {
+            }else if( payName.name == "MOBILE") {
                 switchString = LocalizationManager.getValue("mobileUseLabel","TapMobileInput")
                 view.setSwitchDataSource(getSwitchDataSourceFromAPI(
-                    switchString,
+                    LocalizationManager.getValue("mobileUseLabel","TapMobileInput"),
                     goPayString,
                     savegoPayString,
                     alertgoPaySignupString
@@ -56,11 +56,11 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder {
                 goPayString = LocalizationManager.getValue("goPayTextLabel","GoPay")
                 savegoPayString = LocalizationManager.getValue("savegoPayLabel","GoPay")
                 alertgoPaySignupString = LocalizationManager.getValue("goPaySignupLabel","GoPay")
-
                 view.setSwitchDataSource(getSwitchDataSourceFromAPI(null,goPayString,savegoPayString,alertgoPaySignupString))
             }
 
         }
+        view.invalidate()
     }
 
     private fun getSwitchDataSourceFromAPI(
@@ -87,7 +87,8 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder {
     fun setDatafromAPI(merchantNameApi: String, paymentType: PaymentInputViewHolder.PaymentType) {
         merchantName = merchantNameApi
         paymentName = paymentType
-        bindViewComponents()
+       // bindViewComponents()
+        paymentName?.let { setSwitchLocals(it) }
     }
 
 
