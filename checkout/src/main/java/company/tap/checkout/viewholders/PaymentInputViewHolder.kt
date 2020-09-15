@@ -191,7 +191,8 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
     private fun initCardInput() {
         cardInputWidget.holderNameEnabled = false
         // paymentInputContainer.removeView(cardInputWidget)
-        //  paymentInputContainer.addView(cardInputWidget)
+          paymentInputContainer.addView(cardInputWidget)
+        cardInputWidget.clearFocus()
         cardInputWidget.setCardNumberTextWatcher(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 s?.let {
@@ -199,6 +200,9 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
                     shouldShowScannerOptions = it.isEmpty()
                     controlScannerOptions()
                     cardBrandDetection(s.toString())
+                    if (s.trim().length == 19 ) {
+                        println("s is string $s")
+                    }
                 }
             }
 
@@ -225,13 +229,11 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
                 card.cardBrand,
                 card.validationState == CardValidationState.valid
             )
-
-
+            println("card brand: ${card.validationState}")
             nfcButton?.visibility = View.GONE
             cardScannerBtn?.visibility = View.GONE
 
-
-        }
+    }
 
     }
 
