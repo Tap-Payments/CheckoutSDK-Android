@@ -12,6 +12,7 @@ import company.tap.cardbusinesskit.testmodels.DummyResp
 import company.tap.checkout.enums.SectionType
 import company.tap.checkout.interfaces.BaseLayoutManager
 import company.tap.checkout.interfaces.OnCardSelectedActionListener
+import company.tap.checkout.interfaces.onPaymentCardComplete
 import company.tap.checkout.utils.AnimationEngine
 import company.tap.checkout.utils.AnimationEngine.Type.*
 import company.tap.checkout.viewholders.*
@@ -24,7 +25,7 @@ import kotlinx.android.synthetic.main.action_button_animation.view.*
  *
  */
 class TapLayoutManager : ViewModel(),
-    BaseLayoutManager, OnCardSelectedActionListener {
+    BaseLayoutManager, OnCardSelectedActionListener , onPaymentCardComplete {
 
     private lateinit var context: Context
     private lateinit var fragmentManager: FragmentManager
@@ -50,7 +51,7 @@ class TapLayoutManager : ViewModel(),
         businessViewHolder =  BusinessViewHolder(context)
         amountViewHolder = AmountViewHolder(context)
         cardViewHolder = CardViewHolder(context, this)
-        paymentInputViewHolder = PaymentInputViewHolder(context)
+        paymentInputViewHolder = PaymentInputViewHolder(context,this)
         saveCardSwitchHolder = SwitchViewHolder(context)
         tabAnimatedActionButtonViewHolder = TabAnimatedActionButtonViewHolder(context)
         initAmountAction()
@@ -163,6 +164,10 @@ class TapLayoutManager : ViewModel(),
             tabAnimatedActionButtonViewHolder.view.actionButton.setOnClickListener { tabAnimatedActionButtonViewHolder.setOnClickAction() }
         }
         else unActivateActionButton()
+    }
+
+    override fun onPaycardAction(isCompleted: Boolean) {
+
     }
 
 
