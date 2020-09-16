@@ -39,7 +39,7 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         super.onViewCreated(view, savedInstanceState)
         val checkoutLayout: LinearLayout = view.findViewById(R.id.sdkContainer)
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
-        layoutManager.initLayoutManager(requireContext(), childFragmentManager, checkoutLayout)
+        layoutManager.initLayoutManager(requireContext(),childFragmentManager, checkoutLayout)
 
         val enabledSections = ArrayList<SectionType>()
         enabledSections.add(SectionType.BUSINESS)

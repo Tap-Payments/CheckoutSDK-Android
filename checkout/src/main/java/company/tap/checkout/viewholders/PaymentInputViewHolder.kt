@@ -27,6 +27,7 @@ import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardinputwidget.widget.inline.InlineCardInput
 import company.tap.checkout.R
 import company.tap.checkout.enums.SectionType
+import company.tap.checkout.interfaces.onCardNFCCallListener
 import company.tap.checkout.interfaces.onPaymentCardComplete
 import company.tap.checkout.viewholders.PaymentInputViewHolder.PaymentType.CARD
 import company.tap.checkout.viewholders.PaymentInputViewHolder.PaymentType.MOBILE
@@ -48,7 +49,7 @@ import java.net.URL
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class PaymentInputViewHolder(private val context: Context , private val onPaymentCardComplete: onPaymentCardComplete) : TapBaseViewHolder,
+class PaymentInputViewHolder(private val context: Context , private val onPaymentCardComplete: onPaymentCardComplete , private val onCardNFCCallListener: onCardNFCCallListener) : TapBaseViewHolder,
     TapSelectionTabLayoutInterface, CardInputListener {
 
     override val view: View =
@@ -154,11 +155,12 @@ class PaymentInputViewHolder(private val context: Context , private val onPaymen
         nfcButton?.setOnClickListener {
             //  val nfcFragment = NFCFragment()
 
-            val appCompatActivity = it.context as AppCompatActivity
+          /*  val appCompatActivity = it.context as AppCompatActivity
 
             val fm: FragmentManager = appCompatActivity.getSupportFragmentManager()
             val nfcfrag: Fragment = NFCFragment()
-            fm.beginTransaction().replace(R.id.fragment_container_nfc, nfcfrag).commit()
+            fm.beginTransaction().replace(R.id.fragment_container_nfc, nfcfrag).commit()*/
+            onCardNFCCallListener.onClickNFC()
             Toast.makeText(context, "u clicked nfc", Toast.LENGTH_SHORT).show()
 
         }
@@ -169,6 +171,7 @@ class PaymentInputViewHolder(private val context: Context , private val onPaymen
               val fm: FragmentManager = appCompatActivity.getSupportFragmentManager()
               fm.beginTransaction().replace(R.id.fragment_container_nfc, cardFragment).commit()
               tabLayout.visibility = View.GONE*/
+            onCardNFCCallListener.onClickCardScanner()
             Toast.makeText(context, "u clicked card scanner", Toast.LENGTH_SHORT).show()
 
         }
