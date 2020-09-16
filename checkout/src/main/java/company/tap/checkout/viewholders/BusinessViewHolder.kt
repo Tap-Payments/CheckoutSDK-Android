@@ -1,13 +1,10 @@
 package company.tap.checkout.viewholders
 
 import android.content.Context
-import android.graphics.Color
 import company.tap.checkout.R
 import company.tap.checkout.enums.SectionType
 import company.tap.checkout.utils.CurrentTheme
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.themekit.theme.TextViewTheme
 import company.tap.tapuilibrary.uikit.datasource.HeaderDataSource
 import company.tap.tapuilibrary.uikit.views.TapHeaderSectionView
 
@@ -29,7 +26,7 @@ class BusinessViewHolder(context: Context) : TapBaseViewHolder {
 
     init {
         bindViewComponents()
-        setThemeToView(context)
+
     }
 
     override fun bindViewComponents() {
@@ -46,30 +43,6 @@ class BusinessViewHolder(context: Context) : TapBaseViewHolder {
         )
     }
 
-    // TODO remove all the themes  from viewHolder
-    private fun setThemeToView(context: Context) {
-
-        ///we will set static value with current theme and when we use it we will check current theme first
-        CurrentTheme.initAppTheme(R.raw.defaultlighttheme, context)
-//        ThemeManager.loadTapTheme(context.resources,R.raw.defaultlighttheme )
-
-    }
-
-    fun setThemeToPaymentFor(){
-        val textViewTheme = TextViewTheme()
-        textViewTheme.textColor = Color.parseColor(ThemeManager.getValue("merchantHeaderView.subTitleLabelColor"))
-//        textViewTheme.textSize = ThemeManager.getFontSize("merchantHeaderView.subTitleLabelFont").toFloat()
-        textViewTheme.font = ThemeManager.getFontName("merchantHeaderView.subTitleLabelFont")
-//        view.paymentFor.setTheme(textViewTheme)
-    }
-
-    fun setThemeToBusinessPlaceholder(){
-        val textViewTheme = TextViewTheme()
-        textViewTheme.textColor = Color.parseColor(ThemeManager.getValue("merchantHeaderView.merchantLogoPlaceHolderColor"))
-    //    textViewTheme.textSize = ThemeManager.getFontSize("merchantHeaderView.merchantLogoPlaceHolderFont").toFloat()
-        textViewTheme.font = ThemeManager.getFontName("merchantHeaderView.merchantLogoPlaceHolderFont")
-//        view.businessPlaceholder.setTheme(textViewTheme)
-    }
 
     /**
      * Sets data from API through LayoutManager

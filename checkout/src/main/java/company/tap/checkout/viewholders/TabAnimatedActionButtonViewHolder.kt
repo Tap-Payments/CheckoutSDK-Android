@@ -2,6 +2,7 @@ package company.tap.checkout.viewholders
 
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import company.tap.checkout.R
@@ -28,11 +29,12 @@ class TabAnimatedActionButtonViewHolder(context: Context) : TapBaseViewHolder {
     }
 
     override fun bindViewComponents() {
-        //  view.actionButton.setButtonDataSource(getSuccessDataSource(Color.GRAY, "Pay", Color.WHITE ))
+         // view.actionButton.setButtonDataSource(getSuccessDataSource(Color.GRAY, "Pay", Color.WHITE ))
+        view.actionButton.setButtonDataSource(false)
     }
 
     fun activateButton() {
-        //  view.actionButton.(getSuccessDataSource(Color.GREEN,"", Color.WHITE))
+        view.actionButton.setButtonDataSource(true)
     }
 
     fun getSuccessDataSource(

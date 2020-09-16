@@ -58,6 +58,7 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         val dummyInitApiResponse: DummyResp = gson.fromJson(jsonFileString, DummyResp::class.java)
         // Pass the api response data to LayoutManager
         layoutManager.getDatafromAPI(dummyInitApiResponse)
+
     }
 
     override fun onDismiss() {

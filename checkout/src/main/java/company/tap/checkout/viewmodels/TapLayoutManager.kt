@@ -1,6 +1,7 @@
 package company.tap.checkout.viewmodels
 
 import android.content.Context
+import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 
@@ -12,6 +13,7 @@ import company.tap.cardbusinesskit.testmodels.DummyResp
 import company.tap.checkout.enums.SectionType
 import company.tap.checkout.interfaces.BaseLayoutManager
 import company.tap.checkout.interfaces.OnCardSelectedActionListener
+import company.tap.checkout.interfaces.onPaymentCardComplete
 import company.tap.checkout.utils.AnimationEngine
 import company.tap.checkout.utils.AnimationEngine.Type.*
 import company.tap.checkout.viewholders.*
@@ -24,7 +26,7 @@ import kotlinx.android.synthetic.main.action_button_animation.view.*
  *
  */
 class TapLayoutManager : ViewModel(),
-    BaseLayoutManager, OnCardSelectedActionListener {
+    BaseLayoutManager, OnCardSelectedActionListener , onPaymentCardComplete {
 
     private lateinit var context: Context
     private lateinit var fragmentManager: FragmentManager
@@ -35,7 +37,7 @@ class TapLayoutManager : ViewModel(),
     private lateinit var itemsViewHolder: ItemsViewHolder
     private lateinit var cardViewHolder: CardViewHolder
     private lateinit var paymentInputViewHolder: PaymentInputViewHolder
-    private lateinit var saveCardSwitch: SwitchViewHolder
+    private lateinit var saveCardSwitchHolder: SwitchViewHolder
     private lateinit var goPayViewHolder: GoPayViewHolder
     private lateinit var tabAnimatedActionButtonViewHolder: TabAnimatedActionButtonViewHolder
 
@@ -50,11 +52,17 @@ class TapLayoutManager : ViewModel(),
         businessViewHolder =  BusinessViewHolder(context)
         amountViewHolder = AmountViewHolder(context)
         cardViewHolder = CardViewHolder(context, this)
-        paymentInputViewHolder = PaymentInputViewHolder(context)
-        saveCardSwitch = SwitchViewHolder(context)
+        paymentInputViewHolder = PaymentInputViewHolder(context,this)
+        saveCardSwitchHolder = SwitchViewHolder(context)
+        itemsViewHolder = ItemsViewHolder(context)
         tabAnimatedActionButtonViewHolder = TabAnimatedActionButtonViewHolder(context)
         initAmountAction()
         initCardsGroup()
+        initSwitchAction()
+    }
+
+    private fun initSwitchAction() {
+       saveCardSwitchHolder.view.switchSaveMobile.visibility = View.GONE
     }
 
     private fun initAmountAction() {
@@ -78,7 +86,7 @@ class TapLayoutManager : ViewModel(),
             amountViewHolder,
             cardViewHolder,
             paymentInputViewHolder,
-            saveCardSwitch,
+            saveCardSwitchHolder,
             tabAnimatedActionButtonViewHolder
         )
     }
@@ -94,7 +102,7 @@ class TapLayoutManager : ViewModel(),
     override fun displayGoPayLogin() {
         AnimationEngine.applyTransition(bottomSheetLayout, SLIDE)
         goPayViewHolder = GoPayViewHolder(context, bottomSheetLayout)
-        removeViews(cardViewHolder, paymentInputViewHolder, saveCardSwitch)
+        removeViews(cardViewHolder, paymentInputViewHolder, saveCardSwitchHolder)
         addViews(goPayViewHolder)
     }
 
@@ -105,7 +113,7 @@ class TapLayoutManager : ViewModel(),
             removeViews(
                 cardViewHolder,
                 paymentInputViewHolder,
-                saveCardSwitch,
+                saveCardSwitchHolder,
                 tabAnimatedActionButtonViewHolder
             )
         } else {
@@ -113,7 +121,7 @@ class TapLayoutManager : ViewModel(),
             addViews(
                 cardViewHolder,
                 paymentInputViewHolder,
-                saveCardSwitch,
+                saveCardSwitchHolder,
                 tabAnimatedActionButtonViewHolder
             )
         }
@@ -132,6 +140,9 @@ class TapLayoutManager : ViewModel(),
         businessViewHolder.setDatafromAPI(dummyInitapiResponse.merchant.logo,dummyInitapiResponse.merchant.name)
         amountViewHolder.setDatafromAPI(dummyInitapiResponse.order.original_amount.toString(),dummyInitapiResponse.order.trx_currency,dummyInitapiResponse.order.trx_currency,dummyInitapiResponse?.order.items.size.toString())
         cardViewHolder.setDatafromAPI(dummyInitapiResponse.payment_methods)
+        paymentInputViewHolder.setDatafromAPI(dummyInitapiResponse.payment_methods.get(0).image)
+        saveCardSwitchHolder.setDatafromAPI(dummyInitapiResponse.merchant.name,paymentInputViewHolder.selectedType)
+        itemsViewHolder.setDatafromAPI(dummyInitapiResponse.payment_methods.get(0).supported_currencies)
     }
 
     private fun removeViews(vararg viewHolders: TapBaseViewHolder) {
@@ -161,6 +172,27 @@ class TapLayoutManager : ViewModel(),
             tabAnimatedActionButtonViewHolder.view.actionButton.setOnClickListener { tabAnimatedActionButtonViewHolder.setOnClickAction() }
         }
         else unActivateActionButton()
+    }
+
+    override fun onPaycardSwitchAction(isCompleted: Boolean) {
+        if(isCompleted){
+            saveCardSwitchHolder.view.switchSaveMerchant.isChecked = true
+            saveCardSwitchHolder.view.switchGoPayCheckout.isChecked = true
+            saveCardSwitchHolder.view.switchSaveMobile.isChecked = true
+            saveCardSwitchHolder.view.switchesLayout.visibility = View.VISIBLE
+            saveCardSwitchHolder.view.switchSaveMobile.visibility = View.VISIBLE
+
+            activateActionButton()
+        }else {
+            saveCardSwitchHolder.view.switchSaveMerchant.isChecked = false
+            saveCardSwitchHolder.view.switchGoPayCheckout.isChecked = false
+            saveCardSwitchHolder.view.switchSaveMobile.isChecked = false
+            saveCardSwitchHolder.view.switchSaveMobile.visibility = View.GONE
+            saveCardSwitchHolder.view.switchesLayout.visibility = View.GONE
+            unActivateActionButton()
+
+        }
+
     }
 
 

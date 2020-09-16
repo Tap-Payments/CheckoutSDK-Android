@@ -2,9 +2,9 @@ package company.tap.checkout.viewholders
 
 import android.content.Context
 import android.view.LayoutInflater
-import androidx.fragment.app.FragmentManager
 import company.tap.checkout.R
 import company.tap.checkout.enums.SectionType
+import company.tap.tapuilibrary.uikit.fragment.CurrencyViewFragment
 
 /**
  *
@@ -18,11 +18,22 @@ class ItemsViewHolder(context: Context) : TapBaseViewHolder {
     override val type = SectionType.SELECT
 
     var displayed: Boolean = true
+    private lateinit var supportedCurrecnyList:ArrayList<String>
+
 
     init {
         bindViewComponents()
     }
 
     override fun bindViewComponents() {
+            //CurrencyViewFragment().currencyList = supportedCurrecnyList
+    }
+    /**
+     * Sets data from API through LayoutManager
+     * @param supportedCurrencyApi represents the supported currency for the Merchant.
+     * */
+    fun setDatafromAPI(supportedCurrencyApi: ArrayList<String>) {
+        supportedCurrecnyList = supportedCurrencyApi
+        bindViewComponents()
     }
 }
