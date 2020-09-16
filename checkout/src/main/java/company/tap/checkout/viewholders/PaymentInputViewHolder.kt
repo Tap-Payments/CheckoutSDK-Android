@@ -18,6 +18,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.IntRange
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -43,6 +44,7 @@ import java.net.URL
 /**
  *
  * Created by Mario Gamal on 7/28/20
+ * Modified by Ahlaam K
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
@@ -138,6 +140,7 @@ class PaymentInputViewHolder(private val context: Context , private val onPaymen
              tapCardInputView.setCvcCode("")*/
             cardInputWidget.clear()
             //  alert_text.visibility= View.GONE
+            onPaymentCardComplete.onPaycardSwitchAction(false)
 
             if (tabPosition == 1) {
                 nfcButton?.visibility = View.INVISIBLE
@@ -191,11 +194,13 @@ class PaymentInputViewHolder(private val context: Context , private val onPaymen
         }
     }
 
+    //Setting on the cardInput with logics
     private fun initCardInput() {
         cardInputWidget.holderNameEnabled = false
         // paymentInputContainer.removeView(cardInputWidget)
           paymentInputContainer.addView(cardInputWidget)
         cardInputWidget.clearFocus()
+        //Textwatcher for cardNumber
         cardInputWidget.setCardNumberTextWatcher(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 s?.let {
@@ -204,7 +209,7 @@ class PaymentInputViewHolder(private val context: Context , private val onPaymen
                     controlScannerOptions()
                     cardBrandDetection(s.toString())
                     if (s.trim().length == 19 ) {
-                        onPaymentCardComplete?.onPaycardAction(true)
+                       // onPaymentCardComplete.onPaycardAction(true)
                     }
                 }
             }
@@ -215,6 +220,39 @@ class PaymentInputViewHolder(private val context: Context , private val onPaymen
                     clearText.visibility = View.GONE
                 else
                     clearText.visibility = View.VISIBLE
+            }
+
+        })
+
+        // Textwatcher for CVV
+        cardInputWidget.setCvcNumberTextWatcher(object :TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (s?.trim()?.length == 3 || s?.trim()?.length == 4 ) {
+                    onPaymentCardComplete.onPaycardSwitchAction(true)
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+        })
+        //Textwatcher for Expiry date
+        cardInputWidget.setExpiryDateTextWatcher(object :TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+
             }
 
         })
@@ -251,6 +289,7 @@ class PaymentInputViewHolder(private val context: Context , private val onPaymen
         }
     }
 
+    // Function to get the card names and images or logos from the API
     private fun getCardList(): ArrayList<SectionTabItem> {
         val items = ArrayList<SectionTabItem>()
         if (imageURL != null) {
@@ -298,6 +337,7 @@ class PaymentInputViewHolder(private val context: Context , private val onPaymen
         return items
     }
 
+    // Function to get the mobile names and images or logos from the API .
     private fun getMobileList(): ArrayList<SectionTabItem> {
         val items = ArrayList<SectionTabItem>()
         items.add(
@@ -329,6 +369,7 @@ class PaymentInputViewHolder(private val context: Context , private val onPaymen
         if (position == 0) {
             selectedType = CARD
             switchViewHolder.setSwitchLocals(selectedType)
+            switchViewHolder.view.switchGoPayCheckout.visibility = View.VISIBLE
             nfcButton?.visibility = View.VISIBLE
             cardScannerBtn?.visibility = View.VISIBLE
 
@@ -363,7 +404,8 @@ class PaymentInputViewHolder(private val context: Context , private val onPaymen
         MOBILE
     }
 
-    override fun onCardComplete() {}
+    override fun onCardComplete() {
+    }
 
     override fun onCvcComplete() {}
 

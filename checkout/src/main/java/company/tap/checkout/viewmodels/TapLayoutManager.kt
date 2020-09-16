@@ -1,6 +1,7 @@
 package company.tap.checkout.viewmodels
 
 import android.content.Context
+import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 
@@ -166,7 +167,23 @@ class TapLayoutManager : ViewModel(),
         else unActivateActionButton()
     }
 
-    override fun onPaycardAction(isCompleted: Boolean) {
+    override fun onPaycardSwitchAction(isCompleted: Boolean) {
+        if(isCompleted){
+            saveCardSwitchHolder.view.switchSaveMerchant.isChecked = true
+            saveCardSwitchHolder.view.switchGoPayCheckout.isChecked = true
+            saveCardSwitchHolder.view.switchSaveMobile.isChecked = true
+            saveCardSwitchHolder.view.switchesLayout.visibility = View.VISIBLE
+
+            activateActionButton()
+        }else {
+            saveCardSwitchHolder.view.switchSaveMerchant.isChecked = false
+            saveCardSwitchHolder.view.switchGoPayCheckout.isChecked = false
+            saveCardSwitchHolder.view.switchSaveMobile.isChecked = false
+            saveCardSwitchHolder.view.switchSaveMobile.visibility = View.GONE
+            saveCardSwitchHolder.view.switchesLayout.visibility = View.GONE
+            unActivateActionButton()
+
+        }
 
     }
 

@@ -7,5 +7,5 @@ Copyright (c) 2020    Tap Payments.
 All rights reserved.
  **/
 interface onPaymentCardComplete {
-    fun onPaycardAction(isCompleted:Boolean)
+    fun onPaycardSwitchAction(isCompleted:Boolean)
 }

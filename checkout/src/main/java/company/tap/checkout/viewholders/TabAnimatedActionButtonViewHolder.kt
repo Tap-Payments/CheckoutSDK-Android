@@ -34,7 +34,7 @@ class TabAnimatedActionButtonViewHolder(context: Context) : TapBaseViewHolder {
     }
 
     fun activateButton() {
-        view.actionButton.setButtonDataSource(false)
+        view.actionButton.setButtonDataSource(true)
     }
 
     fun getSuccessDataSource(

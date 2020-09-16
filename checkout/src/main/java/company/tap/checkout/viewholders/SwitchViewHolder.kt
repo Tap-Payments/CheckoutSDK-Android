@@ -15,7 +15,7 @@ import company.tap.tapuilibrary.uikit.views.TapCardSwitch
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class SwitchViewHolder(private val context: Context) : TapBaseViewHolder , onPaymentCardComplete {
+class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
 
     override val view = TapCardSwitch(context)
 
@@ -40,6 +40,10 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder , onPay
     // Function / Logic is responsible for sett ing the data to switch based on user selection
     fun setSwitchLocals(payName:PaymentInputViewHolder.PaymentType) {
         //TODO Check why view is not being refreshed though string is updated
+        //Has to be in Else condition only, temporarily kept here for data purpose
+        goPayString = LocalizationManager.getValue("goPayTextLabel","GoPay")
+        savegoPayString = LocalizationManager.getValue("savegoPayLabel","GoPay")
+        alertgoPaySignupString = LocalizationManager.getValue("goPaySignupLabel","GoPay")
         if(payName.name == "CARD"){
             switchString = LocalizationManager.getValue("cardSaveLabel", "TapCardInputKit")
            view.setSwitchDataSource(getSwitchDataSourceFromAPI(
@@ -77,7 +81,7 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder , onPay
     ): TapSwitchDataSource {
         return TapSwitchDataSource(
     switchSave = switchString,
-    switchSaveMerchantCheckout = "Save for $merchantName Checkouts",
+    switchSaveMerchantCheckout = "Save for   $merchantName   Checkouts",
     switchSavegoPayCheckout = goPayString,
     savegoPayText = savegoPayString,
     alertgoPaySignup = alertgoPaySignupString
@@ -99,11 +103,6 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder , onPay
        }
     }
 
-    override fun onPaycardAction(isCompleted: Boolean) {
-       if(isCompleted){
-           view.switchSaveMerchant.isChecked = true
-       }
-    }
 
 }
 
