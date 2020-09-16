@@ -54,6 +54,7 @@ class TapLayoutManager : ViewModel(),
         cardViewHolder = CardViewHolder(context, this)
         paymentInputViewHolder = PaymentInputViewHolder(context,this)
         saveCardSwitchHolder = SwitchViewHolder(context)
+        itemsViewHolder = ItemsViewHolder(context)
         tabAnimatedActionButtonViewHolder = TabAnimatedActionButtonViewHolder(context)
         initAmountAction()
         initCardsGroup()
@@ -141,6 +142,7 @@ class TapLayoutManager : ViewModel(),
         cardViewHolder.setDatafromAPI(dummyInitapiResponse.payment_methods)
         paymentInputViewHolder.setDatafromAPI(dummyInitapiResponse.payment_methods.get(0).image)
         saveCardSwitchHolder.setDatafromAPI(dummyInitapiResponse.merchant.name,paymentInputViewHolder.selectedType)
+        itemsViewHolder.setDatafromAPI(dummyInitapiResponse.payment_methods.get(0).supported_currencies)
     }
 
     private fun removeViews(vararg viewHolders: TapBaseViewHolder) {

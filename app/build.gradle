@@ -43,8 +43,8 @@ dependencies {
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.0.103'
-    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.0.103'
+    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.0.104'
+    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.0.104'
     implementation 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.2'
 
 
