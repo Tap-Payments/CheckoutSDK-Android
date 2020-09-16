@@ -6,10 +6,10 @@ import company.tap.checkout.R
 import company.tap.checkout.enums.SectionType
 import company.tap.checkout.utils.CurrentTheme
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibrary.datasource.HeaderDataSource
-import company.tap.tapuilibrary.views.TapHeaderSectionView
-import company.tap.thememanager.manager.ThemeManager
-import company.tap.thememanager.theme.TextViewTheme
+import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.themekit.theme.TextViewTheme
+import company.tap.tapuilibrary.uikit.datasource.HeaderDataSource
+import company.tap.tapuilibrary.uikit.views.TapHeaderSectionView
 
 
 /**

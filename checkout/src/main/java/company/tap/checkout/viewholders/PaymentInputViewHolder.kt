@@ -36,9 +36,6 @@ import company.tap.tapcardvalidator_android.CardBrand
 import company.tap.tapcardvalidator_android.CardValidationState
 import company.tap.tapcardvalidator_android.CardValidator
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
-import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
-import company.tap.tapuilibrary.uikit.fragment.NFCFragment
-
 import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
 import company.tap.tapuilibrary.uikit.models.SectionTabItem
 import company.tap.tapuilibrary.uikit.views.TapMobilePaymentView
@@ -169,8 +166,8 @@ class PaymentInputViewHolder(private val context: Context) : TapBaseViewHolder,
             val appCompatActivity = it.context as AppCompatActivity
 
             val fm: FragmentManager = appCompatActivity.getSupportFragmentManager()
-            val nfcfrag: Fragment = NFCFragment()
-            fm.beginTransaction().replace(R.id.fragment_container_nfc, nfcfrag).commit()
+//            val nfcfrag: Fragment = NFCFragment()
+//            fm.beginTransaction().replace(R.id.fragment_container_nfc, nfcfrag).commit()
             Toast.makeText(context, "u clicked nfc", Toast.LENGTH_SHORT).show()
 
         }
