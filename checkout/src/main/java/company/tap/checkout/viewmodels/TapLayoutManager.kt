@@ -57,6 +57,11 @@ class TapLayoutManager : ViewModel(),
         tabAnimatedActionButtonViewHolder = TabAnimatedActionButtonViewHolder(context)
         initAmountAction()
         initCardsGroup()
+        initSwitchAction()
+    }
+
+    private fun initSwitchAction() {
+       saveCardSwitchHolder.view.switchSaveMobile.visibility = View.GONE
     }
 
     private fun initAmountAction() {
@@ -173,6 +178,7 @@ class TapLayoutManager : ViewModel(),
             saveCardSwitchHolder.view.switchGoPayCheckout.isChecked = true
             saveCardSwitchHolder.view.switchSaveMobile.isChecked = true
             saveCardSwitchHolder.view.switchesLayout.visibility = View.VISIBLE
+            saveCardSwitchHolder.view.switchSaveMobile.visibility = View.VISIBLE
 
             activateActionButton()
         }else {
