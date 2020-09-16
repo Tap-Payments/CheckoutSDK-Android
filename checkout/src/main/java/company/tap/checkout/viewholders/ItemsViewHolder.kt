@@ -26,7 +26,7 @@ class ItemsViewHolder(context: Context) : TapBaseViewHolder {
     }
 
     override fun bindViewComponents() {
-            CurrencyViewFragment().currencyList = supportedCurrecnyList
+            //CurrencyViewFragment().currencyList = supportedCurrecnyList
     }
     /**
      * Sets data from API through LayoutManager
