@@ -20,9 +20,7 @@ import androidx.annotation.IntRange
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
 import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
+
 import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardinputwidget.widget.inline.InlineCardInput
 import company.tap.checkout.R
@@ -34,6 +32,7 @@ import company.tap.checkout.viewholders.PaymentInputViewHolder.PaymentType.MOBIL
 import company.tap.tapcardvalidator_android.CardBrand
 import company.tap.tapcardvalidator_android.CardValidationState
 import company.tap.tapcardvalidator_android.CardValidator
+import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
 import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
 import company.tap.tapuilibrary.uikit.models.SectionTabItem
@@ -165,12 +164,12 @@ class PaymentInputViewHolder(private val context: Context , private val onPaymen
 
         }
         cardScannerBtn?.setOnClickListener {
-            /*   val cardFragment = CardScannerFragment()
+              /* val cardFragment = CardScannerFragment()x
               val appCompatActivity = it.context as AppCompatActivity
 
-              val fm: FragmentManager = appCompatActivity.getSupportFragmentManager()
-              fm.beginTransaction().replace(R.id.fragment_container_nfc, cardFragment).commit()
-              tabLayout.visibility = View.GONE*/
+              val fm2: FragmentManager = appCompatActivity.supportFragmentManager
+              fm2.beginTransaction().replace(R.id.fragment_container_card_lib, cardFragment).commit()*/
+              tabLayout.visibility = View.GONE
             onCardNFCCallListener.onClickCardScanner()
             Toast.makeText(context, "u clicked card scanner", Toast.LENGTH_SHORT).show()
 

@@ -24,6 +24,19 @@
             android:layout_gravity="center_horizontal"
             android:background="@color/view_color" />
 
-    </company.tap.tapuilibrary.uikit.atoms.TapDragIndicator>
 
+    </company.tap.tapuilibrary.uikit.atoms.TapDragIndicator>
+    <FrameLayout
+        android:id="@+id/fragment_container_nfc_lib"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <FrameLayout
+        android:id="@+id/fragment_container_card_lib"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <FrameLayout
+        android:id="@+id/currency_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </LinearLayout>

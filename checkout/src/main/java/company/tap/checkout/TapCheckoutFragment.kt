@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.fragment.app.viewModels
+import cards.pay.paycardsrecognizer.sdk.Card
+import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.gson.Gson
 import company.tap.cardbusinesskit.testmodels.DummyResp
@@ -15,6 +17,7 @@ import company.tap.checkout.viewmodels.TapLayoutManager
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
+import java.lang.Exception
 
 
 /**
@@ -78,6 +81,5 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
 
     override fun onStateChanged(newState: Int) {
     }
-
 
 }
