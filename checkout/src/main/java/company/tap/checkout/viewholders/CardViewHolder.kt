@@ -32,7 +32,7 @@ class CardViewHolder(
 
     override val type = SectionType.CARD
 
-    // private var paymentsList: ArrayList<Int> = arrayListOf(1, 2, 3, 4, 5, 6)
+
     private var paymentsList: List<Payment_methods>? = null
 
     init {
@@ -68,23 +68,6 @@ class CardViewHolder(
 
     }
 
-
-    /*
-    horizontalList
-     "headers": {
-            "gatewayHeader": {
-                "backgroundColor" : "whiteTwo",
-                "leftButton": {
-                    "labelTextFont": "Roboto-Regular,10",
-                    "labelTextColor": "greyishBrown"
-                },
-                "rightButton": {
-                    "labelTextFont": "Roboto-Regular,10",
-                    "labelTextColor": "greyishBrown"
-                }
-            }
-        },
-     */
     /**
      * Sets data from API through LayoutManager
      * @param paymentMethodsApi represents the list of payment methods available from API
