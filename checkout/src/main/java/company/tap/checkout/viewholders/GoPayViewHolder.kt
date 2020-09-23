@@ -38,7 +38,7 @@ class GoPayViewHolder(context: Context, private val bottomSheet: FrameLayout) : 
     override fun bindViewComponents() {
         goPayLoginInput.changeDataSource(GoPayLoginDataSource())
         goPayLoginInput.setLoginInterface(this)
-        goPayPasswordInput.setLoginInterface(this)
+        goPayPasswordInput.setLoginInterface(this,goPayLoginInput.textInput.toString())
     }
 
     override fun onChangeClicked() {
@@ -57,70 +57,5 @@ class GoPayViewHolder(context: Context, private val bottomSheet: FrameLayout) : 
 
     }
 
-
-    fun setThemeToGoPayLoginInput() {
-//        goPayLoginInput.textInput.
-    }
-
-    fun setThemeToGoPayPasswordInput() {
-
-    }
-
-    /*
-        "goPay": {
-        "loginBar" :{
-            "backgroundColor" : "whiteTwo",
-            "underline": {
-                "selected": {
-                    "backgroundColor" : "deepSkyBlue"
-                },
-                "unselected": {
-                    "backgroundColor" : "brownGrey"
-                }
-            },
-            "title": {
-                "selected": {
-                    "textFont": "Roboto-Regular,12",
-                    "textColor": "greyishBrown"
-                },
-                "otherSegmentSelected" : {
-                    "textFont": "Roboto-Regular,12",
-                    "textColor": "brownGreyFive"
-                }
-            },
-            "hintLabel": {
-                "textFont": "Roboto-Light,10",
-                "textColor": "brownGreyThree"
-            }
-        },
-   ///     "passwordView" :{
-            "backgroundColor": "clear"
-        },
- ///       "passwordField": {
-            "backgroundColor" : "clear",
-            "textFont": "Roboto-Light,17",
-            "textColor": "greyishBrown",
-            "placeHolderColor" : "brownGreyThree",
-            "showPasswordIcon" : "passwordEye",
-            "hidePasswordIcon" : "passwordEye",
-            "underline":{
-                "empty": {
-                    "backgroundColor" : "brownGrey"
-                },
-                "filled": {
-                    "backgroundColor" : "deepSkyBlue"
-                }
-            }
-        }
-    },
-     */
-
-//    fun setThemeToBusinessName(){
-//        val textViewTheme = TextViewTheme()
-//        textViewTheme.textColor = Color.parseColor(ThemeManager.getValue("merchantHeaderView.titleLabelColor"))
-//        textViewTheme.textSize = ThemeManager.getFontSize("merchantHeaderView.titleLabelFont").toFloat()
-//        textViewTheme.font = ThemeManager.getFontName("merchantHeaderView.titleLabelFont")
-//        view.businessName.setTheme(textViewTheme)
-//    }
 
 }

@@ -63,7 +63,7 @@ class TapLayoutManager() : ViewModel(),
         this.sdkLayout = sdkLayout
         businessViewHolder = BusinessViewHolder(context)
         amountViewHolder = AmountViewHolder(context)
-        cardViewHolder = CardViewHolder(context, this)
+        cardViewHolder = CardViewHolder(context, this,this)
         paymentInputViewHolder = PaymentInputViewHolder(context, this, this)
         saveCardSwitchHolder = SwitchViewHolder(context)
         //itemsViewHolder = ItemsViewHolder(context)
@@ -115,7 +115,7 @@ class TapLayoutManager() : ViewModel(),
     override fun displayGoPayLogin() {
         AnimationEngine.applyTransition(bottomSheetLayout, SLIDE)
         goPayViewHolder = GoPayViewHolder(context, bottomSheetLayout)
-        removeViews(cardViewHolder, paymentInputViewHolder, saveCardSwitchHolder)
+        removeViews(cardViewHolder, paymentInputViewHolder, saveCardSwitchHolder,tabAnimatedActionButtonViewHolder)
         addViews(goPayViewHolder)
     }
 
@@ -242,12 +242,12 @@ class TapLayoutManager() : ViewModel(),
     }
 
     override fun onItemClicked(){
-        val manager: FragmentManager = fragmentManager
+      /*  val manager: FragmentManager = fragmentManager
         val transaction = manager.beginTransaction()
         transaction.replace(R.id.currency_fragment_container, CurrencyViewFragment(supportedCurrecnyList))
         transaction.addToBackStack(null)
         transaction.commit()
-
+*/
     }
 
 

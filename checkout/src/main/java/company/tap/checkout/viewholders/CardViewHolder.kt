@@ -9,6 +9,7 @@ import company.tap.cardbusinesskit.testmodels.Payment_methods
 import company.tap.checkout.R
 import company.tap.checkout.adapters.CardAdapter
 import company.tap.checkout.enums.SectionType
+import company.tap.checkout.interfaces.BaseLayoutManager
 import company.tap.checkout.interfaces.OnCardSelectedActionListener
 
 
@@ -25,7 +26,8 @@ import kotlinx.android.synthetic.main.item_saved_card.view.*
  */
 class CardViewHolder(
     private val context: Context,
-    private val onCardSelectedActionListener: OnCardSelectedActionListener? = null
+    private val onCardSelectedActionListener: OnCardSelectedActionListener? = null,
+    private val baseLayopu: BaseLayoutManager?=null
 ) : TapBaseViewHolder {
 
     override val view = TapChipGroup(context, null)
@@ -34,6 +36,7 @@ class CardViewHolder(
 
 
     private var paymentsList: List<Payment_methods>? = null
+
 
     init {
         bindViewComponents()
@@ -64,6 +67,7 @@ class CardViewHolder(
             val animation = AnimationUtils.loadAnimation(this.view.context, R.anim.shake)
             view.chipsRecycler.startAnimation(animation)
             view.deleteImageView?.visibility = View.VISIBLE
+            baseLayopu?.displayGoPayLogin()
         }
 
     }
