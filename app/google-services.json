@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "810793988762",
+    "firebase_url": "https://tapcheckoutsdk-bec69.firebaseio.com",
+    "project_id": "tapcheckoutsdk-bec69",
+    "storage_bucket": "tapcheckoutsdk-bec69.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:810793988762:android:88ae85be181be4c11be523",
+        "android_client_info": {
+          "package_name": "company.tap.checkoutsdk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "810793988762-187gt1c6ejj6ivi65us11tblrp0eahgd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXn4T5KA1iQZ90sYs9Garp4qsm4Z-RvDQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "810793988762-187gt1c6ejj6ivi65us11tblrp0eahgd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

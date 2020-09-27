@@ -152,27 +152,13 @@ class PaymentInputViewHolder(private val context: Context , private val onPaymen
         }
 
         nfcButton?.setOnClickListener {
-            //  val nfcFragment = NFCFragment()
-
-          /*  val appCompatActivity = it.context as AppCompatActivity
-
-            val fm: FragmentManager = appCompatActivity.getSupportFragmentManager()
-            val nfcfrag: Fragment = NFCFragment()
-            fm.beginTransaction().replace(R.id.fragment_container_nfc, nfcfrag).commit()*/
             onCardNFCCallListener.onClickNFC()
-            Toast.makeText(context, "u clicked nfc", Toast.LENGTH_SHORT).show()
 
         }
         cardScannerBtn?.setOnClickListener {
-              /* val cardFragment = CardScannerFragment()x
-              val appCompatActivity = it.context as AppCompatActivity
 
-              val fm2: FragmentManager = appCompatActivity.supportFragmentManager
-              fm2.beginTransaction().replace(R.id.fragment_container_card_lib, cardFragment).commit()*/
-              tabLayout.visibility = View.GONE
+         tabLayout.visibility = View.GONE
             onCardNFCCallListener.onClickCardScanner()
-            Toast.makeText(context, "u clicked card scanner", Toast.LENGTH_SHORT).show()
-
         }
     }
 

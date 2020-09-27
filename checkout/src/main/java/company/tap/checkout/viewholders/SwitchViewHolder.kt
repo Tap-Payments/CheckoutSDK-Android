@@ -70,7 +70,7 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
         }
         view.saveTextView.text = switchString
         print("switch string $switchString")
-        actionButton.activateButton()
+        actionButton.activateButton(context)
     }
 
     private fun getSwitchDataSourceFromAPI(

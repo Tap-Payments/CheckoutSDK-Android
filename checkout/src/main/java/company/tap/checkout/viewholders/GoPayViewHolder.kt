@@ -38,7 +38,9 @@ class GoPayViewHolder(context: Context, private val bottomSheet: FrameLayout) : 
     override fun bindViewComponents() {
         goPayLoginInput.changeDataSource(GoPayLoginDataSource())
         goPayLoginInput.setLoginInterface(this)
-        goPayPasswordInput.setLoginInterface(this,goPayLoginInput.textInput.toString())
+
+        goPayPasswordInput.setLoginInterface(this, goPayLoginInput.textInput.text.toString())
+
     }
 
     override fun onChangeClicked() {
@@ -51,6 +53,9 @@ class GoPayViewHolder(context: Context, private val bottomSheet: FrameLayout) : 
         AnimationEngine.applyTransition(bottomSheet, SLIDE)
         goPayLoginInput.visibility = View.GONE
         goPayPasswordInput.visibility = View.VISIBLE
+       goPayPasswordInput.setLoginInterface(this,goPayLoginInput.textInput.text.toString())
+
+
     }
 
     override fun onPhoneValidated() {

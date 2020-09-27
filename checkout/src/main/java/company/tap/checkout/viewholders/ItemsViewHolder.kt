@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.replace
 import company.tap.checkout.R
 import company.tap.checkout.enums.SectionType
+import company.tap.checkout.interfaces.BaseLayoutManager
 import company.tap.checkout.interfaces.ItemClickedListener
 import company.tap.tapuilibrary.uikit.adapters.context
 import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
@@ -21,9 +22,9 @@ import java.lang.reflect.Array.newInstance
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class ItemsViewHolder(context11: Context, private val itemClickedListener : ItemClickedListener) : TapBaseViewHolder {
+class ItemsViewHolder(context11: Context, private val baseLayoutManager: BaseLayoutManager ) : TapBaseViewHolder {
     private val context1:Context?=context11
-    override val view = LayoutInflater.from(context1).inflate(
+    override val view = LayoutInflater.from(context11).inflate(
         R.layout.currency_fragment_layout,
         null,false
     )
@@ -37,22 +38,15 @@ class ItemsViewHolder(context11: Context, private val itemClickedListener : Item
     init {
 
         bindViewComponents()
+        if (this::supportedCurrecnyList.isInitialized) {
+            CurrencyViewFragment().currencyList=supportedCurrecnyList
+        }
+
     }
 
     override fun bindViewComponents() {
         if (this::supportedCurrecnyList.isInitialized) {
-            itemClickedListener.onItemClicked()
-            //CurrencyViewFragment(supportedCurrecnyList)
-
-          /*  val appCompatActivity = context1 as AppCompatActivity
-
-            val fm1: FragmentManager = appCompatActivity.supportFragmentManager
-            val currencyViewFragment: Fragment = CurrencyViewFragment(supportedCurrecnyList)
-            //fm.beginTransaction().replace(R.id.fragment_container_nfc, nfcfrag).commit()
-           // fm1.executePendingTransactions()
-            fm1.beginTransaction().replace(R.id.currency_fragment_container,currencyViewFragment).commitNow()*/
-          //  fm1.executePendingTransactions()
-
+            baseLayoutManager.controlCurrency(true)
         }
     }
     /**
@@ -62,6 +56,7 @@ class ItemsViewHolder(context11: Context, private val itemClickedListener : Item
     fun setDatafromAPI(supportedCurrencyApi: ArrayList<String>) {
         supportedCurrecnyList = supportedCurrencyApi
         bindViewComponents()
+        println("supported curr list:$supportedCurrecnyList")
 
     }
 }

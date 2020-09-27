@@ -50,7 +50,7 @@ class BusinessViewHolder(context: Context) : TapBaseViewHolder {
      * @param merchantNameApi represents the merchant business name
      * */
     fun setDatafromAPI(merchantLogoApi: String, merchantNameApi: String) {
-        merchantLogo = merchantLogoApi
+        merchantLogo = null
         merchantName = merchantNameApi
         bindViewComponents()
     }

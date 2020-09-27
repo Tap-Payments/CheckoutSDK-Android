@@ -36,8 +36,8 @@ import java.lang.Exception
  *
  */
 class TapLayoutManager() : ViewModel(),
-    BaseLayoutManager, OnCardSelectedActionListener, onPaymentCardComplete, onCardNFCCallListener,
-    ItemClickedListener {
+    BaseLayoutManager, OnCardSelectedActionListener, onPaymentCardComplete, onCardNFCCallListener
+     {
 
     private lateinit var context: Context
     private lateinit var fragmentManager: FragmentManager
@@ -67,7 +67,7 @@ class TapLayoutManager() : ViewModel(),
         paymentInputViewHolder = PaymentInputViewHolder(context, this, this)
         saveCardSwitchHolder = SwitchViewHolder(context)
         //itemsViewHolder = ItemsViewHolder(context)
-
+        itemsViewHolder = ItemsViewHolder(context,this)
         tabAnimatedActionButtonViewHolder = TabAnimatedActionButtonViewHolder(context)
         initAmountAction()
         initCardsGroup()
@@ -80,9 +80,12 @@ class TapLayoutManager() : ViewModel(),
 
     private fun initAmountAction() {
         amountViewHolder.setOnItemsClickListener {
-            if (!this::itemsViewHolder.isInitialized)
-                itemsViewHolder = ItemsViewHolder(context,this)
+          //  CurrencyViewFragment().setCurrencyList(supportedCurrecnyList)
             controlCurrency(itemsViewHolder.displayed)
+
+            /* if (!this::itemsViewHolder.isInitialized)
+             //   itemsViewHolder = ItemsViewHolder(context,this)
+           controlCurrency(itemsViewHolder.displayed)*/
         }
     }
 
@@ -120,6 +123,7 @@ class TapLayoutManager() : ViewModel(),
     }
 
     override fun controlCurrency(display: Boolean) {
+       /* if(this::bottomSheetLayout.isInitialized)
         TransitionManager.beginDelayedTransition(bottomSheetLayout)
         if (display) {
             addViews(itemsViewHolder)
@@ -137,7 +141,16 @@ class TapLayoutManager() : ViewModel(),
                 saveCardSwitchHolder,
                 tabAnimatedActionButtonViewHolder
             )
+        }*/
+        if(supportedCurrecnyList.size!=0){
+            val manager: FragmentManager = fragmentManager
+            val transaction = manager.beginTransaction()
+            transaction.replace(R.id.currency_fragment_container, CurrencyViewFragment())
+            transaction.addToBackStack(null)
+            transaction.commit()
         }
+
+
         itemsViewHolder.displayed = !display
         amountViewHolder.changeGroupAction(!display)
     }
@@ -159,7 +172,7 @@ class TapLayoutManager() : ViewModel(),
             dummyInitapiResponse.order.original_amount.toString(),
             dummyInitapiResponse.order.trx_currency,
             dummyInitapiResponse.order.trx_currency,
-            dummyInitapiResponse?.order.items.size.toString()
+            dummyInitapiResponse.order.items.size.toString()
         )
         cardViewHolder.setDatafromAPI(dummyInitapiResponse.payment_methods)
         paymentInputViewHolder.setDatafromAPI(dummyInitapiResponse.payment_methods.get(0).image)
@@ -167,10 +180,14 @@ class TapLayoutManager() : ViewModel(),
             dummyInitapiResponse.merchant.name,
             paymentInputViewHolder.selectedType
         )
-         if (!this::itemsViewHolder.isInitialized)
+        supportedCurrecnyList = dummyInitapiResponse.payment_methods.get(0).supported_currencies
+      //  itemsViewHolder.setDatafromAPI(dummyInitapiResponse.payment_methods.get(0).supported_currencies)
+        /* if (!this::itemsViewHolder.isInitialized)
          itemsViewHolder = ItemsViewHolder(context,this)
         supportedCurrecnyList = dummyInitapiResponse.payment_methods.get(0).supported_currencies
-         itemsViewHolder.setDatafromAPI(dummyInitapiResponse.payment_methods.get(0).supported_currencies)
+         itemsViewHolder.setDatafromAPI(dummyInitapiResponse.payment_methods.get(0).supported_currencies)*/
+        CurrencyViewFragment().setCurrencyList(supportedCurrecnyList)
+
     }
 
     private fun removeViews(vararg viewHolders: TapBaseViewHolder) {
@@ -186,7 +203,7 @@ class TapLayoutManager() : ViewModel(),
     }
 
     private fun activateActionButton() {
-        tabAnimatedActionButtonViewHolder.activateButton()
+        tabAnimatedActionButtonViewHolder.activateButton(context)
     }
 
     private fun unActivateActionButton() {
@@ -222,7 +239,7 @@ class TapLayoutManager() : ViewModel(),
     }
     // Override function to open NFC fragment and scan the card via NFC.
     override fun onClickNFC() {
-        removeViews(amountViewHolder,cardViewHolder,saveCardSwitchHolder,paymentInputViewHolder)
+        removeViews(businessViewHolder,amountViewHolder,cardViewHolder,saveCardSwitchHolder,paymentInputViewHolder,tabAnimatedActionButtonViewHolder)
         val manager: FragmentManager = fragmentManager
         val transaction = manager.beginTransaction()
         transaction.replace(R.id.fragment_container_nfc_lib, NFCFragment())
@@ -239,18 +256,12 @@ class TapLayoutManager() : ViewModel(),
         transaction.replace(R.id.fragment_container_card_lib, CardScannerFragment())
         transaction.addToBackStack(null)
         transaction.commit()
+        AnimationEngine.applyTransition(bottomSheetLayout, SLIDE)
     }
 
-    override fun onItemClicked(){
-      /*  val manager: FragmentManager = fragmentManager
-        val transaction = manager.beginTransaction()
-        transaction.replace(R.id.currency_fragment_container, CurrencyViewFragment(supportedCurrecnyList))
-        transaction.addToBackStack(null)
-        transaction.commit()
-*/
+
     }
 
 
 
 
-}
