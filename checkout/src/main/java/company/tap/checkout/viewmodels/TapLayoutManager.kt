@@ -137,7 +137,7 @@ class TapLayoutManager() : ViewModel(),
             if(supportedCurrecnyList.size!=0){
                 val manager: FragmentManager = fragmentManager
                 val transaction = manager.beginTransaction()
-                transaction.replace(R.id.currency_fragment_container, CurrencyViewFragment(supportedCurrecnyList))
+                transaction.replace(R.id.currency_fragment_container, CurrencyViewFragment(supportedCurrecnyList,itemList as List<Object>))
                 transaction.addToBackStack(null)
                 transaction.commit()
             }
@@ -151,7 +151,7 @@ class TapLayoutManager() : ViewModel(),
             )
             val manager: FragmentManager = fragmentManager
             val transaction = manager.beginTransaction()
-            transaction.remove(CurrencyViewFragment(supportedCurrecnyList))
+            transaction.remove(CurrencyViewFragment(supportedCurrecnyList,itemList as List<Object>))
             transaction.addToBackStack(null)
             transaction.commit()
         }
