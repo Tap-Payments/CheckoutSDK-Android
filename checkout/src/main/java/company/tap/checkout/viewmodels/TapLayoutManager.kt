@@ -2,7 +2,6 @@ package company.tap.checkout.viewmodels
 
 
 import android.content.Context
-import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
@@ -33,8 +32,7 @@ import kotlinx.android.synthetic.main.action_button_animation.view.*
  *
  */
 class TapLayoutManager() : ViewModel(),
-    BaseLayoutManager, OnCardSelectedActionListener, onPaymentCardComplete, onCardNFCCallListener
-     {
+    BaseLayoutManager, OnCardSelectedActionListener, onPaymentCardComplete, onCardNFCCallListener {
 
     private lateinit var context: Context
     private lateinit var fragmentManager: FragmentManager
@@ -48,8 +46,8 @@ class TapLayoutManager() : ViewModel(),
     private lateinit var saveCardSwitchHolder: SwitchViewHolder
     private lateinit var goPayViewHolder: GoPayViewHolder
     private lateinit var tabAnimatedActionButtonViewHolder: TabAnimatedActionButtonViewHolder
-    private lateinit var supportedCurrecnyList:ArrayList<String>
-    private lateinit var itemList:List<Items>
+    private lateinit var supportedCurrecnyList: ArrayList<String>
+    private lateinit var itemList: List<Items>
 
     fun initLayoutManager(
         context: Context,
@@ -123,8 +121,8 @@ class TapLayoutManager() : ViewModel(),
     }
 
     override fun controlCurrency(display: Boolean) {
-        if(this::bottomSheetLayout.isInitialized)
-        TransitionManager.beginDelayedTransition(bottomSheetLayout)
+        if (this::bottomSheetLayout.isInitialized)
+            TransitionManager.beginDelayedTransition(bottomSheetLayout)
         if (display) {
             addViews(itemsViewHolder)
             removeViews(
@@ -134,10 +132,13 @@ class TapLayoutManager() : ViewModel(),
                 tabAnimatedActionButtonViewHolder
             )
 
-            if(supportedCurrecnyList.size!=0){
+            if (supportedCurrecnyList.size != 0) {
                 val manager: FragmentManager = fragmentManager
                 val transaction = manager.beginTransaction()
-                transaction.replace(R.id.currency_fragment_container, CurrencyViewFragment(supportedCurrecnyList,itemList as List<Object>))
+                transaction.replace(
+                    R.id.currency_fragment_container,
+                    CurrencyViewFragment(supportedCurrecnyList, itemList)
+                )
                 transaction.addToBackStack(null)
                 transaction.commit()
             }
@@ -151,7 +152,7 @@ class TapLayoutManager() : ViewModel(),
             )
             val manager: FragmentManager = fragmentManager
             val transaction = manager.beginTransaction()
-            transaction.remove(CurrencyViewFragment(supportedCurrecnyList,itemList as List<Object>))
+            transaction.remove(CurrencyViewFragment(supportedCurrecnyList, itemList))
             transaction.addToBackStack(null)
             transaction.commit()
         }
@@ -238,6 +239,7 @@ class TapLayoutManager() : ViewModel(),
         }
 
     }
+
     // Override function to open NFC fragment and scan the card via NFC.
     override fun onClickNFC() {
         removeViews(
@@ -267,9 +269,4 @@ class TapLayoutManager() : ViewModel(),
         AnimationEngine.applyTransition(bottomSheetLayout, SLIDE)
     }
 
-
-    }
-
-
-
-
+}
