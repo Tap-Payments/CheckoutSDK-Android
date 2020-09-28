@@ -38,9 +38,9 @@ class ItemsViewHolder(context11: Context, private val baseLayoutManager: BaseLay
     init {
 
         bindViewComponents()
-        if (this::supportedCurrecnyList.isInitialized) {
+       /* if (this::supportedCurrecnyList.isInitialized) {
             CurrencyViewFragment().currencyList=supportedCurrecnyList
-        }
+        }*/
 
     }
 
