@@ -2,7 +2,7 @@
 <LinearLayout android:id="@+id/sdkContainer"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -29,15 +29,18 @@
     <FrameLayout
         android:id="@+id/fragment_container_nfc_lib"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"/>
 
-    <FrameLayout
-        android:id="@+id/fragment_container_card_lib"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+
     <FrameLayout
         android:id="@+id/currency_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="bottom"/>
+
+        />
+    <FrameLayout
+        android:id="@+id/fragment_container_card_lib"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+      />
 </LinearLayout>

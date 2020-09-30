@@ -47,6 +47,8 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         val enabledSections = ArrayList<SectionType>()
         enabledSections.add(SectionType.BUSINESS)
         enabledSections.add(SectionType.AMOUNT_ITEMS)
+        enabledSections.add(SectionType.FRAGMENT)
+
 
         layoutManager.displayStartupLayout(enabledSections)
         //This is for getting response from business engine . Currently dummy reponse from assets json is used

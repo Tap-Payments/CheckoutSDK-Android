@@ -32,8 +32,7 @@ import company.tap.checkout.viewholders.PaymentInputViewHolder.PaymentType.MOBIL
 import company.tap.tapcardvalidator_android.CardBrand
 import company.tap.tapcardvalidator_android.CardValidationState
 import company.tap.tapcardvalidator_android.CardValidator
-import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
-import company.tap.tapuilibrary.uikit.fragment.NFCFragment
+
 import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
 import company.tap.tapuilibrary.uikit.models.SectionTabItem
 import company.tap.tapuilibrary.uikit.views.TapMobilePaymentView
