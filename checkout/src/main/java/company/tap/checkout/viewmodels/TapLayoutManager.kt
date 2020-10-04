@@ -101,8 +101,6 @@ class TapLayoutManager() : ViewModel(),
                 tabAnimatedActionButtonViewHolder
             )
 
-
-
     }
 
     private fun NMNM() {
@@ -168,7 +166,9 @@ class TapLayoutManager() : ViewModel(),
         amountViewHolder.changeGroupAction(!display)
     }
 
-    override fun displayOTP() {}
+    override fun displayOTP() {
+
+    }
 
     override fun displayRedirect(url: String) {}
 
