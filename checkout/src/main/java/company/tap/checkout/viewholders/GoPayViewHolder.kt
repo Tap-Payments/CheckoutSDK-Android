@@ -1,13 +1,16 @@
 package company.tap.checkout.viewholders
 
 import android.content.Context
+import android.telephony.PhoneNumberUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.Toast
 import company.tap.checkout.R
 import company.tap.checkout.enums.SectionType
 import company.tap.checkout.utils.AnimationEngine
 import company.tap.checkout.utils.AnimationEngine.Type.SLIDE
+import company.tap.tapuilibrary.uikit.adapters.context
 import company.tap.tapuilibrary.uikit.datasource.GoPayLoginDataSource
 import company.tap.tapuilibrary.uikit.interfaces.GoPayLoginInterface
 import company.tap.tapuilibrary.uikit.organisms.GoPayLoginInput
@@ -59,7 +62,8 @@ class GoPayViewHolder(context: Context, private val bottomSheet: FrameLayout) : 
     }
 
     override fun onPhoneValidated() {
-
+        AnimationEngine.applyTransition(bottomSheet, SLIDE)
+        Toast.makeText(context,"OTP view to slide up",Toast.LENGTH_SHORT).show()
     }
 
 
