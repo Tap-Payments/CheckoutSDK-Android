@@ -13,6 +13,7 @@ import company.tap.checkout.R
 import company.tap.checkout.internal.apiresponse.getJsonDataFromAsset
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.viewmodels.TapLayoutManager
+import company.tap.checkout.open.controller.SessionManager
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
@@ -53,6 +54,7 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         getBusinessHeaderData()
 
         setBottomSheetInterface(this)
+
     }
 
     private fun getBusinessHeaderData() {
@@ -65,6 +67,7 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
     }
 
     override fun onDismiss() {
+        SessionManager.setActiveSession(false)
     }
 
     override fun onShow() {
