@@ -1,9 +1,7 @@
-package company.tap.checkout.viewmodels
+package company.tap.checkout.internal.viewmodels
 
 
 import android.content.Context
-import android.net.sip.SipManager.newInstance
-import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
@@ -13,14 +11,14 @@ import androidx.transition.TransitionManager
 import company.tap.cardbusinesskit.testmodels.DummyResp
 import company.tap.cardbusinesskit.testmodels.Items
 import company.tap.checkout.R
-import company.tap.checkout.enums.SectionType
-import company.tap.checkout.interfaces.BaseLayoutManager
-import company.tap.checkout.interfaces.OnCardSelectedActionListener
-import company.tap.checkout.interfaces.onCardNFCCallListener
-import company.tap.checkout.interfaces.onPaymentCardComplete
-import company.tap.checkout.utils.AnimationEngine
-import company.tap.checkout.utils.AnimationEngine.Type.SLIDE
-import company.tap.checkout.viewholders.*
+import company.tap.checkout.internal.enums.SectionType
+import company.tap.checkout.internal.interfaces.BaseLayoutManager
+import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
+import company.tap.checkout.internal.interfaces.onCardNFCCallListener
+import company.tap.checkout.internal.interfaces.onPaymentCardComplete
+import company.tap.checkout.internal.utils.AnimationEngine
+import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
+import company.tap.checkout.internal.viewholders.*
 
 import company.tap.tapuilibrary.uikit.fragment.CurrencyViewFragment
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment

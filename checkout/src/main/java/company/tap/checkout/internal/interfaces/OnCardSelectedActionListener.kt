@@ -1,4 +1,4 @@
-package company.tap.checkout.interfaces
+package company.tap.checkout.internal.interfaces
 
 /**
  * Created by OlaMonir on 8/28/20.

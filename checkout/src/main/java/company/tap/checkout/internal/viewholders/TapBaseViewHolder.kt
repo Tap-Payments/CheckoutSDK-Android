@@ -1,7 +1,7 @@
-package company.tap.checkout.viewholders
+package company.tap.checkout.internal.viewholders
 
 import android.view.View
-import company.tap.checkout.enums.SectionType
+import company.tap.checkout.internal.enums.SectionType
 
 /**
  *

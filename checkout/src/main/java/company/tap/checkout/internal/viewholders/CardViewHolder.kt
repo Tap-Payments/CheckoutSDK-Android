@@ -1,4 +1,4 @@
-package company.tap.checkout.viewholders
+package company.tap.checkout.internal.viewholders
 
 import android.content.Context
 import android.view.View
@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.cardbusinesskit.testmodels.Payment_methods
 import company.tap.checkout.R
-import company.tap.checkout.adapters.CardAdapter
-import company.tap.checkout.enums.SectionType
-import company.tap.checkout.interfaces.BaseLayoutManager
-import company.tap.checkout.interfaces.OnCardSelectedActionListener
+import company.tap.checkout.internal.adapters.CardAdapter
+import company.tap.checkout.internal.enums.SectionType
+import company.tap.checkout.internal.interfaces.BaseLayoutManager
+import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.uikit.atoms.TapChipGroup
 import kotlinx.android.synthetic.main.item_saved_card.view.*

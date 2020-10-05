@@ -1,4 +1,4 @@
-package company.tap.checkout.apiresponse
+package company.tap.checkout.internal.apiresponse
 
 import android.content.Context
 import java.io.IOException

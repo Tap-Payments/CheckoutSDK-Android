@@ -1,9 +1,8 @@
-package company.tap.checkout.viewholders
+package company.tap.checkout.internal.viewholders
 
 
 import android.content.Context
 import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.StrictMode
@@ -15,20 +14,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.annotation.IntRange
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
 import androidx.core.widget.doAfterTextChanged
 
 import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardinputwidget.widget.inline.InlineCardInput
 import company.tap.checkout.R
-import company.tap.checkout.enums.SectionType
-import company.tap.checkout.interfaces.onCardNFCCallListener
-import company.tap.checkout.interfaces.onPaymentCardComplete
-import company.tap.checkout.viewholders.PaymentInputViewHolder.PaymentType.CARD
-import company.tap.checkout.viewholders.PaymentInputViewHolder.PaymentType.MOBILE
+import company.tap.checkout.internal.enums.SectionType
+import company.tap.checkout.internal.interfaces.onCardNFCCallListener
+import company.tap.checkout.internal.interfaces.onPaymentCardComplete
+import company.tap.checkout.internal.viewholders.PaymentInputViewHolder.PaymentType.CARD
+import company.tap.checkout.internal.viewholders.PaymentInputViewHolder.PaymentType.MOBILE
 import company.tap.tapcardvalidator_android.CardBrand
 import company.tap.tapcardvalidator_android.CardValidationState
 import company.tap.tapcardvalidator_android.CardValidator

@@ -1,7 +1,7 @@
-package company.tap.checkout.interfaces
+package company.tap.checkout.internal.interfaces
 
 import company.tap.cardbusinesskit.testmodels.DummyResp
-import company.tap.checkout.enums.SectionType
+import company.tap.checkout.internal.enums.SectionType
 
 /**
  *

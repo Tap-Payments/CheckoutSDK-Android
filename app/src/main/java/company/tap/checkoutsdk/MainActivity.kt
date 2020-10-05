@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import cards.pay.paycardsrecognizer.sdk.Card
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
-import company.tap.checkout.TapCheckoutFragment
+import company.tap.checkout.open.TapCheckoutFragment
 import company.tap.tapuilibrary.themekit.ThemeManager
 
 
@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() ,InlineViewCallback{
             ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme)
             val tapCheckoutFragment = TapCheckoutFragment()
             tapCheckoutFragment.show(supportFragmentManager, null)
+
         }
     }
 

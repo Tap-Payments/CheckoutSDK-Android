@@ -6,5 +6,15 @@ package company.tap.checkout.open.controller
 Copyright (c) 2020    Tap Payments.
 All rights reserved.
  **/
-class SessionManager {
+//Session Manager is responsible for starting the sdk session as active or inactive
+object SessionManager {
+    private var sessionStatus = false
+
+    fun isSessionEnabled(): Boolean {
+        return sessionStatus
+    }
+
+    fun setActiveSession(status: Boolean) {
+        sessionStatus = status
+    }
 }

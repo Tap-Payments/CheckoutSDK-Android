@@ -1,9 +1,7 @@
-package company.tap.checkout.viewholders
+package company.tap.checkout.internal.viewholders
 
 import android.content.Context
-import company.tap.checkout.R
-import company.tap.checkout.enums.SectionType
-import company.tap.checkout.utils.CurrentTheme
+import company.tap.checkout.internal.enums.SectionType
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.uikit.datasource.HeaderDataSource
 import company.tap.tapuilibrary.uikit.views.TapHeaderSectionView

@@ -1,9 +1,9 @@
-package company.tap.checkout.utils
+package company.tap.checkout.internal.utils
 
 import android.view.ViewGroup
 import androidx.transition.*
-import company.tap.checkout.utils.AnimationEngine.Type.FADE
-import company.tap.checkout.utils.AnimationEngine.Type.SLIDE
+import company.tap.checkout.internal.utils.AnimationEngine.Type.FADE
+import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
 
 /**
  *

@@ -1,10 +1,10 @@
-package company.tap.checkout.viewholders
+package company.tap.checkout.internal.viewholders
 
 import android.content.Context
 import android.view.LayoutInflater
 import company.tap.checkout.R
-import company.tap.checkout.enums.SectionType
-import company.tap.checkout.interfaces.BaseLayoutManager
+import company.tap.checkout.internal.enums.SectionType
+import company.tap.checkout.internal.interfaces.BaseLayoutManager
 
 /**
  *

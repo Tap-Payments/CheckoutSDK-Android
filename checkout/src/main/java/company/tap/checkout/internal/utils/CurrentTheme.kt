@@ -1,4 +1,4 @@
-package company.tap.checkout.utils
+package company.tap.checkout.internal.utils
 
 import android.content.Context
 import company.tap.tapuilibrary.themekit.ThemeManager

@@ -1,15 +1,14 @@
-package company.tap.checkout.viewholders
+package company.tap.checkout.internal.viewholders
 
 import android.content.Context
-import android.telephony.PhoneNumberUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.Toast
 import company.tap.checkout.R
-import company.tap.checkout.enums.SectionType
-import company.tap.checkout.utils.AnimationEngine
-import company.tap.checkout.utils.AnimationEngine.Type.SLIDE
+import company.tap.checkout.internal.enums.SectionType
+import company.tap.checkout.internal.utils.AnimationEngine
+import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
 import company.tap.tapuilibrary.uikit.adapters.context
 import company.tap.tapuilibrary.uikit.datasource.GoPayLoginDataSource
 import company.tap.tapuilibrary.uikit.interfaces.GoPayLoginInterface

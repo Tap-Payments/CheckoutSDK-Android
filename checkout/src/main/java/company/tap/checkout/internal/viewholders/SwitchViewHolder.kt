@@ -1,12 +1,9 @@
-package company.tap.checkout.viewholders
+package company.tap.checkout.internal.viewholders
 
 import android.content.Context
-import android.view.View
-import company.tap.checkout.enums.SectionType
-import company.tap.checkout.interfaces.onPaymentCardComplete
+import company.tap.checkout.internal.enums.SectionType
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
-import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.views.TapCardSwitch
 
 /**

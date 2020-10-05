@@ -1,10 +1,9 @@
-package company.tap.checkout.viewholders
+package company.tap.checkout.internal.viewholders
 
 import android.content.Context
 import android.view.LayoutInflater
 import company.tap.checkout.R
-import company.tap.checkout.enums.SectionType
-import kotlinx.android.synthetic.main.cardscanner_fragment_layout.view.*
+import company.tap.checkout.internal.enums.SectionType
 
 
 /**

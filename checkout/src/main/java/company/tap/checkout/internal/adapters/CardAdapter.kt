@@ -1,4 +1,4 @@
-package company.tap.checkout.adapters
+package company.tap.checkout.internal.adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import company.tap.cardbusinesskit.testmodels.Payment_methods
 import company.tap.checkout.R
-import company.tap.checkout.interfaces.OnCardSelectedActionListener
+import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
 import kotlinx.android.synthetic.main.item_saved_card.view.*
 
 

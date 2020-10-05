@@ -1,4 +1,4 @@
-package company.tap.checkout.enums
+package company.tap.checkout.internal.enums
 
 /**
  *

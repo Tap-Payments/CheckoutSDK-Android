@@ -1,12 +1,11 @@
-package company.tap.checkout.viewholders
+package company.tap.checkout.internal.viewholders
 
 
 import android.content.Context
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import company.tap.checkout.R
-import company.tap.checkout.enums.SectionType
+import company.tap.checkout.internal.enums.SectionType
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.uikit.adapters.context
 import company.tap.tapuilibrary.uikit.datasource.ActionButtonDataSource
