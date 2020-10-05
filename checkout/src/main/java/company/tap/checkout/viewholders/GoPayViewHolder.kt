@@ -1,13 +1,16 @@
 package company.tap.checkout.viewholders
 
 import android.content.Context
+import android.telephony.PhoneNumberUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.Toast
 import company.tap.checkout.R
 import company.tap.checkout.enums.SectionType
 import company.tap.checkout.utils.AnimationEngine
 import company.tap.checkout.utils.AnimationEngine.Type.SLIDE
+import company.tap.tapuilibrary.uikit.adapters.context
 import company.tap.tapuilibrary.uikit.datasource.GoPayLoginDataSource
 import company.tap.tapuilibrary.uikit.interfaces.GoPayLoginInterface
 import company.tap.tapuilibrary.uikit.organisms.GoPayLoginInput
@@ -38,7 +41,9 @@ class GoPayViewHolder(context: Context, private val bottomSheet: FrameLayout) : 
     override fun bindViewComponents() {
         goPayLoginInput.changeDataSource(GoPayLoginDataSource())
         goPayLoginInput.setLoginInterface(this)
-        goPayPasswordInput.setLoginInterface(this)
+
+        goPayPasswordInput.setLoginInterface(this, goPayLoginInput.textInput.text.toString())
+
     }
 
     override fun onChangeClicked() {
@@ -51,76 +56,16 @@ class GoPayViewHolder(context: Context, private val bottomSheet: FrameLayout) : 
         AnimationEngine.applyTransition(bottomSheet, SLIDE)
         goPayLoginInput.visibility = View.GONE
         goPayPasswordInput.visibility = View.VISIBLE
+       goPayPasswordInput.setLoginInterface(this,goPayLoginInput.textInput.text.toString())
+
+
     }
 
     override fun onPhoneValidated() {
-
+        //Todo open otp view here
+        AnimationEngine.applyTransition(bottomSheet, SLIDE)
+        Toast.makeText(context,"OTP view to slide up",Toast.LENGTH_SHORT).show()
     }
 
-
-    fun setThemeToGoPayLoginInput() {
-//        goPayLoginInput.textInput.
-    }
-
-    fun setThemeToGoPayPasswordInput() {
-
-    }
-
-    /*
-        "goPay": {
-        "loginBar" :{
-            "backgroundColor" : "whiteTwo",
-            "underline": {
-                "selected": {
-                    "backgroundColor" : "deepSkyBlue"
-                },
-                "unselected": {
-                    "backgroundColor" : "brownGrey"
-                }
-            },
-            "title": {
-                "selected": {
-                    "textFont": "Roboto-Regular,12",
-                    "textColor": "greyishBrown"
-                },
-                "otherSegmentSelected" : {
-                    "textFont": "Roboto-Regular,12",
-                    "textColor": "brownGreyFive"
-                }
-            },
-            "hintLabel": {
-                "textFont": "Roboto-Light,10",
-                "textColor": "brownGreyThree"
-            }
-        },
-   ///     "passwordView" :{
-            "backgroundColor": "clear"
-        },
- ///       "passwordField": {
-            "backgroundColor" : "clear",
-            "textFont": "Roboto-Light,17",
-            "textColor": "greyishBrown",
-            "placeHolderColor" : "brownGreyThree",
-            "showPasswordIcon" : "passwordEye",
-            "hidePasswordIcon" : "passwordEye",
-            "underline":{
-                "empty": {
-                    "backgroundColor" : "brownGrey"
-                },
-                "filled": {
-                    "backgroundColor" : "deepSkyBlue"
-                }
-            }
-        }
-    },
-     */
-
-//    fun setThemeToBusinessName(){
-//        val textViewTheme = TextViewTheme()
-//        textViewTheme.textColor = Color.parseColor(ThemeManager.getValue("merchantHeaderView.titleLabelColor"))
-//        textViewTheme.textSize = ThemeManager.getFontSize("merchantHeaderView.titleLabelFont").toFloat()
-//        textViewTheme.font = ThemeManager.getFontName("merchantHeaderView.titleLabelFont")
-//        view.businessName.setTheme(textViewTheme)
-//    }
 
 }

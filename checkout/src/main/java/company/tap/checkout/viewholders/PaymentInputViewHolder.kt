@@ -20,20 +20,19 @@ import androidx.annotation.IntRange
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
 import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
+
 import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardinputwidget.widget.inline.InlineCardInput
 import company.tap.checkout.R
 import company.tap.checkout.enums.SectionType
+import company.tap.checkout.interfaces.onCardNFCCallListener
 import company.tap.checkout.interfaces.onPaymentCardComplete
 import company.tap.checkout.viewholders.PaymentInputViewHolder.PaymentType.CARD
 import company.tap.checkout.viewholders.PaymentInputViewHolder.PaymentType.MOBILE
 import company.tap.tapcardvalidator_android.CardBrand
 import company.tap.tapcardvalidator_android.CardValidationState
 import company.tap.tapcardvalidator_android.CardValidator
-import company.tap.tapuilibrary.uikit.fragment.NFCFragment
+
 import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
 import company.tap.tapuilibrary.uikit.models.SectionTabItem
 import company.tap.tapuilibrary.uikit.views.TapMobilePaymentView
@@ -48,7 +47,7 @@ import java.net.URL
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class PaymentInputViewHolder(private val context: Context , private val onPaymentCardComplete: onPaymentCardComplete) : TapBaseViewHolder,
+class PaymentInputViewHolder(private val context: Context , private val onPaymentCardComplete: onPaymentCardComplete , private val onCardNFCCallListener: onCardNFCCallListener) : TapBaseViewHolder,
     TapSelectionTabLayoutInterface, CardInputListener {
 
     override val view: View =
@@ -152,25 +151,13 @@ class PaymentInputViewHolder(private val context: Context , private val onPaymen
         }
 
         nfcButton?.setOnClickListener {
-            //  val nfcFragment = NFCFragment()
-
-            val appCompatActivity = it.context as AppCompatActivity
-
-            val fm: FragmentManager = appCompatActivity.getSupportFragmentManager()
-            val nfcfrag: Fragment = NFCFragment()
-            fm.beginTransaction().replace(R.id.fragment_container_nfc, nfcfrag).commit()
-            Toast.makeText(context, "u clicked nfc", Toast.LENGTH_SHORT).show()
+            onCardNFCCallListener.onClickNFC()
 
         }
         cardScannerBtn?.setOnClickListener {
-            /*   val cardFragment = CardScannerFragment()
-              val appCompatActivity = it.context as AppCompatActivity
 
-              val fm: FragmentManager = appCompatActivity.getSupportFragmentManager()
-              fm.beginTransaction().replace(R.id.fragment_container_nfc, cardFragment).commit()
-              tabLayout.visibility = View.GONE*/
-            Toast.makeText(context, "u clicked card scanner", Toast.LENGTH_SHORT).show()
-
+         tabLayout.visibility = View.GONE
+            onCardNFCCallListener.onClickCardScanner()
         }
     }
 

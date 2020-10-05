@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.fragment.app.viewModels
+import cards.pay.paycardsrecognizer.sdk.Card
+import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.gson.Gson
 import company.tap.cardbusinesskit.testmodels.DummyResp
@@ -15,6 +17,7 @@ import company.tap.checkout.viewmodels.TapLayoutManager
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
+import java.lang.Exception
 
 
 /**
@@ -39,11 +42,13 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         super.onViewCreated(view, savedInstanceState)
         val checkoutLayout: LinearLayout = view.findViewById(R.id.sdkContainer)
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
-        layoutManager.initLayoutManager(requireContext(), childFragmentManager, checkoutLayout)
+        layoutManager.initLayoutManager(requireContext(),childFragmentManager, checkoutLayout)
 
         val enabledSections = ArrayList<SectionType>()
         enabledSections.add(SectionType.BUSINESS)
         enabledSections.add(SectionType.AMOUNT_ITEMS)
+        enabledSections.add(SectionType.FRAGMENT)
+
 
         layoutManager.displayStartupLayout(enabledSections)
         //This is for getting response from business engine . Currently dummy reponse from assets json is used
@@ -78,6 +83,5 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
 
     override fun onStateChanged(newState: Int) {
     }
-
 
 }

@@ -9,6 +9,7 @@ import company.tap.cardbusinesskit.testmodels.Payment_methods
 import company.tap.checkout.R
 import company.tap.checkout.adapters.CardAdapter
 import company.tap.checkout.enums.SectionType
+import company.tap.checkout.interfaces.BaseLayoutManager
 import company.tap.checkout.interfaces.OnCardSelectedActionListener
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.uikit.atoms.TapChipGroup
@@ -22,15 +23,17 @@ import kotlinx.android.synthetic.main.item_saved_card.view.*
  */
 class CardViewHolder(
     private val context: Context,
-    private val onCardSelectedActionListener: OnCardSelectedActionListener? = null
+    private val onCardSelectedActionListener: OnCardSelectedActionListener? = null,
+    private val baseLayopu: BaseLayoutManager?=null
 ) : TapBaseViewHolder {
 
     override val view = TapChipGroup(context, null)
 
     override val type = SectionType.CARD
 
-    // private var paymentsList: ArrayList<Int> = arrayListOf(1, 2, 3, 4, 5, 6)
+
     private var paymentsList: List<Payment_methods>? = null
+
 
     init {
         bindViewComponents()
@@ -61,27 +64,11 @@ class CardViewHolder(
             val animation = AnimationUtils.loadAnimation(this.view.context, R.anim.shake)
             view.chipsRecycler.startAnimation(animation)
             view.deleteImageView?.visibility = View.VISIBLE
+            baseLayopu?.displayGoPayLogin()
         }
 
     }
 
-
-    /*
-    horizontalList
-     "headers": {
-            "gatewayHeader": {
-                "backgroundColor" : "whiteTwo",
-                "leftButton": {
-                    "labelTextFont": "Roboto-Regular,10",
-                    "labelTextColor": "greyishBrown"
-                },
-                "rightButton": {
-                    "labelTextFont": "Roboto-Regular,10",
-                    "labelTextColor": "greyishBrown"
-                }
-            }
-        },
-     */
     /**
      * Sets data from API through LayoutManager
      * @param paymentMethodsApi represents the list of payment methods available from API
