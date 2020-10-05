@@ -2,10 +2,9 @@ package company.tap.checkout.viewholders
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import company.tap.checkout.R
 import company.tap.checkout.enums.SectionType
-import company.tap.tapuilibrary.uikit.fragment.CurrencyViewFragment
-
 /**
  *
  * Created by Mario Gamal on 7/23/20
@@ -13,7 +12,7 @@ import company.tap.tapuilibrary.uikit.fragment.CurrencyViewFragment
  *
  */
 class ItemsViewHolder(context: Context) : TapBaseViewHolder {
-    override val view = LayoutInflater.from(context).inflate(R.layout.currency_fragment_layout, null)
+    override val view: View = LayoutInflater.from(context).inflate(R.layout.currency_fragment_layout, null)
 
     override val type = SectionType.SELECT
 
