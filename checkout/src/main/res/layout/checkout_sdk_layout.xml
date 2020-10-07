@@ -15,6 +15,7 @@
         android:layout_marginTop="@dimen/margin_basic_10dp"
         app:cardCornerRadius="3dp"
         app:cardElevation="@dimen/margin_basic_0dp"
+        android:layout_weight="0.5"
         android:layout_gravity="center_horizontal"
         >
 
@@ -29,7 +30,8 @@
     <FrameLayout
         android:id="@+id/fragment_container_nfc_lib"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+       />
 
 
     <FrameLayout
@@ -37,10 +39,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 
+
         />
     <FrameLayout
         android:id="@+id/fragment_container_card_lib"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
       />
 </LinearLayout>

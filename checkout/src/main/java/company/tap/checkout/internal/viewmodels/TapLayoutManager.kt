@@ -19,6 +19,7 @@ import company.tap.checkout.internal.interfaces.onPaymentCardComplete
 import company.tap.checkout.internal.utils.AnimationEngine
 import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
 import company.tap.checkout.internal.viewholders.*
+import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
 
 import company.tap.tapuilibrary.uikit.fragment.CurrencyViewFragment
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
@@ -144,7 +145,9 @@ class TapLayoutManager() : ViewModel(),
                 transaction.addToBackStack(null)
                 transaction.commit()
 
+
             }
+
            // addViews(itemsViewHolder)
         } else {
            // addViews(itemsViewHolder)
@@ -264,9 +267,14 @@ class TapLayoutManager() : ViewModel(),
     // Override function to open card Scanner and scan the card.
     override fun  onClickCardScanner() {
         println("are u reachinhg scanner")
-        cardScannerViewHolder  = CardScannerViewHolder(context)
-        removeViews(cardScannerViewHolder,businessViewHolder,amountViewHolder, cardViewHolder, saveCardSwitchHolder, paymentInputViewHolder,tabAnimatedActionButtonViewHolder)
-
+       // cardScannerViewHolder  = CardScannerViewHolder(context)
+       val manager: FragmentManager = fragmentManager
+        val transaction = manager.beginTransaction()
+        transaction.replace(R.id.fragment_container_card_lib, CardScannerFragment())
+        transaction.addToBackStack(null)
+        transaction.commit()
+        removeViews(businessViewHolder,amountViewHolder, cardViewHolder, saveCardSwitchHolder, paymentInputViewHolder,tabAnimatedActionButtonViewHolder)
+        //addViews(businessViewHolder,cardScannerViewHolder)
     }
 
 }

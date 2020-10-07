@@ -30,7 +30,10 @@ open class SDKSession {
 
     fun startSDK(supportFragmentManager: FragmentManager) {
         println("is session enabled ${SessionManager.isSessionEnabled()}")
-        checkSessionStatus()
+        if (SessionManager.isSessionEnabled()) {
+            println("Session already active!!!")
+            return
+        }
         val tapCheckoutFragment = TapCheckoutFragment()
         tapCheckoutFragment.show(supportFragmentManager, null)
 
