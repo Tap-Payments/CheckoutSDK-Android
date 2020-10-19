@@ -36,10 +36,13 @@
             "brownGreyFour": "#a6a6a6",
             "graySeparator": "#e0e0e0",
             "black_50": "#80000000",
+            "main_switch_background": "#E0E0E0",
             "switch_background": "#d4cfc9",
             "currency_chip_background": "#4cffffff",
             "currency_chip_selected_shadow": "#90c2f7",
-            "currency_chip_unselected_shadow": "#eeeeef"
+            "currency_chip_unselected_shadow": "#eeeeef",
+            "transperant": "#c7f9f9f9",
+            "invalid_action": "#b9b9b9"
         }
     },
     "inlineCard": {
@@ -281,7 +284,7 @@
             "color" : "brownGrey",
             "width" : 1
         },
-        "itemsNumberButtonCorner" : 30,
+        "itemsNumberButtonCorner" : 25,
         "backgroundColor" : "white"
     },
     "horizontalList": {
@@ -302,7 +305,7 @@
             }
         },
         "chips": {
-            "radius" : 25,
+            "radius" : 20,
             "currencyChip": {
                 "backgroundColor" : "whiteTwo",
                 "labelTextFont": "Roboto-Regular,12",
@@ -529,7 +532,7 @@
     },
     "goPay": {
         "loginBar" :{
-            "backgroundColor" : "whiteTwo",
+            "backgroundColor" : "#99ffffff",
             "underline": {
                 "selected": {
                     "backgroundColor" : "deepSkyBlue"
@@ -550,7 +553,7 @@
             },
             "hintLabel": {
                 "textFont": "Roboto-Light,10",
-                "textColor": "brownGreyThree"
+                "textColor": "greyishBrown"
             }
         },
         "passwordView" :{
@@ -559,13 +562,13 @@
         "passwordField": {
             "backgroundColor" : "clear",
             "textFont": "Roboto-Light,17",
-            "textColor": "greyishBrown",
+            "textColor": "black",
             "placeHolderColor" : "brownGreyThree",
             "showPasswordIcon" : "passwordEye",
             "hidePasswordIcon" : "passwordEye",
             "underline":{
                 "empty": {
-                    "backgroundColor" : "brownGrey"
+                    "backgroundColor" : "deepSkyBlue"
                 },
                 "filled": {
                     "backgroundColor" : "deepSkyBlue"
@@ -585,6 +588,7 @@
             }
         },
         "Invalid" : {
+            "goLoginBackgroundColor" : "invalid_action",
             "backgroundColor" : "veryLightPinkThree",
             "titleLabelColor" : "white"
         },
@@ -632,13 +636,14 @@
             }
         }
     },
+
     "TapSwitchView": {
-        "backgroundColor": "whiteTwo",
+        "backgroundColor": "main_switch_background",
         "CurvedSeparator": {
             "BackgroundColor": "whiteTwo"
         },
         "main": {
-            "backgroundColor": "switch_background",
+            "backgroundColor": "whiteTwo",
             "title": {
                 "textFont": "Roboto-Light,12",
                 "textColor": "brownGreySix"

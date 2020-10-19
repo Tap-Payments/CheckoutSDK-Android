@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"/>
 
     <company.tap.tapuilibrary.uikit.organisms.GoPayPasswordInput
-        android:visibility="gone"
+        android:visibility="invisible"
         android:id="@+id/goPay_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

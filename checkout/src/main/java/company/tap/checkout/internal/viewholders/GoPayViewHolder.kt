@@ -63,7 +63,7 @@ class GoPayViewHolder(context: Context, private val bottomSheet: FrameLayout) : 
     override fun onPhoneValidated() {
         //Todo open otp view here
         AnimationEngine.applyTransition(bottomSheet, SLIDE)
-        Toast.makeText(context,"OTP view to slide up",Toast.LENGTH_SHORT).show()
+     //   Toast.makeText(context,"OTP view to slide up",Toast.LENGTH_SHORT).show()
     }
 
 

@@ -47,7 +47,6 @@ class TapLayoutManager() : ViewModel(),
     private lateinit var paymentInputViewHolder: PaymentInputViewHolder
     private lateinit var saveCardSwitchHolder: SwitchViewHolder
     private lateinit var goPayViewHolder: GoPayViewHolder
-    private lateinit var tabAnimatedActionButtonViewHolder: TabAnimatedActionButtonViewHolder
     private lateinit var supportedCurrecnyList: ArrayList<String>
     private lateinit var itemList: List<Items>
 
@@ -65,7 +64,6 @@ class TapLayoutManager() : ViewModel(),
         paymentInputViewHolder = PaymentInputViewHolder(context, this, this)
         saveCardSwitchHolder = SwitchViewHolder(context)
         itemsViewHolder = ItemsViewHolder(context, this)
-        tabAnimatedActionButtonViewHolder = TabAnimatedActionButtonViewHolder(context)
         initAmountAction()
         initCardsGroup()
         initSwitchAction()
@@ -96,8 +94,7 @@ class TapLayoutManager() : ViewModel(),
                 amountViewHolder,
                 cardViewHolder,
                 paymentInputViewHolder,
-                saveCardSwitchHolder,
-                tabAnimatedActionButtonViewHolder
+                saveCardSwitchHolder
             )
 
     }
@@ -116,8 +113,7 @@ class TapLayoutManager() : ViewModel(),
         removeViews(
             cardViewHolder,
             paymentInputViewHolder,
-            saveCardSwitchHolder,
-            tabAnimatedActionButtonViewHolder
+            saveCardSwitchHolder
         )
         addViews(goPayViewHolder)
     }
@@ -131,8 +127,7 @@ class TapLayoutManager() : ViewModel(),
                 amountViewHolder,
                 cardViewHolder,
                 paymentInputViewHolder,
-                saveCardSwitchHolder,
-                tabAnimatedActionButtonViewHolder
+                saveCardSwitchHolder
             )
               if (supportedCurrecnyList.size != 0) {
                 val manager: FragmentManager = fragmentManager
@@ -148,14 +143,12 @@ class TapLayoutManager() : ViewModel(),
 
             }
 
-           // addViews(itemsViewHolder)
         } else {
-           // addViews(itemsViewHolder)
+
             removeViews(
                 cardViewHolder,
                 paymentInputViewHolder,
-                saveCardSwitchHolder,
-                tabAnimatedActionButtonViewHolder
+                saveCardSwitchHolder
             )
             val manager: FragmentManager = fragmentManager
             val transaction = manager.beginTransaction()
@@ -211,18 +204,18 @@ class TapLayoutManager() : ViewModel(),
     }
 
     private fun activateActionButton() {
-        tabAnimatedActionButtonViewHolder.activateButton(context)
+       // tabAnimatedActionButtonViewHolder.activateButton(context)
     }
 
     private fun unActivateActionButton() {
-        tabAnimatedActionButtonViewHolder.bindViewComponents()
-        tabAnimatedActionButtonViewHolder.view.actionButton.isClickable = false
+      //  tabAnimatedActionButtonViewHolder.bindViewComponents()
+      //  tabAnimatedActionButtonViewHolder.view.actionButton.isClickable = false
     }
 
     override fun onCardSelectedAction(isSelected: Boolean) {
         if (isSelected) {
-            activateActionButton()
-            tabAnimatedActionButtonViewHolder.view.actionButton.setOnClickListener { tabAnimatedActionButtonViewHolder.setOnClickAction() }
+           // activateActionButton()
+          //  tabAnimatedActionButtonViewHolder.view.actionButton.setOnClickListener { tabAnimatedActionButtonViewHolder.setOnClickAction() }
         } else unActivateActionButton()
     }
 
@@ -253,8 +246,8 @@ class TapLayoutManager() : ViewModel(),
             amountViewHolder,
             cardViewHolder,
             saveCardSwitchHolder,
-            paymentInputViewHolder,
-            tabAnimatedActionButtonViewHolder
+            paymentInputViewHolder
+
         )
         val manager: FragmentManager = fragmentManager
         val transaction = manager.beginTransaction()
@@ -273,8 +266,8 @@ class TapLayoutManager() : ViewModel(),
         transaction.replace(R.id.fragment_container_card_lib, CardScannerFragment())
         transaction.addToBackStack(null)
         transaction.commit()
-        removeViews(businessViewHolder,amountViewHolder, cardViewHolder, saveCardSwitchHolder, paymentInputViewHolder,tabAnimatedActionButtonViewHolder)
-        //addViews(businessViewHolder,cardScannerViewHolder)
+        removeViews(businessViewHolder,amountViewHolder, cardViewHolder, saveCardSwitchHolder, paymentInputViewHolder)
+
     }
 
 }
