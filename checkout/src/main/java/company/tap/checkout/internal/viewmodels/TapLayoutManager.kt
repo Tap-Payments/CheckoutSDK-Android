@@ -2,6 +2,7 @@ package company.tap.checkout.internal.viewmodels
 
 
 import android.content.Context
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
@@ -20,10 +21,8 @@ import company.tap.checkout.internal.utils.AnimationEngine
 import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
 import company.tap.checkout.internal.viewholders.*
 import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
-
 import company.tap.tapuilibrary.uikit.fragment.CurrencyViewFragment
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
-import kotlinx.android.synthetic.main.action_button_animation.view.*
 
 
 /**
@@ -64,6 +63,7 @@ class TapLayoutManager() : ViewModel(),
         paymentInputViewHolder = PaymentInputViewHolder(context, this, this)
         saveCardSwitchHolder = SwitchViewHolder(context)
         itemsViewHolder = ItemsViewHolder(context, this)
+        println("context = [${context}], fragmentManager = [${fragmentManager}], fragmentManager = [${fragmentManager}]")
         initAmountAction()
         initCardsGroup()
         initSwitchAction()
@@ -75,7 +75,6 @@ class TapLayoutManager() : ViewModel(),
 
     private fun initAmountAction() {
         amountViewHolder.setOnItemsClickListener {
-
             controlCurrency(itemsViewHolder.displayed)
 
         }
@@ -123,39 +122,43 @@ class TapLayoutManager() : ViewModel(),
             TransitionManager.beginDelayedTransition(bottomSheetLayout)
         if (display) {
             removeViews(
-                businessViewHolder,
-                amountViewHolder,
                 cardViewHolder,
                 paymentInputViewHolder,
                 saveCardSwitchHolder
             )
-              if (supportedCurrecnyList.size != 0) {
+        //   itemsViewHolder.setDatafromAPI(supportedCurrecnyList,itemList,fragmentManager)
+          if (supportedCurrecnyList.size != 0) {
                 val manager: FragmentManager = fragmentManager
                 val transaction = manager.beginTransaction()
-                transaction.replace(
-                    R.id.currency_fragment_container,
+              transaction.add(
+                    R.id.sdkContainer,
                     CurrencyViewFragment(supportedCurrecnyList, itemList)
                 )
-
                 transaction.addToBackStack(null)
                 transaction.commit()
+             //  addViews(itemsViewHolder)
+              itemsViewHolder.displayed = false
 
-
-            }
+          }
 
         } else {
 
-            removeViews(
+            addViews(
                 cardViewHolder,
                 paymentInputViewHolder,
                 saveCardSwitchHolder
+
             )
-            val manager: FragmentManager = fragmentManager
-            val transaction = manager.beginTransaction()
-            transaction.remove(CurrencyViewFragment(supportedCurrecnyList, itemList))
-            transaction.addToBackStack(null)
-            transaction.commit()
+
+        //  val manager: FragmentManager = fragmentManager
+        //    val transaction = manager.beginTransaction()
+         //   transaction.remove(CurrencyViewFragment(supportedCurrecnyList, itemList))
+         //   transaction.addToBackStack(null)
+         //   transaction.commit()
+
+            //fragmentManager.beginTransaction().remove(CurrencyViewFragment(null,null)).commit()
         }
+        removeViews(itemsViewHolder)
         itemsViewHolder.displayed = !display
         amountViewHolder.changeGroupAction(!display)
     }
@@ -266,8 +269,17 @@ class TapLayoutManager() : ViewModel(),
         transaction.replace(R.id.fragment_container_card_lib, CardScannerFragment())
         transaction.addToBackStack(null)
         transaction.commit()
-        removeViews(businessViewHolder,amountViewHolder, cardViewHolder, saveCardSwitchHolder, paymentInputViewHolder)
+        removeViews(
+            businessViewHolder,
+            amountViewHolder,
+            cardViewHolder,
+            saveCardSwitchHolder,
+            paymentInputViewHolder
+        )
 
     }
 
+
 }
+
+
