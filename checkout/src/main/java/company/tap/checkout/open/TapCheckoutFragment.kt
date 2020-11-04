@@ -1,11 +1,14 @@
 package company.tap.checkout.open
 
+import android.app.Activity
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.LinearLayout
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.gson.Gson
@@ -16,6 +19,7 @@ import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.viewmodels.TapLayoutManager
 import company.tap.checkout.open.controller.SessionManager
 import company.tap.taplocalizationkit.LocalizationManager
+import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
 
@@ -43,11 +47,11 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         val checkoutLayout: LinearLayout = view.findViewById(R.id.sdkContainer)
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
         layoutManager.initLayoutManager(requireContext(),childFragmentManager, checkoutLayout)
-        backgroundColor= Color.WHITE
+
         val enabledSections = ArrayList<SectionType>()
         enabledSections.add(SectionType.BUSINESS)
         enabledSections.add(SectionType.AMOUNT_ITEMS)
-        enabledSections.add(SectionType.FRAGMENT)
+       // enabledSections.add(SectionType.FRAGMENT)
 
 
         layoutManager.displayStartupLayout(enabledSections)
@@ -86,4 +90,7 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
     override fun onStateChanged(newState: Int) {
     }
 
+    override fun onAttachFragment(childFragment: Fragment) {
+        super.onAttachFragment(childFragment)
+    }
 }
