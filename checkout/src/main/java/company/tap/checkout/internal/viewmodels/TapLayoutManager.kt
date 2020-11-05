@@ -20,9 +20,11 @@ import company.tap.checkout.internal.interfaces.onPaymentCardComplete
 import company.tap.checkout.internal.utils.AnimationEngine
 import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
 import company.tap.checkout.internal.viewholders.*
+import company.tap.checkout.open.TapCheckoutFragment
 import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
 import company.tap.tapuilibrary.uikit.fragment.CurrencyViewFragment
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
+import kotlinx.android.synthetic.main.checkout_sdk_layout.view.*
 
 
 /**
@@ -67,6 +69,7 @@ class TapLayoutManager() : ViewModel(),
         initAmountAction()
         initCardsGroup()
         initSwitchAction()
+
     }
 
     private fun initSwitchAction() {
@@ -118,6 +121,8 @@ class TapLayoutManager() : ViewModel(),
     }
 
     override fun controlCurrency(display: Boolean) {
+        val manager: FragmentManager = fragmentManager
+        val transaction = manager.beginTransaction()
         if (this::bottomSheetLayout.isInitialized)
             TransitionManager.beginDelayedTransition(bottomSheetLayout)
         if (display) {
@@ -128,8 +133,7 @@ class TapLayoutManager() : ViewModel(),
             )
         //   itemsViewHolder.setDatafromAPI(supportedCurrecnyList,itemList,fragmentManager)
           if (supportedCurrecnyList.size != 0) {
-                val manager: FragmentManager = fragmentManager
-                val transaction = manager.beginTransaction()
+
               transaction.add(
                     R.id.sdkContainer,
                     CurrencyViewFragment(supportedCurrecnyList, itemList)
@@ -142,25 +146,22 @@ class TapLayoutManager() : ViewModel(),
           }
 
         } else {
+            removeViews(businessViewHolder,amountViewHolder,itemsViewHolder)
 
-            addViews(
-                cardViewHolder,
-                paymentInputViewHolder,
-                saveCardSwitchHolder
 
-            )
+            supportedCurrecnyList.clear()
+            manager.beginTransaction().replace(R.id.sdkContainer,TapCheckoutFragment()).commit()
 
-        //  val manager: FragmentManager = fragmentManager
-        //    val transaction = manager.beginTransaction()
-         //   transaction.remove(CurrencyViewFragment(supportedCurrecnyList, itemList))
-         //   transaction.addToBackStack(null)
-         //   transaction.commit()
+            transaction.addToBackStack(null)
+            transaction.commit()
 
-            //fragmentManager.beginTransaction().remove(CurrencyViewFragment(null,null)).commit()
+   
         }
-        removeViews(itemsViewHolder)
+
+
         itemsViewHolder.displayed = !display
         amountViewHolder.changeGroupAction(!display)
+
     }
 
     override fun displayOTP() {

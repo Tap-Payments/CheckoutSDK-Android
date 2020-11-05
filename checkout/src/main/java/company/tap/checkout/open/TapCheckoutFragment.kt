@@ -43,7 +43,7 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+//        super.onViewCreated(view, savedInstanceState)
         val checkoutLayout: LinearLayout = view.findViewById(R.id.sdkContainer)
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
         layoutManager.initLayoutManager(requireContext(),childFragmentManager, checkoutLayout)
