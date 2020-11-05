@@ -9,6 +9,7 @@ import android.widget.LinearLayout
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
 import androidx.transition.TransitionManager
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import company.tap.cardbusinesskit.testmodels.DummyResp
 import company.tap.cardbusinesskit.testmodels.Items
 import company.tap.checkout.R
@@ -65,6 +66,9 @@ class TapLayoutManager() : ViewModel(),
         paymentInputViewHolder = PaymentInputViewHolder(context, this, this)
         saveCardSwitchHolder = SwitchViewHolder(context)
         itemsViewHolder = ItemsViewHolder(context, this)
+
+        if (this::bottomSheetLayout.isInitialized)
+       goPayViewHolder= GoPayViewHolder(context,bottomSheetLayout)
         println("context = [${context}], fragmentManager = [${fragmentManager}], fragmentManager = [${fragmentManager}]")
         initAmountAction()
         initCardsGroup()
@@ -99,6 +103,7 @@ class TapLayoutManager() : ViewModel(),
                 saveCardSwitchHolder
             )
 
+
     }
 
     private fun NMNM() {
@@ -110,13 +115,14 @@ class TapLayoutManager() : ViewModel(),
     }
 
     override fun displayGoPayLogin() {
+        if (this::bottomSheetLayout.isInitialized)
         AnimationEngine.applyTransition(bottomSheetLayout, SLIDE)
-        goPayViewHolder = GoPayViewHolder(context, bottomSheetLayout)
         removeViews(
             cardViewHolder,
             paymentInputViewHolder,
             saveCardSwitchHolder
         )
+        if (this::bottomSheetLayout.isInitialized)
         addViews(goPayViewHolder)
     }
 
@@ -155,7 +161,7 @@ class TapLayoutManager() : ViewModel(),
             transaction.addToBackStack(null)
             transaction.commit()
 
-   
+
         }
 
 

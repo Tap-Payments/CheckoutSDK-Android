@@ -39,19 +39,26 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        println("checkout is onCreateView called")
         return inflater.inflate(R.layout.checkout_sdk_layout, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
+        println("checkout is onViewCreated called")
+
+        // super.onViewCreated(view, savedInstanceState)
         val checkoutLayout: LinearLayout = view.findViewById(R.id.sdkContainer)
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
+        backgroundColor= Color.WHITE
+        bottomSheetLayout?.let {
+            layoutManager.setBottomSheetLayout(it)
+        }
         layoutManager.initLayoutManager(requireContext(),childFragmentManager, checkoutLayout)
 
         val enabledSections = ArrayList<SectionType>()
         enabledSections.add(SectionType.BUSINESS)
         enabledSections.add(SectionType.AMOUNT_ITEMS)
-       // enabledSections.add(SectionType.FRAGMENT)
+        enabledSections.add(SectionType.FRAGMENT)
 
 
         layoutManager.displayStartupLayout(enabledSections)
@@ -59,6 +66,7 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         getBusinessHeaderData()
 
         setBottomSheetInterface(this)
+
 
     }
 
@@ -72,10 +80,12 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
     }
 
     override fun onDismiss() {
+        println("onDismiss is called")
         SessionManager.setActiveSession(false)
     }
 
     override fun onShow() {
+        println("onShow is called")
         bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
         bottomSheetDialog.behavior.skipCollapsed = true
         bottomSheetLayout?.let {
@@ -90,7 +100,5 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
     override fun onStateChanged(newState: Int) {
     }
 
-    override fun onAttachFragment(childFragment: Fragment) {
-        super.onAttachFragment(childFragment)
-    }
+
 }
