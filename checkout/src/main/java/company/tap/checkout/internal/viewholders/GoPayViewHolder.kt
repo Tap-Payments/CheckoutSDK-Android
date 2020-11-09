@@ -22,14 +22,13 @@ import company.tap.tapuilibrary.uikit.organisms.GoPayPasswordInput
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class GoPayViewHolder(context: Context, private val bottomSheet: FrameLayout) : TapBaseViewHolder,
-    GoPayLoginInterface {
+class GoPayViewHolder(context: Context) : TapBaseViewHolder{
     override val view: View = LayoutInflater.from(context).inflate(R.layout.gopay_layout, null)
 
     override val type = SectionType.GOPAY_SIGNIN
 
-    private val goPayLoginInput: GoPayLoginInput
-    private val goPayPasswordInput: GoPayPasswordInput
+     val goPayLoginInput: GoPayLoginInput
+     val goPayPasswordInput: GoPayPasswordInput
 
     init {
         goPayLoginInput = view.findViewById(R.id.gopay_login_input)
@@ -39,20 +38,20 @@ class GoPayViewHolder(context: Context, private val bottomSheet: FrameLayout) : 
 
     override fun bindViewComponents() {
         goPayLoginInput.changeDataSource(GoPayLoginDataSource())
-        goPayLoginInput.setLoginInterface(this)
+       // goPayLoginInput.setLoginInterface(this)
 
-        goPayPasswordInput.setLoginInterface(this, goPayLoginInput.textInput.text.toString())
+       // goPayPasswordInput.setLoginInterface(this, goPayLoginInput.textInput.text.toString())
 
     }
 
-    override fun onChangeClicked() {
-        AnimationEngine.applyTransition(bottomSheet, SLIDE)
+   /* override fun onChangeClicked() {
+       // AnimationEngine.applyTransition(bottomSheet, SLIDE)
         goPayLoginInput.visibility = View.VISIBLE
         goPayPasswordInput.visibility = View.GONE
     }
 
     override fun onEmailValidated() {
-        AnimationEngine.applyTransition(bottomSheet, SLIDE)
+       // AnimationEngine.applyTransition(bottomSheet, SLIDE)
         goPayLoginInput.visibility = View.GONE
         goPayPasswordInput.visibility = View.VISIBLE
        goPayPasswordInput.setLoginInterface(this,goPayLoginInput.textInput.text.toString())
@@ -62,9 +61,10 @@ class GoPayViewHolder(context: Context, private val bottomSheet: FrameLayout) : 
 
     override fun onPhoneValidated() {
         //Todo open otp view here
-        AnimationEngine.applyTransition(bottomSheet, SLIDE)
+      //  AnimationEngine.applyTransition(bottomSheet, SLIDE)
+
      //   Toast.makeText(context,"OTP view to slide up",Toast.LENGTH_SHORT).show()
     }
-
+*/
 
 }

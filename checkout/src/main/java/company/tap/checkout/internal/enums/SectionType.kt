@@ -15,6 +15,8 @@ enum class SectionType {
     SAVE_CARD,
     GOPAY_SIGNIN,
     FRAGMENT,
-    ActionButton
+    ActionButton,
+    OTP_VIEW
+
 
 }

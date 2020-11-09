@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentManager
 
 
 import company.tap.checkout.open.TapCheckoutFragment
+import company.tap.checkout.open.TapCheckoutFragment1
 import company.tap.checkout.open.data_managers.PaymentDataSource
 
 /**
@@ -37,9 +38,11 @@ open class SDKSession {
             println("Session already active!!!")
             return
         }
-        val tapCheckoutFragment = TapCheckoutFragment()
-        tapCheckoutFragment.show(supportFragmentManager, null)
-
+       /* val tapCheckoutFragment = TapCheckoutFragment()
+        tapCheckoutFragment.show(supportFragmentManager, null)*/
+        TapCheckoutFragment().apply {
+            show(supportFragmentManager, tag)
+        }
         // start session
         SessionManager.setActiveSession(true)
 

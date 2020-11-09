@@ -46,7 +46,7 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         println("checkout is onViewCreated called")
 
-        // super.onViewCreated(view, savedInstanceState)
+    //     super.onViewCreated(view, savedInstanceState)
         val checkoutLayout: LinearLayout = view.findViewById(R.id.sdkContainer)
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
         backgroundColor= Color.WHITE
@@ -62,9 +62,8 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
 
 
         layoutManager.displayStartupLayout(enabledSections)
-        //This is for getting response from business engine . Currently dummy reponse from assets json is used
+        //This is for getting response from business engine . Currently dummy response from assets json is used
         getBusinessHeaderData()
-
         setBottomSheetInterface(this)
 
 
