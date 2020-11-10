@@ -79,9 +79,9 @@ class TapLayoutManager() : ViewModel(),
         saveCardSwitchHolder = SwitchViewHolder(context)
         itemsViewHolder = ItemsViewHolder(context, this)
 
-
-       goPayViewHolder= GoPayViewHolder(context)
         otpViewHolder = OTPViewHolder(context)
+
+       goPayViewHolder= GoPayViewHolder(context,this)
         println("context = [${context}], fragmentManager = [${fragmentManager}], fragmentManager = [${fragmentManager}]")
         initAmountAction()
         initCardsGroup()
@@ -189,6 +189,7 @@ class TapLayoutManager() : ViewModel(),
     override fun displayOTP() {
         addViews(otpViewHolder)
         println("display OTP is called")
+        otpViewHolder.otpView.visibility = View.VISIBLE
 
 
     }

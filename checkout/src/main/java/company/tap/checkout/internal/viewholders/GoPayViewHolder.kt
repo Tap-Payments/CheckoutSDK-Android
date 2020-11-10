@@ -26,7 +26,7 @@ import kotlinx.android.synthetic.main.otpview_layout.view.*
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class GoPayViewHolder(private val context: Context) : TapBaseViewHolder, OpenOTPInterface,GoPayLoginInterface {
+class GoPayViewHolder(private val context: Context, private val baseLayoutManager: BaseLayoutManager?=null) : TapBaseViewHolder, OpenOTPInterface,GoPayLoginInterface {
     override val view: View = LayoutInflater.from(context).inflate(R.layout.gopay_layout, null)
 
     override val type = SectionType.GOPAY_SIGNIN
@@ -34,7 +34,6 @@ class GoPayViewHolder(private val context: Context) : TapBaseViewHolder, OpenOTP
      val goPayLoginInput: GoPayLoginInput
      val goPayPasswordInput: GoPayPasswordInput
     private  var otpViewHolder: OTPViewHolder = OTPViewHolder(context)
-    private val baseLayoutManager: BaseLayoutManager?=null
 
     init {
         goPayLoginInput = view.findViewById(R.id.gopay_login_input)
@@ -48,7 +47,6 @@ class GoPayViewHolder(private val context: Context) : TapBaseViewHolder, OpenOTP
        goPayLoginInput?.setLoginInterface(this)
         goPayLoginInput?.setOpenOTPInterface(this)
        // goPayPasswordInput.setLoginInterface(this, goPayLoginInput.textInput.text.toString())
-        baseLayoutManager?.displayOTP()
     }
 
     override fun onChangeClicked() {
@@ -73,6 +71,8 @@ class GoPayViewHolder(private val context: Context) : TapBaseViewHolder, OpenOTP
             otpViewHolder.view.otpView.visibility = View.VISIBLE
             otpViewHolder.view.otpView.changePhoneCardView?.visibility = View.VISIBLE
             println(" you clicled for otp")
+            baseLayoutManager?.displayOTP()
+
 
         }
 
