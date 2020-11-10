@@ -35,6 +35,7 @@ import company.tap.tapuilibrary.uikit.interfaces.OpenOTPInterface
 import company.tap.tapuilibrary.uikit.interfaces.OtpButtonConfirmationInterface
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
 import kotlinx.android.synthetic.main.checkout_sdk_layout.view.*
+import kotlinx.android.synthetic.main.otpview_layout.view.*
 
 
 /**
@@ -45,7 +46,7 @@ import kotlinx.android.synthetic.main.checkout_sdk_layout.view.*
  */
 class TapLayoutManager() : ViewModel(),
     BaseLayoutManager, OnCardSelectedActionListener, onPaymentCardComplete, onCardNFCCallListener ,
-    OpenOTPInterface, OtpButtonConfirmationInterface, GoPayLoginInterface {
+     OtpButtonConfirmationInterface {
 
     private lateinit var context: Context
     private lateinit var fragmentManager: FragmentManager
@@ -85,8 +86,9 @@ class TapLayoutManager() : ViewModel(),
         initAmountAction()
         initCardsGroup()
         initSwitchAction()
-        otpViewHolder.otpView?.setOtpButtonConfirmationInterface(this)
-
+            otpViewHolder.view.otpView?.setOtpButtonConfirmationInterface(this)
+      //  otpViewHolder.otpView?.setOTPInterface(this)
+       // goPayViewHolder.goPayLoginInput?.setOpenOTPInterface(this)
 
     }
 
@@ -185,6 +187,9 @@ class TapLayoutManager() : ViewModel(),
     }
 
     override fun displayOTP() {
+        addViews(otpViewHolder)
+        println("display OTP is called")
+
 
     }
 
@@ -300,17 +305,7 @@ class TapLayoutManager() : ViewModel(),
 
     }
 
-    override fun getPhoneNumber(phoneNumber: String, countryCode: String, maskedValue: String) {
-        otpViewHolder.otpView?.mobileNumberText?.text = "+${countryCode} $maskedValue"
-    }
 
-    override fun onChangePhoneClicked() {
-        goPayViewHolder?.goPayLoginInput?.visibility = View.VISIBLE
-        goPayViewHolder?.goPayLoginInput?.changeDataSource(GoPayLoginDataSource())
-        goPayViewHolder.goPayLoginInput?.inputType = GoPayLoginMethod.EMAIL
-        otpViewHolder.otpView?.visibility = View.GONE
-        otpViewHolder.otpView?.changePhoneCardView?.visibility = View.GONE
-    }
 
     override fun onOtpButtonConfirmationClick(otpNumber: String): Boolean {
         //TODO dummy added
@@ -318,25 +313,7 @@ class TapLayoutManager() : ViewModel(),
         return otpNumber == "111111"
     }
 
-    override fun onChangeClicked() {
-        goPayViewHolder.goPayLoginInput?.visibility = View.VISIBLE
-        goPayViewHolder.goPayPasswordInput?.visibility = View.GONE
-        otpViewHolder.otpView?.visibility = View.GONE
-    }
 
-    override fun onEmailValidated() {
-        goPayViewHolder.goPayLoginInput?.visibility = View.GONE
-        goPayViewHolder.goPayPasswordInput?.visibility = View.VISIBLE
-        otpViewHolder.otpView?.visibility = View.GONE
-        goPayViewHolder.goPayPasswordInput?.setLoginInterface(this, goPayViewHolder.goPayLoginInput?.textInput?.text.toString())
-    }
-
-    override fun onPhoneValidated() {
-        goPayViewHolder.goPayPasswordInput?.visibility = View.GONE
-        goPayViewHolder.goPayLoginInput?.visibility = View.GONE
-        otpViewHolder.otpView?.visibility = View.VISIBLE
-        otpViewHolder.otpView?.changePhoneCardView?.visibility = View.VISIBLE
-    }
 
 }
 

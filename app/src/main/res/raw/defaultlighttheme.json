@@ -15,6 +15,7 @@
             "lightPeriwinkle": "#d9d9da",
             "white80":"#ffffffcc",
             "vibrantGreen" : "#2ace00",
+            "chipShaowColor" : "#1000d300",
             "vibrantGreenTwo" : "#00d300",
             "paleLilac":"#e4e4e5",
             "clear":"#00000000",
@@ -42,7 +43,8 @@
             "currency_chip_selected_shadow": "#90c2f7",
             "currency_chip_unselected_shadow": "#eeeeef",
             "transperant": "#c7f9f9f9",
-            "invalid_action": "#b9b9b9"
+            "invalid_action": "#b9b9b9",
+            "change_layout": "#f4f4f4"
         }
     },
     "inlineCard": {
@@ -114,7 +116,7 @@
             "width": 32
         },
         "textFields": {
-            "textColor": "greyishBrown",
+            "textColor": "#838180",
             "errorTextColor": "orange",
             "font" : "Roboto-Light,17",
             "placeHolderColor" : "brownGreyThree"
@@ -284,7 +286,7 @@
             "color" : "brownGrey",
             "width" : 1
         },
-        "itemsNumberButtonCorner" : 25,
+        "itemsNumberButtonCorner" : 30,
         "backgroundColor" : "white"
     },
     "horizontalList": {
@@ -532,7 +534,7 @@
     },
     "goPay": {
         "loginBar" :{
-            "backgroundColor" : "#99ffffff",
+            "backgroundColor" : "whiteTwo",
             "underline": {
                 "selected": {
                     "backgroundColor" : "deepSkyBlue"
@@ -553,7 +555,7 @@
             },
             "hintLabel": {
                 "textFont": "Roboto-Light,10",
-                "textColor": "greyishBrown"
+                "textColor": "brownGreyThree"
             }
         },
         "passwordView" :{
@@ -603,12 +605,12 @@
         }
     },
     "TapOtpView": {
-        "backgroundColor": "clear",
+        "backgroundColor": "transperant",
         "OtpController": {
-            "bottomLineColor": "brownGreyFour",
-            "activeBottomColor": "deepSkyBlue",
+            "bottomLineColor": "deepSkyBlue",
+            "activeBottomColor": "brownGreyFour",
             "textColor": "greyishBrown",
-            "textFont": "Roboto-Light,25"
+            "textFont": "Roboto-Light,14"
         },
         "Timer": {
             "textFont": "Roboto-Regular,16",
@@ -638,7 +640,7 @@
     },
 
     "TapSwitchView": {
-        "backgroundColor": "main_switch_background",
+        "backgroundColor": "transperant",
         "CurvedSeparator": {
             "BackgroundColor": "whiteTwo"
         },

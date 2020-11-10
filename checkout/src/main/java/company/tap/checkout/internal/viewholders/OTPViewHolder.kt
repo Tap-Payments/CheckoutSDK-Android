@@ -16,19 +16,20 @@ import company.tap.tapuilibrary.uikit.organisms.OTPView
 Copyright (c) 2020    Tap Payments.
 All rights reserved.
  **/
-class OTPViewHolder (context: Context) : TapBaseViewHolder
-     {
+class OTPViewHolder (private val context: Context) : TapBaseViewHolder {
     override val view: View = LayoutInflater.from(context).inflate(R.layout.otpview_layout, null)
+   // override val view: View = OTPView(context)
 
     override val type = SectionType.OTP_VIEW
-    val otpView: OTPView
 
+    val otpView:OTPView
         init {
         otpView = view.findViewById(R.id.otpView)
-       // bindViewComponents()
+      //  bindViewComponents()
     }
 
     override fun bindViewComponents() {
+    //    otpView.visibility= View.VISIBLE
 
     }
 

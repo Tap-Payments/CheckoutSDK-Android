@@ -7,13 +7,17 @@ import android.widget.FrameLayout
 import android.widget.Toast
 import company.tap.checkout.R
 import company.tap.checkout.internal.enums.SectionType
+import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.checkout.internal.utils.AnimationEngine
 import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
 import company.tap.tapuilibrary.uikit.adapters.context
 import company.tap.tapuilibrary.uikit.datasource.GoPayLoginDataSource
+import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.interfaces.GoPayLoginInterface
+import company.tap.tapuilibrary.uikit.interfaces.OpenOTPInterface
 import company.tap.tapuilibrary.uikit.organisms.GoPayLoginInput
 import company.tap.tapuilibrary.uikit.organisms.GoPayPasswordInput
+import kotlinx.android.synthetic.main.otpview_layout.view.*
 
 
 /**
@@ -22,49 +26,75 @@ import company.tap.tapuilibrary.uikit.organisms.GoPayPasswordInput
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class GoPayViewHolder(context: Context) : TapBaseViewHolder{
+class GoPayViewHolder(private val context: Context) : TapBaseViewHolder, OpenOTPInterface,GoPayLoginInterface {
     override val view: View = LayoutInflater.from(context).inflate(R.layout.gopay_layout, null)
 
     override val type = SectionType.GOPAY_SIGNIN
 
      val goPayLoginInput: GoPayLoginInput
      val goPayPasswordInput: GoPayPasswordInput
+    private  var otpViewHolder: OTPViewHolder = OTPViewHolder(context)
+    private val baseLayoutManager: BaseLayoutManager?=null
 
     init {
         goPayLoginInput = view.findViewById(R.id.gopay_login_input)
         goPayPasswordInput = view.findViewById(R.id.goPay_password)
+       // otpViewHolder = OTPViewHolder(context)
         bindViewComponents()
     }
 
     override fun bindViewComponents() {
         goPayLoginInput.changeDataSource(GoPayLoginDataSource())
-       // goPayLoginInput.setLoginInterface(this)
-
+       goPayLoginInput?.setLoginInterface(this)
+        goPayLoginInput?.setOpenOTPInterface(this)
        // goPayPasswordInput.setLoginInterface(this, goPayLoginInput.textInput.text.toString())
-
+        baseLayoutManager?.displayOTP()
     }
 
-   /* override fun onChangeClicked() {
-       // AnimationEngine.applyTransition(bottomSheet, SLIDE)
-        goPayLoginInput.visibility = View.VISIBLE
-        goPayPasswordInput.visibility = View.GONE
+    override fun onChangeClicked() {
+      goPayLoginInput?.visibility = View.VISIBLE
+       goPayPasswordInput?.visibility = View.GONE
+        otpViewHolder.view.otpView?.visibility = View.GONE
     }
 
     override fun onEmailValidated() {
-       // AnimationEngine.applyTransition(bottomSheet, SLIDE)
-        goPayLoginInput.visibility = View.GONE
-        goPayPasswordInput.visibility = View.VISIBLE
-       goPayPasswordInput.setLoginInterface(this,goPayLoginInput.textInput.text.toString())
-
-
+        goPayLoginInput?.visibility = View.GONE
+        goPayPasswordInput?.visibility = View.VISIBLE
+        otpViewHolder.view.otpView?.visibility = View.GONE
+       goPayPasswordInput?.setLoginInterface(this, goPayLoginInput?.textInput?.text.toString())
     }
 
     override fun onPhoneValidated() {
-        //Todo open otp view here
-      //  AnimationEngine.applyTransition(bottomSheet, SLIDE)
+        goPayPasswordInput?.visibility = View.GONE
+        goPayLoginInput?.visibility = View.GONE
+        println("viewhodler value"+otpViewHolder+"\n"+"view value"+view+"\n"+"otpview is "+otpViewHolder.view.otpView)
 
-     //   Toast.makeText(context,"OTP view to slide up",Toast.LENGTH_SHORT).show()
+        if(otpViewHolder.view.otpView!=null){
+            otpViewHolder.view.otpView.visibility = View.VISIBLE
+            otpViewHolder.view.otpView.changePhoneCardView?.visibility = View.VISIBLE
+            println(" you clicled for otp")
+
+        }
+
+        /*  goPayLoginInput.actionButton.setOnClickListener {
+          otpViewHolder.view.otpView.visibility = View.VISIBLE
+            println(" you clicled for otp")
+        }*/
     }
-*/
 
+    override fun getPhoneNumber(phoneNumber: String, countryCode: String, maskedValue: String) {
+        if(otpViewHolder.view.otpView!=null)
+        otpViewHolder.view.otpView?.mobileNumberText?.text = "+${countryCode} $maskedValue"
+    }
+
+    override fun onChangePhoneClicked() {
+        goPayLoginInput?.visibility = View.VISIBLE
+        goPayLoginInput?.changeDataSource(GoPayLoginDataSource())
+       goPayLoginInput?.inputType = GoPayLoginMethod.EMAIL
+        if(otpViewHolder.view.otpView!=null){
+            otpViewHolder.view.otpView?.visibility = View.GONE
+            otpViewHolder.view.otpView?.changePhoneCardView?.visibility = View.GONE
+        }
+
+    }
 }

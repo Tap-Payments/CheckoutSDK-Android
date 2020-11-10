@@ -5,7 +5,6 @@ import androidx.fragment.app.FragmentManager
 
 
 import company.tap.checkout.open.TapCheckoutFragment
-import company.tap.checkout.open.TapCheckoutFragment1
 import company.tap.checkout.open.data_managers.PaymentDataSource
 
 /**
