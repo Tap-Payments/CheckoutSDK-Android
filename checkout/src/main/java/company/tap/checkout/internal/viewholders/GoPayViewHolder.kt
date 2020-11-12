@@ -1,6 +1,7 @@
 package company.tap.checkout.internal.viewholders
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
@@ -15,6 +16,7 @@ import company.tap.tapuilibrary.uikit.datasource.GoPayLoginDataSource
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.interfaces.GoPayLoginInterface
 import company.tap.tapuilibrary.uikit.interfaces.OpenOTPInterface
+import company.tap.tapuilibrary.uikit.interfaces.OtpButtonConfirmationInterface
 import company.tap.tapuilibrary.uikit.organisms.GoPayLoginInput
 import company.tap.tapuilibrary.uikit.organisms.GoPayPasswordInput
 import kotlinx.android.synthetic.main.otpview_layout.view.*
@@ -26,7 +28,9 @@ import kotlinx.android.synthetic.main.otpview_layout.view.*
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class GoPayViewHolder(private val context: Context, private val baseLayoutManager: BaseLayoutManager?=null) : TapBaseViewHolder, OpenOTPInterface,GoPayLoginInterface {
+class GoPayViewHolder(private val context: Context, private val baseLayoutManager: BaseLayoutManager?=null) : TapBaseViewHolder, OpenOTPInterface,GoPayLoginInterface,
+    OtpButtonConfirmationInterface {
+
     override val view: View = LayoutInflater.from(context).inflate(R.layout.gopay_layout, null)
 
     override val type = SectionType.GOPAY_SIGNIN
@@ -46,6 +50,7 @@ class GoPayViewHolder(private val context: Context, private val baseLayoutManage
         goPayLoginInput.changeDataSource(GoPayLoginDataSource())
        goPayLoginInput?.setLoginInterface(this)
         goPayLoginInput?.setOpenOTPInterface(this)
+        otpViewHolder.view.otpView?.setOtpButtonConfirmationInterface(this)
        // goPayPasswordInput.setLoginInterface(this, goPayLoginInput.textInput.text.toString())
     }
 
@@ -83,6 +88,7 @@ class GoPayViewHolder(private val context: Context, private val baseLayoutManage
     }
 
     override fun getPhoneNumber(phoneNumber: String, countryCode: String, maskedValue: String) {
+        println("get phn number"+phoneNumber +"\n"+"countryCode ia"+countryCode+"\n"+"masked value"+maskedValue)
         if(otpViewHolder.view.otpView!=null)
         otpViewHolder.view.otpView?.mobileNumberText?.text = "+${countryCode} $maskedValue"
     }
@@ -97,4 +103,11 @@ class GoPayViewHolder(private val context: Context, private val baseLayoutManage
         }
 
     }
+
+    override fun onOtpButtonConfirmationClick(otpNumber: String): Boolean {
+        println("otpNumber is $otpNumber")
+        Log.d("isValidOTP1" ,(otpNumber == "111111").toString() )
+        return otpNumber == "111111"
+    }
+
 }

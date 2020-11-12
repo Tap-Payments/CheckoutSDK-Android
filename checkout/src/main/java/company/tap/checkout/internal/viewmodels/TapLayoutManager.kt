@@ -45,8 +45,8 @@ import kotlinx.android.synthetic.main.otpview_layout.view.*
  *
  */
 class TapLayoutManager() : ViewModel(),
-    BaseLayoutManager, OnCardSelectedActionListener, onPaymentCardComplete, onCardNFCCallListener ,
-     OtpButtonConfirmationInterface {
+    BaseLayoutManager, OnCardSelectedActionListener, onPaymentCardComplete, onCardNFCCallListener
+    {
 
     private lateinit var context: Context
     private lateinit var fragmentManager: FragmentManager
@@ -86,7 +86,7 @@ class TapLayoutManager() : ViewModel(),
         initAmountAction()
         initCardsGroup()
         initSwitchAction()
-            otpViewHolder.view.otpView?.setOtpButtonConfirmationInterface(this)
+
       //  otpViewHolder.otpView?.setOTPInterface(this)
        // goPayViewHolder.goPayLoginInput?.setOpenOTPInterface(this)
 
@@ -308,11 +308,6 @@ class TapLayoutManager() : ViewModel(),
 
 
 
-    override fun onOtpButtonConfirmationClick(otpNumber: String): Boolean {
-        //TODO dummy added
-        Log.d("isValidOTP" ,(otpNumber == "111111").toString() )
-        return otpNumber == "111111"
-    }
 
 
 
