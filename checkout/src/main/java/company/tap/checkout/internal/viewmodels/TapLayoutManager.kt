@@ -186,11 +186,15 @@ class TapLayoutManager() : ViewModel(),
 
     }
 
-    override fun displayOTP() {
+    override fun displayOTP(otpMobile: String) {
         addViews(otpViewHolder)
-        println("display OTP is called")
+        println("display OTP is called"+otpMobile)
         otpViewHolder.otpView.visibility = View.VISIBLE
-
+        otpViewHolder.otpView.mobileNumberText.text=otpMobile
+        otpViewHolder.otpView.changePhone.setOnClickListener {
+            goPayViewHolder.onChangePhoneClicked()
+            removeViews(otpViewHolder)
+       }
 
     }
 
@@ -272,18 +276,20 @@ class TapLayoutManager() : ViewModel(),
     // Override function to open NFC fragment and scan the card via NFC.
     override fun onClickNFC() {
         removeViews(
-            businessViewHolder,
-            amountViewHolder,
             cardViewHolder,
             saveCardSwitchHolder,
             paymentInputViewHolder
-
         )
         val manager: FragmentManager = fragmentManager
         val transaction = manager.beginTransaction()
-        transaction.replace(R.id.fragment_container_nfc_lib, NFCFragment())
+        transaction.add(
+            R.id.sdkContainer,
+            NFCFragment()
+        )
         transaction.addToBackStack(null)
         transaction.commit()
+        amountViewHolder.changeGroupAction(true)
+
 
     }
 
@@ -291,18 +297,22 @@ class TapLayoutManager() : ViewModel(),
     override fun  onClickCardScanner() {
         println("are u reachinhg scanner")
        // cardScannerViewHolder  = CardScannerViewHolder(context)
-       val manager: FragmentManager = fragmentManager
-        val transaction = manager.beginTransaction()
-        transaction.replace(R.id.fragment_container_card_lib, CardScannerFragment())
-        transaction.addToBackStack(null)
-        transaction.commit()
         removeViews(
-            businessViewHolder,
-            amountViewHolder,
             cardViewHolder,
             saveCardSwitchHolder,
             paymentInputViewHolder
         )
+       val manager: FragmentManager = fragmentManager
+        val transaction = manager.beginTransaction()
+        transaction.add(
+                R.id.sdkContainer,
+            CardScannerFragment()
+        )
+        transaction.addToBackStack(null)
+        transaction.commit()
+
+        amountViewHolder.changeGroupAction(true)
+
 
     }
 

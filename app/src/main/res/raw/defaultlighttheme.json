@@ -44,7 +44,8 @@
             "currency_chip_unselected_shadow": "#eeeeef",
             "transperant": "#c7f9f9f9",
             "invalid_action": "#b9b9b9",
-            "change_layout": "#f4f4f4"
+            "change_layout": "#f4f4f4",
+            "password_hint_color": "#878787"
         }
     },
     "inlineCard": {
@@ -116,7 +117,7 @@
             "width": 32
         },
         "textFields": {
-            "textColor": "#838180",
+            "textColor": "#4b4847",
             "errorTextColor": "orange",
             "font" : "Roboto-Light,17",
             "placeHolderColor" : "brownGreyThree"
@@ -562,15 +563,15 @@
             "backgroundColor": "clear"
         },
         "passwordField": {
-            "backgroundColor" : "clear",
+            "backgroundColor" : "transperant",
             "textFont": "Roboto-Light,17",
-            "textColor": "black",
-            "placeHolderColor" : "brownGreyThree",
+            "textColor": "#4b4847",
+            "placeHolderColor" : "#878787",
             "showPasswordIcon" : "passwordEye",
             "hidePasswordIcon" : "passwordEye",
             "underline":{
                 "empty": {
-                    "backgroundColor" : "deepSkyBlue"
+                    "backgroundColor" : "#a0a0a0"
                 },
                 "filled": {
                     "backgroundColor" : "deepSkyBlue"
@@ -638,7 +639,6 @@
             }
         }
     },
-
     "TapSwitchView": {
         "backgroundColor": "transperant",
         "CurvedSeparator": {
@@ -686,6 +686,15 @@
                 "textFont": "Roboto-Light,12",
                 "textColor": "greyishBrown"
             }
+        }
+    },
+    "TapAlertMessage": {
+        "backgroundColor": "#4cffbe60",
+        "separatorColor" : "#33ea6724",
+        "separatorHeight" : 1,
+        "textField": {
+            "textFont": "Roboto-Light,12",
+            "textColor": "#ea611c"
         }
     }
 }

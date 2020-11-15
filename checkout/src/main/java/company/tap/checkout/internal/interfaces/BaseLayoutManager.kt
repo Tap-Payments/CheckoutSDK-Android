@@ -13,7 +13,7 @@ interface BaseLayoutManager {
     fun displayStartupLayout(enabledSections: ArrayList<SectionType>)
     fun displayGoPayLogin()
     fun controlCurrency(display: Boolean)
-    fun displayOTP()
+    fun displayOTP(otpMobile:String)
     fun displayRedirect(url: String)
     fun displaySaveCardOptions()
     fun getDatafromAPI(dummyResponse: DummyResp)

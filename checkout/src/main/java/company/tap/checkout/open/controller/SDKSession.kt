@@ -2,6 +2,7 @@ package company.tap.checkout.open.controller
 
 import android.graphics.Color
 import androidx.fragment.app.FragmentManager
+import company.tap.checkout.TapCheckoutFragment1
 
 
 import company.tap.checkout.open.TapCheckoutFragment
@@ -39,7 +40,7 @@ open class SDKSession {
         }
        /* val tapCheckoutFragment = TapCheckoutFragment()
         tapCheckoutFragment.show(supportFragmentManager, null)*/
-        TapCheckoutFragment().apply {
+        TapCheckoutFragment1().apply {
             show(supportFragmentManager, tag)
         }
         // start session

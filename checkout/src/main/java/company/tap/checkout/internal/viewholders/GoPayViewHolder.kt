@@ -49,7 +49,7 @@ class GoPayViewHolder(private val context: Context, private val baseLayoutManage
     override fun bindViewComponents() {
         goPayLoginInput.changeDataSource(GoPayLoginDataSource())
        goPayLoginInput?.setLoginInterface(this)
-        goPayLoginInput?.setOpenOTPInterface(this)
+        goPayLoginInput.setOpenOTPInterface(this)
         otpViewHolder.view.otpView?.setOtpButtonConfirmationInterface(this)
        // goPayPasswordInput.setLoginInterface(this, goPayLoginInput.textInput.text.toString())
     }
@@ -76,7 +76,7 @@ class GoPayViewHolder(private val context: Context, private val baseLayoutManage
             otpViewHolder.view.otpView.visibility = View.VISIBLE
             otpViewHolder.view.otpView.changePhoneCardView?.visibility = View.VISIBLE
             println(" you clicled for otp")
-            baseLayoutManager?.displayOTP()
+            baseLayoutManager?.displayOTP( otpViewHolder.view.otpView?.mobileNumberText?.text.toString())
 
 
         }
@@ -94,9 +94,11 @@ class GoPayViewHolder(private val context: Context, private val baseLayoutManage
     }
 
     override fun onChangePhoneClicked() {
+        println("onChangePhoneClicked is ()");
         goPayLoginInput?.visibility = View.VISIBLE
         goPayLoginInput?.changeDataSource(GoPayLoginDataSource())
-       goPayLoginInput?.inputType = GoPayLoginMethod.EMAIL
+        goPayLoginInput?.inputType = GoPayLoginMethod.EMAIL
+        println("otpViewHolder.view.otpView gopay is ()"+otpViewHolder.view.otpView)
         if(otpViewHolder.view.otpView!=null){
             otpViewHolder.view.otpView?.visibility = View.GONE
             otpViewHolder.view.otpView?.changePhoneCardView?.visibility = View.GONE
