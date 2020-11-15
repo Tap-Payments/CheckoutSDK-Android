@@ -19,4 +19,5 @@ data class DummyResp (
     @SerializedName("redirect") val redirect : Redirect,
     @SerializedName("merchant") val merchant : Merchant,
     @SerializedName("payment_methods") val payment_methods : List<Payment_methods>
+
 )

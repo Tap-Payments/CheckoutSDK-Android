@@ -45,8 +45,8 @@ import kotlinx.android.synthetic.main.otpview_layout.view.*
  *
  */
 class TapLayoutManager() : ViewModel(),
-    BaseLayoutManager, OnCardSelectedActionListener, onPaymentCardComplete, onCardNFCCallListener
-    {
+    BaseLayoutManager, OnCardSelectedActionListener, onPaymentCardComplete, onCardNFCCallListener,
+    company.tap.tapuilibrary.uikit.interfaces.OnCardSelectedActionListener {
 
     private lateinit var context: Context
     private lateinit var fragmentManager: FragmentManager
@@ -251,6 +251,10 @@ class TapLayoutManager() : ViewModel(),
            // activateActionButton()
           //  tabAnimatedActionButtonViewHolder.view.actionButton.setOnClickListener { tabAnimatedActionButtonViewHolder.setOnClickAction() }
         } else unActivateActionButton()
+    }
+
+    override fun onDeleteIconClicked(stopAnimation: Boolean, itemId: Int) {
+        println("onDeleteIconClicked is onDeleteIconClicked")
     }
 
     override fun onPaycardSwitchAction(isCompleted: Boolean) {

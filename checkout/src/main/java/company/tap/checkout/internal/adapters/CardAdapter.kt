@@ -1,3 +1,4 @@
+/*
 package company.tap.checkout.internal.adapters
 
 import android.annotation.SuppressLint
@@ -18,12 +19,14 @@ import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
 import kotlinx.android.synthetic.main.item_saved_card.view.*
 
 
+*/
 /**
  *
  * Created by Mario Gamal on 7/26/20
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
- */
+ *//*
+
 class CardAdapter(
     private val arrayList: List<Payment_methods>,
     private val onCardSelectedActionListener: OnCardSelectedActionListener? = null
@@ -164,4 +167,4 @@ class CardAdapter(
         const val TYPE_SINGLE = 2
         const val TYPE_GO_PAY = 3
     }
-}
+}*/
