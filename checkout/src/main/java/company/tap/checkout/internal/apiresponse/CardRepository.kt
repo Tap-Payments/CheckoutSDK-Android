@@ -1,6 +1,7 @@
 package company.tap.checkout.internal.apiresponse
 
 import com.google.gson.Gson
+import com.google.gson.JsonElement
 import company.tap.cardbusinesskit.testmodels.DummyResp
 import company.tap.tapnetworkkit.controller.NetworkController
 import company.tap.tapnetworkkit.enums.TapMethodType
@@ -25,7 +26,7 @@ class CardRepository : APIRequestCallback {
                 INIT_CODE
             )
     }
-    override fun onSuccess(responseCode: Int, requestCode: Int, response: Response?) {
+    override fun onSuccess(responseCode: Int, requestCode: Int, response: Response<JsonElement>?) {
         if (requestCode == INIT_CODE) {
             response?.body()?.let {
                 val initResponse = Gson().fromJson(it, DummyResp::class.java)

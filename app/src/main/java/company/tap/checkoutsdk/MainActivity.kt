@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() ,InlineViewCallback{
         launchSDK.setOnClickListener {
             ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme)
 
+
          //   SDKSession().startSDK(false)
             sdkSession.startSDK(supportFragmentManager)
 

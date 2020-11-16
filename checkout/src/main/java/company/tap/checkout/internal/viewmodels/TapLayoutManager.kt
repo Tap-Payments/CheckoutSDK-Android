@@ -23,19 +23,14 @@ import company.tap.checkout.internal.interfaces.onPaymentCardComplete
 import company.tap.checkout.internal.utils.AnimationEngine
 import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
 import company.tap.checkout.internal.viewholders.*
-import company.tap.checkout.open.TapCheckoutFragment
+import company.tap.checkout.open.TapCheckoutFragment1
 import company.tap.checkout.open.controller.SessionManager
 import company.tap.tapuilibrary.uikit.datasource.GoPayLoginDataSource
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
 import company.tap.tapuilibrary.uikit.fragment.CurrencyViewFragment
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
-import company.tap.tapuilibrary.uikit.interfaces.GoPayLoginInterface
-import company.tap.tapuilibrary.uikit.interfaces.OpenOTPInterface
-import company.tap.tapuilibrary.uikit.interfaces.OtpButtonConfirmationInterface
-import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
-import kotlinx.android.synthetic.main.checkout_sdk_layout.view.*
-import kotlinx.android.synthetic.main.otpview_layout.view.*
+
 
 
 /**
@@ -172,7 +167,7 @@ class TapLayoutManager() : ViewModel(),
 
 
             supportedCurrecnyList.clear()
-            manager.beginTransaction().replace(R.id.sdkContainer,TapCheckoutFragment()).commit()
+            manager.beginTransaction().replace(R.id.sdkContainer, TapCheckoutFragment1()).commit()
 
             transaction.addToBackStack(null)
             transaction.commit()
