@@ -2,6 +2,7 @@ package company.tap.checkout.internal.viewmodels
 
 
 import android.content.Context
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +26,8 @@ import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
 import company.tap.checkout.internal.viewholders.*
 import company.tap.checkout.open.TapCheckoutFragment
 import company.tap.checkout.open.controller.SessionManager
+import company.tap.taplocalizationkit.LocalizationManager
+import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.datasource.GoPayLoginDataSource
 import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
@@ -256,22 +259,27 @@ class TapLayoutManager() : ViewModel(),
     }
 
     override fun onPaycardSwitchAction(isCompleted: Boolean) {
-        if (isCompleted) {
-            saveCardSwitchHolder.view.mainSwitch.visibility = View.VISIBLE
-           // saveCardSwitchHolder.view.mainSwitch.setSwitchDataSource(getSwitchDataSource(getString(R.string.savecard_text)))
+      saveCardSwitchHolder.view.cardSwitch.setSwitchDataSource(getSwitchDataSource("fdsg"))
 
+        if (isCompleted) {
+             saveCardSwitchHolder.view.mainSwitch.visibility = View.VISIBLE
+             saveCardSwitchHolder.view.mainSwitch.switchSaveMobile.visibility = View.VISIBLE
+            saveCardSwitchHolder.view.mainSwitch.mainSwitchLinear.setBackgroundColor(Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor")))
+            saveCardSwitchHolder.view.cardSwitch.visibility = View.VISIBLE
+           /* saveCardSwitchHolder.view.cardSwitch.switchesLayout?.visibility = View.VISIBLE
             saveCardSwitchHolder.view.cardSwitch.switchSaveMerchant.isChecked = true
             saveCardSwitchHolder.view.cardSwitch.switchGoPayCheckout.isChecked = true
             saveCardSwitchHolder.view.cardSwitch.switchSaveMobile.isChecked = true
             saveCardSwitchHolder.view.cardSwitch.switchesLayout.visibility = View.VISIBLE
-            saveCardSwitchHolder.view.cardSwitch.switchSaveMobile.visibility = View.VISIBLE
+            saveCardSwitchHolder.view.cardSwitch.switchSaveMobile.visibility = View.VISIBLE*/
             activateActionButton()
+            configureSwitch()
         } else {
-            saveCardSwitchHolder.view.cardSwitch.switchSaveMerchant.isChecked = false
+           /* saveCardSwitchHolder.view.cardSwitch.switchSaveMerchant.isChecked = false
             saveCardSwitchHolder.view.cardSwitch.switchGoPayCheckout.isChecked = false
             saveCardSwitchHolder.view.cardSwitch.switchSaveMobile.isChecked = false
             saveCardSwitchHolder.view.cardSwitch.switchSaveMobile.visibility = View.GONE
-            saveCardSwitchHolder.view.cardSwitch.switchesLayout.visibility = View.GONE
+            saveCardSwitchHolder.view.cardSwitch.switchesLayout.visibility = View.GONE*/
             unActivateActionButton()
 
         }
@@ -325,6 +333,7 @@ class TapLayoutManager() : ViewModel(),
 
     //Setting data to TapSwitchDataSource
     private fun getSwitchDataSource(switchText: String): TapSwitchDataSource {
+        println("switch data source "+switchText)
         return TapSwitchDataSource(
             switchSave = switchText,
             switchSaveMerchantCheckout = "Save for [merchant_name] Checkouts",
@@ -334,6 +343,55 @@ class TapLayoutManager() : ViewModel(),
         )
     }
 
+    private fun configureSwitch() {
+
+        saveCardSwitchHolder.view.mainSwitch.switchSaveMobile?.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                saveCardSwitchHolder.view.cardSwitch.tapCardSwitchLinear.setBackgroundColor(Color.parseColor(ThemeManager.getValue("TapSwitchView.backgroundColor")))
+              //  saveCardSwitchHolder.view.cardSwitch.cardElevation = 2.5f
+                 saveCardSwitchHolder.view.cardSwitch.saveSwitchChip.cardElevation = 2.5f
+
+                saveCardSwitchHolder.view.cardSwitch.payButton.stateListAnimator = null
+                saveCardSwitchHolder.view.cardSwitch.payButton.setButtonDataSource(
+                    true,
+                  "en",
+                    "Pay",
+                    Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
+                    Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
+                )
+                saveCardSwitchHolder.view.cardSwitch.switchesLayout?.visibility = View.VISIBLE
+                saveCardSwitchHolder.view.cardSwitch.switchSaveMerchant?.visibility = View.VISIBLE
+                saveCardSwitchHolder.view.cardSwitch.switchSaveMerchant?.isChecked = true
+                saveCardSwitchHolder.view.cardSwitch.switchGoPayCheckout?.isChecked = true
+                saveCardSwitchHolder.view.cardSwitch.switchGoPayCheckout?.visibility = View.VISIBLE
+                saveCardSwitchHolder.view.cardSwitch.saveGoPay?.visibility = View.VISIBLE
+                saveCardSwitchHolder.view.cardSwitch.alertGoPaySignUp?.visibility = View.VISIBLE
+                saveCardSwitchHolder.view.cardSwitch.switchSeparator?.visibility = View.VISIBLE
+            } else {
+                saveCardSwitchHolder.view.cardSwitch.tapCardSwitchLinear.setBackgroundColor(Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor")))
+                saveCardSwitchHolder.view.cardSwitch.saveSwitchChip.cardElevation = 0f
+
+                saveCardSwitchHolder.view.cardSwitch.payButton.stateListAnimator = null
+                saveCardSwitchHolder.view.cardSwitch.payButton.setButtonDataSource(
+                    false,
+                    "en" ,
+                    "Pay",
+                    Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
+                    Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
+                )
+
+                saveCardSwitchHolder.view.cardSwitch.switchesLayout?.visibility = View.GONE
+                saveCardSwitchHolder.view.cardSwitch.switchSaveMerchant?.visibility = View.GONE
+                saveCardSwitchHolder.view.cardSwitch.switchSaveMerchant?.isChecked = false
+                saveCardSwitchHolder.view.cardSwitch.switchGoPayCheckout?.isChecked = false
+                saveCardSwitchHolder.view.cardSwitch.switchGoPayCheckout?.visibility = View.GONE
+                saveCardSwitchHolder.view.cardSwitch.saveGoPay?.visibility = View.GONE
+                saveCardSwitchHolder.view.cardSwitch.alertGoPaySignUp?.visibility = View.GONE
+                saveCardSwitchHolder.view.cardSwitch.switchSeparator?.visibility = View.GONE
+            }
+        }
+
+    }
 
 }
 
