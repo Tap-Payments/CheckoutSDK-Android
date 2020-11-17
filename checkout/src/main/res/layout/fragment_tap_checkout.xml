@@ -37,11 +37,6 @@
             android:layout_height="match_parent"
 
             />
-     <company.tap.tapuilibrary.uikit.views.MainSwitch
-            android:id="@+id/mainSwitch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"/>
 
     </LinearLayout>
 </FrameLayout>

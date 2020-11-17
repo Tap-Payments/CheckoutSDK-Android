@@ -33,6 +33,7 @@ import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
 import company.tap.tapuilibrary.uikit.models.SectionTabItem
 import company.tap.tapuilibrary.uikit.views.TapMobilePaymentView
 import company.tap.tapuilibrary.uikit.views.TapSelectionTabLayout
+import kotlinx.android.synthetic.main.switch_layout.view.*
 import java.net.URL
 
 
@@ -352,7 +353,7 @@ class PaymentInputViewHolder(private val context: Context , private val onPaymen
         if (position == 0) {
             selectedType = CARD
             switchViewHolder.setSwitchLocals(selectedType)
-            switchViewHolder.view.switchGoPayCheckout.visibility = View.VISIBLE
+            switchViewHolder.view.cardSwitch.switchGoPayCheckout.visibility = View.VISIBLE
             nfcButton?.visibility = View.VISIBLE
             cardScannerBtn?.visibility = View.VISIBLE
 

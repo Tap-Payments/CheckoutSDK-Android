@@ -1,10 +1,14 @@
 package company.tap.checkout.internal.viewholders
 
 import android.content.Context
+import android.view.LayoutInflater
+import android.view.View
+import company.tap.checkout.R
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
 import company.tap.tapuilibrary.uikit.views.TapCardSwitch
+import kotlinx.android.synthetic.main.switch_layout.view.*
 
 /**
  *
@@ -14,7 +18,8 @@ import company.tap.tapuilibrary.uikit.views.TapCardSwitch
  */
 class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
 
-    override val view = TapCardSwitch(context)
+  //  override val view = TapCardSwitch(context)
+    override val view: View = LayoutInflater.from(context).inflate(R.layout.switch_layout, null)
 
     override val type = SectionType.SAVE_CARD
 
@@ -43,7 +48,7 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
         alertgoPaySignupString = LocalizationManager.getValue("goPaySignupLabel","GoPay")
         if(payName.name == "CARD"){
             switchString = LocalizationManager.getValue("cardSaveLabel", "TapCardInputKit")
-           view.setSwitchDataSource(getSwitchDataSourceFromAPI(
+           view.mainSwitch.setSwitchDataSource(getSwitchDataSourceFromAPI(
                switchString,
                 goPayString,
                 savegoPayString,
@@ -52,7 +57,7 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
 
         }else if( payName.name == "MOBILE") {
             switchString = LocalizationManager.getValue("mobileUseLabel","TapMobileInput")
-            view.setSwitchDataSource(getSwitchDataSourceFromAPI(
+            view.mainSwitch.setSwitchDataSource(getSwitchDataSourceFromAPI(
                switchString,
                 goPayString,
                 savegoPayString,
@@ -63,9 +68,9 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
             goPayString = LocalizationManager.getValue("goPayTextLabel","GoPay")
             savegoPayString = LocalizationManager.getValue("savegoPayLabel","GoPay")
             alertgoPaySignupString = LocalizationManager.getValue("goPaySignupLabel","GoPay")
-            view.setSwitchDataSource(getSwitchDataSourceFromAPI(switchString,goPayString,savegoPayString,alertgoPaySignupString))
+            view.mainSwitch.setSwitchDataSource(getSwitchDataSourceFromAPI(switchString,goPayString,savegoPayString,alertgoPaySignupString))
         }
-        view.saveTextView.text = switchString
+        view.cardSwitch.saveTextView.text = switchString
         print("switch string $switchString")
         actionButton.activateButton(context)
     }

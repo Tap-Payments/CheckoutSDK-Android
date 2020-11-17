@@ -26,11 +26,12 @@ import company.tap.checkout.internal.viewholders.*
 import company.tap.checkout.open.TapCheckoutFragment
 import company.tap.checkout.open.controller.SessionManager
 import company.tap.tapuilibrary.uikit.datasource.GoPayLoginDataSource
+import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
 import company.tap.tapuilibrary.uikit.fragment.CurrencyViewFragment
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
-
+import kotlinx.android.synthetic.main.switch_layout.view.*
 
 
 /**
@@ -88,7 +89,7 @@ class TapLayoutManager() : ViewModel(),
     }
 
     private fun initSwitchAction() {
-        saveCardSwitchHolder.view.switchSaveMobile.visibility = View.GONE
+        saveCardSwitchHolder.view.cardSwitch.switchSaveMobile.visibility = View.GONE
     }
 
     private fun initAmountAction() {
@@ -195,7 +196,9 @@ class TapLayoutManager() : ViewModel(),
 
     override fun displayRedirect(url: String) {}
 
-    override fun displaySaveCardOptions() {}
+    override fun displaySaveCardOptions() {
+
+    }
 
     override fun getDatafromAPI(dummyInitapiResponse: DummyResp) {
 
@@ -254,18 +257,21 @@ class TapLayoutManager() : ViewModel(),
 
     override fun onPaycardSwitchAction(isCompleted: Boolean) {
         if (isCompleted) {
-            saveCardSwitchHolder.view.switchSaveMerchant.isChecked = true
-            saveCardSwitchHolder.view.switchGoPayCheckout.isChecked = true
-            saveCardSwitchHolder.view.switchSaveMobile.isChecked = true
-            saveCardSwitchHolder.view.switchesLayout.visibility = View.VISIBLE
-            saveCardSwitchHolder.view.switchSaveMobile.visibility = View.VISIBLE
+            saveCardSwitchHolder.view.mainSwitch.visibility = View.VISIBLE
+           // saveCardSwitchHolder.view.mainSwitch.setSwitchDataSource(getSwitchDataSource(getString(R.string.savecard_text)))
+
+            saveCardSwitchHolder.view.cardSwitch.switchSaveMerchant.isChecked = true
+            saveCardSwitchHolder.view.cardSwitch.switchGoPayCheckout.isChecked = true
+            saveCardSwitchHolder.view.cardSwitch.switchSaveMobile.isChecked = true
+            saveCardSwitchHolder.view.cardSwitch.switchesLayout.visibility = View.VISIBLE
+            saveCardSwitchHolder.view.cardSwitch.switchSaveMobile.visibility = View.VISIBLE
             activateActionButton()
         } else {
-            saveCardSwitchHolder.view.switchSaveMerchant.isChecked = false
-            saveCardSwitchHolder.view.switchGoPayCheckout.isChecked = false
-            saveCardSwitchHolder.view.switchSaveMobile.isChecked = false
-            saveCardSwitchHolder.view.switchSaveMobile.visibility = View.GONE
-            saveCardSwitchHolder.view.switchesLayout.visibility = View.GONE
+            saveCardSwitchHolder.view.cardSwitch.switchSaveMerchant.isChecked = false
+            saveCardSwitchHolder.view.cardSwitch.switchGoPayCheckout.isChecked = false
+            saveCardSwitchHolder.view.cardSwitch.switchSaveMobile.isChecked = false
+            saveCardSwitchHolder.view.cardSwitch.switchSaveMobile.visibility = View.GONE
+            saveCardSwitchHolder.view.cardSwitch.switchesLayout.visibility = View.GONE
             unActivateActionButton()
 
         }
@@ -317,7 +323,16 @@ class TapLayoutManager() : ViewModel(),
 
 
 
-
+    //Setting data to TapSwitchDataSource
+    private fun getSwitchDataSource(switchText: String): TapSwitchDataSource {
+        return TapSwitchDataSource(
+            switchSave = switchText,
+            switchSaveMerchantCheckout = "Save for [merchant_name] Checkouts",
+            switchSavegoPayCheckout = "By enabling goPay, your mobile number will be saved with Tap Payments to get faster and more secure checkouts in multiple apps and websites.",
+            savegoPayText = "Save for goPay Checkouts",
+            alertgoPaySignup = "Please check your email or SMS’s in order to complete the goPay Checkout signup process."
+        )
+    }
 
 
 }
