@@ -1,7 +1,7 @@
 package company.tap.checkout.open.controller
 
 import androidx.fragment.app.FragmentManager
-import company.tap.checkout.open.TapCheckoutFragment1
+import company.tap.checkout.open.TapCheckoutFragment
 
 
 import company.tap.checkout.open.data_managers.PaymentDataSource
@@ -38,7 +38,7 @@ open class SDKSession {
         }
        /* val tapCheckoutFragment = TapCheckoutFragment()
         tapCheckoutFragment.show(supportFragmentManager, null)*/
-        TapCheckoutFragment1().apply {
+        TapCheckoutFragment().apply {
             show(supportFragmentManager, tag)
         }
         // start session

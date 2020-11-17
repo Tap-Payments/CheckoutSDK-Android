@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".open.TapCheckoutFragment1">
+    tools:context=".open.TapCheckoutFragment">
 
     <LinearLayout android:id="@+id/sdkContainer"
         android:layout_width="match_parent"

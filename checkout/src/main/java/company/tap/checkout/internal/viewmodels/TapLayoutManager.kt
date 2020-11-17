@@ -23,7 +23,7 @@ import company.tap.checkout.internal.interfaces.onPaymentCardComplete
 import company.tap.checkout.internal.utils.AnimationEngine
 import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
 import company.tap.checkout.internal.viewholders.*
-import company.tap.checkout.open.TapCheckoutFragment1
+import company.tap.checkout.open.TapCheckoutFragment
 import company.tap.checkout.open.controller.SessionManager
 import company.tap.tapuilibrary.uikit.datasource.GoPayLoginDataSource
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
@@ -167,7 +167,7 @@ class TapLayoutManager() : ViewModel(),
 
 
             supportedCurrecnyList.clear()
-            manager.beginTransaction().replace(R.id.sdkContainer, TapCheckoutFragment1()).commit()
+            manager.beginTransaction().replace(R.id.sdkContainer, TapCheckoutFragment()).commit()
 
             transaction.addToBackStack(null)
             transaction.commit()
