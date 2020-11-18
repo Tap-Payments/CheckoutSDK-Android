@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.LinearLayout
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.gson.Gson
@@ -42,6 +44,7 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
     }
 
     override fun onCreateView(
@@ -50,6 +53,8 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
     ): View? {
         // Inflate the layout for this fragment
         view1 = inflater.inflate(R.layout.fragment_tap_checkout, container, false)
+        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+
         val checkoutLayout: LinearLayout? = view1?.findViewById(R.id.sdkContainer)
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
         backgroundColor= Color.WHITE
@@ -70,7 +75,7 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         enabledSections.add(SectionType.AMOUNT_ITEMS)
         enabledSections.add(SectionType.FRAGMENT)
 
-
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
         layoutManager.displayStartupLayout(enabledSections)
         //This is for getting response from business engine . Currently dummy response from assets json is used
         getBusinessHeaderData()

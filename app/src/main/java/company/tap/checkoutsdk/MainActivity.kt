@@ -2,6 +2,7 @@ package company.tap.checkoutsdk
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.WindowManager
 import cards.pay.paycardsrecognizer.sdk.Card
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import company.tap.checkout.open.controller.SDKSession
@@ -19,7 +20,7 @@ class MainActivity : AppCompatActivity() ,InlineViewCallback{
         launchSDK.setOnClickListener {
             ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme)
 
-
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
          //   SDKSession().startSDK(false)
             sdkSession.startSDK(supportFragmentManager)
 

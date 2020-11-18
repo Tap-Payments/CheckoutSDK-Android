@@ -92,7 +92,9 @@ class TapLayoutManager() : ViewModel(),
     }
 
     private fun initSwitchAction() {
-        saveCardSwitchHolder.view.cardSwitch.switchSaveMobile.visibility = View.GONE
+        saveCardSwitchHolder.view.mainSwitch.visibility = View.VISIBLE
+       saveCardSwitchHolder.view.mainSwitch.switchSaveMobile.visibility = View.GONE
+      //  saveCardSwitchHolder.view.cardSwitch.switchSaveMobile.visibility = View.GONE
     }
 
     private fun initAmountAction() {

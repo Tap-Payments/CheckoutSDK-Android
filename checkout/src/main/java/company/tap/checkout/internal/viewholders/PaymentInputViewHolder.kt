@@ -124,7 +124,8 @@ class PaymentInputViewHolder(private val context: Context , private val onPaymen
         nfcButton = view.findViewById(R.id.nfc_button)
         //  mobileNumberEditText = view.findViewById(R.id.mobile_number)
 //        alertMessage = view.findViewById(R.id.textview_alert_message)
-
+        nfcButton?.visibility = View.VISIBLE
+        cardScannerBtn?.visibility = View.VISIBLE
         linearLayoutPay = view.findViewById(R.id.linear_paylayout)
         cardInputWidget.clearFocus()
         clearText.visibility = View.GONE
