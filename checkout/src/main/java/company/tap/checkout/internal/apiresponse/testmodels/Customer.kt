@@ -11,6 +11,6 @@ data class Customer (
     @SerializedName("email") val email : String,
     @SerializedName("phone") val phone : Phone,
     @SerializedName("description") val description : String,
-    @SerializedName("metadata") val metadata : Metadata,
+    @SerializedName("metadata") val metadata : Metadata?=null,
     @SerializedName("currency") val currency : String
 )
