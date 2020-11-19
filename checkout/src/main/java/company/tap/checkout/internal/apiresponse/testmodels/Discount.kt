@@ -5,6 +5,6 @@ import com.google.gson.annotations.SerializedName
 
 data class Discount (
 
-	@SerializedName("type") val type : String,
-	@SerializedName("value") val value : Int
+	@SerializedName("type") var type : String,
+	@SerializedName("value") var value : Int
 )

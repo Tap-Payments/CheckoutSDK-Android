@@ -1,9 +1,7 @@
 package company.tap.checkout.open.controller
 
 import androidx.fragment.app.FragmentManager
-import company.tap.cardbusinesskit.testmodels.Customer
-import company.tap.cardbusinesskit.testmodels.Order
-import company.tap.cardbusinesskit.testmodels.Phone
+import company.tap.cardbusinesskit.testmodels.*
 import company.tap.checkout.internal.apiresponse.testmodels.InitOptionsRequest
 import company.tap.checkout.open.TapCheckoutFragment
 
@@ -52,15 +50,24 @@ open class SDKSession {
                Phone(phoneNumber.country_code, phoneNumber.number),"descr",null,"KWD")
 
         }
+        fun getItems(): Items? {
+            var discount:Discount?=null
+            discount?.type="P"
+            discount?.value=10
+            return discount?.let {
+                Items(21,"kwd","descrp1",
+                    it,"wewqewewqeqwewewewewew","dsa","name",1)
+            }
+        }
 
-       /* fun getOrder(): Order {
+ fun getOrder(): Order {
+
+            return Order("KWD",100,getItems(),
+                null,null)
+
+        }
 
 
-            return Order("KWD","100",
-                "100","abcd@gmail.com",
-                Phone(phoneNumber.country_code, phoneNumber.number),"descr",null,"KWD")
-
-        }*/
         /*
              Passing post request body to obtain
              response for Payment options
