@@ -216,7 +216,7 @@ class TapLayoutManager() : ViewModel(),
             dummyInitapiResponse.order.original_amount.toString(),
             dummyInitapiResponse.order.trx_currency,
             dummyInitapiResponse.order.trx_currency,
-            dummyInitapiResponse.order.items.size.toString()
+            dummyInitapiResponse.order.items?.size.toString()
         )
         cardViewHolder.setDatafromAPI(dummyInitapiResponse.payment_methods)
         paymentInputViewHolder.setDatafromAPI(dummyInitapiResponse.payment_methods.get(0).image)
@@ -225,7 +225,7 @@ class TapLayoutManager() : ViewModel(),
             paymentInputViewHolder.selectedType
         )
         supportedCurrecnyList = dummyInitapiResponse.payment_methods.get(0).supported_currencies
-        itemList = dummyInitapiResponse.order.items
+        itemList = dummyInitapiResponse.order.items!!
     }
 
     private fun removeViews(vararg viewHolders: TapBaseViewHolder) {
