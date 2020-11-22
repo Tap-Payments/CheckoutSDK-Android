@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() ,InlineViewCallback{
 
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
          //   SDKSession().startSDK(false)
-            sdkSession.startSDK(supportFragmentManager)
+            sdkSession.startSDK(supportFragmentManager,this)
 
         }
     }

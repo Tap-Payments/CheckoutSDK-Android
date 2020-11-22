@@ -1,5 +1,6 @@
 package company.tap.cardbusinesskit.testmodels
 
+import androidx.annotation.Nullable
 import com.google.gson.annotations.SerializedName
 
 
@@ -7,7 +8,7 @@ import com.google.gson.annotations.SerializedName
 
 data class Tax (
 
-	@SerializedName("description") val description : String,
-	@SerializedName("name") val name : String,
-	@SerializedName("rate") val rate : Rate
+	@Nullable @SerializedName("description") val description : String,
+	@Nullable @SerializedName("name") val name : String,
+	@Nullable @SerializedName("rate") val rate : Rate
 )
