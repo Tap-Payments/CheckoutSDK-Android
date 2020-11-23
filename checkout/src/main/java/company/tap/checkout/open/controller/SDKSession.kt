@@ -128,7 +128,7 @@ open class SDKSession : APIRequestCallback {
             "init",
             requestBody,
             this,
-            120
+            11
         )
         TapCheckoutFragment().apply {
             show(supportFragmentManager, tag)
