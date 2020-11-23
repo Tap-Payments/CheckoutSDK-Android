@@ -119,13 +119,13 @@ open class SDKSession : APIRequestCallback {
         NetworkApp.initNetwork(
             contextSDK,
             "sk_test_kovrMB0mupFJXfNZWx6Etg5y",
-            "company.tap.goSellSDKExample",
-            "https://api.tap.company/v2/intent/init"
+            null,
+            "https://api.tap.company/v2/"
         )
 
         NetworkController.getInstance().processRequest(
             TapMethodType.POST,
-            "init",
+            "intent",
             requestBody,
             this,
             11

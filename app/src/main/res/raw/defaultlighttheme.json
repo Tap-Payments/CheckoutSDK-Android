@@ -148,7 +148,7 @@
             "width": 32
         },
         "textFields": {
-            "textColor": "greyishBrown",
+            "textColor": "#4b4847",
             "errorTextColor": "orange",
             "font" : "Roboto-Light,17",
             "placeHolderColor" : "brownGreyThree"
@@ -536,6 +536,7 @@
     "goPay": {
         "loginBar" :{
             "backgroundColor" : "whiteTwo",
+            "inputFieldBackground" : "white",
             "underline": {
                 "selected": {
                     "backgroundColor" : "deepSkyBlue"
@@ -606,11 +607,11 @@
         }
     },
     "TapOtpView": {
-        "backgroundColor": "transperant",
+        "backgroundColor": "#d5cdc9",
         "OtpController": {
             "bottomLineColor": "deepSkyBlue",
             "activeBottomColor": "brownGreyFour",
-            "textColor": "greyishBrown",
+            "textColor": "#4b4847",
             "textFont": "Roboto-Light,14"
         },
         "Timer": {

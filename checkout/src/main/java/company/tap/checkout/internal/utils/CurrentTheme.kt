@@ -11,7 +11,7 @@ object CurrentTheme {
     fun initAppTheme(theme: Int, context: Context) {
         currentTheme = theme
 //        ThemeManager.loadTapTheme(this, "https://kar-tempo.s3.ap-south-1.amazonaws.com/theme-tap.json")
-        ThemeManager.loadTapTheme(context.resources, theme)
+        ThemeManager.loadTapTheme(context.resources, theme,"lighttheme")
     }
 //    fun swapTheme(view: View?) {
 //        if (currentTheme == R.raw.defaultdarktheme) {

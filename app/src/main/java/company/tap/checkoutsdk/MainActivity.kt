@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() ,InlineViewCallback{
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         launchSDK.setOnClickListener {
-            ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme)
+            ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme,"lighttheme")
 
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
          //   SDKSession().startSDK(false)
