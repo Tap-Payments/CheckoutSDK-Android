@@ -13,6 +13,7 @@ import company.tap.tapnetworkkit.controller.NetworkController
 import company.tap.tapnetworkkit.enums.TapMethodType
 import company.tap.tapnetworkkit.exception.GoSellError
 import company.tap.tapnetworkkit.interfaces.APIRequestCallback
+import company.tap.tapnetworkkit.interfaces.TapRequestBodyBase
 import retrofit2.Response
 
 /**
@@ -41,7 +42,7 @@ open class SDKSession : APIRequestCallback {
 
     }
 
-    fun startSDK(supportFragmentManager: FragmentManager,context: Context) {
+    fun startSDK(supportFragmentManager: FragmentManager, context: Context) {
         println("is session enabled ${SessionManager.isSessionEnabled()}")
         if (SessionManager.isSessionEnabled()) {
             println("Session already active!!!")
@@ -112,14 +113,20 @@ open class SDKSession : APIRequestCallback {
              Passing post request body to obtain
              response for Payment options
              */
-        val requestBody = InitOptionsRequest("charge", true, getCustomer(), getOrder())
+
+        /*
+             Passing post request body to obtain
+             response for Payment options
+             */
+
+        var requestBody = InitOptionsRequest("charge", true, getCustomer(), getOrder())
         println("requests body" + requestBody)
 
 
         NetworkApp.initNetwork(
             contextSDK,
             "sk_test_kovrMB0mupFJXfNZWx6Etg5y",
-            null,
+            "company.tap.goSellSDKExample",
             "https://api.tap.company/v2/"
         )
 
@@ -144,6 +151,9 @@ open class SDKSession : APIRequestCallback {
     }
 
     override fun onFailure(requestCode: Int, errorDetails: GoSellError?) {
-        println("onFailure is being called $errorDetails")
+        println("onFailure is being called ${errorDetails?.errorBody}")
     }
 }
+
+
+
