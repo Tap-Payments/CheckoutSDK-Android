@@ -58,9 +58,9 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         val checkoutLayout: LinearLayout? = view1?.findViewById(R.id.sdkContainer)
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
         backgroundColor= Color.WHITE
-        if(bottomSheetDialog!=null){
+      //  if(bottomSheetDialog!=null){
             bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
-        }
+      //  }
         bottomSheetLayout?.let {
             layoutManager.setBottomSheetLayout(it)
         }
@@ -68,7 +68,7 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         if (checkoutLayout != null) {
             context?.let { layoutManager.initLayoutManager(it,childFragmentManager,checkoutLayout) }
         }
-
+        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
         val enabledSections = ArrayList<SectionType>()
         enabledSections.add(SectionType.BUSINESS)
