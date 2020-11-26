@@ -44,7 +44,9 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+       // activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+      setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
+
     }
 
     override fun onCreateView(
@@ -53,13 +55,13 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
     ): View? {
         // Inflate the layout for this fragment
         view1 = inflater.inflate(R.layout.fragment_tap_checkout, container, false)
-        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+       // dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
         val checkoutLayout: LinearLayout? = view1?.findViewById(R.id.sdkContainer)
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
         backgroundColor= Color.WHITE
       //  if(bottomSheetDialog!=null){
-            bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+      //      bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
       //  }
         bottomSheetLayout?.let {
             layoutManager.setBottomSheetLayout(it)
@@ -68,7 +70,7 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         if (checkoutLayout != null) {
             context?.let { layoutManager.initLayoutManager(it,childFragmentManager,checkoutLayout) }
         }
-        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+       // dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
         val enabledSections = ArrayList<SectionType>()
         enabledSections.add(SectionType.BUSINESS)
@@ -111,7 +113,9 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
                 }
+                bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
             }
+
     }
     override fun onDismiss() {
         println("onDismiss is called")
