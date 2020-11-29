@@ -3,16 +3,12 @@ package company.tap.checkout.internal.viewmodels
 
 import android.content.Context
 import android.graphics.Color
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
 import androidx.transition.TransitionManager
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import company.tap.cardbusinesskit.testmodels.DummyResp
 import company.tap.cardbusinesskit.testmodels.Items
 import company.tap.checkout.R
@@ -21,19 +17,14 @@ import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
 import company.tap.checkout.internal.interfaces.onCardNFCCallListener
 import company.tap.checkout.internal.interfaces.onPaymentCardComplete
-import company.tap.checkout.internal.utils.AnimationEngine
-import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
 import company.tap.checkout.internal.viewholders.*
 import company.tap.checkout.open.TapCheckoutFragment
-import company.tap.checkout.open.controller.SessionManager
-import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.uikit.datasource.GoPayLoginDataSource
 import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
-import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
 import company.tap.tapuilibrary.uikit.fragment.CurrencyViewFragment
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
+import kotlinx.android.synthetic.main.action_button_animation.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 
 
@@ -56,6 +47,7 @@ class TapLayoutManager() : ViewModel(),
     private lateinit var amountViewHolder: AmountViewHolder
     private lateinit var itemsViewHolder: ItemsViewHolder
     private lateinit var cardViewHolder: CardViewHolder
+    private lateinit var goPayLoginHolder: GoPayLoginHolder
     private lateinit var paymentInputViewHolder: PaymentInputViewHolder
     private lateinit var saveCardSwitchHolder: SwitchViewHolder
     private lateinit var goPayViewHolder: GoPayViewHolder
@@ -74,6 +66,7 @@ class TapLayoutManager() : ViewModel(),
         businessViewHolder = BusinessViewHolder(context)
         amountViewHolder = AmountViewHolder(context)
         cardViewHolder = CardViewHolder(context, this, this)
+        goPayLoginHolder = GoPayLoginHolder(context, this, this)
         paymentInputViewHolder = PaymentInputViewHolder(context, this, this)
         saveCardSwitchHolder = SwitchViewHolder(context)
         itemsViewHolder = ItemsViewHolder(context, this)
@@ -120,6 +113,7 @@ class TapLayoutManager() : ViewModel(),
                 saveCardSwitchHolder
             )
 
+        saveCardSwitchHolder.view.cardSwitch.payButton.visibility = View.VISIBLE
 
     }
 
@@ -141,6 +135,29 @@ class TapLayoutManager() : ViewModel(),
         )
        // if (this::bottomSheetLayout.isInitialized)
         addViews(goPayViewHolder)
+        //addViews(goPayLoginHolder)
+    }
+
+    override fun displayGoPay() {
+        removeViews(  businessViewHolder,
+            amountViewHolder,
+            cardViewHolder,
+            paymentInputViewHolder,
+            saveCardSwitchHolder,
+        otpViewHolder)
+        addViews(
+            businessViewHolder,
+            amountViewHolder,
+            goPayLoginHolder,
+            cardViewHolder,
+            paymentInputViewHolder,
+            saveCardSwitchHolder
+        )
+
+        cardViewHolder.view.groupAction.text = ""
+        saveCardSwitchHolder.view.cardSwitch.payButton.visibility = View.VISIBLE
+
+        println("goPay views")
     }
 
     override fun controlCurrency(display: Boolean) {
@@ -219,6 +236,7 @@ class TapLayoutManager() : ViewModel(),
             dummyInitapiResponse.order.items?.size.toString()
         )
         cardViewHolder.setDatafromAPI(dummyInitapiResponse.payment_methods)
+        goPayLoginHolder.setDatafromAPI(dummyInitapiResponse.payment_methods)
         paymentInputViewHolder.setDatafromAPI(dummyInitapiResponse.payment_methods.get(0).image)
         saveCardSwitchHolder.setDatafromAPI(
             dummyInitapiResponse.merchant.name,

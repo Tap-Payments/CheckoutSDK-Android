@@ -12,6 +12,7 @@ import company.tap.checkout.internal.enums.SectionType
 interface BaseLayoutManager {
     fun displayStartupLayout(enabledSections: ArrayList<SectionType>)
     fun displayGoPayLogin()
+    fun displayGoPay()
     fun controlCurrency(display: Boolean)
     fun displayOTP(otpMobile:String)
     fun displayRedirect(url: String)

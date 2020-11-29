@@ -4,17 +4,13 @@ import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.FrameLayout
-import android.widget.Toast
 import company.tap.checkout.R
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayoutManager
-import company.tap.checkout.internal.utils.AnimationEngine
-import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
-import company.tap.tapuilibrary.uikit.adapters.context
 import company.tap.tapuilibrary.uikit.datasource.GoPayLoginDataSource
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.interfaces.GoPayLoginInterface
+import company.tap.tapuilibrary.uikit.interfaces.OnCardSelectedActionListener
 import company.tap.tapuilibrary.uikit.interfaces.OpenOTPInterface
 import company.tap.tapuilibrary.uikit.interfaces.OtpButtonConfirmationInterface
 import company.tap.tapuilibrary.uikit.organisms.GoPayLoginInput
@@ -29,7 +25,7 @@ import kotlinx.android.synthetic.main.otpview_layout.view.*
  *
  */
 class GoPayViewHolder(private val context: Context, private val baseLayoutManager: BaseLayoutManager?=null) : TapBaseViewHolder, OpenOTPInterface,GoPayLoginInterface,
-    OtpButtonConfirmationInterface {
+    OtpButtonConfirmationInterface, OnCardSelectedActionListener {
 
     override val view: View = LayoutInflater.from(context).inflate(R.layout.gopay_layout, null)
 
@@ -75,9 +71,9 @@ class GoPayViewHolder(private val context: Context, private val baseLayoutManage
         if(otpViewHolder.view.otpView!=null){
             otpViewHolder.view.otpView.visibility = View.VISIBLE
             otpViewHolder.view.otpView.changePhoneCardView?.visibility = View.VISIBLE
-            println(" you clicled for otp")
+            println(" you clicked for otp!!!")
             baseLayoutManager?.displayOTP( otpViewHolder.view.otpView?.mobileNumberText?.text.toString())
-
+            baseLayoutManager?.displayGoPay()
 
         }
 
@@ -88,7 +84,7 @@ class GoPayViewHolder(private val context: Context, private val baseLayoutManage
     }
 
     override fun getPhoneNumber(phoneNumber: String, countryCode: String, maskedValue: String) {
-        println("get phn number"+phoneNumber +"\n"+"countryCode ia"+countryCode+"\n"+"masked value"+maskedValue)
+        println("get phn number$phoneNumber\ncountryCode ia$countryCode\nmasked value$maskedValue")
         if(otpViewHolder.view.otpView!=null)
         otpViewHolder.view.otpView?.mobileNumberText?.text = "+${countryCode} $maskedValue"
     }
@@ -102,6 +98,8 @@ class GoPayViewHolder(private val context: Context, private val baseLayoutManage
         if(otpViewHolder.view.otpView!=null){
             otpViewHolder.view.otpView?.visibility = View.GONE
             otpViewHolder.view.otpView?.changePhoneCardView?.visibility = View.GONE
+            println("otpViewHolder.inside called")
+
         }
 
     }
@@ -109,7 +107,16 @@ class GoPayViewHolder(private val context: Context, private val baseLayoutManage
     override fun onOtpButtonConfirmationClick(otpNumber: String): Boolean {
         println("otpNumber is $otpNumber")
         Log.d("isValidOTP1" ,(otpNumber == "111111").toString() )
+        GoPayLoginHolder(context,this,baseLayoutManager).view
         return otpNumber == "111111"
+    }
+
+    override fun onCardSelectedAction(isSelected: Boolean) {
+
+    }
+
+    override fun onDeleteIconClicked(stopAnimation: Boolean, itemId: Int) {
+
     }
 
 }
