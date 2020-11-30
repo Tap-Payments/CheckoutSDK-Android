@@ -1,13 +1,16 @@
 package company.tap.checkout.internal.viewholders
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import company.tap.checkout.R
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.taplocalizationkit.LocalizationManager
+import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.datasource.HeaderDataSource
 import company.tap.tapuilibrary.uikit.views.TapHeaderSectionView
+import kotlinx.android.synthetic.main.businessview_layout.*
 import kotlinx.android.synthetic.main.businessview_layout.view.*
 
 
@@ -36,6 +39,10 @@ class BusinessViewHolder(context: Context) : TapBaseViewHolder {
 
         if (merchantName != null)
             view.headerView.setHeaderDataSource(getHeaderDataSourceFromAPI())
+        /**
+         * set separator background
+         */
+        view.topSeparatorLinear.setBackgroundColor((Color.parseColor(ThemeManager.getValue("merchantHeaderView.backgroundColor"))))
     }
 
     private fun getHeaderDataSourceFromAPI(): HeaderDataSource {

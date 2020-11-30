@@ -1,6 +1,7 @@
 package company.tap.checkout.internal.viewholders
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -11,9 +12,11 @@ import company.tap.checkout.R
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.taplocalizationkit.LocalizationManager
+import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.adapters.CardTypeAdapter
 import company.tap.tapuilibrary.uikit.atoms.TapChipGroup
 import company.tap.tapuilibrary.uikit.interfaces.OnCardSelectedActionListener
+import kotlinx.android.synthetic.main.businessview_layout.view.*
 import kotlinx.android.synthetic.main.cardviewholder_layout.view.*
 import kotlinx.android.synthetic.main.item_saved_card.view.*
 
@@ -25,7 +28,7 @@ import kotlinx.android.synthetic.main.item_saved_card.view.*
  */
 class CardViewHolder(
     private val context: Context,
-    private val onCardSelectedActionListener: OnCardSelectedActionListener? = null,
+    private val onCardSelectedActionListener: OnCardSelectedActionListener,
     private val baseLayopu: BaseLayoutManager?=null
 ) : TapBaseViewHolder {
 
@@ -62,14 +65,20 @@ class CardViewHolder(
             false
         )
         view.mainChipgroup.chipsRecycler.adapter =
-            paymentsList?.let { CardTypeAdapter(it, onCardSelectedActionListener,false) }
-        println("paymentList supported currency ${paymentsList?.get(0)?.supported_currencies}")
+            paymentsList?.let { CardTypeAdapter(it as ArrayList<Payment_methods>, onCardSelectedActionListener,false) }
+        println("paymentList supported currency ${paymentsList}")
         view.mainChipgroup.groupAction.setOnClickListener {
             val animation = AnimationUtils.loadAnimation(this.view.context, R.anim.shake)
             view.mainChipgroup.chipsRecycler.startAnimation(animation)
-            view.deleteImageView?.visibility = View.VISIBLE
+            view.deleteImageView2?.visibility = View.VISIBLE
             baseLayopu?.displayGoPayLogin()
         }
+
+        /**
+         * set separator background
+         */
+        view.tapSeparatorViewLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
+
 
     }
 

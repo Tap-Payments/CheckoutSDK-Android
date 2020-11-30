@@ -1,6 +1,7 @@
 package company.tap.checkout.internal.viewholders
 
 import android.content.Context
+import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +14,7 @@ import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.uikit.adapters.CardTypeAdapter
 import company.tap.tapuilibrary.uikit.atoms.TapChipGroup
 import company.tap.tapuilibrary.uikit.interfaces.OnCardSelectedActionListener
+import kotlinx.android.synthetic.main.gopayloginview_layout.view.*
 import kotlinx.android.synthetic.main.item_saved_card.view.*
 
 /**
@@ -23,11 +25,12 @@ import kotlinx.android.synthetic.main.item_saved_card.view.*
  */
 class GoPayLoginHolder(
     private val context: Context,
-    private val onCardSelectedActionListener: OnCardSelectedActionListener? = null,
+    private val onCardSelectedActionListener: OnCardSelectedActionListener,
     private val baseLayopu: BaseLayoutManager?=null
 ) : TapBaseViewHolder {
 
-    override val view = TapChipGroup(context, null)
+  //  override val view = TapChipGroup(context, null)
+    override val view: View = LayoutInflater.from(context).inflate(R.layout.gopayloginview_layout, null)
 
     override val type = SectionType.CARD
 
@@ -42,25 +45,25 @@ class GoPayLoginHolder(
 
     override fun bindViewComponents() {
 
-        view.groupName.text = "GoPay"
-        view.groupAction.text = LocalizationManager.getValue(
+        view.goPayLoginView.groupName.text = "GoPay"
+        view.goPayLoginView.groupAction.text = LocalizationManager.getValue(
             "GatewayHeader",
             "HorizontalHeaders",
             "rightTitle"
         )
 
-        view.chipsRecycler.layoutManager = LinearLayoutManager(
+        view.goPayLoginView.chipsRecycler.layoutManager = LinearLayoutManager(
             context,
             RecyclerView.HORIZONTAL,
             false
         )
-        view.chipsRecycler.adapter =
-            paymentsList?.let { CardTypeAdapter(it, onCardSelectedActionListener,false) }
+        view.goPayLoginView.chipsRecycler.adapter =
+            paymentsList?.let { CardTypeAdapter(it as ArrayList<Payment_methods>, onCardSelectedActionListener,false) }
         println("paymentList supported currency ${paymentsList?.get(0)?.supported_currencies}")
-        view.groupAction.setOnClickListener {
+        view.goPayLoginView.groupAction.setOnClickListener {
             val animation = AnimationUtils.loadAnimation(this.view.context, R.anim.shake)
-            view.chipsRecycler.startAnimation(animation)
-            view.deleteImageView?.visibility = View.VISIBLE
+            view.goPayLoginView.chipsRecycler.startAnimation(animation)
+         //   view.deleteImageView?.visibility = View.VISIBLE
             baseLayopu?.displayGoPayLogin()
         }
 

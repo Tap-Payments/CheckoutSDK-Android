@@ -19,8 +19,10 @@ import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.viewmodels.TapLayoutManager
 import company.tap.checkout.open.controller.SessionManager
 import company.tap.taplocalizationkit.LocalizationManager
+import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
+import kotlinx.android.synthetic.main.businessview_layout.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -59,7 +61,11 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
 
         val checkoutLayout: LinearLayout? = view1?.findViewById(R.id.sdkContainer)
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
-        backgroundColor= Color.WHITE
+        /**
+         * set bottom sheet background
+         */
+        backgroundColor = (Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.main_switch_background")))
+        backgroundColor = (Color.parseColor("#00000000"))
       //  if(bottomSheetDialog!=null){
       //      bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
       //  }
@@ -82,6 +88,8 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         //This is for getting response from business engine . Currently dummy response from assets json is used
         getBusinessHeaderData()
         setBottomSheetInterface(this)
+        bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+
         return view1
     }
 

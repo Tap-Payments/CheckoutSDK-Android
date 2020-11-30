@@ -4,25 +4,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <company.tap.tapuilibrary.uikit.views.TapHeaderSectionView
-        android:id="@+id/headerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layoutDirection="locale" />
 
-    <LinearLayout
+    <company.tap.tapuilibrary.uikit.atoms.TapChipGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/topSeparatorLinear">
+        android:id="@+id/goPayLoginView"/>
+    <LinearLayout
+        android:id="@+id/tapSeparatorViewLinear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <company.tap.tapuilibrary.uikit.atoms.TapSeparatorView
-            android:id="@+id/topSeparator"
+            android:id="@+id/separator_"
             android:layout_width="wrap_content"
             android:layout_height="1dp"
-            android:visibility="visible"
             android:layout_marginStart="@dimen/default_padding"
             android:layout_marginEnd="@dimen/default_padding"
             android:background="@color/separator_color" />
+
     </LinearLayout>
 
 </LinearLayout>

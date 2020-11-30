@@ -3,6 +3,7 @@ package company.tap.checkout.internal.viewholders
 
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.StrictMode
@@ -28,11 +29,15 @@ import company.tap.checkout.internal.viewholders.PaymentInputViewHolder.PaymentT
 import company.tap.tapcardvalidator_android.CardBrand
 import company.tap.tapcardvalidator_android.CardValidationState
 import company.tap.tapcardvalidator_android.CardValidator
+import company.tap.tapuilibrary.themekit.ThemeManager
 
 import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
 import company.tap.tapuilibrary.uikit.models.SectionTabItem
 import company.tap.tapuilibrary.uikit.views.TapMobilePaymentView
 import company.tap.tapuilibrary.uikit.views.TapSelectionTabLayout
+import kotlinx.android.synthetic.main.cardviewholder_layout.view.*
+import kotlinx.android.synthetic.main.cardviewholder_layout.view.tapSeparatorViewLinear
+import kotlinx.android.synthetic.main.payment_input_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 import java.net.URL
 
@@ -110,6 +115,11 @@ class PaymentInputViewHolder(private val context: Context , private val onPaymen
         initMobileInput()
         initClearText()
         initializeCardForm()
+        /**
+         * set separator background
+         */
+        view.separator?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
+
     }
 
     private fun initTabLayout() {

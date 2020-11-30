@@ -10,6 +10,10 @@
         android:layout_height="wrap_content"
         android:background="@color/selection_tab_color"
         android:layoutDirection="locale" />
-
+    <company.tap.tapuilibrary.uikit.atoms.TapSeparatorView
+        android:id="@+id/separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/separator_color" />
 
 </LinearLayout>
