@@ -141,7 +141,7 @@ class PaymentInputViewHolder(private val context: Context , private val onPaymen
         clearText.visibility = View.GONE
         clearText.setOnClickListener {
             tabLayout.resetBehaviour()
-
+            println("is it called")
             mobilePaymentView.clearNumber()
             /* tapCardInputView.setCardNumber("")
              tapCardInputView.setCvcCode("")*/
@@ -154,8 +154,11 @@ class PaymentInputViewHolder(private val context: Context , private val onPaymen
                 cardScannerBtn?.visibility = View.INVISIBLE
 
             }
-
+            switchViewHolder.view.cardviewSwitch.visibility= View.INVISIBLE
+            switchViewHolder.view.mainSwitch.visibility= View.GONE
+            switchViewHolder.view.cardSwitch.visibility= View.GONE
             clearText.visibility = View.GONE
+
         }
 
         nfcButton?.setOnClickListener {
@@ -174,7 +177,10 @@ class PaymentInputViewHolder(private val context: Context , private val onPaymen
             when (selectedType) {
                 CARD -> cardInputWidget.clear()
                 MOBILE -> mobilePaymentView.clearNumber()
+
             }
+            println("is it selectedType")
+
         }
     }
 
@@ -308,27 +314,7 @@ class PaymentInputViewHolder(private val context: Context , private val onPaymen
             isadded = true
 
         }
-        /*  items.add(
-              SectionTabItem(
-                  context.resources.getDrawable(
-                      R.drawable.ic_visa
-                  ), context.resources.getDrawable(R.drawable.ic_visa_black), CardBrand.visa
-              )
-          )
-          items.add(
-              SectionTabItem(
-                  context.resources.getDrawable(
-                      R.drawable.mastercard
-                  ), context.resources.getDrawable(R.drawable.mastercard_gray), CardBrand.masterCard
-              )
-          )
-          items.add(
-              SectionTabItem(
-                  context.resources.getDrawable(
-                      R.drawable.amex
-                  ), context.resources.getDrawable(R.drawable.amex_gray), CardBrand.americanExpress
-              )
-          )*/
+
         return items
     }
 

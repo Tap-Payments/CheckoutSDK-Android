@@ -1,6 +1,7 @@
 package company.tap.checkout.internal.viewholders
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -11,10 +12,13 @@ import company.tap.checkout.R
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.taplocalizationkit.LocalizationManager
+import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.adapters.CardTypeAdapter
 import company.tap.tapuilibrary.uikit.atoms.TapChipGroup
 import company.tap.tapuilibrary.uikit.interfaces.OnCardSelectedActionListener
+import kotlinx.android.synthetic.main.cardviewholder_layout.view.*
 import kotlinx.android.synthetic.main.gopayloginview_layout.view.*
+import kotlinx.android.synthetic.main.gopayloginview_layout.view.tapSeparatorViewLinear
 import kotlinx.android.synthetic.main.item_saved_card.view.*
 
 /**
@@ -66,7 +70,10 @@ class GoPayLoginHolder(
          //   view.deleteImageView?.visibility = View.VISIBLE
             baseLayopu?.displayGoPayLogin()
         }
-
+        /**
+         * set separator background
+         */
+        view.tapSeparatorViewLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
     }
 
 

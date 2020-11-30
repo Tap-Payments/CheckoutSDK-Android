@@ -8,6 +8,7 @@ import company.tap.checkout.R
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.themekit.theme.SeparatorViewTheme
 import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import company.tap.tapuilibrary.uikit.ktx.setBottomBorders
@@ -141,7 +142,6 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
                     view.cardSwitch.tapCardSwitchLinear.setBackgroundResource(company.tap.tapuilibrary.R.drawable.ic_blurbackground)
                 }
                 view.cardviewSwitch.cardElevation = 2.5f
-
                 setBorderedView(
                     view.mainSwitch.card,
                     40f,// corner raduis
