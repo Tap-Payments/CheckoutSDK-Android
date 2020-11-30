@@ -117,6 +117,8 @@ class TapLayoutManager() : ViewModel(),
 
         saveCardSwitchHolder.view.cardSwitch.visibility = View.VISIBLE
         saveCardSwitchHolder.view.cardSwitch.payButton.visibility = View.VISIBLE
+        saveCardSwitchHolder.view.mainSwitch.mainSwitchLinear.setBackgroundColor(Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor")))
+
 
     }
 
@@ -160,7 +162,6 @@ class TapLayoutManager() : ViewModel(),
         cardViewHolder.view.mainChipgroup.groupAction.text = ""
         saveCardSwitchHolder.view.cardSwitch.payButton.visibility = View.VISIBLE
 
-        println("goPay views")
     }
 
     override fun controlCurrency(display: Boolean) {
