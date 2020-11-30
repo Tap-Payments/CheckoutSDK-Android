@@ -1,10 +1,14 @@
 package company.tap.checkout.internal.viewholders
 
 import android.content.Context
+import android.view.LayoutInflater
+import android.view.View
+import company.tap.checkout.R
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.uikit.datasource.HeaderDataSource
 import company.tap.tapuilibrary.uikit.views.TapHeaderSectionView
+import kotlinx.android.synthetic.main.businessview_layout.view.*
 
 
 /**
@@ -15,7 +19,8 @@ import company.tap.tapuilibrary.uikit.views.TapHeaderSectionView
  */
 class BusinessViewHolder(context: Context) : TapBaseViewHolder {
 
-    override val view = TapHeaderSectionView(context, null)
+
+    override val view: View = LayoutInflater.from(context).inflate(R.layout.businessview_layout, null)
 
     override val type = SectionType.BUSINESS
 
@@ -30,7 +35,7 @@ class BusinessViewHolder(context: Context) : TapBaseViewHolder {
     override fun bindViewComponents() {
 
         if (merchantName != null)
-            view.setHeaderDataSource(getHeaderDataSourceFromAPI())
+            view.headerView.setHeaderDataSource(getHeaderDataSourceFromAPI())
     }
 
     private fun getHeaderDataSourceFromAPI(): HeaderDataSource {

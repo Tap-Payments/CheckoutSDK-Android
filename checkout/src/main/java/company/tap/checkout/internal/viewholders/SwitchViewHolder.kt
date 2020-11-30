@@ -1,12 +1,16 @@
 package company.tap.checkout.internal.viewholders
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import company.tap.checkout.R
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.taplocalizationkit.LocalizationManager
+import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
+import company.tap.tapuilibrary.uikit.ktx.setBorderedView
+import company.tap.tapuilibrary.uikit.ktx.setBottomBorders
 import company.tap.tapuilibrary.uikit.views.TapCardSwitch
 import kotlinx.android.synthetic.main.switch_layout.view.*
 
@@ -37,6 +41,7 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
 
     override fun bindViewComponents() {
       //  setSwitchLocals()
+        configureSwitch()
 
     }
     // Function / Logic is responsible for sett ing the data to switch based on user selection
@@ -105,6 +110,130 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
        }
     }
 
+    /**
+     * We will change tap card switch background if main switch checked or not
+     */
+    private fun configureSwitch() {
+//        switch_pay_demo.tapCardSwitchLinear.setBackgroundColor(Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor")))
+//                switch_pay_demo.tapCardSwitchLinear.setBackgroundColor(Color.parseColor(ThemeManager.getValue("TapSwitchView.backgroundColor")))
 
+        setBottomBorders(
+            view.cardviewSwitch,
+            30f,// corner raduis
+            0.0f,
+            Color.parseColor(ThemeManager.getValue("TapSwitchView.backgroundColor")),// stroke color
+            Color.parseColor(ThemeManager.getValue("TapSwitchView.backgroundColor")),// tint color
+            Color.parseColor(ThemeManager.getValue("TapSwitchView.backgroundColor"))
+        )//
+        setBottomBorders(
+            view.cardviewSwitch,
+            30f,// corner raduis
+            0.0f,
+            Color.parseColor(ThemeManager.getValue("TapSwitchView.backgroundColor")),// stroke color
+            Color.parseColor(ThemeManager.getValue("TapSwitchView.backgroundColor")),// tint color
+            Color.parseColor(ThemeManager.getValue("TapSwitchView.backgroundColor"))
+        )//
+        view.mainSwitch.switchSaveMobile?.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
+                    view.cardSwitch.tapCardSwitchLinear.setBackgroundResource(company.tap.tapuilibrary.R.drawable.ic_blurbackgroundblack)
+                } else {
+                    view.cardSwitch.tapCardSwitchLinear.setBackgroundResource(company.tap.tapuilibrary.R.drawable.ic_blurbackground)
+                }
+                view.cardviewSwitch.cardElevation = 2.5f
+
+                setBorderedView(
+                    view.mainSwitch.card,
+                    40f,// corner raduis
+                    0.0f,
+                    Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor")),// stroke color
+                    Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor")),// tint color
+                    Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor"))
+                )//
+
+                    Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor"))
+                view.cardSwitch.payButton.stateListAnimator = null
+                view.cardSwitch.payButton.isActivated
+                view.cardSwitch.payButton.setButtonDataSource(
+                    true,
+
+                    company.tap.tapuilibrary.uikit.adapters.context?.let { LocalizationManager.getLocale(it).language },
+                    "Pay",
+                    Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
+                    Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
+                )
+                view.cardSwitch.switchesLayout?.visibility = View.VISIBLE
+                view.cardSwitch.switchSaveMerchant?.visibility = View.VISIBLE
+                view.cardSwitch.switchSaveMerchant?.isChecked = true
+                view.cardSwitch.switchGoPayCheckout?.isChecked = true
+                view.cardSwitch.switchGoPayCheckout?.visibility = View.VISIBLE
+                view.cardSwitch.saveGoPay?.visibility = View.VISIBLE
+                view.cardSwitch.alertGoPaySignUp?.visibility = View.VISIBLE
+                view.cardSwitch.switchSeparator?.visibility = View.VISIBLE
+            } else {
+                setBorderedView(
+                    view.mainSwitch.card,
+                    0f,// corner raduis
+                    0.0f,
+                    Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor")),// stroke color
+                    Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor")),// tint color
+                    Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor"))
+                )//
+                view.cardSwitch.tapCardSwitchLinear.setBackgroundColor(
+                    Color.parseColor(
+                        ThemeManager.getValue(
+                            "TapSwitchView.main.backgroundColor"
+                        )
+                    )
+                )
+                view.cardviewSwitch.cardElevation = 0f
+
+                view.cardSwitch.payButton.stateListAnimator = null
+                view.cardSwitch.payButton.setButtonDataSource(
+                    false,
+                    company.tap.tapuilibrary.uikit.adapters.context?.let { LocalizationManager.getLocale(it).language },
+                    "Pay",
+                    Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
+                    Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
+                )
+
+
+                view.cardSwitch.switchesLayout?.visibility = View.GONE
+                view.cardSwitch.switchSaveMerchant?.visibility = View.GONE
+                view.cardSwitch.switchSaveMerchant?.isChecked = false
+                view.cardSwitch.switchGoPayCheckout?.isChecked = false
+                view.cardSwitch.switchGoPayCheckout?.visibility = View.GONE
+                view.cardSwitch.saveGoPay?.visibility = View.GONE
+                view.cardSwitch.alertGoPaySignUp?.visibility = View.GONE
+                view.cardSwitch.switchSeparator?.visibility = View.GONE
+            }
+        }
+        view.cardSwitch.switchSaveMerchant?.setOnCheckedChangeListener { _, _ ->
+            if (!  view.cardSwitch.switchSaveMerchant?.isChecked!! && !  view.cardSwitch.switchGoPayCheckout?.isChecked!!) {
+               // switchSaveDemo?.isChecked = false
+                view.cardSwitch.switchesLayout?.visibility = View.GONE
+                view.cardSwitch.switchSaveMerchant?.visibility = View.GONE
+                view.cardSwitch.switchSaveMerchant?.isChecked = false
+                view.cardSwitch.switchGoPayCheckout?.isChecked = false
+                view.cardSwitch.switchGoPayCheckout?.visibility = View.GONE
+                view.cardSwitch.saveGoPay?.visibility = View.GONE
+                view.cardSwitch.alertGoPaySignUp?.visibility = View.GONE
+                view.cardSwitch.switchSeparator?.visibility = View.GONE
+            }
+        }
+        view.cardSwitch.switchGoPayCheckout?.setOnCheckedChangeListener { _, _ ->
+            if (!view.cardSwitch.switchSaveMerchant?.isChecked!! && !view.cardSwitch.switchGoPayCheckout?.isChecked!!) {
+               // view.cardSwitch.switchSaveMerchant?.isChecked = false
+                view.cardSwitch.switchesLayout?.visibility = View.GONE
+                view.cardSwitch.switchSaveMerchant?.visibility = View.GONE
+                view.cardSwitch.switchSaveMerchant?.isChecked = false
+                view.cardSwitch.switchGoPayCheckout?.isChecked = false
+                view.cardSwitch.switchGoPayCheckout?.visibility = View.GONE
+                view.cardSwitch.saveGoPay?.visibility = View.GONE
+                view.cardSwitch.alertGoPaySignUp?.visibility = View.GONE
+                view.cardSwitch.switchSeparator?.visibility = View.GONE
+            }
+        }
+    }
 }
 

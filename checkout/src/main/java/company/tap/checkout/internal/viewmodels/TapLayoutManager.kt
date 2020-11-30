@@ -25,6 +25,7 @@ import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
 import company.tap.tapuilibrary.uikit.fragment.CurrencyViewFragment
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
 import kotlinx.android.synthetic.main.action_button_animation.view.*
+import kotlinx.android.synthetic.main.cardviewholder_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 
 
@@ -113,6 +114,7 @@ class TapLayoutManager() : ViewModel(),
                 saveCardSwitchHolder
             )
 
+        saveCardSwitchHolder.view.cardSwitch.visibility = View.VISIBLE
         saveCardSwitchHolder.view.cardSwitch.payButton.visibility = View.VISIBLE
 
     }
@@ -154,7 +156,7 @@ class TapLayoutManager() : ViewModel(),
             saveCardSwitchHolder
         )
 
-        cardViewHolder.view.groupAction.text = ""
+        cardViewHolder.view.mainChipgroup.groupAction.text = ""
         saveCardSwitchHolder.view.cardSwitch.payButton.visibility = View.VISIBLE
 
         println("goPay views")
@@ -293,7 +295,7 @@ class TapLayoutManager() : ViewModel(),
             saveCardSwitchHolder.view.cardSwitch.switchesLayout.visibility = View.VISIBLE
             saveCardSwitchHolder.view.cardSwitch.switchSaveMobile.visibility = View.VISIBLE*/
             activateActionButton()
-            configureSwitch()
+           // configureSwitch()
         } else {
            /* saveCardSwitchHolder.view.cardSwitch.switchSaveMerchant.isChecked = false
             saveCardSwitchHolder.view.cardSwitch.switchGoPayCheckout.isChecked = false

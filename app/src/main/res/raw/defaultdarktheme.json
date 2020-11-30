@@ -287,7 +287,7 @@
             "color" : "brownGrey",
             "width" : 1
         },
-        "itemsNumberButtonCorner" : 30,
+        "itemsNumberButtonCorner" : 40,
         "backgroundColor" : "black"
     },
     "horizontalList": {
@@ -563,21 +563,26 @@
         "passwordView" :{
             "backgroundColor": "clear"
         },
+
         "passwordField": {
-            "backgroundColor" : "clear",
+            "backgroundColor" : "transperant",
             "textFont": "Roboto-Light,17",
-            "textColor": "greyishBrown",
-            "placeHolderColor" : "brownGreyThree",
+            "textColor": "#a7a7a7",
+            "placeHolderColor" : "#878787",
             "showPasswordIcon" : "passwordEye",
             "hidePasswordIcon" : "passwordEye",
             "underline":{
                 "empty": {
-                    "backgroundColor" : "deepSkyBlue"
+                    "backgroundColor" : "#a0a0a0"
                 },
                 "filled": {
                     "backgroundColor" : "deepSkyBlue"
                 }
-            }
+            },
+            "changeTextColor": "#007aff",
+            "changeTextFont": "Roboto-Light,12",
+            "emailTextColor": "#a7a7a7",
+            "emailTextFont": "Roboto-Light,14"
         }
     },
     "actionButton": {
@@ -690,12 +695,12 @@
         }
     },
     "TapAlertMessage": {
-        "backgroundColor": "#4cffbe60",
+        "backgroundColor": "#ea611c",
         "separatorColor" : "#33ea6724",
         "separatorHeight" : 1,
         "textField": {
             "textFont": "Roboto-Light,12",
-            "textColor": "#ea611c"
+            "textColor": "#ffffff"
         }
     }
 }

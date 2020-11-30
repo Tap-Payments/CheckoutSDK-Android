@@ -1,6 +1,8 @@
 package company.tap.checkout.internal.viewholders
 
 import android.content.Context
+import android.view.LayoutInflater
+import android.view.View
 
 import company.tap.checkout.R
 import company.tap.checkout.internal.enums.SectionType
@@ -9,6 +11,7 @@ import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.uikit.atoms.TapButton
 import company.tap.tapuilibrary.uikit.datasource.AmountViewDataSource
 import company.tap.tapuilibrary.uikit.views.TapAmountSectionView
+import kotlinx.android.synthetic.main.amountview_layout.view.*
 
 
 /**
@@ -19,7 +22,8 @@ import company.tap.tapuilibrary.uikit.views.TapAmountSectionView
  */
 class AmountViewHolder(context: Context) : TapBaseViewHolder {
 
-    override val view = TapAmountSectionView(context, null)
+  // override val view = TapAmountSectionView(context, null)
+    override val view: View = LayoutInflater.from(context).inflate(R.layout.amountview_layout, null)
 
     override val type = SectionType.AMOUNT_ITEMS
 
@@ -35,7 +39,7 @@ class AmountViewHolder(context: Context) : TapBaseViewHolder {
     }
 
     override fun bindViewComponents() {
-        view.setAmountViewDataSource(getAmountDataSourceFromAPIs())
+        view.amount_section.setAmountViewDataSource(getAmountDataSourceFromAPIs())
     }
 
     private fun getAmountDataSourceFromAPIs(): AmountViewDataSource {
@@ -47,7 +51,7 @@ class AmountViewHolder(context: Context) : TapBaseViewHolder {
     }
 
     fun changeDataSource(amountViewDataSource: AmountViewDataSource) {
-        view.setAmountViewDataSource(amountViewDataSource)
+        view.amount_section.setAmountViewDataSource(amountViewDataSource)
     }
 
     fun changeGroupAction(isOpen: Boolean) {
