@@ -44,7 +44,7 @@ class CardViewHolder(
 
 
     init {
-        bindViewComponents()
+       // bindViewComponents()
 
     }
 

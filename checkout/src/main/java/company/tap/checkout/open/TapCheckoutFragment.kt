@@ -11,10 +11,9 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.gson.Gson
-import company.tap.cardbusinesskit.testmodels.DummyResp
 import company.tap.checkout.R
 import company.tap.checkout.internal.apiresponse.getJsonDataFromAsset
-import company.tap.checkout.internal.dummygener.JsonResponseDummy
+import company.tap.checkout.internal.dummygener.JsonResponseDummy1
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.viewmodels.TapLayoutManager
 import company.tap.checkout.open.controller.SessionManager
@@ -97,9 +96,9 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface
     private fun getBusinessHeaderData() {
         val jsonFileString = activity?.applicationContext?.let { getJsonDataFromAsset(it, "dummyapiresponsedefault.json") }
         val gson = Gson()
-        val dummyInitApiResponse: JsonResponseDummy = gson.fromJson(jsonFileString, JsonResponseDummy::class.java)
+        val dummyInitApiResponse1: JsonResponseDummy1 = gson.fromJson(jsonFileString, JsonResponseDummy1::class.java)
         // Pass the api response data to LayoutManager
-        layoutManager.getDatafromAPI(dummyInitApiResponse)
+        layoutManager.getDatafromAPI(dummyInitApiResponse1)
 
     }
 

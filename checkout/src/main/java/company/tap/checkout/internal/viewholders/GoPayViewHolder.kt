@@ -44,28 +44,28 @@ class GoPayViewHolder(private val context: Context, private val baseLayoutManage
 
     override fun bindViewComponents() {
         goPayLoginInput.changeDataSource(GoPayLoginDataSource())
-       goPayLoginInput?.setLoginInterface(this)
+        goPayLoginInput.setLoginInterface(this)
         goPayLoginInput.setOpenOTPInterface(this)
         otpViewHolder.view.otpView?.setOtpButtonConfirmationInterface(this)
        // goPayPasswordInput.setLoginInterface(this, goPayLoginInput.textInput.text.toString())
     }
 
     override fun onChangeClicked() {
-      goPayLoginInput?.visibility = View.VISIBLE
-       goPayPasswordInput?.visibility = View.GONE
+      goPayLoginInput.visibility = View.VISIBLE
+       goPayPasswordInput.visibility = View.GONE
         otpViewHolder.view.otpView?.visibility = View.GONE
     }
 
     override fun onEmailValidated() {
-        goPayLoginInput?.visibility = View.GONE
-        goPayPasswordInput?.visibility = View.VISIBLE
+        goPayLoginInput.visibility = View.GONE
+        goPayPasswordInput.visibility = View.VISIBLE
         otpViewHolder.view.otpView?.visibility = View.GONE
-       goPayPasswordInput?.setLoginInterface(this, goPayLoginInput?.textInput?.text.toString())
+        goPayPasswordInput.setLoginInterface(this, goPayLoginInput.textInput?.text.toString())
     }
 
     override fun onPhoneValidated() {
-        goPayPasswordInput?.visibility = View.GONE
-        goPayLoginInput?.visibility = View.GONE
+        goPayPasswordInput.visibility = View.GONE
+        goPayLoginInput.visibility = View.GONE
         println("viewhodler value"+otpViewHolder+"\n"+"view value"+view+"\n"+"otpview is "+otpViewHolder.view.otpView)
 
         if(otpViewHolder.view.otpView!=null){
@@ -90,10 +90,10 @@ class GoPayViewHolder(private val context: Context, private val baseLayoutManage
     }
 
     override fun onChangePhoneClicked() {
-        println("onChangePhoneClicked is ()");
-        goPayLoginInput?.visibility = View.VISIBLE
-        goPayLoginInput?.changeDataSource(GoPayLoginDataSource())
-        goPayLoginInput?.inputType = GoPayLoginMethod.EMAIL
+        println("onChangePhoneClicked is ()")
+        goPayLoginInput.visibility = View.VISIBLE
+        goPayLoginInput.changeDataSource(GoPayLoginDataSource())
+        goPayLoginInput.inputType = GoPayLoginMethod.EMAIL
         println("otpViewHolder.view.otpView gopay is ()"+otpViewHolder.view.otpView)
         if(otpViewHolder.view.otpView!=null){
             otpViewHolder.view.otpView?.visibility = View.GONE

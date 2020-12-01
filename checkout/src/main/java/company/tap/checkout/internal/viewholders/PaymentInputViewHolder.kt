@@ -125,7 +125,7 @@ class PaymentInputViewHolder(private val context: Context , private val onPaymen
     }
 
     private fun initTabLayout() {
-
+println("sdsadad")
      //   tabLayout.addSection(getCardList())
        // tabLayout.addSection(getMobileList())
         tabLayout.setTabLayoutInterface(this)

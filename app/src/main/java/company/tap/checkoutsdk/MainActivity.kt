@@ -20,8 +20,8 @@ class MainActivity : AppCompatActivity() ,InlineViewCallback{
         launchSDK.setOnClickListener {
             ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme,"lighttheme")
 
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-         //   SDKSession().startSDK(false)
+            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+            //   SDKSession().startSDK(false)
             sdkSession.startSDK(supportFragmentManager,this)
 
         }

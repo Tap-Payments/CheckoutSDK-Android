@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 
 
-data class JsonResponseDummy (
+data class JsonResponseDummy1 (
 
 	@SerializedName("merchant") val merchant1 : Merchant1,
 	@SerializedName("order") val order1 : Order1,
