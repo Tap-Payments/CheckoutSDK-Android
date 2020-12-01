@@ -73,6 +73,7 @@ class CardViewHolder(
             view.mainChipgroup.chipsRecycler.startAnimation(animation)
             view.deleteImageView2?.visibility = View.VISIBLE
            // baseLayopu?.displayGoPayLogin()
+            println("displayGoPayLogin stopped ")
         }
 
         /**

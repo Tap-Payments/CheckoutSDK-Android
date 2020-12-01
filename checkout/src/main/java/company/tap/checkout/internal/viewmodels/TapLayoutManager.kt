@@ -132,13 +132,13 @@ class TapLayoutManager() : ViewModel(),
     override fun displayGoPayLogin() {
        // if (this::bottomSheetLayout.isInitialized)
        // AnimationEngine.applyTransition(bottomSheetLayout, SLIDE)
-        removeViews(
-            cardViewHolder,
-            paymentInputViewHolder,
-            saveCardSwitchHolder
-        )
+      //  removeViews(
+       //cardViewHolder,
+      //      paymentInputViewHolder,
+      //      saveCardSwitchHolder
+      //  )
        // if (this::bottomSheetLayout.isInitialized)
-        addViews(goPayViewHolder)
+       // addViews(goPayViewHolder)
         //addViews(goPayLoginHolder)
     }
 
