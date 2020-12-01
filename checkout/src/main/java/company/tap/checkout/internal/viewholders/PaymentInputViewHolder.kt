@@ -408,7 +408,7 @@ class PaymentInputViewHolder(private val context: Context , private val onPaymen
      * @param imageURLApi represents the images of payment methods.
      * */
     fun setDatafromAPI(imageURLApi:  List<TapCardPhoneListDataSource>) {
-        println("imageURLApi size values are"+imageURLApi.size)
+        println("imageURLApi size values are"+imageURLApi)
         for (i in 0 until imageURLApi.size) {
             imageURL = imageURLApi.get(i).icon
             println("imageURL values are"+i)

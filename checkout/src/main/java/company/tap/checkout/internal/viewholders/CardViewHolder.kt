@@ -66,7 +66,7 @@ class CardViewHolder(
             false
         )
         view.mainChipgroup.chipsRecycler.adapter =
-            paymentsList?.let { CardTypeAdapter(it as ArrayList<Payment_methods>, onCardSelectedActionListener,false) }
+            paymentsList?.let { CardTypeAdapter(it as ArrayList<SavedCards>, onCardSelectedActionListener,false) }
         println("paymentList supported currency ${paymentsList}")
         view.mainChipgroup.groupAction.setOnClickListener {
             val animation = AnimationUtils.loadAnimation(this.view.context, R.anim.shake)

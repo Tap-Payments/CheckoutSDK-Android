@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import company.tap.cardbusinesskit.testmodels.Payment_methods
 import company.tap.checkout.R
 import company.tap.checkout.internal.dummygener.GoPaySavedCards
+import company.tap.checkout.internal.dummygener.SavedCards
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.taplocalizationkit.LocalizationManager
@@ -63,13 +64,13 @@ class GoPayLoginHolder(
             false
         )
         view.goPayLoginView.chipsRecycler.adapter =
-            paymentsList?.let { CardTypeAdapter(it as ArrayList<Payment_methods>, onCardSelectedActionListener,false) }
+            paymentsList?.let { CardTypeAdapter(it as ArrayList<SavedCards>, onCardSelectedActionListener,false) }
         println("paymentList supported currency ${paymentsList?.get(0)?.chip}")
         view.goPayLoginView.groupAction.setOnClickListener {
             val animation = AnimationUtils.loadAnimation(this.view.context, R.anim.shake)
             view.goPayLoginView.chipsRecycler.startAnimation(animation)
          //   view.deleteImageView?.visibility = View.VISIBLE
-            baseLayopu?.displayGoPayLogin()
+            //baseLayopu?.displayGoPayLogin()
         }
         /**
          * set separator background
