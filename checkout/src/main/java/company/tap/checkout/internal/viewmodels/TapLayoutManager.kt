@@ -242,7 +242,7 @@ class TapLayoutManager() : ViewModel(),
         goPayLoginHolder.setDatafromAPI(dummyInitapiResponse.goPaySavedCards)
 
         paymentInputViewHolder.setDatafromAPI(dummyInitapiResponse.tapCardPhoneListDataSource)
-
+        println("dummy value"+dummyInitapiResponse.tapCardPhoneListDataSource)
 
         saveCardSwitchHolder.setDatafromAPI(
             dummyInitapiResponse.merchant.name,
