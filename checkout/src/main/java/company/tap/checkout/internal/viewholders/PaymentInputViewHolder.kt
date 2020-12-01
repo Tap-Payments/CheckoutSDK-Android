@@ -17,10 +17,12 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.annotation.IntRange
 import androidx.core.widget.doAfterTextChanged
+import company.tap.cardbusinesskit.testmodels.Payment_methods
 
 import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardinputwidget.widget.inline.InlineCardInput
 import company.tap.checkout.R
+import company.tap.checkout.internal.dummygener.TapCardPhoneListDataSource
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.onCardNFCCallListener
 import company.tap.checkout.internal.interfaces.onPaymentCardComplete
@@ -35,8 +37,6 @@ import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
 import company.tap.tapuilibrary.uikit.models.SectionTabItem
 import company.tap.tapuilibrary.uikit.views.TapMobilePaymentView
 import company.tap.tapuilibrary.uikit.views.TapSelectionTabLayout
-import kotlinx.android.synthetic.main.cardviewholder_layout.view.*
-import kotlinx.android.synthetic.main.cardviewholder_layout.view.tapSeparatorViewLinear
 import kotlinx.android.synthetic.main.payment_input_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 import java.net.URL
@@ -198,7 +198,7 @@ class PaymentInputViewHolder(private val context: Context , private val onPaymen
     //Setting on the cardInput with logics
     private fun initCardInput() {
         cardInputWidget.holderNameEnabled = false
-        // paymentInputContainer.removeView(cardInputWidget)
+         paymentInputContainer.removeView(cardInputWidget)
           paymentInputContainer.addView(cardInputWidget)
         cardInputWidget.clearFocus()
         //Textwatcher for cardNumber
@@ -300,7 +300,13 @@ class PaymentInputViewHolder(private val context: Context , private val onPaymen
                 println("bmp id " + bmp)
                 val drawable: Drawable = BitmapDrawable(context.resources, bmp)
 
-                drawable.let {
+
+                items.add(
+                    SectionTabItem(
+                        drawable, context.resources.getDrawable(R.drawable.ic_visa_black), CardBrand.visa
+                    )
+                )
+               /* drawable.let {
                     SectionTabItem(
                         drawable, context.resources.getDrawable(R.drawable.ic_visa_black),
                         CardBrand.visa
@@ -309,8 +315,9 @@ class PaymentInputViewHolder(private val context: Context , private val onPaymen
                     items.add(
                         it
                     )
-                }
+                }*/
             }
+            println("items value is"+items)
             isadded = true
 
         }
@@ -400,9 +407,16 @@ class PaymentInputViewHolder(private val context: Context , private val onPaymen
      * Sets data from API through LayoutManager
      * @param imageURLApi represents the images of payment methods.
      * */
-    fun setDatafromAPI(imageURLApi: String) {
-        imageURL = imageURLApi
-        initTabLayout()
+    fun setDatafromAPI(imageURLApi:  List<TapCardPhoneListDataSource>) {
+        println("imageURLApi size values are"+imageURLApi.size)
+        for (i in 0 until imageURLApi.size) {
+            imageURL = imageURLApi.get(i).icon
+            println("imageURL values are"+i)
+            initTabLayout()
+        }
+
+
+        println("imageURL values are"+imageURLApi)
     }
 
 

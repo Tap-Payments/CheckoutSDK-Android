@@ -315,6 +315,7 @@
                 "labelTextColor": "greyishBrown",
                 "selected": {
                     "shadow": {
+                        "backgroundColor" : "black",
                         "color" : "deepSkyBlue",
                         "radius" : 3,
                         "offsetWidth": 0,
@@ -323,6 +324,7 @@
                     }
                 },
                 "unSelected": {
+                    "backgroundColor" : "black",
                     "shadow": {
                         "color" : "brownGrey",
                         "radius" : 0,

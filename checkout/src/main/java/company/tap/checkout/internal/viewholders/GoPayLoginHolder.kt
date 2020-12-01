@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.cardbusinesskit.testmodels.Payment_methods
 import company.tap.checkout.R
+import company.tap.checkout.internal.dummygener.GoPaySavedCards
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.taplocalizationkit.LocalizationManager
@@ -39,7 +40,7 @@ class GoPayLoginHolder(
     override val type = SectionType.CARD
 
 
-    private var paymentsList: List<Payment_methods>? = null
+    private var paymentsList: List<GoPaySavedCards>? = null
 
 
     init {
@@ -63,7 +64,7 @@ class GoPayLoginHolder(
         )
         view.goPayLoginView.chipsRecycler.adapter =
             paymentsList?.let { CardTypeAdapter(it as ArrayList<Payment_methods>, onCardSelectedActionListener,false) }
-        println("paymentList supported currency ${paymentsList?.get(0)?.supported_currencies}")
+        println("paymentList supported currency ${paymentsList?.get(0)?.chip}")
         view.goPayLoginView.groupAction.setOnClickListener {
             val animation = AnimationUtils.loadAnimation(this.view.context, R.anim.shake)
             view.goPayLoginView.chipsRecycler.startAnimation(animation)
@@ -81,7 +82,7 @@ class GoPayLoginHolder(
      * Sets data from API through LayoutManager
      * @param paymentMethodsApi represents the list of payment methods available from API
      * */
-    fun setDatafromAPI(paymentMethodsApi: List<Payment_methods>) {
+    fun setDatafromAPI(paymentMethodsApi: List<GoPaySavedCards>) {
         paymentsList = paymentMethodsApi
         bindViewComponents()
     }

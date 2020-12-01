@@ -21,7 +21,7 @@
     "items":[
       {
         "amount":10,
-        "currency":"KWD",
+        "currency":"KD",
         "description":"test",
         "discount":{
           "type":"P",
@@ -35,7 +35,7 @@
     ],
     "shipping":{
       "amount":1,
-      "currency":"KWD",
+      "currency":"KD",
       "description":"test",
       "provider":"ARAMEX",
       "shipping_note":"",
@@ -134,6 +134,70 @@
       "supported_card_brands":[
         "VISA",
         "VISA_ELECTRON"
+      ],
+      "extra_fees":1.00,
+      "supported_currencies":[
+        "AED",
+        "BHD",
+        "EGP",
+        "EUR",
+        "GBP",
+        "KWD",
+        "OMR",
+        "QAR",
+        "SAR",
+        "USD"
+      ],
+      "order_by":2,
+      "asynchronous":false,
+      "threeDS":"U",
+      "supportedNetworks":{
+
+      },
+      "MerchantCapabilities":{
+
+      }
+    },
+    {
+      "id":"4",
+      "name":"MASTER",
+      "image":"https://img.icons8.com/color/48/000000/mastercard.png",
+      "payment_type":"card",
+      "supported_card_brands":[
+        "MASTER",
+        "MASTER"
+      ],
+      "extra_fees":1.00,
+      "supported_currencies":[
+        "AED",
+        "BHD",
+        "EGP",
+        "EUR",
+        "GBP",
+        "KWD",
+        "OMR",
+        "QAR",
+        "SAR",
+        "USD"
+      ],
+      "order_by":2,
+      "asynchronous":false,
+      "threeDS":"U",
+      "supportedNetworks":{
+
+      },
+      "MerchantCapabilities":{
+
+      }
+    },
+    {
+      "id":"4",
+      "name":"AMEX",
+      "image":"https://img.icons8.com/fluent/48/000000/amex.png",
+      "payment_type":"card",
+      "supported_card_brands":[
+        "AMEX",
+        "MASTER"
       ],
       "extra_fees":1.00,
       "supported_currencies":[

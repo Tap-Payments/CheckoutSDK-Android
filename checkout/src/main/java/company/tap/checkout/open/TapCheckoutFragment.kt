@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.LinearLayout
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
@@ -15,6 +14,7 @@ import com.google.gson.Gson
 import company.tap.cardbusinesskit.testmodels.DummyResp
 import company.tap.checkout.R
 import company.tap.checkout.internal.apiresponse.getJsonDataFromAsset
+import company.tap.checkout.internal.dummygener.JsonResponseDummy
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.viewmodels.TapLayoutManager
 import company.tap.checkout.open.controller.SessionManager
@@ -22,7 +22,6 @@ import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
-import kotlinx.android.synthetic.main.businessview_layout.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -34,7 +33,8 @@ private const val ARG_PARAM2 = "param2"
  * Use the [TapCheckoutFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
+class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface
+     {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -95,9 +95,9 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
 
 
     private fun getBusinessHeaderData() {
-        val jsonFileString = activity?.applicationContext?.let { getJsonDataFromAsset(it, "dummyapiresponse.json") }
+        val jsonFileString = activity?.applicationContext?.let { getJsonDataFromAsset(it, "dummyapiresponsedefault.json") }
         val gson = Gson()
-        val dummyInitApiResponse: DummyResp = gson.fromJson(jsonFileString, DummyResp::class.java)
+        val dummyInitApiResponse: JsonResponseDummy = gson.fromJson(jsonFileString, JsonResponseDummy::class.java)
         // Pass the api response data to LayoutManager
         layoutManager.getDatafromAPI(dummyInitApiResponse)
 

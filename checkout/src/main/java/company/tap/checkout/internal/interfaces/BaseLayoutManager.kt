@@ -1,6 +1,7 @@
 package company.tap.checkout.internal.interfaces
 
 import company.tap.cardbusinesskit.testmodels.DummyResp
+import company.tap.checkout.internal.dummygener.JsonResponseDummy
 import company.tap.checkout.internal.enums.SectionType
 
 /**
@@ -17,5 +18,5 @@ interface BaseLayoutManager {
     fun displayOTP(otpMobile:String)
     fun displayRedirect(url: String)
     fun displaySaveCardOptions()
-    fun getDatafromAPI(dummyResponse: DummyResp)
+    fun getDatafromAPI(dummyResponse: JsonResponseDummy)
 }

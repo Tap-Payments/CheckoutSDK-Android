@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.cardbusinesskit.testmodels.Payment_methods
 import company.tap.checkout.R
+import company.tap.checkout.internal.dummygener.SavedCards
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.taplocalizationkit.LocalizationManager
@@ -39,7 +40,7 @@ class CardViewHolder(
     override val type = SectionType.CARD
 
 
-    private var paymentsList: List<Payment_methods>? = null
+    private var paymentsList: List<SavedCards>? = null
 
 
     init {
@@ -87,7 +88,7 @@ class CardViewHolder(
      * Sets data from API through LayoutManager
      * @param paymentMethodsApi represents the list of payment methods available from API
      * */
-    fun setDatafromAPI(paymentMethodsApi: List<Payment_methods>) {
+    fun setDatafromAPI(paymentMethodsApi: List<SavedCards>) {
         paymentsList = paymentMethodsApi
         bindViewComponents()
     }

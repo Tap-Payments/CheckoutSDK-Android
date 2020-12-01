@@ -9,10 +9,10 @@ import android.widget.LinearLayout
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
 import androidx.transition.TransitionManager
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import company.tap.cardbusinesskit.testmodels.DummyResp
 import company.tap.cardbusinesskit.testmodels.Items
 import company.tap.checkout.R
+import company.tap.checkout.internal.dummygener.JsonResponseDummy
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
@@ -25,7 +25,6 @@ import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
 import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
 import company.tap.tapuilibrary.uikit.fragment.CurrencyViewFragment
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
-import kotlinx.android.synthetic.main.action_button_animation.view.*
 import kotlinx.android.synthetic.main.cardviewholder_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 
@@ -226,7 +225,7 @@ class TapLayoutManager() : ViewModel(),
 
     }
 
-    override fun getDatafromAPI(dummyInitapiResponse: DummyResp) {
+    override fun getDatafromAPI(dummyInitapiResponse: JsonResponseDummy) {
 
         println("dummy response value is ${dummyInitapiResponse}")
         businessViewHolder.setDatafromAPI(
@@ -239,15 +238,18 @@ class TapLayoutManager() : ViewModel(),
             dummyInitapiResponse.order.trx_currency,
             dummyInitapiResponse.order.items?.size.toString()
         )
-        cardViewHolder.setDatafromAPI(dummyInitapiResponse.payment_methods)
-        goPayLoginHolder.setDatafromAPI(dummyInitapiResponse.payment_methods)
-        paymentInputViewHolder.setDatafromAPI(dummyInitapiResponse.payment_methods.get(0).image)
+        cardViewHolder.setDatafromAPI(dummyInitapiResponse.savedCards)
+        goPayLoginHolder.setDatafromAPI(dummyInitapiResponse.goPaySavedCards)
+
+        paymentInputViewHolder.setDatafromAPI(dummyInitapiResponse.tapCardPhoneListDataSource)
+
+
         saveCardSwitchHolder.setDatafromAPI(
             dummyInitapiResponse.merchant.name,
             paymentInputViewHolder.selectedType
         )
-        supportedCurrecnyList = dummyInitapiResponse.payment_methods.get(0).supported_currencies
-        itemList = dummyInitapiResponse.order.items!!
+        supportedCurrecnyList = dummyInitapiResponse.currencies as ArrayList<String>
+        itemList = dummyInitapiResponse.order.items
     }
 
     private fun removeViews(vararg viewHolders: TapBaseViewHolder) {
