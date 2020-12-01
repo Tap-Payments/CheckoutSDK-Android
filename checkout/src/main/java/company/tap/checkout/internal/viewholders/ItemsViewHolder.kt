@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.add
 import company.tap.cardbusinesskit.testmodels.Items
 import company.tap.checkout.R
+import company.tap.checkout.internal.dummygener.Items1
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.tapuilibrary.uikit.fragment.CurrencyViewFragment
@@ -31,7 +32,7 @@ class ItemsViewHolder(context11: Context, private val baseLayoutManager: BaseLay
 
     var displayed: Boolean = true
     private lateinit var supportedCurrecnyList: ArrayList<String>
-    private lateinit var supportedItemList: List<Items1>
+    private lateinit var supportedItemList: List<Items>
 
 
     init {

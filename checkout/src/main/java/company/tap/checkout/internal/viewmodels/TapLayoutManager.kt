@@ -54,7 +54,7 @@ class TapLayoutManager : ViewModel(),
     private lateinit var goPayViewHolder: GoPayViewHolder
     private lateinit var otpViewHolder: OTPViewHolder
     private lateinit var supportedCurrecnyList: ArrayList<String>
-    private lateinit var itemList: List<Items1>
+    private lateinit var itemList: List<Items>
 
     fun initLayoutManager(
         context: Context,
@@ -248,7 +248,7 @@ class TapLayoutManager : ViewModel(),
             paymentInputViewHolder.selectedType
         )
         supportedCurrecnyList = dummyInitapiResponse.currencies as ArrayList<String>
-        itemList = dummyInitapiResponse.order1.items
+       // itemList = dummyInitapiResponse.order1.items
     }
 
     private fun removeViews(vararg viewHolders: TapBaseViewHolder) {
