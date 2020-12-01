@@ -7,21 +7,16 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import company.tap.cardbusinesskit.testmodels.Payment_methods
 import company.tap.checkout.R
-import company.tap.checkout.internal.dummygener.GoPaySavedCards
 import company.tap.checkout.internal.dummygener.SavedCards
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.adapters.CardTypeAdapter
-import company.tap.tapuilibrary.uikit.atoms.TapChipGroup
 import company.tap.tapuilibrary.uikit.interfaces.OnCardSelectedActionListener
-import kotlinx.android.synthetic.main.cardviewholder_layout.view.*
 import kotlinx.android.synthetic.main.gopayloginview_layout.view.*
 import kotlinx.android.synthetic.main.gopayloginview_layout.view.tapSeparatorViewLinear
-import kotlinx.android.synthetic.main.item_saved_card.view.*
 
 /**
  *
@@ -41,7 +36,7 @@ class GoPayLoginHolder(
     override val type = SectionType.CARD
 
 
-    private var paymentsList: List<GoPaySavedCards>? = null
+    private var paymentsList: List<SavedCards>? = null
 
 
     init {
@@ -65,7 +60,7 @@ class GoPayLoginHolder(
         )
         view.goPayLoginView.chipsRecycler.adapter =
             paymentsList?.let { CardTypeAdapter(it as ArrayList<SavedCards>, onCardSelectedActionListener,false) }
-        println("paymentList supported currency ${paymentsList?.get(0)?.chip}")
+        println("paymentList supported currency ${paymentsList?.get(0)?.chip1}")
         view.goPayLoginView.groupAction.setOnClickListener {
             val animation = AnimationUtils.loadAnimation(this.view.context, R.anim.shake)
             view.goPayLoginView.chipsRecycler.startAnimation(animation)
@@ -83,7 +78,7 @@ class GoPayLoginHolder(
      * Sets data from API through LayoutManager
      * @param paymentMethodsApi represents the list of payment methods available from API
      * */
-    fun setDatafromAPI(paymentMethodsApi: List<GoPaySavedCards>) {
+    fun setDatafromAPI(paymentMethodsApi: List<SavedCards>) {
         paymentsList = paymentMethodsApi
         bindViewComponents()
     }

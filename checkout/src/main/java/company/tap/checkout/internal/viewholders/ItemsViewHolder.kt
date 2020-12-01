@@ -31,7 +31,7 @@ class ItemsViewHolder(context11: Context, private val baseLayoutManager: BaseLay
 
     var displayed: Boolean = true
     private lateinit var supportedCurrecnyList: ArrayList<String>
-    private lateinit var supportedItemList: List<Items>
+    private lateinit var supportedItemList: List<Items1>
 
 
     init {

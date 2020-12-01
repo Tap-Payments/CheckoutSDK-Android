@@ -7,8 +7,8 @@ import com.google.gson.annotations.SerializedName
 
 data class JsonResponseDummy (
 
-	@SerializedName("merchant") val merchant : Merchant,
-	@SerializedName("order") val order : Order,
+	@SerializedName("merchant") val merchant1 : Merchant1,
+	@SerializedName("order") val order1 : Order1,
 	@SerializedName("currencies") val currencies : List<String>,
 	@SerializedName("goPayCountries") val goPayCountries : List<GoPayCountries>,
 	@SerializedName("goPaySavedCards") val goPaySavedCards : List<GoPaySavedCards>,

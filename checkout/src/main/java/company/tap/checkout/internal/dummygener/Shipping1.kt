@@ -2,7 +2,7 @@ package company.tap.checkout.internal.dummygener
 import com.google.gson.annotations.SerializedName
 
 
-data class Shipping (
+data class Shipping1 (
 
 	@SerializedName("amount") val amount : Int,
 	@SerializedName("currency") val currency : String,

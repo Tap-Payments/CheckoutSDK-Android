@@ -9,9 +9,9 @@ import android.widget.LinearLayout
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
 import androidx.transition.TransitionManager
-import company.tap.cardbusinesskit.testmodels.DummyResp
 import company.tap.cardbusinesskit.testmodels.Items
 import company.tap.checkout.R
+import company.tap.checkout.internal.dummygener.Items1
 import company.tap.checkout.internal.dummygener.JsonResponseDummy
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayoutManager
@@ -35,7 +35,7 @@ import kotlinx.android.synthetic.main.switch_layout.view.*
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class TapLayoutManager() : ViewModel(),
+class TapLayoutManager : ViewModel(),
     BaseLayoutManager, OnCardSelectedActionListener, onPaymentCardComplete, onCardNFCCallListener,
     company.tap.tapuilibrary.uikit.interfaces.OnCardSelectedActionListener {
 
@@ -54,7 +54,7 @@ class TapLayoutManager() : ViewModel(),
     private lateinit var goPayViewHolder: GoPayViewHolder
     private lateinit var otpViewHolder: OTPViewHolder
     private lateinit var supportedCurrecnyList: ArrayList<String>
-    private lateinit var itemList: List<Items>
+    private lateinit var itemList: List<Items1>
 
     fun initLayoutManager(
         context: Context,
@@ -100,7 +100,8 @@ class TapLayoutManager() : ViewModel(),
 
     private fun initCardsGroup() {
         cardViewHolder.view.setOnClickListener {
-            displayGoPayLogin()
+           // displayGoPayLogin()
+           println("init caleed ")
         }
     }
 
@@ -121,9 +122,7 @@ class TapLayoutManager() : ViewModel(),
 
     }
 
-    private fun NMNM() {
-        print("A7la nmnm dah kda kda")
-    }
+
 
     fun setBottomSheetLayout(bottomSheetLayout: FrameLayout) {
         this.bottomSheetLayout = bottomSheetLayout
@@ -229,27 +228,27 @@ class TapLayoutManager() : ViewModel(),
 
         println("dummy response value is ${dummyInitapiResponse}")
         businessViewHolder.setDatafromAPI(
-            dummyInitapiResponse.merchant.logo,
-            dummyInitapiResponse.merchant.name
+            dummyInitapiResponse.merchant1.logo,
+            dummyInitapiResponse.merchant1.name
         )
         amountViewHolder.setDatafromAPI(
-            dummyInitapiResponse.order.original_amount.toString(),
-            dummyInitapiResponse.order.trx_currency,
-            dummyInitapiResponse.order.trx_currency,
-            dummyInitapiResponse.order.items?.size.toString()
+            dummyInitapiResponse.order1.original_amount.toString(),
+            dummyInitapiResponse.order1.trx_currency,
+            dummyInitapiResponse.order1.trx_currency,
+            dummyInitapiResponse.order1.items?.size.toString()
         )
         cardViewHolder.setDatafromAPI(dummyInitapiResponse.savedCards)
-        goPayLoginHolder.setDatafromAPI(dummyInitapiResponse.goPaySavedCards)
-
+        goPayLoginHolder.setDatafromAPI(dummyInitapiResponse.savedCards)
+        println("dummy values"+dummyInitapiResponse.tapCardPhoneListDataSource)
         paymentInputViewHolder.setDatafromAPI(dummyInitapiResponse.tapCardPhoneListDataSource)
-        println("dummy value"+dummyInitapiResponse.tapCardPhoneListDataSource)
+
 
         saveCardSwitchHolder.setDatafromAPI(
-            dummyInitapiResponse.merchant.name,
+            dummyInitapiResponse.merchant1.name,
             paymentInputViewHolder.selectedType
         )
         supportedCurrecnyList = dummyInitapiResponse.currencies as ArrayList<String>
-        itemList = dummyInitapiResponse.order.items
+        itemList = dummyInitapiResponse.order1.items
     }
 
     private fun removeViews(vararg viewHolders: TapBaseViewHolder) {
