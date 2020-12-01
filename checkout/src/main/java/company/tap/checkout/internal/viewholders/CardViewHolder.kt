@@ -72,7 +72,7 @@ class CardViewHolder(
             val animation = AnimationUtils.loadAnimation(this.view.context, R.anim.shake)
             view.mainChipgroup.chipsRecycler.startAnimation(animation)
             view.deleteImageView2?.visibility = View.VISIBLE
-            baseLayopu?.displayGoPayLogin()
+           // baseLayopu?.displayGoPayLogin()
         }
 
         /**
