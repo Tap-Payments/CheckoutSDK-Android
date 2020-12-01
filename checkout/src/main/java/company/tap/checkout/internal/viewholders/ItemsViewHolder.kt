@@ -32,7 +32,7 @@ class ItemsViewHolder(context11: Context, private val baseLayoutManager: BaseLay
 
     var displayed: Boolean = true
     private lateinit var supportedCurrecnyList: ArrayList<String>
-    private lateinit var supportedItemList: List<Items>
+    private lateinit var supportedItemList: List<Items1>
 
 
     init {
@@ -51,7 +51,7 @@ class ItemsViewHolder(context11: Context, private val baseLayoutManager: BaseLay
      * @param supportedCurrencyApi represents the supported currency for the Merchant.
      * @param supportItemListApi represents the supported currency for the Merchant.
      * */
-    fun setDatafromAPI(supportedCurrencyApi: ArrayList<String>,supportItemListApi :List<Items>,fragmentManager: FragmentManager) {
+    fun setDatafromAPI(supportedCurrencyApi: ArrayList<String>,supportItemListApi :List<Items1>,fragmentManager: FragmentManager) {
         supportedCurrecnyList = supportedCurrencyApi
         supportedItemList = supportItemListApi
        // bindViewComponents()

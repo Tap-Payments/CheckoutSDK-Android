@@ -3,16 +3,20 @@ package company.tap.checkout.internal.viewmodels
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.drawable.ShapeDrawable
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionManager
 import company.tap.cardbusinesskit.testmodels.Items
 import company.tap.checkout.R
 import company.tap.checkout.internal.dummygener.Items1
 import company.tap.checkout.internal.dummygener.JsonResponseDummy
+import company.tap.checkout.internal.dummygener.SavedCards
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
@@ -21,6 +25,7 @@ import company.tap.checkout.internal.interfaces.onPaymentCardComplete
 import company.tap.checkout.internal.viewholders.*
 import company.tap.checkout.open.TapCheckoutFragment
 import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.adapters.CardTypeAdapter
 import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
 import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
 import company.tap.tapuilibrary.uikit.fragment.CurrencyViewFragment
@@ -54,7 +59,8 @@ class TapLayoutManager : ViewModel(),
     private lateinit var goPayViewHolder: GoPayViewHolder
     private lateinit var otpViewHolder: OTPViewHolder
     private lateinit var supportedCurrecnyList: ArrayList<String>
-    private lateinit var itemList: List<Items>
+    private lateinit var itemList: List<Items1>
+    private lateinit var savedcardList: List<SavedCards>
 
     fun initLayoutManager(
         context: Context,
@@ -119,7 +125,36 @@ class TapLayoutManager : ViewModel(),
         saveCardSwitchHolder.view.cardSwitch.payButton.visibility = View.VISIBLE
         saveCardSwitchHolder.view.mainSwitch.mainSwitchLinear.setBackgroundColor(Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor")))
 
+        /**
+         * Setting divider for items
+         */
+        val divider = DividerItemDecoration(
+            context,
+            DividerItemDecoration.HORIZONTAL
+        )
+        divider.setDrawable(ShapeDrawable().apply {
+            intrinsicWidth = 10
+            paint.color = Color.TRANSPARENT
+        }) // note: currently (support version 28.0.0), we can not use tranparent color here, if we use transparent, we still see a small divider line. So if we want to display transparent space, we can set color = background color or we can create a custom ItemDecoration instead of DividerItemDecoration.
+        cardViewHolder.view.mainChipgroup.chipsRecycler.addItemDecoration(divider)
 
+
+
+        cardViewHolder.view.mainChipgroup.chipsRecycler.adapter = CardTypeAdapter(savedcardList as ArrayList<SavedCards>, this, false)
+
+        cardViewHolder.view.mainChipgroup.groupAction?.visibility = View.VISIBLE
+
+        cardViewHolder.view.mainChipgroup.groupAction?.setOnClickListener {
+            if (cardViewHolder.view.mainChipgroup.groupAction?.text == "Close"){
+                cardViewHolder.view.mainChipgroup.chipsRecycler.adapter = CardTypeAdapter(savedcardList as ArrayList<SavedCards>, this, false)
+                cardViewHolder.view.mainChipgroup.groupAction?.text = "Edit"
+
+            }else{
+                cardViewHolder.view.mainChipgroup.chipsRecycler.adapter = CardTypeAdapter(savedcardList as ArrayList<SavedCards>, this, true)
+                cardViewHolder.view.mainChipgroup.groupAction?.text = "Close"
+            }
+
+        }
     }
 
 
@@ -248,7 +283,8 @@ class TapLayoutManager : ViewModel(),
             paymentInputViewHolder.selectedType
         )
         supportedCurrecnyList = dummyInitapiResponse.currencies as ArrayList<String>
-       // itemList = dummyInitapiResponse.order1.items
+        itemList = dummyInitapiResponse.order1.items
+        savedcardList = dummyInitapiResponse.savedCards
     }
 
     private fun removeViews(vararg viewHolders: TapBaseViewHolder) {
@@ -281,6 +317,10 @@ class TapLayoutManager : ViewModel(),
 
     override fun onDeleteIconClicked(stopAnimation: Boolean, itemId: Int) {
         println("onDeleteIconClicked is onDeleteIconClicked")
+        if (stopAnimation){
+            stopShakingCards(cardViewHolder.view.mainChipgroup.chipsRecycler)
+            cardViewHolder.view.mainChipgroup.groupAction?.text = "Edit"
+        }else cardViewHolder.view.mainChipgroup.groupAction?.text = "Close"
     }
 
     override fun onPaycardSwitchAction(isCompleted: Boolean) {
@@ -416,6 +456,9 @@ class TapLayoutManager : ViewModel(),
             }
         }
 
+    }
+    private fun stopShakingCards(chipsView: RecyclerView) {
+        chipsView.adapter = CardTypeAdapter(savedcardList as ArrayList<SavedCards>, this, false)
     }
 
 }

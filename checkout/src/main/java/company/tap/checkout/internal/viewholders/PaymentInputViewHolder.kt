@@ -1,6 +1,7 @@
 package company.tap.checkout.internal.viewholders
 
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -80,7 +81,7 @@ class PaymentInputViewHolder(private val context: Context , private val onPaymen
     private var imageURL: String? = null
     private var isadded: Boolean = false
     private lateinit var paymentType: String
-
+    private var itemsTelecom = ArrayList<SectionTabItem>()
     init {
         tabLayout = view.findViewById(R.id.sections_tablayout)
         paymentInputContainer = view.findViewById(R.id.payment_input_layout)
@@ -125,8 +126,8 @@ class PaymentInputViewHolder(private val context: Context , private val onPaymen
 
     private fun initTabLayout() {
 
-        tabLayout.addSection(getCardList())
-        tabLayout.addSection(getMobileList())
+     //   tabLayout.addSection(getCardList())
+       // tabLayout.addSection(getMobileList())
         tabLayout.setTabLayoutInterface(this)
     }
 
@@ -292,23 +293,24 @@ class PaymentInputViewHolder(private val context: Context , private val onPaymen
     }
 
     // Function to get the card names and images or logos from the API
-    private fun getCardList(): ArrayList<SectionTabItem> {
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun getCardList(imageIcon:String?): ArrayList<SectionTabItem> {
         val items = ArrayList<SectionTabItem>()
-        if (imageURL != null) {
-            val url = URL(imageURL)
+        if (imageIcon != null) {
+            val url = URL(imageIcon)
             if (url != null) {
                 val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
                 println("bmp id " + bmp)
                 val drawable: Drawable = BitmapDrawable(context.resources, bmp)
                 println("paymentType values are"+paymentType)
-if(paymentType.equals("card")){
-                items.add(
+         //   if(paymentType.equals("card")){
+               /* items.add(
                     SectionTabItem(
                         drawable, context.resources.getDrawable(R.drawable.ic_visa_black), CardBrand.visa
                     )
-                )
-}
-               /* drawable.let {
+                )*/
+//}
+                drawable.let {
                     SectionTabItem(
                         drawable, context.resources.getDrawable(R.drawable.ic_visa_black),
                         CardBrand.visa
@@ -317,9 +319,9 @@ if(paymentType.equals("card")){
                     items.add(
                         it
                     )
-                }*/
+                }
             }
-            println("items value is"+items)
+            println("itemscard value is"+items)
             isadded = true
 
         }
@@ -336,12 +338,12 @@ if(paymentType.equals("card")){
             if (url != null) {
                 val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
                 println("bmp id " + bmp)
-                val drawable: Drawable = BitmapDrawable(context.resources, bmp)
+                val drawableTelecom: Drawable = BitmapDrawable(context.resources, bmp)
                 println("paymentType values are telecom "+paymentType)
                 if(paymentType.equals("telecom")){
                     items1.add(
                         SectionTabItem(
-                            drawable, context.resources.getDrawable(R.drawable.zain_dark), CardBrand.zain
+                            drawableTelecom, context.resources.getDrawable(R.drawable.zain_dark), CardBrand.zain
                         )
                     )
                 }
@@ -430,14 +432,16 @@ if(paymentType.equals("card")){
         println("imageURLApi1 size values are"+imageURLApi)
         for (i in 0 until imageURLApi.size) {
             imageURL = imageURLApi.get(i).icon
-            println("imageURL2 values are"+i)
-            println("imageURLApi2 size values are"+imageURLApi.get(i).paymentType)
+
+        //    println("imageURLApi2 size values are"+imageURLApi.get(i).paymentType)
             paymentType = imageURLApi.get(i).paymentType
-            initTabLayout()
+
+            tabLayout.addSection(getCardList(imageURL))
+
+
         }
-
-
-        println("imageURL2 values are"+imageURLApi)
+        initTabLayout()
+      //  println("imageURL2 values are"+imageURLApi)
     }
 
 

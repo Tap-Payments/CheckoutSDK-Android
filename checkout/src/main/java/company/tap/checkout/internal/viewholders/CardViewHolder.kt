@@ -68,13 +68,7 @@ class CardViewHolder(
         view.mainChipgroup.chipsRecycler.adapter =
             paymentsList?.let { CardTypeAdapter(it as ArrayList<SavedCards>, onCardSelectedActionListener,false) }
         println("paymentList supported currency ${paymentsList}")
-        view.mainChipgroup.groupAction.setOnClickListener {
-            val animation = AnimationUtils.loadAnimation(this.view.context, R.anim.shake)
-            view.mainChipgroup.chipsRecycler.startAnimation(animation)
-            view.deleteImageView2?.visibility = View.VISIBLE
-           // baseLayopu?.displayGoPayLogin()
-            println("displayGoPayLogin stopped ")
-        }
+
 
         /**
          * set separator background

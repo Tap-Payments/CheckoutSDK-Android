@@ -61,12 +61,12 @@ class GoPayLoginHolder(
         view.goPayLoginView.chipsRecycler.adapter =
             paymentsList?.let { CardTypeAdapter(it as ArrayList<SavedCards>, onCardSelectedActionListener,false) }
         println("paymentList supported currency ${paymentsList?.get(0)?.chip1}")
-        view.goPayLoginView.groupAction.setOnClickListener {
+       /* view.goPayLoginView.groupAction.setOnClickListener {
             val animation = AnimationUtils.loadAnimation(this.view.context, R.anim.shake)
             view.goPayLoginView.chipsRecycler.startAnimation(animation)
          //   view.deleteImageView?.visibility = View.VISIBLE
             //baseLayopu?.displayGoPayLogin()
-        }
+        }*/
         /**
          * set separator background
          */
