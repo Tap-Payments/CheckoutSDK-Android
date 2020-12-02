@@ -208,7 +208,7 @@ class TapLayoutManager : ViewModel(),
                 saveCardSwitchHolder
             )
         //   itemsViewHolder.setDatafromAPI(supportedCurrecnyList,itemList,fragmentManager)
-          if (supportedCurrecnyList.size != 0) {
+         /* if (supportedCurrecnyList.size != 0) {
 
               transaction.add(
                     R.id.sdkContainer,
@@ -219,17 +219,17 @@ class TapLayoutManager : ViewModel(),
              //  addViews(itemsViewHolder)
               itemsViewHolder.displayed = false
 
-          }
+          }*/
 
         } else {
             removeViews(businessViewHolder,amountViewHolder,itemsViewHolder)
 
 
-            supportedCurrecnyList.clear()
-            manager.beginTransaction().replace(R.id.sdkContainer, TapCheckoutFragment()).commit()
+          //  supportedCurrecnyList.clear()
+          //  manager.beginTransaction().replace(R.id.sdkContainer, TapCheckoutFragment()).commit()
 
-            transaction.addToBackStack(null)
-            transaction.commit()
+           // transaction.addToBackStack(null)
+          //  transaction.commit()
 
 
         }
@@ -265,12 +265,12 @@ class TapLayoutManager : ViewModel(),
             dummyInitapiResponse1.merchant1.logo,
             dummyInitapiResponse1.merchant1.name
         )
-        amountViewHolder.setDatafromAPI(
+        /*amountViewHolder.setDatafromAPI(
             dummyInitapiResponse1.order1.original_amount.toString(),
             dummyInitapiResponse1.order1.trx_currency,
             dummyInitapiResponse1.order1.trx_currency,
             dummyInitapiResponse1.order1.items.size.toString()
-        )
+        )*/
         cardViewHolder.setDatafromAPI(dummyInitapiResponse1.savedCards)
         goPayLoginHolder.setDatafromAPI(dummyInitapiResponse1.savedCards)
         println("dummy values"+dummyInitapiResponse1.tapCardPhoneListDataSource)
@@ -459,6 +459,7 @@ class TapLayoutManager : ViewModel(),
     private fun stopShakingCards(chipsView: RecyclerView) {
         chipsView.adapter = CardTypeAdapter(savedcardList as ArrayList<SavedCards>, this, false)
     }
+
 
 }
 
