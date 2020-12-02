@@ -119,7 +119,7 @@ open class SDKSession : APIRequestCallback {
              response for Payment options
              */
 
-        var requestBody = InitOptionsRequest("charge", true, getCustomer(), getOrder())
+        val requestBody = InitOptionsRequest("charge", true, getCustomer(), getOrder())
         println("requests body" + requestBody)
 
 

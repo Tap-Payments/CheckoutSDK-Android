@@ -71,7 +71,7 @@ class TapLayoutManager : ViewModel(),
         this.sdkLayout = sdkLayout
         businessViewHolder = BusinessViewHolder(context)
         amountViewHolder = AmountViewHolder(context)
-        cardViewHolder = CardViewHolder(context, this, this)
+        cardViewHolder = CardViewHolder(context, this)
         goPayLoginHolder = GoPayLoginHolder(context, this, this)
         paymentInputViewHolder = PaymentInputViewHolder(context, this, this)
         saveCardSwitchHolder = SwitchViewHolder(context)

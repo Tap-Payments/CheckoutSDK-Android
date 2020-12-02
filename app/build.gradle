@@ -48,6 +48,6 @@ dependencies {
     api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.156'
     implementation 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.2'
     implementation 'company.tap:PayCards-Tap-Android:0.1.5.3'
-    implementation 'com.google.firebase:firebase-analytics:18.0.0'
+    implementation 'com.google.firebase:firebase-analytics:17.5.0'
 
 }

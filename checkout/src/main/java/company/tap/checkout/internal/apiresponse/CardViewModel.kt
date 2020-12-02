@@ -32,11 +32,11 @@ class CardViewModel : ViewModel() {
         repository.getInitData()
     }
 
-    fun processEvent(event: CardViewEvent) {
+   /* fun processEvent(event: CardViewEvent) {
         when (event) {
             CardViewEvent.InitEvent -> getInitData()
         }
-    }
+    }*/
 
     override fun onCleared() {
         super.onCleared()

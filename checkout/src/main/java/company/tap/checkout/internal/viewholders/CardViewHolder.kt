@@ -4,22 +4,16 @@ import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
-import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import company.tap.cardbusinesskit.testmodels.Payment_methods
 import company.tap.checkout.R
 import company.tap.checkout.internal.dummygener.SavedCards
 import company.tap.checkout.internal.enums.SectionType
-import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.adapters.CardTypeAdapter
-import company.tap.tapuilibrary.uikit.atoms.TapChipGroup
 import company.tap.tapuilibrary.uikit.interfaces.OnCardSelectedActionListener
-import kotlinx.android.synthetic.main.businessview_layout.view.*
 import kotlinx.android.synthetic.main.cardviewholder_layout.view.*
-import kotlinx.android.synthetic.main.item_saved_card.view.*
 
 /**
  *
@@ -29,8 +23,7 @@ import kotlinx.android.synthetic.main.item_saved_card.view.*
  */
 class CardViewHolder(
     private val context: Context,
-    private val onCardSelectedActionListener: OnCardSelectedActionListener,
-    private val baseLayopu: BaseLayoutManager?=null
+    private val onCardSelectedActionListener: OnCardSelectedActionListener
 ) : TapBaseViewHolder {
 
   //  override val view = TapChipGroup(context, null)

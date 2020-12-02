@@ -265,7 +265,7 @@ println("sdsadad")
 
     // Logic to show the switches when card details are valid
     private fun cardBrandDetection(cardTyped: String) {
-        if (cardTyped.isNullOrEmpty())
+        if (cardTyped.isEmpty())
             tabLayout.resetBehaviour()
         val card = CardValidator.validate(cardTyped.toString())
         if (card.cardBrand != null) {
