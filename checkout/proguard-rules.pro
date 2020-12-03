@@ -19,3 +19,20 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-keep class company.tap.checkout** { *; }
+-keep public interface company.tap.checkout.internal.interfaces.BaseLayoutManager {*;}
+-keep public interface company.tap.checkout.internal.viewmodels.TapLayoutViewModel {*;}
+-dontwarn okhttp3.**
+-dontwarn okhttp2.**
+-dontwarn okio.**
+-dontwarn javax.annotation.**
+-dontwarn org.conscrypt.**
+-keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
+-keepnames class company.tap.tapuilibrary**{*;}
+#-dontobfuscate
+-optimizations !code/allocation/variable
+# GSON.
+-keepnames enum company.tap.checkout** {*;}
+-keepnames interface company.tap.checkout** {*;}
+
+-keepclassmembers enum * { *; }

@@ -6,7 +6,6 @@ import androidx.fragment.app.FragmentManager
 import com.google.gson.JsonElement
 import company.tap.cardbusinesskit.testmodels.*
 import company.tap.checkout.internal.apiresponse.testmodels.InitOptionsRequest
-import company.tap.checkout.open.TapCheckoutFragment
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.tapnetworkkit.connection.NetworkApp
 import company.tap.tapnetworkkit.controller.NetworkController
@@ -138,9 +137,9 @@ open class SDKSession : APIRequestCallback {
             this,
             11
         )
-        TapCheckoutFragment().apply {
+      /*  TapCheckoutFragment().apply {
             show(supportFragmentManager, tag)
-        }
+        }*/
         // start session
         SessionManager.setActiveSession(true)
 

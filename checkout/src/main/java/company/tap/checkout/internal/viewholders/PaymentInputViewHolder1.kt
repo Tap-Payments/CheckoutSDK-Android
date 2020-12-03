@@ -50,7 +50,7 @@ import java.net.URL
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class PaymentInputViewHolder(private val context: Context , private val onPaymentCardComplete: onPaymentCardComplete , private val onCardNFCCallListener: onCardNFCCallListener) : TapBaseViewHolder,
+class PaymentInputViewHolder1(private val context: Context, private val onPaymentCardComplete: onPaymentCardComplete, private val onCardNFCCallListener: onCardNFCCallListener) : TapBaseViewHolder,
     TapSelectionTabLayoutInterface, CardInputListener {
 
     override val view: View =
@@ -82,6 +82,8 @@ class PaymentInputViewHolder(private val context: Context , private val onPaymen
     private var isadded: Boolean = false
     private lateinit var paymentType: String
     private var itemsTelecom = ArrayList<SectionTabItem>()
+    val itemsMobileList = ArrayList<SectionTabItem>()
+    val itemsCardList = ArrayList<SectionTabItem>()
     init {
         tabLayout = view.findViewById(R.id.sections_tablayout)
         paymentInputContainer = view.findViewById(R.id.payment_input_layout)
@@ -125,10 +127,10 @@ class PaymentInputViewHolder(private val context: Context , private val onPaymen
     }
 
     private fun initTabLayout() {
-println("sdsadad")
+        println("sdsadad")
         tabLayout.addSection(getCardList(imageURL))
-     //   tabLayout.addSection(getCardList())
-       // tabLayout.addSection(getMobileList())
+        //   tabLayout.addSection(getCardList())
+        tabLayout.addSection(getMobileList(imageURL))
         tabLayout.setTabLayoutInterface(this)
     }
 
@@ -157,9 +159,9 @@ println("sdsadad")
                 cardScannerBtn?.visibility = View.INVISIBLE
 
             }
-            switchViewHolder.view.cardviewSwitch.visibility= View.INVISIBLE
-            switchViewHolder.view.mainSwitch.visibility= View.GONE
-            switchViewHolder.view.cardSwitch.visibility= View.GONE
+            switchViewHolder.view.cardviewSwitch.visibility = View.INVISIBLE
+            switchViewHolder.view.mainSwitch.visibility = View.GONE
+            switchViewHolder.view.cardSwitch.visibility = View.GONE
             clearText.visibility = View.GONE
 
         }
@@ -170,7 +172,7 @@ println("sdsadad")
         }
         cardScannerBtn?.setOnClickListener {
 
-         tabLayout.visibility = View.GONE
+            tabLayout.visibility = View.GONE
             onCardNFCCallListener.onClickCardScanner()
         }
     }
@@ -201,8 +203,8 @@ println("sdsadad")
     //Setting on the cardInput with logics
     private fun initCardInput() {
         cardInputWidget.holderNameEnabled = false
-         paymentInputContainer.removeView(cardInputWidget)
-          paymentInputContainer.addView(cardInputWidget)
+        paymentInputContainer.removeView(cardInputWidget)
+        paymentInputContainer.addView(cardInputWidget)
         cardInputWidget.clearFocus()
         //Textwatcher for cardNumber
         cardInputWidget.setCardNumberTextWatcher(object : TextWatcher {
@@ -212,8 +214,8 @@ println("sdsadad")
                     shouldShowScannerOptions = it.isEmpty()
                     controlScannerOptions()
                     cardBrandDetection(s.toString())
-                    if (s.trim().length == 19 ) {
-                       // onPaymentCardComplete.onPaycardAction(true)
+                    if (s.trim().length == 19) {
+                        // onPaymentCardComplete.onPaycardAction(true)
                     }
                 }
             }
@@ -229,13 +231,13 @@ println("sdsadad")
         })
 
         // Textwatcher for CVV
-        cardInputWidget.setCvcNumberTextWatcher(object :TextWatcher{
+        cardInputWidget.setCvcNumberTextWatcher(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s?.trim()?.length == 3 || s?.trim()?.length == 4 ) {
+                if (s?.trim()?.length == 3 || s?.trim()?.length == 4) {
                     onPaymentCardComplete.onPaycardSwitchAction(true)
                 }
             }
@@ -246,7 +248,7 @@ println("sdsadad")
 
         })
         //Textwatcher for Expiry date
-        cardInputWidget.setExpiryDateTextWatcher(object :TextWatcher{
+        cardInputWidget.setExpiryDateTextWatcher(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
             }
@@ -278,7 +280,7 @@ println("sdsadad")
             nfcButton?.visibility = View.GONE
             cardScannerBtn?.visibility = View.GONE
 
-    }
+        }
 
     }
 
@@ -295,7 +297,7 @@ println("sdsadad")
 
     // Function to get the card names and images or logos from the API
     @SuppressLint("UseCompatLoadingForDrawables")
-    private fun getCardList(imageIcon:String?): ArrayList<SectionTabItem> {
+    private fun getCardList(imageIcon: String?): ArrayList<SectionTabItem> {
         val items = ArrayList<SectionTabItem>()
         if (imageIcon != null) {
             val url = URL(imageIcon)
@@ -303,9 +305,9 @@ println("sdsadad")
                 val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
                 println("bmp card  id " + bmp)
                 val drawable: Drawable = BitmapDrawable(context.resources, bmp)
-                println("paymentType  card values are"+paymentType)
-         //   if(paymentType.equals("card")){
-               /* items.add(
+                println("paymentType  card values are" + paymentType)
+                //   if(paymentType.equals("card")){
+                /* items.add(
                     SectionTabItem(
                         drawable, context.resources.getDrawable(R.drawable.ic_visa_black), CardBrand.visa
                     )
@@ -322,7 +324,7 @@ println("sdsadad")
                     )
                 }
             }
-            println("itemscard value is"+items)
+            println("itemscard value is" + items)
             isadded = true
 
         }
@@ -331,26 +333,28 @@ println("sdsadad")
     }
 
     // Function to get the mobile names and images or logos from the API .
-    private fun getMobileList(): ArrayList<SectionTabItem> {
-        val items1 = ArrayList<SectionTabItem>()
+    private fun getMobileList(imageIcon: String?): ArrayList<SectionTabItem> {
+        val itemsMobile = ArrayList<SectionTabItem>()
 
-        if (imageURL != null) {
-            val url = URL(imageURL)
+        if (imageIcon != null) {
+            val url = URL(imageIcon)
             if (url != null) {
                 val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-                println("bmp id " + bmp)
+                println("bmp Mobile id " + bmp)
                 val drawableTelecom: Drawable = BitmapDrawable(context.resources, bmp)
-                println("paymentType values are telecom "+paymentType)
-                if(paymentType.equals("telecom")){
-                    items1.add(
+                println("paymentType values are telecom " + paymentType)
+                if (paymentType.equals("telecom")) {
+                    itemsMobile.add(
                         SectionTabItem(
-                            drawableTelecom, context.resources.getDrawable(R.drawable.zain_dark), CardBrand.zain
+                            drawableTelecom,
+                            context.resources.getDrawable(R.drawable.zain_dark),
+                            CardBrand.zain
                         )
                     )
                 }
-                }
             }
-       /* items1.add(
+        }
+        /* items1.add(
             SectionTabItem(
                 context.resources.getDrawable(
                     R.drawable.zain_gray
@@ -364,7 +368,7 @@ println("sdsadad")
                 ), context.resources.getDrawable(R.drawable.ooredoo_gray), CardBrand.ooredoo
             )
         )*/
-        return items1
+        return itemsMobile
     }
 
     override fun onTabSelected(position: Int?) {
@@ -429,19 +433,48 @@ println("sdsadad")
      * Sets data from API through LayoutManager
      * @param imageURLApi represents the images of payment methods.
      * */
-    fun setDatafromAPI(imageURLApi:  List<TapCardPhoneListDataSource>) {
-        println("imageURLApi1 size values are"+imageURLApi)
+    fun setDatafromAPI(imageURLApi: List<TapCardPhoneListDataSource>) {
+
+        println("iamage val  are" + imageURLApi)
         for (i in 0 until imageURLApi.size) {
             imageURL = imageURLApi.get(i).icon
             paymentType = imageURLApi.get(i).paymentType
+            println("paymentType in loop"+paymentType)
+            if (imageURL != null) {
+                val url = URL(imageURL)
+                if (url != null) {
+                    val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
+                    val drawableTelecom: Drawable = BitmapDrawable(context.resources, bmp)
+                    if (paymentType == "telecom") {
+                        itemsMobileList.add(
+                            SectionTabItem(
+                                drawableTelecom,
+                                context.resources.getDrawable(R.drawable.zain_dark),
+                                CardBrand.zain
+                            )
+                        )
+                        println("itemsMobileList in loop"+itemsMobileList.size)
+                        tabLayout.addSection(itemsMobileList)
+                    } else {
 
-            initTabLayout()
+                        itemsCardList.add(
+                            SectionTabItem(
+                                drawableTelecom,
+                                context.resources.getDrawable(R.drawable.visa_gray),
+                                CardBrand.visa
+                            )
+                        )
+                        println("itemsCardList in loop"+itemsCardList.size)
+                        tabLayout.addSection(itemsCardList)
+                    }
 
+                }
+            }
+
+            tabLayout.setTabLayoutInterface(this)
         }
 
 
     }
-
-
 }
 

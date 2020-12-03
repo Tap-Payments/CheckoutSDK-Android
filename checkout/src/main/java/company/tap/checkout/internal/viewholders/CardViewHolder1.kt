@@ -21,18 +21,18 @@ import kotlinx.android.synthetic.main.cardviewholder_layout.view.*
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class CardViewHolder(
+class CardViewHolder1(
     private val context: Context,
     ) : TapBaseViewHolder {
     private val onCardSelectedActionListener: OnCardSelectedActionListener?=null
-  //  override val view = TapChipGroup(context, null)
+
   override val view: View = LayoutInflater.from(context).inflate(R.layout.cardviewholder_layout, null)
 
 
     override val type = SectionType.CARD
 
 
-    private var paymentsList: List<SavedCards>? = null
+    private var savedCardsList: List<SavedCards>? = null
 
 
     init {
@@ -58,8 +58,8 @@ class CardViewHolder(
             false
         )
         view.mainChipgroup.chipsRecycler.adapter =
-            paymentsList?.let { CardTypeAdapter(it as ArrayList<SavedCards>, onCardSelectedActionListener,false) }
-        println("paymentList supported currency ${paymentsList}")
+            savedCardsList?.let { CardTypeAdapter(it as ArrayList<SavedCards>, onCardSelectedActionListener,false) }
+        println("savedCardsList in cardviewholder ${savedCardsList}")
 
 
         /**
@@ -73,10 +73,10 @@ class CardViewHolder(
 
     /**
      * Sets data from API through LayoutManager
-     * @param paymentMethodsApi represents the list of payment methods available from API
+     * @param savedCardMethodsApi represents the list of payment methods available from API
      * */
-    fun setDatafromAPI(paymentMethodsApi: List<SavedCards>) {
-        paymentsList = paymentMethodsApi
+    fun setDatafromAPI(savedCardMethodsApi: List<SavedCards>) {
+        savedCardsList = savedCardMethodsApi
         bindViewComponents()
     }
 }

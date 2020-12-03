@@ -19,3 +19,7 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-keep class company.tap.checkout** { *; }
+-keep public interface company.tap.checkout.internal.interfaces.BaseLayoutManager {*;}
+-keep public interface company.tap.checkout.internal.viewmodels.TapLayoutViewModel {*;}
+-keepnames class company.tap.tapuilibrary**{*;}
