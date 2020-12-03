@@ -22,7 +22,6 @@ import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
 import company.tap.checkout.internal.interfaces.onCardNFCCallListener
 import company.tap.checkout.internal.interfaces.onPaymentCardComplete
 import company.tap.checkout.internal.viewholders.*
-import company.tap.checkout.open.TapCheckoutFragment
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.adapters.CardTypeAdapter
 import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
@@ -210,27 +209,16 @@ class TapLayoutManager : ViewModel(),
         //   itemsViewHolder.setDatafromAPI(supportedCurrecnyList,itemList,fragmentManager)
           if (supportedCurrecnyList.size != 0) {
 
-              transaction.add(
+            /*  transaction.add(
                     R.id.sdkContainer,
                     CurrencyViewFragment(supportedCurrecnyList, itemList)
                 )
                 transaction.addToBackStack(null)
-                transaction.commit()
+                transaction.commit()*/
              //  addViews(itemsViewHolder)
               itemsViewHolder.displayed = false
 
           }
-
-        } else {
-            removeViews(businessViewHolder,amountViewHolder,itemsViewHolder)
-
-
-            supportedCurrecnyList.clear()
-            manager.beginTransaction().replace(R.id.sdkContainer, TapCheckoutFragment()).commit()
-
-            transaction.addToBackStack(null)
-            transaction.commit()
-
 
         }
 
@@ -265,12 +253,7 @@ class TapLayoutManager : ViewModel(),
             dummyInitapiResponse1.merchant1.logo,
             dummyInitapiResponse1.merchant1.name
         )
-        amountViewHolder.setDatafromAPI(
-            dummyInitapiResponse1.order1.original_amount.toString(),
-            dummyInitapiResponse1.order1.trx_currency,
-            dummyInitapiResponse1.order1.trx_currency,
-            dummyInitapiResponse1.order1.items.size.toString()
-        )
+
         cardViewHolder.setDatafromAPI(dummyInitapiResponse1.savedCards)
         goPayLoginHolder.setDatafromAPI(dummyInitapiResponse1.savedCards)
         println("dummy values"+dummyInitapiResponse1.tapCardPhoneListDataSource)
@@ -282,7 +265,7 @@ class TapLayoutManager : ViewModel(),
             paymentInputViewHolder.selectedType
         )
         supportedCurrecnyList = dummyInitapiResponse1.currencies as ArrayList<String>
-        itemList = dummyInitapiResponse1.order1.items
+
         savedcardList = dummyInitapiResponse1.savedCards
     }
 

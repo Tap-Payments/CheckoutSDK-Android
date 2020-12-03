@@ -44,11 +44,12 @@ open class SDKSession : APIRequestCallback {
 
     fun startSDK(supportFragmentManager: FragmentManager, context: Context) {
         println("is session enabled ${SessionManager.isSessionEnabled()}")
-        if (SessionManager.isSessionEnabled()) {
+       /* if (SessionManager.isSessionEnabled()) {
             println("Session already active!!!")
             return
-        }
+        }*/
         contextSDK = context
+        println("we are already active!!!")
        /* val tapCheckoutFragment = TapCheckoutFragment()
         tapCheckoutFragment.show(supportFragmentManager, null)*/
 
