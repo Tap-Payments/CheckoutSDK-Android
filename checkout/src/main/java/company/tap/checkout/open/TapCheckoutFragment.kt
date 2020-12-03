@@ -1,6 +1,5 @@
 package company.tap.checkout.open
 
-import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -86,7 +85,6 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface
         setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
         layoutManager.displayStartupLayout(enabledSections)
         //This is for getting response from business engine . Currently dummy response from assets json is used
-        println("onview created")
 
         setBottomSheetInterface(this)
         bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -95,14 +93,14 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface
     }
 
 
-    private fun getBusinessHeaderData(context:Context) {
-        println("jaonstrinb")
-        val jsonFileString =context?.let { getJsonDataFromAsset(it, "dummyapiresponsedefault.json") }
-        println("jsonFileString"+jsonFileString)
+    private fun getBusinessHeaderData() {
+        val jsonFileString = activity?.applicationContext?.let { getJsonDataFromAsset(it, "dummyapiresponsedefault.json") }
+        println("jsonFileString is"+jsonFileString)
+
         val gson = Gson()
         val dummyInitApiResponse1: JsonResponseDummy1 = gson.fromJson(jsonFileString, JsonResponseDummy1::class.java)
         // Pass the api response data to LayoutManager
-        println("dummyInitApiResponse1"+dummyInitApiResponse1)
+        println("dummyInitApiResponse1 is"+dummyInitApiResponse1)
         layoutManager.getDatafromAPI(dummyInitApiResponse1)
 
     }
@@ -118,17 +116,15 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface
          * @return A new instance of fragment TapCheckoutFragment.
          */
         // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(context: Context) =
+       // @JvmStatic
+       /* fun newInstance(param1: String, param2: String) =
             TapCheckoutFragment().apply {
                 arguments = Bundle().apply {
-                 //   putString(ARG_PARAM1, param1)
-                  //  putString(ARG_PARAM2, param2)
+                    putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
                 }
-                getBusinessHeaderData(context)
                 bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
-            }
-
+            }*/
 
     }
     override fun onDismiss() {
@@ -136,11 +132,6 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface
         SessionManager.setActiveSession(false)
     }
 
-         override fun onViewStateRestored(savedInstanceState: Bundle?) {
-             super.onViewStateRestored(savedInstanceState)
-             println("onViewStateRestored"+savedInstanceState)
-
-         }
     override fun onShow() {
         println("onShow is called")
         bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -148,7 +139,7 @@ class TapCheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface
         bottomSheetLayout?.let {
             layoutManager.setBottomSheetLayout(it)
         }
-
+        getBusinessHeaderData()
     }
 
     override fun onSlide(slideOffset: Float) {
