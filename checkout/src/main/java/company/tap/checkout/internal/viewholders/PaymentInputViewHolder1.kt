@@ -3,6 +3,7 @@ package company.tap.checkout.internal.viewholders
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
@@ -18,8 +19,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.annotation.IntRange
 import androidx.core.widget.doAfterTextChanged
-import company.tap.cardbusinesskit.testmodels.Payment_methods
-
 import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardinputwidget.widget.inline.InlineCardInput
 import company.tap.checkout.R
@@ -33,13 +32,13 @@ import company.tap.tapcardvalidator_android.CardBrand
 import company.tap.tapcardvalidator_android.CardValidationState
 import company.tap.tapcardvalidator_android.CardValidator
 import company.tap.tapuilibrary.themekit.ThemeManager
-
 import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
 import company.tap.tapuilibrary.uikit.models.SectionTabItem
 import company.tap.tapuilibrary.uikit.views.TapMobilePaymentView
 import company.tap.tapuilibrary.uikit.views.TapSelectionTabLayout
 import kotlinx.android.synthetic.main.payment_input_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
+import java.io.ByteArrayOutputStream
 import java.net.URL
 
 
@@ -50,7 +49,11 @@ import java.net.URL
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class PaymentInputViewHolder1(private val context: Context, private val onPaymentCardComplete: onPaymentCardComplete, private val onCardNFCCallListener: onCardNFCCallListener) : TapBaseViewHolder,
+class PaymentInputViewHolder1(
+    private val context: Context,
+    private val onPaymentCardComplete: onPaymentCardComplete,
+    private val onCardNFCCallListener: onCardNFCCallListener
+) : TapBaseViewHolder,
     TapSelectionTabLayoutInterface, CardInputListener {
 
     override val view: View =
@@ -83,8 +86,8 @@ class PaymentInputViewHolder1(private val context: Context, private val onPaymen
     private var isadded: Boolean = false
     private lateinit var paymentType: String
     private var itemsTelecom = ArrayList<SectionTabItem>()
-    val itemsMobileList = ArrayList<SectionTabItem>()
-    val itemsCardList = ArrayList<SectionTabItem>()
+    var itemsMobileList =ArrayList<SectionTabItem>()
+    var itemsCardList = ArrayList<SectionTabItem>()
     init {
         tabLayout = view.findViewById(R.id.sections_tablayout)
         paymentInputContainer = view.findViewById(R.id.payment_input_layout)
@@ -438,16 +441,24 @@ class PaymentInputViewHolder1(private val context: Context, private val onPaymen
 
         println("iamage val  are" + imageURLApi)
         for (i in 0 until imageURLApi.size) {
+            itemsMobileList =  ArrayList<SectionTabItem>()
+            itemsCardList = ArrayList<SectionTabItem>()
            // tabLayout = view.findViewById(R.id.sections_tablayout)
             tabLayout.resetBehaviour()
             imageURL = imageURLApi.get(i).icon
             paymentType = imageURLApi.get(i).paymentType
-            println("paymentType in loop"+paymentType)
+            println("paymentType in loop" + paymentType)
             if (imageURL != null) {
                 val url = URL(imageURL)
                 if (url != null) {
+
+                    val bytes = ByteArrayOutputStream()
+
+                    val bmOptions = BitmapFactory.Options()
                     val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
+                    bmp.compress(Bitmap.CompressFormat.JPEG, 40, bytes)
                     val drawablem: Drawable = BitmapDrawable(context.resources, bmp)
+                    bmOptions.inSampleSize = 1
                     if (paymentType == "telecom") {
                         itemsMobileList.add(
                             SectionTabItem(
@@ -456,19 +467,22 @@ class PaymentInputViewHolder1(private val context: Context, private val onPaymen
                                 CardBrand.zain
                             )
                         )
-                        tabLayout.addSection(itemsMobileList)
 
-                        println("itemsMobileList in loop"+imageURL)
+
+                        println("itemsMobileList in loop" + imageURL)
                     } else {
-
+                        val bmpq = BitmapFactory.decodeStream(url.openConnection().getInputStream())
+                        val bytes = ByteArrayOutputStream()
+                        bmpq.compress(Bitmap.CompressFormat.JPEG, 40, bytes)
+                        val drawablem1: Drawable = BitmapDrawable(context.resources, bmpq)
                         itemsCardList.add(
                             SectionTabItem(
-                                drawablem,
+                                drawablem1,
                                 context.resources.getDrawable(R.drawable.visa_gray),
                                 CardBrand.visa
                             )
                         )
-                        println("itemsCardList in loop"+imageURL)
+                        println("itemsCardList in loop" + imageURL)
                         tabLayout.addSection(itemsCardList)
 
                     }
