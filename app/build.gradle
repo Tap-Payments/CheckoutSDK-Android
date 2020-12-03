@@ -43,17 +43,16 @@ dependencies {
     implementation project(":checkout")
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     testImplementation 'junit:junit:4.13'
-<<<<<<< Updated upstream
+
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.157'
-    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.157'
-=======
+
+
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.162'
     api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.162'
->>>>>>> Stashed changes
+
     implementation 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.2'
     implementation 'company.tap:PayCards-Tap-Android:0.1.5.3'
   // implementation 'com.google.firebase:firebase-analytics:18.0.0'

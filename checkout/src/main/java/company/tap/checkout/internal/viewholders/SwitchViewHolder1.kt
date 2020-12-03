@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.switch_layout.view.*
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
+class SwitchViewHolder1(private val context: Context) : TapBaseViewHolder  {
 
   //  override val view = TapCardSwitch(context)
     override val view: View = LayoutInflater.from(context).inflate(R.layout.switch_layout, null)
@@ -29,7 +29,7 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
     override val type = SectionType.SAVE_CARD
 
     private var merchantName: String? = null
-    private var paymentName: PaymentInputViewHolder.PaymentType? = null
+    private var paymentName: PaymentInputViewHolder1.PaymentType? = null
     private var switchString: String? = null
     private var goPayString: String? = null
     private var savegoPayString: String? = null
@@ -46,7 +46,7 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
 
     }
     // Function / Logic is responsible for sett ing the data to switch based on user selection
-    fun setSwitchLocals(payName:PaymentInputViewHolder.PaymentType) {
+    fun setSwitchLocals(payName:PaymentInputViewHolder1.PaymentType) {
         //TODO Check why view is not being refreshed though string is updated
         //Has to be in Else condition only, temporarily kept here for data purpose
         goPayString = LocalizationManager.getValue("goPayTextLabel","GoPay")
@@ -102,7 +102,7 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
      * @param paymentType represents the type is card or mobile payment.Based on it will decide the
      * text of switches.
      * */
-    fun setDatafromAPI(merchantNameApi: String, paymentType: PaymentInputViewHolder.PaymentType) {
+    fun setDatafromAPI(merchantNameApi: String, paymentType: PaymentInputViewHolder1.PaymentType) {
         merchantName = merchantNameApi
         paymentName = paymentType
        // bindViewComponents()

@@ -27,8 +27,8 @@ import company.tap.checkout.internal.dummygener.TapCardPhoneListDataSource
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.onCardNFCCallListener
 import company.tap.checkout.internal.interfaces.onPaymentCardComplete
-import company.tap.checkout.internal.viewholders.PaymentInputViewHolder.PaymentType.CARD
-import company.tap.checkout.internal.viewholders.PaymentInputViewHolder.PaymentType.MOBILE
+import company.tap.checkout.internal.viewholders.PaymentInputViewHolder1.PaymentType.CARD
+import company.tap.checkout.internal.viewholders.PaymentInputViewHolder1.PaymentType.MOBILE
 import company.tap.tapcardvalidator_android.CardBrand
 import company.tap.tapcardvalidator_android.CardValidationState
 import company.tap.tapcardvalidator_android.CardValidator
@@ -58,7 +58,7 @@ class PaymentInputViewHolder1(private val context: Context, private val onPaymen
 
     override val type = SectionType.PAYMENT_INPUT
 
-    private val tabLayout: TapSelectionTabLayout
+    private var tabLayout: TapSelectionTabLayout
     private val paymentInputContainer: LinearLayout
 
     // private val paymentLayoutContainer: LinearLayout
@@ -77,7 +77,8 @@ class PaymentInputViewHolder1(private val context: Context, private val onPaymen
     private var linearLayoutPay: LinearLayout? = null
     private var tabPosition: Int? = null
 
-    private var switchViewHolder = SwitchViewHolder(context)
+   // private var switchViewHolder = SwitchViewHolder(context)
+    private var switchViewHolder1 = SwitchViewHolder1(context)
     private var imageURL: String? = null
     private var isadded: Boolean = false
     private lateinit var paymentType: String
@@ -128,10 +129,10 @@ class PaymentInputViewHolder1(private val context: Context, private val onPaymen
 
     private fun initTabLayout() {
         println("sdsadad")
-        tabLayout.addSection(getCardList(imageURL))
+       // tabLayout.addSection(getCardList(imageURL))
         //   tabLayout.addSection(getCardList())
-        tabLayout.addSection(getMobileList(imageURL))
-        tabLayout.setTabLayoutInterface(this)
+      //  tabLayout.addSection(getMobileList(imageURL))
+      //  tabLayout.setTabLayoutInterface(this)
     }
 
     private fun initializeCardForm() {
@@ -159,9 +160,9 @@ class PaymentInputViewHolder1(private val context: Context, private val onPaymen
                 cardScannerBtn?.visibility = View.INVISIBLE
 
             }
-            switchViewHolder.view.cardviewSwitch.visibility = View.INVISIBLE
-            switchViewHolder.view.mainSwitch.visibility = View.GONE
-            switchViewHolder.view.cardSwitch.visibility = View.GONE
+            switchViewHolder1.view.cardviewSwitch.visibility = View.INVISIBLE
+            switchViewHolder1.view.mainSwitch.visibility = View.GONE
+            switchViewHolder1.view.cardSwitch.visibility = View.GONE
             clearText.visibility = View.GONE
 
         }
@@ -382,8 +383,8 @@ class PaymentInputViewHolder1(private val context: Context, private val onPaymen
         paymentInputContainer.removeAllViews()
         if (position == 0) {
             selectedType = CARD
-            switchViewHolder.setSwitchLocals(selectedType)
-            switchViewHolder.view.cardSwitch.switchGoPayCheckout.visibility = View.VISIBLE
+            switchViewHolder1.setSwitchLocals(selectedType)
+            switchViewHolder1.view.cardSwitch.switchGoPayCheckout.visibility = View.VISIBLE
             nfcButton?.visibility = View.VISIBLE
             cardScannerBtn?.visibility = View.VISIBLE
 
@@ -392,7 +393,7 @@ class PaymentInputViewHolder1(private val context: Context, private val onPaymen
             checkForFocus()
         } else {
             selectedType = MOBILE
-            switchViewHolder.setSwitchLocals(selectedType)
+            switchViewHolder1.setSwitchLocals(selectedType)
 
             nfcButton?.visibility = View.GONE
             cardScannerBtn?.visibility = View.GONE
@@ -437,6 +438,8 @@ class PaymentInputViewHolder1(private val context: Context, private val onPaymen
 
         println("iamage val  are" + imageURLApi)
         for (i in 0 until imageURLApi.size) {
+           // tabLayout = view.findViewById(R.id.sections_tablayout)
+            tabLayout.resetBehaviour()
             imageURL = imageURLApi.get(i).icon
             paymentType = imageURLApi.get(i).paymentType
             println("paymentType in loop"+paymentType)
@@ -444,36 +447,38 @@ class PaymentInputViewHolder1(private val context: Context, private val onPaymen
                 val url = URL(imageURL)
                 if (url != null) {
                     val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-                    val drawableTelecom: Drawable = BitmapDrawable(context.resources, bmp)
+                    val drawablem: Drawable = BitmapDrawable(context.resources, bmp)
                     if (paymentType == "telecom") {
                         itemsMobileList.add(
                             SectionTabItem(
-                                drawableTelecom,
+                                drawablem,
                                 context.resources.getDrawable(R.drawable.zain_dark),
                                 CardBrand.zain
                             )
                         )
-                        println("itemsMobileList in loop"+itemsMobileList.size)
                         tabLayout.addSection(itemsMobileList)
+
+                        println("itemsMobileList in loop"+imageURL)
                     } else {
 
                         itemsCardList.add(
                             SectionTabItem(
-                                drawableTelecom,
+                                drawablem,
                                 context.resources.getDrawable(R.drawable.visa_gray),
                                 CardBrand.visa
                             )
                         )
-                        println("itemsCardList in loop"+itemsCardList.size)
+                        println("itemsCardList in loop"+imageURL)
                         tabLayout.addSection(itemsCardList)
+
                     }
 
                 }
             }
 
-            tabLayout.setTabLayoutInterface(this)
-        }
 
+        }
+        tabLayout.setTabLayoutInterface(this)
 
     }
 }

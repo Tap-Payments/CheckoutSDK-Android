@@ -1,4 +1,4 @@
-/*
+
 package company.tap.checkout.internal.dummygener
 import com.google.gson.annotations.SerializedName
 
@@ -11,4 +11,4 @@ data class Order1 (
 	@SerializedName("items") val items : List<Items1>,
 	@SerializedName("shipping") val shipping : Shipping1,
 	@SerializedName("tax") val tax : List<Tax1>
-)*/
+)

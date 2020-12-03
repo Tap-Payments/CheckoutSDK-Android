@@ -4,8 +4,8 @@
     "logo": "https://avatars3.githubusercontent.com/u/19837565?s=200&v=4"
   },
   "order":{
-    "trx_currency":"KWD",
-    "original_amount":"100",
+    "trx_currency":"KD",
+    "original_amount":"1",
     "items":[
       {
         "amount":10,
