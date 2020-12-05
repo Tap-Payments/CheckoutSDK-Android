@@ -1,9 +1,11 @@
 package company.tap.checkout.internal.viewmodels
 
 
+
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ShapeDrawable
+import android.transition.TransitionManager
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
@@ -11,7 +13,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.TransitionManager
+
 import company.tap.checkout.R
 import company.tap.checkout.internal.dummygener.Items1
 import company.tap.checkout.internal.dummygener.JsonResponseDummy1
@@ -24,8 +26,10 @@ import company.tap.tapuilibrary.uikit.adapters.CardTypeAdapterUIKIT
 import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
 import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
+
 import kotlinx.android.synthetic.main.cardviewholder_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
+import java.util.*
 
 
 /**
@@ -43,17 +47,12 @@ class TapLayoutViewModel : ViewModel(),
     private lateinit var sdkLayout: LinearLayout
     private lateinit var bottomSheetLayout: FrameLayout
     private lateinit var businessViewHolder: BusinessViewHolder
-    private lateinit var cardScannerViewHolder: CardScannerViewHolder
     private lateinit var amountViewHolder: AmountViewHolder
     private lateinit var itemsViewHolder: ItemsViewHolder
-  //  private lateinit var cardViewHolder2: CardViewHolder2
     private lateinit var cardViewHolder11: CardViewHolder11
     private lateinit var goPayLoginHolder1: GoPayLoginHolder1
-  //  private lateinit var goPayLoginHolder: GoPayLoginHolder
     private lateinit var paymentInputViewHolder1: PaymentInputViewHolder1
-  //  private lateinit var saveCardSwitchHolder: SwitchViewHolder
     private lateinit var saveCardSwitchHolder1: SwitchViewHolder1
-   // private lateinit var goPayViewHolder: GoPayViewHolder
     private lateinit var goPayViewHolder1: GoPayViewHolder1
     private lateinit var otpViewHolder: OTPViewHolder
     private lateinit var supportedCurrecnyList: ArrayList<String>
@@ -66,7 +65,7 @@ class TapLayoutViewModel : ViewModel(),
         sdkLayout: LinearLayout,
 
     ) {
-        println("again claled fragmentManager = [${fragmentManager}]")
+        println("again called fragmentManager = [${fragmentManager}]")
 
         this.context = context
         this.fragmentManager = fragmentManager

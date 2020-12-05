@@ -44,7 +44,8 @@
             "currency_chip_unselected_shadow": "#eeeeef",
             "transperant": "#c7f9f9f9",
             "invalid_action": "#b9b9b9",
-            "change_layout": "#f4f4f4"
+            "change_layout": "#f4f4f4",
+            "password_hint_color": "#878787"
         }
     },
     "inlineCard": {
@@ -116,7 +117,7 @@
             "width": 32
         },
         "textFields": {
-            "textColor": "greyishBrown",
+            "textColor": "#4b4847",
             "errorTextColor": "orange",
             "font" : "Roboto-Light,17",
             "placeHolderColor" : "brownGreyThree"
@@ -147,7 +148,7 @@
             "width": 32
         },
         "textFields": {
-            "textColor": "greyishBrown",
+            "textColor": "#4b4847",
             "errorTextColor": "orange",
             "font" : "Roboto-Light,17",
             "placeHolderColor" : "brownGreyThree"
@@ -286,7 +287,7 @@
             "color" : "brownGrey",
             "width" : 1
         },
-        "itemsNumberButtonCorner" : 30,
+        "itemsNumberButtonCorner" : 40,
         "backgroundColor" : "white"
     },
     "horizontalList": {
@@ -307,12 +308,13 @@
             }
         },
         "chips": {
-            "radius" : 20,
+            "radius" : 25,
             "currencyChip": {
                 "backgroundColor" : "whiteTwo",
                 "labelTextFont": "Roboto-Regular,12",
                 "labelTextColor": "greyishBrown",
                 "selected": {
+                    "backgroundColor" : "white",
                     "shadow": {
                         "color" : "deepSkyBlue",
                         "radius" : 3,
@@ -322,6 +324,7 @@
                     }
                 },
                 "unSelected": {
+                    "backgroundColor" : "whiteTwo",
                     "shadow": {
                         "color" : "brownGrey",
                         "radius" : 3,
@@ -535,6 +538,7 @@
     "goPay": {
         "loginBar" :{
             "backgroundColor" : "whiteTwo",
+            "inputFieldBackground" : "white",
             "underline": {
                 "selected": {
                     "backgroundColor" : "deepSkyBlue"
@@ -555,27 +559,31 @@
             },
             "hintLabel": {
                 "textFont": "Roboto-Light,10",
-                "textColor": "greyishBrown"
+                "textColor": "brownGreyThree"
             }
         },
         "passwordView" :{
             "backgroundColor": "clear"
         },
         "passwordField": {
-            "backgroundColor" : "clear",
+            "backgroundColor" : "transperant",
             "textFont": "Roboto-Light,17",
-            "textColor": "black",
-            "placeHolderColor" : "brownGreyThree",
+            "textColor": "#4b4847",
+            "placeHolderColor" : "#878787",
             "showPasswordIcon" : "passwordEye",
             "hidePasswordIcon" : "passwordEye",
             "underline":{
                 "empty": {
-                    "backgroundColor" : "deepSkyBlue"
+                    "backgroundColor" : "#a0a0a0"
                 },
                 "filled": {
                     "backgroundColor" : "deepSkyBlue"
                 }
-            }
+            },
+            "changeTextColor": "#007aff",
+            "changeTextFont": "Roboto-Light,12",
+            "emailTextColor": "#4b4847",
+            "emailTextFont": "Roboto-Light,14"
         }
     },
     "actionButton": {
@@ -605,12 +613,12 @@
         }
     },
     "TapOtpView": {
-        "backgroundColor": "transperant",
+        "backgroundColor": "#d5cdc9",
         "OtpController": {
             "bottomLineColor": "deepSkyBlue",
             "activeBottomColor": "brownGreyFour",
-            "textColor": "greyishBrown",
-            "textFont": "Roboto-Light,25"
+            "textColor": "#4b4847",
+            "textFont": "Roboto-Light,14"
         },
         "Timer": {
             "textFont": "Roboto-Regular,16",
@@ -638,7 +646,6 @@
             }
         }
     },
-
     "TapSwitchView": {
         "backgroundColor": "transperant",
         "CurvedSeparator": {
@@ -686,6 +693,15 @@
                 "textFont": "Roboto-Light,12",
                 "textColor": "greyishBrown"
             }
+        }
+    },
+    "TapAlertMessage": {
+        "backgroundColor": "#4cffbe60",
+        "separatorColor" : "#33ea6724",
+        "separatorHeight" : 1,
+        "textField": {
+            "textFont": "Roboto-Light,12",
+            "textColor": "#ea611c"
         }
     }
 }
