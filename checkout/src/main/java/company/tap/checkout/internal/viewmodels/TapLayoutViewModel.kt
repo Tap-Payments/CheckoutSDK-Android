@@ -20,7 +20,7 @@ import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.*
 import company.tap.checkout.internal.viewholders.*
 import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.uikit.adapters.CardTypeAdapter
+import company.tap.tapuilibrary.uikit.adapters.CardTypeAdapterUIKIT
 import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
 import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
@@ -46,13 +46,15 @@ class TapLayoutViewModel : ViewModel(),
     private lateinit var cardScannerViewHolder: CardScannerViewHolder
     private lateinit var amountViewHolder: AmountViewHolder
     private lateinit var itemsViewHolder: ItemsViewHolder
-    private lateinit var cardViewHolder: CardViewHolder
-    private lateinit var cardViewHolder1: CardViewHolder1
-    private lateinit var goPayLoginHolder: GoPayLoginHolder
+  //  private lateinit var cardViewHolder2: CardViewHolder2
+    private lateinit var cardViewHolder11: CardViewHolder11
+    private lateinit var goPayLoginHolder1: GoPayLoginHolder1
+  //  private lateinit var goPayLoginHolder: GoPayLoginHolder
     private lateinit var paymentInputViewHolder1: PaymentInputViewHolder1
   //  private lateinit var saveCardSwitchHolder: SwitchViewHolder
     private lateinit var saveCardSwitchHolder1: SwitchViewHolder1
-    private lateinit var goPayViewHolder: GoPayViewHolder
+   // private lateinit var goPayViewHolder: GoPayViewHolder
+    private lateinit var goPayViewHolder1: GoPayViewHolder1
     private lateinit var otpViewHolder: OTPViewHolder
     private lateinit var supportedCurrecnyList: ArrayList<String>
     private lateinit var itemList: List<Items1>
@@ -72,15 +74,17 @@ class TapLayoutViewModel : ViewModel(),
         businessViewHolder = BusinessViewHolder(context)
         amountViewHolder = AmountViewHolder(context)
        // cardViewHolder = CardViewHolder(context,this )
-        cardViewHolder1 = CardViewHolder1(context)
-        goPayLoginHolder = GoPayLoginHolder(context, this, this)
+     //   cardViewHolder2 = CardViewHolder2(context,this)
+        cardViewHolder11 = CardViewHolder11(context,this)
+        //goPayLoginHolder = GoPayLoginHolder(context, this, this)
+        goPayLoginHolder1 = GoPayLoginHolder1(context, this, this)
         paymentInputViewHolder1 = PaymentInputViewHolder1(context, this, this)
         saveCardSwitchHolder1 = SwitchViewHolder1(context)
         itemsViewHolder = ItemsViewHolder(context, this)
 
         otpViewHolder = OTPViewHolder(context)
 
-       goPayViewHolder= GoPayViewHolder(context, this)
+        goPayViewHolder1= GoPayViewHolder1(context, this)
        // println("context = [${context}], fragmentManager = [${fragmentManager}], dummyInitApiResponse11 = [${dummyInitApiResponse11}]")
         initAmountAction()
         initCardsGroup()
@@ -110,7 +114,7 @@ class TapLayoutViewModel : ViewModel(),
     private fun initCardsGroup() {
        // cardViewHolder = CardViewHolder(context,this )
 
-        cardViewHolder1.view.setOnClickListener {
+        cardViewHolder11.view.setOnClickListener {
            // displayGoPayLogin()
            println("init caleed ")
         }
@@ -123,7 +127,7 @@ class TapLayoutViewModel : ViewModel(),
         addViews(
                 businessViewHolder,
                 amountViewHolder,
-                cardViewHolder1,
+            cardViewHolder11,
             paymentInputViewHolder1,
             saveCardSwitchHolder1
         )
@@ -164,13 +168,13 @@ class TapLayoutViewModel : ViewModel(),
         addViews(
             businessViewHolder,
             amountViewHolder,
-            goPayLoginHolder,
-                cardViewHolder1,
+            goPayLoginHolder1,
+            cardViewHolder11,
             paymentInputViewHolder1,
             saveCardSwitchHolder1
         )
 
-        cardViewHolder1.view.mainChipgroup.groupAction.text = ""
+        cardViewHolder11.view.mainChipgroup.groupAction.text = ""
         saveCardSwitchHolder1.view.cardSwitch.payButton.visibility = View.VISIBLE
 
     }
@@ -182,7 +186,7 @@ class TapLayoutViewModel : ViewModel(),
             TransitionManager.beginDelayedTransition(bottomSheetLayout)
         if (display) {
             removeViews(
-                    cardViewHolder1,
+                cardViewHolder11,
                 paymentInputViewHolder1,
                 saveCardSwitchHolder1
             )
@@ -229,7 +233,7 @@ class TapLayoutViewModel : ViewModel(),
         otpViewHolder.otpView.visibility = View.VISIBLE
         otpViewHolder.otpView.mobileNumberText.text=otpMobile
         otpViewHolder.otpView.changePhone.setOnClickListener {
-            goPayViewHolder.onChangePhoneClicked()
+            goPayViewHolder1.onChangePhoneClicked()
 
        }
 
@@ -259,8 +263,8 @@ class TapLayoutViewModel : ViewModel(),
             dummyInitapiResponse1.order1.items.size.toString()
         )
 
-        cardViewHolder1.setDatafromAPI(dummyInitapiResponse1.savedCards)
-        goPayLoginHolder.setDatafromAPI(dummyInitapiResponse1.savedCards)
+        cardViewHolder11.setDatafromAPI(dummyInitapiResponse1.savedCards)
+        goPayLoginHolder1.setDatafromAPI(dummyInitapiResponse1.savedCards)
         println("dummy tapCardPhoneListDataSource" + dummyInitapiResponse1.tapCardPhoneListDataSource)
         paymentInputViewHolder1.setDatafromAPI(dummyInitapiResponse1.tapCardPhoneListDataSource)
 
@@ -283,34 +287,34 @@ class TapLayoutViewModel : ViewModel(),
             intrinsicWidth = 10
             paint.color = Color.TRANSPARENT
         }) // note: currently (support version 28.0.0), we can not use tranparent color here, if we use transparent, we still see a small divider line. So if we want to display transparent space, we can set color = background color or we can create a custom ItemDecoration instead of DividerItemDecoration.
-        cardViewHolder1.view.mainChipgroup.chipsRecycler.addItemDecoration(divider)
+        cardViewHolder11.view.mainChipgroup.chipsRecycler.addItemDecoration(divider)
 
 
 
-        cardViewHolder1.view.mainChipgroup.chipsRecycler.adapter = CardTypeAdapter(
+        cardViewHolder11.view.mainChipgroup.chipsRecycler.adapter = CardTypeAdapterUIKIT(
                 savedcardList as ArrayList<SavedCards>,
                 this,
                 false
         )
 
-        cardViewHolder1.view.mainChipgroup.groupAction?.visibility = View.VISIBLE
+        cardViewHolder11.view.mainChipgroup.groupAction?.visibility = View.VISIBLE
 
-        cardViewHolder1.view.mainChipgroup.groupAction?.setOnClickListener {
-            if (cardViewHolder1.view.mainChipgroup.groupAction?.text == "Close"){
-                cardViewHolder1.view.mainChipgroup.chipsRecycler.adapter = CardTypeAdapter(
+        cardViewHolder11.view.mainChipgroup.groupAction?.setOnClickListener {
+            if (cardViewHolder11.view.mainChipgroup.groupAction?.text == "Close"){
+                cardViewHolder11.view.mainChipgroup.chipsRecycler.adapter =  CardTypeAdapterUIKIT(
                         savedcardList as ArrayList<SavedCards>,
                         this,
                         false
                 )
-                cardViewHolder1.view.mainChipgroup.groupAction?.text = "Edit"
+                cardViewHolder11.view.mainChipgroup.groupAction?.text = "Edit"
 
             }else{
-                cardViewHolder1.view.mainChipgroup.chipsRecycler.adapter = CardTypeAdapter(
+                cardViewHolder11.view.mainChipgroup.chipsRecycler.adapter = CardTypeAdapterUIKIT(
                         savedcardList as ArrayList<SavedCards>,
                         this,
                         true
                 )
-                cardViewHolder1.view.mainChipgroup.groupAction?.text = "Close"
+                cardViewHolder11.view.mainChipgroup.groupAction?.text = "Close"
             }
 
         }
@@ -348,9 +352,9 @@ class TapLayoutViewModel : ViewModel(),
     override fun onDeleteIconClicked(stopAnimation: Boolean, itemId: Int) {
         println("onDeleteIconClicked is onDeleteIconClicked")
        if (stopAnimation){
-            stopShakingCards(cardViewHolder1.view.mainChipgroup.chipsRecycler)
-           cardViewHolder1.view.mainChipgroup.groupAction?.text = "Edit"
-        }else cardViewHolder1.view.mainChipgroup.groupAction?.text = "Close"
+            stopShakingCards(cardViewHolder11.view.mainChipgroup.chipsRecycler)
+           cardViewHolder11.view.mainChipgroup.groupAction?.text = "Edit"
+        }else cardViewHolder11.view.mainChipgroup.groupAction?.text = "Close"
     }
 
     override fun onPaycardSwitchAction(isCompleted: Boolean) {
@@ -390,7 +394,7 @@ class TapLayoutViewModel : ViewModel(),
     // Override function to open NFC fragment and scan the card via NFC.
     override fun onClickNFC() {
         removeViews(
-                cardViewHolder1,
+            cardViewHolder11,
             saveCardSwitchHolder1,
             paymentInputViewHolder1
         )
@@ -412,7 +416,7 @@ class TapLayoutViewModel : ViewModel(),
         println("are u reachinhg scanner")
        // cardScannerViewHolder  = CardScannerViewHolder(context)
         removeViews(
-           cardViewHolder1,
+            cardViewHolder11,
             saveCardSwitchHolder1,
             paymentInputViewHolder1
         )
@@ -506,7 +510,7 @@ class TapLayoutViewModel : ViewModel(),
 
     }
     private fun stopShakingCards(chipsView: RecyclerView) {
-        chipsView.adapter = CardTypeAdapter(savedcardList as ArrayList<SavedCards>, this, false)
+        chipsView.adapter = CardTypeAdapterUIKIT(savedcardList as ArrayList<SavedCards>, this, false)
     }
 
 

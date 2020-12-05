@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.otpview_layout.view.*
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class GoPayViewHolder(private val context: Context, private val baseLayoutManager: BaseLayoutManager?=null) : TapBaseViewHolder, OpenOTPInterface,GoPayLoginInterface,
+class GoPayViewHolder1(private val context: Context, private val baseLayoutManager: BaseLayoutManager?=null) : TapBaseViewHolder, OpenOTPInterface,GoPayLoginInterface,
     OtpButtonConfirmationInterface, OnCardSelectedActionListener {
 
     override val view: View = LayoutInflater.from(context).inflate(R.layout.gopay_layout, null)
@@ -107,7 +107,7 @@ class GoPayViewHolder(private val context: Context, private val baseLayoutManage
     override fun onOtpButtonConfirmationClick(otpNumber: String): Boolean {
         println("otpNumber is $otpNumber")
         Log.d("isValidOTP1" ,(otpNumber == "111111").toString() )
-        GoPayLoginHolder(context,this,baseLayoutManager).view
+        GoPayLoginHolder1(context,this,baseLayoutManager).view
         return otpNumber == "111111"
     }
 

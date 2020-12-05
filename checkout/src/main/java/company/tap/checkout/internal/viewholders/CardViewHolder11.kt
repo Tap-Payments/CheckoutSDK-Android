@@ -7,11 +7,14 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.R
+
+
 import company.tap.checkout.internal.dummygener.SavedCards
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.uikit.adapters.CardTypeAdapter
+import company.tap.tapuilibrary.uikit.adapters.CardTypeAdapterUIKIT
+
 import company.tap.tapuilibrary.uikit.interfaces.OnCardSelectedActionListener
 import kotlinx.android.synthetic.main.cardviewholder_layout.view.*
 
@@ -21,12 +24,13 @@ import kotlinx.android.synthetic.main.cardviewholder_layout.view.*
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class CardViewHolder1(
+class CardViewHolder11(
     private val context: Context,
-    ) : TapBaseViewHolder {
     private val onCardSelectedActionListener: OnCardSelectedActionListener?=null
 
-  override val view: View = LayoutInflater.from(context).inflate(R.layout.cardviewholder_layout, null)
+) : TapBaseViewHolder {
+
+  override val view: View = LayoutInflater.from(context).inflate(R.layout.cardviewholder_layout1, null)
 
 
     override val type = SectionType.CARD
@@ -57,8 +61,12 @@ class CardViewHolder1(
             RecyclerView.HORIZONTAL,
             false
         )
+       /* view.mainChipgroup.chipsRecycler.adapter =
+            savedCardsList?.let { CardTypeAdapter(it as ArrayList<SavedCards>, onCardSelectedActionListener,false) } */
+        println("savedCardsList before cardviewholder ${savedCardsList}")
         view.mainChipgroup.chipsRecycler.adapter =
-            savedCardsList?.let { CardTypeAdapter(it as ArrayList<SavedCards>, onCardSelectedActionListener,false) }
+            savedCardsList?.let { CardTypeAdapterUIKIT(it,onCardSelectedActionListener,false) }
+          //  savedCardsList?.let { CardTypeAdapterUIKIT(it as ArrayList<SavedCards>, onCardSelectedActionListener,false) }
         println("savedCardsList in cardviewholder ${savedCardsList}")
 
 

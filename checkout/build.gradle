@@ -64,8 +64,8 @@ dependencies {
     api 'com.github.Tap-Payments:TapUIKit-Android:1.1.0.395'*/
 
 
-    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.162'
-    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.162'
+    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.165'
+    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.165'
 
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
@@ -80,7 +80,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.8.1'
     implementation 'androidx.multidex:multidex:2.0.1'
 
-
+implementation 'androidx.recyclerview:recyclerview:1.2.0-beta01'
     implementation "androidx.fragment:fragment-ktx:1.2.5"
 
 }

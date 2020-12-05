@@ -13,7 +13,7 @@ import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.uikit.adapters.CardTypeAdapter
+import company.tap.tapuilibrary.uikit.adapters.CardTypeAdapterUIKIT
 import company.tap.tapuilibrary.uikit.interfaces.OnCardSelectedActionListener
 import kotlinx.android.synthetic.main.gopayloginview_layout.view.*
 import kotlinx.android.synthetic.main.gopayloginview_layout.view.tapSeparatorViewLinear
@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.gopayloginview_layout.view.tapSeparatorVie
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class GoPayLoginHolder(
+class GoPayLoginHolder1(
     private val context: Context,
     private val onCardSelectedActionListener: OnCardSelectedActionListener,
     private val baseLayopu: BaseLayoutManager?=null
@@ -59,7 +59,7 @@ class GoPayLoginHolder(
             false
         )
         view.goPayLoginView.chipsRecycler.adapter =
-            paymentsList?.let { CardTypeAdapter(it as ArrayList<SavedCards>, onCardSelectedActionListener,false) }
+            paymentsList?.let { CardTypeAdapterUIKIT(it as ArrayList<SavedCards>, onCardSelectedActionListener,false) }
         println("paymentList  currency ${paymentsList?.get(0)?.currencies}")
        /* view.goPayLoginView.groupAction.setOnClickListener {
             val animation = AnimationUtils.loadAnimation(this.view.context, R.anim.shake)
