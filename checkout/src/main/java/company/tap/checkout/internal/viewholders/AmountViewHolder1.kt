@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.amountview_layout.view.*
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class AmountViewHolder(context: Context) : TapBaseViewHolder {
+class AmountViewHolder1(context: Context) : TapBaseViewHolder {
 
   // override val view = TapAmountSectionView(context, null)
     override val view: View = LayoutInflater.from(context).inflate(R.layout.amountview_layout, null)

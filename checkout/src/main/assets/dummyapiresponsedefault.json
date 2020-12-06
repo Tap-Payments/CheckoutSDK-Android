@@ -131,18 +131,6 @@
         "title": "",
         "icon": ""
       },
-      "paymentType": "apple_pay",
-      "chipType": 2,
-      "currencies":[
-        "AED",
-        "SAR",
-        "USD"]
-    },
-    {
-      "chip": {
-        "title": "",
-        "icon": ""
-      },
       "chipType": 3,
       "paymentType": "all"
     },

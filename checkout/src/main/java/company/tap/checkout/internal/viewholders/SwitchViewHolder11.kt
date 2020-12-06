@@ -8,11 +8,9 @@ import company.tap.checkout.R
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.themekit.theme.SeparatorViewTheme
 import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import company.tap.tapuilibrary.uikit.ktx.setBottomBorders
-import company.tap.tapuilibrary.uikit.views.TapCardSwitch
 import kotlinx.android.synthetic.main.switch_layout.view.*
 
 /**
@@ -21,7 +19,7 @@ import kotlinx.android.synthetic.main.switch_layout.view.*
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class SwitchViewHolder1(private val context: Context) : TapBaseViewHolder  {
+class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
 
   //  override val view = TapCardSwitch(context)
     override val view: View = LayoutInflater.from(context).inflate(R.layout.switch_layout, null)
@@ -29,12 +27,11 @@ class SwitchViewHolder1(private val context: Context) : TapBaseViewHolder  {
     override val type = SectionType.SAVE_CARD
 
     private var merchantName: String? = null
-    private var paymentName: PaymentInputViewHolder1.PaymentType? = null
+    private var paymentName: PaymentInputViewHolder11.PaymentType? = null
     private var switchString: String? = null
     private var goPayString: String? = null
     private var savegoPayString: String? = null
     private var alertgoPaySignupString: String? = null
-    private var actionButton = TabAnimatedActionButtonViewHolder(context)
 
     init {
         bindViewComponents()
@@ -46,7 +43,7 @@ class SwitchViewHolder1(private val context: Context) : TapBaseViewHolder  {
 
     }
     // Function / Logic is responsible for sett ing the data to switch based on user selection
-    fun setSwitchLocals(payName:PaymentInputViewHolder1.PaymentType) {
+    fun setSwitchLocals(payName:PaymentInputViewHolder11.PaymentType) {
         //TODO Check why view is not being refreshed though string is updated
         //Has to be in Else condition only, temporarily kept here for data purpose
         goPayString = LocalizationManager.getValue("goPayTextLabel","GoPay")
@@ -78,7 +75,7 @@ class SwitchViewHolder1(private val context: Context) : TapBaseViewHolder  {
         }
         view.cardSwitch.saveTextView.text = switchString
         print("switch string $switchString")
-        actionButton.activateButton(context)
+      //  actionButtons.activateButton(context)
     }
 
     private fun getSwitchDataSourceFromAPI(
@@ -102,7 +99,7 @@ class SwitchViewHolder1(private val context: Context) : TapBaseViewHolder  {
      * @param paymentType represents the type is card or mobile payment.Based on it will decide the
      * text of switches.
      * */
-    fun setDatafromAPI(merchantNameApi: String, paymentType: PaymentInputViewHolder1.PaymentType) {
+    fun setDatafromAPI(merchantNameApi: String, paymentType: PaymentInputViewHolder11.PaymentType) {
         merchantName = merchantNameApi
         paymentName = paymentType
        // bindViewComponents()
@@ -137,9 +134,9 @@ class SwitchViewHolder1(private val context: Context) : TapBaseViewHolder  {
         view.mainSwitch.switchSaveMobile?.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
-                    view.cardSwitch.tapCardSwitchLinear.setBackgroundResource(company.tap.tapuilibrary.R.drawable.ic_blurbackgroundblack)
+                    view.cardSwitch.tapCardSwitchLinear.setBackgroundResource(R.drawable.ic_blurbackgroundblack)
                 } else {
-                    view.cardSwitch.tapCardSwitchLinear.setBackgroundResource(company.tap.tapuilibrary.R.drawable.ic_blurbackground)
+                    view.cardSwitch.tapCardSwitchLinear.setBackgroundResource(R.drawable.ic_blurbackground)
                 }
                 view.cardviewSwitch.cardElevation = 2.5f
                 setBorderedView(
@@ -156,8 +153,7 @@ class SwitchViewHolder1(private val context: Context) : TapBaseViewHolder  {
                 view.cardSwitch.payButton.isActivated
                 view.cardSwitch.payButton.setButtonDataSource(
                     true,
-
-                    company.tap.tapuilibrary.uikit.adapters.context?.let { LocalizationManager.getLocale(it).language },
+                    context?.let { LocalizationManager.getLocale(it).language },
                     "Pay",
                     Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
                     Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
@@ -191,7 +187,7 @@ class SwitchViewHolder1(private val context: Context) : TapBaseViewHolder  {
                 view.cardSwitch.payButton.stateListAnimator = null
                 view.cardSwitch.payButton.setButtonDataSource(
                     false,
-                    company.tap.tapuilibrary.uikit.adapters.context?.let { LocalizationManager.getLocale(it).language },
+                   context?.let { LocalizationManager.getLocale(it).language },
                     "Pay",
                     Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
                     Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))

@@ -16,7 +16,7 @@ import company.tap.checkout.internal.dummygener.JsonResponseDummy1
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.checkout.internal.interfaces.getDataInterface
-import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
+import company.tap.checkout.internal.viewmodels.TapLayoutViewModell
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
@@ -27,10 +27,10 @@ import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
 
 /**
  * A simple [Fragment] subclass.
- * Use the [CheckoutTapFragment.newInstance] factory method to
+ * Use the [CheckoutTapFragmentt.newInstance] factory method to
  * create an instance of this fragment.
  */
-class CheckoutTapFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
+class CheckoutTapFragmentt : TapBottomSheetDialog(), TapBottomDialogInterface {
 
 
 
@@ -39,11 +39,10 @@ class CheckoutTapFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
     private lateinit var baseLayoutManager: BaseLayoutManager
     private lateinit var getDataInterface: getDataInterface
 
-    private lateinit var viewModel1: TapLayoutViewModel
+    private lateinit var viewModell :TapLayoutViewModell
 
      var _Activity: Activity? = null
 
-    lateinit var dummyInitApiResponse1: JsonResponseDummy1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,11 +62,11 @@ class CheckoutTapFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        view1 = inflater.inflate(R.layout.fragment_checkouttap, container, false)
+        view1 = inflater.inflate(R.layout.fragment_checkouttaps, container, false)
 
        // bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
-        val viewModel: TapLayoutViewModel by viewModels()
-        this.viewModel1 = viewModel
+        val viewModell: TapLayoutViewModell by viewModels()
+        this.viewModell = viewModell
 
         //BlankFragment().retainInstance = true
         println("onAttach is calleds")
@@ -95,22 +94,11 @@ class CheckoutTapFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         //      bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
         //  }
         bottomSheetLayout?.let {
-            viewModel1?.setBottomSheetLayout(it)
+            viewModell.setBottomSheetLayout(it)
         }
-
-
-     /*   println("jsonFileString in create is calleds"+jsonFileString)
-        val gson11 = Gson()
-
-
-
-            val dummyInitApiResponse11 :JsonResponseDummy1= gson11.fromJson(jsonFileString, JsonResponseDummy1::class.java)
-            println("dummyInit are"+dummyInitApiResponse11 +"\n"+"context2"+context)
-            println("context are"+context +"\n"+"childFragmentManager"+childFragmentManager+"viewmode"+viewModel1)
-            dummyInitApiResponse1= dummyInitApiResponse11*/
-           // baseLayoutManager.getDatafromAPI(dummyInitApiResponse11)
+        print("contextt before business"+contextt)
         if (checkoutLayout != null) {
-            context?.let { viewModel1.initLayoutManager(it,childFragmentManager,checkoutLayout) }
+            context?.let { viewModell.initLayoutManager(it,childFragmentManager,checkoutLayout) }
         }
         // dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
@@ -120,9 +108,9 @@ class CheckoutTapFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         enabledSections.add(SectionType.FRAGMENT)
 
         setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
-        viewModel1.displayStartupLayout(enabledSections)
+        viewModell.displayStartupLayout(enabledSections)
         //This is for getting response from business engine . Currently dummy response from assets json is used
-        getBusinessHeaderData(context,viewModel1)
+        getBusinessHeaderData(context,viewModell)
            /* context?.let { checkoutLayout?.let { it1 ->
                 viewModel1.initLayoutManager(it,childFragmentManager,
                     it1
@@ -141,12 +129,13 @@ class CheckoutTapFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         return view1
     }
 
-    private fun getBusinessHeaderData(context: Context?,viewModel2: TapLayoutViewModel) {
-        val jsonFileString = context?.let { getJsonDataFromAsset(it, "dummyapiresponsedefault.json") }
+    private fun getBusinessHeaderData(context22: Context?,viewModel22: TapLayoutViewModell) {
+        print("contexct22"+context22)
+        val jsonFileString = context22?.let { getJsonDataFromAsset(it, "dummyapiresponsedefault.json") }
         val gson = Gson()
         val dummyInitApiResponse: JsonResponseDummy1 = gson.fromJson(jsonFileString, JsonResponseDummy1::class.java)
         // Pass the api response data to LayoutManager
-        viewModel2.getDatafromAPI(dummyInitApiResponse)
+        viewModel22.getDatafromAPI(dummyInitApiResponse)
     }
 
 
@@ -162,7 +151,7 @@ class CheckoutTapFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(context: Context, activity: Activity) =
-            CheckoutTapFragment().apply {
+            CheckoutTapFragmentt().apply {
                 arguments = Bundle().apply {
                     // putString(ARG_PARAM1, param1)
                     // putString(ARG_PARAM2, param2)
@@ -177,14 +166,6 @@ class CheckoutTapFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
     }
 
 
-
-
-
-  /*  override fun onAttach(context2: Context) {
-        super.onAttach(context2)
-
-     //   getDataInterface.getDatafromAPIS(dummyInitApiResponse1)
-    }*/
 
 
 

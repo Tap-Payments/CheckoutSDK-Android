@@ -21,5 +21,5 @@
 #-renamesourcefileattribute SourceFile
 -keep class company.tap.checkout** { *; }
 -keep public interface company.tap.checkout.internal.interfaces.BaseLayoutManager {*;}
--keep public interface company.tap.checkout.internal.viewmodels.TapLayoutViewModel {*;}
+-keep public interface company.tap.checkout.internal.viewmodels.TapLayoutViewModell {*;}
 -keepnames class company.tap.tapuilibrary**{*;}

@@ -21,7 +21,7 @@
 #-renamesourcefileattribute SourceFile
 -keep class company.tap.checkout** { *; }
 -keep public interface company.tap.checkout.internal.interfaces.BaseLayoutManager {*;}
--keep public interface company.tap.checkout.internal.viewmodels.TapLayoutViewModel {*;}
+-keep public interface company.tap.checkout.internal.viewmodels.TapLayoutViewModell {*;}
 -dontwarn okhttp3.**
 -dontwarn okhttp2.**
 -dontwarn okio.**

@@ -26,8 +26,8 @@ import company.tap.checkout.internal.dummygener.TapCardPhoneListDataSource
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.onCardNFCCallListener
 import company.tap.checkout.internal.interfaces.onPaymentCardComplete
-import company.tap.checkout.internal.viewholders.PaymentInputViewHolder1.PaymentType.CARD
-import company.tap.checkout.internal.viewholders.PaymentInputViewHolder1.PaymentType.MOBILE
+import company.tap.checkout.internal.viewholders.PaymentInputViewHolder11.PaymentType.CARD
+import company.tap.checkout.internal.viewholders.PaymentInputViewHolder11.PaymentType.MOBILE
 import company.tap.tapcardvalidator_android.CardBrand
 import company.tap.tapcardvalidator_android.CardValidationState
 import company.tap.tapcardvalidator_android.CardValidator
@@ -36,7 +36,7 @@ import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
 import company.tap.tapuilibrary.uikit.models.SectionTabItem
 import company.tap.tapuilibrary.uikit.views.TapMobilePaymentView
 import company.tap.tapuilibrary.uikit.views.TapSelectionTabLayout
-import kotlinx.android.synthetic.main.payment_input_layout.view.*
+import kotlinx.android.synthetic.main.payment_input1s_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 import java.io.ByteArrayOutputStream
 import java.net.URL
@@ -49,7 +49,7 @@ import java.net.URL
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class PaymentInputViewHolder1(
+class PaymentInputViewHolder11(
     private val context: Context,
     private val onPaymentCardComplete: onPaymentCardComplete,
     private val onCardNFCCallListener: onCardNFCCallListener
@@ -57,7 +57,7 @@ class PaymentInputViewHolder1(
     TapSelectionTabLayoutInterface, CardInputListener {
 
     override val view: View =
-        LayoutInflater.from(context).inflate(R.layout.payment_input_layout, null)
+        LayoutInflater.from(context).inflate(R.layout.payment_input1s_layout, null)
 
     override val type = SectionType.PAYMENT_INPUT
 
@@ -80,8 +80,7 @@ class PaymentInputViewHolder1(
     private var linearLayoutPay: LinearLayout? = null
     private var tabPosition: Int? = null
 
-   // private var switchViewHolder = SwitchViewHolder(context)
-    private var switchViewHolder1 = SwitchViewHolder1(context)
+    private var switchViewHolder11 = SwitchViewHolder11(context)
     private var imageURL: String? = null
     private var isadded: Boolean = false
     private lateinit var paymentType: String
@@ -99,6 +98,7 @@ class PaymentInputViewHolder1(
         StrictMode.setThreadPolicy(policy)
         // switchViewHolder = SwitchViewHolder(context)
         bindViewComponents()
+        tabLayout.changeTabItemAlphaValue(0.7f)
 
     }
 
@@ -162,9 +162,9 @@ class PaymentInputViewHolder1(
                 cardScannerBtn?.visibility = View.INVISIBLE
 
             }
-            switchViewHolder1.view.cardviewSwitch.visibility = View.INVISIBLE
-            switchViewHolder1.view.mainSwitch.visibility = View.GONE
-            switchViewHolder1.view.cardSwitch.visibility = View.GONE
+            switchViewHolder11.view.cardviewSwitch.visibility = View.INVISIBLE
+            switchViewHolder11.view.mainSwitch.visibility = View.GONE
+            switchViewHolder11.view.cardSwitch.visibility = View.GONE
             clearText.visibility = View.GONE
 
         }
@@ -385,8 +385,8 @@ class PaymentInputViewHolder1(
         paymentInputContainer.removeAllViews()
         if (position == 0) {
             selectedType = CARD
-            switchViewHolder1.setSwitchLocals(selectedType)
-            switchViewHolder1.view.cardSwitch.switchGoPayCheckout.visibility = View.VISIBLE
+            switchViewHolder11.setSwitchLocals(selectedType)
+            switchViewHolder11.view.cardSwitch.switchGoPayCheckout.visibility = View.VISIBLE
             nfcButton?.visibility = View.VISIBLE
             cardScannerBtn?.visibility = View.VISIBLE
 
@@ -395,7 +395,7 @@ class PaymentInputViewHolder1(
             checkForFocus()
         } else {
             selectedType = MOBILE
-            switchViewHolder1.setSwitchLocals(selectedType)
+            switchViewHolder11.setSwitchLocals(selectedType)
 
             nfcButton?.visibility = View.GONE
             cardScannerBtn?.visibility = View.GONE
@@ -469,7 +469,7 @@ class PaymentInputViewHolder1(
                         )
 
 
-                        println("itemsMobileList in loop" + imageURL)
+                       // println("itemsMobileList in loop" + imageURL)
                     } else {
                         val bmpq = BitmapFactory.decodeStream(url.openConnection().getInputStream())
                         val bytes = ByteArrayOutputStream()
@@ -482,7 +482,7 @@ class PaymentInputViewHolder1(
                                 CardBrand.visa
                             )
                         )
-                        println("itemsCardList in loop" + imageURL)
+                     //   println("itemsCardList in loop" + imageURL)
                         tabLayout.addSection(itemsCardList)
 
                     }

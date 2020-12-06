@@ -7,7 +7,7 @@ import android.view.View
 import company.tap.checkout.R
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibrary.uikit.adapters.context
+import company.tap.tapuilibrary.uikit.adapters.contexts
 import company.tap.tapuilibrary.uikit.datasource.ActionButtonDataSource
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import kotlinx.android.synthetic.main.action_button_animation.view.*
@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.action_button_animation.view.*
 Copyright (c) 2020    Tap Payments.
 All rights reserved.
  **/
-class TabAnimatedActionButtonViewHolder(context: Context) : TapBaseViewHolder {
+class TabAnimatedActionButtonViewHolder11(context: Context) : TapBaseViewHolder {
 
     override val view: View =
         LayoutInflater.from(context).inflate(R.layout.action_button_animation, null)
@@ -26,13 +26,13 @@ class TabAnimatedActionButtonViewHolder(context: Context) : TapBaseViewHolder {
 
 
     init {
-        bindViewComponents()
+      //  bindViewComponents()
     }
 
     override fun bindViewComponents() {
          // view.actionButton.setButtonDataSource(getSuccessDataSource(Color.GRAY, "Pay", Color.WHITE ))
         view.actionButton.setButtonDataSource(false,
-            context?.let { LocalizationManager.getLocale(it).language },LocalizationManager.getValue("pay","ActionButton"),R. color.gray)
+            contexts?.let { LocalizationManager.getLocale(it).language },LocalizationManager.getValue("pay","ActionButton"),R. color.gray)
     }
 
     fun activateButton(context: Context) {

@@ -7,10 +7,12 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.add
 import company.tap.cardbusinesskit.testmodels.Items
 import company.tap.checkout.R
+import company.tap.checkout.internal.dummygener.Currencies1
 import company.tap.checkout.internal.dummygener.Items1
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.tapuilibrary.uikit.fragment.CurrencyViewFragment
+import company.tap.tapuilibrary.uikit.fragment.CurrencyViewsFragment
 
 /**
  *
@@ -19,7 +21,7 @@ import company.tap.tapuilibrary.uikit.fragment.CurrencyViewFragment
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class ItemsViewHolder(context11: Context, private val baseLayoutManager: BaseLayoutManager) :
+class ItemsViewHolder1(context11: Context, private val baseLayoutManager: BaseLayoutManager) :
     TapBaseViewHolder {
     private val context1: Context? = context11
     private lateinit var fragmentManager: FragmentManager
@@ -32,6 +34,7 @@ class ItemsViewHolder(context11: Context, private val baseLayoutManager: BaseLay
 
     var displayed: Boolean = true
     private lateinit var supportedCurrecnyList: ArrayList<String>
+    private lateinit var supportedCurrecny: ArrayList<Currencies1>
     private lateinit var supportedItemList: List<Items1>
 
 
@@ -62,7 +65,7 @@ class ItemsViewHolder(context11: Context, private val baseLayoutManager: BaseLay
              CurrencyViewFragment(supportedCurrecnyList, itemList)
          )*/
         transaction.replace(R.id.sdkContainer,
-            CurrencyViewFragment(supportedCurrecnyList, supportedItemList))
+            CurrencyViewsFragment(supportedCurrecny, supportedItemList))
 
 
         transaction.addToBackStack(null)
@@ -74,7 +77,7 @@ class ItemsViewHolder(context11: Context, private val baseLayoutManager: BaseLay
     fun resetView(){
         val manager: FragmentManager = fragmentManager
         val transaction = manager.beginTransaction()
-        transaction.remove(CurrencyViewFragment(supportedCurrecnyList, supportedItemList))
+        transaction.remove(CurrencyViewFragment(supportedCurrecny, supportedItemList))
         transaction.addToBackStack(null)
         transaction.commit()
     }
