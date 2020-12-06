@@ -57,8 +57,8 @@ class TapLayoutViewModel : ViewModel(),
     private lateinit var saveCardSwitchHolder1: SwitchViewHolder1
     private lateinit var goPayViewHolder1: GoPayViewHolder1
     private lateinit var otpViewHolder: OTPViewHolder
-   // private lateinit var supportedCurrecnyList: ArrayList<String>
-    private lateinit var CurrecnyLists: ArrayList<Currencies1>
+    private lateinit var supportedCurrecnyList: ArrayList<String>
+  //  private lateinit var CurrecnyLists: ArrayList<Currencies1>
     private lateinit var itemList: List<Items1>
     private lateinit var savedcardList: List<SavedCards>
 
@@ -193,7 +193,7 @@ class TapLayoutViewModel : ViewModel(),
                 saveCardSwitchHolder1
             )
         //   itemsViewHolder.setDatafromAPI(supportedCurrecnyList,itemList,fragmentManager)
-          if (CurrecnyLists.size != 0) {
+         /* if (CurrecnyLists.size != 0) {
 
               transaction.add(
                     R.id.sdkContainer,
@@ -205,7 +205,7 @@ class TapLayoutViewModel : ViewModel(),
               itemsViewHolder.displayed = false
 
 
-          }
+          }*/
 
           }
 
@@ -275,7 +275,7 @@ class TapLayoutViewModel : ViewModel(),
             dummyInitapiResponse1.merchant1.name,
             paymentInputViewHolder1.selectedType
         )
-        CurrecnyLists = dummyInitapiResponse1.currencies1 as ArrayList<Currencies1>
+        //CurrecnyLists = dummyInitapiResponse1.currencies1 as ArrayList<Currencies1>
  itemList = dummyInitapiResponse1.order1.items
         savedcardList = dummyInitapiResponse1.savedCards
         /**
