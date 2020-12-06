@@ -41,15 +41,43 @@
     ]
   },
   "currencies": [
-    "USD",
-    "SAR",
-    "AED",
-    "KWD",
-    "OMR",
-    "QAR",
-    "BHD",
-    "EGP",
-    "JOD"
+    {
+      "currencytitle": "USD",
+        "currencyicon": "https://img.icons8.com/color/48/000000/usa.png"
+      },
+    {
+        "currencytitle": "SAR",
+        "currencyicon": "https://img.icons8.com/color/48/000000/saudi-arabia.png"
+      },
+       {
+        "currencytitle": "AED",
+        "currencyicon": "https://img.icons8.com/color/48/000000/united-arab-emirates.png"
+      },
+      {
+        "currencytitle": "KWD",
+        "currencyicon": "https://img.icons8.com/color/48/000000/kuwait.png"
+      },
+      {
+        "currencytitle": "OMR",
+        "currencyicon": "https://img.icons8.com/color/48/000000/oman.png"
+      },
+     {
+      "currencytitle": "QAR",
+      "currencyicon": "https://img.icons8.com/color/48/000000/qatar.png"
+    },
+      {
+        "currencytitle": "BHD",
+        "currencyicon": "https://img.icons8.com/emoji/48/000000/bahrain-emoji.png"
+      },
+      {
+        "currencytitle": "EGP",
+        "currencyicon": "https://img.icons8.com/color/48/000000/egypt.png"
+      },
+     {
+        "currencytitle": "JOD",
+        "currencyicon": "https://img.icons8.com/color/48/000000/jordan.png"
+      }
+
   ],
   "goPayCountries": [
     {

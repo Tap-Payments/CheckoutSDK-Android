@@ -131,8 +131,7 @@ class PaymentInputViewHolder1(
     }
 
     private fun initTabLayout() {
-        println("sdsadad")
-       // tabLayout.addSection(getCardList(imageURL))
+    // tabLayout.addSection(getCardList(imageURL))
         //   tabLayout.addSection(getCardList())
       //  tabLayout.addSection(getMobileList(imageURL))
       //  tabLayout.setTabLayoutInterface(this)
@@ -447,19 +446,20 @@ class PaymentInputViewHolder1(
             tabLayout.resetBehaviour()
             imageURL = imageURLApi.get(i).icon
             paymentType = imageURLApi.get(i).paymentType
-            println("paymentType in loop" + paymentType)
+           // println("paymentType in loop" + paymentType)
             if (imageURL != null) {
                 val url = URL(imageURL)
                 if (url != null) {
 
-                    val bytes = ByteArrayOutputStream()
-
-                    val bmOptions = BitmapFactory.Options()
-                    val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-                    bmp.compress(Bitmap.CompressFormat.JPEG, 40, bytes)
-                    val drawablem: Drawable = BitmapDrawable(context.resources, bmp)
-                    bmOptions.inSampleSize = 1
                     if (paymentType == "telecom") {
+
+                        val bytes = ByteArrayOutputStream()
+
+                        val bmOptions = BitmapFactory.Options()
+                        val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
+                        bmp.compress(Bitmap.CompressFormat.JPEG, 40, bytes)
+                        val drawablem: Drawable = BitmapDrawable(context.resources, bmp)
+                        bmOptions.inSampleSize = 1
                         itemsMobileList.add(
                             SectionTabItem(
                                 drawablem,

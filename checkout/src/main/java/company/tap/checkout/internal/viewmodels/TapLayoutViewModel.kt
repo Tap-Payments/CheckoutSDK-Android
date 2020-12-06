@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 
 import company.tap.checkout.R
+import company.tap.checkout.internal.dummygener.Currencies1
 import company.tap.checkout.internal.dummygener.Items1
 import company.tap.checkout.internal.dummygener.JsonResponseDummy1
 import company.tap.checkout.internal.dummygener.SavedCards
@@ -25,6 +26,7 @@ import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.adapters.CardTypeAdapterUIKIT
 import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
 import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
+import company.tap.tapuilibrary.uikit.fragment.CurrencyViewFragment
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
 
 import kotlinx.android.synthetic.main.cardviewholder_layout.view.*
@@ -55,7 +57,8 @@ class TapLayoutViewModel : ViewModel(),
     private lateinit var saveCardSwitchHolder1: SwitchViewHolder1
     private lateinit var goPayViewHolder1: GoPayViewHolder1
     private lateinit var otpViewHolder: OTPViewHolder
-    private lateinit var supportedCurrecnyList: ArrayList<String>
+   // private lateinit var supportedCurrecnyList: ArrayList<String>
+    private lateinit var CurrecnyLists: ArrayList<Currencies1>
     private lateinit var itemList: List<Items1>
     private lateinit var savedcardList: List<SavedCards>
 
@@ -190,14 +193,14 @@ class TapLayoutViewModel : ViewModel(),
                 saveCardSwitchHolder1
             )
         //   itemsViewHolder.setDatafromAPI(supportedCurrecnyList,itemList,fragmentManager)
-          if (supportedCurrecnyList.size != 0) {
+          if (CurrecnyLists.size != 0) {
 
-            /*  transaction.add(
+              transaction.add(
                     R.id.sdkContainer,
-                    CurrencyViewFragment(supportedCurrecnyList, itemList)
+                    CurrencyViewFragment(CurrecnyLists, itemList)
                 )
                 transaction.addToBackStack(null)
-                transaction.commit()*/
+                transaction.commit()
              //  addViews(itemsViewHolder)
               itemsViewHolder.displayed = false
 
@@ -272,8 +275,8 @@ class TapLayoutViewModel : ViewModel(),
             dummyInitapiResponse1.merchant1.name,
             paymentInputViewHolder1.selectedType
         )
-        supportedCurrecnyList = dummyInitapiResponse1.currencies as ArrayList<String>
-         itemList = dummyInitapiResponse1.order1.items
+        CurrecnyLists = dummyInitapiResponse1.currencies1 as ArrayList<Currencies1>
+ itemList = dummyInitapiResponse1.order1.items
         savedcardList = dummyInitapiResponse1.savedCards
         /**
          * Setting divider for items
