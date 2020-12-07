@@ -107,13 +107,15 @@ class GoPayViewHolder1(private val context: Context, private val baseLayoutManag
     override fun onOtpButtonConfirmationClick(otpNumber: String): Boolean {
         println("otpNumber is $otpNumber")
         Log.d("isValidOTP1" ,(otpNumber == "111111").toString() )
-        GoPayLoginHolder1(context,this,baseLayoutManager).view
+       // GoPayLoginHolder1(context,this,baseLayoutManager).view
+        GoPaySavedCardHolder(context,this,baseLayoutManager).view
         return otpNumber == "111111"
     }
 
-    override fun onCardSelectedAction(isSelected: Boolean) {
+    override fun onCardSelectedAction(isSelected: Boolean, typeCardView: String) {
 
     }
+
 
     override fun onDeleteIconClicked(stopAnimation: Boolean, itemId: Int) {
 

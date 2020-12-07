@@ -4,16 +4,15 @@ import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
-import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.R
-import company.tap.checkout.internal.dummygener.SavedCards
+import company.tap.checkout.internal.dummygener.GoPaySavedCards
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.uikit.adapters.CardTypeAdapterUIKIT
+import company.tap.tapuilibrary.uikit.adapters.goPayCardAdapterUIKIT
 import company.tap.tapuilibrary.uikit.interfaces.OnCardSelectedActionListener
 import kotlinx.android.synthetic.main.gopayloginview_layout.view.*
 import kotlinx.android.synthetic.main.gopayloginview_layout.view.tapSeparatorViewLinear
@@ -24,19 +23,19 @@ import kotlinx.android.synthetic.main.gopayloginview_layout.view.tapSeparatorVie
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class GoPayLoginHolder1(
+class GoPaySavedCardHolder(
     private val context: Context,
     private val onCardSelectedActionListener: OnCardSelectedActionListener,
     private val baseLayopu: BaseLayoutManager?=null
 ) : TapBaseViewHolder {
 
   //  override val view = TapChipGroup(context, null)
-    override val view: View = LayoutInflater.from(context).inflate(R.layout.gopayloginview_layout, null)
+    override val view: View = LayoutInflater.from(context).inflate(R.layout.gopaysavedcard_layout, null)
 
     override val type = SectionType.CARD
 
 
-    private var paymentsList: List<SavedCards>? = null
+    private var goPaySavedCardsList: List<GoPaySavedCards>? = null
 
 
     init {
@@ -59,8 +58,8 @@ class GoPayLoginHolder1(
             false
         )
         view.goPayLoginView.chipsRecycler.adapter =
-            paymentsList?.let { CardTypeAdapterUIKIT(it as ArrayList<SavedCards>, onCardSelectedActionListener,false) }
-        println("paymentList  currency ${paymentsList?.get(0)?.currencies}")
+            goPaySavedCardsList?.let { goPayCardAdapterUIKIT(it as ArrayList<GoPaySavedCards>, onCardSelectedActionListener,false) }
+        println("paymentList  currency ${goPaySavedCardsList?.get(0)?.chip1?.icon}")
        /* view.goPayLoginView.groupAction.setOnClickListener {
             val animation = AnimationUtils.loadAnimation(this.view.context, R.anim.shake)
             view.goPayLoginView.chipsRecycler.startAnimation(animation)
@@ -76,10 +75,10 @@ class GoPayLoginHolder1(
 
     /**
      * Sets data from API through LayoutManager
-     * @param paymentMethodsApi represents the list of payment methods available from API
+     * @param goPaySavedCardsApi represents the list of payment methods available from API
      * */
-    fun setDatafromAPI(paymentMethodsApi: List<SavedCards>) {
-        paymentsList = paymentMethodsApi
+    fun setDatafromAPI(goPaySavedCardsApi: List<GoPaySavedCards>) {
+        goPaySavedCardsList = goPaySavedCardsApi
         bindViewComponents()
     }
 }

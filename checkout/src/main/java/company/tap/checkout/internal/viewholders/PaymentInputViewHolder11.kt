@@ -98,7 +98,7 @@ class PaymentInputViewHolder11(
         StrictMode.setThreadPolicy(policy)
         // switchViewHolder = SwitchViewHolder(context)
         bindViewComponents()
-        tabLayout.changeTabItemAlphaValue(0.7f)
+        tabLayout.changeTabItemAlphaValue(0.9f)
 
     }
 
@@ -206,7 +206,7 @@ class PaymentInputViewHolder11(
     //Setting on the cardInput with logics
     private fun initCardInput() {
         cardInputWidget.holderNameEnabled = false
-        paymentInputContainer.removeView(cardInputWidget)
+        //paymentInputContainer.removeView(cardInputWidget)
         paymentInputContainer.addView(cardInputWidget)
         cardInputWidget.clearFocus()
         //Textwatcher for cardNumber
@@ -298,81 +298,6 @@ class PaymentInputViewHolder11(
         }
     }
 
-    // Function to get the card names and images or logos from the API
-    @SuppressLint("UseCompatLoadingForDrawables")
-    private fun getCardList(imageIcon: String?): ArrayList<SectionTabItem> {
-        val items = ArrayList<SectionTabItem>()
-        if (imageIcon != null) {
-            val url = URL(imageIcon)
-            if (url != null) {
-                val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-                println("bmp card  id " + bmp)
-                val drawable: Drawable = BitmapDrawable(context.resources, bmp)
-                println("paymentType  card values are" + paymentType)
-                //   if(paymentType.equals("card")){
-                /* items.add(
-                    SectionTabItem(
-                        drawable, context.resources.getDrawable(R.drawable.ic_visa_black), CardBrand.visa
-                    )
-                )*/
-//}
-                drawable.let {
-                    SectionTabItem(
-                        drawable, context.resources.getDrawable(R.drawable.ic_visa_black),
-                        CardBrand.visa
-                    )
-                }.let {
-                    items.add(
-                        it
-                    )
-                }
-            }
-            println("itemscard value is" + items)
-            isadded = true
-
-        }
-
-        return items
-    }
-
-    // Function to get the mobile names and images or logos from the API .
-    private fun getMobileList(imageIcon: String?): ArrayList<SectionTabItem> {
-        val itemsMobile = ArrayList<SectionTabItem>()
-
-        if (imageIcon != null) {
-            val url = URL(imageIcon)
-            if (url != null) {
-                val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-                println("bmp Mobile id " + bmp)
-                val drawableTelecom: Drawable = BitmapDrawable(context.resources, bmp)
-                println("paymentType values are telecom " + paymentType)
-                if (paymentType.equals("telecom")) {
-                    itemsMobile.add(
-                        SectionTabItem(
-                            drawableTelecom,
-                            context.resources.getDrawable(R.drawable.zain_dark),
-                            CardBrand.zain
-                        )
-                    )
-                }
-            }
-        }
-        /* items1.add(
-            SectionTabItem(
-                context.resources.getDrawable(
-                    R.drawable.zain_gray
-                ), context.resources.getDrawable(R.drawable.zain_dark), CardBrand.zain
-            )
-        )
-        items1.add(
-            SectionTabItem(
-                context.resources.getDrawable(
-                    R.drawable.ooredoo
-                ), context.resources.getDrawable(R.drawable.ooredoo_gray), CardBrand.ooredoo
-            )
-        )*/
-        return itemsMobile
-    }
 
     override fun onTabSelected(position: Int?) {
         tabPosition = position
@@ -442,7 +367,6 @@ class PaymentInputViewHolder11(
         for (i in 0 until imageURLApi.size) {
             itemsMobileList =  ArrayList<SectionTabItem>()
             itemsCardList = ArrayList<SectionTabItem>()
-           // tabLayout = view.findViewById(R.id.sections_tablayout)
             tabLayout.resetBehaviour()
             imageURL = imageURLApi.get(i).icon
             paymentType = imageURLApi.get(i).paymentType
@@ -462,12 +386,12 @@ class PaymentInputViewHolder11(
                         bmOptions.inSampleSize = 1
                         itemsMobileList.add(
                             SectionTabItem(
-                                drawablem,
-                                context.resources.getDrawable(R.drawable.zain_dark),
+                                imageURL!!,
+                                imageURL!!,
                                 CardBrand.zain
                             )
                         )
-
+                        tabLayout.addSection(itemsMobileList)
 
                        // println("itemsMobileList in loop" + imageURL)
                     } else {
@@ -477,12 +401,12 @@ class PaymentInputViewHolder11(
                         val drawablem1: Drawable = BitmapDrawable(context.resources, bmpq)
                         itemsCardList.add(
                             SectionTabItem(
-                                drawablem1,
-                                context.resources.getDrawable(R.drawable.visa_gray),
+                                imageURL!!,
+                                imageURL!!,
                                 CardBrand.visa
                             )
                         )
-                     //   println("itemsCardList in loop" + imageURL)
+                       // println("itemsCardList in loop" + itemsCardList.size)
                         tabLayout.addSection(itemsCardList)
 
                     }

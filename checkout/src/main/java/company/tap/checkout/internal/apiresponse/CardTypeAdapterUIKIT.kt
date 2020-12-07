@@ -146,7 +146,7 @@ class CardTypeAdapterUIKIT(
                 if (!isShaking) {
                     holder.itemView.setOnClickListener {
                         selectedPosition = position
-                        onCardSelectedActionListener?.onCardSelectedAction(false)
+                        onCardSelectedActionListener?.onCardSelectedAction(false,TYPE_GO_PAY.toString())
                         notifyDataSetChanged()
                     }
                 }
@@ -257,7 +257,7 @@ class CardTypeAdapterUIKIT(
         (holder as SingleViewHolder)
         if (!isShaking) {
             holder.itemView.setOnClickListener {
-                onCardSelectedActionListener?.onCardSelectedAction(true)
+                onCardSelectedActionListener?.onCardSelectedAction(true,arrayListSaveCard.toString())
                 selectedPosition = position
                 notifyDataSetChanged()
             }

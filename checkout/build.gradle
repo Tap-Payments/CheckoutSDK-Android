@@ -63,8 +63,8 @@ dependencies {
     api 'com.github.Tap-Payments:TapUIKit-Android:1.1.0.395'*/
 
 
-    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.181'
-    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.181'
+    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.185'
+    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.185'
 
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     kapt 'com.github.bumptech.glide:compiler:4.11.0'

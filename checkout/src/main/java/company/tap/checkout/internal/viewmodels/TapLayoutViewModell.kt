@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.Slide
 
 import company.tap.checkout.R
 import company.tap.checkout.internal.dummygener.Currencies1
@@ -29,6 +30,7 @@ import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
 import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
 import company.tap.tapuilibrary.uikit.fragment.CurrencyViewsFragment
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
+import company.tap.tapuilibrary.uikit.interfaces.OnCardSelectedActionListener
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 
 import kotlinx.android.synthetic.main.cardviewholder_layout.view.*
@@ -43,8 +45,8 @@ import java.util.*
  *
  */
 class TapLayoutViewModell : ViewModel(),
-    BaseLayoutManager, OnCardSelectedActionListener, onPaymentCardComplete, onCardNFCCallListener,
-    company.tap.tapuilibrary.uikit.interfaces.OnCardSelectedActionListener {
+    BaseLayoutManager, OnCardSelectedActionListener, onPaymentCardComplete, onCardNFCCallListener
+    {
 
     private lateinit var context: Context
     private lateinit var fragmentManager: FragmentManager
@@ -54,14 +56,14 @@ class TapLayoutViewModell : ViewModel(),
     private lateinit var amountViewHolder1: AmountViewHolder1
     private lateinit var itemsViewHolder1: ItemsViewHolder1
     private lateinit var cardViewHolder11: CardViewHolder11
-    private lateinit var goPayLoginHolder1: GoPayLoginHolder1
+  //  private lateinit var goPayLoginHolder1: GoPayLoginHolder1
   //  private lateinit var paymentInputViewHolder1: PaymentInputViewHolder1
     private lateinit var paymentInputViewHolder11: PaymentInputViewHolder11
   //  private lateinit var saveCardSwitchHolder1: SwitchViewHolder1
     private lateinit var saveCardSwitchHolder11: SwitchViewHolder11
     private lateinit var goPayViewHolder1: GoPayViewHolder1
     private lateinit var otpViewHolder: OTPViewHolder
-
+ private lateinit var goPaySavedCardHolder: GoPaySavedCardHolder
     private lateinit var allCurrencies:List<Currencies1>
     private lateinit var itemList: List<Items1>
     private lateinit var savedcardList: List<SavedCards>
@@ -84,7 +86,8 @@ class TapLayoutViewModell : ViewModel(),
 
         cardViewHolder11 = CardViewHolder11(context,this)
 
-        goPayLoginHolder1 = GoPayLoginHolder1(context, this, this)
+       // goPayLoginHolder1 = GoPayLoginHolder1(context, this, this)
+        goPaySavedCardHolder = GoPaySavedCardHolder(context, this, this)
        // paymentInputViewHolder1 = PaymentInputViewHolder1(context, this, this)
         paymentInputViewHolder11 = PaymentInputViewHolder11(context, this, this)
        // saveCardSwitchHolder1 = SwitchViewHolder1(context)
@@ -161,25 +164,42 @@ class TapLayoutViewModell : ViewModel(),
     }
 
     override fun displayGoPayLogin() {
-       // if (this::bottomSheetLayout.isInitialized)
-      // AnimationEngine.applyTransition(bottomSheetLayout, SLIDE)
+        println("goPay Login reached")
+        if (this::bottomSheetLayout.isInitialized) {
+            AnimationEngine.applyTransition(bottomSheetLayout,
+
+            )
+        }
         removeViews(
-       cardViewHolder11,
+            businessViewHolder,
+            amountViewHolder1,
+            cardViewHolder11,
             paymentInputViewHolder11,
             saveCardSwitchHolder11,
         )
        // if (this::bottomSheetLayout.isInitialized)
        // addViews(goPayViewHolder)
-        addViews(goPayLoginHolder1)
+        addViews( businessViewHolder,
+            amountViewHolder1,goPayViewHolder1)
+
 
     }
 
     override fun displayGoPay() {
 
+        removeViews(
+            businessViewHolder,
+            amountViewHolder1,
+            goPaySavedCardHolder,
+            cardViewHolder11,
+            paymentInputViewHolder11,
+            saveCardSwitchHolder11
+        )
+
         addViews(
             businessViewHolder,
             amountViewHolder1,
-            goPayLoginHolder1,
+            goPaySavedCardHolder,
             cardViewHolder11,
             paymentInputViewHolder11,
             saveCardSwitchHolder11
@@ -240,8 +260,8 @@ class TapLayoutViewModell : ViewModel(),
     }
 
     override fun displayOTP(otpMobile: String) {
-
-        addViews(otpViewHolder)
+        removeViews(businessViewHolder,amountViewHolder1,otpViewHolder)
+        addViews(businessViewHolder,amountViewHolder1,otpViewHolder)
         println("display OTP is called" + otpMobile)
         otpViewHolder.otpView.visibility = View.VISIBLE
         otpViewHolder.otpView.mobileNumberText.text=otpMobile
@@ -279,7 +299,7 @@ class TapLayoutViewModell : ViewModel(),
         )
 
         cardViewHolder11.setDatafromAPI(dummyInitapiResponse1.savedCards)
-        goPayLoginHolder1.setDatafromAPI(dummyInitapiResponse1.savedCards)
+        goPaySavedCardHolder.setDatafromAPI(dummyInitapiResponse1.goPaySavedCards)
         println("dummy tapCardPhoneListDataSource" + dummyInitapiResponse1.tapCardPhoneListDataSource)
         paymentInputViewHolder11.setDatafromAPI(dummyInitapiResponse1.tapCardPhoneListDataSource)
 
@@ -358,10 +378,15 @@ class TapLayoutViewModell : ViewModel(),
       //  tabAnimatedActionButtonViewHolder11.view.actionButton.isClickable = false
     }
 
-    override fun onCardSelectedAction(isSelected: Boolean) {
+
+    override fun onCardSelectedAction(isSelected: Boolean, typeCardView: String) {
+        println("onCardSelectedAction called"+isSelected)
         if (isSelected) {
-           // activateActionButton()
-          //  tabAnimatedActionButtonViewHolder11.view.actionButton.setOnClickListener { tabAnimatedActionButtonViewHolder11.setOnClickAction() }
+           if(typeCardView == "3"){
+               displayGoPayLogin()
+           }
+            // activateActionButton()
+            //  tabAnimatedActionButtonViewHolder11.view.actionButton.setOnClickListener { tabAnimatedActionButtonViewHolder11.setOnClickAction() }
         } else unActivateActionButton()
     }
 
@@ -528,6 +553,8 @@ class TapLayoutViewModell : ViewModel(),
     private fun stopShakingCards(chipsView: RecyclerView) {
         chipsView.adapter = CardTypeAdapterUIKIT(savedcardList as ArrayList<SavedCards>, this, false)
     }
+
+
 
 
 }
