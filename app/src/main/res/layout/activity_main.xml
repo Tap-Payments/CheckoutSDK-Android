@@ -9,7 +9,6 @@
     android:background="@drawable/backgr"
     >
 
-   <!-- android:background="@drawable/backgr"-->
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/launchSDK"
@@ -21,11 +20,5 @@
         android:onClick="openBottomSheet"
         />
 
-    <FrameLayout
-        android:id="@+id/frameContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
-        />
 
 </LinearLayout>

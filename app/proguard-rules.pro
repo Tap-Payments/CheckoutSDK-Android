@@ -20,7 +20,6 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 -keep class company.tap.checkout** { *; }
--keep public interface company.tap.checkout.internal.interfaces.BaseLayoutManager {*;}
 -keep public interface company.tap.checkout.internal.interfaces.BaseLayouttManager {*;}
 -keep public interface company.tap.checkout.internal.viewmodels.TapLayoutViewModell {*;}
 -keepnames class company.tap.tapuilibrary**{*;}

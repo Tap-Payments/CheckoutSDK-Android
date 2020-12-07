@@ -15,7 +15,6 @@ import company.tap.checkout.internal.apiresponse.getJsonDataFromAsset
 import company.tap.checkout.internal.dummygener.JsonResponseDummy1
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayouttManager
-import company.tap.checkout.internal.interfaces.getDataInterface
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModell
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
@@ -27,7 +26,7 @@ import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
 
 /**
  * A simple [Fragment] subclass.
- * Use the [CheckoutFragment.newInstance] factory method to
+// * Use the [CheckoutFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
 class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
@@ -36,9 +35,9 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
 
     private var view1: View? = null
     private var contextt: Context? = null
-  //  private lateinit var baseLayoutManager: BaseLayoutManager
+
     private lateinit var baseLayouttManager: BaseLayouttManager
-    private lateinit var getDataInterface: getDataInterface
+
 
     private lateinit var viewModell :TapLayoutViewModell
 
@@ -130,9 +129,9 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         return view1
     }
 
-    private fun getBusinessHeaderData(context22: Context?,viewModel22: TapLayoutViewModell) {
-        print("contexct22"+context22)
-        val jsonFileString = context22?.let { getJsonDataFromAsset(it, "dummyapiresponsedefault.json") }
+    private fun getBusinessHeaderData(context: Context?,viewModel22: TapLayoutViewModell) {
+        print("contexct22"+context)
+        val jsonFileString = context?.let { getJsonDataFromAsset(it, "dummyapiresponsedefault.json") }
         val gson = Gson()
         val dummyInitApiResponse: JsonResponseDummy1 = gson.fromJson(jsonFileString, JsonResponseDummy1::class.java)
         // Pass the api response data to LayoutManager

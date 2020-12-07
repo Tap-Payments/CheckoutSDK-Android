@@ -27,7 +27,6 @@ import company.tap.checkout.internal.interfaces.onCardNFCCallListener
 import company.tap.checkout.internal.interfaces.onPaymentCardComplete
 import company.tap.checkout.internal.viewholders.*
 import company.tap.tapuilibrary.themekit.ThemeManager
-//import company.tap.tapuilibrary.uikit.adapters.CardTypeAdapterUIKIT
 import company.tap.tapuilibrary.uikit.animation.AnimationEngine
 import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
 import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
@@ -57,7 +56,8 @@ class TapLayoutViewModell : ViewModel(),
     private lateinit var amountViewHolder1: AmountViewHolder1
     private lateinit var itemsViewHolder1: ItemsViewHolder1
     private lateinit var cardViewHolder11: CardViewHolder11
-    private lateinit var paymentInputsViewHolder: PaymentInputsViewHolder
+  //  private lateinit var paymenttInputViewHolder: PaymenttInputViewHolder
+    private lateinit var paymenttInputViewHolder: PaymenttInputViewHolder
 
     //  private lateinit var saveCardSwitchHolder1: SwitchViewHolder1
     private lateinit var saveCardSwitchHolder11: SwitchViewHolder11
@@ -89,10 +89,10 @@ class TapLayoutViewModell : ViewModel(),
 
         cardViewHolder11 = CardViewHolder11(context, this)
 
-        // goPayLoginHolder1 = GoPayLoginHolder1(context, this, this)
         goPaySavedCardHolder = GoPaySavedCardHolder(context, this, this)
-        // paymentInputViewHolder11 = PaymentInputViewHolder11(context, this, this)
-        paymentInputsViewHolder = PaymentInputsViewHolder(context, this, this)
+       // paymenttInputViewHolder = PaymenttInputViewHolder(context, this, this)
+       // paymentInputtViewHolder = PaymentInputtViewHolder(context, this, this)
+        paymenttInputViewHolder = PaymenttInputViewHolder(context, this, this)
         // saveCardSwitchHolder1 = SwitchViewHolder1(context)
         saveCardSwitchHolder11 = SwitchViewHolder11(context)
         // itemsViewHolder = ItemsViewHolder(context, this)
@@ -145,7 +145,7 @@ class TapLayoutViewModell : ViewModel(),
             businessViewHolder,
             amountViewHolder1,
             cardViewHolder11,
-            paymentInputsViewHolder,
+                paymenttInputViewHolder,
             saveCardSwitchHolder11
         )
 
@@ -178,7 +178,7 @@ class TapLayoutViewModell : ViewModel(),
             businessViewHolder,
             amountViewHolder1,
             cardViewHolder11,
-            paymentInputsViewHolder,
+                paymenttInputViewHolder,
             saveCardSwitchHolder11,
         )
         // if (this::bottomSheetLayout.isInitialized)
@@ -198,7 +198,7 @@ class TapLayoutViewModell : ViewModel(),
             amountViewHolder1,
             goPaySavedCardHolder,
             cardViewHolder11,
-            paymentInputsViewHolder,
+                paymenttInputViewHolder,
             saveCardSwitchHolder11
         )
 
@@ -207,7 +207,7 @@ class TapLayoutViewModell : ViewModel(),
             amountViewHolder1,
             goPaySavedCardHolder,
             cardViewHolder11,
-            paymentInputsViewHolder,
+                paymenttInputViewHolder,
             saveCardSwitchHolder11
         )
 
@@ -240,7 +240,7 @@ class TapLayoutViewModell : ViewModel(),
             }
             removeViews(
                 cardViewHolder11,
-                paymentInputsViewHolder,
+                    paymenttInputViewHolder,
                 saveCardSwitchHolder11
             )
 
@@ -322,13 +322,13 @@ class TapLayoutViewModell : ViewModel(),
 
         cardViewHolder11.setDatafromAPI(dummyInitapiResponse1.savedCards)
         goPaySavedCardHolder.setDatafromAPI(dummyInitapiResponse1.goPaySavedCards)
-        println("dummy tapCardPhoneListDataSource" + dummyInitapiResponse1.tapCardPhoneListDataSource)
-        paymentInputsViewHolder.setDatafromAPI(dummyInitapiResponse1.tapCardPhoneListDataSource)
+       // println("dummy tapCardPhoneListDataSource" + dummyInitapiResponse1.tapCardPhoneListDataSources)
+        paymenttInputViewHolder.setDatafromAPI(dummyInitapiResponse1.tapCardPhoneListDataSourced)
 
 
         saveCardSwitchHolder11.setDatafromAPI(
             dummyInitapiResponse1.merchant1.name,
-            paymentInputsViewHolder.selectedType
+                paymenttInputViewHolder.selectedType
         )
 
         allCurrencies = dummyInitapiResponse1.currencies1
@@ -461,7 +461,7 @@ class TapLayoutViewModell : ViewModel(),
         removeViews(
             cardViewHolder11,
             saveCardSwitchHolder11,
-            paymentInputsViewHolder
+                paymenttInputViewHolder
         )
         val manager: FragmentManager = fragmentManager
         val transaction = manager.beginTransaction()
@@ -483,7 +483,7 @@ class TapLayoutViewModell : ViewModel(),
         removeViews(
             cardViewHolder11,
             saveCardSwitchHolder11,
-            paymentInputsViewHolder
+                paymenttInputViewHolder
         )
         val manager: FragmentManager = fragmentManager
         val transaction = manager.beginTransaction()
