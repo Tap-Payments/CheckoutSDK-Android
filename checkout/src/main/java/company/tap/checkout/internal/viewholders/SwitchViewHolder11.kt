@@ -27,7 +27,7 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
     override val type = SectionType.SAVE_CARD
 
     private var merchantName: String? = null
-    private var paymentName: PaymentInputViewHolder11.PaymentType? = null
+    private var paymentName: PaymentInputsViewHolder.PaymentType? = null
     private var switchString: String? = null
     private var goPayString: String? = null
     private var savegoPayString: String? = null
@@ -43,7 +43,7 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
 
     }
     // Function / Logic is responsible for sett ing the data to switch based on user selection
-    fun setSwitchLocals(payName:PaymentInputViewHolder11.PaymentType) {
+    fun setSwitchLocals(payName:PaymentInputsViewHolder.PaymentType) {
         //TODO Check why view is not being refreshed though string is updated
         //Has to be in Else condition only, temporarily kept here for data purpose
         goPayString = LocalizationManager.getValue("goPayTextLabel","GoPay")
@@ -99,7 +99,7 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
      * @param paymentType represents the type is card or mobile payment.Based on it will decide the
      * text of switches.
      * */
-    fun setDatafromAPI(merchantNameApi: String, paymentType: PaymentInputViewHolder11.PaymentType) {
+    fun setDatafromAPI(merchantNameApi: String, paymentType: PaymentInputsViewHolder.PaymentType) {
         merchantName = merchantNameApi
         paymentName = paymentType
        // bindViewComponents()

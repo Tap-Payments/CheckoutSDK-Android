@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.R
 import company.tap.checkout.internal.dummygener.GoPaySavedCards
 import company.tap.checkout.internal.enums.SectionType
-import company.tap.checkout.internal.interfaces.BaseLayoutManager
+import company.tap.checkout.internal.interfaces.BaseLayouttManager
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.adapters.goPayCardAdapterUIKIT
@@ -26,7 +26,8 @@ import kotlinx.android.synthetic.main.gopayloginview_layout.view.tapSeparatorVie
 class GoPaySavedCardHolder(
     private val context: Context,
     private val onCardSelectedActionListener: OnCardSelectedActionListener,
-    private val baseLayopu: BaseLayoutManager?=null
+
+    private val baseLayouttManager: BaseLayouttManager?=null
 ) : TapBaseViewHolder {
 
   //  override val view = TapChipGroup(context, null)
@@ -59,7 +60,7 @@ class GoPaySavedCardHolder(
         )
         view.goPayLoginView.chipsRecycler.adapter =
             goPaySavedCardsList?.let { goPayCardAdapterUIKIT(it as ArrayList<GoPaySavedCards>, onCardSelectedActionListener,false) }
-        println("paymentList  currency ${goPaySavedCardsList?.get(0)?.chip1?.icon}")
+        println("goPaySavedCardsList  currency ${goPaySavedCardsList?.get(0)?.chip1?.icon}")
        /* view.goPayLoginView.groupAction.setOnClickListener {
             val animation = AnimationUtils.loadAnimation(this.view.context, R.anim.shake)
             view.goPayLoginView.chipsRecycler.startAnimation(animation)

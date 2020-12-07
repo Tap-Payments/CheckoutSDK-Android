@@ -14,7 +14,7 @@ import company.tap.checkout.R
 import company.tap.checkout.internal.apiresponse.getJsonDataFromAsset
 import company.tap.checkout.internal.dummygener.JsonResponseDummy1
 import company.tap.checkout.internal.enums.SectionType
-import company.tap.checkout.internal.interfaces.BaseLayoutManager
+import company.tap.checkout.internal.interfaces.BaseLayouttManager
 import company.tap.checkout.internal.interfaces.getDataInterface
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModell
 import company.tap.taplocalizationkit.LocalizationManager
@@ -27,16 +27,17 @@ import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
 
 /**
  * A simple [Fragment] subclass.
- * Use the [CheckoutTapFragmentt.newInstance] factory method to
+ * Use the [CheckoutFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class CheckoutTapFragmentt : TapBottomSheetDialog(), TapBottomDialogInterface {
+class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
 
 
 
     private var view1: View? = null
     private var contextt: Context? = null
-    private lateinit var baseLayoutManager: BaseLayoutManager
+  //  private lateinit var baseLayoutManager: BaseLayoutManager
+    private lateinit var baseLayouttManager: BaseLayouttManager
     private lateinit var getDataInterface: getDataInterface
 
     private lateinit var viewModell :TapLayoutViewModell
@@ -151,7 +152,7 @@ class CheckoutTapFragmentt : TapBottomSheetDialog(), TapBottomDialogInterface {
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(context: Context, activity: Activity) =
-            CheckoutTapFragmentt().apply {
+            CheckoutFragment().apply {
                 arguments = Bundle().apply {
                     // putString(ARG_PARAM1, param1)
                     // putString(ARG_PARAM2, param2)

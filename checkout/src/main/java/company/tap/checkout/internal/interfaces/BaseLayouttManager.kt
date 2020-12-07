@@ -9,12 +9,13 @@ import company.tap.checkout.internal.enums.SectionType
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-interface BaseLayoutManager {
+interface BaseLayouttManager {
     fun displayStartupLayout(enabledSections: ArrayList<SectionType>)
     fun displayGoPayLogin()
     fun displayGoPay()
     fun controlCurrency(display: Boolean)
-    fun displayOTP(otpMobile:String)
+    //fun displayOTP(otpMobile:String, otpValid: Boolean)
+    fun displayOTPV(otpMobile:String, otpValid: Boolean)
     fun displayRedirect(url: String)
     fun displaySaveCardOptions()
     fun getDatafromAPI(dummyResponse1: JsonResponseDummy1)

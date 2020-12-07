@@ -1,13 +1,9 @@
 package company.tap.checkout.internal.viewholders
 
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.StrictMode
 import android.text.Editable
 import android.text.TextWatcher
@@ -18,6 +14,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.annotation.IntRange
+import androidx.annotation.RequiresApi
 import androidx.core.widget.doAfterTextChanged
 import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardinputwidget.widget.inline.InlineCardInput
@@ -26,19 +23,20 @@ import company.tap.checkout.internal.dummygener.TapCardPhoneListDataSource
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.onCardNFCCallListener
 import company.tap.checkout.internal.interfaces.onPaymentCardComplete
-import company.tap.checkout.internal.viewholders.PaymentInputViewHolder11.PaymentType.CARD
-import company.tap.checkout.internal.viewholders.PaymentInputViewHolder11.PaymentType.MOBILE
+import company.tap.checkout.internal.viewholders.PaymentInputsViewHolder.PaymentType.CARD
+import company.tap.checkout.internal.viewholders.PaymentInputsViewHolder.PaymentType.MOBILE
 import company.tap.tapcardvalidator_android.CardBrand
 import company.tap.tapcardvalidator_android.CardValidationState
 import company.tap.tapcardvalidator_android.CardValidator
 import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.fragment.NFCFragment
+import company.tap.tapuilibrary.uikit.interfaces.TapPaymentShowHideClearImage
 import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
 import company.tap.tapuilibrary.uikit.models.SectionTabItem
 import company.tap.tapuilibrary.uikit.views.TapMobilePaymentView
 import company.tap.tapuilibrary.uikit.views.TapSelectionTabLayout
-import kotlinx.android.synthetic.main.payment_input1s_layout.view.*
+import kotlinx.android.synthetic.main.payment_inputss_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
-import java.io.ByteArrayOutputStream
 import java.net.URL
 
 
@@ -49,15 +47,16 @@ import java.net.URL
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class PaymentInputViewHolder11(
+@RequiresApi(Build.VERSION_CODES.N)
+class PaymentInputsViewHolder(
     private val context: Context,
     private val onPaymentCardComplete: onPaymentCardComplete,
     private val onCardNFCCallListener: onCardNFCCallListener
 ) : TapBaseViewHolder,
-    TapSelectionTabLayoutInterface, CardInputListener {
+    TapSelectionTabLayoutInterface, CardInputListener,TapPaymentShowHideClearImage {
 
     override val view: View =
-        LayoutInflater.from(context).inflate(R.layout.payment_input1s_layout, null)
+        LayoutInflater.from(context).inflate(R.layout.payment_inputss_layout, null)
 
     override val type = SectionType.PAYMENT_INPUT
 
@@ -65,7 +64,7 @@ class PaymentInputViewHolder11(
     private val paymentInputContainer: LinearLayout
 
     // private val paymentLayoutContainer: LinearLayout
-    private val clearText: ImageView
+    private val clearView: ImageView
 
     //  private val scannerOptions: LinearLayout
     var selectedType = CARD
@@ -76,28 +75,34 @@ class PaymentInputViewHolder11(
     private var lastCardInput = ""
     private var cardScannerBtn: ImageView? = null
     private var nfcButton: ImageView? = null
-
+    private lateinit var tapCardInputView: InlineCardInput
+    private lateinit var tapMobileInputView: TapMobilePaymentView
     private var linearLayoutPay: LinearLayout? = null
     private var tabPosition: Int? = null
 
     private var switchViewHolder11 = SwitchViewHolder11(context)
-    private var imageURL: String? = null
+    private var imageURL: String=""
     private var isadded: Boolean = false
     private lateinit var paymentType: String
     private var itemsTelecom = ArrayList<SectionTabItem>()
-    var itemsMobileList =ArrayList<SectionTabItem>()
-    var itemsCardList = ArrayList<SectionTabItem>()
+
     init {
+
         tabLayout = view.findViewById(R.id.sections_tablayout)
+        tabLayout.setTabLayoutInterface(this)
+        tapMobileInputView = TapMobilePaymentView(context, null)
+        tapCardInputView = InlineCardInput(context,null)
+        tabLayout.setTabLayoutInterface(this)
+
         paymentInputContainer = view.findViewById(R.id.payment_input_layout)
         //  paymentLayoutContainer = view.findViewById(R.id.payment_layout_container)
         //    scannerOptions = view.findViewById(R.id.scanner_options)
-        clearText = view.findViewById(R.id.clear_text)
-        val policy = StrictMode.ThreadPolicy.Builder()
-            .permitAll().build()
-        StrictMode.setThreadPolicy(policy)
+        clearView = view.findViewById(R.id.clear_text)
+
         // switchViewHolder = SwitchViewHolder(context)
         bindViewComponents()
+        tapMobileInputView.setTapPaymentShowHideClearImage(this)
+        tabLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.backgroundColor")))
         tabLayout.changeTabItemAlphaValue(0.9f)
 
     }
@@ -118,7 +123,7 @@ class PaymentInputViewHolder11(
     }
 
     override fun bindViewComponents() {
-        // initTabLayout()
+         initTabLayout()
         initCardInput()
         initMobileInput()
         initClearText()
@@ -131,10 +136,10 @@ class PaymentInputViewHolder11(
     }
 
     private fun initTabLayout() {
-    // tabLayout.addSection(getCardList(imageURL))
+        // tabLayout.addSection(getCardList(imageURL))
         //   tabLayout.addSection(getCardList())
-      //  tabLayout.addSection(getMobileList(imageURL))
-      //  tabLayout.setTabLayoutInterface(this)
+        //  tabLayout.addSection(getMobileList(imageURL))
+        //  tabLayout.setTabLayoutInterface(this)
     }
 
     private fun initializeCardForm() {
@@ -146,8 +151,8 @@ class PaymentInputViewHolder11(
         cardScannerBtn?.visibility = View.VISIBLE
         linearLayoutPay = view.findViewById(R.id.linear_paylayout)
         cardInputWidget.clearFocus()
-        clearText.visibility = View.GONE
-        clearText.setOnClickListener {
+        clearView.visibility = View.GONE
+        clearView.setOnClickListener {
             tabLayout.resetBehaviour()
             println("is it called")
             mobilePaymentView.clearNumber()
@@ -165,7 +170,7 @@ class PaymentInputViewHolder11(
             switchViewHolder11.view.cardviewSwitch.visibility = View.INVISIBLE
             switchViewHolder11.view.mainSwitch.visibility = View.GONE
             switchViewHolder11.view.cardSwitch.visibility = View.GONE
-            clearText.visibility = View.GONE
+            clearView.visibility = View.GONE
 
         }
 
@@ -181,7 +186,7 @@ class PaymentInputViewHolder11(
     }
 
     private fun initClearText() {
-        clearText.setOnClickListener {
+        clearView.setOnClickListener {
             when (selectedType) {
                 CARD -> cardInputWidget.clear()
                 MOBILE -> mobilePaymentView.clearNumber()
@@ -196,9 +201,9 @@ class PaymentInputViewHolder11(
         mobilePaymentView.mobileNumber.doAfterTextChanged {
             it?.let {
                 if (it.isEmpty())
-                    clearText.visibility = View.GONE
+                    clearView.visibility = View.GONE
                 else
-                    clearText.visibility = View.VISIBLE
+                    clearView.visibility = View.VISIBLE
             }
         }
     }
@@ -226,9 +231,9 @@ class PaymentInputViewHolder11(
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s.toString().isEmpty())
-                    clearText.visibility = View.GONE
+                    clearView.visibility = View.GONE
                 else
-                    clearText.visibility = View.VISIBLE
+                    clearView.visibility = View.VISIBLE
             }
 
         })
@@ -315,7 +320,7 @@ class PaymentInputViewHolder11(
             nfcButton?.visibility = View.VISIBLE
             cardScannerBtn?.visibility = View.VISIBLE
 
-            clearText.visibility = View.GONE
+            clearView.visibility = View.GONE
             paymentInputContainer.addView(cardInputWidget)
             checkForFocus()
         } else {
@@ -325,9 +330,9 @@ class PaymentInputViewHolder11(
             nfcButton?.visibility = View.GONE
             cardScannerBtn?.visibility = View.GONE
             if (mobilePaymentView.mobileNumber.text.isEmpty())
-                clearText.visibility = View.INVISIBLE
+                clearView.visibility = View.INVISIBLE
             else
-                clearText.visibility = View.VISIBLE
+                clearView.visibility = View.VISIBLE
 
             paymentInputContainer.addView(mobilePaymentView)
         }
@@ -361,63 +366,37 @@ class PaymentInputViewHolder11(
      * Sets data from API through LayoutManager
      * @param imageURLApi represents the images of payment methods.
      * */
+    @RequiresApi(Build.VERSION_CODES.N)
     fun setDatafromAPI(imageURLApi: List<TapCardPhoneListDataSource>) {
+        val itemsMobilesList = ArrayList<SectionTabItem>()
+        val itemsCardsList = ArrayList<SectionTabItem>()
 
         println("iamage val  are" + imageURLApi)
         for (i in 0 until imageURLApi.size) {
-            itemsMobileList =  ArrayList<SectionTabItem>()
-            itemsCardList = ArrayList<SectionTabItem>()
             tabLayout.resetBehaviour()
             imageURL = imageURLApi.get(i).icon
             paymentType = imageURLApi.get(i).paymentType
-           // println("paymentType in loop" + paymentType)
-            if (imageURL != null) {
-                val url = URL(imageURL)
-                if (url != null) {
+            println("imageURL in loop" + imageURL)
+            if (paymentType == "telecom") {
+                itemsMobilesList.add(SectionTabItem(imageURL,imageURL,CardBrand.zain))
 
-                    if (paymentType == "telecom") {
-
-                        val bytes = ByteArrayOutputStream()
-
-                        val bmOptions = BitmapFactory.Options()
-                        val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-                        bmp.compress(Bitmap.CompressFormat.JPEG, 40, bytes)
-                        val drawablem: Drawable = BitmapDrawable(context.resources, bmp)
-                        bmOptions.inSampleSize = 1
-                        itemsMobileList.add(
-                            SectionTabItem(
-                                imageURL!!,
-                                imageURL!!,
-                                CardBrand.zain
-                            )
-                        )
-                        tabLayout.addSection(itemsMobileList)
-
-                       // println("itemsMobileList in loop" + imageURL)
-                    } else {
-                        val bmpq = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-                        val bytes = ByteArrayOutputStream()
-                        bmpq.compress(Bitmap.CompressFormat.JPEG, 40, bytes)
-                        val drawablem1: Drawable = BitmapDrawable(context.resources, bmpq)
-                        itemsCardList.add(
-                            SectionTabItem(
-                                imageURL!!,
-                                imageURL!!,
-                                CardBrand.visa
-                            )
-                        )
-                       // println("itemsCardList in loop" + itemsCardList.size)
-                        tabLayout.addSection(itemsCardList)
-
-                    }
-
+                } else {
+                    itemsCardsList.add(SectionTabItem(imageURL, imageURL, CardBrand.visa))
                 }
-            }
-
-
         }
-        tabLayout.setTabLayoutInterface(this)
+         tabLayout.addSection(itemsCardsList)
+        tabLayout.addSection(itemsMobilesList)
 
     }
-}
+
+    override fun showHideClearImage(show: Boolean) {
+            if (show) {
+                clearView?.visibility = View.VISIBLE
+            } else {
+                clearView?.visibility = View.VISIBLE
+            }
+        }
+    }
+
+
 

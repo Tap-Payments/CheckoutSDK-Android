@@ -1,16 +1,13 @@
 package company.tap.checkout.internal.viewholders
 
-import android.content.ClipData
 import android.content.Context
 import android.view.LayoutInflater
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.add
-import company.tap.cardbusinesskit.testmodels.Items
 import company.tap.checkout.R
 import company.tap.checkout.internal.dummygener.Currencies1
 import company.tap.checkout.internal.dummygener.Items1
 import company.tap.checkout.internal.enums.SectionType
-import company.tap.checkout.internal.interfaces.BaseLayoutManager
+import company.tap.checkout.internal.interfaces.BaseLayouttManager
 import company.tap.tapuilibrary.uikit.fragment.CurrencyViewFragment
 import company.tap.tapuilibrary.uikit.fragment.CurrencyViewsFragment
 
@@ -21,7 +18,7 @@ import company.tap.tapuilibrary.uikit.fragment.CurrencyViewsFragment
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class ItemsViewHolder1(context11: Context, private val baseLayoutManager: BaseLayoutManager) :
+class ItemsViewHolder1(context11: Context, private val baseLayouttManager: BaseLayouttManager) :
     TapBaseViewHolder {
     private val context1: Context? = context11
     private lateinit var fragmentManager: FragmentManager

@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import company.tap.checkout.R
 import company.tap.checkout.internal.enums.SectionType
-import company.tap.checkout.internal.interfaces.BaseLayoutManager
+import company.tap.checkout.internal.interfaces.BaseLayouttManager
 import company.tap.tapuilibrary.uikit.datasource.GoPayLoginDataSource
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.interfaces.GoPayLoginInterface
@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.otpview_layout.view.*
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class GoPayViewHolder1(private val context: Context, private val baseLayoutManager: BaseLayoutManager?=null) : TapBaseViewHolder, OpenOTPInterface,GoPayLoginInterface,
+class GoPayViewsHolder(private val context: Context, private val baseLayouttManager: BaseLayouttManager?=null) : TapBaseViewHolder, OpenOTPInterface,GoPayLoginInterface,
     OtpButtonConfirmationInterface, OnCardSelectedActionListener {
 
     override val view: View = LayoutInflater.from(context).inflate(R.layout.gopay_layout, null)
@@ -72,8 +72,8 @@ class GoPayViewHolder1(private val context: Context, private val baseLayoutManag
             otpViewHolder.view.otpView.visibility = View.VISIBLE
             otpViewHolder.view.otpView.changePhoneCardView?.visibility = View.VISIBLE
             println(" you clicked for otp!!!")
-            baseLayoutManager?.displayOTP( otpViewHolder.view.otpView?.mobileNumberText?.text.toString())
-            baseLayoutManager?.displayGoPay()
+            baseLayouttManager?.displayOTPV( otpViewHolder.view.otpView?.otpViewInput1?.text.toString(),otpViewHolder.otpView.isValidOTP)
+           // baseLayoutManager?.displayGoPay()
 
         }
 
@@ -104,13 +104,7 @@ class GoPayViewHolder1(private val context: Context, private val baseLayoutManag
 
     }
 
-    override fun onOtpButtonConfirmationClick(otpNumber: String): Boolean {
-        println("otpNumber is $otpNumber")
-        Log.d("isValidOTP1" ,(otpNumber == "111111").toString() )
-       // GoPayLoginHolder1(context,this,baseLayoutManager).view
-        GoPaySavedCardHolder(context,this,baseLayoutManager).view
-        return otpNumber == "111111"
-    }
+
 
     override fun onCardSelectedAction(isSelected: Boolean, typeCardView: String) {
 
@@ -119,6 +113,17 @@ class GoPayViewHolder1(private val context: Context, private val baseLayoutManag
 
     override fun onDeleteIconClicked(stopAnimation: Boolean, itemId: Int) {
 
+    }
+
+    override fun onOtpButtonConfirmationClick(otpNumber: String): Boolean {
+        println("otpNumber is $otpNumber")
+        Log.d("isValidOTP1" ,(otpNumber == "111111").toString() )
+        // GoPayLoginHolder1(context,this,baseLayoutManager).view
+        if(otpNumber== "111111"){
+            GoPaySavedCardHolder(context,this,baseLayouttManager).view
+
+        }
+        return otpNumber == "111111"
     }
 
 }

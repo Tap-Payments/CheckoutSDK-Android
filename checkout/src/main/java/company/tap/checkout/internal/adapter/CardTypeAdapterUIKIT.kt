@@ -1,15 +1,11 @@
-package company.tap.checkout.internal.apiresponse
+package company.tap.checkout.internal.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Color.parseColor
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.os.Build
-import android.util.Log
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,9 +14,8 @@ import android.view.animation.AnimationUtils
 import android.webkit.URLUtil
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.RecyclerView
-import company.tap.cardbusinesskit.testmodels.Payment_methods
+import com.bumptech.glide.Glide
 import company.tap.checkout.internal.dummygener.SavedCards
 import company.tap.tapuilibrary.R
 
@@ -28,10 +23,8 @@ import company.tap.tapuilibrary.R
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.interfaces.OnCardSelectedActionListener
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
-import company.tap.tapuilibrary.uikit.ktx.setImage
-import kotlinx.android.synthetic.main.item_gopay.view.*
 import kotlinx.android.synthetic.main.item_knet.view.*
-import kotlinx.android.synthetic.main.item_saved_card.view.*
+import kotlinx.android.synthetic.main.item_save_cards.view.*
 import java.net.URL
 
 
@@ -42,7 +35,7 @@ All rights reserved.
 
 @Suppress("PrivatePropertyName")
 class CardTypeAdapterUIKIT(
-     val arrayList1: List<SavedCards>,
+     val arrayListsSaveCard: List<SavedCards>,
     private val onCardSelectedActionListener: OnCardSelectedActionListener?,
     var isShaking: Boolean = false
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -52,18 +45,20 @@ class CardTypeAdapterUIKIT(
     private var selectedPosition = -1
     private var lastPosition = -1
     var context_: Context? = null
-    lateinit var arrayListSaveCard:  ArrayList<SavedCards>
+    private var arrayListRedirect:ArrayList<String> = ArrayList()
+    private var arrayListCards:ArrayList<String> = ArrayList()
+    private var totalArrayList:ArrayList<SavedCards> = ArrayList()
 
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view: View
         context_ = parent.context
-        arrayListSaveCard = arrayList1 as ArrayList<SavedCards>
+        totalArrayList.addAll(arrayListsSaveCard)
         return when (viewType) {
             TYPE_SAVED_CARD -> {
                 view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_saved_card, parent, false)
+                    .inflate(R.layout.item_save_cards, parent, false)
                 SavedViewHolder(view)
             }
             TYPE_REDIRECT -> {
@@ -80,9 +75,11 @@ class CardTypeAdapterUIKIT(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (arrayListSaveCard[position].chipType == 1) {
+        return if (arrayListsSaveCard[position].chipType == 1) {
+            arrayListRedirect.add(arrayListsSaveCard[position].chip1.icon)
             TYPE_REDIRECT
-        } else if (arrayListSaveCard[position].chipType == 5) {
+        } else if (arrayListsSaveCard[position].chipType == 5) {
+            arrayListCards.add(arrayListsSaveCard[position].chip1.icon)
             TYPE_SAVED_CARD
         } else {
             TYPE_GO_PAY
@@ -90,17 +87,17 @@ class CardTypeAdapterUIKIT(
     }
 
     override fun getItemCount(): Int {
-        return arrayList1.size
+        return arrayListsSaveCard.size
     }
 
 
     private fun setOnClickActions(holder: RecyclerView.ViewHolder) {
        
-        holder.itemView.deleteImageView2?.visibility = View.VISIBLE
+        holder.itemView.deleteImageViewsaved?.visibility = View.VISIBLE
 
-        holder.itemView.deleteImageView2?.setOnClickListener {
+        holder.itemView.deleteImageViewsaved?.setOnClickListener {
             onCardSelectedActionListener?.onDeleteIconClicked(true, holder.itemView.id)
-            arrayListSaveCard.removeAt(holder.itemView.id)
+             arrayListCards.removeAt(holder.itemView.id)
             holder.itemView.clearAnimation()
             it.animate().cancel()
             it.clearAnimation()
@@ -112,7 +109,7 @@ class CardTypeAdapterUIKIT(
     @SuppressLint("ResourceAsColor")
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        println("position printed: $position")
+      //  println("position printed: $position")
 
         when {
             /**
@@ -146,7 +143,7 @@ class CardTypeAdapterUIKIT(
                 if (!isShaking) {
                     holder.itemView.setOnClickListener {
                         selectedPosition = position
-                        onCardSelectedActionListener?.onCardSelectedAction(false,TYPE_GO_PAY.toString())
+                        onCardSelectedActionListener?.onCardSelectedAction(true,TYPE_GO_PAY.toString())
                         notifyDataSetChanged()
                     }
                 }
@@ -203,14 +200,18 @@ class CardTypeAdapterUIKIT(
                 notifyDataSetChanged()
             }
         }
-        for (i in 2 until arrayListSaveCard.size) {
+        for (i in 2 until arrayListCards.size-1) {
             val imageViewCard = holder.itemView.findViewById<ImageView>(R.id.imageView_amex)
-            val url = URL(arrayListSaveCard[i].chip1.icon)
-            if ( URLUtil.isValidUrl(url.toString()) ) {
-                val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
+          //  val url = URL(arrayListCards[i])
+           // if ( URLUtil.isValidUrl(url.toString()) ) {
+             //   val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
 
-                imageViewCard.setImageBitmap(bmp)
-            }
+                Glide.with(holder.itemView.context)
+                    .load(arrayListsSaveCard[i])
+                    .into(imageViewCard)
+
+               // imageViewCard.setImageBitmap(bmp)
+           // }
         }
 
     }
@@ -257,18 +258,21 @@ class CardTypeAdapterUIKIT(
         (holder as SingleViewHolder)
         if (!isShaking) {
             holder.itemView.setOnClickListener {
-                onCardSelectedActionListener?.onCardSelectedAction(true,arrayListSaveCard.toString())
+                onCardSelectedActionListener?.onCardSelectedAction(true, arrayListRedirect.toString())
                 selectedPosition = position
                 notifyDataSetChanged()
             }
         }
-        for (i in 2 until arrayListSaveCard.size) {
+        for (i in 2 until arrayListRedirect.size-1) {
             val imageViewCard = holder.itemView.findViewById<ImageView>(R.id.imageView_knet)
-            val url = URL(arrayListSaveCard[i].chip1.icon)
+           /* val url = URL(arrayListRedirect[i])
             if ( URLUtil.isValidUrl(url.toString()) ) {
                 val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
                 imageViewCard.setImageBitmap(bmp)
-            }
+            }*/
+            Glide.with(holder.itemView.context)
+                .load(arrayListRedirect[i])
+                .into(imageViewCard)
         }
 
 

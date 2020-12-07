@@ -10,26 +10,16 @@
     app:cardElevation="8dp"
     android:layout_gravity="center">
 
-    <!--    <ImageView-->
-    <!--        android:id="@+id/deleteImageView1"-->
-    <!--        android:layout_width="18dp"-->
-    <!--        android:layout_height="12dp"-->
-    <!--        android:layout_gravity="right|top"-->
-    <!--        android:layout_marginTop="5dp"-->
-    <!--        android:layout_marginEnd="5dp"-->
-    <!--        android:src="@drawable/btn_close_normal"-->
-    <!--        android:visibility="gone" />-->
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
-        android:layout_height="39dp"
+        android:layout_height="40dp"
         android:layout_gravity="center_vertical">
 
         <company.tap.tapuilibrary.uikit.atoms.TapImageView
             android:id="@+id/imageView_goPay"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_marginStart="@dimen/margin_basic_20dp"
+            android:layout_marginLeft="@dimen/margin_basic_20dp"
             android:layout_marginTop="@dimen/margin_basic_10dp"
             android:layout_marginBottom="@dimen/margin_basic_10dp"
             android:src="@drawable/tap"
@@ -42,14 +32,14 @@
             android:id="@+id/goPayText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_basic_20dp"
-            android:paddingStart="8dp"
+            android:layout_marginRight="@dimen/margin_basic_20dp"
+            android:paddingLeft="8dp"
             android:paddingBottom="2dp"
             android:layout_marginTop="@dimen/margin_basic_10dp"
             android:layout_marginBottom="@dimen/margin_basic_10dp"
             android:fontFamily="sans-serif"
             android:gravity="center"
-            android:text="goPay"
+            android:text="@string/gopay"
             android:textColor="#ffffff"
             android:textSize="12sp"
             android:textStyle="normal"
