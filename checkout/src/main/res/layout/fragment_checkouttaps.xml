@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".open.CheckoutFragment">
 
+    <LinearLayout
+        android:id="@+id/fragment_all"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical"
+
+        >
         <LinearLayout
             android:id="@+id/sdkContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
 
             >
-            <FrameLayout
-                android:id="@+id/fragment_all"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                />
-            <FrameLayout
-                android:id="@+id/fragment_container_nfc_lib"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
+
+
             <FrameLayout
                 android:id="@+id/currency_fragment_container"
                 android:layout_width="match_parent"
@@ -40,4 +39,12 @@
 
         </LinearLayout>
 
-</androidx.core.widget.NestedScrollView>
+    </LinearLayout>
+    <FrameLayout
+        android:id="@+id/fragment_container_nfc_lib"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        android:orientation="vertical"
+        android:gravity="bottom"/>
+</LinearLayout>

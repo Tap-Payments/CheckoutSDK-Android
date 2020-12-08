@@ -2,6 +2,7 @@ package company.tap.checkout.internal.viewholders
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import androidx.fragment.app.FragmentManager
 import company.tap.checkout.R
 import company.tap.checkout.internal.dummygener.Currencies1
@@ -9,7 +10,7 @@ import company.tap.checkout.internal.dummygener.Items1
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.fragment.CurrencyViewsFragment
 import company.tap.checkout.internal.interfaces.BaseLayouttManager
-import company.tap.tapuilibrary.uikit.fragment.CurrencyViewFragment
+import kotlinx.android.synthetic.main.fragment_checkouttaps.view.*
 
 /**
  *
@@ -20,8 +21,7 @@ import company.tap.tapuilibrary.uikit.fragment.CurrencyViewFragment
  */
 class ItemsViewHolder1(context11: Context, private val baseLayouttManager: BaseLayouttManager,fragmentManagere: FragmentManager) :
     TapBaseViewHolder {
-    private val context1: Context? = context11
-    private lateinit var fragmentManager: FragmentManager
+    private  var fragmentManager: FragmentManager
     override val view = LayoutInflater.from(context11).inflate(
         R.layout.currency_fragment_layout,
         null
@@ -31,7 +31,6 @@ class ItemsViewHolder1(context11: Context, private val baseLayouttManager: BaseL
 
     var displayed: Boolean = true
     private lateinit var supportedCurrecnyList: ArrayList<Currencies1>
-    private lateinit var supportedCurrecny: ArrayList<Currencies1>
     private lateinit var supportedItemList: List<Items1>
 
 
@@ -70,19 +69,13 @@ class ItemsViewHolder1(context11: Context, private val baseLayouttManager: BaseL
 
     fun resetView(){
         fragmentManager.beginTransaction()
-            .replace(R.id.sdkContainer, CurrencyViewsFragment(ArrayList(), ArrayList()))
-            .addToBackStack(null)
-            .commit()
-       /* val manager: FragmentManager = fragmentManager
-        val transaction = manager.beginTransaction()
-        transaction.remove(CurrencyViewsFragment(supportedCurrecny, supportedItemList))
-        transaction.addToBackStack(null)
-        transaction.commit()*/
+            .remove(CurrencyViewsFragment(ArrayList(), ArrayList())).commit()
+
     }
 
     fun setView(){
         fragmentManager.beginTransaction()
-            .replace(R.id.sdkContainer, CurrencyViewsFragment(supportedCurrecnyList, supportedItemList))
+            .replace(R.id.fragment_container_nfc_lib, CurrencyViewsFragment(supportedCurrecnyList, supportedItemList))
             .addToBackStack(null)
             .commit()
     }

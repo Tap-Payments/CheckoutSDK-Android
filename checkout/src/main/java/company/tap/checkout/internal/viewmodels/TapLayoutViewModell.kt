@@ -1,24 +1,19 @@
 package company.tap.checkout.internal.viewmodels
 
 
-import android.app.PendingIntent.getActivity
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ShapeDrawable
 import android.os.Build
-import android.os.Handler
-import android.transition.TransitionManager
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.replace
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.Transition
 import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
 import company.tap.checkout.R
 import company.tap.checkout.internal.adapter.CardTypeAdapterUIKIT
@@ -27,24 +22,19 @@ import company.tap.checkout.internal.dummygener.Items1
 import company.tap.checkout.internal.dummygener.JsonResponseDummy1
 import company.tap.checkout.internal.dummygener.SavedCards
 import company.tap.checkout.internal.enums.SectionType
-import company.tap.checkout.internal.fragment.CurrencyViewsFragment
 import company.tap.checkout.internal.interfaces.BaseLayouttManager
 import company.tap.checkout.internal.interfaces.onCardNFCCallListener
 import company.tap.checkout.internal.interfaces.onPaymentCardComplete
 import company.tap.checkout.internal.utils.AnimationEngine
 import company.tap.checkout.internal.viewholders.*
-import company.tap.checkout.open.CheckoutFragment
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
 import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
 import company.tap.tapuilibrary.uikit.interfaces.OnCardSelectedActionListener
-import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.cardviewholder_layout.view.*
-import kotlinx.android.synthetic.main.currency_fragment_layout.view.*
 import kotlinx.android.synthetic.main.fragment_checkouttaps.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -75,18 +65,22 @@ class TapLayoutViewModell : ViewModel(),
     private lateinit var savedcardList: List<SavedCards>
     private  var displayItemsOpen: Boolean = false
 
+    private  lateinit var frameLayout: FrameLayout
+
     @RequiresApi(Build.VERSION_CODES.N)
     fun initLayoutManager(
-            context: Context,
-            fragmentManager: FragmentManager,
-            sdkLayout: LinearLayout,
+        context: Context,
+        fragmentManager: FragmentManager,
+        sdkLayout: LinearLayout,
+        frameLayout: FrameLayout
 
-            ) {
+        ) {
         println("again called fragmentManager = [${fragmentManager}]")
 
         this.context = context
         this.fragmentManager = fragmentManager
         this.sdkLayout = sdkLayout
+        this.frameLayout = frameLayout
         businessViewHolder = BusinessViewHolder(context)
 
         amountViewHolder1 = AmountViewHolder1(context,this)
@@ -225,8 +219,9 @@ class TapLayoutViewModell : ViewModel(),
                 saveCardSwitchHolder11,itemsViewHolder1
             )
 
-            addViews(businessViewHolder,amountViewHolder1)
             itemsViewHolder1.setView()
+            addViews(businessViewHolder,amountViewHolder1)
+            frameLayout.visibility= View.VISIBLE
 
         } else {
 
@@ -247,7 +242,7 @@ class TapLayoutViewModell : ViewModel(),
             )
 
             itemsViewHolder1.resetView()
-
+            frameLayout.visibility= View.GONE
             println("second block called")
 
         }

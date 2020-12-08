@@ -3,19 +3,20 @@ package company.tap.checkout.open
 import android.app.Activity
 import android.content.Context
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.LinearLayout
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.*
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.gson.Gson
 import company.tap.checkout.R
 import company.tap.checkout.internal.apiresponse.getJsonDataFromAsset
 import company.tap.checkout.internal.dummygener.JsonResponseDummy1
 import company.tap.checkout.internal.enums.SectionType
-import company.tap.checkout.internal.interfaces.BaseLayouttManager
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModell
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
@@ -52,6 +53,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
 
 
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -65,7 +67,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         //BlankFragment().retainInstance = true
         println("onAttach is calleds")
 
-        val checkoutLayout: LinearLayout? = view1?.findViewById(R.id.sdkContainer)
+        val checkoutLayout: LinearLayout? = view1?.findViewById(R.id.fragment_all)
+        val frameLayout: FrameLayout? = view1?.findViewById(R.id.fragment_container_nfc_lib)
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
 
         /**
@@ -82,7 +85,11 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         }
         print("contextt before business"+contextt)
         if (checkoutLayout != null) {
-            context?.let { viewModell.initLayoutManager(it,childFragmentManager,checkoutLayout) }
+            context?.let {
+                if (frameLayout != null) {
+                    viewModell.initLayoutManager(it,childFragmentManager,checkoutLayout,frameLayout)
+                }
+            }
         }
         // dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 

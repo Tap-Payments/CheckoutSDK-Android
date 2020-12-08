@@ -30,7 +30,7 @@ import kotlinx.android.synthetic.main.item_frame_currencies.*
 Copyright (c) 2020    Tap Payments.
 All rights reserved.
  **/
-open class CurrencyViewsFragment(private var currencyLists1:ArrayList<Currencies1>, private var itemLists:List<Items1>) : Fragment() {
+open class CurrencyViewsFragment(private var currencyLists1: ArrayList<Currencies1>, private var itemLists: List<Items1>?) : Fragment() {
     private lateinit var chipRecycler: RecyclerView
 
 
@@ -62,6 +62,7 @@ open class CurrencyViewsFragment(private var currencyLists1:ArrayList<Currencies
        // chipRecycler.setHasFixedSize(true)
         chipRecycler.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         // chipRecycler.adapter = CurrencyAdapter(currencyList)
+        if(currenciesList==null||currenciesList.isEmpty()){return null}
         if (this::currenciesList.isInitialized)
             chipRecycler.adapter = CurrencyTypeAdapter(currenciesList)
         itemsRecycler = view.findViewById<View>(R.id.items_recylerview) as RecyclerView
