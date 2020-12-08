@@ -18,8 +18,7 @@ import androidx.core.widget.doAfterTextChanged
 import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardinputwidget.widget.inline.InlineCardInput
 import company.tap.checkout.R
-import company.tap.checkout.internal.dummygener.TapCardPhoneListDataSources
-import company.tap.checkout.internal.enums.PaymentTypeEnum
+import company.tap.checkout.internal.dummygener.TapCardPhoneListDataSource
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.onCardNFCCallListener
 import company.tap.checkout.internal.interfaces.onPaymentCardComplete
@@ -27,7 +26,6 @@ import company.tap.tapcardvalidator_android.CardBrand
 import company.tap.tapcardvalidator_android.CardValidationState
 import company.tap.tapcardvalidator_android.CardValidator
 import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.uikit.fragment.NFCFragment
 import company.tap.tapuilibrary.uikit.interfaces.TapPaymentShowHideClearImage
 import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
 import company.tap.tapuilibrary.uikit.models.SectionTabItem
@@ -80,8 +78,8 @@ class PaymenttInputViewHolder(
     private var switchViewHolder11 = SwitchViewHolder11(context)
     private var imageURL: String=""
     private var isadded: Boolean = false
-    private lateinit var paymentType: PaymentTypeEnum
-    private lateinit var cardBrandType: CardBrand
+    private lateinit var paymentType: String
+    private lateinit var cardBrandType: String
 
 
     init {
@@ -365,7 +363,7 @@ class PaymenttInputViewHolder(
      * @param imageURLApi represents the images of payment methods.
      * */
     @RequiresApi(Build.VERSION_CODES.N)
-    fun setDatafromAPI(imageURLApi: List<TapCardPhoneListDataSources>) {
+    fun setDatafromAPI(imageURLApi: List<TapCardPhoneListDataSource>) {
         val itemsMobilesList = ArrayList<SectionTabItem>()
         val itemsCardsList = ArrayList<SectionTabItem>()
 
@@ -376,11 +374,13 @@ class PaymenttInputViewHolder(
             paymentType = imageURLApi[i].paymentType
             cardBrandType = imageURLApi[i].brand
             println("imageURL in loop" + imageURL)
-            if (paymentType == PaymentTypeEnum.TELECOM) {
-                itemsMobilesList.add(SectionTabItem(imageURL,imageURL,cardBrandType))
+
+            if (paymentType == "telecom") {
+
+                itemsMobilesList.add(SectionTabItem(imageURL,imageURL,CardBrand.masterCard))
 
                 } else {
-                    itemsCardsList.add(SectionTabItem(imageURL, imageURL,cardBrandType))
+                    itemsCardsList.add(SectionTabItem(imageURL, imageURL,CardBrand.ooredoo))
                 }
         }
          tabLayout.addSection(itemsCardsList)
@@ -390,9 +390,9 @@ class PaymenttInputViewHolder(
 
     override fun showHideClearImage(show: Boolean) {
             if (show) {
-                clearView?.visibility = View.VISIBLE
+                clearView.visibility = View.VISIBLE
             } else {
-                clearView?.visibility = View.VISIBLE
+                clearView.visibility = View.VISIBLE
             }
         }
     }

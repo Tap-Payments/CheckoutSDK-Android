@@ -12,5 +12,5 @@ data class JsonResponseDummy1 (
 	@SerializedName("goPayCountries") val goPayCountries : List<GoPayCountries>,
 	@SerializedName("goPaySavedCards") val goPaySavedCards : List<GoPaySavedCards>,
 	@SerializedName("savedCards") val savedCards : List<SavedCards>,
-	@SerializedName("tapCardPhoneListDataSourced") val tapCardPhoneListDataSourced : List<TapCardPhoneListDataSources>
+	@SerializedName("tapCardPhoneListDataSource") val tapCardPhoneListDataSource : List<TapCardPhoneListDataSource>
 )

@@ -200,18 +200,13 @@ class CardTypeAdapterUIKIT(
                 notifyDataSetChanged()
             }
         }
-        for (i in 2 until arrayListCards.size-1) {
+        for (i in 1 until arrayListCards.size) {
             val imageViewCard = holder.itemView.findViewById<ImageView>(R.id.imageView_amex)
-          //  val url = URL(arrayListCards[i])
-           // if ( URLUtil.isValidUrl(url.toString()) ) {
-             //   val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-
-                Glide.with(holder.itemView.context)
-                    .load(arrayListsSaveCard[i])
+            Glide.with(holder.itemView.context)
+                    .load(arrayListsSaveCard[i].chip1.icon)
                     .into(imageViewCard)
 
-               // imageViewCard.setImageBitmap(bmp)
-           // }
+
         }
 
     }
@@ -263,13 +258,8 @@ class CardTypeAdapterUIKIT(
                 notifyDataSetChanged()
             }
         }
-        for (i in 2 until arrayListRedirect.size-1) {
+        for (i in 0 until arrayListRedirect.size) {
             val imageViewCard = holder.itemView.findViewById<ImageView>(R.id.imageView_knet)
-           /* val url = URL(arrayListRedirect[i])
-            if ( URLUtil.isValidUrl(url.toString()) ) {
-                val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-                imageViewCard.setImageBitmap(bmp)
-            }*/
             Glide.with(holder.itemView.context)
                 .load(arrayListRedirect[i])
                 .into(imageViewCard)

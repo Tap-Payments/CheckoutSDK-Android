@@ -323,7 +323,7 @@ class TapLayoutViewModell : ViewModel(),
         cardViewHolder11.setDatafromAPI(dummyInitapiResponse1.savedCards)
         goPaySavedCardHolder.setDatafromAPI(dummyInitapiResponse1.goPaySavedCards)
        // println("dummy tapCardPhoneListDataSource" + dummyInitapiResponse1.tapCardPhoneListDataSources)
-        paymenttInputViewHolder.setDatafromAPI(dummyInitapiResponse1.tapCardPhoneListDataSourced)
+        paymenttInputViewHolder.setDatafromAPI(dummyInitapiResponse1.tapCardPhoneListDataSource)
 
 
         saveCardSwitchHolder11.setDatafromAPI(
