@@ -7,7 +7,6 @@ import android.view.View
 import company.tap.checkout.R
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibrary.uikit.adapters.contexts
 import company.tap.tapuilibrary.uikit.datasource.ActionButtonDataSource
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import kotlinx.android.synthetic.main.action_button_animation.view.*
@@ -32,7 +31,7 @@ class TabAnimatedActionButtonViewHolder11(context: Context) : TapBaseViewHolder 
     override fun bindViewComponents() {
          // view.actionButton.setButtonDataSource(getSuccessDataSource(Color.GRAY, "Pay", Color.WHITE ))
         view.actionButton.setButtonDataSource(false,
-            contexts?.let { LocalizationManager.getLocale(it).language },LocalizationManager.getValue("pay","ActionButton"),R. color.gray)
+            view.context?.let { LocalizationManager.getLocale(it).language },LocalizationManager.getValue("pay","ActionButton"),R. color.gray)
     }
 
     fun activateButton(context: Context) {

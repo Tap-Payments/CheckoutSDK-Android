@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <company.tap.tapuilibrary.uikit.organisms.GoPayLoginInput
         android:id="@+id/gopay_login_input"
@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"/>
 
     <company.tap.tapuilibrary.uikit.organisms.GoPayPasswordInput
-        android:visibility="invisible"
+        android:visibility="gone"
         android:id="@+id/goPay_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

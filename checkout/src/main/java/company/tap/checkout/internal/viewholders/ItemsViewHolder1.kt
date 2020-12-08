@@ -7,9 +7,9 @@ import company.tap.checkout.R
 import company.tap.checkout.internal.dummygener.Currencies1
 import company.tap.checkout.internal.dummygener.Items1
 import company.tap.checkout.internal.enums.SectionType
+import company.tap.checkout.internal.fragment.CurrencyViewsFragment
 import company.tap.checkout.internal.interfaces.BaseLayouttManager
 import company.tap.tapuilibrary.uikit.fragment.CurrencyViewFragment
-import company.tap.tapuilibrary.uikit.fragment.CurrencyViewsFragment
 
 /**
  *
@@ -62,7 +62,8 @@ class ItemsViewHolder1(context11: Context, private val baseLayouttManager: BaseL
              CurrencyViewFragment(supportedCurrecnyList, itemList)
          )*/
         transaction.replace(R.id.sdkContainer,
-            CurrencyViewsFragment(supportedCurrecny, supportedItemList))
+            CurrencyViewsFragment(supportedCurrecny, supportedItemList)
+        )
 
 
         transaction.addToBackStack(null)
@@ -74,7 +75,7 @@ class ItemsViewHolder1(context11: Context, private val baseLayouttManager: BaseL
     fun resetView(){
         val manager: FragmentManager = fragmentManager
         val transaction = manager.beginTransaction()
-        transaction.remove(CurrencyViewFragment(supportedCurrecny, supportedItemList))
+        transaction.remove(CurrencyViewsFragment(supportedCurrecny, supportedItemList))
         transaction.addToBackStack(null)
         transaction.commit()
     }

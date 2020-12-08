@@ -5,12 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".open.CheckoutFragment">
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".open.CheckoutFragment"
-        >
 
         <LinearLayout
             android:id="@+id/sdkContainer"
@@ -39,5 +33,5 @@
                 />
 
         </LinearLayout>
-    </FrameLayout>
+
 </androidx.core.widget.NestedScrollView>

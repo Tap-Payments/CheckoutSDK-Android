@@ -38,7 +38,7 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
     init {
         goPayLoginInput = view.findViewById(R.id.gopay_login_input)
         goPayPasswordInput = view.findViewById(R.id.goPay_password)
-       // otpViewHolder = OTPViewHolder(context)
+
         bindViewComponents()
     }
 
@@ -47,7 +47,7 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
         goPayLoginInput.setLoginInterface(this)
         goPayLoginInput.setOpenOTPInterface(this)
         otpViewHolder.view.otpView?.setOtpButtonConfirmationInterface(this)
-       // goPayPasswordInput.setLoginInterface(this, goPayLoginInput.textInput.text.toString())
+        goPayPasswordInput.setLoginInterface(this, goPayLoginInput.textInput.text.toString())
     }
 
     override fun onChangeClicked() {
@@ -61,6 +61,8 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
         goPayPasswordInput.visibility = View.VISIBLE
         otpViewHolder.view.otpView?.visibility = View.GONE
         goPayPasswordInput.setLoginInterface(this, goPayLoginInput.textInput?.text.toString())
+
+
     }
 
     override fun onPhoneValidated() {
@@ -106,7 +108,11 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
 
 
 
-    override fun onCardSelectedAction(isSelected: Boolean, typeCardView: String) {
+  /*  override fun onCardSelectedAction(isSelected: Boolean, typeCardView: String) {
+
+    }
+*/
+    override fun onCardSelectedAction(isSelected: Boolean) {
 
     }
 

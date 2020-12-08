@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.fragment.app.*
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.gson.Gson
 import company.tap.checkout.R
 import company.tap.checkout.internal.apiresponse.getJsonDataFromAsset
@@ -36,9 +37,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
     private var view1: View? = null
     private var contextt: Context? = null
 
-    private lateinit var baseLayouttManager: BaseLayouttManager
-
-
     private lateinit var viewModell :TapLayoutViewModell
 
      var _Activity: Activity? = null
@@ -46,14 +44,10 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-      //  val viewModel: TapLayoutViewModel by viewModels()
-      //  this.viewModel1 = viewModel
         _Activity = activity?.parent
         this.contextt = context
         setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
-        backgroundColor =
-            (Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.main_switch_background")))
-        backgroundColor = (Color.parseColor("#00000000"))
+
     }
 
 
@@ -64,26 +58,16 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
     ): View? {
         view1 = inflater.inflate(R.layout.fragment_checkouttaps, container, false)
 
-       // bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
         val viewModell: TapLayoutViewModell by viewModels()
         this.viewModell = viewModell
 
         //BlankFragment().retainInstance = true
         println("onAttach is calleds")
 
-        /*try {
-            baseLayoutManager = context as BaseLayoutManager
-            //getDataInterface = activity2 as getDataInterface
-        } catch (e: ClassCastException) {
-            //throw ClassCastException("$activity2 must implement MyInterface ")
-        }
-        val jsonFileString =
-            context?.let { getJsonDataFromAsset(it, "dummyapiresponsedefault.json") }*/
-
-        // Inflate the layout for this fragment
         val checkoutLayout: LinearLayout? = view1?.findViewById(R.id.sdkContainer)
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
-      //  println("jsonFileString in create is calleds"+jsonFileString)
+
         /**
          * set bottom sheet background
          */
@@ -111,18 +95,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         viewModell.displayStartupLayout(enabledSections)
         //This is for getting response from business engine . Currently dummy response from assets json is used
         getBusinessHeaderData(context,viewModell)
-           /* context?.let { checkoutLayout?.let { it1 ->
-                viewModel1.initLayoutManager(it,childFragmentManager,
-                    it1
-                )
-            } }
-
-        println("base viewModel1"+viewModel1)
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
-         viewModel1.displayStartupLayout(enabledSections)*/
-        //This is for getting response from business engine . Currently dummy response from assets json is used
-        println("onview created")
-
         setBottomSheetInterface(this)
 
 
@@ -153,15 +125,11 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         fun newInstance(context: Context, activity: Activity) =
             CheckoutFragment().apply {
                 arguments = Bundle().apply {
-                    // putString(ARG_PARAM1, param1)
-                    // putString(ARG_PARAM2, param2)
+
                 }
                 contextt = context
                 println("context" + contextt)
                _Activity=activity
-               /// getBusinessHeaderData(context, activity)
-
-
             }
     }
 

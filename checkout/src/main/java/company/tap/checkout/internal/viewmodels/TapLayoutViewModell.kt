@@ -22,6 +22,7 @@ import company.tap.checkout.internal.dummygener.Items1
 import company.tap.checkout.internal.dummygener.JsonResponseDummy1
 import company.tap.checkout.internal.dummygener.SavedCards
 import company.tap.checkout.internal.enums.SectionType
+import company.tap.checkout.internal.fragment.CurrencyViewsFragment
 import company.tap.checkout.internal.interfaces.BaseLayouttManager
 import company.tap.checkout.internal.interfaces.onCardNFCCallListener
 import company.tap.checkout.internal.interfaces.onPaymentCardComplete
@@ -30,7 +31,6 @@ import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.animation.AnimationEngine
 import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
 import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
-import company.tap.tapuilibrary.uikit.fragment.CurrencyViewsFragment
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
 import company.tap.tapuilibrary.uikit.interfaces.OnCardSelectedActionListener
 import kotlinx.android.synthetic.main.amountview_layout.view.*
@@ -46,7 +46,7 @@ import java.util.*
  *
  */
 class TapLayoutViewModell : ViewModel(),
-    BaseLayouttManager, OnCardSelectedActionListener, onPaymentCardComplete, onCardNFCCallListener {
+        BaseLayouttManager, OnCardSelectedActionListener, onPaymentCardComplete, onCardNFCCallListener {
 
     private lateinit var context: Context
     private lateinit var fragmentManager: FragmentManager
@@ -56,13 +56,8 @@ class TapLayoutViewModell : ViewModel(),
     private lateinit var amountViewHolder1: AmountViewHolder1
     private lateinit var itemsViewHolder1: ItemsViewHolder1
     private lateinit var cardViewHolder11: CardViewHolder11
-  //  private lateinit var paymenttInputViewHolder: PaymenttInputViewHolder
     private lateinit var paymenttInputViewHolder: PaymenttInputViewHolder
-
-    //  private lateinit var saveCardSwitchHolder1: SwitchViewHolder1
     private lateinit var saveCardSwitchHolder11: SwitchViewHolder11
-
-    // private lateinit var goPayViewHolder1: GoPayViewHolder1
     private lateinit var goPayViewsHolder: GoPayViewsHolder
     private lateinit var otpViewHolder: OTPViewHolder
     private lateinit var goPaySavedCardHolder: GoPaySavedCardHolder
@@ -72,45 +67,35 @@ class TapLayoutViewModell : ViewModel(),
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun initLayoutManager(
-        context: Context,
-        fragmentManager: FragmentManager,
-        sdkLayout: LinearLayout,
+            context: Context,
+            fragmentManager: FragmentManager,
+            sdkLayout: LinearLayout,
 
-        ) {
+            ) {
         println("again called fragmentManager = [${fragmentManager}]")
 
         this.context = context
         this.fragmentManager = fragmentManager
         this.sdkLayout = sdkLayout
         businessViewHolder = BusinessViewHolder(context)
-        //  amountViewHolder = AmountViewHolder(context)
+
         amountViewHolder1 = AmountViewHolder1(context)
         initAmountAction()
 
         cardViewHolder11 = CardViewHolder11(context, this)
 
         goPaySavedCardHolder = GoPaySavedCardHolder(context, this, this)
-       // paymenttInputViewHolder = PaymenttInputViewHolder(context, this, this)
-       // paymentInputtViewHolder = PaymentInputtViewHolder(context, this, this)
+
         paymenttInputViewHolder = PaymenttInputViewHolder(context, this, this)
-        // saveCardSwitchHolder1 = SwitchViewHolder1(context)
         saveCardSwitchHolder11 = SwitchViewHolder11(context)
-        // itemsViewHolder = ItemsViewHolder(context, this)
         itemsViewHolder1 = ItemsViewHolder1(context, this)
 
         otpViewHolder = OTPViewHolder(context)
 
-        //  goPayViewHolder1= GoPayViewHolder1(context, this)
         goPayViewsHolder = GoPayViewsHolder(context, this)
         // println("context = [${context}], fragmentManager = [${fragmentManager}], dummyInitApiResponse11 = [${dummyInitApiResponse11}]")
         initCardsGroup()
         initSwitchAction()
-        //   if (dummyInitapiResponse1 != null) {
-        //  getDatafromAPI(dummyInitApiResponse11)
-        //   }
-        //  displayStartupLayout(enabledSections)
-        //  otpViewHolder.otpView?.setOTPInterface(this)
-        // goPayViewHolder.goPayLoginInput?.setOpenOTPInterface(this)
 
     }
 
@@ -129,10 +114,7 @@ class TapLayoutViewModell : ViewModel(),
     }
 
     private fun initCardsGroup() {
-        // cardViewHolder = CardViewHolder(context,this )
-
         cardViewHolder11.view.setOnClickListener {
-            // displayGoPayLogin()
             println("init caleed ")
         }
     }
@@ -142,21 +124,21 @@ class TapLayoutViewModell : ViewModel(),
         //Todo based on api response logic for swicth case
 
         addViews(
-            businessViewHolder,
-            amountViewHolder1,
-            cardViewHolder11,
+                businessViewHolder,
+                amountViewHolder1,
+                cardViewHolder11,
                 paymenttInputViewHolder,
-            saveCardSwitchHolder11
+                saveCardSwitchHolder11
         )
 
         saveCardSwitchHolder11.view.cardSwitch.visibility = View.VISIBLE
         saveCardSwitchHolder11.view.cardSwitch.payButton.visibility = View.VISIBLE
         saveCardSwitchHolder11.view.mainSwitch.mainSwitchLinear.setBackgroundColor(
-            Color.parseColor(
-                ThemeManager.getValue(
-                    "TapSwitchView.main.backgroundColor"
+                Color.parseColor(
+                        ThemeManager.getValue(
+                                "TapSwitchView.main.backgroundColor"
+                        )
                 )
-            )
         )
 
     }
@@ -170,22 +152,20 @@ class TapLayoutViewModell : ViewModel(),
         println("goPay Login reached")
         if (this::bottomSheetLayout.isInitialized) {
             AnimationEngine.applyTransition(
-                bottomSheetLayout,
-
-                )
+                    bottomSheetLayout,
+            )
         }
         removeViews(
-            businessViewHolder,
-            amountViewHolder1,
-            cardViewHolder11,
+                businessViewHolder,
+                amountViewHolder1,
+                cardViewHolder11,
                 paymenttInputViewHolder,
-            saveCardSwitchHolder11,
+                saveCardSwitchHolder11,
         )
-        // if (this::bottomSheetLayout.isInitialized)
-        // addViews(goPayViewHolder)
+
         addViews(
-            businessViewHolder,
-            amountViewHolder1, goPayViewsHolder
+                businessViewHolder,
+                amountViewHolder1, goPayViewsHolder
         )
 
 
@@ -194,21 +174,21 @@ class TapLayoutViewModell : ViewModel(),
     override fun displayGoPay() {
 
         removeViews(
-            businessViewHolder,
-            amountViewHolder1,
-            goPaySavedCardHolder,
-            cardViewHolder11,
+                businessViewHolder,
+                amountViewHolder1,
+                goPaySavedCardHolder,
+                cardViewHolder11,
                 paymenttInputViewHolder,
-            saveCardSwitchHolder11
+                saveCardSwitchHolder11
         )
 
         addViews(
-            businessViewHolder,
-            amountViewHolder1,
-            goPaySavedCardHolder,
-            cardViewHolder11,
+                businessViewHolder,
+                amountViewHolder1,
+                goPaySavedCardHolder,
+                cardViewHolder11,
                 paymenttInputViewHolder,
-            saveCardSwitchHolder11
+                saveCardSwitchHolder11
         )
 
         cardViewHolder11.view.mainChipgroup.groupAction.text = ""
@@ -228,8 +208,8 @@ class TapLayoutViewModell : ViewModel(),
 
             if (allCurrencies.isNotEmpty()) {
                 transaction.add(
-                    R.id.sdkContainer,
-                    CurrencyViewsFragment(allCurrencies as ArrayList<Currencies1>, itemList)
+                        R.id.sdkContainer,
+                        CurrencyViewsFragment(allCurrencies as ArrayList<Currencies1>, itemList)
                 )
                 transaction.addToBackStack(null)
                 transaction.commit()
@@ -239,9 +219,9 @@ class TapLayoutViewModell : ViewModel(),
 
             }
             removeViews(
-                cardViewHolder11,
+                    cardViewHolder11,
                     paymenttInputViewHolder,
-                saveCardSwitchHolder11
+                    saveCardSwitchHolder11
             )
 
         } else {
@@ -263,24 +243,11 @@ class TapLayoutViewModell : ViewModel(),
 
     }
 
-   /* override fun displayOTP(otpMobile: String, otpValid: Boolean) {
-        println("display OTP is called" + otpMobile)
-        otpViewHolder.otpView.visibility = View.VISIBLE
-        otpViewHolder.otpView.mobileNumberText.text = otpMobile
-        otpViewHolder.otpView.changePhone.setOnClickListener {
-            goPayViewsHolder.onChangePhoneClicked()
 
-        }
-
-        if (otpValid) {
-            displayGoPay()
-        }
-    }
-*/
     override fun displayOTPV(otpMobile: String, otpValid: Boolean) {
         println("display OTP is called" + otpMobile)
-       addViews(otpViewHolder)
-       otpViewHolder.otpView.visibility = View.VISIBLE
+        addViews(otpViewHolder)
+        otpViewHolder.otpView.visibility = View.VISIBLE
         otpViewHolder.otpView.mobileNumberText.text = otpMobile
         otpViewHolder.otpView.changePhone.setOnClickListener {
             goPayViewsHolder.onChangePhoneClicked()
@@ -295,7 +262,7 @@ class TapLayoutViewModell : ViewModel(),
 
 
     override fun displayRedirect(url: String) {
-        Toast.makeText(context, "url redirecting"+url, Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "url redirecting" + url, Toast.LENGTH_SHORT).show()
     }
 
     override fun displaySaveCardOptions() {
@@ -308,26 +275,26 @@ class TapLayoutViewModell : ViewModel(),
 
         println("dummyAPIS response new value is ${dummyInitapiResponse1}")
         businessViewHolder.setDatafromAPI(
-            dummyInitapiResponse1.merchant1.logo,
-            dummyInitapiResponse1.merchant1.name
+                dummyInitapiResponse1.merchant1.logo,
+                dummyInitapiResponse1.merchant1.name
         )
 
 
         amountViewHolder1.setDatafromAPI(
-            dummyInitapiResponse1.order1.original_amount.toString(),
-            dummyInitapiResponse1.order1.trx_currency,
-            dummyInitapiResponse1.order1.trx_currency,
-            dummyInitapiResponse1.order1.items.size.toString()
+                dummyInitapiResponse1.order1.original_amount.toString(),
+                dummyInitapiResponse1.order1.trx_currency,
+                dummyInitapiResponse1.order1.trx_currency,
+                dummyInitapiResponse1.order1.items.size.toString()
         )
 
         cardViewHolder11.setDatafromAPI(dummyInitapiResponse1.savedCards)
         goPaySavedCardHolder.setDatafromAPI(dummyInitapiResponse1.goPaySavedCards)
-       // println("dummy tapCardPhoneListDataSource" + dummyInitapiResponse1.tapCardPhoneListDataSources)
+        // println("dummy tapCardPhoneListDataSource" + dummyInitapiResponse1.tapCardPhoneListDataSources)
         paymenttInputViewHolder.setDatafromAPI(dummyInitapiResponse1.tapCardPhoneListDataSource)
 
 
         saveCardSwitchHolder11.setDatafromAPI(
-            dummyInitapiResponse1.merchant1.name,
+                dummyInitapiResponse1.merchant1.name,
                 paymenttInputViewHolder.selectedType
         )
 
@@ -338,8 +305,8 @@ class TapLayoutViewModell : ViewModel(),
          * Setting divider for items
          */
         val divider = DividerItemDecoration(
-            context,
-            DividerItemDecoration.HORIZONTAL
+                context,
+                DividerItemDecoration.HORIZONTAL
         )
         divider.setDrawable(ShapeDrawable().apply {
             intrinsicWidth = 10
@@ -350,9 +317,9 @@ class TapLayoutViewModell : ViewModel(),
 
 
         cardViewHolder11.view.mainChipgroup.chipsRecycler.adapter = CardTypeAdapterUIKIT(
-            savedcardList as ArrayList<SavedCards>,
-            this,
-            false
+                savedcardList as ArrayList<SavedCards>,
+                this,
+                false
         )
 
         cardViewHolder11.view.mainChipgroup.groupAction?.visibility = View.VISIBLE
@@ -360,17 +327,17 @@ class TapLayoutViewModell : ViewModel(),
         cardViewHolder11.view.mainChipgroup.groupAction?.setOnClickListener {
             if (cardViewHolder11.view.mainChipgroup.groupAction?.text == "Close") {
                 cardViewHolder11.view.mainChipgroup.chipsRecycler.adapter = CardTypeAdapterUIKIT(
-                    savedcardList as ArrayList<SavedCards>,
-                    this,
-                    false
+                        savedcardList as ArrayList<SavedCards>,
+                        this,
+                        false
                 )
                 cardViewHolder11.view.mainChipgroup.groupAction?.text = "Edit"
 
             } else {
                 cardViewHolder11.view.mainChipgroup.chipsRecycler.adapter = CardTypeAdapterUIKIT(
-                    savedcardList as ArrayList<SavedCards>,
-                    this,
-                    true
+                        savedcardList as ArrayList<SavedCards>,
+                        this,
+                        true
                 )
                 cardViewHolder11.view.mainChipgroup.groupAction?.text = "Close"
             }
@@ -401,17 +368,23 @@ class TapLayoutViewModell : ViewModel(),
     }
 
 
-    override fun onCardSelectedAction(isSelected: Boolean, typeCardView: String) {
+ /*   override fun onCardSelectedAction(isSelected: Boolean, typeCardView: String) {
         println("onCardSelectedAction called" + typeCardView)
         if (isSelected) {
             if (typeCardView == "3") {
                 displayGoPayLogin()
-            }else  {
-               displayRedirect("wwww.google.com")
+            } else {
+                displayRedirect("wwww.google.com")
             }
             // activateActionButton()
             //  tabAnimatedActionButtonViewHolder11.view.actionButton.setOnClickListener { tabAnimatedActionButtonViewHolder11.setOnClickAction() }
         } else unActivateActionButton()
+    }*/
+
+    override fun onCardSelectedAction(isSelected: Boolean) {
+        if(isSelected){
+            displayGoPayLogin()
+        }
     }
 
     override fun onDeleteIconClicked(stopAnimation: Boolean, itemId: Int) {
@@ -429,11 +402,11 @@ class TapLayoutViewModell : ViewModel(),
             saveCardSwitchHolder11.view.mainSwitch.visibility = View.VISIBLE
             saveCardSwitchHolder11.view.mainSwitch.switchSaveMobile.visibility = View.VISIBLE
             saveCardSwitchHolder11.view.mainSwitch.mainSwitchLinear.setBackgroundColor(
-                Color.parseColor(
-                    ThemeManager.getValue(
-                        "TapSwitchView.main.backgroundColor"
+                    Color.parseColor(
+                            ThemeManager.getValue(
+                                    "TapSwitchView.main.backgroundColor"
+                            )
                     )
-                )
             )
             saveCardSwitchHolder11.view.cardSwitch.visibility = View.VISIBLE
             /* saveCardSwitchHolder.view.cardSwitch.switchesLayout?.visibility = View.VISIBLE
@@ -459,15 +432,15 @@ class TapLayoutViewModell : ViewModel(),
     // Override function to open NFC fragment and scan the card via NFC.
     override fun onClickNFC() {
         removeViews(
-            cardViewHolder11,
-            saveCardSwitchHolder11,
+                cardViewHolder11,
+                saveCardSwitchHolder11,
                 paymenttInputViewHolder
         )
         val manager: FragmentManager = fragmentManager
         val transaction = manager.beginTransaction()
         transaction.add(
-            R.id.sdkContainer,
-            NFCFragment()
+                R.id.sdkContainer,
+                NFCFragment()
         )
         transaction.addToBackStack(null)
         transaction.commit()
@@ -481,15 +454,15 @@ class TapLayoutViewModell : ViewModel(),
         println("are u reachinhg scanner")
         // cardScannerViewHolder  = CardScannerViewHolder(context)
         removeViews(
-            cardViewHolder11,
-            saveCardSwitchHolder11,
+                cardViewHolder11,
+                saveCardSwitchHolder11,
                 paymenttInputViewHolder
         )
         val manager: FragmentManager = fragmentManager
         val transaction = manager.beginTransaction()
         transaction.add(
-            R.id.sdkContainer,
-            CardScannerFragment()
+                R.id.sdkContainer,
+                CardScannerFragment()
         )
         transaction.addToBackStack(null)
         transaction.commit()
@@ -504,11 +477,11 @@ class TapLayoutViewModell : ViewModel(),
     private fun getSwitchDataSource(switchText: String): TapSwitchDataSource {
         println("switch data source " + switchText)
         return TapSwitchDataSource(
-            switchSave = switchText,
-            switchSaveMerchantCheckout = "Save for [merchant_name] Checkouts",
-            switchSavegoPayCheckout = "By enabling goPay, your mobile number will be saved with Tap Payments to get faster and more secure checkouts in multiple apps and websites.",
-            savegoPayText = "Save for goPay Checkouts",
-            alertgoPaySignup = "Please check your email or SMS’s in order to complete the goPay Checkout signup process."
+                switchSave = switchText,
+                switchSaveMerchantCheckout = "Save for [merchant_name] Checkouts",
+                switchSavegoPayCheckout = "By enabling goPay, your mobile number will be saved with Tap Payments to get faster and more secure checkouts in multiple apps and websites.",
+                savegoPayText = "Save for goPay Checkouts",
+                alertgoPaySignup = "Please check your email or SMS’s in order to complete the goPay Checkout signup process."
         )
     }
 
@@ -517,49 +490,49 @@ class TapLayoutViewModell : ViewModel(),
         saveCardSwitchHolder11.view.mainSwitch.switchSaveMobile?.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 saveCardSwitchHolder11.view.cardSwitch.tapCardSwitchLinear.setBackgroundColor(
-                    Color.parseColor(
-                        ThemeManager.getValue(
-                            "TapSwitchView.backgroundColor"
+                        Color.parseColor(
+                                ThemeManager.getValue(
+                                        "TapSwitchView.backgroundColor"
+                                )
                         )
-                    )
                 )
                 //  saveCardSwitchHolder.view.cardSwitch.cardElevation = 2.5f
                 saveCardSwitchHolder11.view.cardSwitch.saveSwitchChip.cardElevation = 2.5f
 
                 saveCardSwitchHolder11.view.cardSwitch.payButton.stateListAnimator = null
                 saveCardSwitchHolder11.view.cardSwitch.payButton.setButtonDataSource(
-                    true,
-                    "en",
-                    "Pay",
-                    Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-                    Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
+                        true,
+                        "en",
+                        "Pay",
+                        Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
+                        Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
                 )
                 saveCardSwitchHolder11.view.cardSwitch.switchesLayout?.visibility = View.VISIBLE
                 saveCardSwitchHolder11.view.cardSwitch.switchSaveMerchant?.visibility = View.VISIBLE
                 saveCardSwitchHolder11.view.cardSwitch.switchSaveMerchant?.isChecked = true
                 saveCardSwitchHolder11.view.cardSwitch.switchGoPayCheckout?.isChecked = true
                 saveCardSwitchHolder11.view.cardSwitch.switchGoPayCheckout?.visibility =
-                    View.VISIBLE
+                        View.VISIBLE
                 saveCardSwitchHolder11.view.cardSwitch.saveGoPay?.visibility = View.VISIBLE
                 saveCardSwitchHolder11.view.cardSwitch.alertGoPaySignUp?.visibility = View.VISIBLE
                 saveCardSwitchHolder11.view.cardSwitch.switchSeparator?.visibility = View.VISIBLE
             } else {
                 saveCardSwitchHolder11.view.cardSwitch.tapCardSwitchLinear.setBackgroundColor(
-                    Color.parseColor(
-                        ThemeManager.getValue(
-                            "TapSwitchView.main.backgroundColor"
+                        Color.parseColor(
+                                ThemeManager.getValue(
+                                        "TapSwitchView.main.backgroundColor"
+                                )
                         )
-                    )
                 )
                 saveCardSwitchHolder11.view.cardSwitch.saveSwitchChip.cardElevation = 0f
 
                 saveCardSwitchHolder11.view.cardSwitch.payButton.stateListAnimator = null
                 saveCardSwitchHolder11.view.cardSwitch.payButton.setButtonDataSource(
-                    false,
-                    "en",
-                    "Pay",
-                    Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
-                    Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
+                        false,
+                        "en",
+                        "Pay",
+                        Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
+                        Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
                 )
 
                 saveCardSwitchHolder11.view.cardSwitch.switchesLayout?.visibility = View.GONE
@@ -577,7 +550,7 @@ class TapLayoutViewModell : ViewModel(),
 
     private fun stopShakingCards(chipsView: RecyclerView) {
         chipsView.adapter =
-            CardTypeAdapterUIKIT(savedcardList as ArrayList<SavedCards>, this, false)
+                CardTypeAdapterUIKIT(savedcardList as ArrayList<SavedCards>, this, false)
     }
 
 
