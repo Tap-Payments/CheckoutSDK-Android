@@ -13,6 +13,7 @@ import android.widget.RelativeLayout
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.internal.dummygener.Items1
+import company.tap.checkout.internal.utils.CurrencyFormatter
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.R
 import company.tap.tapuilibrary.fontskit.enums.TapFont
@@ -68,16 +69,16 @@ class ItemAdapter(private val itemList: ArrayList<Items1>) :
         val isExpanded = position == mExpandedPosition
         if(itemList.size!=0){
             for (i in 0 until itemList.size) {
-                descriptionTextView.text = itemList.get(i).description
+                descriptionTextView.text = itemList[position].description
                 descriptionTextView.visibility = if (isExpanded) View.VISIBLE else View.GONE
                 holder.itemView.isActivated = isExpanded
                 totalQuantity.text = itemList[i].quantity.toString()
 
-                itemViewAdapter.setItemViewDataSource(getItemViewDataSource(itemList[i].amount.toString(),itemList[i].currency,itemList[i].quantity.toString()))
+                itemViewAdapter.setItemViewDataSource(getItemViewDataSource(itemList[i].currency+CurrencyFormatter.currencyFormat(itemList[i].amount.toString()),itemList[i].currency,itemList[i].quantity.toString()))
 
             }
         }else{
-            descriptionTextView.text = itemList.get(0).description
+            descriptionTextView.text = itemList[0].description
             descriptionTextView.visibility = if (isExpanded) View.VISIBLE else View.GONE
             holder.itemView.isActivated = isExpanded
         }
@@ -124,12 +125,12 @@ class ItemAdapter(private val itemList: ArrayList<Items1>) :
             }
         }else
             for (i in 0 until itemList.size) {
-                itemName?.text = itemList[i].name
-                if(itemList[i].discount1?.type == "P"){
+                itemName?.text = itemList[position].name
+                if(itemList[position].discount1.type == "P"){
                     discount?.visibility = View.VISIBLE
                     discount?.text = itemList[i].discount1.value.toString()
                     totalAmount?.paintFlags = totalAmount?.paintFlags?.or(Paint.STRIKE_THRU_TEXT_FLAG)!!
-                    totalAmount.text = itemList[i].amount.toString()
+                    totalAmount.text = itemList[position].amount.toString()
 
                 }else{
                     discount?.visibility = View.INVISIBLE

@@ -37,6 +37,7 @@ import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.cardviewholder_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 /**
@@ -225,18 +226,20 @@ class TapLayoutViewModell : ViewModel(),
             )
 
         } else {
-            removeViews(businessViewHolder, amountViewHolder1, itemsViewHolder1)
+            removeViews(businessViewHolder,amountViewHolder1,cardViewHolder11,paymenttInputViewHolder,saveCardSwitchHolder11)
 
 
-            //  supportedCurrecnyList.clear()
-            //  manager.beginTransaction().replace(R.id.sdkContainer, TapCheckoutFragment()).commit()
+          //  allCurrencies= ArrayList()
+           // itemList = ArrayList()
 
-            // transaction.addToBackStack(null)
-            //  transaction.commit()
+             manager.beginTransaction().replace(R.id.sdkContainer, CurrencyViewsFragment(allCurrencies as ArrayList<Currencies1>,ArrayList())).addToBackStack(null).commit()
+             //manager.beginTransaction().remove(CurrencyViewsFragment( ArrayList(),ArrayList())).commit()
+            addViews(businessViewHolder,amountViewHolder1,cardViewHolder11,paymenttInputViewHolder,saveCardSwitchHolder11)
+          //transaction.addToBackStack(null)
+           //transaction.commit()
 
 
         }
-
 
         itemsViewHolder1.displayed = !display
         amountViewHolder1.changeGroupAction(!display)

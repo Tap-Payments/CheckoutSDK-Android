@@ -6,6 +6,7 @@ import android.view.View
 
 import company.tap.checkout.R
 import company.tap.checkout.internal.enums.SectionType
+import company.tap.checkout.internal.utils.CurrencyFormatter
 import company.tap.checkout.internal.utils.CurrentTheme
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.uikit.atoms.TapButton
@@ -30,7 +31,7 @@ class AmountViewHolder1(context: Context) : TapBaseViewHolder {
     private var selectedCurren:String?=null
     private var currentCurren:String?=null
     private var itemCountt :String?=null
-    private var originalAmount :String?=null
+    private var originalAmount :String=""
     init {
         bindViewComponents()
         CurrentTheme.initAppTheme(R.raw.defaultlighttheme, context)
@@ -92,7 +93,8 @@ class AmountViewHolder1(context: Context) : TapBaseViewHolder {
         selectedCurren = selectedCurrencyApi
         currentCurren = currentCurrencyApi
         itemCountt  = itemCountApi
-        originalAmount = originalAmountApi
+        originalAmount =CurrencyFormatter.currencyFormat(originalAmountApi)
+
         bindViewComponents()
     }
 }

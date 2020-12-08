@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class Items1 (
 
-	@SerializedName("amount") val amount : Int,
+	@SerializedName("amount") val amount : Long,
 	@SerializedName("currency") val currency : String,
 	@SerializedName("description") val description : String,
 	@SerializedName("discount") val discount1 : Discount1,
