@@ -6,6 +6,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ShapeDrawable
 import android.os.Build
+import android.os.Handler
 import android.transition.TransitionManager
 import android.view.View
 import android.widget.FrameLayout
@@ -40,6 +41,8 @@ import company.tap.tapuilibrary.uikit.fragment.NFCFragment
 import company.tap.tapuilibrary.uikit.interfaces.OnCardSelectedActionListener
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.cardviewholder_layout.view.*
+import kotlinx.android.synthetic.main.currency_fragment_layout.view.*
+import kotlinx.android.synthetic.main.fragment_checkouttaps.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -60,7 +63,7 @@ class TapLayoutViewModell : ViewModel(),
     private lateinit var bottomSheetLayout: FrameLayout
     private lateinit var businessViewHolder: BusinessViewHolder
     private lateinit var amountViewHolder1: AmountViewHolder1
-  //  private lateinit var itemsViewHolder1: ItemsViewHolder1
+   private lateinit var itemsViewHolder1: ItemsViewHolder1
     private lateinit var cardViewHolder11: CardViewHolder11
     private lateinit var paymenttInputViewHolder: PaymenttInputViewHolder
     private lateinit var saveCardSwitchHolder11: SwitchViewHolder11
@@ -70,7 +73,7 @@ class TapLayoutViewModell : ViewModel(),
     private lateinit var allCurrencies: List<Currencies1>
     private lateinit var itemList: List<Items1>
     private lateinit var savedcardList: List<SavedCards>
-    private  var displayItemsOpen: Boolean = true
+    private  var displayItemsOpen: Boolean = false
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun initLayoutManager(
@@ -86,7 +89,7 @@ class TapLayoutViewModell : ViewModel(),
         this.sdkLayout = sdkLayout
         businessViewHolder = BusinessViewHolder(context)
 
-        amountViewHolder1 = AmountViewHolder1(context)
+        amountViewHolder1 = AmountViewHolder1(context,this)
         initAmountAction()
 
         cardViewHolder11 = CardViewHolder11(context, this)
@@ -95,7 +98,7 @@ class TapLayoutViewModell : ViewModel(),
 
         paymenttInputViewHolder = PaymenttInputViewHolder(context, this, this)
         saveCardSwitchHolder11 = SwitchViewHolder11(context)
-     //   itemsViewHolder1 = ItemsViewHolder1(context, this)
+        itemsViewHolder1 = ItemsViewHolder1(context, this,fragmentManager)
 
         otpViewHolder = OTPViewHolder(context)
 
@@ -113,10 +116,13 @@ class TapLayoutViewModell : ViewModel(),
     }
 
     private fun initAmountAction() {
-        amountViewHolder1.view.amount_section?.itemCount?.setOnClickListener {
+       /* amountViewHolder1.view.amount_section?.itemCount?.setOnClickListener {
             controlCurrency(displayItemsOpen)
             println("amount clicked")
 
+        }*/
+        amountViewHolder1.setOnItemsClickListener {
+           //itemsViewHolder1.resetView()
         }
     }
 
@@ -203,45 +209,52 @@ class TapLayoutViewModell : ViewModel(),
     }
 
     override fun controlCurrency(display: Boolean) {
-        val manager: FragmentManager = fragmentManager
-        val transaction = manager.beginTransaction()
+
         if (this::bottomSheetLayout.isInitialized)
             AnimationEngine.applyTransition(
-                bottomSheetLayout,SLIDE)
-        if (display) {
-            if (allCurrencies.isNotEmpty()) {
-                transaction.add(
-                        R.id.sdkContainer,
-                        CurrencyViewsFragment(allCurrencies as ArrayList<Currencies1>, itemList)
-                )
-                transaction.addToBackStack(null)
-                transaction.commit()
-
-                displayItemsOpen = false
-
-            }
-            removeViews(
-                    cardViewHolder11,
-                    paymenttInputViewHolder,
-                    saveCardSwitchHolder11
+                bottomSheetLayout, SLIDE
             )
 
+        if (display) {
+            println("first block called")
+            removeViews(
+                businessViewHolder,
+                amountViewHolder1,
+                cardViewHolder11,
+                paymenttInputViewHolder,
+                saveCardSwitchHolder11,itemsViewHolder1
+            )
+
+            addViews(businessViewHolder,amountViewHolder1)
+            itemsViewHolder1.setView()
+
         } else {
-            removeViews(businessViewHolder,amountViewHolder1,cardViewHolder11,paymenttInputViewHolder,saveCardSwitchHolder11)
-          //manager.beginTransaction().replace(R.id.sdkContainer, CurrencyViewsFragment(allCurrencies as ArrayList<Currencies1>,ArrayList())).addToBackStack(null).commit()
-            manager.beginTransaction().remove(CurrencyViewsFragment(ArrayList(),ArrayList())).commit()
-          //  manager.beginTransaction().replace(R.id.sdkContainer,CurrencyViewsFragment(ArrayList(),ArrayList())).commit()
-            addViews(businessViewHolder,amountViewHolder1,cardViewHolder11,paymenttInputViewHolder,saveCardSwitchHolder11)
 
+            removeViews(
+                businessViewHolder,
+                amountViewHolder1,
+                cardViewHolder11,
+                paymenttInputViewHolder,
+                saveCardSwitchHolder11,
+                itemsViewHolder1
+            )
+            addViews(
+                businessViewHolder,
+                amountViewHolder1,
+                cardViewHolder11,
+                paymenttInputViewHolder,
+                saveCardSwitchHolder11
+            )
 
+            itemsViewHolder1.resetView()
+
+            println("second block called")
 
         }
-
-       // itemsViewHolder1.displayed = !display
-        amountViewHolder1.changeGroupAction(!displayItemsOpen)
+        displayItemsOpen = !display
+        amountViewHolder1.changeGroupAction(!display)
 
     }
-
 
     override fun displayOTPV(otpMobile: String, otpValid: Boolean) {
         println("display OTP is called" + otpMobile)
@@ -296,6 +309,7 @@ class TapLayoutViewModell : ViewModel(),
                 dummyInitapiResponse1.merchant1.name,
                 paymenttInputViewHolder.selectedType
         )
+        itemsViewHolder1.setDatafromAPI(dummyInitapiResponse1.currencies1 as ArrayList<Currencies1>,dummyInitapiResponse1.order1.items,fragmentManager)
 
         allCurrencies = dummyInitapiResponse1.currencies1
         itemList = dummyInitapiResponse1.order1.items

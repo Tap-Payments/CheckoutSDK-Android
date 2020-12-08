@@ -18,7 +18,7 @@ import company.tap.tapuilibrary.uikit.fragment.CurrencyViewFragment
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class ItemsViewHolder1(context11: Context, private val baseLayouttManager: BaseLayouttManager) :
+class ItemsViewHolder1(context11: Context, private val baseLayouttManager: BaseLayouttManager,fragmentManagere: FragmentManager) :
     TapBaseViewHolder {
     private val context1: Context? = context11
     private lateinit var fragmentManager: FragmentManager
@@ -30,7 +30,7 @@ class ItemsViewHolder1(context11: Context, private val baseLayouttManager: BaseL
     override val type = SectionType.SELECT
 
     var displayed: Boolean = true
-    private lateinit var supportedCurrecnyList: ArrayList<String>
+    private lateinit var supportedCurrecnyList: ArrayList<Currencies1>
     private lateinit var supportedCurrecny: ArrayList<Currencies1>
     private lateinit var supportedItemList: List<Items1>
 
@@ -38,12 +38,12 @@ class ItemsViewHolder1(context11: Context, private val baseLayouttManager: BaseL
     init {
 
         bindViewComponents()
+        this.fragmentManager = fragmentManagere
 
 
     }
 
     override fun bindViewComponents() {
-
     }
 
     /**
@@ -51,33 +51,40 @@ class ItemsViewHolder1(context11: Context, private val baseLayouttManager: BaseL
      * @param supportedCurrencyApi represents the supported currency for the Merchant.
      * @param supportItemListApi represents the supported currency for the Merchant.
      * */
-    fun setDatafromAPI(supportedCurrencyApi: ArrayList<String>,supportItemListApi :List<Items1>,fragmentManager: FragmentManager) {
+    fun setDatafromAPI(supportedCurrencyApi: ArrayList<Currencies1>,supportItemListApi :List<Items1>,fragmentManager: FragmentManager) {
         supportedCurrecnyList = supportedCurrencyApi
         supportedItemList = supportItemListApi
        // bindViewComponents()
-        val manager: FragmentManager = fragmentManager
-        val transaction = manager.beginTransaction()
+     //   val manager: FragmentManager = fragmentManager
+     //   val transaction = manager.beginTransaction()
         /* transaction.add(
              R.id.currency_fragment_container,
              CurrencyViewFragment(supportedCurrecnyList, itemList)
          )*/
-        transaction.replace(R.id.sdkContainer,
-            CurrencyViewsFragment(supportedCurrecny, supportedItemList)
-        )
+        println("supportedItemList curr list:$supportedItemList")
 
+        this.fragmentManager = fragmentManager
 
-        transaction.addToBackStack(null)
-        transaction.commit()
-        println("supported curr list:$supportedCurrecnyList")
 
     }
 
     fun resetView(){
-        val manager: FragmentManager = fragmentManager
+        fragmentManager.beginTransaction()
+            .replace(R.id.sdkContainer, CurrencyViewsFragment(ArrayList(), ArrayList()))
+            .addToBackStack(null)
+            .commit()
+       /* val manager: FragmentManager = fragmentManager
         val transaction = manager.beginTransaction()
         transaction.remove(CurrencyViewsFragment(supportedCurrecny, supportedItemList))
         transaction.addToBackStack(null)
-        transaction.commit()
+        transaction.commit()*/
+    }
+
+    fun setView(){
+        fragmentManager.beginTransaction()
+            .replace(R.id.sdkContainer, CurrencyViewsFragment(supportedCurrecnyList, supportedItemList))
+            .addToBackStack(null)
+            .commit()
     }
 
 }
