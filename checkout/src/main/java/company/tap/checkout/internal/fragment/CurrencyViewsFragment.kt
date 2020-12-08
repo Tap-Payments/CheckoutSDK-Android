@@ -33,13 +33,12 @@ All rights reserved.
 open class CurrencyViewsFragment(private var currencyLists1:ArrayList<Currencies1>, private var itemLists:List<Items1>) : Fragment() {
     private lateinit var chipRecycler: RecyclerView
 
-    // lateinit var currencyList: ArrayList<CurrencyModel>
+
     lateinit var currenciesList: ArrayList<Currencies1>
 
 
     private lateinit var itemsRecycler: RecyclerView
-    /* private var itemList: ArrayList<Int> =
-         arrayListOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 21, 22)*/
+
     private lateinit var itemList: ArrayList<Items1>
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
@@ -60,7 +59,7 @@ open class CurrencyViewsFragment(private var currencyLists1:ArrayList<Currencies
         val groupAction = currencyGroup.findViewById<TapTextView>(R.id.group_action)
         groupAction.visibility = View.GONE
         chipRecycler = currencyGroup.findViewById<View>(R.id.chip_recycler) as RecyclerView
-        chipRecycler.setHasFixedSize(true)
+       // chipRecycler.setHasFixedSize(true)
         chipRecycler.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         // chipRecycler.adapter = CurrencyAdapter(currencyList)
         if (this::currenciesList.isInitialized)
@@ -106,52 +105,6 @@ open class CurrencyViewsFragment(private var currencyLists1:ArrayList<Currencies
         return view
     }
 
-    //Filling dummy data for currency chips
-    private fun fillData() {
-        //  currencyList = ArrayList()
-        val arguments = arguments
-        val arraylistCurrency = arguments?.getString("arraylistcurrency")
-        println("desired_string list valu   ${arraylistCurrency.toString()} $arraylistCurrency")
-
-        //adding some dummy data to the list
-        /*   currencyList.add(
-               CurrencyModel(
-                   "KWD",
-                   "https://www.countryflags.io/kw/flat/24.png"
-               )
-           )
-           currencyList.add(
-               CurrencyModel(
-                   "SAR",
-                   "https://www.countryflags.io/sa/flat/24.png"
-               )
-           )
-           currencyList.add(
-               CurrencyModel(
-                   "BHD",
-                   "https://www.countryflags.io/bh/flat/24.png"
-               )
-           )
-           currencyList.add(
-               CurrencyModel(
-                   "QAR",
-                   "https://www.countryflags.io/qa/flat/24.png"
-               )
-           )
-           currencyList.add(
-               CurrencyModel(
-                   "KWD",
-                   "https://www.countryflags.io/kw/flat/24.png"
-               )
-           )
-           currencyList.add(
-               CurrencyModel(
-                   "SAR",
-                   "https://www.countryflags.io/sa/flat/24.png"
-               )
-           )*/
-
-    }
 
 
     fun setTheme() {

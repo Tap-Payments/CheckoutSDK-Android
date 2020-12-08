@@ -1,6 +1,7 @@
 package company.tap.checkout.internal.viewmodels
 
 
+import android.app.PendingIntent.getActivity
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ShapeDrawable
@@ -12,9 +13,12 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.replace
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.Transition
+import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
 import company.tap.checkout.R
 import company.tap.checkout.internal.adapter.CardTypeAdapterUIKIT
 import company.tap.checkout.internal.dummygener.Currencies1
@@ -26,9 +30,10 @@ import company.tap.checkout.internal.fragment.CurrencyViewsFragment
 import company.tap.checkout.internal.interfaces.BaseLayouttManager
 import company.tap.checkout.internal.interfaces.onCardNFCCallListener
 import company.tap.checkout.internal.interfaces.onPaymentCardComplete
+import company.tap.checkout.internal.utils.AnimationEngine
 import company.tap.checkout.internal.viewholders.*
+import company.tap.checkout.open.CheckoutFragment
 import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.uikit.animation.AnimationEngine
 import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
 import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
@@ -55,7 +60,7 @@ class TapLayoutViewModell : ViewModel(),
     private lateinit var bottomSheetLayout: FrameLayout
     private lateinit var businessViewHolder: BusinessViewHolder
     private lateinit var amountViewHolder1: AmountViewHolder1
-    private lateinit var itemsViewHolder1: ItemsViewHolder1
+  //  private lateinit var itemsViewHolder1: ItemsViewHolder1
     private lateinit var cardViewHolder11: CardViewHolder11
     private lateinit var paymenttInputViewHolder: PaymenttInputViewHolder
     private lateinit var saveCardSwitchHolder11: SwitchViewHolder11
@@ -65,6 +70,7 @@ class TapLayoutViewModell : ViewModel(),
     private lateinit var allCurrencies: List<Currencies1>
     private lateinit var itemList: List<Items1>
     private lateinit var savedcardList: List<SavedCards>
+    private  var displayItemsOpen: Boolean = true
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun initLayoutManager(
@@ -89,7 +95,7 @@ class TapLayoutViewModell : ViewModel(),
 
         paymenttInputViewHolder = PaymenttInputViewHolder(context, this, this)
         saveCardSwitchHolder11 = SwitchViewHolder11(context)
-        itemsViewHolder1 = ItemsViewHolder1(context, this)
+     //   itemsViewHolder1 = ItemsViewHolder1(context, this)
 
         otpViewHolder = OTPViewHolder(context)
 
@@ -108,7 +114,7 @@ class TapLayoutViewModell : ViewModel(),
 
     private fun initAmountAction() {
         amountViewHolder1.view.amount_section?.itemCount?.setOnClickListener {
-            controlCurrency(itemsViewHolder1.displayed)
+            controlCurrency(displayItemsOpen)
             println("amount clicked")
 
         }
@@ -153,8 +159,7 @@ class TapLayoutViewModell : ViewModel(),
         println("goPay Login reached")
         if (this::bottomSheetLayout.isInitialized) {
             AnimationEngine.applyTransition(
-                    bottomSheetLayout,
-            )
+                    bottomSheetLayout,SLIDE)
         }
         removeViews(
                 businessViewHolder,
@@ -201,12 +206,9 @@ class TapLayoutViewModell : ViewModel(),
         val manager: FragmentManager = fragmentManager
         val transaction = manager.beginTransaction()
         if (this::bottomSheetLayout.isInitialized)
-            TransitionManager.beginDelayedTransition(bottomSheetLayout)
+            AnimationEngine.applyTransition(
+                bottomSheetLayout,SLIDE)
         if (display) {
-
-            println("allCurrencies inside" + allCurrencies)
-            // itemsViewHolder.setDatafromAPI(CurrecnyLists as ArrayList<Currencies1>,itemList,fragmentManager)
-
             if (allCurrencies.isNotEmpty()) {
                 transaction.add(
                         R.id.sdkContainer,
@@ -214,9 +216,8 @@ class TapLayoutViewModell : ViewModel(),
                 )
                 transaction.addToBackStack(null)
                 transaction.commit()
-                //   addViews(itemsViewHolder)
-                itemsViewHolder1.displayed = false
 
+                displayItemsOpen = false
 
             }
             removeViews(
@@ -227,22 +228,17 @@ class TapLayoutViewModell : ViewModel(),
 
         } else {
             removeViews(businessViewHolder,amountViewHolder1,cardViewHolder11,paymenttInputViewHolder,saveCardSwitchHolder11)
-
-
-          //  allCurrencies= ArrayList()
-           // itemList = ArrayList()
-
-             manager.beginTransaction().replace(R.id.sdkContainer, CurrencyViewsFragment(allCurrencies as ArrayList<Currencies1>,ArrayList())).addToBackStack(null).commit()
-             //manager.beginTransaction().remove(CurrencyViewsFragment( ArrayList(),ArrayList())).commit()
+          //manager.beginTransaction().replace(R.id.sdkContainer, CurrencyViewsFragment(allCurrencies as ArrayList<Currencies1>,ArrayList())).addToBackStack(null).commit()
+            manager.beginTransaction().remove(CurrencyViewsFragment(ArrayList(),ArrayList())).commit()
+          //  manager.beginTransaction().replace(R.id.sdkContainer,CurrencyViewsFragment(ArrayList(),ArrayList())).commit()
             addViews(businessViewHolder,amountViewHolder1,cardViewHolder11,paymenttInputViewHolder,saveCardSwitchHolder11)
-          //transaction.addToBackStack(null)
-           //transaction.commit()
+
 
 
         }
 
-        itemsViewHolder1.displayed = !display
-        amountViewHolder1.changeGroupAction(!display)
+       // itemsViewHolder1.displayed = !display
+        amountViewHolder1.changeGroupAction(!displayItemsOpen)
 
     }
 

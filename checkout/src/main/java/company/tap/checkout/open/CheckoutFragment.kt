@@ -58,7 +58,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
     ): View? {
         view1 = inflater.inflate(R.layout.fragment_checkouttaps, container, false)
 
-        bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+       // bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
         val viewModell: TapLayoutViewModell by viewModels()
         this.viewModell = viewModell
 
