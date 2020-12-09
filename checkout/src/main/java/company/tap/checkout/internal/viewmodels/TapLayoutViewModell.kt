@@ -11,6 +11,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
@@ -62,8 +63,9 @@ class TapLayoutViewModell : ViewModel(),
     private lateinit var goPaySavedCardHolder: GoPaySavedCardHolder
     private lateinit var allCurrencies: List<Currencies1>
     private lateinit var itemList: List<Items1>
-    private lateinit var savedcardList: List<SavedCards>
+    private  var savedCardList = MutableLiveData<List<SavedCards>>()
     private  var displayItemsOpen: Boolean = false
+    private val isShaking = MutableLiveData<Boolean>()
 
     private  lateinit var frameLayout: FrameLayout
 
@@ -166,7 +168,7 @@ class TapLayoutViewModell : ViewModel(),
                 amountViewHolder1,
                 cardViewHolder11,
                 paymenttInputViewHolder,
-                saveCardSwitchHolder11,
+                saveCardSwitchHolder11
         )
 
         addViews(
@@ -308,7 +310,7 @@ class TapLayoutViewModell : ViewModel(),
 
         allCurrencies = dummyInitapiResponse1.currencies1
         itemList = dummyInitapiResponse1.order1.items
-        savedcardList = dummyInitapiResponse1.savedCards
+        savedCardList.value = dummyInitapiResponse1.savedCards
         /**
          * Setting divider for items
          */
@@ -325,7 +327,7 @@ class TapLayoutViewModell : ViewModel(),
 
 
         cardViewHolder11.view.mainChipgroup.chipsRecycler.adapter = CardTypeAdapterUIKIT(
-                savedcardList as ArrayList<SavedCards>,
+            savedCardList.value as ArrayList<SavedCards>,
                 this,
                 false
         )
@@ -334,22 +336,12 @@ class TapLayoutViewModell : ViewModel(),
 
         cardViewHolder11.view.mainChipgroup.groupAction?.setOnClickListener {
             if (cardViewHolder11.view.mainChipgroup.groupAction?.text == "Close") {
-                cardViewHolder11.view.mainChipgroup.chipsRecycler.adapter = CardTypeAdapterUIKIT(
-                        savedcardList as ArrayList<SavedCards>,
-                        this,
-                        false
-                )
+                isShaking.value = false
                 cardViewHolder11.view.mainChipgroup.groupAction?.text = "Edit"
-
             } else {
-                cardViewHolder11.view.mainChipgroup.chipsRecycler.adapter = CardTypeAdapterUIKIT(
-                        savedcardList as ArrayList<SavedCards>,
-                        this,
-                        true
-                )
+                isShaking.value = true
                 cardViewHolder11.view.mainChipgroup.groupAction?.text = "Close"
             }
-
         }
 
     }
@@ -398,7 +390,7 @@ class TapLayoutViewModell : ViewModel(),
     override fun onDeleteIconClicked(stopAnimation: Boolean, itemId: Int) {
         println("onDeleteIconClicked is onDeleteIconClicked")
         if (stopAnimation) {
-            stopShakingCards(cardViewHolder11.view.mainChipgroup.chipsRecycler)
+            isShaking.value = false
             cardViewHolder11.view.mainChipgroup.groupAction?.text = "Edit"
         } else cardViewHolder11.view.mainChipgroup.groupAction?.text = "Close"
     }
@@ -557,9 +549,8 @@ class TapLayoutViewModell : ViewModel(),
     }
 
     private fun stopShakingCards(chipsView: RecyclerView) {
-        chipsView.adapter =
-                CardTypeAdapterUIKIT(savedcardList as ArrayList<SavedCards>, this, false)
-    }
+        isShaking.value = false
+        }
 
 
 }
