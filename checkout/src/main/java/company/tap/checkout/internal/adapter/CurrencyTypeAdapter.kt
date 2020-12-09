@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import company.tap.checkout.R
 import company.tap.checkout.internal.dummygener.Currencies1
+import company.tap.checkout.internal.enums.Currencies
 import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.TextViewTheme
@@ -162,9 +163,8 @@ class CurrencyTypeAdapter(private val arraylistscurencs: ArrayList<Currencies1>,
                 Toast.LENGTH_SHORT
             ).show()
 
-            onCurrencyChangedActionListener?.OnCurrencyClicked(holder.itemView.textView_currency.text.toString(),
-                currencyRate)
-
+            onCurrencyChangedActionListener?.onCurrencyClicked(holder.itemView.textView_currency.text.toString(),
+                arraylistscurencs[position].conversionrate)
             notifyDataSetChanged()
         }
 

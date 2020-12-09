@@ -2,16 +2,13 @@ package company.tap.checkout.internal.viewholders
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import androidx.fragment.app.FragmentManager
 import company.tap.checkout.R
 import company.tap.checkout.internal.dummygener.Currencies1
 import company.tap.checkout.internal.dummygener.Items1
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.fragment.CurrencyViewsFragment
-import company.tap.checkout.internal.interfaces.BaseLayouttManager
 import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener
-import kotlinx.android.synthetic.main.fragment_checkouttaps.view.*
 
 /**
  *
@@ -80,5 +77,11 @@ class ItemsViewHolder1(context11: Context, private val onCurrencyChangedActionLi
             .addToBackStack(null)
             .commit()
     }
+
+    fun resetItemList(items1: List<Items1>){
+        supportedItemList = items1
+        setView()
+    }
+
 
 }

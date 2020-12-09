@@ -20,6 +20,7 @@ import company.tap.checkout.internal.dummygener.Currencies1
 import company.tap.checkout.internal.dummygener.Items1
 import company.tap.checkout.internal.dummygener.JsonResponseDummy1
 import company.tap.checkout.internal.dummygener.SavedCards
+import company.tap.checkout.internal.enums.Currencies
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.*
 import company.tap.checkout.internal.utils.AnimationEngine
@@ -61,6 +62,7 @@ class TapLayoutViewModell : ViewModel(),
     private var savedCardList = MutableLiveData<List<SavedCards>>()
     private var displayItemsOpen: Boolean = false
     private val isShaking = MutableLiveData<Boolean>()
+
 
     private lateinit var frameLayout: FrameLayout
     var rate: Double = 0.0
@@ -391,8 +393,15 @@ class TapLayoutViewModell : ViewModel(),
         println("onDeleteIconClicked is onDeleteIconClicked")
         if (stopAnimation) {
             isShaking.value = false
-            cardViewHolder11.view.mainChipgroup.groupAction?.text = LocalizationManager.getValue("GatewayHeader","HorizontalHeaders","rightTitle")
-        } else cardViewHolder11.view.mainChipgroup.groupAction?.text = LocalizationManager.getValue("close", "Common")
+            cardViewHolder11.view.mainChipgroup.groupAction?.text = LocalizationManager.getValue(
+                "GatewayHeader",
+                "HorizontalHeaders",
+                "rightTitle"
+            )
+        } else cardViewHolder11.view.mainChipgroup.groupAction?.text = LocalizationManager.getValue(
+            "close",
+            "Common"
+        )
     }
 
     override fun onPaycardSwitchAction(isCompleted: Boolean) {
@@ -548,8 +557,14 @@ class TapLayoutViewModell : ViewModel(),
 
     }
 
-    override fun OnCurrencyClicked(currencySelected: String, currencyRate: Double) {
-        println("currecnt selcetd"+currencySelected+"currencyRate is"+currencyRate )
+    override fun onCurrencyClicked(currencySelected: String, currencyRate: Double) {
+        for(i in itemList.indices){
+            itemList[i].amount= (itemList[i].amount * currencyRate).toLong()
+            itemList[i].currency = currencySelected
+        }
+        println("changed before itemLists"+itemList)
+        itemsViewHolder1.resetItemList(itemList)
+
     }
 
 }

@@ -68,9 +68,9 @@
   },
   "currencies": [
     {
-      "currencytitle": "KWD",
+      "currencytitle": "KD",
       "currencyicon": "https://img.icons8.com/color/48/000000/kuwait.png",
-      "conversionrate": "2.15"
+      "conversionrate": "2.45"
     },
     {
       "currencytitle": "USD",

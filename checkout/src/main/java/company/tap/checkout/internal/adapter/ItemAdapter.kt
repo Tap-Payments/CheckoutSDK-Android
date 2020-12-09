@@ -33,7 +33,7 @@ Copyright (c) 2020    Tap Payments.
 All rights reserved.
  **/
 class ItemAdapter(private val itemList: ArrayList<Items1>) :
-    RecyclerView.Adapter<ItemAdapter.ItemHolder>(),OnCurrencyChangedActionListener {
+    RecyclerView.Adapter<ItemAdapter.ItemHolder>() {
     private var previousExpandedPosition = -1
     private var mExpandedPosition = -1
     private lateinit var itemViewAdapter: TapListItemView
@@ -283,12 +283,7 @@ class ItemAdapter(private val itemList: ArrayList<Items1>) :
         )
     }
 
-    override fun OnCurrencyClicked(currencySelected: String, currencyRate: Double) {
-        if(currencySelected=="SAR"){
-            println("SAR is cliececcc")
 
-        }
-    }
 
 
 }
