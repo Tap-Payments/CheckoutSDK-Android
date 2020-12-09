@@ -383,9 +383,16 @@ class TapLayoutViewModell : ViewModel(),
        }*/
 
     override fun onCardSelectedAction(isSelected: Boolean, savedCardsModel: Any) {
-//        if (isSelected) {
-//            displayGoPayLogin()
-//        }
+        when ((savedCardsModel as SavedCards).chipType) {
+            5 -> {
+                // do action for saved card
+            }
+            1 -> {
+                // redirect
+            }
+            else -> displayGoPayLogin()
+        }
+
     }
 
     override fun onDeleteIconClicked(stopAnimation: Boolean, itemId: Int) {
