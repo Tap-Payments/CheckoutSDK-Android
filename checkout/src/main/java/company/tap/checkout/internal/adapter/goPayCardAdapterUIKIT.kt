@@ -16,10 +16,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import company.tap.checkout.R
 import company.tap.checkout.internal.dummygener.GoPaySavedCards
-
-
+import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
 import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.uikit.interfaces.OnCardSelectedActionListener
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import kotlinx.android.synthetic.main.item_knet.view.*
 import kotlinx.android.synthetic.main.item_save_cards.view.*
@@ -33,8 +31,8 @@ All rights reserved.
 
 @Suppress("PrivatePropertyName")
 class goPayCardAdapterUIKIT(
-    val arrayListsgoPaySaveCard: List<GoPaySavedCards>,
-    private val onCardSelectedActionListener: OnCardSelectedActionListener?,
+    private val arrayListsgoPaySaveCard: List<GoPaySavedCards>,
+    private val onCardSelectedActionListener: OnCardSelectedActionListener,
     var isShaking: Boolean = false
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val TYPE_SAVED_CARD = 1
@@ -142,7 +140,7 @@ class goPayCardAdapterUIKIT(
                     holder.itemView.setOnClickListener {
                         selectedPosition = position
                        // onCardSelectedActionListener?.onCardSelectedAction(true,TYPE_GO_PAY.toString())
-                        onCardSelectedActionListener?.onCardSelectedAction(true)
+                        onCardSelectedActionListener.onCardSelectedAction(true, totalgopayArrayList[holder.adapterPosition])
                         notifyDataSetChanged()
                     }
                 }
@@ -251,7 +249,7 @@ class goPayCardAdapterUIKIT(
         if (!isShaking) {
             holder.itemView.setOnClickListener {
                // onCardSelectedActionListener?.onCardSelectedAction(true, arrayListRedirect.toString())
-                onCardSelectedActionListener?.onCardSelectedAction(true)
+                onCardSelectedActionListener?.onCardSelectedAction(true,totalgopayArrayList[holder.adapterPosition])
                 selectedPosition = position
                 notifyDataSetChanged()
             }

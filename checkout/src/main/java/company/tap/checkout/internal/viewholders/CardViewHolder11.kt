@@ -12,10 +12,10 @@ import company.tap.checkout.internal.adapter.CardTypeAdapterUIKIT
 
 import company.tap.checkout.internal.dummygener.SavedCards
 import company.tap.checkout.internal.enums.SectionType
+import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 
-import company.tap.tapuilibrary.uikit.interfaces.OnCardSelectedActionListener
 import kotlinx.android.synthetic.main.cardviewholder_layout.view.*
 
 /**
@@ -24,28 +24,17 @@ import kotlinx.android.synthetic.main.cardviewholder_layout.view.*
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class CardViewHolder11(
-    private val context: Context,
-    private val onCardSelectedActionListener: OnCardSelectedActionListener?=null
+class CardViewHolder11(private val context: Context, private val onCardSelectedActionListener: OnCardSelectedActionListener) : TapBaseViewHolder {
 
-) : TapBaseViewHolder {
-
-  override val view: View = LayoutInflater.from(context).inflate(R.layout.cardviewholder_layout1, null)
-
-
+    override val view: View = LayoutInflater.from(context).inflate(R.layout.cardviewholder_layout1, null)
     override val type = SectionType.CARD
-
-
     private var savedCardsList: List<SavedCards>? = null
 
-
     init {
-       // bindViewComponents()
-
+        bindViewComponents()
     }
 
     override fun bindViewComponents() {
-
         view.mainChipgroup.groupName.text = LocalizationManager.getValue(
             "GatewayHeader",
             "HorizontalHeaders",
@@ -61,23 +50,14 @@ class CardViewHolder11(
             RecyclerView.HORIZONTAL,
             false
         )
-       /* view.mainChipgroup.chipsRecycler.adapter =
-            savedCardsList?.let { CardTypeAdapter(it as ArrayList<SavedCards>, onCardSelectedActionListener,false) } */
-        println("savedCardsList before cardviewholder ${savedCardsList}")
-        view.mainChipgroup.chipsRecycler.adapter =
-            savedCardsList?.let { CardTypeAdapterUIKIT(it,onCardSelectedActionListener,false) }
-          //  savedCardsList?.let { CardTypeAdapterUIKIT(it as ArrayList<SavedCards>, onCardSelectedActionListener,false) }
-        println("savedCardsList in cardviewholder ${savedCardsList}")
-
-
+        val adapter = CardTypeAdapterUIKIT(onCardSelectedActionListener, false)
+        view.mainChipgroup.chipsRecycler.adapter = adapter
+        savedCardsList?.let { adapter.updateAdapterData(it) }
         /**
          * set separator background
          */
         view.tapSeparatorViewLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
-
-
     }
-
 
     /**
      * Sets data from API through LayoutManager

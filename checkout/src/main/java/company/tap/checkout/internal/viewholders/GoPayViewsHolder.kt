@@ -125,10 +125,10 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
         println("otpNumber is $otpNumber")
         Log.d("isValidOTP1" ,(otpNumber == "111111").toString() )
         // GoPayLoginHolder1(context,this,baseLayoutManager).view
-        if(otpNumber== "111111"){
-            GoPaySavedCardHolder(context,this,baseLayouttManager).view
-
-        }
+//        if(otpNumber== "111111"){
+//            GoPaySavedCardHolder(context,this,baseLayouttManager).view
+//
+//        }
         return otpNumber == "111111"
     }
 

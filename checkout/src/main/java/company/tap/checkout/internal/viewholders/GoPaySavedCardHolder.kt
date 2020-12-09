@@ -11,9 +11,9 @@ import company.tap.checkout.internal.adapter.goPayCardAdapterUIKIT
 import company.tap.checkout.internal.dummygener.GoPaySavedCards
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayouttManager
+import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.uikit.interfaces.OnCardSelectedActionListener
 import kotlinx.android.synthetic.main.gopayloginview_layout.view.*
 import kotlinx.android.synthetic.main.gopayloginview_layout.view.tapSeparatorViewLinear
 
