@@ -205,6 +205,7 @@ class TapLayoutViewModell : ViewModel(),
 
         cardViewHolder11.view.mainChipgroup.groupAction.text = ""
         saveCardSwitchHolder11.view.cardSwitch.payButton.visibility = View.VISIBLE
+        adapter.goPayOpenedfromMain(true)
         adapter.removeItems()
 
     }
@@ -408,8 +409,7 @@ class TapLayoutViewModell : ViewModel(),
        if(isClicked){
            CustomUtils.showDialog("Are you sure you would like to sign out","The goPayCards will be hidden from the page and you will need to login again to use any of them",context,"twobtns")
             removeViews(goPaySavedCardHolder)
-
-           adapter.updateAdapterData(savedCardList.value as List<SavedCards>)
+            adapter.updateAdapterData(savedCardList.value as List<SavedCards>)
 
        }
     }

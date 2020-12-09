@@ -1,8 +1,6 @@
 package company.tap.checkout.internal.utils
 
-import android.R
 import android.content.Context
-import android.widget.Toast
 import com.gdacciaro.iOSDialog.iOSDialogBuilder
 
 
@@ -24,9 +22,10 @@ object CustomUtils {
                  if(btnType=="twobtns"){
                   builder.setPositiveListener("YES") { dialog ->
                          dialog.dismiss()
+
                      }
                      builder.setNegativeListener("No") { dialog ->
-
+                         dialog.dismiss()
                      }
                  }else {
                     builder .setPositiveListener("OK") { dialog ->

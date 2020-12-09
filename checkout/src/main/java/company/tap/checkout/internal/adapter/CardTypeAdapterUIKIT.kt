@@ -41,6 +41,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     private var adapterContent: List<SavedCards> = java.util.ArrayList()
     private var isShaking: Boolean = false
     private var goPayOpened: Boolean = false
+    private var arrayModified : ArrayList<Any> = ArrayList()
 
 
 
@@ -151,7 +152,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                         selectedPosition = position
                         println("goPay is clicked")
                         onCardSelectedActionListener.onCardSelectedAction(true, adapterContent[holder.adapterPosition])
-                        goPayOpenedfromMain(true)
+                        goPayOpenedfromMain(goPayOpened)
                         notifyDataSetChanged()
                     }
                 }
@@ -161,9 +162,13 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
     fun removeItems() {
         if(goPayOpened)
-        //adapterContent as MutableList<SavedCards>(0)
+            arrayModified = ArrayList(adapterContent) // Copy the list
+        arrayModified.removeAt(0)
+        adapterContent= arrayModified as ArrayList<SavedCards>
         notifyDataSetChanged()
+
     }
+
     
     fun goPayOpenedfromMain(goPayOpened:Boolean){
         this.goPayOpened= goPayOpened

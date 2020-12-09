@@ -49,7 +49,7 @@ class GoPaySavedCardHolder(
 
     override fun bindViewComponents() {
 
-        view.goPayLoginView.groupName.text = "GoPay"
+        view.goPayLoginView.groupName.text = LocalizationManager.getValue("GoPayAlert", "Hints", "goPayTitle")
         view.goPayLoginView.groupAction.text = LocalizationManager.getValue(
             "GatewayHeader",
             "HorizontalHeaders",
