@@ -10,6 +10,7 @@ import company.tap.checkout.internal.dummygener.Items1
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.fragment.CurrencyViewsFragment
 import company.tap.checkout.internal.interfaces.BaseLayouttManager
+import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener
 import kotlinx.android.synthetic.main.fragment_checkouttaps.view.*
 
 /**
@@ -19,7 +20,7 @@ import kotlinx.android.synthetic.main.fragment_checkouttaps.view.*
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class ItemsViewHolder1(context11: Context, private val baseLayouttManager: BaseLayouttManager,fragmentManagere: FragmentManager) :
+class ItemsViewHolder1(context11: Context, private val onCurrencyChangedActionListener: OnCurrencyChangedActionListener,fragmentManagere: FragmentManager) :
     TapBaseViewHolder {
     private  var fragmentManager: FragmentManager
     override val view = LayoutInflater.from(context11).inflate(
@@ -69,13 +70,13 @@ class ItemsViewHolder1(context11: Context, private val baseLayouttManager: BaseL
 
     fun resetView(){
         fragmentManager.beginTransaction()
-            .remove(CurrencyViewsFragment(ArrayList(), ArrayList())).commit()
+            .remove(CurrencyViewsFragment(ArrayList(), ArrayList(),onCurrencyChangedActionListener)).commit()
 
     }
 
     fun setView(){
         fragmentManager.beginTransaction()
-            .replace(R.id.fragment_container_nfc_lib, CurrencyViewsFragment(supportedCurrecnyList, supportedItemList))
+            .replace(R.id.fragment_container_nfc_lib, CurrencyViewsFragment(supportedCurrecnyList, supportedItemList,onCurrencyChangedActionListener))
             .addToBackStack(null)
             .commit()
     }

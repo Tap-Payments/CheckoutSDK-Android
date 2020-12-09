@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import company.tap.checkout.R
 import company.tap.checkout.internal.dummygener.Currencies1
+import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.TextViewTheme
 import company.tap.tapuilibrary.uikit.atoms.TapImageView
@@ -30,11 +31,12 @@ All rights reserved.
 
 var selectedPosition = 0
 var contexts: Context? = null
+var currencyRate:Double=0.0
 //var viewType :ViewGroup? = null
 //val tapCard_Chip by lazy {  viewType?.findViewById<TapChip>(R.id.tapcard_Chip) }
-var rate: Double = 0.0
 
-class CurrencyTypeAdapter(private val arraylistscurencs: ArrayList<Currencies1>) :
+
+class CurrencyTypeAdapter(private val arraylistscurencs: ArrayList<Currencies1>,private val onCurrencyChangedActionListener: OnCurrencyChangedActionListener) :
     RecyclerView.Adapter<CurrencyTypeAdapter.CurrencyHolders>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyHolders {
         val v =
@@ -97,6 +99,7 @@ class CurrencyTypeAdapter(private val arraylistscurencs: ArrayList<Currencies1>)
 
             val itemCurrencyText = holder.itemView.findViewById<TapTextView>(R.id.textView_currency)
             itemCurrencyText.text = arraylistscurencs[position].currencytitle
+            currencyRate = arraylistscurencs[position].conversionrate
         }
 
 
@@ -159,7 +162,8 @@ class CurrencyTypeAdapter(private val arraylistscurencs: ArrayList<Currencies1>)
                 Toast.LENGTH_SHORT
             ).show()
 
-
+            onCurrencyChangedActionListener?.OnCurrencyClicked(holder.itemView.textView_currency.text.toString(),
+                currencyRate)
 
             notifyDataSetChanged()
         }

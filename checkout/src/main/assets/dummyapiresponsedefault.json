@@ -69,40 +69,49 @@
   "currencies": [
     {
       "currencytitle": "KWD",
-      "currencyicon": "https://img.icons8.com/color/48/000000/kuwait.png"
+      "currencyicon": "https://img.icons8.com/color/48/000000/kuwait.png",
+      "conversionrate": "2.15"
     },
     {
       "currencytitle": "USD",
-        "currencyicon": "https://img.icons8.com/color/48/000000/usa.png"
+        "currencyicon": "https://img.icons8.com/color/48/000000/usa.png",
+      "conversionrate": "4.15"
       },
     {
         "currencytitle": "SAR",
-        "currencyicon": "https://img.icons8.com/color/48/000000/saudi-arabia.png"
+        "currencyicon": "https://img.icons8.com/color/48/000000/saudi-arabia.png",
+      "conversionrate": "2.0"
       },
        {
         "currencytitle": "AED",
-        "currencyicon": "https://img.icons8.com/color/48/000000/united-arab-emirates.png"
+        "currencyicon": "https://img.icons8.com/color/48/000000/united-arab-emirates.png",
+         "conversionrate": "2.25"
       },
 
       {
         "currencytitle": "OMR",
-        "currencyicon": "https://img.icons8.com/color/48/000000/oman.png"
+        "currencyicon": "https://img.icons8.com/color/48/000000/oman.png",
+        "conversionrate": "2.30"
       },
      {
       "currencytitle": "QAR",
-      "currencyicon": "https://img.icons8.com/color/48/000000/qatar.png"
+      "currencyicon": "https://img.icons8.com/color/48/000000/qatar.png",
+       "conversionrate": "2.25"
     },
       {
         "currencytitle": "BHD",
-        "currencyicon": "https://img.icons8.com/emoji/48/000000/bahrain-emoji.png"
+        "currencyicon": "https://img.icons8.com/emoji/48/000000/bahrain-emoji.png",
+        "conversionrate": "2.20"
       },
       {
         "currencytitle": "EGP",
-        "currencyicon": "https://img.icons8.com/color/48/000000/egypt.png"
+        "currencyicon": "https://img.icons8.com/color/48/000000/egypt.png",
+        "conversionrate": "3.0"
       },
      {
         "currencytitle": "JOD",
-        "currencyicon": "https://img.icons8.com/color/48/000000/jordan.png"
+        "currencyicon": "https://img.icons8.com/color/48/000000/jordan.png",
+       "conversionrate": "3.2"
       }
 
   ],

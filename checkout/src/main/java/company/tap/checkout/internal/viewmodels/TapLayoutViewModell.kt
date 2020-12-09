@@ -14,8 +14,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.RecyclerView
-import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
 import company.tap.checkout.R
 import company.tap.checkout.internal.adapter.CardTypeAdapterUIKIT
 import company.tap.checkout.internal.dummygener.Currencies1
@@ -23,20 +21,17 @@ import company.tap.checkout.internal.dummygener.Items1
 import company.tap.checkout.internal.dummygener.JsonResponseDummy1
 import company.tap.checkout.internal.dummygener.SavedCards
 import company.tap.checkout.internal.enums.SectionType
-import company.tap.checkout.internal.interfaces.BaseLayouttManager
-import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
-import company.tap.checkout.internal.interfaces.onCardNFCCallListener
-import company.tap.checkout.internal.interfaces.onPaymentCardComplete
+import company.tap.checkout.internal.interfaces.*
 import company.tap.checkout.internal.utils.AnimationEngine
+import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
 import company.tap.checkout.internal.viewholders.*
+import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
 import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
 import kotlinx.android.synthetic.main.cardviewholder_layout.view.*
-import kotlinx.android.synthetic.main.fragment_checkouttaps.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
-import kotlin.collections.ArrayList
 
 
 /**
@@ -46,7 +41,7 @@ import kotlin.collections.ArrayList
  *
  */
 class TapLayoutViewModell : ViewModel(),
-    BaseLayouttManager, OnCardSelectedActionListener, onPaymentCardComplete, onCardNFCCallListener {
+    BaseLayouttManager, OnCardSelectedActionListener, onPaymentCardComplete, onCardNFCCallListener,OnCurrencyChangedActionListener {
 
     private lateinit var context: Context
     private lateinit var fragmentManager: FragmentManager
@@ -68,7 +63,7 @@ class TapLayoutViewModell : ViewModel(),
     private val isShaking = MutableLiveData<Boolean>()
 
     private lateinit var frameLayout: FrameLayout
-
+    var rate: Double = 0.0
     @RequiresApi(Build.VERSION_CODES.N)
     fun initLayoutManager(
         context: Context,
@@ -282,14 +277,11 @@ class TapLayoutViewModell : ViewModel(),
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun getDatafromAPI(dummyInitapiResponse1: JsonResponseDummy1) {
-
         println("dummyAPIS response new value is ${dummyInitapiResponse1}")
         businessViewHolder.setDatafromAPI(
             dummyInitapiResponse1.merchant1.logo,
             dummyInitapiResponse1.merchant1.name
         )
-
-
         amountViewHolder1.setDatafromAPI(
             dummyInitapiResponse1.order1.original_amount.toString(),
             dummyInitapiResponse1.order1.trx_currency,
@@ -399,8 +391,8 @@ class TapLayoutViewModell : ViewModel(),
         println("onDeleteIconClicked is onDeleteIconClicked")
         if (stopAnimation) {
             isShaking.value = false
-            cardViewHolder11.view.mainChipgroup.groupAction?.text = "Edit"
-        } else cardViewHolder11.view.mainChipgroup.groupAction?.text = "Close"
+            cardViewHolder11.view.mainChipgroup.groupAction?.text = LocalizationManager.getValue("GatewayHeader","HorizontalHeaders","rightTitle")
+        } else cardViewHolder11.view.mainChipgroup.groupAction?.text = LocalizationManager.getValue("close", "Common")
     }
 
     override fun onPaycardSwitchAction(isCompleted: Boolean) {
@@ -554,6 +546,10 @@ class TapLayoutViewModell : ViewModel(),
             }
         }
 
+    }
+
+    override fun OnCurrencyClicked(currencySelected: String, currencyRate: Double) {
+        println("currecnt selcetd"+currencySelected+"currencyRate is"+currencyRate )
     }
 
 }

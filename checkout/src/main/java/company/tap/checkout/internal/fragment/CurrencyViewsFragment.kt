@@ -20,6 +20,7 @@ import company.tap.checkout.internal.adapter.ItemAdapter
 import company.tap.checkout.internal.dummygener.Currencies1
 
 import company.tap.checkout.internal.dummygener.Items1
+import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.atoms.TapChipGroup
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
@@ -30,7 +31,7 @@ import kotlinx.android.synthetic.main.item_frame_currencies.*
 Copyright (c) 2020    Tap Payments.
 All rights reserved.
  **/
-open class CurrencyViewsFragment(private var currencyLists1: ArrayList<Currencies1>, private var itemLists: List<Items1>?) : Fragment() {
+open class CurrencyViewsFragment(private var currencyLists1: ArrayList<Currencies1>, private var itemLists: List<Items1>?,private var onCurrencyChangedActionListener:OnCurrencyChangedActionListener) : Fragment() {
     private lateinit var chipRecycler: RecyclerView
 
 
@@ -64,7 +65,7 @@ open class CurrencyViewsFragment(private var currencyLists1: ArrayList<Currencie
         // chipRecycler.adapter = CurrencyAdapter(currencyList)
         if(currenciesList==null||currenciesList.isEmpty()){return null}
         if (this::currenciesList.isInitialized)
-            chipRecycler.adapter = CurrencyTypeAdapter(currenciesList)
+            chipRecycler.adapter = CurrencyTypeAdapter(currenciesList,onCurrencyChangedActionListener)
         itemsRecycler = view.findViewById<View>(R.id.items_recylerview) as RecyclerView
 
 //        itemsRecycler.setHasFixedSize(false)

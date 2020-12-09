@@ -13,6 +13,7 @@ import android.widget.RelativeLayout
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.internal.dummygener.Items1
+import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener
 import company.tap.checkout.internal.utils.CurrencyFormatter
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.R
@@ -32,7 +33,7 @@ Copyright (c) 2020    Tap Payments.
 All rights reserved.
  **/
 class ItemAdapter(private val itemList: ArrayList<Items1>) :
-    RecyclerView.Adapter<ItemAdapter.ItemHolder>() {
+    RecyclerView.Adapter<ItemAdapter.ItemHolder>(),OnCurrencyChangedActionListener {
     private var previousExpandedPosition = -1
     private var mExpandedPosition = -1
     private lateinit var itemViewAdapter: TapListItemView
@@ -40,7 +41,11 @@ class ItemAdapter(private val itemList: ArrayList<Items1>) :
 
 
     override fun onCreateViewHolder(@NonNull parent: ViewGroup, viewType: Int): ItemHolder {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.item_view_adapter, parent, false)
+        val v = LayoutInflater.from(parent.context).inflate(
+            R.layout.item_view_adapter,
+            parent,
+            false
+        )
         context = parent.context
         itemViewAdapter = v.findViewById(R.id.amount_item_view)
         return ItemHolder(v)
@@ -74,7 +79,13 @@ class ItemAdapter(private val itemList: ArrayList<Items1>) :
                 holder.itemView.isActivated = isExpanded
                 totalQuantity.text = itemList[i].quantity.toString()
 
-                itemViewAdapter.setItemViewDataSource(getItemViewDataSource(itemList[i].currency+CurrencyFormatter.currencyFormat(itemList[i].amount.toString()),itemList[i].currency,itemList[i].quantity.toString()))
+                itemViewAdapter.setItemViewDataSource(
+                    getItemViewDataSource(
+                        itemList[i].currency + CurrencyFormatter.currencyFormat(
+                            itemList[i].amount.toString()
+                        ), itemList[i].currency, itemList[i].quantity.toString()
+                    )
+                )
 
             }
         }else{
@@ -82,16 +93,26 @@ class ItemAdapter(private val itemList: ArrayList<Items1>) :
             descriptionTextView.visibility = if (isExpanded) View.VISIBLE else View.GONE
             holder.itemView.isActivated = isExpanded
         }
-        holder.itemView.setBackgroundColor( Color.parseColor(ThemeManager.getValue("itemsList.item.backgroundColor")))
+        holder.itemView.setBackgroundColor(Color.parseColor(ThemeManager.getValue("itemsList.item.backgroundColor")))
 
         onItemClickAction(holder, position, isExpanded)
         showHideDescText(isExpanded, position, descText)
-        setTheme(descriptionTextView,discount,descText,totalQuantity,totalAmount,itemName,itemSeparator,mainViewLinear,quantityRelative)
-        setFonts(itemName,totalAmount,discount,descText,descriptionTextView,totalQuantity)
-        checkItemListPosition(position,discount, totalAmount, itemName)
+        setTheme(
+            descriptionTextView,
+            discount,
+            descText,
+            totalQuantity,
+            totalAmount,
+            itemName,
+            itemSeparator,
+            mainViewLinear,
+            quantityRelative
+        )
+        setFonts(itemName, totalAmount, discount, descText, descriptionTextView, totalQuantity)
+        checkItemListPosition(position, discount, totalAmount, itemName)
     }
 
-    private fun showHideDescText(isExpanded: Boolean, position: Int, descText:TapTextView?) {
+    private fun showHideDescText(isExpanded: Boolean, position: Int, descText: TapTextView?) {
         if (isExpanded) {
             previousExpandedPosition = position
             descText?.text = LocalizationManager.getValue("hideDesc", "ItemList")
@@ -110,7 +131,12 @@ class ItemAdapter(private val itemList: ArrayList<Items1>) :
     }
 
 
-    private fun checkItemListPosition(position: Int, discount:TapTextView? , totalAmount:TapTextView? ,itemName: TapTextView? ) {
+    private fun checkItemListPosition(
+        position: Int,
+        discount: TapTextView?,
+        totalAmount: TapTextView?,
+        itemName: TapTextView?
+    ) {
         if(itemList.size==0) {
             if (position % 2 == 0) {
                 discount?.visibility = View.VISIBLE
@@ -141,8 +167,17 @@ class ItemAdapter(private val itemList: ArrayList<Items1>) :
     }
 
 
-    fun setTheme(descriptionTextView:TapTextView?,discount:TapTextView?,descText:TapTextView?,totalQuantity:TapTextView?,
-                 totalAmount:TapTextView?,itemName:TapTextView?, itemSeparator: TapSeparatorView?,mainViewLinear :LinearLayout?, quantityRelative:RelativeLayout?) {
+    fun setTheme(
+        descriptionTextView: TapTextView?,
+        discount: TapTextView?,
+        descText: TapTextView?,
+        totalQuantity: TapTextView?,
+        totalAmount: TapTextView?,
+        itemName: TapTextView?,
+        itemSeparator: TapSeparatorView?,
+        mainViewLinear: LinearLayout?,
+        quantityRelative: RelativeLayout?
+    ) {
 
         itemViewAdapter.setBackgroundColor(Color.parseColor(ThemeManager.getValue("itemsList.item.backgroundColor")))
         val descriptionTextViewTheme = TextViewTheme()
@@ -202,9 +237,11 @@ class ItemAdapter(private val itemList: ArrayList<Items1>) :
     }
 
 
-    private fun setFonts(itemName:TapTextView?,totalAmount:TapTextView?,
-                         discount:TapTextView?,descText:TapTextView?,
-                         descriptionTextView:TapTextView?,totalQuantity:TapTextView?) {
+    private fun setFonts(
+        itemName: TapTextView?, totalAmount: TapTextView?,
+        discount: TapTextView?, descText: TapTextView?,
+        descriptionTextView: TapTextView?, totalQuantity: TapTextView?
+    ) {
         itemName?.typeface = Typeface.createFromAsset(
             context?.assets, TapFont.tapFontType(
                 TapFont.RobotoRegular
@@ -238,12 +275,19 @@ class ItemAdapter(private val itemList: ArrayList<Items1>) :
         )
     }
 
-    private fun getItemViewDataSource(itemAmount:String,totalAmnt:String,quantity:String): ItemViewDataSource {
+    private fun getItemViewDataSource(itemAmount: String, totalAmnt: String, quantity: String): ItemViewDataSource {
         return ItemViewDataSource(
             itemAmount = itemAmount,
             totalAmount = totalAmnt,
             totalQuantity = quantity
         )
+    }
+
+    override fun OnCurrencyClicked(currencySelected: String, currencyRate: Double) {
+        if(currencySelected=="SAR"){
+            println("SAR is cliececcc")
+
+        }
     }
 
 
