@@ -45,7 +45,7 @@ class CardTypeAdapterUIKIT(
     private var arrayListCards:ArrayList<String> = ArrayList()
     private var totalArrayList:ArrayList<SavedCards> = ArrayList()
     private var adapterContent: List<Any> = java.util.ArrayList()
-    var isShaking: Boolean = false
+    private var isShaking: Boolean = false
 
     companion object {
         private const val TYPE_SAVED_CARD = 1
@@ -110,8 +110,9 @@ class CardTypeAdapterUIKIT(
 
 
     private fun setOnClickActions(holder: RecyclerView.ViewHolder) {
-        holder.itemView.deleteImageViewsaved?.visibility = View.VISIBLE
-        holder.itemView.deleteImageViewsaved?.setOnClickListener {
+        if (isShaking) holder.itemView.deleteImageViewSaved?.visibility = View.VISIBLE
+        else holder.itemView.deleteImageViewSaved?.visibility = View.GONE
+        holder.itemView.deleteImageViewSaved?.setOnClickListener {
             onCardSelectedActionListener.onDeleteIconClicked(true, holder.itemView.id)
             arrayListCards.removeAt(holder.itemView.id)
             holder.itemView.clearAnimation()
@@ -162,6 +163,7 @@ class CardTypeAdapterUIKIT(
 
     private fun setAlphaWhenShaking(isShaking: Boolean, holder: RecyclerView.ViewHolder) {
         if (isShaking) holder.itemView.alpha = 0.4f
+        else holder.itemView.alpha = 1.0f
     }
 
     private fun typeSavedCard(holder: RecyclerView.ViewHolder, position: Int) {
@@ -186,11 +188,9 @@ class CardTypeAdapterUIKIT(
 
     private fun bindSavedCardData(holder: RecyclerView.ViewHolder) {
         for (i in 0 until arrayListCards.size) {
-            val imageViewCard = holder.itemView.findViewById<ImageView>(R.id.imageView_amex)
             Glide.with(holder.itemView.context)
                 .load(arrayListCards[i])
-                .into(imageViewCard)
-
+                .into(holder.itemView.imageView_amex)
             holder.itemView.textViewCardDetails.text = (adapterContent[holder.adapterPosition] as SavedCards).chip1.title
         }
     }
@@ -200,8 +200,8 @@ class CardTypeAdapterUIKIT(
             Log.d("isShaking" , isShaking.toString())
             val animShake: Animation = AnimationUtils.loadAnimation(holder.itemView.context, R.anim.shake)
             holder.itemView.startAnimation(animShake)
-            setOnClickActions(holder)
-        }
+            holder.itemView.deleteImageViewSaved?.visibility = View.VISIBLE
+        }else holder.itemView.deleteImageViewSaved?.visibility = View.GONE
     }
 
     private fun setSelectedCardTypeSavedShadowAndBackground(holder: RecyclerView.ViewHolder) {

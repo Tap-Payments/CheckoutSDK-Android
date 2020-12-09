@@ -11,7 +11,7 @@
     android:id="@+id/shakingArea">
 
     <ImageView
-        android:id="@+id/deleteImageViewsaved"
+        android:id="@+id/deleteImageViewSaved"
         android:layout_width="15dp"
         android:layout_height="15dp"
         app:layout_constraintTop_toTopOf="parent"
