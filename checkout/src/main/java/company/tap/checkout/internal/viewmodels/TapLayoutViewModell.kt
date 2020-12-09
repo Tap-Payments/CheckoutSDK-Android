@@ -364,8 +364,8 @@ class TapLayoutViewModell : ViewModel(),
     }
 
     private fun unActivateActionButton() {
-        //  tabAnimatedActionButtonViewHolder11.bindViewComponents()
-        //  tabAnimatedActionButtonViewHolder11.view.actionButton.isClickable = false
+//          tabAnimatedActionButtonViewHolder11.bindViewComponents()
+//          tabAnimatedActionButtonViewHolder11.view.actionButton.isClickable = false
     }
 
 
@@ -383,9 +383,10 @@ class TapLayoutViewModell : ViewModel(),
        }*/
 
     override fun onCardSelectedAction(isSelected: Boolean, savedCardsModel: Any) {
-        if (isSelected) {
-            displayGoPayLogin()
-        }    }
+//        if (isSelected) {
+//            displayGoPayLogin()
+//        }
+    }
 
     override fun onDeleteIconClicked(stopAnimation: Boolean, itemId: Int) {
         println("onDeleteIconClicked is onDeleteIconClicked")

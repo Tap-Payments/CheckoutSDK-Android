@@ -76,7 +76,7 @@ class CurrencyTypeAdapter(private val arraylistscurencs: ArrayList<Currencies1>)
 
             setBorderedView(
                 itemView.CurrencyChipLinear,
-                20.0f,
+                40.0f,
                 0.0f,
                 Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.selected.shadow.color")),
                 Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.backgroundColor")),
@@ -119,7 +119,7 @@ class CurrencyTypeAdapter(private val arraylistscurencs: ArrayList<Currencies1>)
 
             setBorderedView(
                 holder.itemView.CurrencyChipLinear,
-                (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
+                40.0f,// corner raduis
                 0.0f,
                 Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.selected.shadow.color")),
                 Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.selected.backgroundColor")),
@@ -141,7 +141,7 @@ class CurrencyTypeAdapter(private val arraylistscurencs: ArrayList<Currencies1>)
 
             setBorderedView(
                 holder.itemView.CurrencyChipLinear,
-                (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
+                40.0f,// corner raduis
                 0.0f,
                 Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.unSelected.shadow.color")),
                 Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.backgroundColor")),

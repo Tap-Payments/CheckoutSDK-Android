@@ -1,4 +1,7 @@
 package company.tap.checkout.internal.interfaces
+
+import company.tap.checkout.internal.dummygener.SavedCards
+
 /**
  * Created by OlaMonir on 9/12/20.
 
