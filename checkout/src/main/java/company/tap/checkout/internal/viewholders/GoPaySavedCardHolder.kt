@@ -15,6 +15,7 @@ import company.tap.checkout.internal.interfaces.BaseLayouttManager
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import kotlinx.android.synthetic.main.cardviewholder_layout.view.*
 import kotlinx.android.synthetic.main.gopayloginview_layout.view.*
 import kotlinx.android.synthetic.main.gopayloginview_layout.view.tapSeparatorViewLinear
@@ -40,11 +41,13 @@ class GoPaySavedCardHolder(
 
     private var goPaySavedCardsList: List<GoPaySavedCards>? = null
     private var chipRecyclerView: RecyclerView
+    private var groupAction: TapTextView
 
 
     init {
         bindViewComponents()
         chipRecyclerView = view.findViewById(R.id.chip_recycler)
+        groupAction = view.findViewById(R.id.group_action)
     }
 
     override fun bindViewComponents() {
@@ -69,6 +72,19 @@ class GoPaySavedCardHolder(
          //   view.deleteImageView?.visibility = View.VISIBLE
             //baseLayopu?.displayGoPayLogin()
         }*/
+       groupAction?.setOnClickListener {
+            val adapter = CardTypeAdapterUIKIT(onCardSelectedActionListener)
+            if (groupAction?.text == "Close") {
+                chipRecyclerView.adapter = adapter
+                adapter.updateShaking(false)
+                adapter.notifyDataSetChanged()
+               groupAction.text =  LocalizationManager.getValue("edit", "Common")
+            } else {
+                adapter.updateShaking(true)
+                adapter.notifyDataSetChanged()
+              groupAction?.text = LocalizationManager.getValue("close", "Common")
+            }
+        }
         /**
          * set separator background
          */

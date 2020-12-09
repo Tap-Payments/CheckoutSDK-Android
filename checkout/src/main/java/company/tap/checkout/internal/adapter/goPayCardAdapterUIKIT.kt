@@ -170,7 +170,7 @@ class goPayCardAdapterUIKIT(
 
     private fun typeSavedCard(holder: RecyclerView.ViewHolder, position: Int) {
         if (isShaking) {
-            val animShake: Animation = AnimationUtils.loadAnimation(context_, R.anim.shake)
+            val animShake: Animation = AnimationUtils.loadAnimation(holder.itemView.context, R.anim.shake)
             holder.itemView.startAnimation(animShake)
             setOnClickActions(holder)
         }
