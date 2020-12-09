@@ -50,7 +50,7 @@ class CardViewHolder11(private val context: Context, private val onCardSelectedA
             RecyclerView.HORIZONTAL,
             false
         )
-        val adapter = CardTypeAdapterUIKIT(onCardSelectedActionListener, false)
+        val adapter = CardTypeAdapterUIKIT(onCardSelectedActionListener)
         view.mainChipgroup.chipsRecycler.adapter = adapter
         savedCardsList?.let { adapter.updateAdapterData(it) }
         /**

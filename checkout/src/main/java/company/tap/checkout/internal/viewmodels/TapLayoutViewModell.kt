@@ -329,7 +329,7 @@ class TapLayoutViewModell : ViewModel(),
         }) // note: currently (support version 28.0.0), we can not use tranparent color here, if we use transparent, we still see a small divider line. So if we want to display transparent space, we can set color = background color or we can create a custom ItemDecoration instead of DividerItemDecoration.
         cardViewHolder11.view.mainChipgroup.chipsRecycler.addItemDecoration(divider)
 
-        val adapter = CardTypeAdapterUIKIT(this, false)
+        val adapter = CardTypeAdapterUIKIT(this)
         cardViewHolder11.view.mainChipgroup.chipsRecycler.adapter = adapter
         adapter.updateAdapterData(savedCardList.value as List<SavedCards>)
 
@@ -337,10 +337,10 @@ class TapLayoutViewModell : ViewModel(),
 
         cardViewHolder11.view.mainChipgroup.groupAction?.setOnClickListener {
             if (cardViewHolder11.view.mainChipgroup.groupAction?.text == "Close") {
-                isShaking.value = false
+                adapter.updateShaking(false)
                 cardViewHolder11.view.mainChipgroup.groupAction?.text = "Edit"
             } else {
-                isShaking.value = true
+                adapter.updateShaking(true)
                 cardViewHolder11.view.mainChipgroup.groupAction?.text = "Close"
             }
         }

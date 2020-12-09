@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Color.parseColor
 import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,8 +36,8 @@ All rights reserved.
 
 @Suppress("PrivatePropertyName")
 class CardTypeAdapterUIKIT(
-    private val onCardSelectedActionListener: OnCardSelectedActionListener,
-    var isShaking: Boolean = false
+    private val onCardSelectedActionListener: OnCardSelectedActionListener
+
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var selectedPosition = -1
     private var lastPosition = -1
@@ -44,6 +45,7 @@ class CardTypeAdapterUIKIT(
     private var arrayListCards:ArrayList<String> = ArrayList()
     private var totalArrayList:ArrayList<SavedCards> = ArrayList()
     private var adapterContent: List<Any> = java.util.ArrayList()
+    var isShaking: Boolean = false
 
     companion object {
         private const val TYPE_SAVED_CARD = 1
@@ -53,6 +55,11 @@ class CardTypeAdapterUIKIT(
 
     fun updateAdapterData(adapterContent: List<Any>) {
         this.adapterContent = adapterContent
+        notifyDataSetChanged()
+    }
+
+    fun updateShaking(isShaking: Boolean) {
+        this.isShaking = isShaking
         notifyDataSetChanged()
     }
 
@@ -129,7 +136,7 @@ class CardTypeAdapterUIKIT(
              * Knet Type
              */
             getItemViewType(position) == TYPE_REDIRECT -> {
-                isShaking?.let { setAlphaWhenShaking(it, holder) }
+                setAlphaWhenShaking(isShaking, holder)
                 typeRedirect(holder, position)
             }
             /**
@@ -169,7 +176,7 @@ class CardTypeAdapterUIKIT(
 
 
     private fun setOnSavedCardOnClickAction(holder: RecyclerView.ViewHolder, position: Int) {
-        if (!isShaking!!) {
+        if (!isShaking) {
             holder.itemView.setOnClickListener {
                 selectedPosition = position
                 notifyDataSetChanged()
@@ -189,7 +196,8 @@ class CardTypeAdapterUIKIT(
     }
 
     private fun setSavedCardShakingAnimation(holder: RecyclerView.ViewHolder) {
-        if (isShaking!!) {
+        if (isShaking) {
+            Log.d("isShaking" , isShaking.toString())
             val animShake: Animation = AnimationUtils.loadAnimation(holder.itemView.context, R.anim.shake)
             holder.itemView.startAnimation(animShake)
             setOnClickActions(holder)
