@@ -47,9 +47,13 @@ class goPayCardAdapterUIKIT(
         private const val TYPE_SAVED_CARD = 1
         private const val TYPE_GO_PAY_SIGNOUT = 2
     }
+
     fun updateAdapterData(adapterContent: List<GoPaySavedCards>) {
         this.adapterContent = adapterContent
         notifyDataSetChanged()
+    }
+    fun goPayOpenedfromMain(goPayOpened:Boolean){
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -153,7 +157,6 @@ class goPayCardAdapterUIKIT(
                 if (!isShaking) {
                     holder.itemView.setOnClickListener {
                         selectedPosition = position
-                       // onCardSelectedActionListener?.onCardSelectedAction(true,TYPE_GO_PAY.toString())
                         onCardSelectedActionListener.ongoPayLogoutClicked(true)
                         notifyDataSetChanged()
                     }

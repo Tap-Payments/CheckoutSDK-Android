@@ -28,7 +28,7 @@ class CardViewHolder11(private val context: Context, private val onCardSelectedA
 
     override val view: View = LayoutInflater.from(context).inflate(R.layout.cardviewholder_layout1, null)
     override val type = SectionType.CARD
-    private var savedCardsList: List<SavedCards>? = null
+    private var savedCardsList: MutableList<SavedCards>? = null
 
     init {
         bindViewComponents()
@@ -63,7 +63,7 @@ class CardViewHolder11(private val context: Context, private val onCardSelectedA
      * Sets data from API through LayoutManager
      * @param savedCardMethodsApi represents the list of payment methods available from API
      * */
-    fun setDatafromAPI(savedCardMethodsApi: List<SavedCards>) {
+    fun setDatafromAPI(savedCardMethodsApi: MutableList<SavedCards>) {
         savedCardsList = savedCardMethodsApi
         bindViewComponents()
     }

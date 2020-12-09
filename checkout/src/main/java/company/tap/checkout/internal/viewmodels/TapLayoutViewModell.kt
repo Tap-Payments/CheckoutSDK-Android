@@ -63,9 +63,10 @@ class TapLayoutViewModell : ViewModel(),
     private var goPayCardList = MutableLiveData<List<GoPaySavedCards>>()
     private var displayItemsOpen: Boolean = false
     private val isShaking = MutableLiveData<Boolean>()
-    private lateinit var  slectedAmountCurrency :String
-    private lateinit var  currentAmountCurrency :String
-    
+    private lateinit var selectedAmountCurrency:String
+    private lateinit var currentAmountCurrency :String
+    private lateinit var adapter:CardTypeAdapterUIKIT
+
 
 
 
@@ -204,6 +205,7 @@ class TapLayoutViewModell : ViewModel(),
 
         cardViewHolder11.view.mainChipgroup.groupAction.text = ""
         saveCardSwitchHolder11.view.cardSwitch.payButton.visibility = View.VISIBLE
+        adapter.removeItems()
 
     }
 
@@ -253,7 +255,7 @@ class TapLayoutViewModell : ViewModel(),
         displayItemsOpen = !display
         amountViewHolder1.changeGroupAction(!display)
         if(this::currentAmountCurrency.isInitialized)
-        amountViewHolder1.updateSelectedCurrency(displayItemsOpen,slectedAmountCurrency,currentAmountCurrency)
+        amountViewHolder1.updateSelectedCurrency(displayItemsOpen,selectedAmountCurrency,currentAmountCurrency)
 
 
     }
@@ -298,7 +300,7 @@ class TapLayoutViewModell : ViewModel(),
             dummyInitapiResponse1.order1.items.size.toString()
         )
 
-        cardViewHolder11.setDatafromAPI(dummyInitapiResponse1.savedCards)
+        cardViewHolder11.setDatafromAPI(dummyInitapiResponse1.savedCards as MutableList<SavedCards>)
         goPaySavedCardHolder.setDatafromAPI(dummyInitapiResponse1.goPaySavedCards)
         // println("dummy tapCardPhoneListDataSource" + dummyInitapiResponse1.tapCardPhoneListDataSources)
         paymenttInputViewHolder.setDatafromAPI(dummyInitapiResponse1.tapCardPhoneListDataSource)
@@ -332,7 +334,7 @@ class TapLayoutViewModell : ViewModel(),
         }) // note: currently (support version 28.0.0), we can not use tranparent color here, if we use transparent, we still see a small divider line. So if we want to display transparent space, we can set color = background color or we can create a custom ItemDecoration instead of DividerItemDecoration.
         cardViewHolder11.view.mainChipgroup.chipsRecycler.addItemDecoration(divider)
 
-        val adapter = CardTypeAdapterUIKIT(this)
+         adapter = CardTypeAdapterUIKIT(this)
         val goPayadapter = goPayCardAdapterUIKIT(this)
         cardViewHolder11.view.mainChipgroup.chipsRecycler.adapter = adapter
         adapter.updateAdapterData(savedCardList.value as List<SavedCards>)
@@ -405,6 +407,10 @@ class TapLayoutViewModell : ViewModel(),
     override fun ongoPayLogoutClicked(isClicked: Boolean) {
        if(isClicked){
            CustomUtils.showDialog("Are you sure you would like to sign out","The goPayCards will be hidden from the page and you will need to login again to use any of them",context,"twobtns")
+            removeViews(goPaySavedCardHolder)
+
+           adapter.updateAdapterData(savedCardList.value as List<SavedCards>)
+
        }
     }
 
@@ -568,10 +574,10 @@ class TapLayoutViewModell : ViewModel(),
 
             itemList[i].amount= (itemList[i].amount * currencyRate).toLong()
             itemList[i].currency = currencySelected
-            slectedAmountCurrency = itemList[i].currency+" "+CurrencyFormatter.currencyFormat(itemList[i].amount.toString())
+            selectedAmountCurrency = itemList[i].currency+" "+CurrencyFormatter.currencyFormat(itemList[i].amount.toString())
         }
         itemsViewHolder1.resetItemList(itemList)
-        amountViewHolder1.updateSelectedCurrency(displayItemsOpen,slectedAmountCurrency,currentAmountCurrency)
+        amountViewHolder1.updateSelectedCurrency(displayItemsOpen,selectedAmountCurrency,currentAmountCurrency)
 
 
     }

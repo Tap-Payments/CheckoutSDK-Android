@@ -1,8 +1,6 @@
 package company.tap.checkout.internal.adapter
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Color.parseColor
 import android.os.Build
@@ -15,6 +13,7 @@ import android.view.animation.AnimationUtils
 import android.webkit.URLUtil
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import company.tap.checkout.R
@@ -41,6 +40,9 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     private var arrayListCards:ArrayList<String> = ArrayList()
     private var adapterContent: List<SavedCards> = java.util.ArrayList()
     private var isShaking: Boolean = false
+    private var goPayOpened: Boolean = false
+
+
 
     companion object {
         private const val TYPE_SAVED_CARD = 1
@@ -144,15 +146,28 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                 else holder.itemView.setBackgroundResource(R.drawable.border_gopay_unclick)
 
                 (holder as GoPayViewHolder)
-                if ( !isShaking) {
+                if (!isShaking) {
                     holder.itemView.setOnClickListener {
                         selectedPosition = position
+                        println("goPay is clicked")
                         onCardSelectedActionListener.onCardSelectedAction(true, adapterContent[holder.adapterPosition])
+                        goPayOpenedfromMain(true)
                         notifyDataSetChanged()
                     }
                 }
             }
         }
+    }
+
+    fun removeItems() {
+        if(goPayOpened)
+        //adapterContent as MutableList<SavedCards>(0)
+        notifyDataSetChanged()
+    }
+    
+    fun goPayOpenedfromMain(goPayOpened:Boolean){
+        this.goPayOpened= goPayOpened
+        notifyDataSetChanged()
     }
 
 
