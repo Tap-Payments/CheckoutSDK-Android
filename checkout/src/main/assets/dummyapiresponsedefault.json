@@ -5,19 +5,45 @@
   },
   "order":{
     "trx_currency":"KD",
-    "original_amount":"1",
+    "original_amount":"1000000",
     "items":[
       {
-        "amount":10,
+        "amount":1000000,
         "currency":"KD",
-        "description":"test",
+        "description":"testing0",
         "discount":{
           "type":"P",
           "value":0
         },
         "image":"",
         "sku":"",
-        "name":"test",
+        "name":"TEST0",
+        "quantity":1
+      },
+      {
+        "amount":1000000,
+        "currency":"KD",
+        "description":"testing1 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
+        "discount":{
+          "type":"P",
+          "value":0
+        },
+        "image":"",
+        "sku":"",
+        "name":"TEST1",
+        "quantity":1
+      },
+      {
+        "amount":10000000,
+        "currency":"KD",
+        "description":"testing2 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
+        "discount":{
+          "type":"P",
+          "value":0
+        },
+        "image":"",
+        "sku":"",
+        "name":"TEST2",
         "quantity":1
       }
     ],
@@ -42,6 +68,10 @@
   },
   "currencies": [
     {
+      "currencytitle": "KWD",
+      "currencyicon": "https://img.icons8.com/color/48/000000/kuwait.png"
+    },
+    {
       "currencytitle": "USD",
         "currencyicon": "https://img.icons8.com/color/48/000000/usa.png"
       },
@@ -53,10 +83,7 @@
         "currencytitle": "AED",
         "currencyicon": "https://img.icons8.com/color/48/000000/united-arab-emirates.png"
       },
-      {
-        "currencytitle": "KWD",
-        "currencyicon": "https://img.icons8.com/color/48/000000/kuwait.png"
-      },
+
       {
         "currencytitle": "OMR",
         "currencyicon": "https://img.icons8.com/color/48/000000/oman.png"

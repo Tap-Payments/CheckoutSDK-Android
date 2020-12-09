@@ -2,7 +2,6 @@ package company.tap.checkout.internal.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Color.parseColor
 import android.os.Build
@@ -11,13 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.webkit.URLUtil
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import company.tap.checkout.R
-import company.tap.checkout.internal.dummygener.SavedCards
+import company.tap.checkout.internal.dummygener.GoPaySavedCards
 
 
 import company.tap.tapuilibrary.themekit.ThemeManager
@@ -34,8 +32,8 @@ All rights reserved.
  **/
 
 @Suppress("PrivatePropertyName")
-class CardTypeAdapterUIKIT(
-     val arrayListsSaveCard: List<SavedCards>,
+class goPayCardAdapterUIKIT(
+    val arrayListsgoPaySaveCard: List<GoPaySavedCards>,
     private val onCardSelectedActionListener: OnCardSelectedActionListener?,
     var isShaking: Boolean = false
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -47,14 +45,14 @@ class CardTypeAdapterUIKIT(
     var context_: Context? = null
     private var arrayListRedirect:ArrayList<String> = ArrayList()
     private var arrayListCards:ArrayList<String> = ArrayList()
-    private var totalArrayList:ArrayList<SavedCards> = ArrayList()
+    private var totalgopayArrayList:ArrayList<GoPaySavedCards> = ArrayList()
 
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view: View
         context_ = parent.context
-        totalArrayList.addAll(arrayListsSaveCard)
+        totalgopayArrayList.addAll(arrayListsgoPaySaveCard)
         return when (viewType) {
             TYPE_SAVED_CARD -> {
                 view = LayoutInflater.from(parent.context)
@@ -75,11 +73,11 @@ class CardTypeAdapterUIKIT(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (arrayListsSaveCard[position].chipType == 1) {
-            arrayListRedirect.add(arrayListsSaveCard[position].chip1.icon)
+        return if (arrayListsgoPaySaveCard[position].chipType == 1) {
+            arrayListRedirect.add(arrayListsgoPaySaveCard[position].chip1.icon)
             TYPE_REDIRECT
-        } else if (arrayListsSaveCard[position].chipType == 5) {
-            arrayListCards.add(arrayListsSaveCard[position].chip1.icon)
+        } else if (arrayListsgoPaySaveCard[position].chipType == 5) {
+            arrayListCards.add(arrayListsgoPaySaveCard[position].chip1.icon)
             TYPE_SAVED_CARD
         } else {
             TYPE_GO_PAY
@@ -87,7 +85,7 @@ class CardTypeAdapterUIKIT(
     }
 
     override fun getItemCount(): Int {
-        return arrayListsSaveCard.size
+        return arrayListsgoPaySaveCard.size
     }
 
 
@@ -109,7 +107,7 @@ class CardTypeAdapterUIKIT(
     @SuppressLint("ResourceAsColor")
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-      //  println("position printed: $position")
+       // println("position printed: $position")
 
         when {
             /**
@@ -143,7 +141,7 @@ class CardTypeAdapterUIKIT(
                 if (!isShaking) {
                     holder.itemView.setOnClickListener {
                         selectedPosition = position
-                        //onCardSelectedActionListener?.onCardSelectedAction(true,TYPE_GO_PAY.toString())
+                       // onCardSelectedActionListener?.onCardSelectedAction(true,TYPE_GO_PAY.toString())
                         onCardSelectedActionListener?.onCardSelectedAction(true)
                         notifyDataSetChanged()
                     }
@@ -206,8 +204,6 @@ class CardTypeAdapterUIKIT(
             Glide.with(holder.itemView.context)
                     .load(arrayListCards[i])
                     .into(imageViewCard)
-
-
         }
 
     }
@@ -263,8 +259,9 @@ class CardTypeAdapterUIKIT(
         for (i in 0 until arrayListRedirect.size) {
             val imageViewCard = holder.itemView.findViewById<ImageView>(R.id.imageView_knet)
             Glide.with(holder.itemView.context)
-                .load(arrayListRedirect[i])
-                .into(imageViewCard)
+                    .load(arrayListRedirect[i])
+                    .into(imageViewCard)
+
         }
 
 

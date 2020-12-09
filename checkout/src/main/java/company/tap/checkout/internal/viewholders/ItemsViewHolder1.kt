@@ -2,14 +2,15 @@ package company.tap.checkout.internal.viewholders
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import androidx.fragment.app.FragmentManager
 import company.tap.checkout.R
 import company.tap.checkout.internal.dummygener.Currencies1
 import company.tap.checkout.internal.dummygener.Items1
 import company.tap.checkout.internal.enums.SectionType
+import company.tap.checkout.internal.fragment.CurrencyViewsFragment
 import company.tap.checkout.internal.interfaces.BaseLayouttManager
-import company.tap.tapuilibrary.uikit.fragment.CurrencyViewFragment
-import company.tap.tapuilibrary.uikit.fragment.CurrencyViewsFragment
+import kotlinx.android.synthetic.main.fragment_checkouttaps.view.*
 
 /**
  *
@@ -18,10 +19,9 @@ import company.tap.tapuilibrary.uikit.fragment.CurrencyViewsFragment
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class ItemsViewHolder1(context11: Context, private val baseLayouttManager: BaseLayouttManager) :
+class ItemsViewHolder1(context11: Context, private val baseLayouttManager: BaseLayouttManager,fragmentManagere: FragmentManager) :
     TapBaseViewHolder {
-    private val context1: Context? = context11
-    private lateinit var fragmentManager: FragmentManager
+    private  var fragmentManager: FragmentManager
     override val view = LayoutInflater.from(context11).inflate(
         R.layout.currency_fragment_layout,
         null
@@ -30,20 +30,19 @@ class ItemsViewHolder1(context11: Context, private val baseLayouttManager: BaseL
     override val type = SectionType.SELECT
 
     var displayed: Boolean = true
-    private lateinit var supportedCurrecnyList: ArrayList<String>
-    private lateinit var supportedCurrecny: ArrayList<Currencies1>
+    private lateinit var supportedCurrecnyList: ArrayList<Currencies1>
     private lateinit var supportedItemList: List<Items1>
 
 
     init {
 
         bindViewComponents()
+        this.fragmentManager = fragmentManagere
 
 
     }
 
     override fun bindViewComponents() {
-
     }
 
     /**
@@ -51,32 +50,34 @@ class ItemsViewHolder1(context11: Context, private val baseLayouttManager: BaseL
      * @param supportedCurrencyApi represents the supported currency for the Merchant.
      * @param supportItemListApi represents the supported currency for the Merchant.
      * */
-    fun setDatafromAPI(supportedCurrencyApi: ArrayList<String>,supportItemListApi :List<Items1>,fragmentManager: FragmentManager) {
+    fun setDatafromAPI(supportedCurrencyApi: ArrayList<Currencies1>,supportItemListApi :List<Items1>,fragmentManager: FragmentManager) {
         supportedCurrecnyList = supportedCurrencyApi
         supportedItemList = supportItemListApi
        // bindViewComponents()
-        val manager: FragmentManager = fragmentManager
-        val transaction = manager.beginTransaction()
+     //   val manager: FragmentManager = fragmentManager
+     //   val transaction = manager.beginTransaction()
         /* transaction.add(
              R.id.currency_fragment_container,
              CurrencyViewFragment(supportedCurrecnyList, itemList)
          )*/
-        transaction.replace(R.id.sdkContainer,
-            CurrencyViewsFragment(supportedCurrecny, supportedItemList))
+        println("supportedItemList curr list:$supportedItemList")
 
+        this.fragmentManager = fragmentManager
 
-        transaction.addToBackStack(null)
-        transaction.commit()
-        println("supported curr list:$supportedCurrecnyList")
 
     }
 
     fun resetView(){
-        val manager: FragmentManager = fragmentManager
-        val transaction = manager.beginTransaction()
-        transaction.remove(CurrencyViewFragment(supportedCurrecny, supportedItemList))
-        transaction.addToBackStack(null)
-        transaction.commit()
+        fragmentManager.beginTransaction()
+            .remove(CurrencyViewsFragment(ArrayList(), ArrayList())).commit()
+
+    }
+
+    fun setView(){
+        fragmentManager.beginTransaction()
+            .replace(R.id.fragment_container_nfc_lib, CurrencyViewsFragment(supportedCurrecnyList, supportedItemList))
+            .addToBackStack(null)
+            .commit()
     }
 
 }

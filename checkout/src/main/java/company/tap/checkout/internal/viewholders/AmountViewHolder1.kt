@@ -6,6 +6,8 @@ import android.view.View
 
 import company.tap.checkout.R
 import company.tap.checkout.internal.enums.SectionType
+import company.tap.checkout.internal.interfaces.BaseLayouttManager
+import company.tap.checkout.internal.utils.CurrencyFormatter
 import company.tap.checkout.internal.utils.CurrentTheme
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.uikit.atoms.TapButton
@@ -20,7 +22,7 @@ import kotlinx.android.synthetic.main.amountview_layout.view.*
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class AmountViewHolder1(context: Context) : TapBaseViewHolder {
+class AmountViewHolder1(context: Context,private val baseLayouttManager: BaseLayouttManager?=null) : TapBaseViewHolder {
 
   // override val view = TapAmountSectionView(context, null)
     override val view: View = LayoutInflater.from(context).inflate(R.layout.amountview_layout, null)
@@ -30,7 +32,8 @@ class AmountViewHolder1(context: Context) : TapBaseViewHolder {
     private var selectedCurren:String?=null
     private var currentCurren:String?=null
     private var itemCountt :String?=null
-    private var originalAmount :String?=null
+    private var originalAmount :String=""
+    private var isOpenedList :Boolean=false
     init {
         bindViewComponents()
         CurrentTheme.initAppTheme(R.raw.defaultlighttheme, context)
@@ -55,6 +58,8 @@ class AmountViewHolder1(context: Context) : TapBaseViewHolder {
     }
 
     fun changeGroupAction(isOpen: Boolean) {
+        println("isOpen in groupaction"+isOpen)
+        isOpenedList = isOpen
         if (isOpen)
             changeDataSource(
                 AmountViewDataSource(
@@ -77,6 +82,7 @@ class AmountViewHolder1(context: Context) : TapBaseViewHolder {
     fun setOnItemsClickListener(onItemsClickListener: () -> Unit) {
         view.findViewById<TapButton>(R.id.textView_itemcount).setOnClickListener {
             onItemsClickListener()
+            baseLayouttManager?.controlCurrency(isOpenedList)
         }
     }
 
@@ -92,7 +98,8 @@ class AmountViewHolder1(context: Context) : TapBaseViewHolder {
         selectedCurren = selectedCurrencyApi
         currentCurren = currentCurrencyApi
         itemCountt  = itemCountApi
-        originalAmount = originalAmountApi
+        originalAmount =CurrencyFormatter.currencyFormat(originalAmountApi)
+
         bindViewComponents()
     }
 }
