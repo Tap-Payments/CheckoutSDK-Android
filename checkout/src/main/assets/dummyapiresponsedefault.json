@@ -159,6 +159,14 @@
       },
       "chipType": 5,
       "paymentType": "card"
+    },
+    {
+      "chip": {
+        "title": "",
+        "icon": ""
+      },
+      "chipType": 6,
+      "paymentType": "signout"
     }
   ],
   "savedCards": [

@@ -16,12 +16,14 @@ import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DividerItemDecoration
 import company.tap.checkout.R
 import company.tap.checkout.internal.adapter.CardTypeAdapterUIKIT
+import company.tap.checkout.internal.adapter.goPayCardAdapterUIKIT
 import company.tap.checkout.internal.dummygener.*
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.*
 import company.tap.checkout.internal.utils.AnimationEngine
 import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
 import company.tap.checkout.internal.utils.CurrencyFormatter
+import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.viewholders.*
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
@@ -58,6 +60,7 @@ class TapLayoutViewModell : ViewModel(),
     private lateinit var itemList: List<Items1>
     private lateinit var orderList:Order1
     private var savedCardList = MutableLiveData<List<SavedCards>>()
+    private var goPayCardList = MutableLiveData<List<GoPaySavedCards>>()
     private var displayItemsOpen: Boolean = false
     private val isShaking = MutableLiveData<Boolean>()
     private lateinit var  slectedAmountCurrency :String
@@ -184,7 +187,7 @@ class TapLayoutViewModell : ViewModel(),
         removeViews(
             businessViewHolder,
             amountViewHolder1,
-            goPaySavedCardHolder,
+            goPayViewsHolder,
             cardViewHolder11,
             paymenttInputViewHolder,
             saveCardSwitchHolder11
@@ -314,6 +317,7 @@ class TapLayoutViewModell : ViewModel(),
         allCurrencies = dummyInitapiResponse1.currencies1
         itemList = dummyInitapiResponse1.order1.items
         savedCardList.value = dummyInitapiResponse1.savedCards
+        goPayCardList.value = dummyInitapiResponse1.goPaySavedCards
         orderList = dummyInitapiResponse1.order1
         /**
          * Setting divider for items
@@ -329,18 +333,19 @@ class TapLayoutViewModell : ViewModel(),
         cardViewHolder11.view.mainChipgroup.chipsRecycler.addItemDecoration(divider)
 
         val adapter = CardTypeAdapterUIKIT(this)
+        val goPayadapter = goPayCardAdapterUIKIT(this)
         cardViewHolder11.view.mainChipgroup.chipsRecycler.adapter = adapter
         adapter.updateAdapterData(savedCardList.value as List<SavedCards>)
-
+        goPayadapter.updateAdapterData(goPayCardList.value as List<GoPaySavedCards>)
         cardViewHolder11.view.mainChipgroup.groupAction?.visibility = View.VISIBLE
 
         cardViewHolder11.view.mainChipgroup.groupAction?.setOnClickListener {
             if (cardViewHolder11.view.mainChipgroup.groupAction?.text == "Close") {
                 adapter.updateShaking(false)
-                cardViewHolder11.view.mainChipgroup.groupAction?.text = "Edit"
+                cardViewHolder11.view.mainChipgroup.groupAction?.text =  LocalizationManager.getValue("edit", "Common")
             } else {
                 adapter.updateShaking(true)
-                cardViewHolder11.view.mainChipgroup.groupAction?.text = "Close"
+                cardViewHolder11.view.mainChipgroup.groupAction?.text = LocalizationManager.getValue("close", "Common")
             }
         }
 
@@ -395,6 +400,12 @@ class TapLayoutViewModell : ViewModel(),
             "close",
             "Common"
         )
+    }
+
+    override fun ongoPayLogoutClicked(isClicked: Boolean) {
+       if(isClicked){
+           CustomUtils.showDialog("Are you sure you would like to sign out","The goPayCards will be hidden from the page and you will need to login again to use any of them",context,"twobtns")
+       }
     }
 
     override fun onPaycardSwitchAction(isCompleted: Boolean) {

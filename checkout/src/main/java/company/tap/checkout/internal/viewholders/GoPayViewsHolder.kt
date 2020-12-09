@@ -17,6 +17,7 @@ import company.tap.tapuilibrary.uikit.interfaces.OpenOTPInterface
 import company.tap.tapuilibrary.uikit.interfaces.OtpButtonConfirmationInterface
 import company.tap.tapuilibrary.uikit.organisms.GoPayLoginInput
 import company.tap.tapuilibrary.uikit.organisms.GoPayPasswordInput
+import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
 import kotlinx.android.synthetic.main.otpview_layout.view.*
 
 
@@ -35,11 +36,13 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
 
      val goPayLoginInput: GoPayLoginInput
      val goPayPasswordInput: GoPayPasswordInput
+     val signInButton: TabAnimatedActionButton
     private  var otpViewHolder: OTPViewHolder = OTPViewHolder(context)
 
     init {
         goPayLoginInput = view.findViewById(R.id.gopay_login_input)
         goPayPasswordInput = view.findViewById(R.id.goPay_password)
+        signInButton = view.findViewById(R.id.sigin_button)
 
         bindViewComponents()
     }
@@ -50,6 +53,13 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
         goPayLoginInput.setOpenOTPInterface(this)
         otpViewHolder.view.otpView?.setOtpButtonConfirmationInterface(this)
         goPayPasswordInput.setLoginInterface(this, goPayLoginInput.textInput.text.toString())
+        signInButton.setOnClickListener {
+            if(goPayPasswordInput.passwordTextInput.text.toString()=="12345678"){
+                baseLayouttManager?.displayGoPay()
+            }else{
+                goPayPasswordInput.textInputLayout.error= LocalizationManager.getValue("GoPayLogin","Hints","password")
+            }
+        }
     }
 
     override fun onChangeClicked() {
@@ -59,15 +69,16 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
     }
 
     override fun onEmailValidated() {
-       println("email entered is"+goPayLoginInput.textInput.text.toString())
-        if(goPayLoginInput.textInput.text.toString()=="ahlaam.kazi@gmail.com"){
-            CustomUtils.showDialog("goPay","Please check your email and follow the steps",context)
-        }else
-        goPayLoginInput.visibility = View.GONE
-        goPayPasswordInput.visibility = View.VISIBLE
-        otpViewHolder.view.otpView?.visibility = View.GONE
-        goPayPasswordInput.setLoginInterface(this, goPayLoginInput.textInput?.text.toString())
-
+        //to be replace dummy check when validating via api
+        if(goPayLoginInput.textInput.text.toString()=="a.k@g.com"){
+            CustomUtils.showDialog(LocalizationManager.getValue("GoPayAlert", "Hints", "goPayTitle"),LocalizationManager.getValue("GoPayAlert", "Hints", "goPayemailalert"),context)
+        return
+        }else {
+            goPayLoginInput.visibility = View.GONE
+            goPayPasswordInput.visibility = View.VISIBLE
+            otpViewHolder.view.otpView?.visibility = View.GONE
+            goPayPasswordInput.setLoginInterface(this, goPayLoginInput.textInput?.text.toString())
+        }
 
     }
 

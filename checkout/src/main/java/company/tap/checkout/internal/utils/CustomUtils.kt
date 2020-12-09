@@ -1,10 +1,10 @@
 package company.tap.checkout.internal.utils
 
-import android.app.Dialog
+import android.R
 import android.content.Context
-import android.view.Window
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+import com.gdacciaro.iOSDialog.iOSDialogBuilder
+
 
 /**
  * Created by AhlaamK on 12/8/20.
@@ -14,26 +14,27 @@ All rights reserved.
  **/
 object CustomUtils {
 
-     fun showDialog(title: String, messageString :String,context: Context) {
-        val builder = AlertDialog.Builder(context)
-        builder.setTitle(title)
-        builder.setMessage(messageString)
-    //builder.setPositiveButton("OK", DialogInterface.OnClickListener(function = x))
+     fun showDialog(title: String, messageString: String, context: Context, btnType:String?=null) {
+         val builder = iOSDialogBuilder(context)
+         builder
+             .setTitle(title)
+             .setSubtitle(messageString)
+             .setBoldPositiveLabel(true)
+             .setCancelable(false)
+                 if(btnType=="twobtns"){
+                  builder.setPositiveListener("YES") { dialog ->
+                         dialog.dismiss()
+                     }
+                     builder.setNegativeListener("No") { dialog ->
 
-        builder.setPositiveButton(android.R.string.yes) { dialog, which ->
-            Toast.makeText(context,
-                    android.R.string.yes, Toast.LENGTH_SHORT).show()
-        }
+                     }
+                 }else {
+                    builder .setPositiveListener("OK") { dialog ->
+                         dialog.dismiss()
+                     }
+                 }
+             .build().show()
 
-        builder.setNegativeButton(android.R.string.no) { dialog, which ->
-            Toast.makeText(context,
-                    android.R.string.no, Toast.LENGTH_SHORT).show()
-        }
 
-        builder.setNeutralButton("Maybe") { dialog, which ->
-            Toast.makeText(context,
-                    "Maybe", Toast.LENGTH_SHORT).show()
-        }
-        builder.show()
     }
 }

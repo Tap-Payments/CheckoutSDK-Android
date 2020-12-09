@@ -7,6 +7,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.R
+import company.tap.checkout.internal.adapter.CardTypeAdapterUIKIT
 import company.tap.checkout.internal.adapter.goPayCardAdapterUIKIT
 import company.tap.checkout.internal.dummygener.GoPaySavedCards
 import company.tap.checkout.internal.enums.SectionType
@@ -14,6 +15,7 @@ import company.tap.checkout.internal.interfaces.BaseLayouttManager
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
+import kotlinx.android.synthetic.main.cardviewholder_layout.view.*
 import kotlinx.android.synthetic.main.gopayloginview_layout.view.*
 import kotlinx.android.synthetic.main.gopayloginview_layout.view.tapSeparatorViewLinear
 
@@ -37,11 +39,12 @@ class GoPaySavedCardHolder(
 
 
     private var goPaySavedCardsList: List<GoPaySavedCards>? = null
+    private var chipRecyclerView: RecyclerView
 
 
     init {
         bindViewComponents()
-
+        chipRecyclerView = view.findViewById(R.id.chip_recycler)
     }
 
     override fun bindViewComponents() {
@@ -58,8 +61,7 @@ class GoPaySavedCardHolder(
             RecyclerView.HORIZONTAL,
             false
         )
-        view.goPayLoginView.chipsRecycler.adapter =
-            goPaySavedCardsList?.let { goPayCardAdapterUIKIT(it as ArrayList<GoPaySavedCards>, onCardSelectedActionListener,false) }
+
         println("goPaySavedCardsList  currency ${goPaySavedCardsList?.get(0)?.chip1?.icon}")
        /* view.goPayLoginView.groupAction.setOnClickListener {
             val animation = AnimationUtils.loadAnimation(this.view.context, R.anim.shake)
@@ -81,5 +83,9 @@ class GoPaySavedCardHolder(
     fun setDatafromAPI(goPaySavedCardsApi: List<GoPaySavedCards>) {
         goPaySavedCardsList = goPaySavedCardsApi
         bindViewComponents()
+        val adapter = goPayCardAdapterUIKIT(onCardSelectedActionListener)
+        chipRecyclerView.adapter = adapter
+        adapter.isShaking=false
+        goPaySavedCardsList?.let { adapter.updateAdapterData(it) }
     }
 }

@@ -16,11 +16,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import company.tap.checkout.R
 import company.tap.checkout.internal.dummygener.GoPaySavedCards
+import company.tap.checkout.internal.dummygener.SavedCards
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
+import kotlinx.android.synthetic.main.item_gopay_signout.view.*
 import kotlinx.android.synthetic.main.item_knet.view.*
 import kotlinx.android.synthetic.main.item_save_cards.view.*
+import kotlinx.android.synthetic.main.item_save_cards.view.tapCardChip2
 import java.net.URL
 
 
@@ -31,59 +34,59 @@ All rights reserved.
 
 @Suppress("PrivatePropertyName")
 class goPayCardAdapterUIKIT(
-    private val arrayListsgoPaySaveCard: List<GoPaySavedCards>,
     private val onCardSelectedActionListener: OnCardSelectedActionListener,
     var isShaking: Boolean = false
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private val TYPE_SAVED_CARD = 1
-    private val TYPE_REDIRECT = 2
-    private val TYPE_GO_PAY = 3
     private var selectedPosition = -1
     private var lastPosition = -1
     var context_: Context? = null
     private var arrayListRedirect:ArrayList<String> = ArrayList()
     private var arrayListCards:ArrayList<String> = ArrayList()
-    private var totalgopayArrayList:ArrayList<GoPaySavedCards> = ArrayList()
-
-
+    private var adapterContent: List<GoPaySavedCards> = java.util.ArrayList()
+    companion object {
+        private const val TYPE_SAVED_CARD = 1
+        private const val TYPE_GO_PAY_SIGNOUT = 2
+    }
+    fun updateAdapterData(adapterContent: List<GoPaySavedCards>) {
+        this.adapterContent = adapterContent
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view: View
-        context_ = parent.context
-        totalgopayArrayList.addAll(arrayListsgoPaySaveCard)
         return when (viewType) {
             TYPE_SAVED_CARD -> {
                 view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_save_cards, parent, false)
                 SavedViewHolder(view)
             }
-            TYPE_REDIRECT -> {
-                view =
-                    LayoutInflater.from(parent.context).inflate(R.layout.item_knet, parent, false)
-                SingleViewHolder(view)
-            }
             else -> {
                 view =
-                    LayoutInflater.from(parent.context).inflate(R.layout.item_gopay, parent, false)
+                    LayoutInflater.from(parent.context).inflate(R.layout.item_gopay_signout, parent, false)
                 GoPayViewHolder(view)
             }
         }
+
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (arrayListsgoPaySaveCard[position].chipType == 1) {
-            arrayListRedirect.add(arrayListsgoPaySaveCard[position].chip1.icon)
-            TYPE_REDIRECT
-        } else if (arrayListsgoPaySaveCard[position].chipType == 5) {
-            arrayListCards.add(arrayListsgoPaySaveCard[position].chip1.icon)
-            TYPE_SAVED_CARD
-        } else {
-            TYPE_GO_PAY
+        /**
+         * here we will cast the list of any depending on card type
+         */
+
+        return when ((adapterContent[position]).chipType ) {
+            5 -> {
+                arrayListCards.add((adapterContent[position]).chip1.icon)
+                TYPE_SAVED_CARD
+            }
+            else -> {
+                TYPE_GO_PAY_SIGNOUT
+            }
         }
     }
 
     override fun getItemCount(): Int {
-        return arrayListsgoPaySaveCard.size
+        return adapterContent.size
     }
 
 
@@ -104,15 +107,7 @@ class goPayCardAdapterUIKIT(
             getItemViewType(position) == TYPE_SAVED_CARD -> {
                 typeSavedCard(holder, position)
             }
-            /**
-             * Knet Type
-             */
-            getItemViewType(position) == TYPE_REDIRECT -> {
-                if (isShaking) {
-                    holder.itemView.alpha = 0.4f
-                }
-                typeRedirect(holder, position)
-            }
+
             /**
              * GoPay Type
              */
@@ -120,17 +115,46 @@ class goPayCardAdapterUIKIT(
                 if (isShaking) {
                     holder.itemView.alpha = 0.4f
                 }
-                if (selectedPosition == position)
-                    holder.itemView.setBackgroundResource(R.drawable.border_gopay)
-                else
-                    holder.itemView.setBackgroundResource(R.drawable.border_gopay_unclick)
+                if (selectedPosition == position) {
+                    if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
+                        holder.itemView.tapCardChip4.setBackgroundResource(R.drawable.border_shadow_black)
+                    } else {
+                        holder.itemView.tapCardChip4.setBackgroundResource(R.drawable.border_shadow_)
+                    }
+                    setBorderedView(
+                        holder.itemView.tapCardChip4Linear,
+                        (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
+                        0.0f,
+                        parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
+                        Color.parseColor(ThemeManager.getValue("horizontalList.chips.savedCardChip.backgroundColor")),// tint color
+                        parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
+                    )// shadow color
+
+                } else {
+                    if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
+                        holder.itemView.tapCardChip4.setBackgroundResource(R.drawable.border_unclick_black)
+                    } else {
+                        holder.itemView.tapCardChip4.setBackgroundResource(R.drawable.border_unclick)
+                    }
+
+
+                    setBorderedView(
+                        holder.itemView.tapCardChip4Linear,
+                        (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
+                        0.0f,
+                        parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
+                        Color.parseColor(ThemeManager.getValue("horizontalList.chips.savedCardChip.backgroundColor")),// tint color
+                        parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
+                    )// shadow color
+
+                }
                 (holder as GoPayViewHolder)
 
                 if (!isShaking) {
                     holder.itemView.setOnClickListener {
                         selectedPosition = position
                        // onCardSelectedActionListener?.onCardSelectedAction(true,TYPE_GO_PAY.toString())
-                        onCardSelectedActionListener.onCardSelectedAction(true, totalgopayArrayList[holder.adapterPosition])
+                        onCardSelectedActionListener.ongoPayLogoutClicked(true)
                         notifyDataSetChanged()
                     }
                 }
@@ -239,7 +263,7 @@ class goPayCardAdapterUIKIT(
         if (!isShaking) {
             holder.itemView.setOnClickListener {
                // onCardSelectedActionListener?.onCardSelectedAction(true, arrayListRedirect.toString())
-                onCardSelectedActionListener?.onCardSelectedAction(true,totalgopayArrayList[holder.adapterPosition])
+                onCardSelectedActionListener?.onCardSelectedAction(true,adapterContent[holder.adapterPosition])
                 selectedPosition = position
                 notifyDataSetChanged()
             }
