@@ -432,7 +432,6 @@ class TapLayoutViewModell : ViewModel(),
              saveCardSwitchHolder.view.cardSwitch.switchSaveMobile.visibility = View.GONE
              saveCardSwitchHolder.view.cardSwitch.switchesLayout.visibility = View.GONE*/
             unActivateActionButton()
-
         }
 
     }
