@@ -560,7 +560,6 @@ class TapLayoutViewModell : ViewModel(),
             itemList[i].currency = currencySelected
             slectedAmountCurrency = itemList[i].currency+" "+CurrencyFormatter.currencyFormat(itemList[i].amount.toString())
         }
-        println("changed before itemLists"+itemList)
         itemsViewHolder1.resetItemList(itemList)
         amountViewHolder1.updateSelectedCurrency(displayItemsOpen,slectedAmountCurrency,currentAmountCurrency)
 

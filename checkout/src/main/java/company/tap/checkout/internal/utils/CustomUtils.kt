@@ -12,12 +12,12 @@ import androidx.appcompat.app.AlertDialog
 Copyright (c) 2020    Tap Payments.
 All rights reserved.
  **/
-class CustomUtils {
+object CustomUtils {
 
-    private fun showDialog(title: String, context: Context) {
+     fun showDialog(title: String, messageString :String,context: Context) {
         val builder = AlertDialog.Builder(context)
-        builder.setTitle("Androidly Alert")
-        builder.setMessage("We have a message")
+        builder.setTitle(title)
+        builder.setMessage(messageString)
     //builder.setPositiveButton("OK", DialogInterface.OnClickListener(function = x))
 
         builder.setPositiveButton(android.R.string.yes) { dialog, which ->

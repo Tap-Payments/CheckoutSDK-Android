@@ -12,6 +12,7 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.*
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.gson.Gson
 import company.tap.checkout.R
 import company.tap.checkout.internal.apiresponse.getJsonDataFromAsset
@@ -60,7 +61,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
     ): View? {
         view1 = inflater.inflate(R.layout.fragment_checkouttaps, container, false)
 
-       // bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
         val viewModell: TapLayoutViewModell by viewModels()
         this.viewModell = viewModell
 

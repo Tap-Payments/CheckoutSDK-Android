@@ -7,6 +7,8 @@ import android.view.View
 import company.tap.checkout.R
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayouttManager
+import company.tap.checkout.internal.utils.CustomUtils
+import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.uikit.datasource.GoPayLoginDataSource
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.interfaces.GoPayLoginInterface
@@ -57,6 +59,10 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
     }
 
     override fun onEmailValidated() {
+       println("email entered is"+goPayLoginInput.textInput.text.toString())
+        if(goPayLoginInput.textInput.text.toString()=="ahlaam.kazi@gmail.com"){
+            CustomUtils.showDialog("goPay","Please check your email and follow the steps",context)
+        }else
         goPayLoginInput.visibility = View.GONE
         goPayPasswordInput.visibility = View.VISIBLE
         otpViewHolder.view.otpView?.visibility = View.GONE
@@ -68,14 +74,14 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
     override fun onPhoneValidated() {
         goPayPasswordInput.visibility = View.GONE
         goPayLoginInput.visibility = View.GONE
-        println("viewhodler value"+otpViewHolder+"\n"+"view value"+view+"\n"+"otpview is "+otpViewHolder.view.otpView)
+        println("viewholder value"+otpViewHolder+"\n"+"view value"+view+"\n"+"otpview is "+otpViewHolder.view.otpView)
 
         if(otpViewHolder.view.otpView!=null){
             otpViewHolder.view.otpView.visibility = View.VISIBLE
             otpViewHolder.view.otpView.changePhoneCardView?.visibility = View.VISIBLE
             println(" you clicked for otp!!!")
             baseLayouttManager?.displayOTPV( otpViewHolder.view.otpView?.otpViewInput1?.text.toString(),otpViewHolder.otpView.isValidOTP)
-           // baseLayoutManager?.displayGoPay()
+
 
         }
 
