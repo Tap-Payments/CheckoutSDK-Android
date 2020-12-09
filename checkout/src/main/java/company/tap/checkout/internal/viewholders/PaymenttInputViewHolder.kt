@@ -25,10 +25,13 @@ import company.tap.checkout.internal.interfaces.onPaymentCardComplete
 import company.tap.tapcardvalidator_android.CardBrand
 import company.tap.tapcardvalidator_android.CardValidationState
 import company.tap.tapcardvalidator_android.CardValidator
+import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.interfaces.TapPaymentShowHideClearImage
 import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
 import company.tap.tapuilibrary.uikit.models.SectionTabItem
+import company.tap.tapuilibrary.uikit.views.TapAlertView
 import company.tap.tapuilibrary.uikit.views.TapMobilePaymentView
 import company.tap.tapuilibrary.uikit.views.TapSelectionTabLayout
 import kotlinx.android.synthetic.main.payment_inputt_layout.view.*
@@ -37,8 +40,6 @@ import kotlinx.android.synthetic.main.switch_layout.view.*
 
 /**
  *
- * Created by Mario Gamal on 7/28/20
- * Modified by Ahlaam K
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
@@ -48,24 +49,15 @@ class PaymenttInputViewHolder(
     private val onPaymentCardComplete: onPaymentCardComplete,
     private val onCardNFCCallListener: onCardNFCCallListener
 ) : TapBaseViewHolder,
-    TapSelectionTabLayoutInterface, CardInputListener,TapPaymentShowHideClearImage {
-
+    TapSelectionTabLayoutInterface, CardInputListener, TapPaymentShowHideClearImage {
     override val view: View =
         LayoutInflater.from(context).inflate(R.layout.payment_inputt_layout, null)
-
     override val type = SectionType.PAYMENT_INPUT
-
     private var tabLayout: TapSelectionTabLayout
     private val paymentInputContainer: LinearLayout
-
-    // private val paymentLayoutContainer: LinearLayout
     private val clearView: ImageView
-
-    //  private val scannerOptions: LinearLayout
     var selectedType = PaymentType.CARD
     private var shouldShowScannerOptions = true
-    private val cardInputWidget = InlineCardInput(context)
-    private val mobilePaymentView = TapMobilePaymentView(context, null)
     private var lastFocusField = CardInputListener.FocusField.FOCUS_CARD
     private var lastCardInput = ""
     private var cardScannerBtn: ImageView? = null
@@ -74,52 +66,34 @@ class PaymenttInputViewHolder(
     private lateinit var tapMobileInputView: TapMobilePaymentView
     private var linearLayoutPay: LinearLayout? = null
     private var tabPosition: Int? = null
-
+    private var tapAlertView: TapAlertView? = null
     private var switchViewHolder11 = SwitchViewHolder11(context)
-    private var imageURL: String=""
+    private var imageURL: String = ""
     private var isadded: Boolean = false
     private lateinit var paymentType: String
     private lateinit var cardBrandType: String
 
 
     init {
-
         tabLayout = view.findViewById(R.id.sections_tablayout)
         tabLayout.setTabLayoutInterface(this)
         tapMobileInputView = TapMobilePaymentView(context, null)
         tapCardInputView = InlineCardInput(context,null)
+        tapAlertView = view.findViewById(R.id.alertView)
         tabLayout.setTabLayoutInterface(this)
-
         paymentInputContainer = view.findViewById(R.id.payment_input_layout)
-        //  paymentLayoutContainer = view.findViewById(R.id.payment_layout_container)
-        //    scannerOptions = view.findViewById(R.id.scanner_options)
         clearView = view.findViewById(R.id.clear_text)
-
-        // switchViewHolder = SwitchViewHolder(context)
-        bindViewComponents()
         tapMobileInputView.setTapPaymentShowHideClearImage(this)
         tabLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.backgroundColor")))
         tabLayout.changeTabItemAlphaValue(0.9f)
+        bindViewComponents()
+
 
     }
 
-    fun setCardNumber(cardNumber: String?) {
-        cardInputWidget.setCardNumber(cardNumber)
-    }
-
-    fun setExpDate(
-        @IntRange(from = 1, to = 12) month: Int,
-        @IntRange(from = 0, to = 9999) year: Int
-    ) {
-        cardInputWidget.setExpiryDate(month, year)
-    }
-
-    fun setCvc(cvcCode: String?) {
-        cardInputWidget.setCvcCode(cvcCode)
-    }
 
     override fun bindViewComponents() {
-         initTabLayout()
+        initTabLayout()
         initCardInput()
         initMobileInput()
         initClearText()
@@ -141,41 +115,31 @@ class PaymenttInputViewHolder(
     private fun initializeCardForm() {
         cardScannerBtn = view.findViewById(R.id.card_scanner_button)
         nfcButton = view.findViewById(R.id.nfc_button)
-        //  mobileNumberEditText = view.findViewById(R.id.mobile_number)
-//        alertMessage = view.findViewById(R.id.textview_alert_message)
         nfcButton?.visibility = View.VISIBLE
         cardScannerBtn?.visibility = View.VISIBLE
         linearLayoutPay = view.findViewById(R.id.linear_paylayout)
-        cardInputWidget.clearFocus()
+        tapCardInputView.clearFocus()
         clearView.visibility = View.GONE
         clearView.setOnClickListener {
             tabLayout.resetBehaviour()
             println("is it called")
-            mobilePaymentView.clearNumber()
-            /* tapCardInputView.setCardNumber("")
-             tapCardInputView.setCvcCode("")*/
-            cardInputWidget.clear()
-            //  alert_text.visibility= View.GONE
+            tapMobileInputView.clearNumber()
+            tapCardInputView.clear()
             onPaymentCardComplete.onPaycardSwitchAction(false)
-
             if (tabPosition == 1) {
                 nfcButton?.visibility = View.INVISIBLE
                 cardScannerBtn?.visibility = View.INVISIBLE
-
             }
             switchViewHolder11.view.cardviewSwitch.visibility = View.INVISIBLE
             switchViewHolder11.view.mainSwitch.visibility = View.GONE
             switchViewHolder11.view.cardSwitch.visibility = View.GONE
             clearView.visibility = View.GONE
-
         }
 
         nfcButton?.setOnClickListener {
             onCardNFCCallListener.onClickNFC()
-
         }
         cardScannerBtn?.setOnClickListener {
-
             tabLayout.visibility = View.GONE
             onCardNFCCallListener.onClickCardScanner()
         }
@@ -184,66 +148,44 @@ class PaymenttInputViewHolder(
     private fun initClearText() {
         clearView.setOnClickListener {
             when (selectedType) {
-                PaymentType.CARD -> cardInputWidget.clear()
-                PaymentType.MOBILE -> mobilePaymentView.clearNumber()
-
+                PaymentType.CARD -> tapCardInputView.clear()
+                PaymentType.MOBILE -> tapMobileInputView.clearNumber()
             }
-            println("is it selectedType")
-
         }
     }
 
     private fun initMobileInput() {
-        mobilePaymentView.mobileNumber.doAfterTextChanged {
+        tapMobileInputView.mobileNumber.doAfterTextChanged {
             it?.let {
-                if (it.isEmpty())
-                    clearView.visibility = View.GONE
-                else
-                    clearView.visibility = View.VISIBLE
+                if (it.isEmpty()) clearView.visibility = View.GONE
+                else clearView.visibility = View.VISIBLE
+                //check if editable start with number of oridoo or zain etc
             }
         }
     }
 
     //Setting on the cardInput with logics
     private fun initCardInput() {
-        cardInputWidget.holderNameEnabled = false
-        //paymentInputContainer.removeView(cardInputWidget)
-        paymentInputContainer.addView(cardInputWidget)
-        cardInputWidget.clearFocus()
-        //Textwatcher for cardNumber
-        cardInputWidget.setCardNumberTextWatcher(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                s?.let {
-                    lastCardInput = it.toString()
-                    shouldShowScannerOptions = it.isEmpty()
-                    controlScannerOptions()
-                    cardBrandDetection(s.toString())
-                    if (s.trim().length == 19) {
-                        // onPaymentCardComplete.onPaycardAction(true)
-                    }
-                }
-            }
-
+        tapCardInputView.holderNameEnabled = false
+        paymentInputContainer.addView(tapCardInputView)
+        tapCardInputView.clearFocus()
+        tapCardInputView.setCardNumberTextWatcher(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) { cardNumAfterTextChangeListener(s) }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s.toString().isEmpty())
-                    clearView.visibility = View.GONE
-                else
-                    clearView.visibility = View.VISIBLE
+                if (s.toString().isEmpty()) clearView.visibility = View.GONE
+                else clearView.visibility = View.VISIBLE
             }
-
         })
 
         // Textwatcher for CVV
-        cardInputWidget.setCvcNumberTextWatcher(object : TextWatcher {
+        tapCardInputView.setCvcNumberTextWatcher(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s?.trim()?.length == 3 || s?.trim()?.length == 4) {
-                    onPaymentCardComplete.onPaycardSwitchAction(true)
-                }
+                if (s?.trim()?.length == 3 || s?.trim()?.length == 4) onPaymentCardComplete.onPaycardSwitchAction(true)
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -252,7 +194,7 @@ class PaymenttInputViewHolder(
 
         })
         //Textwatcher for Expiry date
-        cardInputWidget.setExpiryDateTextWatcher(object : TextWatcher {
+        tapCardInputView.setExpiryDateTextWatcher(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
             }
@@ -270,22 +212,56 @@ class PaymenttInputViewHolder(
 
     }
 
+
+    fun cardNumAfterTextChangeListener(s: Editable?){
+        val card = CardValidator.validate(s.toString())
+        s?.let {
+            if (s.isNullOrEmpty()) {
+                tabLayout.resetBehaviour()
+                tapAlertView?.visibility = View.GONE
+            }
+            if (s.trim().length == 19 && (card.validationState == CardValidationState.invalid)) {
+                tapAlertView?.visibility = View.VISIBLE
+                tapAlertView?.alertMessage?.text = (LocalizationManager.getValue("Warning", "Hints", "missingExpiryCVV"))
+            }
+
+            lastCardInput = it.toString()
+            shouldShowScannerOptions = it.isEmpty()
+            controlScannerOptions()
+            cardBrandDetection(s.toString())
+
+            when (card.validationState) {
+                CardValidationState.invalid -> {
+                    tapAlertView?.visibility = View.VISIBLE
+                    tapAlertView?.alertMessage?.text = (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
+                }
+                CardValidationState.incomplete -> {
+                    tapAlertView?.visibility = View.VISIBLE
+                    tapAlertView?.alertMessage?.text = (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
+                }
+                CardValidationState.valid -> {
+                    tapAlertView?.visibility = View.GONE
+                }
+                else -> {
+                    tapAlertView?.visibility = View.VISIBLE
+                    tapAlertView?.alertMessage?.text = (LocalizationManager.getValue("Warning", "Hints", "missingExpiryCVV"))
+                }
+            }
+
+        }
+    }
+
     // Logic to show the switches when card details are valid
     private fun cardBrandDetection(cardTyped: String) {
         if (cardTyped.isEmpty())
             tabLayout.resetBehaviour()
         val card = CardValidator.validate(cardTyped.toString())
         if (card.cardBrand != null) {
-            tabLayout.selectTab(
-                card.cardBrand,
-                card.validationState == CardValidationState.valid
-            )
+            tabLayout.selectTab(card.cardBrand, card.validationState == CardValidationState.valid)
             println("card brand: ${card.validationState}")
             nfcButton?.visibility = View.GONE
             cardScannerBtn?.visibility = View.GONE
-
         }
-
     }
 
     private fun controlScannerOptions() {
@@ -317,7 +293,7 @@ class PaymenttInputViewHolder(
             cardScannerBtn?.visibility = View.VISIBLE
 
             clearView.visibility = View.GONE
-            paymentInputContainer.addView(cardInputWidget)
+            paymentInputContainer.addView(tapCardInputView)
             checkForFocus()
         } else {
             selectedType = PaymentType.MOBILE
@@ -325,12 +301,12 @@ class PaymenttInputViewHolder(
 
             nfcButton?.visibility = View.GONE
             cardScannerBtn?.visibility = View.GONE
-            if (mobilePaymentView.mobileNumber.text.isEmpty())
+            if (tapMobileInputView.mobileNumber.text.isEmpty())
                 clearView.visibility = View.INVISIBLE
             else
                 clearView.visibility = View.VISIBLE
 
-            paymentInputContainer.addView(mobilePaymentView)
+            paymentInputContainer.addView(tapMobileInputView)
         }
         tabPosition = position
     }
@@ -374,28 +350,25 @@ class PaymenttInputViewHolder(
             paymentType = imageURLApi[i].paymentType
             cardBrandType = imageURLApi[i].brand
             println("imageURL in loop" + imageURL)
-
             if (paymentType == "telecom") {
-
-                itemsMobilesList.add(SectionTabItem(imageURL,imageURL,CardBrand.masterCard))
-
-                } else {
-                    itemsCardsList.add(SectionTabItem(imageURL, imageURL,CardBrand.ooredoo))
-                }
+                itemsMobilesList.add(SectionTabItem(imageURL, imageURL, CardBrand.masterCard))
+            } else {
+                itemsCardsList.add(SectionTabItem(imageURL, imageURL, CardBrand.ooredoo))
+            }
         }
-         tabLayout.addSection(itemsCardsList)
+        tabLayout.addSection(itemsCardsList)
         tabLayout.addSection(itemsMobilesList)
 
     }
 
     override fun showHideClearImage(show: Boolean) {
-            if (show) {
-                clearView.visibility = View.VISIBLE
-            } else {
-                clearView.visibility = View.VISIBLE
-            }
+        if (show) {
+            clearView.visibility = View.VISIBLE
+        } else {
+            clearView.visibility = View.VISIBLE
         }
     }
+}
 
 
 

@@ -62,11 +62,8 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
    /* implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.0.395'
     api 'com.github.Tap-Payments:TapUIKit-Android:1.1.0.395'*/
-
-
-    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.191'
-    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.191'
-
+    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.193'
+    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.193'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
     implementation 'com.github.Tap-Payments:TapCardScannerKit-Android:0.0.1.3'
