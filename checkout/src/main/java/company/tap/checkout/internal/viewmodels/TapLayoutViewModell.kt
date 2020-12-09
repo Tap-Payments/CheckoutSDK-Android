@@ -548,11 +548,6 @@ class TapLayoutViewModell : ViewModel(),
 
     }
 
-    private fun stopShakingCards(chipsView: RecyclerView) {
-        isShaking.value = false
-    }
-
-
 }
 
 

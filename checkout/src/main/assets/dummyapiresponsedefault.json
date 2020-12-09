@@ -203,7 +203,7 @@
     },
     {
       "chip": {
-        "title": "•••• 1234",
+        "title": "xxxx 1234",
         "icon": "https://img.icons8.com/color/2x/amex.png"
       },
       "paymentType": "card",
@@ -211,7 +211,7 @@
     },
     {
       "chip": {
-        "title": "•••• 5678",
+        "title": "xxxx 5678",
         "icon": "https://img.icons8.com/color/2x/visa.png"
       },
       "paymentType": "card",
@@ -219,7 +219,7 @@
     },
     {
       "chip": {
-        "title": "•••• 9123",
+        "title": "xxxx 9123",
         "icon": "https://img.icons8.com/color/2x/mastercard-logo.png"
       },
       "paymentType": "card",

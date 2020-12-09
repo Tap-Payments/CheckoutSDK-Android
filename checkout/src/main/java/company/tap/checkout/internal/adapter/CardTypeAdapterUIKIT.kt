@@ -26,7 +26,6 @@ import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import kotlinx.android.synthetic.main.item_knet.view.*
 import kotlinx.android.synthetic.main.item_save_cards.view.*
-import java.net.URL
 
 
 /**
@@ -35,16 +34,12 @@ All rights reserved.
  **/
 
 @Suppress("PrivatePropertyName")
-class CardTypeAdapterUIKIT(
-    private val onCardSelectedActionListener: OnCardSelectedActionListener
-
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedActionListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var selectedPosition = -1
     private var lastPosition = -1
     private var arrayListRedirect:ArrayList<String> = ArrayList()
     private var arrayListCards:ArrayList<String> = ArrayList()
-    private var totalArrayList:ArrayList<SavedCards> = ArrayList()
-    private var adapterContent: List<Any> = java.util.ArrayList()
+    private var adapterContent: List<SavedCards> = java.util.ArrayList()
     private var isShaking: Boolean = false
 
     companion object {
@@ -53,7 +48,7 @@ class CardTypeAdapterUIKIT(
         private const val TYPE_GO_PAY = 3
     }
 
-    fun updateAdapterData(adapterContent: List<Any>) {
+    fun updateAdapterData(adapterContent: List<SavedCards>) {
         this.adapterContent = adapterContent
         notifyDataSetChanged()
     }
