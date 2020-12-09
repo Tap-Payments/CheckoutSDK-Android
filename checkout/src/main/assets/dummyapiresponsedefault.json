@@ -70,48 +70,48 @@
     {
       "currencytitle": "KD",
       "currencyicon": "https://img.icons8.com/color/48/000000/kuwait.png",
-      "conversionrate": "2.45"
+      "conversionrate": "1.0"
     },
     {
       "currencytitle": "USD",
         "currencyicon": "https://img.icons8.com/color/48/000000/usa.png",
-      "conversionrate": "4.15"
+      "conversionrate": "1.0"
       },
     {
         "currencytitle": "SAR",
         "currencyicon": "https://img.icons8.com/color/48/000000/saudi-arabia.png",
-      "conversionrate": "2.0"
+      "conversionrate": "1.0"
       },
        {
         "currencytitle": "AED",
         "currencyicon": "https://img.icons8.com/color/48/000000/united-arab-emirates.png",
-         "conversionrate": "2.25"
+         "conversionrate": "1.0"
       },
 
       {
         "currencytitle": "OMR",
         "currencyicon": "https://img.icons8.com/color/48/000000/oman.png",
-        "conversionrate": "2.30"
+        "conversionrate": "1.0"
       },
      {
       "currencytitle": "QAR",
       "currencyicon": "https://img.icons8.com/color/48/000000/qatar.png",
-       "conversionrate": "2.25"
+       "conversionrate": "1.0"
     },
       {
         "currencytitle": "BHD",
         "currencyicon": "https://img.icons8.com/emoji/48/000000/bahrain-emoji.png",
-        "conversionrate": "2.20"
+        "conversionrate": "1.0"
       },
       {
         "currencytitle": "EGP",
         "currencyicon": "https://img.icons8.com/color/48/000000/egypt.png",
-        "conversionrate": "3.0"
+        "conversionrate": "1.0"
       },
      {
         "currencytitle": "JOD",
         "currencyicon": "https://img.icons8.com/color/48/000000/jordan.png",
-       "conversionrate": "3.2"
+       "conversionrate": "1.0"
       }
 
   ],

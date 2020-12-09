@@ -16,15 +16,12 @@ import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DividerItemDecoration
 import company.tap.checkout.R
 import company.tap.checkout.internal.adapter.CardTypeAdapterUIKIT
-import company.tap.checkout.internal.dummygener.Currencies1
-import company.tap.checkout.internal.dummygener.Items1
-import company.tap.checkout.internal.dummygener.JsonResponseDummy1
-import company.tap.checkout.internal.dummygener.SavedCards
-import company.tap.checkout.internal.enums.Currencies
+import company.tap.checkout.internal.dummygener.*
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.*
 import company.tap.checkout.internal.utils.AnimationEngine
 import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
+import company.tap.checkout.internal.utils.CurrencyFormatter
 import company.tap.checkout.internal.viewholders.*
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
@@ -59,13 +56,18 @@ class TapLayoutViewModell : ViewModel(),
     private lateinit var goPaySavedCardHolder: GoPaySavedCardHolder
     private lateinit var allCurrencies: List<Currencies1>
     private lateinit var itemList: List<Items1>
+    private lateinit var orderList:Order1
     private var savedCardList = MutableLiveData<List<SavedCards>>()
     private var displayItemsOpen: Boolean = false
     private val isShaking = MutableLiveData<Boolean>()
+    private lateinit var  slectedAmountCurrency :String
+    private lateinit var  currentAmountCurrency :String
+    
+
 
 
     private lateinit var frameLayout: FrameLayout
-    var rate: Double = 0.0
+
     @RequiresApi(Build.VERSION_CODES.N)
     fun initLayoutManager(
         context: Context,
@@ -208,9 +210,8 @@ class TapLayoutViewModell : ViewModel(),
             AnimationEngine.applyTransition(
                 bottomSheetLayout, SLIDE
             )
-
         if (display) {
-            println("first block called")
+
             removeViews(
                 businessViewHolder,
                 amountViewHolder1,
@@ -243,11 +244,14 @@ class TapLayoutViewModell : ViewModel(),
 
             itemsViewHolder1.resetView()
             frameLayout.visibility = View.GONE
-            println("second block called")
+
 
         }
         displayItemsOpen = !display
         amountViewHolder1.changeGroupAction(!display)
+        if(this::currentAmountCurrency.isInitialized)
+        amountViewHolder1.updateSelectedCurrency(displayItemsOpen,slectedAmountCurrency,currentAmountCurrency)
+
 
     }
 
@@ -310,6 +314,7 @@ class TapLayoutViewModell : ViewModel(),
         allCurrencies = dummyInitapiResponse1.currencies1
         itemList = dummyInitapiResponse1.order1.items
         savedCardList.value = dummyInitapiResponse1.savedCards
+        orderList = dummyInitapiResponse1.order1
         /**
          * Setting divider for items
          */
@@ -363,18 +368,6 @@ class TapLayoutViewModell : ViewModel(),
     }
 
 
-    /*   override fun onCardSelectedAction(isSelected: Boolean, typeCardView: String) {
-           println("onCardSelectedAction called" + typeCardView)
-           if (isSelected) {
-               if (typeCardView == "3") {
-                   displayGoPayLogin()
-               } else {
-                   displayRedirect("wwww.google.com")
-               }
-               // activateActionButton()
-               //  tabAnimatedActionButtonViewHolder11.view.actionButton.setOnClickListener { tabAnimatedActionButtonViewHolder11.setOnClickAction() }
-           } else unActivateActionButton()
-       }*/
 
     override fun onCardSelectedAction(isSelected: Boolean, savedCardsModel: Any) {
         when ((savedCardsModel as SavedCards).chipType) {
@@ -454,6 +447,8 @@ class TapLayoutViewModell : ViewModel(),
         transaction.addToBackStack(null)
         transaction.commit()
         amountViewHolder1.changeGroupAction(true)
+      //  if(this::slectedAmountCurrency.isInitialized)
+      //  amountViewHolder1.updateSelectedCurrency(true,slectedAmountCurrency,currentCurrency = "")
 
 
     }
@@ -557,13 +552,18 @@ class TapLayoutViewModell : ViewModel(),
 
     }
 
-    override fun onCurrencyClicked(currencySelected: String, currencyRate: Double) {
+    override fun onCurrencyClicked(currencySelected: String, currencyRate: Double ) {
         for(i in itemList.indices){
+            currentAmountCurrency = orderList.trx_currency+" "+CurrencyFormatter.currencyFormat(itemList[i].amount.toString())
+
             itemList[i].amount= (itemList[i].amount * currencyRate).toLong()
             itemList[i].currency = currencySelected
+            slectedAmountCurrency = itemList[i].currency+" "+CurrencyFormatter.currencyFormat(itemList[i].amount.toString())
         }
         println("changed before itemLists"+itemList)
         itemsViewHolder1.resetItemList(itemList)
+        amountViewHolder1.updateSelectedCurrency(displayItemsOpen,slectedAmountCurrency,currentAmountCurrency)
+
 
     }
 

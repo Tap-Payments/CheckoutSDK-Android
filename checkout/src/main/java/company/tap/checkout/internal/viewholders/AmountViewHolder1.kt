@@ -11,8 +11,8 @@ import company.tap.checkout.internal.utils.CurrencyFormatter
 import company.tap.checkout.internal.utils.CurrentTheme
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.uikit.atoms.TapButton
+import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.datasource.AmountViewDataSource
-import company.tap.tapuilibrary.uikit.views.TapAmountSectionView
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 
 
@@ -34,10 +34,11 @@ class AmountViewHolder1(context: Context,private val baseLayouttManager: BaseLay
     private var itemCountt :String?=null
     private var originalAmount :String=""
     private var isOpenedList :Boolean=false
+    private var currentCurrencyTextView :TapTextView
     init {
         bindViewComponents()
         CurrentTheme.initAppTheme(R.raw.defaultlighttheme, context)
-
+        currentCurrencyTextView = view.findViewById(R.id.textView_currentcurrency)
 
     }
 
@@ -85,6 +86,29 @@ class AmountViewHolder1(context: Context,private val baseLayouttManager: BaseLay
             baseLayouttManager?.controlCurrency(isOpenedList)
         }
     }
+
+    fun updateSelectedCurrency(isOpen: Boolean, selectedAmountCurrency: String,currentCurrency:String) {
+        isOpenedList = isOpen
+        currentCurrencyTextView.visibility = View.VISIBLE
+        if (isOpen)
+            changeDataSource(
+                AmountViewDataSource(
+                    selectedCurr = selectedAmountCurrency,
+                    currentCurr = currentCurrency,
+                    itemCount = itemCountt + "  "+ LocalizationManager.getValue("items","Common")
+                )
+            )
+        else
+            changeDataSource(
+                AmountViewDataSource(
+                    selectedCurr =selectedAmountCurrency,
+                    currentCurr = currentCurrency,
+                    itemCount = LocalizationManager.getValue("close","Common")
+                )
+            )
+
+    }
+
 
 
     /**

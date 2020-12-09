@@ -72,6 +72,7 @@ class ItemsViewHolder1(context11: Context, private val onCurrencyChangedActionLi
     }
 
     fun setView(){
+
         fragmentManager.beginTransaction()
             .replace(R.id.fragment_container_nfc_lib, CurrencyViewsFragment(supportedCurrecnyList, supportedItemList,onCurrencyChangedActionListener))
             .addToBackStack(null)

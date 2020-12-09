@@ -63,7 +63,7 @@ open class CurrencyViewsFragment(private var currencyLists1: ArrayList<Currencie
        // chipRecycler.setHasFixedSize(true)
         chipRecycler.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         // chipRecycler.adapter = CurrencyAdapter(currencyList)
-        if(currenciesList==null||currenciesList.isEmpty()){return null}
+
         if (this::currenciesList.isInitialized)
             chipRecycler.adapter = CurrencyTypeAdapter(currenciesList,onCurrencyChangedActionListener)
         itemsRecycler = view.findViewById<View>(R.id.items_recylerview) as RecyclerView
@@ -74,7 +74,6 @@ open class CurrencyViewsFragment(private var currencyLists1: ArrayList<Currencie
         itemsRecycler.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         if (this::itemList.isInitialized)
             itemsRecycler.adapter = ItemAdapter(itemList)
-
 
         val divider = DividerItemDecoration(
             context,
@@ -126,6 +125,7 @@ open class CurrencyViewsFragment(private var currencyLists1: ArrayList<Currencie
     fun setCurrencyList(ApiCurrencyList: ArrayList<Currencies1>) {
         currenciesList = ApiCurrencyList
     }
+
 
 
 }
