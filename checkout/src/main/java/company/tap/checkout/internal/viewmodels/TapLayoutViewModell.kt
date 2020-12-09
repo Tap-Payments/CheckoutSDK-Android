@@ -263,6 +263,7 @@ class TapLayoutViewModell : ViewModel(),
 
     override fun displayOTPV(otpMobile: String, otpValid: Boolean) {
         println("display OTP is called" + otpMobile)
+        removeViews(cardViewHolder11,paymenttInputViewHolder,saveCardSwitchHolder11)
         addViews(otpViewHolder)
         otpViewHolder.otpView.visibility = View.VISIBLE
         otpViewHolder.otpView.mobileNumberText.text = otpMobile
@@ -272,9 +273,9 @@ class TapLayoutViewModell : ViewModel(),
         }
 
 
-        if (!otpViewHolder.otpView.isValidOTP) {
+        /*if (!otpViewHolder.otpView.isValidOTP) {
             displayGoPay()
-        }
+        }*/
     }
 
 
