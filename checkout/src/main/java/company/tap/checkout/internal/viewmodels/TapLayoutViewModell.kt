@@ -119,11 +119,6 @@ class TapLayoutViewModell : ViewModel(),
     }
 
     private fun initAmountAction() {
-        /* amountViewHolder1.view.amount_section?.itemCount?.setOnClickListener {
-             controlCurrency(displayItemsOpen)
-             println("amount clicked")
-
-         }*/
         amountViewHolder1.setOnItemsClickListener {
             //itemsViewHolder1.resetView()
         }
@@ -195,7 +190,7 @@ class TapLayoutViewModell : ViewModel(),
 
         }
         println("addedviews ae"+addViews())
-
+        amountViewHolder1.changeGroupAction(false)
 
     }
 
@@ -486,7 +481,7 @@ class TapLayoutViewModell : ViewModel(),
             NFCFragment()
         )
 
-        amountViewHolder1.changeGroupAction(true)
+        amountViewHolder1.changeGroupAction(false)
       //  if(this::slectedAmountCurrency.isInitialized)
       //  amountViewHolder1.updateSelectedCurrency(true,slectedAmountCurrency,currentCurrency = "")
 
@@ -496,7 +491,6 @@ class TapLayoutViewModell : ViewModel(),
     // Override function to open card Scanner and scan the card.
     override fun onClickCardScanner() {
         println("are u reachinhg scanner")
-
         removeViews(businessViewHolder,amountViewHolder1,
             cardViewHolder11,
             saveCardSwitchHolder11,
@@ -509,7 +503,7 @@ class TapLayoutViewModell : ViewModel(),
         ).commit()
 
 
-        amountViewHolder1.changeGroupAction(true)
+        amountViewHolder1.changeGroupAction(false)
 
 
     }

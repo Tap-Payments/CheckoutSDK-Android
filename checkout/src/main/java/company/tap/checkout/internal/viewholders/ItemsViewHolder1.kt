@@ -4,6 +4,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import androidx.fragment.app.FragmentManager
 import company.tap.checkout.R
+import company.tap.checkout.internal.adapter.CurrencyTypeAdapter
+import company.tap.checkout.internal.adapter.ItemAdapter
 import company.tap.checkout.internal.dummygener.Currencies1
 import company.tap.checkout.internal.dummygener.Items1
 import company.tap.checkout.internal.enums.SectionType
@@ -81,7 +83,8 @@ class ItemsViewHolder1(context11: Context, private val onCurrencyChangedActionLi
 
     fun resetItemList(items1: List<Items1>){
         supportedItemList = items1
-          setView()
+            setView()
+
 
     }
 
