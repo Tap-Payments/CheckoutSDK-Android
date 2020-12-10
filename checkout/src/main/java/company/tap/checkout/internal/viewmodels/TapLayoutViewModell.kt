@@ -104,7 +104,7 @@ class TapLayoutViewModell : ViewModel(),
         saveCardSwitchHolder11 = SwitchViewHolder11(context)
         itemsViewHolder1 = ItemsViewHolder1(context, this, fragmentManager)
 
-        otpViewHolder = OTPViewHolder(context,this)
+        otpViewHolder = OTPViewHolder(context)
 
         goPayViewsHolder = GoPayViewsHolder(context, this)
         // println("context = [${context}], fragmentManager = [${fragmentManager}], dummyInitApiResponse11 = [${dummyInitApiResponse11}]")
@@ -187,9 +187,14 @@ class TapLayoutViewModell : ViewModel(),
             amountViewHolder1,
             goPayViewsHolder
         )
-        goPayViewsHolder.goPayLoginInput?.visibility = View.VISIBLE
+       // goPayViewsHolder.goPayLoginInput.inputType = GoPayLoginMethod.PHONE
+       // goPayViewsHolder.goPayLoginInput.visibility = View.VISIBLE
        // goPayLoginInput?.changeDataSource(GoPayLoginDataSource())
-        goPayViewsHolder.goPayLoginInput?.inputType = GoPayLoginMethod.PHONE
+        if(goPayViewsHolder.goPayopened){
+            goPayViewsHolder.goPayLoginInput.inputType = GoPayLoginMethod.PHONE
+            goPayViewsHolder.goPayLoginInput.visibility = View.VISIBLE
+
+        }
         println("addedviews ae"+addViews())
 
 
@@ -285,7 +290,7 @@ class TapLayoutViewModell : ViewModel(),
 
         }
         otpViewHolder.otpView.otpViewActionButton.setOnClickListener {
-            goPayViewsHolder.onOtpButtonConfirmationClick("111111")
+            goPayViewsHolder.onOtpButtonConfirmationClick(otpViewHolder.otpView.otpViewInput1.text.toString()+otpViewHolder.otpView.otpViewInput2.text.toString())
             }
 
     }
@@ -410,7 +415,10 @@ class TapLayoutViewModell : ViewModel(),
             1 -> {
                 // redirect
             }
-            else -> displayGoPayLogin()
+            else -> {
+                displayGoPayLogin()
+                //goPayViewsHolder.goPayopened
+            }
         }
 
     }
@@ -435,6 +443,9 @@ class TapLayoutViewModell : ViewModel(),
            CustomUtils.showDialog("Are you sure you would like to sign out","The goPayCards will be hidden from the page and you will need to login again to use any of them",context,"twobtns")
             removeViews(goPaySavedCardHolder)
             adapter.updateAdapterData(savedCardList.value as List<SavedCards>)
+           goPayViewsHolder.goPayopened = false
+           adapter.goPayOpenedfromMain(true)
+
        }
     }
 
@@ -474,18 +485,19 @@ class TapLayoutViewModell : ViewModel(),
     // Override function to open NFC fragment and scan the card via NFC.
     override fun onClickNFC() {
         removeViews(
+            businessViewHolder,
+            amountViewHolder1,
             cardViewHolder11,
             saveCardSwitchHolder11,
             paymenttInputViewHolder
         )
-        val manager: FragmentManager = fragmentManager
-        val transaction = manager.beginTransaction()
-        transaction.add(
-            R.id.sdkContainer,
+        addViews(businessViewHolder,amountViewHolder1)
+
+        fragmentManager.beginTransaction().replace(
+            R.id.fragment_container_nfc_lib,
             NFCFragment()
         )
-        transaction.addToBackStack(null)
-        transaction.commit()
+
         amountViewHolder1.changeGroupAction(true)
       //  if(this::slectedAmountCurrency.isInitialized)
       //  amountViewHolder1.updateSelectedCurrency(true,slectedAmountCurrency,currentCurrency = "")
@@ -496,20 +508,18 @@ class TapLayoutViewModell : ViewModel(),
     // Override function to open card Scanner and scan the card.
     override fun onClickCardScanner() {
         println("are u reachinhg scanner")
-        // cardScannerViewHolder  = CardScannerViewHolder(context)
-        removeViews(
+
+        removeViews(businessViewHolder,amountViewHolder1,
             cardViewHolder11,
             saveCardSwitchHolder11,
             paymenttInputViewHolder
         )
-        val manager: FragmentManager = fragmentManager
-        val transaction = manager.beginTransaction()
-        transaction.add(
-            R.id.sdkContainer,
+        addViews(businessViewHolder,amountViewHolder1)
+        fragmentManager.beginTransaction().replace(
+            R.id.fragment_container_nfc_lib,
             CardScannerFragment()
-        )
-        transaction.addToBackStack(null)
-        transaction.commit()
+        ).commit()
+
 
         amountViewHolder1.changeGroupAction(true)
 

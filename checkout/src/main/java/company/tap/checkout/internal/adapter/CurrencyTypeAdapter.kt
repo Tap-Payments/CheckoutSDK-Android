@@ -156,7 +156,6 @@ class CurrencyTypeAdapter(private val arraylistscurencs: ArrayList<Currencies1>,
         holder.itemView.setOnClickListener {
             selectedPosition = position
 
-
             Toast.makeText(
                 holder.itemView.context,
                 "You click ${holder.itemView.textView_currency.text}",
@@ -165,7 +164,7 @@ class CurrencyTypeAdapter(private val arraylistscurencs: ArrayList<Currencies1>,
 
             onCurrencyChangedActionListener?.onCurrencyClicked(holder.itemView.textView_currency.text.toString(),
                 arraylistscurencs[position].conversionrate)
-            notifyDataSetChanged()
+            //notifyDataSetChanged()
         }
 
     }
