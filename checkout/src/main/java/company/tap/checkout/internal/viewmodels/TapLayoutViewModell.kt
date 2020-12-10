@@ -103,7 +103,7 @@ class TapLayoutViewModell : ViewModel(),
         saveCardSwitchHolder11 = SwitchViewHolder11(context)
         itemsViewHolder1 = ItemsViewHolder1(context, this, fragmentManager)
 
-        otpViewHolder = OTPViewHolder(context,this)
+        otpViewHolder = OTPViewHolder(context)
 
         goPayViewsHolder = GoPayViewsHolder(context, this)
         // println("context = [${context}], fragmentManager = [${fragmentManager}], dummyInitApiResponse11 = [${dummyInitApiResponse11}]")
@@ -284,7 +284,7 @@ class TapLayoutViewModell : ViewModel(),
 
         }
         otpViewHolder.otpView.otpViewActionButton.setOnClickListener {
-            goPayViewsHolder.onOtpButtonConfirmationClick("111111")
+            goPayViewsHolder.onOtpButtonConfirmationClick(otpViewHolder.otpView.otpViewInput1.text.toString()+otpViewHolder.otpView.otpViewInput2.text.toString())
             }
 
     }

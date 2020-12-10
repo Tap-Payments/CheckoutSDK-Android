@@ -35,7 +35,6 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
      val goPayPasswordInput: GoPayPasswordInput
      val signInButton: TabAnimatedActionButton
      lateinit var mobileNumber: String
-  //  private  var otpViewHolder: OTPViewHolder = OTPViewHolder(context)
 
     init {
         goPayLoginInput = view.findViewById(R.id.gopay_login_input)
@@ -63,7 +62,7 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
     override fun onChangeClicked() {
       goPayLoginInput.visibility = View.VISIBLE
        goPayPasswordInput.visibility = View.GONE
-       // otpViewHolder.view.otpView?.visibility = View.GONE
+
     }
 
     override fun onEmailValidated() {
@@ -88,19 +87,9 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
             CustomUtils.showDialog(LocalizationManager.getValue("GoPayAlert", "Hints", "goPayTitle"),LocalizationManager.getValue("GoPayAlert", "Hints", "goPayemailalert"),context)
             return
         }else{
-
-      //  println("viewholder value"+otpViewHolder+"\n"+"view value"+view+"\n"+"otpview is "+otpViewHolder.view.otpView)
-
-       // if(otpViewHolder.view.otpView!=null) {
-           // otpViewHolder.view.otpView.visibility = View.VISIBLE
-           // otpViewHolder.view.otpView.changePhoneCardView?.visibility = View.VISIBLE
-            println(" you clicked for otp!!!")
-           /// baseLayouttManager?.displayOTPV(otpViewHolder.view.otpView?.otpViewInput1?.text.toString(), otpViewHolder.otpView.isValidOTP
-
+            println(" you clicked to display otp!!!")
             baseLayouttManager?.displayOTPView(mobileNumber)
 
-
-      //  }
 
         }
 
@@ -117,6 +106,7 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
     }
 
     override fun onOtpButtonConfirmationClick(otpNumber: String): Boolean {
+        println("otpNumber in goPay is"+otpNumber)
         Log.d("isValidOTPValid", (otpNumber == "111111").toString())
         return if(otpNumber=="111111"){
             baseLayouttManager?.displayGoPay()
