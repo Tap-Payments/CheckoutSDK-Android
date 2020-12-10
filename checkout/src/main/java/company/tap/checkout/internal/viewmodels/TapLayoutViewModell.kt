@@ -34,6 +34,7 @@ import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
 import company.tap.tapuilibrary.uikit.interfaces.OtpButtonConfirmationInterface
 import kotlinx.android.synthetic.main.cardviewholder_layout.view.*
+import kotlinx.android.synthetic.main.gopaysavedcard_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 
 
@@ -45,6 +46,7 @@ import kotlinx.android.synthetic.main.switch_layout.view.*
  */
 class TapLayoutViewModell : ViewModel(),
     BaseLayouttManager, OnCardSelectedActionListener, onPaymentCardComplete, onCardNFCCallListener,OnCurrencyChangedActionListener
+
      {
 
     private lateinit var context: Context
@@ -70,7 +72,6 @@ class TapLayoutViewModell : ViewModel(),
     private lateinit var selectedAmountCurrency:String
     private lateinit var currentAmountCurrency :String
     private lateinit var adapter:CardTypeAdapterUIKIT
-
 
 
 
@@ -106,8 +107,7 @@ class TapLayoutViewModell : ViewModel(),
         otpViewHolder = OTPViewHolder(context)
 
         goPayViewsHolder = GoPayViewsHolder(context, this)
-        // println("context = [${context}], fragmentManager = [${fragmentManager}], dummyInitApiResponse11 = [${dummyInitApiResponse11}]")
-        initCardsGroup()
+        // println("context = [${context}], fragmentManager = [${fragmentManager}], dummyInitApiResponse11 = [${dummyInitApiResponse11}]") initCardsGroup()
         initSwitchAction()
 
     }
@@ -124,11 +124,7 @@ class TapLayoutViewModell : ViewModel(),
         }
     }
 
-    private fun initCardsGroup() {
-        cardViewHolder11.view.setOnClickListener {
-            println("init caleed ")
-        }
-    }
+
 
     override fun displayStartupLayout(enabledSections: ArrayList<SectionType>) {
         print("is displayStartupLayout")
@@ -191,6 +187,7 @@ class TapLayoutViewModell : ViewModel(),
         }
         println("addedviews ae"+addViews())
         amountViewHolder1.changeGroupAction(false)
+        goPayViewsHolder.goPayopened = true
 
     }
 
@@ -215,7 +212,7 @@ class TapLayoutViewModell : ViewModel(),
             saveCardSwitchHolder11
         )
 
-        cardViewHolder11.view.mainChipgroup.groupAction.text = ""
+        cardViewHolder11.view.mainChipgroup.groupAction.visibility = View.INVISIBLE
         saveCardSwitchHolder11.view.cardSwitch.payButton.visibility = View.VISIBLE
         adapter.goPayOpenedfromMain(true)
         adapter.removeItems()
@@ -223,13 +220,14 @@ class TapLayoutViewModell : ViewModel(),
     }
 
     override fun controlCurrency(display: Boolean) {
+        println("controlCurrency display "+display)
 
         if (this::bottomSheetLayout.isInitialized)
             AnimationEngine.applyTransition(
                 bottomSheetLayout, SLIDE
             )
         if (display) {
-
+            println("block1 display "+display)
             removeViews(
                 businessViewHolder,
                 amountViewHolder1,
@@ -241,29 +239,55 @@ class TapLayoutViewModell : ViewModel(),
             itemsViewHolder1.setView()
             addViews(businessViewHolder, amountViewHolder1)
             frameLayout.visibility = View.VISIBLE
+            itemsViewHolder1.itemsdisplayed = true
 
         } else {
+            if (goPayViewsHolder.goPayopened||itemsViewHolder1.itemsdisplayed) {
+                println("block2 display "+display)
+                removeViews(
+                    businessViewHolder,
+                    amountViewHolder1,
+                    cardViewHolder11,
+                    paymenttInputViewHolder,
+                    saveCardSwitchHolder11,
+                    goPayViewsHolder,
+                    otpViewHolder,
+                    itemsViewHolder1
+                )
+                addViews(
+                    businessViewHolder,
+                    amountViewHolder1,
+                    cardViewHolder11,
+                    paymenttInputViewHolder,
+                    saveCardSwitchHolder11
+                )
+                itemsViewHolder1.resetView()
+                frameLayout.visibility = View.GONE
 
-            removeViews(
-                businessViewHolder,
-                amountViewHolder1,
-                cardViewHolder11,
-                paymenttInputViewHolder,
-                saveCardSwitchHolder11,
-                itemsViewHolder1
-            )
-            addViews(
-                businessViewHolder,
-                amountViewHolder1,
-                cardViewHolder11,
-                paymenttInputViewHolder,
-                saveCardSwitchHolder11
-            )
+            }else {
+                println("block3 display "+display)
 
-            itemsViewHolder1.resetView()
-            frameLayout.visibility = View.GONE
+                removeViews(
+                    businessViewHolder,
+                    amountViewHolder1,
+                    cardViewHolder11,
+                    paymenttInputViewHolder,
+                    saveCardSwitchHolder11,
+                    itemsViewHolder1
+                )
+                addViews(
+                    businessViewHolder,
+                    amountViewHolder1,
+                    cardViewHolder11,
+                    paymenttInputViewHolder,
+                    saveCardSwitchHolder11
+                )
+
+                itemsViewHolder1.resetView()
+                frameLayout.visibility = View.GONE
 
 
+            }
         }
         displayItemsOpen = !display
         amountViewHolder1.changeGroupAction(!display)
@@ -367,7 +391,22 @@ class TapLayoutViewModell : ViewModel(),
 
     }
 
-    private fun removeViews(vararg viewHolders: TapBaseViewHolder) {
+         override fun didDialogueExecute(response: String) {
+            println("response are$response")
+             if(response == "YES"){
+                 removeViews(goPaySavedCardHolder)
+                 adapter.updateAdapterData(savedCardList.value as List<SavedCards>)
+                 goPayViewsHolder.goPayopened = false
+                 adapter.goPayOpenedfromMain(true)
+                 cardViewHolder11.view.mainChipgroup.groupAction.visibility = View.VISIBLE
+
+             }else if(response == "NO"){
+
+             }
+
+         }
+
+         private fun removeViews(vararg viewHolders: TapBaseViewHolder) {
         viewHolders.forEach {
             sdkLayout.removeView(it.view)
         }
@@ -423,16 +462,22 @@ class TapLayoutViewModell : ViewModel(),
 
     override fun ongoPayLogoutClicked(isClicked: Boolean) {
        if(isClicked){
-           CustomUtils.showDialog("Are you sure you would like to sign out","The goPayCards will be hidden from the page and you will need to login again to use any of them",context,"twobtns")
-            removeViews(goPaySavedCardHolder)
-            adapter.updateAdapterData(savedCardList.value as List<SavedCards>)
-           goPayViewsHolder.goPayopened = false
-           adapter.goPayOpenedfromMain(true)
+           CustomUtils.showDialog("Are you sure you would like to sign out","The goPayCards will be hidden from the page and you will need to login again to use any of them",context,"twobtns",this)
+
 
        }
     }
 
-    override fun onPaycardSwitchAction(isCompleted: Boolean) {
+         override fun onEditClicked(isClicked: Boolean) {
+
+             if(isClicked){
+                 adapter.updateShaking(true)
+             }else{
+                 adapter.updateShaking(false)
+             }
+         }
+
+         override fun onPaycardSwitchAction(isCompleted: Boolean) {
         saveCardSwitchHolder11.view.cardSwitch.setSwitchDataSource(getSwitchDataSource("fdsg"))
 
         if (isCompleted) {
@@ -497,7 +542,7 @@ class TapLayoutViewModell : ViewModel(),
             paymenttInputViewHolder
         )
         addViews(businessViewHolder,amountViewHolder1)
-        fragmentManager.beginTransaction().replace(
+        fragmentManager.beginTransaction().add(
             R.id.fragment_container_nfc_lib,
             CardScannerFragment()
         ).commit()
@@ -600,6 +645,6 @@ class TapLayoutViewModell : ViewModel(),
 
 
 
-}
+     }
 
 

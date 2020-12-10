@@ -73,17 +73,18 @@ class GoPaySavedCardHolder(
             //baseLayopu?.displayGoPayLogin()
         }*/
        groupAction?.setOnClickListener {
-            val adapter = CardTypeAdapterUIKIT(onCardSelectedActionListener)
+
+           onCardSelectedActionListener?.onEditClicked(true)
+           //val adapter = CardTypeAdapterUIKIT(onCardSelectedActionListener)
             if (groupAction?.text == "Close") {
-                chipRecyclerView.adapter = adapter
-                adapter.updateShaking(false)
-                adapter.notifyDataSetChanged()
-               groupAction.text =  LocalizationManager.getValue("edit", "Common")
+                onCardSelectedActionListener?.onEditClicked(false)
+                groupAction.text =  LocalizationManager.getValue("edit", "Common")
             } else {
-                adapter.updateShaking(true)
-                adapter.notifyDataSetChanged()
+                onCardSelectedActionListener?.onEditClicked(true)
+
               groupAction?.text = LocalizationManager.getValue("close", "Common")
             }
+
         }
         /**
          * set separator background

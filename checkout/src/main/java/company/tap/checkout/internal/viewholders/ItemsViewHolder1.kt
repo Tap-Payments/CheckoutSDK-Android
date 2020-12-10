@@ -29,7 +29,7 @@ class ItemsViewHolder1(context11: Context, private val onCurrencyChangedActionLi
 
     override val type = SectionType.SELECT
 
-    var displayed: Boolean = true
+    var itemsdisplayed: Boolean = false
     private lateinit var supportedCurrecnyList: ArrayList<Currencies1>
     private lateinit var supportedItemList: List<Items1>
 
