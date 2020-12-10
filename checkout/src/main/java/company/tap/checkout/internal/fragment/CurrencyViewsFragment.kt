@@ -60,12 +60,14 @@ open class CurrencyViewsFragment(private var currencyLists1: ArrayList<Currencie
         val groupAction = currencyGroup.findViewById<TapTextView>(R.id.group_action)
         groupAction.visibility = View.GONE
         chipRecycler = currencyGroup.findViewById<View>(R.id.chip_recycler) as RecyclerView
-       // chipRecycler.setHasFixedSize(true)
+       chipRecycler.setHasFixedSize(true)
         chipRecycler.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         // chipRecycler.adapter = CurrencyAdapter(currencyList)
 
-        if (this::currenciesList.isInitialized)
+
+            if (this::currenciesList.isInitialized)
             chipRecycler.adapter = CurrencyTypeAdapter(currenciesList,onCurrencyChangedActionListener)
+
         itemsRecycler = view.findViewById<View>(R.id.items_recylerview) as RecyclerView
 
 //        itemsRecycler.setHasFixedSize(false)

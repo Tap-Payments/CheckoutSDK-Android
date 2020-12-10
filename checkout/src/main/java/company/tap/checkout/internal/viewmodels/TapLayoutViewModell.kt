@@ -473,18 +473,19 @@ class TapLayoutViewModell : ViewModel(),
     // Override function to open NFC fragment and scan the card via NFC.
     override fun onClickNFC() {
         removeViews(
+            businessViewHolder,
+            amountViewHolder1,
             cardViewHolder11,
             saveCardSwitchHolder11,
             paymenttInputViewHolder
         )
-        val manager: FragmentManager = fragmentManager
-        val transaction = manager.beginTransaction()
-        transaction.add(
-            R.id.sdkContainer,
+        addViews(businessViewHolder,amountViewHolder1)
+
+        fragmentManager.beginTransaction().replace(
+            R.id.fragment_container_nfc_lib,
             NFCFragment()
         )
-        transaction.addToBackStack(null)
-        transaction.commit()
+
         amountViewHolder1.changeGroupAction(true)
       //  if(this::slectedAmountCurrency.isInitialized)
       //  amountViewHolder1.updateSelectedCurrency(true,slectedAmountCurrency,currentCurrency = "")
@@ -495,20 +496,18 @@ class TapLayoutViewModell : ViewModel(),
     // Override function to open card Scanner and scan the card.
     override fun onClickCardScanner() {
         println("are u reachinhg scanner")
-        // cardScannerViewHolder  = CardScannerViewHolder(context)
-        removeViews(
+
+        removeViews(businessViewHolder,amountViewHolder1,
             cardViewHolder11,
             saveCardSwitchHolder11,
             paymenttInputViewHolder
         )
-        val manager: FragmentManager = fragmentManager
-        val transaction = manager.beginTransaction()
-        transaction.add(
-            R.id.sdkContainer,
+        addViews(businessViewHolder,amountViewHolder1)
+        fragmentManager.beginTransaction().replace(
+            R.id.fragment_container_nfc_lib,
             CardScannerFragment()
-        )
-        transaction.addToBackStack(null)
-        transaction.commit()
+        ).commit()
+
 
         amountViewHolder1.changeGroupAction(true)
 
