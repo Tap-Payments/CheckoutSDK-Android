@@ -83,8 +83,16 @@ class ItemsViewHolder1(context11: Context, private val onCurrencyChangedActionLi
 
     fun resetItemList(items1: List<Items1>){
         supportedItemList = items1
-            setView()
-
+        setView()
+        println("items1 is"+items1)
+       /*  val adapter = CurrencyTypeAdapter(onCurrencyChangedActionListener)
+        adapter.updateAdapterData(supportedCurrecnyList)
+        adapter.notifyDataSetChanged()*/
+     /* val itemAdapter = ItemAdapter(onCurrencyChangedActionListener)
+        itemAdapter.adapterClearList()
+        itemAdapter.updateAdapterData(items1)
+        itemAdapter.notifyDataSetChanged()
+*/
 
     }
 

@@ -51,6 +51,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
     }
 
     override fun getItemCount() = adapterContentCurrencies.size
+
     fun updateAdapterData(adapterContentCurrencies: List<Currencies1>) {
         this.adapterContentCurrencies = adapterContentCurrencies
         notifyDataSetChanged()
@@ -97,7 +98,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onBindViewHolder(holder: CurrencyHolders, position: Int) {
         holder.bindTheme()
-        for (i in 0 until adapterContentCurrencies.size) {
+        for (i in adapterContentCurrencies.indices) {
             val imageViewCard = holder.itemView.findViewById<TapImageView>(R.id.imageView_currency)
             Glide.with(holder.itemView.context).load(adapterContentCurrencies[position].currencyicon).into(
                 imageViewCard
@@ -161,22 +162,19 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
         holder.itemView.setOnClickListener {
             selectedPosition = position
 
-            Toast.makeText(
+          /*  Toast.makeText(
                 holder.itemView.context,
                 "You click ${holder.itemView.textView_currency.text}",
                 Toast.LENGTH_SHORT
             ).show()
-
+*/
             onCurrencyChangedActionListener?.onCurrencyClicked(holder.itemView.textView_currency.text.toString(),
                 adapterContentCurrencies[position].conversionrate)
-                notifyItemChanged(position)
+                notifyDataSetChanged()
         }
 
     }
-    fun updateItemposition() {
-       notifyItemChanged(selectedPosition)
-        notifyDataSetChanged()
-    }
+
 
 
 }

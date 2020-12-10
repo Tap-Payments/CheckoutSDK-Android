@@ -40,7 +40,7 @@ class ItemAdapter(private val onCurrencyChangedActionListener:OnCurrencyChangedA
     private var mExpandedPosition = -1
     private lateinit var itemViewAdapter: TapListItemView
     private lateinit var context: Context
-
+    private var arrayModifiedItem : ArrayList<Any> = ArrayList()
     private var adapterContentItems: List<Items1> = java.util.ArrayList()
     override fun onCreateViewHolder(@NonNull parent: ViewGroup, viewType: Int): ItemHolder {
 
@@ -58,6 +58,7 @@ class ItemAdapter(private val onCurrencyChangedActionListener:OnCurrencyChangedA
     fun updateAdapterData(adapterContentItems: List<Items1>) {
         this.adapterContentItems = adapterContentItems
         notifyDataSetChanged()
+
     }
     override fun getItemCount() = adapterContentItems.size
 
@@ -80,18 +81,18 @@ class ItemAdapter(private val onCurrencyChangedActionListener:OnCurrencyChangedA
         val mainViewLinear = holder.itemView.findViewById<LinearLayout>(R.id.mainViewLinear)
         val itemName = holder.itemView.findViewById<TapTextView>(R.id.item_title)
         val isExpanded = position == mExpandedPosition
-        if(adapterContentItems.size!=0){
-            for (i in 0 until adapterContentItems.size) {
+        if(adapterContentItems.isNotEmpty()){
+            for (element in adapterContentItems) {
                 descriptionTextView.text = adapterContentItems[position].description
                 descriptionTextView.visibility = if (isExpanded) View.VISIBLE else View.GONE
                 holder.itemView.isActivated = isExpanded
-                totalQuantity.text = adapterContentItems[i].quantity.toString()
+                totalQuantity.text = element.quantity.toString()
 
                 itemViewAdapter.setItemViewDataSource(
                     getItemViewDataSource(
-                        adapterContentItems[i].currency + CurrencyFormatter.currencyFormat(
-                            adapterContentItems[i].amount.toString()
-                        ), adapterContentItems[i].currency, adapterContentItems[i].quantity.toString()
+                        adapterContentItems[position].currency + CurrencyFormatter.currencyFormat(
+                            adapterContentItems[position].amount.toString()
+                        ), adapterContentItems[position].currency, adapterContentItems[position].quantity.toString()
                     )
                 )
 
@@ -291,7 +292,13 @@ class ItemAdapter(private val onCurrencyChangedActionListener:OnCurrencyChangedA
         )
     }
 
-
+    fun adapterClearList(){
+        arrayModifiedItem = ArrayList(adapterContentItems)
+        arrayModifiedItem.clear()
+        adapterContentItems= arrayModifiedItem as ArrayList<Items1>
+        println("adapterContentItems"+adapterContentItems)
+        notifyDataSetChanged()
+    }
 
 
 }
