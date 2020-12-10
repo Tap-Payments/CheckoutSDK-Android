@@ -186,9 +186,14 @@ class TapLayoutViewModell : ViewModel(),
             amountViewHolder1,
             goPayViewsHolder
         )
-        goPayViewsHolder.goPayLoginInput?.visibility = View.VISIBLE
+       // goPayViewsHolder.goPayLoginInput.inputType = GoPayLoginMethod.PHONE
+       // goPayViewsHolder.goPayLoginInput.visibility = View.VISIBLE
        // goPayLoginInput?.changeDataSource(GoPayLoginDataSource())
-        goPayViewsHolder.goPayLoginInput?.inputType = GoPayLoginMethod.PHONE
+        if(goPayViewsHolder.goPayopened){
+            goPayViewsHolder.goPayLoginInput.inputType = GoPayLoginMethod.PHONE
+            goPayViewsHolder.goPayLoginInput.visibility = View.VISIBLE
+
+        }
         println("addedviews ae"+addViews())
 
 
@@ -398,7 +403,10 @@ class TapLayoutViewModell : ViewModel(),
             1 -> {
                 // redirect
             }
-            else -> displayGoPayLogin()
+            else -> {
+                displayGoPayLogin()
+                //goPayViewsHolder.goPayopened
+            }
         }
 
     }
@@ -423,6 +431,8 @@ class TapLayoutViewModell : ViewModel(),
            CustomUtils.showDialog("Are you sure you would like to sign out","The goPayCards will be hidden from the page and you will need to login again to use any of them",context,"twobtns")
             removeViews(goPaySavedCardHolder)
             adapter.updateAdapterData(savedCardList.value as List<SavedCards>)
+           goPayViewsHolder.goPayopened = false
+           adapter.goPayOpenedfromMain(true)
 
        }
     }

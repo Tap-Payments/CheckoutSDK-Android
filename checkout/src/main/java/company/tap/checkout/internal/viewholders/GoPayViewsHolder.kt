@@ -35,6 +35,7 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
      val goPayPasswordInput: GoPayPasswordInput
      val signInButton: TabAnimatedActionButton
      lateinit var mobileNumber: String
+      var goPayopened: Boolean= false
 
     init {
         goPayLoginInput = view.findViewById(R.id.gopay_login_input)
@@ -103,6 +104,8 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
 
     override fun onChangePhoneClicked() {
         baseLayouttManager?.displayGoPayLogin()
+        goPayopened = true
+
     }
 
     override fun onOtpButtonConfirmationClick(otpNumber: String): Boolean {
