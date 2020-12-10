@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ShapeDrawable
 import android.os.Build
+import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
@@ -28,8 +29,10 @@ import company.tap.checkout.internal.viewholders.*
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
+import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
+import company.tap.tapuilibrary.uikit.interfaces.OtpButtonConfirmationInterface
 import kotlinx.android.synthetic.main.cardviewholder_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 
@@ -41,7 +44,8 @@ import kotlinx.android.synthetic.main.switch_layout.view.*
  *
  */
 class TapLayoutViewModell : ViewModel(),
-    BaseLayouttManager, OnCardSelectedActionListener, onPaymentCardComplete, onCardNFCCallListener,OnCurrencyChangedActionListener {
+    BaseLayouttManager, OnCardSelectedActionListener, onPaymentCardComplete, onCardNFCCallListener,OnCurrencyChangedActionListener
+     {
 
     private lateinit var context: Context
     private lateinit var fragmentManager: FragmentManager
@@ -99,7 +103,7 @@ class TapLayoutViewModell : ViewModel(),
         saveCardSwitchHolder11 = SwitchViewHolder11(context)
         itemsViewHolder1 = ItemsViewHolder1(context, this, fragmentManager)
 
-        otpViewHolder = OTPViewHolder(context)
+        otpViewHolder = OTPViewHolder(context,this)
 
         goPayViewsHolder = GoPayViewsHolder(context, this)
         // println("context = [${context}], fragmentManager = [${fragmentManager}], dummyInitApiResponse11 = [${dummyInitApiResponse11}]")
@@ -172,13 +176,20 @@ class TapLayoutViewModell : ViewModel(),
             amountViewHolder1,
             cardViewHolder11,
             paymenttInputViewHolder,
-            saveCardSwitchHolder11
+            saveCardSwitchHolder11,
+            goPayViewsHolder,
+            otpViewHolder
         )
 
         addViews(
             businessViewHolder,
-            amountViewHolder1, goPayViewsHolder
+            amountViewHolder1,
+            goPayViewsHolder
         )
+        goPayViewsHolder.goPayLoginInput?.visibility = View.VISIBLE
+       // goPayLoginInput?.changeDataSource(GoPayLoginDataSource())
+        goPayViewsHolder.goPayLoginInput?.inputType = GoPayLoginMethod.PHONE
+        println("addedviews ae"+addViews())
 
 
     }
@@ -191,7 +202,8 @@ class TapLayoutViewModell : ViewModel(),
             goPayViewsHolder,
             cardViewHolder11,
             paymenttInputViewHolder,
-            saveCardSwitchHolder11
+            saveCardSwitchHolder11,
+            otpViewHolder
         )
 
         addViews(
@@ -261,22 +273,22 @@ class TapLayoutViewModell : ViewModel(),
 
     }
 
-    override fun displayOTPV(otpMobile: String, otpValid: Boolean) {
-        println("display OTP is called" + otpMobile)
+    override fun displayOTPView(mobileNumber: String) {
         removeViews(cardViewHolder11,paymenttInputViewHolder,saveCardSwitchHolder11)
         addViews(otpViewHolder)
         otpViewHolder.otpView.visibility = View.VISIBLE
-        otpViewHolder.otpView.mobileNumberText.text = otpMobile
+        otpViewHolder.otpView.mobileNumberText.text = mobileNumber
         otpViewHolder.otpView.changePhone.setOnClickListener {
             goPayViewsHolder.onChangePhoneClicked()
 
+
         }
+        otpViewHolder.otpView.otpViewActionButton.setOnClickListener {
+            goPayViewsHolder.onOtpButtonConfirmationClick("111111")
+            }
 
-
-        /*if (!otpViewHolder.otpView.isValidOTP) {
-            displayGoPay()
-        }*/
     }
+
 
 
     override fun displayRedirect(url: String) {
@@ -582,6 +594,8 @@ class TapLayoutViewModell : ViewModel(),
 
 
     }
+
+
 
 }
 

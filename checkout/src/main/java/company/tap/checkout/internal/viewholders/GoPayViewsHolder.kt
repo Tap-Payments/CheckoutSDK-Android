@@ -5,21 +5,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import company.tap.checkout.R
-import company.tap.checkout.internal.adapter.CardTypeAdapterUIKIT
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayouttManager
 import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.uikit.datasource.GoPayLoginDataSource
-import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.interfaces.GoPayLoginInterface
-import company.tap.tapuilibrary.uikit.interfaces.OnCardSelectedActionListener
 import company.tap.tapuilibrary.uikit.interfaces.OpenOTPInterface
 import company.tap.tapuilibrary.uikit.interfaces.OtpButtonConfirmationInterface
 import company.tap.tapuilibrary.uikit.organisms.GoPayLoginInput
 import company.tap.tapuilibrary.uikit.organisms.GoPayPasswordInput
 import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
-import kotlinx.android.synthetic.main.otpview_layout.view.*
 
 
 /**
@@ -28,8 +24,8 @@ import kotlinx.android.synthetic.main.otpview_layout.view.*
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class GoPayViewsHolder(private val context: Context, private val baseLayouttManager: BaseLayouttManager?=null) : TapBaseViewHolder, OpenOTPInterface,GoPayLoginInterface,
-    OtpButtonConfirmationInterface, OnCardSelectedActionListener {
+class GoPayViewsHolder(private val context: Context, private val baseLayouttManager: BaseLayouttManager?=null) : TapBaseViewHolder,GoPayLoginInterface,OtpButtonConfirmationInterface,
+    OpenOTPInterface {
 
     override val view: View = LayoutInflater.from(context).inflate(R.layout.gopay_layout, null)
 
@@ -38,7 +34,8 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
      val goPayLoginInput: GoPayLoginInput
      val goPayPasswordInput: GoPayPasswordInput
      val signInButton: TabAnimatedActionButton
-    private  var otpViewHolder: OTPViewHolder = OTPViewHolder(context)
+     lateinit var mobileNumber: String
+  //  private  var otpViewHolder: OTPViewHolder = OTPViewHolder(context)
 
     init {
         goPayLoginInput = view.findViewById(R.id.gopay_login_input)
@@ -52,7 +49,7 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
         goPayLoginInput.changeDataSource(GoPayLoginDataSource())
         goPayLoginInput.setLoginInterface(this)
         goPayLoginInput.setOpenOTPInterface(this)
-        otpViewHolder.view.otpView?.setOtpButtonConfirmationInterface(this)
+      //  otpViewHolder.view.otpView?.setOtpButtonConfirmationInterface(this)
         goPayPasswordInput.setLoginInterface(this, goPayLoginInput.textInput.text.toString())
         signInButton.setOnClickListener {
             if(goPayPasswordInput.passwordTextInput.text.toString()=="12345678"){
@@ -66,7 +63,7 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
     override fun onChangeClicked() {
       goPayLoginInput.visibility = View.VISIBLE
        goPayPasswordInput.visibility = View.GONE
-        otpViewHolder.view.otpView?.visibility = View.GONE
+       // otpViewHolder.view.otpView?.visibility = View.GONE
     }
 
     override fun onEmailValidated() {
@@ -77,7 +74,7 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
         }else {
             goPayLoginInput.visibility = View.GONE
             goPayPasswordInput.visibility = View.VISIBLE
-            otpViewHolder.view.otpView?.visibility = View.GONE
+         //   otpViewHolder.view.otpView?.visibility = View.GONE
             goPayPasswordInput.setLoginInterface(this, goPayLoginInput.textInput?.text.toString())
         }
 
@@ -86,68 +83,50 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
     override fun onPhoneValidated() {
         goPayPasswordInput.visibility = View.GONE
         goPayLoginInput.visibility = View.GONE
-        println("viewholder value"+otpViewHolder+"\n"+"view value"+view+"\n"+"otpview is "+otpViewHolder.view.otpView)
+        //to be replace dummy check when validating via api
+        if(goPayLoginInput.textInput.text.toString()=="69045932"){
+            CustomUtils.showDialog(LocalizationManager.getValue("GoPayAlert", "Hints", "goPayTitle"),LocalizationManager.getValue("GoPayAlert", "Hints", "goPayemailalert"),context)
+            return
+        }else{
 
-        if(otpViewHolder.view.otpView!=null){
-            otpViewHolder.view.otpView.visibility = View.VISIBLE
-            otpViewHolder.view.otpView.changePhoneCardView?.visibility = View.VISIBLE
+      //  println("viewholder value"+otpViewHolder+"\n"+"view value"+view+"\n"+"otpview is "+otpViewHolder.view.otpView)
+
+       // if(otpViewHolder.view.otpView!=null) {
+           // otpViewHolder.view.otpView.visibility = View.VISIBLE
+           // otpViewHolder.view.otpView.changePhoneCardView?.visibility = View.VISIBLE
             println(" you clicked for otp!!!")
-            baseLayouttManager?.displayOTPV( otpViewHolder.view.otpView?.otpViewInput1?.text.toString(),otpViewHolder.otpView.isValidOTP)
+           /// baseLayouttManager?.displayOTPV(otpViewHolder.view.otpView?.otpViewInput1?.text.toString(), otpViewHolder.otpView.isValidOTP
 
+            baseLayouttManager?.displayOTPView(mobileNumber)
+
+
+      //  }
 
         }
 
-        /*  goPayLoginInput.actionButton.setOnClickListener {
-          otpViewHolder.view.otpView.visibility = View.VISIBLE
-            println(" you clicled for otp")
-        }*/
     }
 
     override fun getPhoneNumber(phoneNumber: String, countryCode: String, maskedValue: String) {
-        println("get phn number$phoneNumber\ncountryCode ia$countryCode\nmasked value$maskedValue")
-        if(otpViewHolder.view.otpView!=null)
-        otpViewHolder.view.otpView?.mobileNumberText?.text = "+${countryCode} $maskedValue"
+        mobileNumber  = "+${countryCode.replace("+", " ")} $maskedValue"
+        Log.d("countrycode", countryCode)
+        Log.d("countrycode......", countryCode.replace("+", " "))
     }
 
     override fun onChangePhoneClicked() {
-        println("onChangePhoneClicked is ()")
-        goPayLoginInput.visibility = View.VISIBLE
-        goPayLoginInput.changeDataSource(GoPayLoginDataSource())
-        goPayLoginInput.inputType = GoPayLoginMethod.EMAIL
-        println("otpViewHolder.view.otpView gopay is ()"+otpViewHolder.view.otpView)
-        if(otpViewHolder.view.otpView!=null){
-            otpViewHolder.view.otpView?.visibility = View.GONE
-            otpViewHolder.view.otpView?.changePhoneCardView?.visibility = View.GONE
-            println("otpViewHolder.inside called")
-
-        }
-
-    }
-
-
-
-  /*  override fun onCardSelectedAction(isSelected: Boolean, typeCardView: String) {
-
-    }
-*/
-    override fun onCardSelectedAction(isSelected: Boolean) {
-
-    }
-
-
-    override fun onDeleteIconClicked(stopAnimation: Boolean, itemId: Int) {
-
+        baseLayouttManager?.displayGoPayLogin()
     }
 
     override fun onOtpButtonConfirmationClick(otpNumber: String): Boolean {
-        println("otpNumber is $otpNumber")
-        Log.d("isValidOTP1" ,(otpNumber == "111111").toString() )
-        // GoPayLoginHolder1(context,this,baseLayoutManager).view
-//        if(otpNumber== "111111"){
-//            GoPaySavedCardHolder(context,this,baseLayouttManager).view
-//
-//        }
-        return otpNumber == "111111"
+        Log.d("isValidOTPValid", (otpNumber == "111111").toString())
+        return if(otpNumber=="111111"){
+            baseLayouttManager?.displayGoPay()
+            true
+        } else {
+            false
+        }
     }
 
+
 }
+
+
