@@ -34,6 +34,7 @@ import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
 import company.tap.tapuilibrary.uikit.interfaces.OtpButtonConfirmationInterface
 import kotlinx.android.synthetic.main.cardviewholder_layout.view.*
+import kotlinx.android.synthetic.main.gopaysavedcard_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 
 
@@ -365,6 +366,15 @@ class TapLayoutViewModell : ViewModel(),
             }
         }
 
+        goPaySavedCardHolder.view.goPayLoginView.groupAction.setOnClickListener {
+            if (goPaySavedCardHolder.view.goPayLoginView.groupAction?.text == LocalizationManager.getValue("close", "Common")) {
+                adapter.updateShaking(false)
+                goPaySavedCardHolder.view.goPayLoginView.groupAction?.text =  LocalizationManager.getValue("edit", "Common")
+            } else {
+                adapter.updateShaking(true)
+                goPaySavedCardHolder.view.goPayLoginView.groupAction?.text = LocalizationManager.getValue("close", "Common")
+            }
+        }
     }
 
 

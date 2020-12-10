@@ -7,6 +7,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.R
+import company.tap.checkout.internal.adapter.CardTypeAdapterUIKIT
 import company.tap.checkout.internal.adapter.GoPayCardAdapterUIKIT
 import company.tap.checkout.internal.dummygener.GoPaySavedCards
 import company.tap.checkout.internal.enums.SectionType
@@ -33,10 +34,7 @@ class GoPaySavedCardHolder(
 
   //  override val view = TapChipGroup(context, null)
     override val view: View = LayoutInflater.from(context).inflate(R.layout.gopaysavedcard_layout, null)
-
     override val type = SectionType.CARD
-
-
     private var goPaySavedCardsList: List<GoPaySavedCards>? = null
     private var chipRecyclerView: RecyclerView
     private var groupAction: TapTextView
@@ -60,25 +58,7 @@ class GoPaySavedCardHolder(
         )
 
         println("goPaySavedCardsList  currency ${goPaySavedCardsList?.get(0)?.chip1?.icon}")
-       /* view.goPayLoginView.groupAction.setOnClickListener {
-            val animation = AnimationUtils.loadAnimation(this.view.context, R.anim.shake)
-            view.goPayLoginView.chipsRecycler.startAnimation(animation)
-         //   view.deleteImageView?.visibility = View.VISIBLE
-            //baseLayopu?.displayGoPayLogin()
-        }*/
-       groupAction?.setOnClickListener {
-            val adapter = CardTypeAdapterUIKIT(onCardSelectedActionListener)
-            if (groupAction?.text == "Close") {
-                chipRecyclerView.adapter = adapter
-                adapter.updateShaking(false)
-                adapter.notifyDataSetChanged()
-               groupAction.text =  LocalizationManager.getValue("edit", "Common")
-            } else {
-                adapter.updateShaking(true)
-                adapter.notifyDataSetChanged()
-              groupAction?.text = LocalizationManager.getValue("close", "Common")
-            }
-        }
+
         /**
          * set separator background
          */
@@ -97,18 +77,6 @@ class GoPaySavedCardHolder(
         chipRecyclerView.adapter = adapter
         adapter.updateShaking(false)
         goPaySavedCardsList?.let { adapter.updateAdapterData(it) }
-        setOnEditAction(adapter)
     }
 
-
-    fun setOnEditAction(goPayCardAdapterUIKIT :GoPayCardAdapterUIKIT){
-        if (view.mainChipgroup.groupAction?.text == LocalizationManager.getValue("close", "Common")) {
-            goPayCardAdapterUIKIT.updateShaking(false)
-            view.mainChipgroup.groupAction?.text =  LocalizationManager.getValue("edit", "Common")
-        } else {
-            goPayCardAdapterUIKIT.updateShaking(true)
-            view.mainChipgroup.groupAction?.text = LocalizationManager.getValue("close", "Common")
-        }
-
-    }
 }
