@@ -7,8 +7,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.R
-import company.tap.checkout.internal.adapter.CardTypeAdapterUIKIT
-import company.tap.checkout.internal.adapter.goPayCardAdapterUIKIT
+import company.tap.checkout.internal.adapter.GoPayCardAdapterUIKIT
 import company.tap.checkout.internal.dummygener.GoPaySavedCards
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayouttManager
@@ -21,7 +20,6 @@ import kotlinx.android.synthetic.main.gopayloginview_layout.view.tapSeparatorVie
 
 /**
  *
- * Created by Mario Gamal on 7/26/20
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
@@ -50,11 +48,7 @@ class GoPaySavedCardHolder(
     override fun bindViewComponents() {
 
         view.goPayLoginView.groupName.text = LocalizationManager.getValue("GoPayAlert", "Hints", "goPayTitle")
-        view.goPayLoginView.groupAction.text = LocalizationManager.getValue(
-            "GatewayHeader",
-            "HorizontalHeaders",
-            "rightTitle"
-        )
+        view.goPayLoginView.groupAction.text = LocalizationManager.getValue("GatewayHeader", "HorizontalHeaders", "rightTitle")
 
         view.goPayLoginView.chipsRecycler.layoutManager = LinearLayoutManager(
             context,
@@ -83,9 +77,22 @@ class GoPaySavedCardHolder(
     fun setDatafromAPI(goPaySavedCardsApi: List<GoPaySavedCards>) {
         goPaySavedCardsList = goPaySavedCardsApi
         bindViewComponents()
-        val adapter = goPayCardAdapterUIKIT(onCardSelectedActionListener)
+        val adapter = GoPayCardAdapterUIKIT(onCardSelectedActionListener)
         chipRecyclerView.adapter = adapter
-        adapter.isShaking=false
+        adapter.updateShaking(false)
         goPaySavedCardsList?.let { adapter.updateAdapterData(it) }
+        setOnEditAction(adapter)
+    }
+
+
+    fun setOnEditAction(goPayCardAdapterUIKIT :GoPayCardAdapterUIKIT){
+        if (view.mainChipgroup.groupAction?.text == LocalizationManager.getValue("close", "Common")) {
+            goPayCardAdapterUIKIT.updateShaking(false)
+            view.mainChipgroup.groupAction?.text =  LocalizationManager.getValue("edit", "Common")
+        } else {
+            goPayCardAdapterUIKIT.updateShaking(true)
+            view.mainChipgroup.groupAction?.text = LocalizationManager.getValue("close", "Common")
+        }
+
     }
 }

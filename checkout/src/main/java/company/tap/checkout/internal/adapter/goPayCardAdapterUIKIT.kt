@@ -33,9 +33,8 @@ All rights reserved.
  **/
 
 @Suppress("PrivatePropertyName")
-class goPayCardAdapterUIKIT(
-    private val onCardSelectedActionListener: OnCardSelectedActionListener,
-    var isShaking: Boolean = false
+class GoPayCardAdapterUIKIT(
+    private val onCardSelectedActionListener: OnCardSelectedActionListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var selectedPosition = -1
     private var lastPosition = -1
@@ -43,6 +42,8 @@ class goPayCardAdapterUIKIT(
     private var arrayListRedirect:ArrayList<String> = ArrayList()
     private var arrayListCards:ArrayList<String> = ArrayList()
     private var adapterContent: List<GoPaySavedCards> = java.util.ArrayList()
+    private var isShaking: Boolean = false
+
     companion object {
         private const val TYPE_SAVED_CARD = 1
         private const val TYPE_GO_PAY_SIGNOUT = 2
@@ -54,6 +55,11 @@ class goPayCardAdapterUIKIT(
     }
     fun goPayOpenedfromMain(goPayOpened:Boolean){
 
+    }
+
+    fun updateShaking(isShaking: Boolean) {
+        this.isShaking = isShaking
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -157,7 +163,7 @@ class goPayCardAdapterUIKIT(
                 if (!isShaking) {
                     holder.itemView.setOnClickListener {
                         selectedPosition = position
-                        onCardSelectedActionListener.ongoPayLogoutClicked(true)
+                        onCardSelectedActionListener.onGoPayLogoutClicked(true)
                         notifyDataSetChanged()
                     }
                 }

@@ -12,8 +12,6 @@ import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener
 
 /**
  *
- * Created by Mario Gamal on 7/23/20
- * Modified by AhlaamK
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
@@ -33,15 +31,11 @@ class ItemsViewHolder1(context11: Context, private val onCurrencyChangedActionLi
 
 
     init {
-
         bindViewComponents()
         this.fragmentManager = fragmentManagere
-
-
     }
 
-    override fun bindViewComponents() {
-    }
+    override fun bindViewComponents() {}
 
     /**
      * Sets data from API through LayoutManager
@@ -59,20 +53,15 @@ class ItemsViewHolder1(context11: Context, private val onCurrencyChangedActionLi
              CurrencyViewFragment(supportedCurrecnyList, itemList)
          )*/
         println("supportedItemList curr list:$supportedItemList")
-
         this.fragmentManager = fragmentManager
-
-
     }
 
     fun resetView(){
         fragmentManager.beginTransaction()
             .remove(CurrencyViewsFragment(ArrayList(), ArrayList(),onCurrencyChangedActionListener)).commit()
-
     }
 
     fun setView(){
-
         fragmentManager.beginTransaction()
             .replace(R.id.fragment_container_nfc_lib, CurrencyViewsFragment(supportedCurrecnyList, supportedItemList,onCurrencyChangedActionListener))
             .addToBackStack(null)

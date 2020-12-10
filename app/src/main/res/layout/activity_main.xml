@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity"
     android:orientation="vertical"
-    android:background="@drawable/backgr"
-    >
+    android:background="@drawable/backgr">
 
 
     <com.google.android.material.button.MaterialButton
@@ -20,8 +19,7 @@
         android:textColor="@color/white"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="50dp"
-        android:onClick="openBottomSheet"
-        />
+        android:onClick="openBottomSheet" />
 
 
 </LinearLayout>

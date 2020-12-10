@@ -11,8 +11,6 @@ import company.tap.tapuilibrary.uikit.organisms.GoPayLoginInput
 import company.tap.tapuilibrary.uikit.organisms.OTPView
 
 /**
- * Created by AhlaamK on 11/8/20.
-
 Copyright (c) 2020    Tap Payments.
 All rights reserved.
  **/

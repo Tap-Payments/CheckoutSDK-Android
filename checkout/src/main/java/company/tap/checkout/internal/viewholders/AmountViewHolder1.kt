@@ -18,7 +18,6 @@ import kotlinx.android.synthetic.main.amountview_layout.view.*
 
 /**
  *
- * Created by Mario Gamal on 7/22/20
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
@@ -39,7 +38,6 @@ class AmountViewHolder1(context: Context,private val baseLayouttManager: BaseLay
         bindViewComponents()
         CurrentTheme.initAppTheme(R.raw.defaultlighttheme, context)
         currentCurrencyTextView = view.findViewById(R.id.textView_currentcurrency)
-
     }
 
     override fun bindViewComponents() {
@@ -66,17 +64,13 @@ class AmountViewHolder1(context: Context,private val baseLayouttManager: BaseLay
                 AmountViewDataSource(
                     selectedCurr = selectedCurren +" "+  originalAmount,
                     currentCurr = currentCurren,
-                    itemCount = itemCountt + "  "+ LocalizationManager.getValue("items","Common")
-                )
-            )
+                    itemCount = itemCountt + "  "+ LocalizationManager.getValue("items","Common")))
         else
             changeDataSource(
                 AmountViewDataSource(
                     selectedCurr = selectedCurren +" "+ originalAmount,
                     currentCurr = currentCurren,
-                    itemCount = LocalizationManager.getValue("close","Common")
-                )
-            )
+                    itemCount = LocalizationManager.getValue("close","Common")))
     }
 
 
@@ -95,18 +89,13 @@ class AmountViewHolder1(context: Context,private val baseLayouttManager: BaseLay
                 AmountViewDataSource(
                     selectedCurr = selectedAmountCurrency,
                     currentCurr = currentCurrency,
-                    itemCount = itemCountt + "  "+ LocalizationManager.getValue("items","Common")
-                )
-            )
+                    itemCount = itemCountt + "  "+ LocalizationManager.getValue("items","Common")))
         else
             changeDataSource(
                 AmountViewDataSource(
                     selectedCurr =selectedAmountCurrency,
                     currentCurr = currentCurrency,
-                    itemCount = LocalizationManager.getValue("close","Common")
-                )
-            )
-
+                    itemCount = LocalizationManager.getValue("close","Common")))
     }
 
 
@@ -123,7 +112,6 @@ class AmountViewHolder1(context: Context,private val baseLayouttManager: BaseLay
         currentCurren = currentCurrencyApi
         itemCountt  = itemCountApi
         originalAmount =CurrencyFormatter.currencyFormat(originalAmountApi)
-
         bindViewComponents()
     }
 }

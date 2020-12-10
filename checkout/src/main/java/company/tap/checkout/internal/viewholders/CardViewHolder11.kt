@@ -20,7 +20,6 @@ import kotlinx.android.synthetic.main.cardviewholder_layout.view.*
 
 /**
  *
- * Created by Mario Gamal on 7/26/20
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */

@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() ,InlineViewCallback{
     private fun getArguments(): Bundle {
         val arguments = Bundle()
         arguments.putFloatArray(DialogConfigurations.Corners, floatArrayOf(25f, 25f, 0f, 0f))
-        arguments.putInt(DialogConfigurations.Color, Color.WHITE)
+        arguments.putInt(DialogConfigurations.Color, Color.TRANSPARENT)
         arguments.putBoolean(DialogConfigurations.Cancelable, false)
         arguments.putFloat(DialogConfigurations.Dim, 0.75f)
         return arguments

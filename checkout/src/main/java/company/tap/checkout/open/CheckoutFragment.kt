@@ -34,13 +34,9 @@ import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
  */
 class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
 
-
-
     private var view1: View? = null
     private var contextt: Context? = null
-
     private lateinit var viewModell :TapLayoutViewModell
-
      var _Activity: Activity? = null
 
 
@@ -49,7 +45,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         _Activity = activity?.parent
         this.contextt = context
         setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
-
     }
 
 
@@ -60,6 +55,12 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         savedInstanceState: Bundle?
     ): View? {
         view1 = inflater.inflate(R.layout.fragment_checkouttaps, container, false)
+
+        /**
+         * set bottom sheet background
+         */
+//        backgroundColor = (Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.main_switch_background")))
+        backgroundColor = (Color.parseColor("#00000000"))
 
         bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
         val viewModell: TapLayoutViewModell by viewModels()
@@ -72,15 +73,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         val frameLayout: FrameLayout? = view1?.findViewById(R.id.fragment_container_nfc_lib)
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
 
-        /**
-         * set bottom sheet background
-         */
-        backgroundColor =
-            (Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.main_switch_background")))
-        backgroundColor = (Color.parseColor("#00000000"))
-        //  if(bottomSheetDialog!=null){
-        //      bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
-        //  }
         bottomSheetLayout?.let {
             viewModell.setBottomSheetLayout(it)
         }
@@ -99,7 +91,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         enabledSections.add(SectionType.AMOUNT_ITEMS)
         enabledSections.add(SectionType.FRAGMENT)
 
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
+//        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
         viewModell.displayStartupLayout(enabledSections)
         //This is for getting response from business engine . Currently dummy response from assets json is used
         getBusinessHeaderData(context,viewModell)

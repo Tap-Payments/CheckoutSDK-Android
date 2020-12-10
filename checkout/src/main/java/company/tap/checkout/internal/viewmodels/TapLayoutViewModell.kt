@@ -16,7 +16,7 @@ import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DividerItemDecoration
 import company.tap.checkout.R
 import company.tap.checkout.internal.adapter.CardTypeAdapterUIKIT
-import company.tap.checkout.internal.adapter.goPayCardAdapterUIKIT
+import company.tap.checkout.internal.adapter.GoPayCardAdapterUIKIT
 import company.tap.checkout.internal.dummygener.*
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.*
@@ -336,7 +336,7 @@ class TapLayoutViewModell : ViewModel(),
         cardViewHolder11.view.mainChipgroup.chipsRecycler.addItemDecoration(divider)
 
          adapter = CardTypeAdapterUIKIT(this)
-        val goPayadapter = goPayCardAdapterUIKIT(this)
+        val goPayadapter = GoPayCardAdapterUIKIT(this)
         cardViewHolder11.view.mainChipgroup.chipsRecycler.adapter = adapter
         adapter.updateAdapterData(savedCardList.value as List<SavedCards>)
         goPayadapter.updateAdapterData(goPayCardList.value as List<GoPaySavedCards>)
@@ -353,6 +353,8 @@ class TapLayoutViewModell : ViewModel(),
         }
 
     }
+
+
 
     private fun removeViews(vararg viewHolders: TapBaseViewHolder) {
         viewHolders.forEach {
@@ -405,12 +407,11 @@ class TapLayoutViewModell : ViewModel(),
         )
     }
 
-    override fun ongoPayLogoutClicked(isClicked: Boolean) {
+    override fun onGoPayLogoutClicked(isClicked: Boolean) {
        if(isClicked){
            CustomUtils.showDialog("Are you sure you would like to sign out","The goPayCards will be hidden from the page and you will need to login again to use any of them",context,"twobtns")
             removeViews(goPaySavedCardHolder)
             adapter.updateAdapterData(savedCardList.value as List<SavedCards>)
-
        }
     }
 

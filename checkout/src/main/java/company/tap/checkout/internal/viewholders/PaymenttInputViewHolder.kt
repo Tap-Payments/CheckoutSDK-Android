@@ -87,8 +87,6 @@ class PaymenttInputViewHolder(
         tabLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.backgroundColor")))
         tabLayout.changeTabItemAlphaValue(0.9f)
         bindViewComponents()
-
-
     }
 
 
@@ -103,16 +101,14 @@ class PaymenttInputViewHolder(
          * set separator background
          */
         view.separator?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
-
     }
 
     fun tapMobileInputViewWatcher(){
         tapMobileInputView.mobileNumber.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 val card = CardValidator.validate(s.toString())
-
                 if (s?.trim()?.length!! > 2  ){
-                   if(  s?.trim()?.get(0).toInt() == 5){
+                   if(s.trim()[0].toInt() == 5){
                        tabLayout.selectTab(CardBrand.ooredoo, true)
                    }
                 }

@@ -12,8 +12,6 @@ import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import kotlinx.android.synthetic.main.action_button_animation.view.*
 
 /**
- * Created by OlaMonir on 8/25/20.
-
 Copyright (c) 2020    Tap Payments.
 All rights reserved.
  **/
