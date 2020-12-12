@@ -162,12 +162,10 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     }
 
     fun removeItems() {
-        if(goPayOpened)
-            arrayModified = ArrayList(adapterContent)
+        if(goPayOpened) arrayModified = ArrayList(adapterContent)
         arrayModified.removeAt(0)
         adapterContent= arrayModified as ArrayList<SavedCards>
         notifyDataSetChanged()
-
     }
 
     

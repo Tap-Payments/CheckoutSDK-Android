@@ -1,10 +1,10 @@
 package company.tap.checkout.internal.adapter
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.graphics.Color
 import android.graphics.Color.parseColor
 import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import company.tap.checkout.R
 import company.tap.checkout.internal.dummygener.GoPaySavedCards
-import company.tap.checkout.internal.dummygener.SavedCards
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
@@ -24,8 +23,6 @@ import kotlinx.android.synthetic.main.item_gopay_signout.view.*
 import kotlinx.android.synthetic.main.item_knet.view.*
 import kotlinx.android.synthetic.main.item_save_cards.view.*
 import kotlinx.android.synthetic.main.item_save_cards.view.tapCardChip2
-import java.net.URL
-
 
 /**
 Copyright (c) 2020    Tap Payments.
@@ -38,7 +35,6 @@ class GoPayCardAdapterUIKIT(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var selectedPosition = -1
     private var lastPosition = -1
-    var context_: Context? = null
     private var arrayListRedirect:ArrayList<String> = ArrayList()
     private var arrayListCards:ArrayList<String> = ArrayList()
     private var adapterContent: List<GoPaySavedCards> = java.util.ArrayList()
@@ -60,6 +56,7 @@ class GoPayCardAdapterUIKIT(
     fun updateShaking(isShaking: Boolean) {
         this.isShaking = isShaking
         notifyDataSetChanged()
+        Log.d("isShakingupdate" , isShaking.toString())
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -86,9 +83,7 @@ class GoPayCardAdapterUIKIT(
                 arrayListCards.add((adapterContent[position]).chip1.icon)
                 TYPE_SAVED_CARD
             }
-            else -> {
-                TYPE_GO_PAY_SIGNOUT
-            }
+            else -> TYPE_GO_PAY_SIGNOUT
         }
     }
 
@@ -97,16 +92,16 @@ class GoPayCardAdapterUIKIT(
     }
 
 
-    private fun setOnClickActions(holder: RecyclerView.ViewHolder) {
-
-    }
-
+    private fun setOnClickActions(holder: RecyclerView.ViewHolder) {}
 
     @SuppressLint("ResourceAsColor")
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-       // println("position printed: $position")
-
+        if (isShaking) {
+            holder.itemView.alpha = 0.4f
+        }else{
+            holder.itemView.alpha = 1.0f
+        }
         when {
             /**
              * Saved Cards Type
@@ -168,7 +163,9 @@ class GoPayCardAdapterUIKIT(
     }
 
     private fun typeSavedCard(holder: RecyclerView.ViewHolder, position: Int) {
+        Log.d("isShaking" , isShaking.toString())
         if (isShaking) {
+            holder.itemView.alpha = 0.4f
             val animShake: Animation = AnimationUtils.loadAnimation(holder.itemView.context, R.anim.shake)
             holder.itemView.startAnimation(animShake)
             setOnClickActions(holder)
@@ -263,29 +260,20 @@ class GoPayCardAdapterUIKIT(
         (holder as SingleViewHolder)
             holder.itemView.setOnClickListener {
                 if (!isShaking) {
-                onCardSelectedActionListener?.onCardSelectedAction(true,adapterContent[holder.adapterPosition])
+                onCardSelectedActionListener.onCardSelectedAction(true,adapterContent[holder.adapterPosition])
                 selectedPosition = position
                 notifyDataSetChanged()
             }
         }
         for (i in 0 until arrayListRedirect.size) {
-            val imageViewCard = holder.itemView.findViewById<ImageView>(R.id.imageView_knet)
             Glide.with(holder.itemView.context)
                     .load(arrayListRedirect[i])
-                    .into(imageViewCard)
-
+                    .into(holder.itemView.imageView_knet)
         }
-
-
     }
 
-
     internal class SavedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
-
     internal class SingleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
-
     internal class GoPayViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
-
-
 }
 

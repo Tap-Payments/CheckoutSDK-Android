@@ -50,17 +50,17 @@ class GoPaySavedCardHolder(
         view.goPayLoginView.groupAction.text = LocalizationManager.getValue("GatewayHeader", "HorizontalHeaders", "rightTitle")
         view.goPayLoginView.chipsRecycler.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
 
-        groupAction.setOnClickListener {
-            onCardSelectedActionListener.onEditClicked(true)
-            //val adapter = CardTypeAdapterUIKIT(onCardSelectedActionListener)
-            if (groupAction.text == "Close") {
-                onCardSelectedActionListener.onEditClicked(false)
-                groupAction.text =  LocalizationManager.getValue("edit", "Common")
-            } else {
-                onCardSelectedActionListener.onEditClicked(true)
-                groupAction.text = LocalizationManager.getValue("close", "Common")
-            }
-        }
+//        groupAction.setOnClickListener {
+//            onCardSelectedActionListener.onEditClicked(true)
+//            //val adapter = CardTypeAdapterUIKIT(onCardSelectedActionListener)
+//            if (groupAction.text == "Close") {
+//                onCardSelectedActionListener.onEditClicked(false)
+//                groupAction.text =  LocalizationManager.getValue("edit", "Common")
+//            } else {
+//                onCardSelectedActionListener.onEditClicked(true)
+//                groupAction.text = LocalizationManager.getValue("close", "Common")
+//            }
+//        }
 
         /**
          * set separator background
