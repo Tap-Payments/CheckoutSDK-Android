@@ -147,8 +147,9 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                 else holder.itemView.setBackgroundResource(R.drawable.border_gopay_unclick)
 
                 (holder as GoPayViewHolder)
-                if (!isShaking) {
+
                     holder.itemView.setOnClickListener {
+                        if (!isShaking) {
                         selectedPosition = position
                         println("goPay is clicked")
                         onCardSelectedActionListener.onCardSelectedAction(true, adapterContent[holder.adapterPosition])
@@ -193,8 +194,8 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
 
     private fun setOnSavedCardOnClickAction(holder: RecyclerView.ViewHolder, position: Int) {
-        if (!isShaking) {
             holder.itemView.setOnClickListener {
+                if (!isShaking) {
                 selectedPosition = position
                 notifyDataSetChanged()
             }
@@ -257,7 +258,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         if (selectedPosition == position) setSelectedCardTypeRedirectShadowAndBackground(holder)
         else setUnSelectedCardTypeRedirectShadowAndBackground(holder)
         (holder as SingleViewHolder)
-        if (!isShaking) holder.itemView.setOnClickListener { setOnRedirectCardOnClickAction(holder,position) }
+        holder.itemView.setOnClickListener {if (!isShaking) { setOnRedirectCardOnClickAction(holder,position) }}
         bindRedirectCardImage(holder)
     }
 

@@ -66,17 +66,14 @@ class GoPayCardAdapterUIKIT(
         val view: View
         return when (viewType) {
             TYPE_SAVED_CARD -> {
-                view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_save_cards, parent, false)
+                view = LayoutInflater.from(parent.context).inflate(R.layout.item_save_cards, parent, false)
                 SavedViewHolder(view)
             }
             else -> {
-                view =
-                    LayoutInflater.from(parent.context).inflate(R.layout.item_gopay_signout, parent, false)
+                view = LayoutInflater.from(parent.context).inflate(R.layout.item_gopay_signout, parent, false)
                 GoPayViewHolder(view)
             }
         }
-
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -159,19 +156,15 @@ class GoPayCardAdapterUIKIT(
 
                 }
                 (holder as GoPayViewHolder)
-
-                if (!isShaking) {
                     holder.itemView.setOnClickListener {
+                        if (!isShaking) {
                         selectedPosition = position
                         onCardSelectedActionListener.onGoPayLogoutClicked(true)
                         notifyDataSetChanged()
                     }
                 }
-
-
             }
         }
-
     }
 
     private fun typeSavedCard(holder: RecyclerView.ViewHolder, position: Int) {
@@ -214,13 +207,16 @@ class GoPayCardAdapterUIKIT(
 
         }
         (holder as SavedViewHolder)
-        if (!isShaking) {
             holder.itemView.setOnClickListener {
+                if (!isShaking) {
                 selectedPosition = position
                 notifyDataSetChanged()
             }
         }
         for (i in 0 until arrayListCards.size) {
+            if (isShaking) {
+                holder.itemView.alpha = 0.4f
+            }
             val imageViewCard = holder.itemView.findViewById<ImageView>(R.id.imageView_amex)
             Glide.with(holder.itemView.context)
                     .load(arrayListCards[i])
@@ -229,17 +225,13 @@ class GoPayCardAdapterUIKIT(
 
     }
 
-
     private fun typeRedirect(holder: RecyclerView.ViewHolder, position: Int) {
         if (selectedPosition == position) {
-//                holder.itemView.tapCardChip3Linear.setBackgroundColor(Color.WHITE)
             if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
                 holder.itemView.setBackgroundResource(R.drawable.border_shadow_black)
             } else {
                 holder.itemView.setBackgroundResource(R.drawable.border_shadow_)
             }
-
-
             setBorderedView(
                 holder.itemView.tapCardChip3Linear,
                 (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
@@ -269,9 +261,8 @@ class GoPayCardAdapterUIKIT(
 
         }
         (holder as SingleViewHolder)
-        if (!isShaking) {
             holder.itemView.setOnClickListener {
-               // onCardSelectedActionListener?.onCardSelectedAction(true, arrayListRedirect.toString())
+                if (!isShaking) {
                 onCardSelectedActionListener?.onCardSelectedAction(true,adapterContent[holder.adapterPosition])
                 selectedPosition = position
                 notifyDataSetChanged()

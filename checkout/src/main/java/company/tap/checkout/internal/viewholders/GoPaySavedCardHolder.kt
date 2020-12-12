@@ -28,7 +28,6 @@ import kotlinx.android.synthetic.main.gopayloginview_layout.view.tapSeparatorVie
 class GoPaySavedCardHolder(
     private val context: Context,
     private val onCardSelectedActionListener: OnCardSelectedActionListener,
-
     private val baseLayouttManager: BaseLayouttManager?=null
 ) : TapBaseViewHolder {
 
@@ -47,18 +46,9 @@ class GoPaySavedCardHolder(
     }
 
     override fun bindViewComponents() {
-
         view.goPayLoginView.groupName.text = LocalizationManager.getValue("GoPayAlert", "Hints", "goPayTitle")
         view.goPayLoginView.groupAction.text = LocalizationManager.getValue("GatewayHeader", "HorizontalHeaders", "rightTitle")
-
-        view.goPayLoginView.chipsRecycler.layoutManager = LinearLayoutManager(
-            context,
-            RecyclerView.HORIZONTAL,
-            false
-        )
-
-        println("goPaySavedCardsList  currency ${goPaySavedCardsList?.get(0)?.chip1?.icon}")
-
+        view.goPayLoginView.chipsRecycler.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         /**
          * set separator background
          */
