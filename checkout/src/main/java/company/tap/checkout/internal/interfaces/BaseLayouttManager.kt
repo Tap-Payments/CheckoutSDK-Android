@@ -18,4 +18,5 @@ interface BaseLayouttManager {
     fun displayRedirect(url: String)
     fun displaySaveCardOptions()
     fun getDatafromAPI(dummyResponse1: JsonResponseDummy1)
+    fun didDialogueExecute(response :String)
 }

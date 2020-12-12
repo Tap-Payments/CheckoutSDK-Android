@@ -10,4 +10,5 @@ interface OnCardSelectedActionListener {
     fun onCardSelectedAction(isSelected:Boolean , savedCardsModel : Any)
     fun onDeleteIconClicked(stopAnimation:Boolean, itemId : Int)
     fun onGoPayLogoutClicked(isClicked:Boolean)
+    fun onEditClicked(isClicked:Boolean)
 }

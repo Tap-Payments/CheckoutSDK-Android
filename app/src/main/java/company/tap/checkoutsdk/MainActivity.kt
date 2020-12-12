@@ -8,6 +8,7 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import cards.pay.paycardsrecognizer.sdk.Card
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
+import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.open.CheckoutFragment
 
 

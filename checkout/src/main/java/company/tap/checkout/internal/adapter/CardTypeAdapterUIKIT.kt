@@ -87,13 +87,13 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
          * here we will cast the list of any depending on card type
          */
 
-        return when ((adapterContent[position]  as SavedCards).chipType ) {
+        return when ((adapterContent[position]).chipType ) {
             1 -> {
-                arrayListRedirect.add((adapterContent[position]  as SavedCards).chip1.icon)
+                arrayListRedirect.add((adapterContent[position]  ).chip1.icon)
                 TYPE_REDIRECT
             }
             5 -> {
-                arrayListCards.add((adapterContent[position]  as SavedCards).chip1.icon)
+                arrayListCards.add((adapterContent[position] ).chip1.icon)
                 TYPE_SAVED_CARD
             }
             else -> {
@@ -163,7 +163,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
     fun removeItems() {
         if(goPayOpened)
-            arrayModified = ArrayList(adapterContent) // Copy the list
+            arrayModified = ArrayList(adapterContent)
         arrayModified.removeAt(0)
         adapterContent= arrayModified as ArrayList<SavedCards>
         notifyDataSetChanged()

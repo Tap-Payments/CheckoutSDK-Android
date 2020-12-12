@@ -1,6 +1,7 @@
 package company.tap.checkout.internal.adapter
 
 import android.annotation.SuppressLint
+import android.content.ClipData
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Paint
@@ -13,6 +14,7 @@ import android.widget.RelativeLayout
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.internal.dummygener.Items1
+import company.tap.checkout.internal.dummygener.SavedCards
 import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener
 import company.tap.checkout.internal.utils.CurrencyFormatter
 import company.tap.taplocalizationkit.LocalizationManager
@@ -32,15 +34,17 @@ import company.tap.tapuilibrary.uikit.views.TapListItemView
 Copyright (c) 2020    Tap Payments.
 All rights reserved.
  **/
-class ItemAdapter(private val itemList: ArrayList<Items1>) :
+class ItemAdapter(private val onCurrencyChangedActionListener:OnCurrencyChangedActionListener) :
     RecyclerView.Adapter<ItemAdapter.ItemHolder>() {
     private var previousExpandedPosition = -1
     private var mExpandedPosition = -1
     private lateinit var itemViewAdapter: TapListItemView
     private lateinit var context: Context
-
-
+    private var arrayModifiedItem : ArrayList<Any> = ArrayList()
+    private var adapterContentItems: List<Items1> = java.util.ArrayList()
     override fun onCreateViewHolder(@NonNull parent: ViewGroup, viewType: Int): ItemHolder {
+
+
         val v = LayoutInflater.from(parent.context).inflate(
             R.layout.item_view_adapter,
             parent,
@@ -51,7 +55,12 @@ class ItemAdapter(private val itemList: ArrayList<Items1>) :
         return ItemHolder(v)
     }
 
-    override fun getItemCount() = itemList.size
+    fun updateAdapterData(adapterContentItems: List<Items1>) {
+        this.adapterContentItems = adapterContentItems
+        notifyDataSetChanged()
+
+    }
+    override fun getItemCount() = adapterContentItems.size
 
 
     class ItemHolder(v: View) : RecyclerView.ViewHolder(v)
@@ -72,24 +81,24 @@ class ItemAdapter(private val itemList: ArrayList<Items1>) :
         val mainViewLinear = holder.itemView.findViewById<LinearLayout>(R.id.mainViewLinear)
         val itemName = holder.itemView.findViewById<TapTextView>(R.id.item_title)
         val isExpanded = position == mExpandedPosition
-        if(itemList.size!=0){
-            for (i in 0 until itemList.size) {
-                descriptionTextView.text = itemList[position].description
+        if(adapterContentItems.isNotEmpty()){
+            for (element in adapterContentItems) {
+                descriptionTextView.text = adapterContentItems[position].description
                 descriptionTextView.visibility = if (isExpanded) View.VISIBLE else View.GONE
                 holder.itemView.isActivated = isExpanded
-                totalQuantity.text = itemList[i].quantity.toString()
+                totalQuantity.text = element.quantity.toString()
 
                 itemViewAdapter.setItemViewDataSource(
                     getItemViewDataSource(
-                        itemList[i].currency + CurrencyFormatter.currencyFormat(
-                            itemList[i].amount.toString()
-                        ), itemList[i].currency, itemList[i].quantity.toString()
+                        adapterContentItems[position].currency + CurrencyFormatter.currencyFormat(
+                            adapterContentItems[position].amount.toString()
+                        ), adapterContentItems[position].currency, adapterContentItems[position].quantity.toString()
                     )
                 )
 
             }
         }else{
-            descriptionTextView.text = itemList[0].description
+            descriptionTextView.text = adapterContentItems[0].description
             descriptionTextView.visibility = if (isExpanded) View.VISIBLE else View.GONE
             holder.itemView.isActivated = isExpanded
         }
@@ -137,26 +146,26 @@ class ItemAdapter(private val itemList: ArrayList<Items1>) :
         totalAmount: TapTextView?,
         itemName: TapTextView?
     ) {
-        if(itemList.size==0) {
+        if(adapterContentItems.size==0) {
             if (position % 2 == 0) {
                 discount?.visibility = View.VISIBLE
                 discount?.text = LocalizationManager.getValue("Discount", "ItemList")
                 totalAmount?.paintFlags = totalAmount?.paintFlags?.or(Paint.STRIKE_THRU_TEXT_FLAG)!!
-                itemName?.text = "ITEM TITLE " + itemList[position]
+                itemName?.text = "ITEM TITLE " + adapterContentItems[position]
             } else {
                 discount?.visibility = View.INVISIBLE
                 totalAmount?.paintFlags = totalAmount?.paintFlags?.and(Paint.STRIKE_THRU_TEXT_FLAG.inv())!!
                 itemName?.text =
-                    "VERY LOOOONNGGGG ITEM TITLE ITEM TITLE TITLE ITEM TITLETITLE ITEM TITLETITLE ITEM TITLETITLE ITEM TITLETITLE ITEM TITLETITLE ITEM TITLE " + itemList[position]
+                    "VERY LOOOONNGGGG ITEM TITLE ITEM TITLE TITLE ITEM TITLETITLE ITEM TITLETITLE ITEM TITLETITLE ITEM TITLETITLE ITEM TITLETITLE ITEM TITLE " + adapterContentItems[position]
             }
         }else
-            for (i in 0 until itemList.size) {
-                itemName?.text = itemList[position].name
-                if(itemList[position].discount1.type == "P"){
+            for (i in 0 until adapterContentItems.size) {
+                itemName?.text = adapterContentItems[position].name
+                if(adapterContentItems[position].discount1.type == "P"){
                     discount?.visibility = View.VISIBLE
-                    discount?.text = itemList[i].discount1.value.toString()
+                    discount?.text = adapterContentItems[i].discount1.value.toString()
                     totalAmount?.paintFlags = totalAmount?.paintFlags?.or(Paint.STRIKE_THRU_TEXT_FLAG)!!
-                    totalAmount.text = itemList[position].amount.toString()
+                    totalAmount.text = adapterContentItems[position].amount.toString()
 
                 }else{
                     discount?.visibility = View.INVISIBLE
@@ -283,7 +292,13 @@ class ItemAdapter(private val itemList: ArrayList<Items1>) :
         )
     }
 
-
+    fun adapterClearList(){
+        arrayModifiedItem = ArrayList(adapterContentItems)
+        arrayModifiedItem.clear()
+        adapterContentItems= arrayModifiedItem as ArrayList<Items1>
+        println("adapterContentItems"+adapterContentItems)
+        notifyDataSetChanged()
+    }
 
 
 }
