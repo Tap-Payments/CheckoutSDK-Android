@@ -15,8 +15,8 @@ import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
+import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
 
-import kotlinx.android.synthetic.main.cardviewholder_layout.view.*
 
 /**
  *

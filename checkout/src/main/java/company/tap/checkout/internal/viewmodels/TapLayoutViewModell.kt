@@ -34,9 +34,8 @@ import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
-import company.tap.tapuilibrary.uikit.interfaces.OtpButtonConfirmationInterface
 import kotlinx.android.synthetic.main.businessview_layout.view.*
-import kotlinx.android.synthetic.main.cardviewholder_layout.view.*
+import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
 import kotlinx.android.synthetic.main.gopaysavedcard_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 
@@ -457,6 +456,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
         if (stopAnimation) {
             isShaking.value = false
             cardViewHolder11.view.mainChipgroup.groupAction?.text = LocalizationManager.getValue("GatewayHeader", "HorizontalHeaders", "rightTitle")
+           
         } else cardViewHolder11.view.mainChipgroup.groupAction?.text = LocalizationManager.getValue("close", "Common")
     }
 

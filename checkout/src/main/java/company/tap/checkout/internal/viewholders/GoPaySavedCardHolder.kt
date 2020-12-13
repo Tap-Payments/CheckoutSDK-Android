@@ -16,7 +16,6 @@ import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
-import kotlinx.android.synthetic.main.cardviewholder_layout.view.*
 import kotlinx.android.synthetic.main.gopayloginview_layout.view.*
 import kotlinx.android.synthetic.main.gopayloginview_layout.view.tapSeparatorViewLinear
 
