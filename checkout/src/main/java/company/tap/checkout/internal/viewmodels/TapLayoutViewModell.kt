@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DividerItemDecoration
 import company.tap.checkout.R
 import company.tap.checkout.internal.adapter.CardTypeAdapterUIKIT
+import company.tap.checkout.internal.adapter.CurrencyTypeAdapter
 import company.tap.checkout.internal.adapter.GoPayCardAdapterUIKIT
 import company.tap.checkout.internal.dummygener.*
 import company.tap.checkout.internal.enums.SectionType
@@ -61,17 +62,20 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
     private lateinit var goPayViewsHolder: GoPayViewsHolder
     private lateinit var otpViewHolder: OTPViewHolder
     private lateinit var goPaySavedCardHolder: GoPaySavedCardHolder
-    private lateinit var allCurrencies: List<Currencies1>
+  //  private lateinit var allCurrencies: List<Currencies1>
     private lateinit var itemList: List<Items1>
     private lateinit var orderList: Order1
+ //   private lateinit var currecnyList:List<Currencies1>
     private var savedCardList = MutableLiveData<List<SavedCards>>()
     private var goPayCardList = MutableLiveData<List<GoPaySavedCards>>()
+    private var allCurrencies = MutableLiveData<List<Currencies1>>()
     private var displayItemsOpen: Boolean = false
     private val isShaking = MutableLiveData<Boolean>()
     private lateinit var selectedAmountCurrency: String
     private lateinit var currentAmountCurrency: String
     private lateinit var adapter: CardTypeAdapterUIKIT
     private lateinit var goPayAdapter: GoPayCardAdapterUIKIT
+    private lateinit var currencyAdapter: CurrencyTypeAdapter
     private lateinit var frameLayout: FrameLayout
     private  var deleteCardisSelected: Boolean=false
    var selectedItemsDel by Delegates.notNull<Int>()
@@ -221,6 +225,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
                 paymenttInputViewHolder,
                 saveCardSwitchHolder11, itemsViewHolder1
             )
+
             itemsViewHolder1.setView()
             addViews(businessViewHolder, amountViewHolder1)
             frameLayout.visibility = View.VISIBLE
@@ -340,11 +345,12 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
             fragmentManager
         )
 
-        allCurrencies = dummyInitapiResponse1.currencies1
+        allCurrencies.value = dummyInitapiResponse1.currencies1
         itemList = dummyInitapiResponse1.order1.items
         savedCardList.value = dummyInitapiResponse1.savedCards
         goPayCardList.value = dummyInitapiResponse1.goPaySavedCards
         orderList = dummyInitapiResponse1.order1
+
         /**
          * Setting divider for items
          */
@@ -363,6 +369,8 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
         cardViewHolder11.view.mainChipgroup.chipsRecycler.adapter = adapter
         adapter.updateAdapterData(savedCardList.value as List<SavedCards>)
         goPayAdapter.updateAdapterData(goPayCardList.value as List<GoPaySavedCards>)
+        currencyAdapter = CurrencyTypeAdapter(this)
+     //   currencyAdapter.updateAdapterData(allCurrencies.value as List<Currencies1>)
         cardViewHolder11.view.mainChipgroup.groupAction?.visibility = View.VISIBLE
 
         cardViewHolder11.view.mainChipgroup.groupAction?.setOnClickListener {
