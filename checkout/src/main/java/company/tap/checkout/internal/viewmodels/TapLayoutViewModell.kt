@@ -495,7 +495,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
     private fun onClickRedirect() {
         removeViews(businessViewHolder, amountViewHolder1, cardViewHolder11, saveCardSwitchHolder11, paymenttInputViewHolder)
         addViews(businessViewHolder)
-        businessViewHolder.showOnlyTopLinear()
+        businessViewHolder.view.headerView.showOnlyTopLinear()
 //        businessViewHolder.view.headerView.topLinear.visibility =View.VISIBLE
         fragmentManager.beginTransaction().replace(R.id.webFrameLayout, WebFragment(this)).commit()
     }
