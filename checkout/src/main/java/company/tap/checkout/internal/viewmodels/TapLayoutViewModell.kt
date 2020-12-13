@@ -415,6 +415,8 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
             if(deleteCardisSelected){
                 adapter.deleteSelectedCard(selectedItemsDel)
                 adapter.updateShaking(false)
+                deleteCardisSelected = false
+
             }else {
                 removeViews(goPaySavedCardHolder)
                  adapter.updateAdapterData(savedCardList.value as List<SavedCards>)
@@ -424,6 +426,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
             }
         } else if (response == "NO") {
             adapter.updateShaking(false)
+            deleteCardisSelected = false
 
         }
 
@@ -477,7 +480,9 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
             selectedItemsDel = itemId
             deleteCardisSelected = true
 
-        } else cardViewHolder11.view.mainChipgroup.groupAction?.text = LocalizationManager.getValue("close", "Common")
+        } else { cardViewHolder11.view.mainChipgroup.groupAction?.text = LocalizationManager.getValue("close", "Common")
+            deleteCardisSelected = false
+        }
     }
 
     override fun onGoPayLogoutClicked(isClicked: Boolean) {
