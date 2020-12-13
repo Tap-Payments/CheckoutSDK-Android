@@ -28,6 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
+
         </LinearLayout>
 
     </LinearLayout>
@@ -38,4 +39,11 @@
         android:layout_gravity="bottom"
         android:orientation="vertical"
         android:gravity="bottom"/>
+
+    <FrameLayout
+        android:id="@+id/webFrameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
 </LinearLayout>

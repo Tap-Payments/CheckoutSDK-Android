@@ -31,7 +31,6 @@ class BusinessViewHolder(context: Context) : TapBaseViewHolder {
 
     init {
         bindViewComponents()
-
     }
 
     override fun bindViewComponents() {

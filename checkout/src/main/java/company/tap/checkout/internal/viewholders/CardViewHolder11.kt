@@ -29,9 +29,7 @@ class CardViewHolder11(private val context: Context, private val onCardSelectedA
     override val type = SectionType.CARD
     private var savedCardsList: MutableList<SavedCards>? = null
 
-    init {
-        bindViewComponents()
-    }
+    init { bindViewComponents() }
 
     override fun bindViewComponents() {
         view.mainChipgroup.groupName.text = LocalizationManager.getValue(

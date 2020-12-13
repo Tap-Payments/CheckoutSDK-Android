@@ -71,6 +71,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
 
         val checkoutLayout: LinearLayout? = view1?.findViewById(R.id.fragment_all)
         val frameLayout: FrameLayout? = view1?.findViewById(R.id.fragment_container_nfc_lib)
+        val webFrameLayout: FrameLayout? = view1?.findViewById(R.id.webFrameLayout)
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
 
         bottomSheetLayout?.let {
@@ -96,8 +97,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         //This is for getting response from business engine . Currently dummy response from assets json is used
         getBusinessHeaderData(context,viewModell)
         setBottomSheetInterface(this)
-
-
         return view1
     }
 

@@ -26,6 +26,8 @@ import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
 import company.tap.checkout.internal.utils.CurrencyFormatter
 import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.viewholders.*
+import company.tap.checkout.internal.webview.WebFragment
+import company.tap.checkout.internal.webview.WebViewContract
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
@@ -33,6 +35,7 @@ import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
 import company.tap.tapuilibrary.uikit.interfaces.OtpButtonConfirmationInterface
+import kotlinx.android.synthetic.main.businessview_layout.view.*
 import kotlinx.android.synthetic.main.cardviewholder_layout.view.*
 import kotlinx.android.synthetic.main.gopaysavedcard_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
@@ -44,7 +47,7 @@ import kotlinx.android.synthetic.main.switch_layout.view.*
  *
  */
 class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActionListener,
-    onPaymentCardComplete, onCardNFCCallListener, OnCurrencyChangedActionListener {
+    onPaymentCardComplete, onCardNFCCallListener, OnCurrencyChangedActionListener, WebViewContract {
     private lateinit var context: Context
     private lateinit var fragmentManager: FragmentManager
     private lateinit var sdkLayout: LinearLayout
@@ -94,6 +97,10 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
         goPayViewsHolder = GoPayViewsHolder(context, this)
 //        initCardsGroup()
         initSwitchAction()
+    }
+
+    fun initWebFragment(){
+
     }
 
     private fun initSwitchAction() {
@@ -436,14 +443,15 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
             }
             1 -> {
                 // redirect
+                onClickRedirect()
             }
             else -> {
                 displayGoPayLogin()
                 //goPayViewsHolder.goPayopened
             }
         }
-
     }
+
 
     override fun onDeleteIconClicked(stopAnimation: Boolean, itemId: Int) {
         if (stopAnimation) {
@@ -483,6 +491,13 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
         addViews(businessViewHolder, amountViewHolder1)
         fragmentManager.beginTransaction().replace(R.id.fragment_container_nfc_lib, NFCFragment())
         amountViewHolder1.changeGroupAction(false)
+    }
+    private fun onClickRedirect() {
+        removeViews(businessViewHolder, amountViewHolder1, cardViewHolder11, saveCardSwitchHolder11, paymenttInputViewHolder)
+        addViews(businessViewHolder)
+        businessViewHolder.showOnlyTopLinear()
+//        businessViewHolder.view.headerView.topLinear.visibility =View.VISIBLE
+        fragmentManager.beginTransaction().replace(R.id.webFrameLayout, WebFragment(this)).commit()
     }
 
     // Override function to open card Scanner and scan the card.
@@ -546,6 +561,9 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
         }
         itemsViewHolder1.resetItemList(itemList)
         amountViewHolder1.updateSelectedCurrency(displayItemsOpen, selectedAmountCurrency, currentAmountCurrency)
+    }
+
+    override fun redirectLoadingFinished(done: Boolean) {
     }
 
 }
