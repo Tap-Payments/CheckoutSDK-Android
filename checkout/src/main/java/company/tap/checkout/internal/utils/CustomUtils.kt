@@ -13,8 +13,6 @@ All rights reserved.
  **/
 object CustomUtils {
 
-
-
      fun showDialog(title: String, messageString: String, context: Context, btnType: Int? = null,baseLayouttManager: BaseLayouttManager?) {
          val builder = iOSDialogBuilder(context)
          builder
@@ -24,13 +22,12 @@ object CustomUtils {
              .setCancelable(false)
                  if(btnType==2){
                   builder.setPositiveListener("YES") { dialog ->
-                         dialog.dismiss()
-                      baseLayouttManager?.didDialogueExecute("YES")
+                       dialog.dismiss()
+                       baseLayouttManager?.didDialogueExecute("YES")
 
                      }
                      builder.setNegativeListener("NO") { dialog ->
                          dialog.dismiss()
-
                          baseLayouttManager?.didDialogueExecute("NO")
                      }
                  }else {
@@ -40,7 +37,6 @@ object CustomUtils {
                      }
                  }
              .build().show()
-
 
     }
 }
