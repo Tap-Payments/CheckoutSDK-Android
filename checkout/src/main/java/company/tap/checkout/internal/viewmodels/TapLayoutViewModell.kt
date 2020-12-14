@@ -492,8 +492,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
     }
 
     private fun onClickRedirect() {
-//        saveCardSwitchHolder11.view.cardSwitch.payButton.changeButtonState(ActionButtonState.LOADING)
-//        saveCardSwitchHolder11.view.cardSwitch.payButton.addTapLoadingView()
+        saveCardSwitchHolder11.view.cardSwitch.payButton.changeButtonState(ActionButtonState.LOADING)
         saveCardSwitchHolder11.view.cardSwitch.payButton.addChildView(
             saveCardSwitchHolder11.view.cardSwitch.payButton.getImageView(
                 R.drawable.loader,
