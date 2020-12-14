@@ -53,6 +53,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
     override fun getItemCount() = adapterContentCurrencies.size
 
     fun updateAdapterData(adapterContentCurrencies: List<Currencies1>) {
+        println("list of currencies"+adapterContentCurrencies)
         this.adapterContentCurrencies = adapterContentCurrencies
         notifyDataSetChanged()
     }
@@ -95,7 +96,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.P)
+
     override fun onBindViewHolder(holder: CurrencyHolders, position: Int) {
         holder.bindTheme()
         for (i in adapterContentCurrencies.indices) {

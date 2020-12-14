@@ -86,7 +86,6 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         /**
          * here we will cast the list of any depending on card type
          */
-
         return when ((adapterContent[position]).chipType ) {
             1 -> {
                 arrayListRedirect.add((adapterContent[position]  ).chip1.icon)
@@ -124,6 +123,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     @SuppressLint("ResourceAsColor")
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        arrayListCards = ArrayList()
         when {
             /**
              * Saved Cards Type
@@ -168,6 +168,13 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         notifyDataSetChanged()
     }
 
+    fun deleteSelectedCard(position: Int){
+        val cardDelList = ArrayList(adapterContent)
+        cardDelList.removeAt(position)
+        adapterContent = cardDelList as List<SavedCards>
+        notifyDataSetChanged()
+    }
+
     
     fun goPayOpenedfromMain(goPayOpened:Boolean){
         this.goPayOpened= goPayOpened
@@ -192,10 +199,22 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
 
     private fun setOnSavedCardOnClickAction(holder: RecyclerView.ViewHolder, position: Int) {
-            holder.itemView.setOnClickListener {
-                if (!isShaking) {
+        holder.itemView.deleteImageViewSaved.setOnClickListener {
+            if (!isShaking) {
                 selectedPosition = position
                 notifyDataSetChanged()
+            } else {
+                holder.itemView.deleteImageViewSaved?.setOnClickListener {
+                    println("delete imageview clicked!!")
+                    onCardSelectedActionListener.onDeleteIconClicked(true, position)
+                    holder.itemView.clearAnimation()
+                    it.animate().cancel()
+                    it.clearAnimation()
+                    holder.itemView.deleteImageViewSaved?.visibility = View.GONE
+                    notifyDataSetChanged()
+
+
+                }
             }
         }
     }
@@ -205,7 +224,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
             Glide.with(holder.itemView.context)
                 .load(arrayListCards[i])
                 .into(holder.itemView.imageView_amex)
-            holder.itemView.textViewCardDetails.text = (adapterContent[holder.adapterPosition] as SavedCards).chip1.title
+            holder.itemView.textViewCardDetails.text = adapterContent[holder.adapterPosition].chip1.title
         }
     }
 

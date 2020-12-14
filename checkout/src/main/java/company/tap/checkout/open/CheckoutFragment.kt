@@ -67,7 +67,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         this.viewModell = viewModell
 
         //BlankFragment().retainInstance = true
-        println("onAttach is calleds")
 
         val checkoutLayout: LinearLayout? = view1?.findViewById(R.id.fragment_all)
         val frameLayout: FrameLayout? = view1?.findViewById(R.id.fragment_container_nfc_lib)
@@ -131,9 +130,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
                _Activity=activity
             }
     }
-
-
-
 
 
 }
