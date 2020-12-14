@@ -35,6 +35,16 @@ class WebFragment constructor(private val webViewContract: WebViewContract)  : F
         setUpWebView()
     }
 
+//    companion object {
+//        val KEY_URL = "key:url"
+//        fun newInstance(url: String): WebFragment {
+//            val fragment = WebFragment()
+//            val args = Bundle()
+//            args.putString(KEY_URL, url)
+//            fragment.arguments = args
+//            return fragment
+//        }
+//    }
     @SuppressLint("SetJavaScriptEnabled")
     private fun setUpWebView() {
         web_view.settings.javaScriptEnabled = true
@@ -43,6 +53,8 @@ class WebFragment constructor(private val webViewContract: WebViewContract)  : F
             web_view.settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
         }
         web_view.webViewClient = TapCustomWebViewClient(this)
+        web_view.settings.loadWithOverviewMode = true
+
         web_view.loadUrl("https://www.google.com")
         web_view.setOnKeyListener { _, keyCode, event ->
             if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
