@@ -7,6 +7,7 @@ import android.graphics.drawable.ShapeDrawable
 import android.os.Build
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -15,6 +16,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.transition.Fade
+import androidx.transition.TransitionManager
 import company.tap.checkout.R
 import company.tap.checkout.internal.adapter.CardTypeAdapterUIKIT
 import company.tap.checkout.internal.adapter.CurrencyTypeAdapter
@@ -23,6 +26,7 @@ import company.tap.checkout.internal.dummygener.*
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.*
 import company.tap.checkout.internal.utils.AnimationEngine
+import company.tap.checkout.internal.utils.AnimationEngine.Type.FADE
 import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
 import company.tap.checkout.internal.utils.CurrencyFormatter
 import company.tap.checkout.internal.utils.CustomUtils
@@ -148,11 +152,9 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
 
     override fun displayGoPayLogin() {
         println("goPay Login reached")
-        if (this::bottomSheetLayout.isInitialized) {
-            AnimationEngine.applyTransition(
-                bottomSheetLayout, SLIDE
-            )
-        }
+        if (this::bottomSheetLayout.isInitialized)
+            AnimationEngine.applyTransition(bottomSheetLayout, SLIDE)
+
         removeViews(
             businessViewHolder,
             amountViewHolder1,
@@ -442,6 +444,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
 
     private fun removeViews(vararg viewHolders: TapBaseViewHolder) {
         viewHolders.forEach {
+            AnimationEngine.applyTransition(it.view as ViewGroup, FADE)
             sdkLayout.removeView(it.view)
         }
     }
@@ -498,6 +501,11 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
                 R.drawable.loader,
                 1
             ) {
+                if (this::bottomSheetLayout.isInitialized) {
+                    AnimationEngine.applyTransition(
+                        bottomSheetLayout, SLIDE
+                    )
+                }
                 removeViews(
                     businessViewHolder,
                     amountViewHolder1,
@@ -520,7 +528,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
         if (stopAnimation) {
             isShaking.value = false
             cardViewHolder11.view.mainChipgroup.groupAction?.text = LocalizationManager.getValue("GatewayHeader", "HorizontalHeaders", "rightTitle")
-            CustomUtils.showDialog("Are you sure you want to delete this card", "The Cards once deleted cannot be undone", context, 2, this)
+            CustomUtils.showDialog(LocalizationManager.getValue("deletegoPayCard","GoPay"), LocalizationManager.getValue("deleteMessage","GoPay"), context, 2, this)
             selectedItemsDel = itemId
             deleteCardisSelected = true
 
@@ -530,7 +538,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
     }
 
     override fun onGoPayLogoutClicked(isClicked: Boolean) {
-        if (isClicked) CustomUtils.showDialog("Are you sure you would like to sign out", "The goPayCards will be hidden from the page and you will need to login again to use any of them", context, 2, this)
+        if (isClicked) CustomUtils.showDialog(LocalizationManager.getValue("goPaySignOut","GoPay"), LocalizationManager.getValue("goPaySaveCards","GoPay"), context, 2, this)
     }
 
     override fun onEditClicked(isClicked: Boolean) {
@@ -598,9 +606,9 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
         return TapSwitchDataSource(
             switchSave = switchText,
             switchSaveMerchantCheckout = "Save for [merchant_name] Checkouts",
-            switchSavegoPayCheckout = "By enabling goPay, your mobile number will be saved with Tap Payments to get faster and more secure checkouts in multiple apps and websites.",
-            savegoPayText = "Save for goPay Checkouts",
-            alertgoPaySignup = "Please check your email or SMS’s in order to complete the goPay Checkout signup process."
+            switchSavegoPayCheckout = LocalizationManager.getValue("goPayTextLabel","GoPay"),
+            savegoPayText = LocalizationManager.getValue("savegoPayLabel","GoPay"),
+            alertgoPaySignup = LocalizationManager.getValue("goPaySignupLabel","GoPay")
         )
     }
 
