@@ -461,7 +461,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
                 val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
                 it.view.startAnimation(animation)
 
-            }, 50)
+            }, 30)
         }
 
     }
@@ -472,7 +472,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
                 sdkLayout.addView(it.view)
                 //  val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
                 //   it.view.startAnimation(animation)
-            }, 50)
+            }, 30)
             //   sdkLayout.addView(it.view)
 
         }
@@ -745,7 +745,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
     }
 
     override fun onEnterValidPhoneNumberActionListener() {
-        println("onEnterValidPhoneNumberActionListener pay button")
+        //Here API calls will happen
        activateActionButton()
 
     }
@@ -786,7 +786,14 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
 
     fun refreshMainView(){
         println("refresh main view")
-        removeAllViews()
+        removeViews(
+            businessViewHolder,
+            amountViewHolder1,
+            cardViewHolder11,
+            paymenttInputViewHolder,
+            saveCardSwitchHolder11
+        )
+
         addViews(
             businessViewHolder,
             amountViewHolder1,
@@ -795,7 +802,9 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
             saveCardSwitchHolder11
         )
 
-
+        saveCardSwitchHolder11.view.cardSwitch.showOnlyPayButton()
+        saveCardSwitchHolder11.view.cardviewSwitch.visibility = View.GONE
+        saveCardSwitchHolder11.view.cardSwitch.payButton.isActivated = false
 
     }
 
