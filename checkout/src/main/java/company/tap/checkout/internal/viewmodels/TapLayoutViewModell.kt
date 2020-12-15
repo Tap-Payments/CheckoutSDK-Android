@@ -437,14 +437,12 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
 
     private fun removeViews(vararg viewHolders: TapBaseViewHolder) {
         viewHolders.forEach {
-           // val animFadeIn: Animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
-           // sdkLayout.startAnimation(animFadeIn)
-           //   sdkLayout.removeView(it.view)
-          //  sdkLayout.removeView(it.view)
+            //   sdkLayout.removeView(it.view)
             Handler(Looper.getMainLooper()).postDelayed(Runnable {
                 sdkLayout.removeView(it.view)
                 val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
                 it.view.startAnimation(animation)
+
             }, 50)
         }
 
