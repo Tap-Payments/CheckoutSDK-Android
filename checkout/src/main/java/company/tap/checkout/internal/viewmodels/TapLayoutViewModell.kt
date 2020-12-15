@@ -109,9 +109,9 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
         businessViewHolder = BusinessViewHolder(context)
         amountViewHolder1 = AmountViewHolder1(context, this)
         initAmountAction()
-        cardViewHolder11 = CardViewHolder11(context, this)
+        cardViewHolder11 = CardViewHolder11(context, this,this)
         goPaySavedCardHolder = GoPaySavedCardHolder(context, this, this)
-        paymenttInputViewHolder = PaymenttInputViewHolder(context, this, this)
+        paymenttInputViewHolder = PaymenttInputViewHolder(context, this, this,this)
         saveCardSwitchHolder11 = SwitchViewHolder11(context)
         itemsViewHolder1 = ItemsViewHolder1(context, this, fragmentManager)
         otpViewHolder = OTPViewHolder(context)
@@ -283,6 +283,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
                 selectedAmountCurrency,
                 currentAmountCurrency
             )
+       
     }
 
     override fun displayOTPView(mobileNumber: String) {
@@ -361,7 +362,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
         }) // note: currently (support version 28.0.0), we can not use tranparent color here, if we use transparent, we still see a small divider line. So if we want to display transparent space, we can set color = background color or we can create a custom ItemDecoration instead of DividerItemDecoration.
         cardViewHolder11.view.mainChipgroup.chipsRecycler.addItemDecoration(divider)
 
-        adapter = CardTypeAdapterUIKIT(this)
+        adapter = CardTypeAdapterUIKIT(this,this)
         goPayAdapter = GoPayCardAdapterUIKIT(this)
         cardViewHolder11.view.mainChipgroup.chipsRecycler.adapter = adapter
         adapter.updateAdapterData(savedCardList.value as List<SavedCards>)
@@ -464,8 +465,17 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
 
 
     private fun unActivateActionButton() {
-//          tabAnimatedActionButtonViewHolder11.bindViewComponents()
+     //     tabAnimatedActionButtonViewHolder11.bindViewComponents()
 //          tabAnimatedActionButtonViewHolder11.view.actionButton.isClickable = false
+        saveCardSwitchHolder11.view.cardSwitch.payButton.setButtonDataSource(
+            false,
+            context.let { LocalizationManager.getLocale(it).language },
+            LocalizationManager.getValue("pay", "ActionButton"),
+            Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
+            Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
+        )
+        saveCardSwitchHolder11.view.cardSwitch.showOnlyPayButton()
+        saveCardSwitchHolder11.view.cardSwitch.payButton.isActivated = false
     }
 
 
@@ -751,7 +761,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
 //    }
 
     override fun onEnterValidCardNumberActionListener() {
-        TODO("Not yet implemented")
+      println("Valid pay button")
     }
 
     override fun onEnterValidPhoneNumberActionListener() {
@@ -759,7 +769,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
     }
 
     override fun onSelectPaymentOptionActionListener() {
-        TODO("Not yet implemented")
+        activateActionButton()
     }
 
     override fun onStateChanged(state: ActionButtonState) {}

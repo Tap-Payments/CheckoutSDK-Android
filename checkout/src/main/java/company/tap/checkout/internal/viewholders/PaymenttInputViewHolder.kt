@@ -29,12 +29,14 @@ import company.tap.tapcardvalidator_android.CardValidator
 import company.tap.tapcardvalidator_android.DefinedCardBrand
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.interfaces.TapActionButtonInterface
 import company.tap.tapuilibrary.uikit.interfaces.TapPaymentShowHideClearImage
 import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
 import company.tap.tapuilibrary.uikit.models.SectionTabItem
 import company.tap.tapuilibrary.uikit.views.TapAlertView
 import company.tap.tapuilibrary.uikit.views.TapMobilePaymentView
 import company.tap.tapuilibrary.uikit.views.TapSelectionTabLayout
+import kotlinx.android.synthetic.main.action_button_animation.view.*
 import kotlinx.android.synthetic.main.payment_inputt_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 
@@ -46,9 +48,10 @@ import kotlinx.android.synthetic.main.switch_layout.view.*
  */
 @RequiresApi(Build.VERSION_CODES.N)
 class PaymenttInputViewHolder(
-    context: Context,
+   private val context: Context,
     private val onPaymentCardComplete: onPaymentCardComplete,
-    private val onCardNFCCallListener: onCardNFCCallListener
+    private val onCardNFCCallListener: onCardNFCCallListener,
+    private val tapActionButtonInterface: TapActionButtonInterface
 ) : TapBaseViewHolder,
     TapSelectionTabLayoutInterface, CardInputListener, TapPaymentShowHideClearImage {
     override val view: View =
@@ -144,8 +147,21 @@ class PaymenttInputViewHolder(
             }
             switchViewHolder11.view.cardviewSwitch.visibility = View.INVISIBLE
             switchViewHolder11.view.mainSwitch.visibility = View.GONE
-            switchViewHolder11.view.cardSwitch.visibility = View.GONE
+            switchViewHolder11.view.cardSwitch.switchSaveMobile.visibility = View.GONE
             clearView.visibility = View.GONE
+            tapAlertView?.visibility = View.GONE
+            //switchViewHolder11.view.cardSwitch.showOnlyPayButton()
+            switchViewHolder11.view.cardSwitch.payButton.isActivated = false
+          //  switchViewHolder11.view.actionButton.isClickable = false
+            switchViewHolder11.view.cardSwitch.payButton.setButtonDataSource(false,
+                context?.let { LocalizationManager.getLocale(it).language },LocalizationManager.getValue("pay","ActionButton"),R. color.gray)
+           /* switchViewHolder11.view.cardSwitch.payButton.setButtonDataSource(
+                false,
+                        context.let { LocalizationManager.getLocale(it).language },
+                LocalizationManager.getValue("pay", "ActionButton"),
+                Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
+                Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
+            )*/
         }
 
         nfcButton?.setOnClickListener {
@@ -229,6 +245,7 @@ class PaymenttInputViewHolder(
                 if (s?.trim()?.length == 3 || s?.trim()?.length == 4) {
                     onPaymentCardComplete.onPaycardSwitchAction(true)
                     tapAlertView?.visibility = View.GONE
+                    tapActionButtonInterface?.onEnterValidCardNumberActionListener()
                 }
             }
 
@@ -254,6 +271,7 @@ class PaymenttInputViewHolder(
                 tapAlertView?.alertMessage?.text =
                     (LocalizationManager.getValue("Warning", "Hints", "missingExpiryCVV"))
             }
+
             lastCardInput = it.toString()
             shouldShowScannerOptions = it.isEmpty()
             controlScannerOptions()
@@ -400,7 +418,8 @@ class PaymenttInputViewHolder(
         if (show) {
             clearView.visibility = View.VISIBLE
         } else {
-            clearView.visibility = View.VISIBLE
+            clearView.visibility = View.GONE
+            tapAlertView?.visibility = View.GONE
         }
     }
 }
