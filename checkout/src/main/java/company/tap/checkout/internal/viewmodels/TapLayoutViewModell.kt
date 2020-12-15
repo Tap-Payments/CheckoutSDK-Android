@@ -223,9 +223,16 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
 //                bottomSheetLayout, SLIDE
 //            )
         if (display) {
-            removeAllViews()
+//            removeAllViews()
+            removeViews(
+                cardViewHolder11,
+                paymenttInputViewHolder,
+                saveCardSwitchHolder11,
+                goPayViewsHolder,
+                otpViewHolder,
+                itemsViewHolder1)
+//            addViews(businessViewHolder, amountViewHolder1)
             itemsViewHolder1.setView()
-            addViews(businessViewHolder, amountViewHolder1)
             frameLayout.visibility = View.VISIBLE
             itemsViewHolder1.itemsdisplayed = true
 
@@ -451,10 +458,10 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
             //   sdkLayout.removeView(it.view)
             Handler(Looper.getMainLooper()).postDelayed(Runnable {
                 sdkLayout.removeView(it.view)
-                val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
-                it.view.startAnimation(animation)
+//                val animation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
+//                it.view.startAnimation(animation)
 
-            }, 30)
+            }, 0)
         }
 
     }
@@ -463,9 +470,9 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
         viewHolders.forEach {
             Handler(Looper.getMainLooper()).postDelayed(Runnable {
                 sdkLayout.addView(it.view)
-                //  val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
-                //   it.view.startAnimation(animation)
-            }, 30)
+//                  val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
+//                   it.view.startAnimation(animation)
+            }, 0)
             //   sdkLayout.addView(it.view)
 
         }

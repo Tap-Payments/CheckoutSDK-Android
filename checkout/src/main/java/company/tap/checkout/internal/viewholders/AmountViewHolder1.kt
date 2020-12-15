@@ -32,7 +32,7 @@ class AmountViewHolder1(context: Context,private val baseLayouttManager: BaseLay
     private var currentCurren:String?=null
     private var itemCountt :String?=null
     private var originalAmount :String=""
-    private var isOpenedList :Boolean=false
+    private var isOpenedList :Boolean=true
     private var currentCurrencyTextView :TapTextView
     init {
         bindViewComponents()
@@ -75,7 +75,7 @@ class AmountViewHolder1(context: Context,private val baseLayouttManager: BaseLay
 
 
     fun setOnItemsClickListener(onItemsClickListener: () -> Unit) {
-        view.findViewById<TapButton>(R.id.textView_itemcount).setOnClickListener {
+        view.amount_section.itemCount.setOnClickListener {
             onItemsClickListener()
             baseLayouttManager?.controlCurrency(isOpenedList)
         }
