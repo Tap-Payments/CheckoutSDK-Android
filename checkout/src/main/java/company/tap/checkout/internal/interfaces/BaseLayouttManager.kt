@@ -5,7 +5,6 @@ import company.tap.checkout.internal.enums.SectionType
 
 /**
  *
- * Created by Mario Gamal on 7/24/20
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
