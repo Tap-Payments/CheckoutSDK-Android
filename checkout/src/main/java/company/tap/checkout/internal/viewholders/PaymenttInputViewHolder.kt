@@ -19,6 +19,7 @@ import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardinputwidget.widget.inline.InlineCardInput
 import company.tap.checkout.R
 import company.tap.checkout.internal.dummygener.TapCardPhoneListDataSource
+import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.onCardNFCCallListener
 import company.tap.checkout.internal.interfaces.onPaymentCardComplete
@@ -70,7 +71,7 @@ class PaymenttInputViewHolder(
     private var switchViewHolder11 = SwitchViewHolder11(context)
     private var imageURL: String = ""
     private var isadded: Boolean = false
-    private lateinit var paymentType: String
+    private lateinit var paymentType: PaymentTypeEnum
     private lateinit var cardBrandType: String
 
 
@@ -378,13 +379,13 @@ class PaymenttInputViewHolder(
         val itemsCardsList = ArrayList<SectionTabItem>()
 
         println("iamage val  are" + imageURLApi)
-        for (i in 0 until imageURLApi.size) {
+        for (i in imageURLApi.indices) {
             tabLayout.resetBehaviour()
             imageURL = imageURLApi[i].icon
             paymentType = imageURLApi[i].paymentType
             cardBrandType = imageURLApi[i].brand
-            println("imageURL in loop" + imageURL)
-            if (paymentType == "telecom") {
+
+            if (paymentType == PaymentTypeEnum.telecom) {
                 itemsMobilesList.add(SectionTabItem(imageURL, imageURL, CardBrand.ooredoo))
             } else {
                 itemsCardsList.add(SectionTabItem(imageURL, imageURL, CardBrand.visa))

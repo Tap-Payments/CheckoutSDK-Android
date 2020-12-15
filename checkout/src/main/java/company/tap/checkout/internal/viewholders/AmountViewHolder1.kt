@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.amountview_layout.view.*
  */
 class AmountViewHolder1(context: Context,private val baseLayouttManager: BaseLayouttManager?=null) : TapBaseViewHolder {
 
-  // override val view = TapAmountSectionView(context, null)
+
     override val view: View = LayoutInflater.from(context).inflate(R.layout.amountview_layout, null)
 
     override val type = SectionType.AMOUNT_ITEMS
