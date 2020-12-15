@@ -45,6 +45,11 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
     }
 
+    fun refreshFragment (){
+        dismiss()
+        dialog?.dismiss()
+        onShow()
+    }
 
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -79,15 +84,13 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
             context?.let {
                 if (frameLayout != null) {
                     webFrameLayout?.let { it1 ->
-                        viewModell.initLayoutManager(it,childFragmentManager,checkoutLayout,frameLayout,
+                        viewModell.initLayoutManager(bottomSheetDialog,it,childFragmentManager,checkoutLayout,frameLayout,
                             it1
                         )
                     }
                 }
             }
         }
-        // dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-
         val enabledSections = ArrayList<SectionType>()
         enabledSections.add(SectionType.BUSINESS)
         enabledSections.add(SectionType.AMOUNT_ITEMS)
