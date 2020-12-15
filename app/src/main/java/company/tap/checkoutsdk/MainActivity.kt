@@ -42,11 +42,11 @@ class MainActivity : AppCompatActivity() ,InlineViewCallback{
     }
 
     override fun onScanCardFailed(e: Exception?) {
-        TODO("Not yet implemented")
+
     }
 
     override fun onScanCardFinished(card: Card?, cardImage: ByteArray?) {
-        TODO("Not yet implemented")
+
     }
 }
 

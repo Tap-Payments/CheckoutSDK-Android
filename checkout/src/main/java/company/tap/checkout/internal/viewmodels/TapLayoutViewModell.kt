@@ -440,24 +440,24 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
            // val animFadeIn: Animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
            // sdkLayout.startAnimation(animFadeIn)
            //   sdkLayout.removeView(it.view)
-            sdkLayout.removeView(it.view)
-           /* Handler(Looper.getMainLooper()).postDelayed(Runnable {
+          //  sdkLayout.removeView(it.view)
+            Handler(Looper.getMainLooper()).postDelayed(Runnable {
                 sdkLayout.removeView(it.view)
                 val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
                 it.view.startAnimation(animation)
-            }, 50)*/
+            }, 50)
         }
 
         }
 
     private fun addViews(vararg viewHolders: TapBaseViewHolder) {
         viewHolders.forEach {
-           /* Handler(Looper.getMainLooper()).postDelayed(Runnable {
+          Handler(Looper.getMainLooper()).postDelayed(Runnable {
                 sdkLayout.addView(it.view)
-                val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
-                it.view.startAnimation(animation)
-            }, 500)*/
-            sdkLayout.addView(it.view)
+              //  val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
+             //   it.view.startAnimation(animation)
+            }, 50)
+         //   sdkLayout.addView(it.view)
 
         }
     }
