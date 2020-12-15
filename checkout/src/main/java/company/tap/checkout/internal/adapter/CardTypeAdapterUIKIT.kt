@@ -189,21 +189,26 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
     private fun typeSavedCard(holder: RecyclerView.ViewHolder, position: Int) {
         setSavedCardShakingAnimation(holder)
+        println("selectedPosition  typeSavedCard is"+selectedPosition)
+        println("position typeSavedCard is"+position)
         if (selectedPosition == position) setSelectedCardTypeSavedShadowAndBackground(holder)
         else setUnSelectedCardTypeSavedShadowAndBackground(holder)
+
         (holder as SavedViewHolder)
         bindSavedCardData(holder)
         setOnSavedCardOnClickAction(holder, position)
     }
 
+
     private fun setOnSavedCardOnClickAction(holder: RecyclerView.ViewHolder, position: Int) {
-        holder.itemView.deleteImageViewSaved.setOnClickListener {
+        holder.itemView.setOnClickListener {
             if (!isShaking) {
                 selectedPosition = position
                 notifyDataSetChanged()
-            } else {
-                holder.itemView.deleteImageViewSaved?.setOnClickListener {
-                    println("delete imageview clicked!!")
+            }
+        }
+        holder.itemView.deleteImageViewSaved?.setOnClickListener {
+            println("delete imageview clicked!!")
                     onCardSelectedActionListener.onDeleteIconClicked(true, position)
                     holder.itemView.clearAnimation()
                     it.animate().cancel()
@@ -211,9 +216,10 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                     holder.itemView.deleteImageViewSaved?.visibility = View.GONE
                     notifyDataSetChanged()
                 }
-            }
+
+
         }
-    }
+
 
     private fun bindSavedCardData(holder: RecyclerView.ViewHolder) {
         for (i in 0 until arrayListCards.size) {
