@@ -366,8 +366,8 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
         cardViewHolder11.view.mainChipgroup.chipsRecycler.adapter = adapter
         adapter.updateAdapterData(savedCardList.value as List<SavedCards>)
         goPayAdapter.updateAdapterData(goPayCardList.value as List<GoPaySavedCards>)
-        currencyAdapter = CurrencyTypeAdapter()
-        currencyAdapter.initOnCurrencyChangedActionListener(this)
+        currencyAdapter = CurrencyTypeAdapter(this)
+//        currencyAdapter.initOnCurrencyChangedActionListener(this)
         //   currencyAdapter.updateAdapterData(allCurrencies.value as List<Currencies1>)
         cardViewHolder11.view.mainChipgroup.groupAction?.visibility = View.VISIBLE
         cardViewHolder11.view.mainChipgroup.groupAction?.setOnClickListener {
@@ -445,7 +445,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
                 val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
                 it.view.startAnimation(animation)
 
-            }, 30)
+            }, 50)
         }
 
     }
@@ -456,7 +456,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
                 sdkLayout.addView(it.view)
                 //  val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
                 //   it.view.startAnimation(animation)
-            }, 30)
+            }, 50)
             //   sdkLayout.addView(it.view)
 
         }

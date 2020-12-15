@@ -38,9 +38,9 @@ var currencyRate:Double=0.0
 //val tapCard_Chip by lazy {  viewType?.findViewById<TapChip>(R.id.tapcard_Chip) }
 
 
-class CurrencyTypeAdapter : RecyclerView.Adapter<CurrencyTypeAdapter.CurrencyHolders>() {
+class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrencyChangedActionListener) :
+    RecyclerView.Adapter<CurrencyTypeAdapter.CurrencyHolders>() {
     private var adapterContentCurrencies: List<Currencies1> = java.util.ArrayList()
-    private var onCurrencyChangedActionListener: OnCurrencyChangedActionListener? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyHolders {
         val v =
             LayoutInflater.from(parent.context).inflate(R.layout.item_currency_rows, parent, false)
@@ -50,16 +50,13 @@ class CurrencyTypeAdapter : RecyclerView.Adapter<CurrencyTypeAdapter.CurrencyHol
         )
     }
 
-    fun initOnCurrencyChangedActionListener(onCurrencyChangedActionListener: OnCurrencyChangedActionListener){
-        this.onCurrencyChangedActionListener = onCurrencyChangedActionListener
-    }
 
     override fun getItemCount() = adapterContentCurrencies.size
 
     fun updateAdapterData(adapterContentCurrencies: List<Currencies1>) {
         println("list of currencies"+adapterContentCurrencies)
         this.adapterContentCurrencies = adapterContentCurrencies
-        notifyDataSetChanged()
+//        notifyDataSetChanged()
     }
 
     class CurrencyHolders(v: View) : RecyclerView.ViewHolder(v) {
@@ -159,7 +156,7 @@ class CurrencyTypeAdapter : RecyclerView.Adapter<CurrencyTypeAdapter.CurrencyHol
 
         holder.itemView.setOnClickListener {
             selectedPosition = position
-            onCurrencyChangedActionListener?.onCurrencyClicked(holder.itemView.textView_currency.text.toString(), adapterContentCurrencies[position].conversionrate)
+            onCurrencyChangedActionListener.onCurrencyClicked(holder.itemView.textView_currency.text.toString(), adapterContentCurrencies[position].conversionrate)
 //                notifyDataSetChanged()
         }
 

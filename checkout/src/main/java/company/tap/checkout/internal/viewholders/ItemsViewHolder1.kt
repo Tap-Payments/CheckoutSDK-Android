@@ -68,7 +68,6 @@ class ItemsViewHolder1(context11: Context, private val onCurrencyChangedActionLi
             .replace(R.id.fragment_container_nfc_lib, CurrencyViewsFragment(supportedCurrecnyList, supportedItemList,onCurrencyChangedActionListener))
             .addToBackStack(null)
             .commit()
-
     }
 
     fun resetItemList(items1: List<Items1>){

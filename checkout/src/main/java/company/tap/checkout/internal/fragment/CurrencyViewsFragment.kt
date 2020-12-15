@@ -38,43 +38,30 @@ open class CurrencyViewsFragment(private var currencyLists1: ArrayList<Currencie
 //    lateinit var currenciesList: ArrayList<Currencies1>
     private lateinit var itemsRecycler: RecyclerView
     private lateinit var itemList: ArrayList<Items1>
+    private val adapterItems by lazy { ItemAdapter(onCurrencyChangedActionListener) }
+    private val adapter by lazy { CurrencyTypeAdapter(onCurrencyChangedActionListener)}
+
+
 
 
     @SuppressLint("ClickableViewAccessibility")
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view: View = inflater.inflate(R.layout.item_frame_currencies, container, false)
-
-//        currenciesList = currencyLists1
-        itemList = itemLists as ArrayList<Items1>
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view : View = inflater.inflate(R.layout.item_frame_currencies, container, false)
         val currencyGroup = view.findViewById<TapChipGroup>(R.id.currencyLayout1)
-        val mainView = view.findViewById<LinearLayout>(R.id.mainView)
         val headerView = view.findViewById<ConstraintLayout>(R.id.header_view)
-//        headerView.visibility=View.GONE
-        currencyGroup.orientation = LinearLayout.HORIZONTAL
-        val groupName = currencyGroup.findViewById<TapTextView>(R.id.group_name)
-        groupName.visibility = View.GONE
-        val groupAction = currencyGroup.findViewById<TapTextView>(R.id.group_action)
-        groupAction.visibility = View.GONE
+        itemList = itemLists as ArrayList<Items1>
+        currencyLayout1?.orientation = LinearLayout.HORIZONTAL
+        currencyLayout1?.groupName?.visibility = View.GONE
+        currencyLayout1?.groupAction?.visibility = View.GONE
         chipRecycler = currencyGroup.findViewById<View>(R.id.chip_recycler) as RecyclerView
-        // chipRecycler.setHasFixedSize(true)
         chipRecycler.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-        // chipRecycler.adapter = CurrencyAdapter(currencyList)
-        val adapter = CurrencyTypeAdapter()
-        adapter.initOnCurrencyChangedActionListener(onCurrencyChangedActionListener)
         chipRecycler.adapter = adapter
-//        if (this::currenciesList.isInitialized)
-            adapter.updateAdapterData(currencyLists1)
+        adapter.updateAdapterData(currencyLists1)
         itemsRecycler = view.findViewById<View>(R.id.items_recylerview) as RecyclerView
         headerView.visibility = View.GONE
-
         itemsRecycler.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        val adapterItems = ItemAdapter(onCurrencyChangedActionListener)
         itemsRecycler.adapter= adapterItems
         if (this::itemList.isInitialized) adapterItems.updateAdapterData(itemList)
-
         val divider = DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL)
         divider.setDrawable(ShapeDrawable().apply {
             intrinsicWidth = 25
@@ -96,6 +83,10 @@ open class CurrencyViewsFragment(private var currencyLists1: ArrayList<Currencie
             true
         }
         return view
+    }
+
+    fun initView(){
+
     }
 
     fun setTheme() {
