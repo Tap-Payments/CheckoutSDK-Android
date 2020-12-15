@@ -445,7 +445,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
                 val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
                 it.view.startAnimation(animation)
 
-            }, 50)
+            }, 30)
         }
 
     }
@@ -456,7 +456,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
                 sdkLayout.addView(it.view)
                 //  val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
                 //   it.view.startAnimation(animation)
-            }, 50)
+            }, 30)
             //   sdkLayout.addView(it.view)
 
         }

@@ -191,12 +191,10 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         setSavedCardShakingAnimation(holder)
         if (selectedPosition == position) setSelectedCardTypeSavedShadowAndBackground(holder)
         else setUnSelectedCardTypeSavedShadowAndBackground(holder)
-
         (holder as SavedViewHolder)
         bindSavedCardData(holder)
         setOnSavedCardOnClickAction(holder, position)
     }
-
 
     private fun setOnSavedCardOnClickAction(holder: RecyclerView.ViewHolder, position: Int) {
         holder.itemView.deleteImageViewSaved.setOnClickListener {
@@ -212,8 +210,6 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                     it.clearAnimation()
                     holder.itemView.deleteImageViewSaved?.visibility = View.GONE
                     notifyDataSetChanged()
-
-
                 }
             }
         }
