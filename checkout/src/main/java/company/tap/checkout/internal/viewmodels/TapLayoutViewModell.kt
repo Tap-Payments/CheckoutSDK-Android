@@ -111,7 +111,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
         initAmountAction()
         cardViewHolder11 = CardViewHolder11(context, this)
         goPaySavedCardHolder = GoPaySavedCardHolder(context, this, this)
-        paymenttInputViewHolder = PaymenttInputViewHolder(context, this, this)
+        paymenttInputViewHolder = PaymenttInputViewHolder(context, this, this,this)
         saveCardSwitchHolder11 = SwitchViewHolder11(context)
         itemsViewHolder1 = ItemsViewHolder1(context, this, fragmentManager)
         otpViewHolder = OTPViewHolder(context)
@@ -751,7 +751,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
 //    }
 
     override fun onEnterValidCardNumberActionListener() {
-        TODO("Not yet implemented")
+      println("Valid pay button")
     }
 
     override fun onEnterValidPhoneNumberActionListener() {

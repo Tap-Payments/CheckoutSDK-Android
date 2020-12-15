@@ -189,8 +189,6 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
     private fun typeSavedCard(holder: RecyclerView.ViewHolder, position: Int) {
         setSavedCardShakingAnimation(holder)
-        println("selectedPosition  typeSavedCard is"+selectedPosition)
-        println("position typeSavedCard is"+position)
         if (selectedPosition == position) setSelectedCardTypeSavedShadowAndBackground(holder)
         else setUnSelectedCardTypeSavedShadowAndBackground(holder)
 

@@ -29,6 +29,7 @@ import company.tap.tapcardvalidator_android.CardValidator
 import company.tap.tapcardvalidator_android.DefinedCardBrand
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.interfaces.TapActionButtonInterface
 import company.tap.tapuilibrary.uikit.interfaces.TapPaymentShowHideClearImage
 import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
 import company.tap.tapuilibrary.uikit.models.SectionTabItem
@@ -48,7 +49,8 @@ import kotlinx.android.synthetic.main.switch_layout.view.*
 class PaymenttInputViewHolder(
     context: Context,
     private val onPaymentCardComplete: onPaymentCardComplete,
-    private val onCardNFCCallListener: onCardNFCCallListener
+    private val onCardNFCCallListener: onCardNFCCallListener,
+    private val tapActionButtonInterface: TapActionButtonInterface
 ) : TapBaseViewHolder,
     TapSelectionTabLayoutInterface, CardInputListener, TapPaymentShowHideClearImage {
     override val view: View =
@@ -146,6 +148,7 @@ class PaymenttInputViewHolder(
             switchViewHolder11.view.mainSwitch.visibility = View.GONE
             switchViewHolder11.view.cardSwitch.visibility = View.GONE
             clearView.visibility = View.GONE
+            tapAlertView?.visibility = View.GONE
         }
 
         nfcButton?.setOnClickListener {
@@ -229,6 +232,7 @@ class PaymenttInputViewHolder(
                 if (s?.trim()?.length == 3 || s?.trim()?.length == 4) {
                     onPaymentCardComplete.onPaycardSwitchAction(true)
                     tapAlertView?.visibility = View.GONE
+                    tapActionButtonInterface?.onEnterValidCardNumberActionListener()
                 }
             }
 
@@ -254,6 +258,7 @@ class PaymenttInputViewHolder(
                 tapAlertView?.alertMessage?.text =
                     (LocalizationManager.getValue("Warning", "Hints", "missingExpiryCVV"))
             }
+
             lastCardInput = it.toString()
             shouldShowScannerOptions = it.isEmpty()
             controlScannerOptions()
@@ -400,7 +405,8 @@ class PaymenttInputViewHolder(
         if (show) {
             clearView.visibility = View.VISIBLE
         } else {
-            clearView.visibility = View.VISIBLE
+            clearView.visibility = View.GONE
+            tapAlertView?.visibility = View.GONE
         }
     }
 }
