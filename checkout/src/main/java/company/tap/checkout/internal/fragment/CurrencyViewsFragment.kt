@@ -42,8 +42,6 @@ open class CurrencyViewsFragment(private var currencyLists1: ArrayList<Currencie
     private val adapter by lazy { CurrencyTypeAdapter(onCurrencyChangedActionListener)}
 
 
-
-
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view : View = inflater.inflate(R.layout.item_frame_currencies, container, false)
@@ -86,6 +84,14 @@ open class CurrencyViewsFragment(private var currencyLists1: ArrayList<Currencie
     }
 
     fun initView(){
+
+    }
+
+    fun setChipAdapter(){
+
+    }
+
+    fun setItemsAdapter(){
 
     }
 
