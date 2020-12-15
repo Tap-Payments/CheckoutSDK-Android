@@ -22,6 +22,7 @@ import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
 
 
 import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.interfaces.TapActionButtonInterface
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import kotlinx.android.synthetic.main.item_knet.view.*
 import kotlinx.android.synthetic.main.item_save_cards.view.*
@@ -33,7 +34,7 @@ All rights reserved.
  **/
 
 @Suppress("PrivatePropertyName")
-class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedActionListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedActionListener,private val tapActionButtonInterface: TapActionButtonInterface) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var selectedPosition = -1
     private var lastPosition = -1
     private var arrayListRedirect:ArrayList<String> = ArrayList()
@@ -205,6 +206,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                 selectedPosition = position
                 notifyDataSetChanged()
             }
+            tapActionButtonInterface?.onSelectPaymentOptionActionListener()
         }
 
         }
