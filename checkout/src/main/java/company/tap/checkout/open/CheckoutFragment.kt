@@ -23,8 +23,7 @@ import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
-
-
+import kotlinx.android.synthetic.main.fragment_checkouttaps.view.*
 
 
 /**
@@ -80,7 +79,11 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         if (checkoutLayout != null) {
             context?.let {
                 if (frameLayout != null) {
-                    viewModell.initLayoutManager(it,childFragmentManager,checkoutLayout,frameLayout)
+                    webFrameLayout?.let { it1 ->
+                        viewModell.initLayoutManager(it,childFragmentManager,checkoutLayout,frameLayout,
+                            it1
+                        )
+                    }
                 }
             }
         }

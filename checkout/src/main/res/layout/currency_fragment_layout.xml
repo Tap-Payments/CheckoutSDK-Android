@@ -4,9 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/currency1_fragment_container"
-    android:visibility="gone"
-
-    >
+    android:visibility="gone">
 
 </FrameLayout>
    <!-- android:name="company.tap.tapuilibrary.uikit.fragment.CurrencyViewFragment"-->
