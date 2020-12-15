@@ -8,8 +8,11 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ShapeDrawable
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -86,7 +89,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
     private lateinit var goPayAdapter: GoPayCardAdapterUIKIT
     private lateinit var currencyAdapter: CurrencyTypeAdapter
     private lateinit var frameLayout: FrameLayout
-    private var deleteCardisSelected: Boolean = false
+    private  var deleteCardisSelected: Boolean=false
     var selectedItemsDel by Delegates.notNull<Int>()
 
 
@@ -122,22 +125,20 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
     }
 
     private fun initAmountAction() {
-        amountViewHolder1.setOnItemsClickListener {
-            //itemsViewHolder1.resetView()
-        }
+        amountViewHolder1.setOnItemsClickListener{}
     }
 
 
     override fun displayStartupLayout(enabledSections: ArrayList<SectionType>) {
         print("is displayStartupLayout")
         //Todo based on api response logic for swicth case
-        addViews(
-            businessViewHolder,
+
+        addViews(businessViewHolder,
             amountViewHolder1,
             cardViewHolder11,
             paymenttInputViewHolder,
-            saveCardSwitchHolder11
-        )
+            saveCardSwitchHolder11)
+
         saveCardSwitchHolder11.view.cardSwitch.visibility = View.VISIBLE
         saveCardSwitchHolder11.view.cardSwitch.payButton.visibility = View.VISIBLE
         saveCardSwitchHolder11.view.mainSwitch.mainSwitchLinear.setBackgroundColor(
@@ -148,30 +149,22 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
 
     fun setBottomSheetLayout(bottomSheetLayout: FrameLayout) {
         this.bottomSheetLayout = bottomSheetLayout
+
     }
 
     override fun displayGoPayLogin() {
         println("goPay Login reached")
-        if (this::bottomSheetLayout.isInitialized) {
-            AnimationEngine.applyTransition(
-                bottomSheetLayout, SLIDE
-            )
-        }
-        removeViews(
-            businessViewHolder,
-            amountViewHolder1,
-            cardViewHolder11,
-            paymenttInputViewHolder,
-            saveCardSwitchHolder11,
-            goPayViewsHolder,
-            otpViewHolder
-        )
+        if (this::bottomSheetLayout.isInitialized)
+            AnimationEngine.applyTransition(bottomSheetLayout, SLIDE)
 
-        addViews(
-            businessViewHolder,
-            amountViewHolder1,
-            goPayViewsHolder
-        )
+        removeViews(businessViewHolder, amountViewHolder1 ,
+            cardViewHolder11, paymenttInputViewHolder,
+            saveCardSwitchHolder11, otpViewHolder,
+            goPayViewsHolder)
+
+        addViews(businessViewHolder
+            ,amountViewHolder1, goPayViewsHolder)
+
         // goPayViewsHolder.goPayLoginInput.inputType = GoPayLoginMethod.PHONE
         // goPayViewsHolder.goPayLoginInput.visibility = View.VISIBLE
         // goPayLoginInput?.changeDataSource(GoPayLoginDataSource())
@@ -236,7 +229,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
 
         } else {
             if (goPayViewsHolder.goPayopened || itemsViewHolder1.itemsdisplayed) {
-                println("block2 display " + display)
+
                 removeViews(
                     businessViewHolder,
                     amountViewHolder1,
@@ -258,7 +251,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
                 frameLayout.visibility = View.GONE
 
             } else {
-                println("block3 display " + display)
+
 
                 removeViews(
                     businessViewHolder,
@@ -298,7 +291,8 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
                 bottomSheetLayout, SLIDE
             )
         }
-        removeViews(cardViewHolder11, paymenttInputViewHolder, saveCardSwitchHolder11)
+        removeViews(cardViewHolder11,
+            paymenttInputViewHolder, saveCardSwitchHolder11)
         addViews(otpViewHolder)
         otpViewHolder.otpView.visibility = View.VISIBLE
         otpViewHolder.otpView.mobileNumberText.text = mobileNumber
@@ -445,13 +439,26 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
 
     private fun removeViews(vararg viewHolders: TapBaseViewHolder) {
         viewHolders.forEach {
-            sdkLayout.removeView(it.view)
+            //   sdkLayout.removeView(it.view)
+            Handler(Looper.getMainLooper()).postDelayed(Runnable {
+                sdkLayout.removeView(it.view)
+                val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
+                it.view.startAnimation(animation)
+
+            }, 50)
         }
+
     }
 
     private fun addViews(vararg viewHolders: TapBaseViewHolder) {
         viewHolders.forEach {
-            sdkLayout.addView(it.view)
+            Handler(Looper.getMainLooper()).postDelayed(Runnable {
+                sdkLayout.addView(it.view)
+                //  val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
+                //   it.view.startAnimation(animation)
+            }, 50)
+            //   sdkLayout.addView(it.view)
+
         }
     }
 
@@ -502,6 +509,11 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
                 R.drawable.loader,
                 1
             ) {
+                if (this::bottomSheetLayout.isInitialized) {
+                    AnimationEngine.applyTransition(
+                        bottomSheetLayout, SLIDE
+                    )
+                }
                 removeViews(cardViewHolder11)
                 removeViews(businessViewHolder)
                 removeViews(amountViewHolder1)
@@ -525,11 +537,17 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
         println("delete icon is clicked:$stopAnimation" + "itemId is" + itemId)
         if (stopAnimation) {
             isShaking.value = false
-            cardViewHolder11.view.mainChipgroup.groupAction?.text =
-                LocalizationManager.getValue("GatewayHeader", "HorizontalHeaders", "rightTitle")
+            cardViewHolder11.view.mainChipgroup.groupAction?.text = LocalizationManager.getValue(
+                "GatewayHeader",
+                "HorizontalHeaders",
+                "rightTitle"
+            )
             CustomUtils.showDialog(
-                "Are you sure you want to delete this card",
-                "The Cards once deleted cannot be undone",
+                LocalizationManager.getValue("deletegoPayCard", "GoPay"),
+                LocalizationManager.getValue(
+                    "deleteMessage",
+                    "GoPay"
+                ),
                 context,
                 2,
                 this
@@ -537,20 +555,20 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
             selectedItemsDel = itemId
             deleteCardisSelected = true
 
-        } else {
-            cardViewHolder11.view.mainChipgroup.groupAction?.text =
-                LocalizationManager.getValue("close", "Common")
+        } else { cardViewHolder11.view.mainChipgroup.groupAction?.text = LocalizationManager.getValue(
+            "close",
+            "Common"
+        )
             deleteCardisSelected = false
         }
     }
 
     override fun onGoPayLogoutClicked(isClicked: Boolean) {
         if (isClicked) CustomUtils.showDialog(
-            "Are you sure you would like to sign out",
-            "The goPayCards will be hidden from the page and you will need to login again to use any of them",
-            context,
-            2,
-            this
+            LocalizationManager.getValue("goPaySignOut", "GoPay"), LocalizationManager.getValue(
+                "goPaySaveCards",
+                "GoPay"
+            ), context, 2, this
         )
     }
 
@@ -625,9 +643,9 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
         return TapSwitchDataSource(
             switchSave = switchText,
             switchSaveMerchantCheckout = "Save for [merchant_name] Checkouts",
-            switchSavegoPayCheckout = "By enabling goPay, your mobile number will be saved with Tap Payments to get faster and more secure checkouts in multiple apps and websites.",
-            savegoPayText = "Save for goPay Checkouts",
-            alertgoPaySignup = "Please check your email or SMS’s in order to complete the goPay Checkout signup process."
+            switchSavegoPayCheckout = LocalizationManager.getValue("goPayTextLabel", "GoPay"),
+            savegoPayText = LocalizationManager.getValue("savegoPayLabel", "GoPay"),
+            alertgoPaySignup = LocalizationManager.getValue("goPaySignupLabel", "GoPay")
         )
     }
 
@@ -745,6 +763,8 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
     }
 
     override fun onStateChanged(state: ActionButtonState) {}
+
+
 
 }
 

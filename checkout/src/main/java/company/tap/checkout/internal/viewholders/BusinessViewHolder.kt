@@ -9,8 +9,6 @@ import company.tap.checkout.internal.enums.SectionType
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.datasource.HeaderDataSource
-import company.tap.tapuilibrary.uikit.views.TapHeaderSectionView
-import kotlinx.android.synthetic.main.businessview_layout.*
 import kotlinx.android.synthetic.main.businessview_layout.view.*
 
 
@@ -22,7 +20,8 @@ import kotlinx.android.synthetic.main.businessview_layout.view.*
 class BusinessViewHolder(context: Context) : TapBaseViewHolder {
 
 
-    override val view: View = LayoutInflater.from(context).inflate(R.layout.businessview_layout, null)
+    override val view: View =
+        LayoutInflater.from(context).inflate(R.layout.businessview_layout, null)
 
     override val type = SectionType.BUSINESS
 

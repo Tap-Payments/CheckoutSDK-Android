@@ -20,7 +20,6 @@ import company.tap.checkout.internal.dummygener.JsonResponseDummy1
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModell
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
 import kotlinx.android.synthetic.main.fragment_checkouttaps.view.*
@@ -102,13 +101,13 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         return view1
     }
 
-    private fun getBusinessHeaderData(context: Context?,viewModel22: TapLayoutViewModell) {
+    private fun getBusinessHeaderData(context: Context?, viewModell22: TapLayoutViewModell) {
         print("contexct22"+context)
         val jsonFileString = context?.let { getJsonDataFromAsset(it, "dummyapiresponsedefault.json") }
         val gson = Gson()
         val dummyInitApiResponse: JsonResponseDummy1 = gson.fromJson(jsonFileString, JsonResponseDummy1::class.java)
         // Pass the api response data to LayoutManager
-        viewModel22.getDatafromAPI(dummyInitApiResponse)
+        viewModell22.getDatafromAPI(dummyInitApiResponse)
     }
 
 

@@ -22,10 +22,6 @@ class TabAnimatedActionButtonViewHolder11(context: Context) : TapBaseViewHolder 
     override val type = SectionType.ActionButton
 
 
-    init {
-      //  bindViewComponents()
-    }
-
     override fun bindViewComponents() {
          // view.actionButton.setButtonDataSource(getSuccessDataSource(Color.GRAY, "Pay", Color.WHITE ))
         view.actionButton.setButtonDataSource(false,

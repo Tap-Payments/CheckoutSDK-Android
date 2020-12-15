@@ -84,7 +84,7 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
         goPayLoginInput.visibility = View.GONE
         //to be replace dummy check when validating via api
         if(goPayLoginInput.textInput.text.toString()=="69045932"){
-            CustomUtils.showDialog(LocalizationManager.getValue("GoPayAlert", "Hints", "goPayTitle"),LocalizationManager.getValue("GoPayAlert", "Hints", "goPayemailalert"),context,null,baseLayouttManager)
+            CustomUtils.showDialog(LocalizationManager.getValue("GoPayAlert", "Hints", "goPayTitle"),LocalizationManager.getValue("GoPayAlert", "Hints", "goPayphonealert"),context,null,baseLayouttManager)
             return
         }else{
             println(" you clicked to display otp!!!")
@@ -108,7 +108,6 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
     }
 
     override fun onOtpButtonConfirmationClick(otpNumber: String): Boolean {
-        println("otpNumber in goPay is"+otpNumber)
         Log.d("isValidOTPValid", (otpNumber == "111111").toString())
         return if(otpNumber=="111111"){
             baseLayouttManager?.displayGoPay()
