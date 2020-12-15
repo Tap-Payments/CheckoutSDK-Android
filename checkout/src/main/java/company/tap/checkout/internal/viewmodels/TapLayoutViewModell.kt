@@ -441,20 +441,6 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
         } else if (response == "OK"){
             bottomSheetDialog.dismissWithAnimation
             bottomSheetDialog.dismiss()
-//            refreshMainView()
-//            saveCardSwitchHolder11 = SwitchViewHolder11(context)
-//            saveCardSwitchHolder11.view.cardSwitch.payButton.changeButtonState(ActionButtonState.IDLE)
-//            saveCardSwitchHolder11.view.cardSwitch.payButton.onMorphAnimationEnd()
-//            saveCardSwitchHolder11.view.cardSwitch.payButton.setButtonDataSource(
-//                false,
-//                context.let { LocalizationManager.getLocale(it).language },
-//                LocalizationManager.getValue("pay", "ActionButton"),
-//                Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
-//                Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")))
-//
-//            _Activity?.recreate()
-
-
         }
 
     }
@@ -468,7 +454,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
                 val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
                 it.view.startAnimation(animation)
 
-            }, 50)
+            }, 30)
         }
 
     }
@@ -479,7 +465,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
                 sdkLayout.addView(it.view)
                 //  val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
                 //   it.view.startAnimation(animation)
-            }, 50)
+            }, 30)
             //   sdkLayout.addView(it.view)
 
         }
@@ -736,7 +722,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
     }
 
     override fun onEnterValidPhoneNumberActionListener() {
-        println("onEnterValidPhoneNumberActionListener pay button")
+        //Here API calls will happen
        activateActionButton()
 
     }
@@ -777,7 +763,14 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
 
     fun refreshMainView(){
         println("refresh main view")
-        removeAllViews()
+        removeViews(
+            businessViewHolder,
+            amountViewHolder1,
+            cardViewHolder11,
+            paymenttInputViewHolder,
+            saveCardSwitchHolder11
+        )
+
         addViews(
             businessViewHolder,
             amountViewHolder1,
@@ -796,6 +789,11 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
             goPayViewsHolder,
             otpViewHolder
         )
+
+        saveCardSwitchHolder11.view.cardSwitch.showOnlyPayButton()
+        saveCardSwitchHolder11.view.cardviewSwitch.visibility = View.GONE
+        saveCardSwitchHolder11.view.cardSwitch.payButton.isActivated = false
+
     }
 
 
