@@ -20,7 +20,6 @@ import kotlinx.android.synthetic.main.switch_layout.view.*
  */
 class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
 
-  //  override val view = TapCardSwitch(context)
     override val view: View = LayoutInflater.from(context).inflate(R.layout.switch_layout, null)
 
     override val type = SectionType.SAVE_CARD
@@ -37,7 +36,7 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
     }
 
     override fun bindViewComponents() {
-      //  setSwitchLocals()
+        //  setSwitchLocals()
         configureSwitch()
 
     }
@@ -50,8 +49,8 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
         alertgoPaySignupString = LocalizationManager.getValue("goPaySignupLabel","GoPay")
         if(payName.name == "CARD"){
             switchString = LocalizationManager.getValue("cardSaveLabel", "TapCardInputKit")
-           view.mainSwitch.setSwitchDataSource(getSwitchDataSourceFromAPI(
-               switchString,
+            view.mainSwitch.setSwitchDataSource(getSwitchDataSourceFromAPI(
+                switchString,
                 goPayString,
                 savegoPayString,
                 alertgoPaySignupString
@@ -60,7 +59,7 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
         }else if( payName.name == "MOBILE") {
             switchString = LocalizationManager.getValue("mobileUseLabel","TapMobileInput")
             view.mainSwitch.setSwitchDataSource(getSwitchDataSourceFromAPI(
-               switchString,
+                switchString,
                 goPayString,
                 savegoPayString,
                 alertgoPaySignupString
@@ -74,7 +73,7 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
         }
         view.cardSwitch.saveTextView.text = switchString
         print("switch string $switchString")
-      //  actionButtons.activateButton(context)
+        //  actionButtons.activateButton(context)
     }
 
     private fun getSwitchDataSourceFromAPI(
@@ -84,12 +83,12 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
         alertgoPaySignupString: String?
     ): TapSwitchDataSource {
         return TapSwitchDataSource(
-    switchSave = switchString,
-    switchSaveMerchantCheckout = "Save for   $merchantName   Checkouts",
-    switchSavegoPayCheckout = goPayString,
-    savegoPayText = savegoPayString,
-    alertgoPaySignup = alertgoPaySignupString
-)
+            switchSave = switchString,
+            switchSaveMerchantCheckout = "Save for   $merchantName   Checkouts",
+            switchSavegoPayCheckout = goPayString,
+            savegoPayText = savegoPayString,
+            alertgoPaySignup = alertgoPaySignupString
+        )
     }
 
     /**
@@ -101,10 +100,10 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
     fun setDatafromAPI(merchantNameApi: String, paymentType: PaymenttInputViewHolder.PaymentType) {
         merchantName = merchantNameApi
         paymentName = paymentType
-       // bindViewComponents()
-       paymentName?.let {
-           setSwitchLocals(it)
-       }
+        // bindViewComponents()
+        paymentName?.let {
+            setSwitchLocals(it)
+        }
     }
 
     /**
@@ -147,7 +146,7 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
                     Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor"))
                 )//
 
-                    Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor"))
+                Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor"))
                 view.cardSwitch.payButton.stateListAnimator = null
                 view.cardSwitch.payButton.isActivated
                 view.cardSwitch.payButton.setButtonDataSource(
@@ -186,7 +185,7 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
                 view.cardSwitch.payButton.stateListAnimator = null
                 view.cardSwitch.payButton.setButtonDataSource(
                     false,
-                   context?.let { LocalizationManager.getLocale(it).language },
+                    context?.let { LocalizationManager.getLocale(it).language },
                     "Pay",
                     Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
                     Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
@@ -205,7 +204,7 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
         }
         view.cardSwitch.switchSaveMerchant?.setOnCheckedChangeListener { _, _ ->
             if (!  view.cardSwitch.switchSaveMerchant?.isChecked!! && !  view.cardSwitch.switchGoPayCheckout?.isChecked!!) {
-               // switchSaveDemo?.isChecked = false
+                // switchSaveDemo?.isChecked = false
                 view.cardSwitch.switchesLayout?.visibility = View.GONE
                 view.cardSwitch.switchSaveMerchant?.visibility = View.GONE
                 view.cardSwitch.switchSaveMerchant?.isChecked = false
@@ -218,7 +217,7 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
         }
         view.cardSwitch.switchGoPayCheckout?.setOnCheckedChangeListener { _, _ ->
             if (!view.cardSwitch.switchSaveMerchant?.isChecked!! && !view.cardSwitch.switchGoPayCheckout?.isChecked!!) {
-               // view.cardSwitch.switchSaveMerchant?.isChecked = false
+                // view.cardSwitch.switchSaveMerchant?.isChecked = false
                 view.cardSwitch.switchesLayout?.visibility = View.GONE
                 view.cardSwitch.switchSaveMerchant?.visibility = View.GONE
                 view.cardSwitch.switchSaveMerchant?.isChecked = false

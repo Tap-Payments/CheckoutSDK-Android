@@ -45,7 +45,7 @@ import kotlinx.android.synthetic.main.switch_layout.view.*
  */
 @RequiresApi(Build.VERSION_CODES.N)
 class PaymenttInputViewHolder(
-    private val context: Context,
+    context: Context,
     private val onPaymentCardComplete: onPaymentCardComplete,
     private val onCardNFCCallListener: onCardNFCCallListener
 ) : TapBaseViewHolder,
@@ -62,8 +62,8 @@ class PaymenttInputViewHolder(
     private var lastCardInput = ""
     private var cardScannerBtn: ImageView? = null
     private var nfcButton: ImageView? = null
-    private lateinit var tapCardInputView: InlineCardInput
-    private lateinit var tapMobileInputView: TapMobilePaymentView
+    private var tapCardInputView: InlineCardInput
+    private var tapMobileInputView: TapMobilePaymentView
     private var linearLayoutPay: LinearLayout? = null
     private var tabPosition: Int? = null
     private var tapAlertView: TapAlertView? = null
@@ -79,7 +79,7 @@ class PaymenttInputViewHolder(
         tabLayout.setTabLayoutInterface(this)
         tapMobileInputView = TapMobilePaymentView(context, null)
         tapMobileInputView.setTapPaymentShowHideClearImage(this)
-        tapCardInputView = InlineCardInput(context,null)
+        tapCardInputView = InlineCardInput(context, null)
         tapAlertView = view.findViewById(R.id.alertView)
         tabLayout.setTabLayoutInterface(this)
         paymentInputContainer = view.findViewById(R.id.payment_input_layout)
@@ -91,7 +91,6 @@ class PaymenttInputViewHolder(
 
 
     override fun bindViewComponents() {
-        initTabLayout()
         initCardInput()
         initMobileInput()
         initClearText()
@@ -103,14 +102,14 @@ class PaymenttInputViewHolder(
         view.separator?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
     }
 
-    fun tapMobileInputViewWatcher(){
+    fun tapMobileInputViewWatcher() {
         tapMobileInputView.mobileNumber.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 val card = CardValidator.validate(s.toString())
-                if (s?.trim()?.length!! > 2  ){
-                   if(s.trim()[0].toInt() == 5){
-                       tabLayout.selectTab(CardBrand.ooredoo, true)
-                   }
+                if (s?.trim()?.length!! > 2) {
+                    if (s.trim()[0].toInt() == 5) {
+                        tabLayout.selectTab(CardBrand.ooredoo, true)
+                    }
                 }
 
             }
@@ -123,12 +122,6 @@ class PaymenttInputViewHolder(
         })
     }
 
-    private fun initTabLayout() {
-        // tabLayout.addSection(getCardList(imageURL))
-        //   tabLayout.addSection(getCardList())
-        //  tabLayout.addSection(getMobileList(imageURL))
-        //  tabLayout.setTabLayoutInterface(this)
-    }
 
     private fun initializeCardForm() {
         cardScannerBtn = view.findViewById(R.id.card_scanner_button)
@@ -191,23 +184,25 @@ class PaymenttInputViewHolder(
         cvcNumberWatcher()
     }
 
-    private fun cardNumberWatcher(){
+    private fun cardNumberWatcher() {
         tapCardInputView.setCardNumberTextWatcher(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) { cardNumAfterTextChangeListener(s) }
+            override fun afterTextChanged(s: Editable?) {
+                cardNumAfterTextChangeListener(s)
+            }
+
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s.toString().isEmpty()){
+                if (s.toString().isEmpty()) {
                     clearView.visibility = View.GONE
                     tapAlertView?.visibility = View.GONE
-                }
-                else {
+                } else {
                     clearView.visibility = View.VISIBLE
                 }
             }
         })
     }
 
-    private fun expiryDateWatcher(){
+    private fun expiryDateWatcher() {
         tapCardInputView.setExpiryDateTextWatcher(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -226,7 +221,7 @@ class PaymenttInputViewHolder(
         })
     }
 
-    private fun cvcNumberWatcher(){
+    private fun cvcNumberWatcher() {
         tapCardInputView.setCvcNumberTextWatcher(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -235,26 +230,28 @@ class PaymenttInputViewHolder(
                     tapAlertView?.visibility = View.GONE
                 }
             }
+
             override fun afterTextChanged(s: Editable?) {}
         })
     }
 
 
-    fun cardNumAfterTextChangeListener(s: Editable?){
+    fun cardNumAfterTextChangeListener(s: Editable?) {
         val card = CardValidator.validate(s.toString())
         s?.let {
             if (s.isNullOrEmpty()) {
                 tabLayout.resetBehaviour()
                 tapAlertView?.visibility = View.GONE
             }
-            if(card.cardBrand != null){
-                Log.d("cardBrand"  ,card.cardBrand.toString() )
-                Log.d("cardBrand"  ,(card.validationState == CardValidationState.valid).toString() )
+            if (card.cardBrand != null) {
+                Log.d("cardBrand", card.cardBrand.toString())
+                Log.d("cardBrand", (card.validationState == CardValidationState.valid).toString())
                 tabLayout.selectTab(card.cardBrand, true)
             }
             if (s.trim().length == 19 && (card.validationState == CardValidationState.invalid)) {
                 tapAlertView?.visibility = View.VISIBLE
-                tapAlertView?.alertMessage?.text = (LocalizationManager.getValue("Warning", "Hints", "missingExpiryCVV"))
+                tapAlertView?.alertMessage?.text =
+                    (LocalizationManager.getValue("Warning", "Hints", "missingExpiryCVV"))
             }
             lastCardInput = it.toString()
             shouldShowScannerOptions = it.isEmpty()
@@ -264,22 +261,25 @@ class PaymenttInputViewHolder(
         }
     }
 
-    private fun  checkValidationState(card: DefinedCardBrand) {
+    private fun checkValidationState(card: DefinedCardBrand) {
         when (card.validationState) {
             CardValidationState.invalid -> {
                 tapAlertView?.visibility = View.VISIBLE
-                tapAlertView?.alertMessage?.text = (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
+                tapAlertView?.alertMessage?.text =
+                    (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
             }
             CardValidationState.incomplete -> {
                 tapAlertView?.visibility = View.VISIBLE
-                tapAlertView?.alertMessage?.text = (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
+                tapAlertView?.alertMessage?.text =
+                    (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
             }
             CardValidationState.valid -> {
                 tapAlertView?.visibility = View.GONE
             }
             else -> {
                 tapAlertView?.visibility = View.VISIBLE
-                tapAlertView?.alertMessage?.text = (LocalizationManager.getValue("Warning", "Hints", "missingExpiryCVV"))
+                tapAlertView?.alertMessage?.text =
+                    (LocalizationManager.getValue("Warning", "Hints", "missingExpiryCVV"))
             }
         }
     }
@@ -385,7 +385,7 @@ class PaymenttInputViewHolder(
             cardBrandType = imageURLApi[i].brand
             println("imageURL in loop" + imageURL)
             if (paymentType == "telecom") {
-                itemsMobilesList.add(SectionTabItem(imageURL, imageURL,CardBrand.ooredoo))
+                itemsMobilesList.add(SectionTabItem(imageURL, imageURL, CardBrand.ooredoo))
             } else {
                 itemsCardsList.add(SectionTabItem(imageURL, imageURL, CardBrand.visa))
             }
