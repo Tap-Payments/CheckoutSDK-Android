@@ -197,6 +197,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         (holder as SavedViewHolder)
         bindSavedCardData(holder)
         setOnSavedCardOnClickAction(holder, position)
+        deleteSelectedCard(holder,position)
     }
 
 
@@ -207,18 +208,20 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                 notifyDataSetChanged()
             }
         }
-        holder.itemView.deleteImageViewSaved?.setOnClickListener {
-            println("delete imageview clicked!!")
-                    onCardSelectedActionListener.onDeleteIconClicked(true, position)
-                    holder.itemView.clearAnimation()
-                    it.animate().cancel()
-                    it.clearAnimation()
-                    holder.itemView.deleteImageViewSaved?.visibility = View.GONE
-                    notifyDataSetChanged()
-                }
-
 
         }
+    private fun deleteSelectedCard(holder: RecyclerView.ViewHolder, position: Int){
+        holder.itemView.deleteImageViewSaved?.setOnClickListener {
+            println("delete imageview clicked!!")
+            onCardSelectedActionListener.onDeleteIconClicked(true, position)
+            holder.itemView.clearAnimation()
+            it.animate().cancel()
+            it.clearAnimation()
+            holder.itemView.deleteImageViewSaved?.visibility = View.GONE
+            notifyDataSetChanged()
+        }
+
+    }
 
 
     private fun bindSavedCardData(holder: RecyclerView.ViewHolder) {
