@@ -112,6 +112,7 @@ class PaymenttInputViewHolder(
                 val card = CardValidator.validate(s.toString())
                 if (s?.trim()?.length!! > 2) {
                     if (s.trim()[0].toInt() == 5) {
+                        println("is that called")
                         tabLayout.selectTab(CardBrand.ooredoo, true)
                     }
                 }
@@ -185,8 +186,14 @@ class PaymenttInputViewHolder(
     private fun initMobileInput() {
         tapMobileInputView.mobileNumber.doAfterTextChanged {
             it?.let {
-                if (it.isEmpty()) clearView.visibility = View.GONE
-                else clearView.visibility = View.VISIBLE
+                println("is this called")
+                if (it.isEmpty()){
+                    clearView.visibility = View.GONE
+                }
+                else {
+                    clearView.visibility = View.VISIBLE
+                }
+                tapActionButtonInterface?.onEnterValidPhoneNumberActionListener()
                 //check if editable start with number of oridoo or zain etc
             }
         }
