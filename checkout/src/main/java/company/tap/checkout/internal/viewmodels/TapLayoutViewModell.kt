@@ -283,7 +283,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
                 selectedAmountCurrency,
                 currentAmountCurrency
             )
-        unActivateActionButton()
+       
     }
 
     override fun displayOTPView(mobileNumber: String) {
