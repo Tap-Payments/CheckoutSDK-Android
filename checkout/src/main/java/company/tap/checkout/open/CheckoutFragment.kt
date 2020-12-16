@@ -22,7 +22,6 @@ import company.tap.checkout.internal.viewmodels.TapLayoutViewModell
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
-import kotlinx.android.synthetic.main.fragment_checkouttaps.view.*
 
 
 /**
@@ -33,7 +32,7 @@ import kotlinx.android.synthetic.main.fragment_checkouttaps.view.*
 class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
 
     private var view1: View? = null
-    private var contextt: Context? = null
+    private var _Context: Context? = null
     private lateinit var viewModell :TapLayoutViewModell
      var _Activity: Activity? = null
 
@@ -41,16 +40,9 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _Activity = activity?.parent
-        this.contextt = context
+        this._Context = context
         setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
     }
-
-    fun refreshFragment (){
-        dismiss()
-        dialog?.dismiss()
-        onShow()
-    }
-
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
@@ -58,28 +50,17 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         savedInstanceState: Bundle?
     ): View? {
         view1 = inflater.inflate(R.layout.fragment_checkouttaps, container, false)
-
-        /**
-         * set bottom sheet background
-         */
-//        backgroundColor = (Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.main_switch_background")))
         backgroundColor = (Color.parseColor("#00000000"))
-
         bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
         val viewModell: TapLayoutViewModell by viewModels()
         this.viewModell = viewModell
-
-        //BlankFragment().retainInstance = true
-
         val checkoutLayout: LinearLayout? = view1?.findViewById(R.id.fragment_all)
         val frameLayout: FrameLayout? = view1?.findViewById(R.id.fragment_container_nfc_lib)
         val webFrameLayout: FrameLayout? = view1?.findViewById(R.id.webFrameLayout)
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
-
         bottomSheetLayout?.let {
             viewModell.setBottomSheetLayout(it)
         }
-        print("contextt before business"+contextt)
         if (checkoutLayout != null) {
             context?.let {
                 if (frameLayout != null) {
@@ -95,17 +76,14 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         enabledSections.add(SectionType.BUSINESS)
         enabledSections.add(SectionType.AMOUNT_ITEMS)
         enabledSections.add(SectionType.FRAGMENT)
-
-//        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
         viewModell.displayStartupLayout(enabledSections)
-        //This is for getting response from business engine . Currently dummy response from assets json is used
         getBusinessHeaderData(context,viewModell)
         setBottomSheetInterface(this)
         return view1
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun getBusinessHeaderData(context: Context?, viewModell22: TapLayoutViewModell) {
-        print("contexct22"+context)
         val jsonFileString = context?.let { getJsonDataFromAsset(it, "dummyapiresponsedefault.json") }
         val gson = Gson()
         val dummyInitApiResponse: JsonResponseDummy1 = gson.fromJson(jsonFileString, JsonResponseDummy1::class.java)
@@ -115,14 +93,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
 
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment BlankFragment.
-         */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(context: Context, activity: Activity) =
@@ -130,8 +100,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
                 arguments = Bundle().apply {
 
                 }
-                contextt = context
-                println("context" + contextt)
+                _Context = context
                _Activity=activity
             }
     }
