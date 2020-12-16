@@ -29,6 +29,7 @@ import company.tap.tapcardvalidator_android.CardValidator
 import company.tap.tapcardvalidator_android.DefinedCardBrand
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
 import company.tap.tapuilibrary.uikit.interfaces.TapActionButtonInterface
 import company.tap.tapuilibrary.uikit.interfaces.TapPaymentShowHideClearImage
 import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
@@ -51,7 +52,8 @@ class PaymenttInputViewHolder(
    private val context: Context,
     private val onPaymentCardComplete: onPaymentCardComplete,
     private val onCardNFCCallListener: onCardNFCCallListener,
-    private val tapActionButtonInterface: TapActionButtonInterface
+    private val tapActionButtonInterface: TapActionButtonInterface,
+   private val switchViewHolder11: SwitchViewHolder11
 ) : TapBaseViewHolder,
     TapSelectionTabLayoutInterface, CardInputListener, TapPaymentShowHideClearImage {
     override val view: View =
@@ -71,7 +73,6 @@ class PaymenttInputViewHolder(
     private var linearLayoutPay: LinearLayout? = null
     private var tabPosition: Int? = null
     private var tapAlertView: TapAlertView? = null
-    private var switchViewHolder11 = SwitchViewHolder11(context)
     private var imageURL: String = ""
     private var isadded: Boolean = false
     private lateinit var paymentType: PaymentTypeEnum
@@ -154,15 +155,13 @@ class PaymenttInputViewHolder(
             //switchViewHolder11.view.cardSwitch.showOnlyPayButton()
             switchViewHolder11.view.cardSwitch.payButton.isActivated = false
           //  switchViewHolder11.view.actionButton.isClickable = false
-            switchViewHolder11.view.cardSwitch.payButton.setButtonDataSource(false,
-                context?.let { LocalizationManager.getLocale(it).language },LocalizationManager.getValue("pay","ActionButton"),R. color.gray)
-           /* switchViewHolder11.view.cardSwitch.payButton.setButtonDataSource(
+            switchViewHolder11.view.cardSwitch.payButton.setButtonDataSource(
                 false,
                         context.let { LocalizationManager.getLocale(it).language },
                 LocalizationManager.getValue("pay", "ActionButton"),
                 Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
                 Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
-            )*/
+            )
         }
 
         nfcButton?.setOnClickListener {
@@ -195,6 +194,7 @@ class PaymenttInputViewHolder(
                 }
                 tapActionButtonInterface?.onEnterValidPhoneNumberActionListener()
                 //check if editable start with number of oridoo or zain etc
+                onPaymentCardComplete.onPaycardSwitchAction(true)
             }
         }
     }
@@ -346,19 +346,19 @@ class PaymenttInputViewHolder(
         TransitionManager.beginDelayedTransition(paymentInputContainer, Fade())
         paymentInputContainer.removeAllViews()
         if (position == 0) {
+            println("call 1")
             selectedType = PaymentType.CARD
-            switchViewHolder11.setSwitchLocals(selectedType)
+            switchViewHolder11.setSwitchLocals(PaymentType.CARD)
             switchViewHolder11.view.cardSwitch.switchGoPayCheckout.visibility = View.VISIBLE
             nfcButton?.visibility = View.VISIBLE
             cardScannerBtn?.visibility = View.VISIBLE
-
             clearView.visibility = View.GONE
             paymentInputContainer.addView(tapCardInputView)
             checkForFocus()
         } else {
             selectedType = PaymentType.MOBILE
-            switchViewHolder11.setSwitchLocals(selectedType)
-
+            println("call 2")
+            switchViewHolder11.setSwitchLocals(PaymentType.MOBILE)
             nfcButton?.visibility = View.GONE
             cardScannerBtn?.visibility = View.GONE
             if (tapMobileInputView.mobileNumber.text.isEmpty())
@@ -429,6 +429,7 @@ class PaymenttInputViewHolder(
             tapAlertView?.visibility = View.GONE
         }
     }
+
 }
 
 

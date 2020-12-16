@@ -106,8 +106,8 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
         amountViewHolder1 = AmountViewHolder1(context, this)
         cardViewHolder11 = CardViewHolder11(context, this, this)
         goPaySavedCardHolder = GoPaySavedCardHolder(context, this, this)
-        paymentInputViewHolder = PaymenttInputViewHolder(context, this, this, this)
         saveCardSwitchHolder11 = SwitchViewHolder11(context)
+        paymentInputViewHolder = PaymenttInputViewHolder(context, this, this, this,saveCardSwitchHolder11)
         itemsViewHolder1 = ItemsViewHolder1(context, this, fragmentManager)
         otpViewHolder = OTPViewHolder(context)
         goPayViewsHolder = GoPayViewsHolder(context, this)
@@ -581,7 +581,6 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
     }
 
     override fun onPaycardSwitchAction(isCompleted: Boolean) {
-        saveCardSwitchHolder11.view.cardSwitch.setSwitchDataSource(getSwitchDataSource("fdsg"))
         if (isCompleted) {
             saveCardSwitchHolder11.view.mainSwitch.visibility = View.VISIBLE
             saveCardSwitchHolder11.view.mainSwitch.switchSaveMobile.visibility = View.VISIBLE
@@ -636,7 +635,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
         amountViewHolder1.changeGroupAction(false)
     }
 
-    //Setting data to TapSwitchDataSource
+  /*  //Setting data to TapSwitchDataSource
     private fun getSwitchDataSource(switchText: String): TapSwitchDataSource {
         return TapSwitchDataSource(
             switchSave = switchText,
@@ -645,7 +644,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
             savegoPayText = LocalizationManager.getValue("savegoPayLabel", "GoPay"),
             alertgoPaySignup = LocalizationManager.getValue("goPaySignupLabel", "GoPay")
         )
-    }
+    }*/
 
 
 
