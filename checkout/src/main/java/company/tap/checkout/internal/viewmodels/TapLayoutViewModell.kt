@@ -662,18 +662,6 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
         amountViewHolder1.changeGroupAction(false)
     }
 
-  /*  //Setting data to TapSwitchDataSource
-    private fun getSwitchDataSource(switchText: String): TapSwitchDataSource {
-        return TapSwitchDataSource(
-            switchSave = switchText,
-            switchSaveMerchantCheckout = "Save for [merchant_name] Checkouts",
-            switchSavegoPayCheckout = LocalizationManager.getValue("goPayTextLabel", "GoPay"),
-            savegoPayText = LocalizationManager.getValue("savegoPayLabel", "GoPay"),
-            alertgoPaySignup = LocalizationManager.getValue("goPaySignupLabel", "GoPay")
-        )
-    }*/
-
-
 
     override fun onCurrencyClicked(currencySelected: String, currencyRate: Double) {
         for (i in itemList.indices) {
