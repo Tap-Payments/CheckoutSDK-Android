@@ -29,7 +29,6 @@ import company.tap.tapcardvalidator_android.CardValidator
 import company.tap.tapcardvalidator_android.DefinedCardBrand
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
 import company.tap.tapuilibrary.uikit.interfaces.TapActionButtonInterface
 import company.tap.tapuilibrary.uikit.interfaces.TapPaymentShowHideClearImage
 import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
@@ -37,7 +36,6 @@ import company.tap.tapuilibrary.uikit.models.SectionTabItem
 import company.tap.tapuilibrary.uikit.views.TapAlertView
 import company.tap.tapuilibrary.uikit.views.TapMobilePaymentView
 import company.tap.tapuilibrary.uikit.views.TapSelectionTabLayout
-import kotlinx.android.synthetic.main.action_button_animation.view.*
 import kotlinx.android.synthetic.main.payment_inputt_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 
@@ -142,7 +140,7 @@ class PaymenttInputViewHolder(
             println("is it called")
             tapMobileInputView.clearNumber()
             tapCardInputView.clear()
-            onPaymentCardComplete.onPaycardSwitchAction(false)
+            onPaymentCardComplete.onPaycardSwitchAction(false,PaymentType.CARD)
             if (tabPosition == 1) {
                 nfcButton?.visibility = View.INVISIBLE
                 cardScannerBtn?.visibility = View.INVISIBLE
@@ -194,7 +192,7 @@ class PaymenttInputViewHolder(
                 }
                 tapActionButtonInterface?.onEnterValidPhoneNumberActionListener()
                 //check if editable start with number of oridoo or zain etc
-                onPaymentCardComplete.onPaycardSwitchAction(true)
+                onPaymentCardComplete.onPaycardSwitchAction(true, PaymentType.MOBILE)
             }
         }
     }
@@ -250,7 +248,7 @@ class PaymenttInputViewHolder(
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s?.trim()?.length == 3 || s?.trim()?.length == 4) {
-                    onPaymentCardComplete.onPaycardSwitchAction(true)
+                    onPaymentCardComplete.onPaycardSwitchAction(true, PaymentType.CARD)
                     tapAlertView?.visibility = View.GONE
                     tapActionButtonInterface?.onEnterValidCardNumberActionListener()
                 }

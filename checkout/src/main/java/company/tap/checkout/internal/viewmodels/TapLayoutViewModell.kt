@@ -35,7 +35,6 @@ import company.tap.checkout.internal.webview.WebFragment
 import company.tap.checkout.internal.webview.WebViewContract
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
@@ -580,10 +579,11 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
         }
     }
 
-    override fun onPaycardSwitchAction(isCompleted: Boolean) {
+    override fun onPaycardSwitchAction(isCompleted: Boolean, paymentType: PaymenttInputViewHolder.PaymentType) {
         if (isCompleted) {
             saveCardSwitchHolder11.view.mainSwitch.visibility = View.VISIBLE
             saveCardSwitchHolder11.view.mainSwitch.switchSaveMobile.visibility = View.VISIBLE
+            saveCardSwitchHolder11.setSwitchToggleData(paymentType)
             saveCardSwitchHolder11.view.mainSwitch.mainSwitchLinear.setBackgroundColor(
                 Color.parseColor(
                     ThemeManager.getValue("TapSwitchView.main.backgroundColor")
@@ -690,6 +690,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
 
     override fun onEnterValidCardNumberActionListener() {
         //Here API calls will happen
+
         activateActionButton()
     }
 

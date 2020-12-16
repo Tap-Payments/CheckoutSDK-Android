@@ -44,14 +44,12 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
     }
     // Function / Logic is responsible for sett ing the data to switch based on user selection
     fun setSwitchLocals(payName:PaymenttInputViewHolder.PaymentType) {
-
-        //Has to be in Else condition only, temporarily kept here for data purpose
         goPayString = LocalizationManager.getValue("goPayTextLabel","GoPay")
         savegoPayString = LocalizationManager.getValue("savegoPayLabel","GoPay")
         alertgoPaySignupString = LocalizationManager.getValue("goPaySignupLabel","GoPay")
         println("payname in switch"+payName.name)
         if(payName.name == "CARD"){
-            switchString = LocalizationManager.getValue("cardSaveLabel", "TapCardInputKit")
+            switchString =LocalizationManager.getValue("cardUseNFCLabel","TapCardInputKit")
             switchString?.let { getMainSwitchDataSource(it) }?.let {
                 view.mainSwitch.setSwitchDataSource(it) }
             view.cardSwitch.setSwitchDataSource(getTapSwitchDataSourceFromAPI(switchString, goPayString, savegoPayString, alertgoPaySignupString))
@@ -217,6 +215,18 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
         return TapSwitchDataSource(
             switchSave = switchText
         )
+    }
+
+    fun setSwitchToggleData(paymentType: PaymenttInputViewHolder.PaymentType){
+        if(paymentType==PaymenttInputViewHolder.PaymentType.CARD) {
+            view.mainSwitch.setSwitchDataSource(getMainSwitchDataSource(LocalizationManager.getValue("cardSaveLabel", "TapCardInputKit")))
+        }else{
+            view.mainSwitch.setSwitchDataSource(getMainSwitchDataSource(LocalizationManager.getValue("mobileSaveLabel","TapMobileInput")))
+
+        }
+
+
+
     }
 
 }
