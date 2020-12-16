@@ -13,7 +13,7 @@ interface BaseLayouttManager {
     fun displayGoPayLogin()
     fun displayGoPay()
     fun controlCurrency(display: Boolean)
-    fun displayOTPView(mobileNumber: String)
+    fun displayOTPView(mobileNumber: String, otpType:String)
     fun displayRedirect(url: String)
     fun displaySaveCardOptions()
     fun getDatafromAPI(dummyResponse1: JsonResponseDummy1)

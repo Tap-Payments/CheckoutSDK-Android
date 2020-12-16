@@ -88,7 +88,7 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
             return
         }else{
             println(" you clicked to display otp!!!")
-            baseLayouttManager?.displayOTPView(mobileNumber)
+            baseLayouttManager?.displayOTPView(mobileNumber,"GOPAY")
 
 
         }

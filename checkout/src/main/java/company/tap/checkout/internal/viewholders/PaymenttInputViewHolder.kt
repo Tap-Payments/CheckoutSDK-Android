@@ -21,6 +21,7 @@ import company.tap.checkout.R
 import company.tap.checkout.internal.dummygener.TapCardPhoneListDataSource
 import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.SectionType
+import company.tap.checkout.internal.interfaces.BaseLayouttManager
 import company.tap.checkout.internal.interfaces.onCardNFCCallListener
 import company.tap.checkout.internal.interfaces.onPaymentCardComplete
 import company.tap.tapcardvalidator_android.CardBrand
@@ -51,7 +52,8 @@ class PaymenttInputViewHolder(
     private val onPaymentCardComplete: onPaymentCardComplete,
     private val onCardNFCCallListener: onCardNFCCallListener,
     private val tapActionButtonInterface: TapActionButtonInterface,
-   private val switchViewHolder11: SwitchViewHolder11
+   private val switchViewHolder11: SwitchViewHolder11,
+   private val baseLayouttManager: BaseLayouttManager
 ) : TapBaseViewHolder,
     TapSelectionTabLayoutInterface, CardInputListener, TapPaymentShowHideClearImage {
     override val view: View =
@@ -67,7 +69,7 @@ class PaymenttInputViewHolder(
     private var cardScannerBtn: ImageView? = null
     private var nfcButton: ImageView? = null
     private var tapCardInputView: InlineCardInput
-    private var tapMobileInputView: TapMobilePaymentView
+    internal var tapMobileInputView: TapMobilePaymentView
     private var linearLayoutPay: LinearLayout? = null
     private var tabPosition: Int? = null
     private var tapAlertView: TapAlertView? = null
@@ -192,7 +194,10 @@ class PaymenttInputViewHolder(
                 }
                 tapActionButtonInterface?.onEnterValidPhoneNumberActionListener()
                 //check if editable start with number of oridoo or zain etc
-                onPaymentCardComplete.onPaycardSwitchAction(true, PaymentType.MOBILE)
+               // onPaymentCardComplete.onPaycardSwitchAction(true, PaymentType.MOBILE)
+                if(tapMobileInputView.mobileNumber.text.length>7)
+                baseLayouttManager.displayOTPView(tapMobileInputView.mobileNumber.text.toString(),"PAYMOBILE")
+
             }
         }
     }

@@ -106,7 +106,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
         cardViewHolder11 = CardViewHolder11(context, this, this)
         goPaySavedCardHolder = GoPaySavedCardHolder(context, this, this)
         saveCardSwitchHolder11 = SwitchViewHolder11(context)
-        paymentInputViewHolder = PaymenttInputViewHolder(context, this, this, this,saveCardSwitchHolder11)
+        paymentInputViewHolder = PaymenttInputViewHolder(context, this, this, this,saveCardSwitchHolder11,this)
         itemsViewHolder1 = ItemsViewHolder1(context, this, fragmentManager)
         otpViewHolder = OTPViewHolder(context)
         goPayViewsHolder = GoPayViewsHolder(context, this)
@@ -259,24 +259,51 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
        
     }
 
-    override fun displayOTPView(mobileNumber: String) {
+    override fun displayOTPView(mobileNumber: String,otpType:String) {
         if (this::bottomSheetLayout.isInitialized) {
             AnimationEngine.applyTransition(
                 bottomSheetLayout, SLIDE
             )
         }
-        removeViews(
-            cardViewHolder11,
-            paymentInputViewHolder, saveCardSwitchHolder11
-        )
-        addViews(otpViewHolder)
-        otpViewHolder.otpView.visibility = View.VISIBLE
-        otpViewHolder.otpView.mobileNumberText.text = mobileNumber
-        otpViewHolder.otpView.changePhone.setOnClickListener {
-            goPayViewsHolder.onChangePhoneClicked()
-        }
-        otpViewHolder.otpView.otpViewActionButton.setOnClickListener {
-            goPayViewsHolder.onOtpButtonConfirmationClick(otpViewHolder.otpView.otpViewInput1.text.toString() + otpViewHolder.otpView.otpViewInput2.text.toString())
+        if(otpType=="GOPAY") {
+            removeViews(
+                cardViewHolder11,
+                paymentInputViewHolder, saveCardSwitchHolder11
+            )
+            addViews(otpViewHolder)
+            otpViewHolder.otpView.visibility = View.VISIBLE
+            otpViewHolder.otpView.mobileNumberText.text = mobileNumber
+            otpViewHolder.otpView.changePhone.setOnClickListener {
+                goPayViewsHolder.onChangePhoneClicked()
+            }
+            otpViewHolder.otpView.otpViewActionButton.setOnClickListener {
+                goPayViewsHolder.onOtpButtonConfirmationClick(otpViewHolder.otpView.otpViewInput1.text.toString() + otpViewHolder.otpView.otpViewInput2.text.toString())
+            }
+        }else if(otpType == "PAYMOBILE"){
+            removeViews(businessViewHolder,amountViewHolder1,paymentInputViewHolder,cardViewHolder11,saveCardSwitchHolder11,otpViewHolder)
+            addViews(businessViewHolder,amountViewHolder1,cardViewHolder11,paymentInputViewHolder,saveCardSwitchHolder11,otpViewHolder)
+            saveCardSwitchHolder11.view.cardSwitch.payButton.visibility = View.GONE
+            saveCardSwitchHolder11.view.mainSwitch.switchSaveMobile.visibility = View.VISIBLE
+            otpViewHolder.otpView.visibility = View.VISIBLE
+            otpViewHolder.otpView.mobileNumberText.text = mobileNumber
+            otpViewHolder.otpView.changePhone.setOnClickListener {
+                goPayViewsHolder.onChangePhoneClicked()
+            }
+            otpViewHolder.otpView.otpViewActionButton.setOnClickListener {
+                removeViews(businessViewHolder,amountViewHolder1,paymentInputViewHolder,cardViewHolder11,saveCardSwitchHolder11,otpViewHolder)
+                addViews(businessViewHolder,amountViewHolder1,cardViewHolder11,paymentInputViewHolder,saveCardSwitchHolder11)
+                saveCardSwitchHolder11.view.cardSwitch.switchSaveMobile.visibility = View.GONE
+                saveCardSwitchHolder11.view.cardSwitch.payButton.setButtonDataSource(
+                    false,
+                    context.let { LocalizationManager.getLocale(it).language },
+                    LocalizationManager.getValue("pay", "ActionButton"),
+                    Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
+                    Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
+                )
+                saveCardSwitchHolder11.view.cardSwitch.payButton.visibility = View.VISIBLE
+                paymentInputViewHolder.tapMobileInputView.clearNumber()
+            }
+
         }
     }
 
