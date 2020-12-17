@@ -34,7 +34,7 @@ All rights reserved.
  **/
 
 @Suppress("PrivatePropertyName")
-class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedActionListener,private val tapActionButtonInterface: TapActionButtonInterface) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedActionListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var selectedPosition = -1
     private var lastPosition = -1
     private var arrayListRedirect:ArrayList<String> = ArrayList()
@@ -203,10 +203,11 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     private fun setOnSavedCardOnClickAction(holder: RecyclerView.ViewHolder, position: Int) {
         holder.itemView.setOnClickListener {
             if (!isShaking) {
+                onCardSelectedActionListener.onCardSelectedAction(true, adapterContent[holder.adapterPosition])
                 selectedPosition = position
                 notifyDataSetChanged()
             }
-            tapActionButtonInterface?.onSelectPaymentOptionActionListener()
+//            tapActionButtonInterface.onSelectPaymentOptionActionListener()
         }
 
         }

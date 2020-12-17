@@ -19,18 +19,17 @@ import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardinputwidget.widget.inline.InlineCardInput
 import company.tap.checkout.R
 import company.tap.checkout.internal.dummygener.TapCardPhoneListDataSource
-import company.tap.checkout.internal.enums.PaymentTypeEnum
+import company.tap.checkout.internal.enums.PaymentActionType
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayouttManager
 import company.tap.checkout.internal.interfaces.onCardNFCCallListener
-import company.tap.checkout.internal.interfaces.onPaymentCardComplete
+import company.tap.checkout.internal.interfaces.PaymentCardComplete
 import company.tap.tapcardvalidator_android.CardBrand
 import company.tap.tapcardvalidator_android.CardValidationState
 import company.tap.tapcardvalidator_android.CardValidator
 import company.tap.tapcardvalidator_android.DefinedCardBrand
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.uikit.interfaces.TapActionButtonInterface
 import company.tap.tapuilibrary.uikit.interfaces.TapPaymentShowHideClearImage
 import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
 import company.tap.tapuilibrary.uikit.models.SectionTabItem
@@ -49,10 +48,9 @@ import kotlinx.android.synthetic.main.switch_layout.view.*
 @RequiresApi(Build.VERSION_CODES.N)
 class PaymenttInputViewHolder(
    private val context: Context,
-    private val onPaymentCardComplete: onPaymentCardComplete,
+    private val onPaymentCardComplete: PaymentCardComplete,
     private val onCardNFCCallListener: onCardNFCCallListener,
-    private val tapActionButtonInterface: TapActionButtonInterface,
-   private val switchViewHolder11: SwitchViewHolder11,
+   private val switchViewHolder11: SwitchViewHolder11?,
    private val baseLayouttManager: BaseLayouttManager
 ) : TapBaseViewHolder,
     TapSelectionTabLayoutInterface, CardInputListener, TapPaymentShowHideClearImage {
@@ -62,7 +60,7 @@ class PaymenttInputViewHolder(
     private var tabLayout: TapSelectionTabLayout
     private val paymentInputContainer: LinearLayout
     private val clearView: ImageView
-    var selectedType = PaymentType.CARD
+    var selectedType = PaymentActionType.CARD
     private var shouldShowScannerOptions = true
     private var lastFocusField = CardInputListener.FocusField.FOCUS_CARD
     private var lastCardInput = ""
@@ -75,7 +73,7 @@ class PaymenttInputViewHolder(
     private var tapAlertView: TapAlertView? = null
     private var imageURL: String = ""
     private var isadded: Boolean = false
-    private lateinit var paymentType: PaymentTypeEnum
+    private  var paymentType: PaymentActionType ?= null
     private lateinit var cardBrandType: String
 
 
@@ -107,7 +105,7 @@ class PaymenttInputViewHolder(
         view.separator?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
     }
 
-    fun tapMobileInputViewWatcher() {
+    private fun tapMobileInputViewWatcher() {
         tapMobileInputView.mobileNumber.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 val card = CardValidator.validate(s.toString())
@@ -137,33 +135,6 @@ class PaymenttInputViewHolder(
         linearLayoutPay = view.findViewById(R.id.linear_paylayout)
         tapCardInputView.clearFocus()
         clearView.visibility = View.GONE
-        clearView.setOnClickListener {
-            tabLayout.resetBehaviour()
-            println("is it called")
-            tapMobileInputView.clearNumber()
-            tapCardInputView.clear()
-            onPaymentCardComplete.onPaycardSwitchAction(false,PaymentType.CARD)
-            if (tabPosition == 1) {
-                nfcButton?.visibility = View.INVISIBLE
-                cardScannerBtn?.visibility = View.INVISIBLE
-            }
-            switchViewHolder11.view.cardviewSwitch.visibility = View.INVISIBLE
-            switchViewHolder11.view.mainSwitch.visibility = View.GONE
-            switchViewHolder11.view.cardSwitch.switchSaveMobile.visibility = View.GONE
-            clearView.visibility = View.GONE
-            tapAlertView?.visibility = View.GONE
-            //switchViewHolder11.view.cardSwitch.showOnlyPayButton()
-            switchViewHolder11.view.cardSwitch.payButton.isActivated = false
-          //  switchViewHolder11.view.actionButton.isClickable = false
-            switchViewHolder11.view.cardSwitch.payButton.setButtonDataSource(
-                false,
-                        context.let { LocalizationManager.getLocale(it).language },
-                LocalizationManager.getValue("pay", "ActionButton"),
-                Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
-                Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
-            )
-        }
-
         nfcButton?.setOnClickListener {
             onCardNFCCallListener.onClickNFC()
         }
@@ -176,9 +147,20 @@ class PaymenttInputViewHolder(
     private fun initClearText() {
         clearView.setOnClickListener {
             when (selectedType) {
-                PaymentType.CARD -> tapCardInputView.clear()
-                PaymentType.MOBILE -> tapMobileInputView.clearNumber()
+                PaymentActionType.CARD -> tapCardInputView.clear()
+                PaymentActionType.telecom -> tapMobileInputView.clearNumber()
             }
+            switchViewHolder11?.view?.cardSwitch?.switchesLayout?.visibility = View.GONE
+            switchViewHolder11?.view?.mainSwitch?.switchSaveMobile?.visibility = View.GONE
+            tapAlertView?.visibility = View.GONE
+            switchViewHolder11?.view?.cardSwitch?.payButton?.isActivated = false
+            switchViewHolder11?.view?.cardSwitch?.payButton?.setButtonDataSource(
+                false,
+                        context.let { LocalizationManager.getLocale(it).language },
+                LocalizationManager.getValue("pay", "ActionButton"),
+                Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
+                Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
+            )
         }
     }
 
@@ -192,7 +174,6 @@ class PaymenttInputViewHolder(
                 else {
                     clearView.visibility = View.VISIBLE
                 }
-                tapActionButtonInterface?.onEnterValidPhoneNumberActionListener()
                 //check if editable start with number of oridoo or zain etc
                // onPaymentCardComplete.onPaycardSwitchAction(true, PaymentType.MOBILE)
                 if(tapMobileInputView.mobileNumber.text.length>7)
@@ -253,9 +234,8 @@ class PaymenttInputViewHolder(
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s?.trim()?.length == 3 || s?.trim()?.length == 4) {
-                    onPaymentCardComplete.onPaycardSwitchAction(true, PaymentType.CARD)
+                    onPaymentCardComplete.onPayCardSwitchAction(true, PaymentActionType.CARD)
                     tapAlertView?.visibility = View.GONE
-                    tapActionButtonInterface?.onEnterValidCardNumberActionListener()
                 }
             }
 
@@ -350,18 +330,18 @@ class PaymenttInputViewHolder(
         paymentInputContainer.removeAllViews()
         if (position == 0) {
             println("call 1")
-            selectedType = PaymentType.CARD
-            switchViewHolder11.setSwitchLocals(PaymentType.CARD)
-            switchViewHolder11.view.cardSwitch.switchGoPayCheckout.visibility = View.VISIBLE
+            selectedType = PaymentActionType.CARD
+            switchViewHolder11?.setSwitchLocals(PaymentActionType.CARD)
+            switchViewHolder11?.view?.cardSwitch?.switchGoPayCheckout?.visibility = View.VISIBLE
             nfcButton?.visibility = View.VISIBLE
             cardScannerBtn?.visibility = View.VISIBLE
             clearView.visibility = View.GONE
             paymentInputContainer.addView(tapCardInputView)
             checkForFocus()
         } else {
-            selectedType = PaymentType.MOBILE
+            selectedType = PaymentActionType.telecom
             println("call 2")
-            switchViewHolder11.setSwitchLocals(PaymentType.MOBILE)
+            switchViewHolder11?.setSwitchLocals(PaymentActionType.telecom)
             nfcButton?.visibility = View.GONE
             cardScannerBtn?.visibility = View.GONE
             if (tapMobileInputView.mobileNumber.text.isEmpty())
@@ -381,10 +361,10 @@ class PaymenttInputViewHolder(
         controlScannerOptions()
     }
 
-    enum class PaymentType {
-        CARD,
-        MOBILE
-    }
+//    enum class PaymentType {
+//        CARD,
+//        MOBILE
+//    }
 
     override fun onCardComplete() {
     }
@@ -413,7 +393,7 @@ class PaymenttInputViewHolder(
             paymentType = imageURLApi[i].paymentType
             cardBrandType = imageURLApi[i].brand
 
-            if (paymentType == PaymentTypeEnum.telecom) {
+            if (paymentType == PaymentActionType.telecom) {
                 itemsMobilesList.add(SectionTabItem(imageURL, imageURL, CardBrand.ooredoo))
             } else {
                 itemsCardsList.add(SectionTabItem(imageURL, imageURL, CardBrand.visa))

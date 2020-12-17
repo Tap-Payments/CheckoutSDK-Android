@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import company.tap.checkout.R
+import company.tap.checkout.internal.enums.PaymentActionType
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
@@ -26,7 +27,7 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
     override val type = SectionType.SAVE_CARD
 
     private var merchantName: String? = null
-    private var paymentName: PaymenttInputViewHolder.PaymentType? = null
+    private var paymentName: PaymentActionType? = null
     private var switchString: String? = null
     private var goPayString: String? = null
     private var savegoPayString: String? = null
@@ -43,7 +44,7 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
 
     }
     // Function / Logic is responsible for sett ing the data to switch based on user selection
-    fun setSwitchLocals(payName:PaymenttInputViewHolder.PaymentType) {
+    fun setSwitchLocals(payName:PaymentActionType) {
         goPayString = LocalizationManager.getValue("goPayTextLabel","GoPay")
         savegoPayString = LocalizationManager.getValue("savegoPayLabel","GoPay")
         alertgoPaySignupString = LocalizationManager.getValue("goPaySignupLabel","GoPay")
@@ -78,7 +79,7 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
      * @param paymentType represents the type is card or mobile payment.Based on it will decide the
      * text of switches.
      * */
-    fun setDatafromAPI(merchantNameApi: String, paymentType: PaymenttInputViewHolder.PaymentType) {
+    fun setDatafromAPI(merchantNameApi: String, paymentType: PaymentActionType) {
         merchantName = merchantNameApi
         paymentName = paymentType
         // bindViewComponents()
@@ -217,8 +218,8 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
         )
     }
 
-    fun setSwitchToggleData(paymentType: PaymenttInputViewHolder.PaymentType){
-        if(paymentType==PaymenttInputViewHolder.PaymentType.CARD) {
+    fun setSwitchToggleData(paymentType: PaymentActionType){
+        if(paymentType==PaymentActionType.CARD) {
             view.mainSwitch.setSwitchDataSource(getMainSwitchDataSource(LocalizationManager.getValue("cardSaveLabel", "TapCardInputKit")))
         }else{
             view.mainSwitch.setSwitchDataSource(getMainSwitchDataSource(LocalizationManager.getValue("mobileSaveLabel","TapMobileInput")))
