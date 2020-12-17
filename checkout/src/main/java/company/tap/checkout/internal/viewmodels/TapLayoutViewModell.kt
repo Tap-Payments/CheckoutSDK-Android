@@ -276,6 +276,8 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
                     saveCardSwitchHolder11
                 )
                 //itemsViewHolder1.resetView()
+                itemsViewHolder1.setItemsRecylerView()
+                //itemsViewHolder1.setCurrencyRecylerView()
                 frameLayout.visibility = View.GONE
 
             } else {
@@ -298,6 +300,8 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
                 )
 
                // itemsViewHolder1.resetView()
+                itemsViewHolder1.setItemsRecylerView()
+                itemsViewHolder1.setCurrencyRecylerView()
                 frameLayout.visibility = View.GONE
 
 

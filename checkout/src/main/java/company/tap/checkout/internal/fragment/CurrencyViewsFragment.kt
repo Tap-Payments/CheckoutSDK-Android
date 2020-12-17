@@ -38,7 +38,7 @@ open class CurrencyViewsFragment(private var currencyLists1: ArrayList<Currencie
 //    lateinit var currenciesList: ArrayList<Currencies1>
     private lateinit var itemsRecycler: RecyclerView
     private lateinit var itemList: ArrayList<Items1>
-    private val adapterItems by lazy { ItemAdapter(onCurrencyChangedActionListener) }
+    private val adapterItems by lazy { ItemAdapter() }
     private val adapter by lazy { CurrencyTypeAdapter(onCurrencyChangedActionListener)}
 
 

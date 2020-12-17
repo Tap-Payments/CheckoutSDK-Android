@@ -2,19 +2,14 @@ package company.tap.checkout.internal.adapter
 
 import android.content.Context
 import android.graphics.Color
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import company.tap.checkout.R
 import company.tap.checkout.internal.dummygener.Currencies1
-import company.tap.checkout.internal.dummygener.SavedCards
-import company.tap.checkout.internal.enums.Currencies
 import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.TextViewTheme
@@ -32,7 +27,7 @@ All rights reserved.
 
 
 var selectedPosition = 0
-var contexts: Context? = null
+var _context: Context? = null
 var currencyRate:Double=0.0
 //var viewType :ViewGroup? = null
 //val tapCard_Chip by lazy {  viewType?.findViewById<TapChip>(R.id.tapcard_Chip) }
@@ -44,7 +39,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyHolders {
         val v =
             LayoutInflater.from(parent.context).inflate(R.layout.item_currency_rows, parent, false)
-        contexts = parent.context
+        _context = parent.context
         return CurrencyHolders(
             v
         )
@@ -157,7 +152,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
         holder.itemView.setOnClickListener {
             selectedPosition = position
             onCurrencyChangedActionListener.onCurrencyClicked(holder.itemView.textView_currency.text.toString(), adapterContentCurrencies[position].conversionrate)
-                notifyDataSetChanged()
+            notifyDataSetChanged()
         }
 
     }

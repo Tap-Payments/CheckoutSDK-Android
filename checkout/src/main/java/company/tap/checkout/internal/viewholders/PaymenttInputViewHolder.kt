@@ -79,7 +79,6 @@ class PaymenttInputViewHolder(
     private lateinit var paymentType: PaymentTypeEnum
     private lateinit var cardBrandType: String
 
-
     init {
         tabLayout = view.findViewById(R.id.sections_tablayout)
         tabLayout.setTabLayoutInterface(this)
@@ -326,6 +325,7 @@ class PaymenttInputViewHolder(
             println("card brand: ${card.validationState}")
             nfcButton?.visibility = View.GONE
             cardScannerBtn?.visibility = View.GONE
+
         }
     }
 
@@ -414,12 +414,14 @@ class PaymenttInputViewHolder(
             imageURL = imageURLApi[i].icon
             paymentType = imageURLApi[i].paymentType
             cardBrandType = imageURLApi[i].brand
+            println("cardbrandtype"+cardBrandType)
 
             if (paymentType == telecom) {
-                itemsMobilesList.add(SectionTabItem(imageURL, imageURL, CardBrand.ooredoo))
+                itemsMobilesList.add(SectionTabItem(imageURL, imageURL, CardBrand.valueOf(cardBrandType)))
             } else {
-                itemsCardsList.add(SectionTabItem(imageURL, imageURL, CardBrand.visa))
+                itemsCardsList.add(SectionTabItem(imageURL, imageURL, CardBrand.valueOf(cardBrandType)))
             }
+
         }
         tabLayout.addSection(itemsCardsList)
         tabLayout.addSection(itemsMobilesList)

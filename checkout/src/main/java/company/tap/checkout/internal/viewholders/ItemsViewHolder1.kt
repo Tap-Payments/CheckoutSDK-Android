@@ -45,7 +45,7 @@ class ItemsViewHolder1(private val context: Context, private val onCurrencyChang
      var itemsRecyclerView:RecyclerView
      var currencyRecyclerView:RecyclerView
      var headerview:ConstraintLayout
-    private val adapterItems by lazy { ItemAdapter(onCurrencyChangedActionListener) }
+    private val adapterItems by lazy { ItemAdapter() }
     private val adapterCurrency by lazy { CurrencyTypeAdapter(onCurrencyChangedActionListener) }
 
     init {

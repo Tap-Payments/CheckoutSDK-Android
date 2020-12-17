@@ -245,28 +245,28 @@
   ],
   "tapCardPhoneListDataSource":[
     {
-      "brand":"VISA",
+      "brand":"visa",
       "icon":"https://img.icons8.com/color/2x/visa.png",
       "paymentType":"card"
     },
     {
-      "brand":"MASTERCARD",
+      "brand":"masterCard",
       "icon":"https://img.icons8.com/color/2x/mastercard.png",
       "paymentType":"card"
     },
     {
-      "brand":"AMEX",
+      "brand":"americanExpress",
       "icon":"https://img.icons8.com/color/2x/amex.png",
       "paymentType":"card"
     },
     {
-      "brand":"MADA",
+      "brand":"mada",
       "icon":"https://i.ibb.co/S3VhxmR/796px-Mada-Logo-svg.png",
       "currencies":["SAR"],
       "paymentType":"card"
     },
     {
-      "brand":"Viva PAY",
+      "brand":"viva",
       "icon":"https://i.ibb.co/cw5y89V/unnamed.png",
       "currencies":["KWD"],
       "country":{
@@ -278,7 +278,7 @@
       "paymentType":"telecom"
     },
     {
-      "brand":"Zain PAY",
+      "brand":"zain",
       "icon":"https://i.ibb.co/mvkJXwF/zain-3x.png",
       "currencies":["KWD"],
       "country":{
@@ -290,7 +290,7 @@
       "paymentType":"telecom"
     },
     {
-      "brand":"Wataniya PAY",
+      "brand":"ooredoo",
       "icon":"https://i.ibb.co/PCYd8Xm/ooredoo-3x.png",
       "currencies":["KWD"],
       "country":{
@@ -302,7 +302,7 @@
       "paymentType":"telecom"
     },
     {
-      "brand":"ORANGE PAY",
+      "brand":"wataniya",
       "icon":"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Orange_logo.svg/2560px-Orange_logo.svg.png",
       "currencies":["EGP"],
       "country":{
@@ -314,7 +314,7 @@
       "paymentType":"telecom"
     },
     {
-      "brand":"VODAFONE PAY",
+      "brand":"unknown",
       "icon":"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Vodafone_icon.svg/1020px-Vodafone_icon.svg.png",
       "currencies":["EGP"],
       "country":{
