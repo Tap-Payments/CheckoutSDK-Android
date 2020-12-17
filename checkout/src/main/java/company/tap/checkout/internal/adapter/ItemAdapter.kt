@@ -56,6 +56,7 @@ class ItemAdapter(private val onCurrencyChangedActionListener:OnCurrencyChangedA
     }
 
     fun updateAdapterData(adapterContentItems: List<Items1>) {
+        println("adapterContentItems val"+adapterContentItems.size)
         this.adapterContentItems = adapterContentItems
         notifyDataSetChanged()
 
@@ -82,17 +83,18 @@ class ItemAdapter(private val onCurrencyChangedActionListener:OnCurrencyChangedA
         val itemName = holder.itemView.findViewById<TapTextView>(R.id.item_title)
         val isExpanded = position == mExpandedPosition
         if(adapterContentItems.isNotEmpty()){
-            for (element in adapterContentItems) {
-                descriptionTextView.text = adapterContentItems[position].description
+            for (i in adapterContentItems.indices) {
+                println("looping inside adapter"+i)
+                descriptionTextView.text = adapterContentItems[i].description
                 descriptionTextView.visibility = if (isExpanded) View.VISIBLE else View.GONE
                 holder.itemView.isActivated = isExpanded
-                totalQuantity.text = element.quantity.toString()
+                totalQuantity.text = adapterContentItems[i].quantity.toString()
 
                 itemViewAdapter.setItemViewDataSource(
                     getItemViewDataSource(
-                        adapterContentItems[position].currency + CurrencyFormatter.currencyFormat(
-                            adapterContentItems[position].amount.toString()
-                        ), adapterContentItems[position].currency, adapterContentItems[position].quantity.toString()
+                        adapterContentItems[i].currency + CurrencyFormatter.currencyFormat(
+                            adapterContentItems[i].amount.toString()
+                        ), adapterContentItems[i].currency, adapterContentItems[i].quantity.toString()
                     )
                 )
 
@@ -106,17 +108,7 @@ class ItemAdapter(private val onCurrencyChangedActionListener:OnCurrencyChangedA
 
         onItemClickAction(holder, position, isExpanded)
         showHideDescText(isExpanded, position, descText)
-        setTheme(
-            descriptionTextView,
-            discount,
-            descText,
-            totalQuantity,
-            totalAmount,
-            itemName,
-            itemSeparator,
-            mainViewLinear,
-            quantityRelative
-        )
+        setTheme(descriptionTextView, discount, descText, totalQuantity, totalAmount, itemName, itemSeparator, mainViewLinear, quantityRelative)
         setFonts(itemName, totalAmount, discount, descText, descriptionTextView, totalQuantity)
         checkItemListPosition(position, discount, totalAmount, itemName)
     }
@@ -292,13 +284,7 @@ class ItemAdapter(private val onCurrencyChangedActionListener:OnCurrencyChangedA
         )
     }
 
-    fun adapterClearList(){
-        arrayModifiedItem = ArrayList(adapterContentItems)
-        arrayModifiedItem.clear()
-        adapterContentItems= arrayModifiedItem as ArrayList<Items1>
-        println("adapterContentItems"+adapterContentItems)
-        notifyDataSetChanged()
-    }
+
 
 
 }

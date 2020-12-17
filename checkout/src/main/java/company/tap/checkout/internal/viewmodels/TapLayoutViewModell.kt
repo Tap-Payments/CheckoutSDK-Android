@@ -42,6 +42,7 @@ import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
+import company.tap.tapuilibrary.uikit.fragment.CurrencyViewFragment
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
 import company.tap.tapuilibrary.uikit.interfaces.TapActionButtonInterface
 import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
@@ -157,7 +158,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
         goPaySavedCardHolder = GoPaySavedCardHolder(context, this, this)
         saveCardSwitchHolder11 = SwitchViewHolder11(context)
         paymentInputViewHolder = PaymenttInputViewHolder(context, this, this, this,saveCardSwitchHolder11,this)
-        itemsViewHolder1 = ItemsViewHolder1(context, this, fragmentManager)
+        itemsViewHolder1 = ItemsViewHolder1(context, this)
         otpViewHolder = OTPViewHolder(context)
         goPayViewsHolder = GoPayViewsHolder(context, this)
     }
@@ -237,17 +238,21 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
 //            AnimationEngine.applyTransition(
 //                bottomSheetLayout, SLIDE
 //            )
+        println("display"+display)
         if (display) {
 //            removeAllViews()
             removeViews(
+                businessViewHolder,
+                amountViewHolder1,
                 cardViewHolder11,
                 paymentInputViewHolder,
                 saveCardSwitchHolder11,
                 goPayViewsHolder,
                 otpViewHolder,
                 itemsViewHolder1)
-//            addViews(businessViewHolder, amountViewHolder1)
-            itemsViewHolder1.setView()
+            addViews(businessViewHolder, amountViewHolder1,itemsViewHolder1)
+            itemsViewHolder1.setItemsRecylerView()
+            itemsViewHolder1.setCurrencyRecylerView()
             frameLayout.visibility = View.VISIBLE
             itemsViewHolder1.itemsdisplayed = true
 
@@ -270,7 +275,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
                     paymentInputViewHolder,
                     saveCardSwitchHolder11
                 )
-                itemsViewHolder1.resetView()
+                //itemsViewHolder1.resetView()
                 frameLayout.visibility = View.GONE
 
             } else {
@@ -292,7 +297,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
                     saveCardSwitchHolder11
                 )
 
-                itemsViewHolder1.resetView()
+               // itemsViewHolder1.resetView()
                 frameLayout.visibility = View.GONE
 
 
@@ -389,8 +394,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
         )
         itemsViewHolder1.setDatafromAPI(
             dummyInitapiResponse1.currencies1 as ArrayList<Currencies1>,
-            dummyInitapiResponse1.order1.items,
-            fragmentManager
+            dummyInitapiResponse1.order1.items
         )
 
         allCurrencies.value = dummyInitapiResponse1.currencies1
@@ -419,7 +423,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
         goPayAdapter.updateAdapterData(goPayCardList.value as List<GoPaySavedCards>)
         currencyAdapter = CurrencyTypeAdapter(this)
 //        currencyAdapter.initOnCurrencyChangedActionListener(this)
-        //   currencyAdapter.updateAdapterData(allCurrencies.value as List<Currencies1>)
+           currencyAdapter.updateAdapterData(allCurrencies.value as List<Currencies1>)
         cardViewHolder11.view.mainChipgroup.groupAction?.visibility = View.VISIBLE
         cardViewHolder11.view.mainChipgroup.groupAction?.setOnClickListener {
             if (cardViewHolder11.view.mainChipgroup.groupAction?.text == LocalizationManager.getValue(
@@ -723,7 +727,8 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
                 itemList[i].amount.toString()
             )
         }
-        itemsViewHolder1.resetItemList(itemList)
+       // itemsViewHolder1.resetItemList(itemList)
+        itemsViewHolder1.setResetItemsRecylerView(itemList)
         amountViewHolder1.updateSelectedCurrency(
             displayItemsOpen,
             selectedAmountCurrency,

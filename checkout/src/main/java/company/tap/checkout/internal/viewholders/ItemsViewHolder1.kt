@@ -1,27 +1,38 @@
 package company.tap.checkout.internal.viewholders
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ShapeDrawable
 import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.R
 import company.tap.checkout.internal.adapter.CurrencyTypeAdapter
 import company.tap.checkout.internal.adapter.ItemAdapter
+
 import company.tap.checkout.internal.dummygener.Currencies1
 import company.tap.checkout.internal.dummygener.Items1
 import company.tap.checkout.internal.enums.SectionType
-import company.tap.checkout.internal.fragment.CurrencyViewsFragment
 import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener
+import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.atoms.TapChipGroup
 
 /**
  *
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class ItemsViewHolder1(context11: Context, private val onCurrencyChangedActionListener: OnCurrencyChangedActionListener,fragmentManagere: FragmentManager) :
+@SuppressLint("ClickableViewAccessibility")
+class ItemsViewHolder1(private val context: Context, private val onCurrencyChangedActionListener: OnCurrencyChangedActionListener) :
     TapBaseViewHolder {
-    private  var fragmentManager: FragmentManager
-    override val view = LayoutInflater.from(context11).inflate(
-        R.layout.currency_fragment_layout,
+    override val view = LayoutInflater.from(context).inflate(
+        R.layout.itemviewholder_layout,
         null
     )
 
@@ -30,58 +41,81 @@ class ItemsViewHolder1(context11: Context, private val onCurrencyChangedActionLi
     var itemsdisplayed: Boolean = false
     private lateinit var supportedCurrecnyList: ArrayList<Currencies1>
     private lateinit var supportedItemList: List<Items1>
-
+     var mainCurrencyChip: TapChipGroup
+     var itemsRecyclerView:RecyclerView
+     var currencyRecyclerView:RecyclerView
+     var headerview:ConstraintLayout
+    private val adapterItems by lazy { ItemAdapter(onCurrencyChangedActionListener) }
+    private val adapterCurrency by lazy { CurrencyTypeAdapter(onCurrencyChangedActionListener) }
 
     init {
-        bindViewComponents()
-        this.fragmentManager = fragmentManagere
+
+
+        mainCurrencyChip = view.findViewById(R.id.mainCurrencyChip)
+        mainCurrencyChip.groupAction.visibility = View.GONE
+        mainCurrencyChip.groupName.visibility = View.GONE
+
+        itemsRecyclerView = view.findViewById(R.id.itemRecylerView)
+        currencyRecyclerView = mainCurrencyChip.findViewById<View>(R.id.chip_recycler) as RecyclerView
+        headerview = view.findViewById<View>(R.id.header_view) as ConstraintLayout
+        headerview.visibility = View.GONE
+        itemsRecyclerView.setOnTouchListener { v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN ->                         // Disallow NestedScrollView to intercept touch events.
+                    v.parent.requestDisallowInterceptTouchEvent(true)
+                MotionEvent.ACTION_UP ->                         // Allow NestedScrollView to intercept touch events.
+                    v.parent.requestDisallowInterceptTouchEvent(false)
+            }
+            // Handle RecyclerView touch events.
+            v.onTouchEvent(event)
+            true
+        }
+        val divider = DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL)
+        divider.setDrawable(ShapeDrawable().apply {
+            intrinsicWidth = 25
+            paint.color = Color.TRANSPARENT
+        }) // note: currently (support version 28.0.0), we can not use tranparent color here, if we use transparent, we still see a small divider line. So if we want to display transparent space, we can set color = background color or we can create a custom ItemDecoration instead of DividerItemDecoration.
+        currencyRecyclerView.addItemDecoration(divider)
+        mainCurrencyChip.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
+        itemsRecyclerView.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
+
+
     }
 
-    override fun bindViewComponents() {}
+    override fun bindViewComponents() {
+
+    }
 
     /**
      * Sets data from API through LayoutManager
      * @param supportedCurrencyApi represents the supported currency for the Merchant.
      * @param supportItemListApi represents the supported currency for the Merchant.
      * */
-    fun setDatafromAPI(supportedCurrencyApi: ArrayList<Currencies1>,supportItemListApi :List<Items1>,fragmentManager: FragmentManager) {
+    fun setDatafromAPI(supportedCurrencyApi: ArrayList<Currencies1>,supportItemListApi :List<Items1>) {
         supportedCurrecnyList = supportedCurrencyApi
         supportedItemList = supportItemListApi
-       // bindViewComponents()
-     //   val manager: FragmentManager = fragmentManager
-     //   val transaction = manager.beginTransaction()
-        /* transaction.add(
-             R.id.currency_fragment_container,
-             CurrencyViewFragment(supportedCurrecnyList, itemList)
-         )*/
         println("supportedItemList curr list:$supportedItemList")
-        this.fragmentManager = fragmentManager
-    }
-
-    fun resetView(){
-        fragmentManager.beginTransaction().remove(CurrencyViewsFragment(ArrayList(), ArrayList(),onCurrencyChangedActionListener)).commit()
-    }
-
-    fun setView(){
-        fragmentManager.beginTransaction()
-            .replace(R.id.fragment_container_nfc_lib, CurrencyViewsFragment(supportedCurrecnyList, supportedItemList,onCurrencyChangedActionListener))
-            .commit()
-    }
-
-    fun resetItemList(items1: List<Items1>){
-        supportedItemList = items1
-        setView()
-        println("items1 is"+items1)
-       /*  val adapter = CurrencyTypeAdapter(onCurrencyChangedActionListener)
-        adapter.updateAdapterData(supportedCurrecnyList)
-        adapter.notifyDataSetChanged()*/
-     /* val itemAdapter = ItemAdapter(onCurrencyChangedActionListener)
-        itemAdapter.adapterClearList()
-        itemAdapter.updateAdapterData(items1)
-        itemAdapter.notifyDataSetChanged()
-*/
 
     }
 
+
+    fun setCurrencyRecylerView(){
+        currencyRecyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+        currencyRecyclerView.adapter = adapterCurrency
+        adapterCurrency.updateAdapterData(supportedCurrecnyList)
+    }
+    fun setItemsRecylerView(){
+        itemsRecyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        itemsRecyclerView.adapter = adapterItems
+        adapterItems.updateAdapterData(supportedItemList)
+
+    }
+
+    fun setResetItemsRecylerView(itemsListUpdated:List<Items1>){
+        itemsRecyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        itemsRecyclerView.adapter = adapterItems
+        adapterItems.updateAdapterData(itemsListUpdated)
+
+    }
 
 }

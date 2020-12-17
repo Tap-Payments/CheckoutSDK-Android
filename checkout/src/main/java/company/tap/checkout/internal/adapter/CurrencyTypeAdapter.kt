@@ -56,7 +56,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
     fun updateAdapterData(adapterContentCurrencies: List<Currencies1>) {
         println("list of currencies"+adapterContentCurrencies)
         this.adapterContentCurrencies = adapterContentCurrencies
-//        notifyDataSetChanged()
+        notifyDataSetChanged()
     }
 
     class CurrencyHolders(v: View) : RecyclerView.ViewHolder(v) {
@@ -157,7 +157,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
         holder.itemView.setOnClickListener {
             selectedPosition = position
             onCurrencyChangedActionListener.onCurrencyClicked(holder.itemView.textView_currency.text.toString(), adapterContentCurrencies[position].conversionrate)
-//                notifyDataSetChanged()
+                notifyDataSetChanged()
         }
 
     }
