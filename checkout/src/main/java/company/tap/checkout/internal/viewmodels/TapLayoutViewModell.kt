@@ -13,6 +13,7 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -24,6 +25,8 @@ import company.tap.checkout.internal.adapter.CardTypeAdapterUIKIT
 import company.tap.checkout.internal.adapter.CurrencyTypeAdapter
 import company.tap.checkout.internal.adapter.GoPayCardAdapterUIKIT
 import company.tap.checkout.internal.dummygener.*
+import company.tap.checkout.internal.enums.PaymentTypeEnum
+import company.tap.checkout.internal.enums.PaymentTypeEnum.*
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.*
 import company.tap.checkout.internal.utils.AnimationEngine
@@ -35,6 +38,7 @@ import company.tap.checkout.internal.webview.WebFragment
 import company.tap.checkout.internal.webview.WebViewContract
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
@@ -84,6 +88,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
     private lateinit var itemList: List<Items1>
     private lateinit var orderList: Order1
     private lateinit var context: Context
+    private lateinit var otpTypeString: PaymentTypeEnum
 
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -97,6 +102,51 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
         initViewHolders()
         initAmountAction()
         initSwitchAction()
+        initOtpActionButton()
+    }
+
+    private fun initOtpActionButton() {
+        otpViewHolder.otpView.otpViewActionButton.setOnClickListener {
+         when(otpTypeString) {
+            GOPAY -> goPayViewsHolder.onOtpButtonConfirmationClick(otpViewHolder.otpView.otpViewInput1.text.toString() + otpViewHolder.otpView.otpViewInput2.text.toString())
+
+             else -> {
+                 removeViews(
+                     businessViewHolder,
+                     amountViewHolder1,
+                     paymentInputViewHolder,
+                     cardViewHolder11,
+                     saveCardSwitchHolder11,
+                     otpViewHolder
+                 )
+                 addViews(
+                     businessViewHolder,
+                     amountViewHolder1,
+                     cardViewHolder11,
+                     paymentInputViewHolder,
+                     saveCardSwitchHolder11
+                 )
+                 saveCardSwitchHolder11.view.cardSwitch.switchSaveMobile.visibility = View.GONE
+                 saveCardSwitchHolder11.view.cardSwitch.payButton.setButtonDataSource(
+                     false,
+                     context.let { LocalizationManager.getLocale(it).language },
+                     LocalizationManager.getValue("pay", "ActionButton"),
+                     Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
+                     Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
+                 )
+                 saveCardSwitchHolder11.view.cardSwitch.payButton.visibility = View.VISIBLE
+                 paymentInputViewHolder.tapMobileInputView.clearNumber()
+                 CustomUtils.showDialog(
+                     "Payment Done",
+                     "Payment id 2e412321eqqweq32131",
+                     context,
+                     1,
+                     this
+                 )
+             }
+         }
+        }
+
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -259,13 +309,15 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
        
     }
 
-    override fun displayOTPView(mobileNumber: String,otpType:String) {
+    @SuppressLint("SetTextI18n")
+    override fun displayOTPView(mobileNumber: String, otpType:String) {
         if (this::bottomSheetLayout.isInitialized) {
             AnimationEngine.applyTransition(
                 bottomSheetLayout, SLIDE
             )
         }
-        if(otpType=="GOPAY") {
+        if(otpType==GOPAY.name) {
+            otpTypeString = GOPAY
             removeViews(
                 cardViewHolder11,
                 paymentInputViewHolder, saveCardSwitchHolder11
@@ -276,34 +328,30 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
             otpViewHolder.otpView.changePhone.setOnClickListener {
                 goPayViewsHolder.onChangePhoneClicked()
             }
-            otpViewHolder.otpView.otpViewActionButton.setOnClickListener {
-                goPayViewsHolder.onOtpButtonConfirmationClick(otpViewHolder.otpView.otpViewInput1.text.toString() + otpViewHolder.otpView.otpViewInput2.text.toString())
-            }
-        }else if(otpType == "PAYMOBILE"){
+
+        }else if(otpType == PAYMOBILE.name){
+            otpTypeString = PAYMOBILE
+
             removeViews(businessViewHolder,amountViewHolder1,paymentInputViewHolder,cardViewHolder11,saveCardSwitchHolder11,otpViewHolder)
             addViews(businessViewHolder,amountViewHolder1,cardViewHolder11,paymentInputViewHolder,saveCardSwitchHolder11,otpViewHolder)
-            saveCardSwitchHolder11.view.cardSwitch.payButton.visibility = View.GONE
-            saveCardSwitchHolder11.view.mainSwitch.switchSaveMobile.visibility = View.VISIBLE
-            otpViewHolder.otpView.visibility = View.VISIBLE
-            otpViewHolder.otpView.mobileNumberText.text = mobileNumber
-            otpViewHolder.otpView.changePhone.setOnClickListener {
-                goPayViewsHolder.onChangePhoneClicked()
-            }
-            otpViewHolder.otpView.otpViewActionButton.setOnClickListener {
-                removeViews(businessViewHolder,amountViewHolder1,paymentInputViewHolder,cardViewHolder11,saveCardSwitchHolder11,otpViewHolder)
-                addViews(businessViewHolder,amountViewHolder1,cardViewHolder11,paymentInputViewHolder,saveCardSwitchHolder11)
-                saveCardSwitchHolder11.view.cardSwitch.switchSaveMobile.visibility = View.GONE
-                saveCardSwitchHolder11.view.cardSwitch.payButton.setButtonDataSource(
-                    false,
-                    context.let { LocalizationManager.getLocale(it).language },
-                    LocalizationManager.getValue("pay", "ActionButton"),
-                    Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
-                    Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
-                )
-                saveCardSwitchHolder11.view.cardSwitch.payButton.visibility = View.VISIBLE
-                paymentInputViewHolder.tapMobileInputView.clearNumber()
-            }
 
+            //Added check change listener to handle showing of extra save options
+            saveCardSwitchHolder11.view.mainSwitch.switchSaveMobile.visibility = View.VISIBLE
+            saveCardSwitchHolder11.view.cardSwitch.payButton.visibility = View.GONE
+            saveCardSwitchHolder11.view.mainSwitch.switchSaveMobile.setOnCheckedChangeListener { buttonView, isChecked ->
+                if(isChecked)
+                    saveCardSwitchHolder11.view.cardSwitch.switchesLayout.visibility = View.GONE
+
+            }
+            saveCardSwitchHolder11.setSwitchToggleData(PaymenttInputViewHolder.PaymentType.MOBILE)
+            otpViewHolder.setMobileOtpView()
+            var replaced = ""
+            var countryCodeReplaced = ""
+            if (mobileNumber.length > 7)
+                replaced = (mobileNumber.toString()).replaceRange(1, 6, "....")
+            countryCodeReplaced = goPayViewsHolder.goPayLoginInput.countryCodePicker.selectedCountryCode.replace("+", " ")
+
+            otpViewHolder.otpView.mobileNumberTextNormalPay.text = "+$countryCodeReplaced$replaced"
         }
     }
 
@@ -438,6 +486,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
             deleteCard = false
 
         } else if (response == "OK"){
+
             bottomSheetDialog.dismissWithAnimation
             bottomSheetDialog.dismiss()
         }

@@ -5,6 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import company.tap.checkout.R
+import company.tap.checkout.internal.enums.PaymentTypeEnum
+import company.tap.checkout.internal.enums.PaymentTypeEnum.*
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayouttManager
 import company.tap.checkout.internal.utils.CustomUtils
@@ -88,7 +90,7 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
             return
         }else{
             println(" you clicked to display otp!!!")
-            baseLayouttManager?.displayOTPView(mobileNumber,"GOPAY")
+            baseLayouttManager?.displayOTPView(mobileNumber, GOPAY.name)
 
 
         }

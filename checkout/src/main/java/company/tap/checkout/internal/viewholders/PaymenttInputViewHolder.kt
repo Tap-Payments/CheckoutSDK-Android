@@ -20,6 +20,7 @@ import company.tap.cardinputwidget.widget.inline.InlineCardInput
 import company.tap.checkout.R
 import company.tap.checkout.internal.dummygener.TapCardPhoneListDataSource
 import company.tap.checkout.internal.enums.PaymentTypeEnum
+import company.tap.checkout.internal.enums.PaymentTypeEnum.*
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayouttManager
 import company.tap.checkout.internal.interfaces.onCardNFCCallListener
@@ -196,7 +197,8 @@ class PaymenttInputViewHolder(
                 //check if editable start with number of oridoo or zain etc
                // onPaymentCardComplete.onPaycardSwitchAction(true, PaymentType.MOBILE)
                 if(tapMobileInputView.mobileNumber.text.length>7)
-                baseLayouttManager.displayOTPView(tapMobileInputView.mobileNumber.text.toString(),"PAYMOBILE")
+                baseLayouttManager.displayOTPView(tapMobileInputView.mobileNumber.text.toString(),
+                    PAYMOBILE.name)
 
             }
         }
@@ -413,7 +415,7 @@ class PaymenttInputViewHolder(
             paymentType = imageURLApi[i].paymentType
             cardBrandType = imageURLApi[i].brand
 
-            if (paymentType == PaymentTypeEnum.telecom) {
+            if (paymentType == telecom) {
                 itemsMobilesList.add(SectionTabItem(imageURL, imageURL, CardBrand.ooredoo))
             } else {
                 itemsCardsList.add(SectionTabItem(imageURL, imageURL, CardBrand.visa))
