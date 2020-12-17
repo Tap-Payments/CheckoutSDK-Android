@@ -84,23 +84,21 @@ class ItemAdapter(private val onCurrencyChangedActionListener:OnCurrencyChangedA
         val isExpanded = position == mExpandedPosition
         if(adapterContentItems.isNotEmpty()){
             for (i in adapterContentItems.indices) {
-                println("looping inside adapter"+i)
-                descriptionTextView.text = adapterContentItems[i].description
+                descriptionTextView.text = adapterContentItems[position].description
                 descriptionTextView.visibility = if (isExpanded) View.VISIBLE else View.GONE
                 holder.itemView.isActivated = isExpanded
-                totalQuantity.text = adapterContentItems[i].quantity.toString()
+                totalQuantity.text = adapterContentItems[position].quantity.toString()
 
                 itemViewAdapter.setItemViewDataSource(
                     getItemViewDataSource(
-                        adapterContentItems[i].currency + CurrencyFormatter.currencyFormat(
-                            adapterContentItems[i].amount.toString()
-                        ), adapterContentItems[i].currency, adapterContentItems[i].quantity.toString()
+                        adapterContentItems[position].currency + CurrencyFormatter.currencyFormat(
+                            adapterContentItems[position].amount.toString()
+                        ), adapterContentItems[position].currency, adapterContentItems[position].quantity.toString()
                     )
                 )
-
             }
         }else{
-            descriptionTextView.text = adapterContentItems[0].description
+           // descriptionTextView.text = adapterContentItems[0].description
             descriptionTextView.visibility = if (isExpanded) View.VISIBLE else View.GONE
             holder.itemView.isActivated = isExpanded
         }

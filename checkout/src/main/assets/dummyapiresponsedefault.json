@@ -31,7 +31,7 @@
         "image":"",
         "sku":"",
         "name":"TEST1",
-        "quantity":1
+        "quantity":2
       },
       {
         "amount":10000000,
@@ -44,7 +44,7 @@
         "image":"",
         "sku":"",
         "name":"TEST2",
-        "quantity":1
+        "quantity":3
       }
     ],
     "shipping":{
