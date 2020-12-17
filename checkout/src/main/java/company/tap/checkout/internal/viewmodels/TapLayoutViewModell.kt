@@ -111,7 +111,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
     private fun initOtpActionButton() {
         otpViewHolder.otpView.otpViewActionButton.setOnClickListener {
          when(otpTypeString) {
-            GOPAY -> goPayViewsHolder.onOtpButtonConfirmationClick(otpViewHolder.otpView.otpViewInput1.text.toString() + otpViewHolder.otpView.otpViewInput2.text.toString())
+            PaymentTypeEnum.GOPAY -> goPayViewsHolder.onOtpButtonConfirmationClick(otpViewHolder.otpView.otpViewInput1.text.toString() + otpViewHolder.otpView.otpViewInput2.text.toString())
 
              else -> {
                  removeViews(
@@ -129,15 +129,15 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
                      paymentInputViewHolder,
                      saveCardSwitchHolder11
                  )
-                 saveCardSwitchHolder11.view.cardSwitch.switchSaveMobile.visibility = View.GONE
-                 saveCardSwitchHolder11.view.cardSwitch.payButton.setButtonDataSource(
+                 saveCardSwitchHolder11?.view?.cardSwitch?.switchSaveMobile?.visibility = View.GONE
+                 saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.setButtonDataSource(
                      false,
                      context.let { LocalizationManager.getLocale(it).language },
                      LocalizationManager.getValue("pay", "ActionButton"),
                      Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
                      Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
                  )
-                 saveCardSwitchHolder11.view.cardSwitch.payButton.visibility = View.VISIBLE
+                 saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.visibility = View.VISIBLE
                  paymentInputViewHolder.tapMobileInputView.clearNumber()
                  CustomUtils.showDialog(
                      "Payment Done",
@@ -160,8 +160,8 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
         goPaySavedCardHolder = GoPaySavedCardHolder(context, this, this)
         saveCardSwitchHolder11 = SwitchViewHolder11(context)
         paymentInputViewHolder = PaymenttInputViewHolder(context, this, this, saveCardSwitchHolder11,this)
-        itemsViewHolder1 = ItemsViewHolder1(context, this, fragmentManager)
-        paymentInputViewHolder = PaymenttInputViewHolder(context, this, this, this,saveCardSwitchHolder11,this)
+        itemsViewHolder1 = ItemsViewHolder1(context, this)
+        paymentInputViewHolder = PaymenttInputViewHolder(context, this, this, saveCardSwitchHolder11,this)
         itemsViewHolder1 = ItemsViewHolder1(context, this)
         otpViewHolder = OTPViewHolder(context)
         goPayViewsHolder = GoPayViewsHolder(context, this)
@@ -336,8 +336,8 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
                 bottomSheetLayout, SLIDE
             )
         }
-        if(otpType==GOPAY.name) {
-            otpTypeString = GOPAY
+        if(otpType== PaymentTypeEnum.GOPAY.name) {
+            otpTypeString = PaymentTypeEnum.GOPAY
             removeViews(
                 cardViewHolder11,
                 paymentInputViewHolder, saveCardSwitchHolder11
@@ -349,21 +349,21 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
                 goPayViewsHolder.onChangePhoneClicked()
             }
 
-        }else if(otpType == PAYMOBILE.name){
-            otpTypeString = PAYMOBILE
+        }else if(otpType == PaymentTypeEnum.telecom.name){
+            otpTypeString = PaymentTypeEnum.telecom
 
             removeViews(businessViewHolder,amountViewHolder1,paymentInputViewHolder,cardViewHolder11,saveCardSwitchHolder11,otpViewHolder)
             addViews(businessViewHolder,amountViewHolder1,cardViewHolder11,paymentInputViewHolder,saveCardSwitchHolder11,otpViewHolder)
 
             //Added check change listener to handle showing of extra save options
-            saveCardSwitchHolder11.view.mainSwitch.switchSaveMobile.visibility = View.VISIBLE
-            saveCardSwitchHolder11.view.cardSwitch.payButton.visibility = View.GONE
-            saveCardSwitchHolder11.view.mainSwitch.switchSaveMobile.setOnCheckedChangeListener { buttonView, isChecked ->
+            saveCardSwitchHolder11?.view?.mainSwitch?.switchSaveMobile?.visibility = View.VISIBLE
+            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.visibility = View.GONE
+            saveCardSwitchHolder11?.view?.mainSwitch?.switchSaveMobile?.setOnCheckedChangeListener { buttonView, isChecked ->
                 if(isChecked)
-                    saveCardSwitchHolder11.view.cardSwitch.switchesLayout.visibility = View.GONE
+                    saveCardSwitchHolder11?.view?.cardSwitch?.switchesLayout?.visibility = View.GONE
 
             }
-            saveCardSwitchHolder11.setSwitchToggleData(PaymenttInputViewHolder.PaymentType.MOBILE)
+            saveCardSwitchHolder11?.setSwitchToggleData(PaymentActionType.telecom)
             otpViewHolder.setMobileOtpView()
             var replaced = ""
             var countryCodeReplaced = ""
@@ -797,7 +797,6 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
         saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.setOnClickListener {
 
 //            if (saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.isActivated ==  true) {
-                Log.d("payButtonSourceAction", payButtonSourceAction)
 
                 when(paymentActionType) {
                     PaymentActionType.SAVED_CARD -> {

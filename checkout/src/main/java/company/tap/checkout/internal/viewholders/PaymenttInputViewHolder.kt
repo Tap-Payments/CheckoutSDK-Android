@@ -20,6 +20,7 @@ import company.tap.cardinputwidget.widget.inline.InlineCardInput
 import company.tap.checkout.R
 import company.tap.checkout.internal.dummygener.TapCardPhoneListDataSource
 import company.tap.checkout.internal.enums.PaymentActionType
+import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayouttManager
 import company.tap.checkout.internal.interfaces.onCardNFCCallListener
@@ -176,8 +177,7 @@ class PaymenttInputViewHolder(
                 //check if editable start with number of oridoo or zain etc
                // onPaymentCardComplete.onPaycardSwitchAction(true, PaymentType.MOBILE)
                 if(tapMobileInputView.mobileNumber.text.length>7)
-                baseLayouttManager.displayOTPView(tapMobileInputView.mobileNumber.text.toString(),
-                    PAYMOBILE.name)
+                baseLayouttManager.displayOTPView(tapMobileInputView.mobileNumber.text.toString(), PaymentTypeEnum.telecom.name)
 
             }
         }
@@ -218,6 +218,9 @@ class PaymenttInputViewHolder(
                 if (s.isNullOrEmpty()) {
                     tabLayout.resetBehaviour()
                 } else {
+                    /**
+                     * we will get date value
+                     */
                     tapAlertView?.alertMessage?.text = (LocalizationManager.getValue(
                         "Warning",
                         "Hints",
@@ -239,7 +242,11 @@ class PaymenttInputViewHolder(
                 }
             }
 
-            override fun afterTextChanged(s: Editable?) {}
+            override fun afterTextChanged(s: Editable?) {
+                /**
+                 * we will get cvv number
+                 */
+            }
         })
     }
 
@@ -252,6 +259,9 @@ class PaymenttInputViewHolder(
                 tapAlertView?.visibility = View.GONE
             }
             if (card.cardBrand != null) {
+                /**
+                 * we will get the full card number
+                 */
                 Log.d("cardBrand", card.cardBrand.toString())
                 Log.d("cardBrand", (card.validationState == CardValidationState.valid).toString())
                 tabLayout.selectTab(card.cardBrand, true)
@@ -362,13 +372,7 @@ class PaymenttInputViewHolder(
         controlScannerOptions()
     }
 
-//    enum class PaymentType {
-//        CARD,
-//        MOBILE
-//    }
-
-    override fun onCardComplete() {
-    }
+    override fun onCardComplete() {}
 
     override fun onCvcComplete() {}
 
@@ -400,7 +404,6 @@ class PaymenttInputViewHolder(
             } else {
                 itemsCardsList.add(SectionTabItem(imageURL, imageURL,CardBrand.valueOf(cardBrandType)))
             }
-
         }
         tabLayout.addSection(itemsCardsList)
         tabLayout.addSection(itemsMobilesList)
