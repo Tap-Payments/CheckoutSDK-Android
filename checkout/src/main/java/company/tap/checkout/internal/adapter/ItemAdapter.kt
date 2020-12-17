@@ -34,7 +34,7 @@ import company.tap.tapuilibrary.uikit.views.TapListItemView
 Copyright (c) 2020    Tap Payments.
 All rights reserved.
  **/
-class ItemAdapter(private val onCurrencyChangedActionListener:OnCurrencyChangedActionListener) :
+class ItemAdapter :
     RecyclerView.Adapter<ItemAdapter.ItemHolder>() {
     private var previousExpandedPosition = -1
     private var mExpandedPosition = -1
@@ -56,6 +56,7 @@ class ItemAdapter(private val onCurrencyChangedActionListener:OnCurrencyChangedA
     }
 
     fun updateAdapterData(adapterContentItems: List<Items1>) {
+        println("adapterContentItems val"+adapterContentItems.size)
         this.adapterContentItems = adapterContentItems
         notifyDataSetChanged()
 
@@ -82,11 +83,11 @@ class ItemAdapter(private val onCurrencyChangedActionListener:OnCurrencyChangedA
         val itemName = holder.itemView.findViewById<TapTextView>(R.id.item_title)
         val isExpanded = position == mExpandedPosition
         if(adapterContentItems.isNotEmpty()){
-            for (element in adapterContentItems) {
+            for (i in adapterContentItems.indices) {
                 descriptionTextView.text = adapterContentItems[position].description
                 descriptionTextView.visibility = if (isExpanded) View.VISIBLE else View.GONE
                 holder.itemView.isActivated = isExpanded
-                totalQuantity.text = element.quantity.toString()
+                totalQuantity.text = adapterContentItems[position].quantity.toString()
 
                 itemViewAdapter.setItemViewDataSource(
                     getItemViewDataSource(
@@ -95,10 +96,9 @@ class ItemAdapter(private val onCurrencyChangedActionListener:OnCurrencyChangedA
                         ), adapterContentItems[position].currency, adapterContentItems[position].quantity.toString()
                     )
                 )
-
             }
         }else{
-            descriptionTextView.text = adapterContentItems[0].description
+           // descriptionTextView.text = adapterContentItems[0].description
             descriptionTextView.visibility = if (isExpanded) View.VISIBLE else View.GONE
             holder.itemView.isActivated = isExpanded
         }
@@ -106,17 +106,7 @@ class ItemAdapter(private val onCurrencyChangedActionListener:OnCurrencyChangedA
 
         onItemClickAction(holder, position, isExpanded)
         showHideDescText(isExpanded, position, descText)
-        setTheme(
-            descriptionTextView,
-            discount,
-            descText,
-            totalQuantity,
-            totalAmount,
-            itemName,
-            itemSeparator,
-            mainViewLinear,
-            quantityRelative
-        )
+        setTheme(descriptionTextView, discount, descText, totalQuantity, totalAmount, itemName, itemSeparator, mainViewLinear, quantityRelative)
         setFonts(itemName, totalAmount, discount, descText, descriptionTextView, totalQuantity)
         checkItemListPosition(position, discount, totalAmount, itemName)
     }
@@ -292,13 +282,7 @@ class ItemAdapter(private val onCurrencyChangedActionListener:OnCurrencyChangedA
         )
     }
 
-    fun adapterClearList(){
-        arrayModifiedItem = ArrayList(adapterContentItems)
-        arrayModifiedItem.clear()
-        adapterContentItems= arrayModifiedItem as ArrayList<Items1>
-        println("adapterContentItems"+adapterContentItems)
-        notifyDataSetChanged()
-    }
+
 
 
 }

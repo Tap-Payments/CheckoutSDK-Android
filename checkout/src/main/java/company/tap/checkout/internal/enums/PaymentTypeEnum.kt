@@ -6,5 +6,9 @@ All rights reserved.
  **/
 enum class PaymentTypeEnum {
     telecom,
-   card
+   card,
+    SAVEDCARD,
+    REDIRECT,
+    GOPAY,
+    PAYMOBILE
 }
