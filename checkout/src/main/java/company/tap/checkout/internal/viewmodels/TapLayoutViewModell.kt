@@ -301,7 +301,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
 
                // itemsViewHolder1.resetView()
                 itemsViewHolder1.setItemsRecylerView()
-                itemsViewHolder1.setCurrencyRecylerView()
+              //  itemsViewHolder1.setCurrencyRecylerView()
                 frameLayout.visibility = View.GONE
 
 
