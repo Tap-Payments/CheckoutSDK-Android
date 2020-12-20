@@ -424,6 +424,9 @@ class PaymenttInputViewHolder(
             }
         }
         tabLayout.addSection(itemsCardsList)
+        tabLayout.changeTabItemAlphaValue(0.9f)
+        tabLayout.changeTabItemMarginBottomValue(35)
+        tabLayout.changeTabItemMarginTopValue(35)
         tabLayout.addSection(itemsMobilesList)
 
     }

@@ -16,6 +16,7 @@
         android:id="@+id/mainSwitch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/margin_basic_8dp"
         android:visibility="gone"/>
     </androidx.cardview.widget.CardView>
     <company.tap.tapuilibrary.uikit.views.TapCardSwitch

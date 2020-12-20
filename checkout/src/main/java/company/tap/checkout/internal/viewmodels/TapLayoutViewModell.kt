@@ -13,7 +13,6 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -38,13 +37,10 @@ import company.tap.checkout.internal.webview.WebFragment
 import company.tap.checkout.internal.webview.WebViewContract
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
-import company.tap.tapuilibrary.uikit.fragment.CurrencyViewFragment
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
-import company.tap.tapuilibrary.uikit.interfaces.TapActionButtonInterface
 import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
 import kotlinx.android.synthetic.main.gopaysavedcard_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
@@ -64,9 +60,9 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
     private val isShaking = MutableLiveData<Boolean>()
     private var deleteCard: Boolean=false
     private var displayItemsOpen: Boolean = false
+    private var saveCardSwitchHolder11: SwitchViewHolder11 ? = null
 
     private lateinit var paymentInputViewHolder: PaymenttInputViewHolder
-    private var saveCardSwitchHolder11: SwitchViewHolder11 ? = null
     private lateinit var goPaySavedCardHolder: GoPaySavedCardHolder
     private lateinit var businessViewHolder: BusinessViewHolder
     private lateinit var amountViewHolder1: AmountViewHolder1
@@ -89,9 +85,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
     private lateinit var orderList: Order1
     private lateinit var context: Context
     private lateinit var otpTypeString: PaymentTypeEnum
-
     private lateinit var paymentActionType: PaymentActionType
-
 
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -112,7 +106,6 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
         otpViewHolder.otpView.otpViewActionButton.setOnClickListener {
          when(otpTypeString) {
             PaymentTypeEnum.GOPAY -> goPayViewsHolder.onOtpButtonConfirmationClick(otpViewHolder.otpView.otpViewInput1.text.toString() + otpViewHolder.otpView.otpViewInput2.text.toString())
-
              else -> {
                  removeViews(
                      businessViewHolder,
@@ -179,13 +172,11 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
 
 
     override fun displayStartupLayout(enabledSections: ArrayList<SectionType>) {
-        print("is displayStartupLayout")
         //Todo based on api response logic for swicth case
         addViews(businessViewHolder, amountViewHolder1, cardViewHolder11, paymentInputViewHolder, saveCardSwitchHolder11)
         saveCardSwitchHolder11?.view?.cardSwitch?.visibility = View.VISIBLE
         saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.visibility = View.VISIBLE
         saveCardSwitchHolder11?.view?.mainSwitch?.mainSwitchLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor")))
-//        setPayButtonAction()
     }
 
     fun setBottomSheetLayout(bottomSheetLayout: FrameLayout) {
@@ -193,8 +184,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
     }
 
     override fun displayGoPayLogin() {
-        if (this::bottomSheetLayout.isInitialized)
-            AnimationEngine.applyTransition(bottomSheetLayout, SLIDE)
+        setSlideAnimation()
         saveCardSwitchHolder11?.let {
             removeViews(
                 businessViewHolder, amountViewHolder1,
@@ -213,9 +203,13 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
         goPayViewsHolder.goPayopened = true
     }
 
-    override fun displayGoPay() {
+  private  fun setSlideAnimation(){
         if (this::bottomSheetLayout.isInitialized)
             AnimationEngine.applyTransition(bottomSheetLayout, SLIDE)
+    }
+
+    override fun displayGoPay() {
+        setSlideAnimation()
         saveCardSwitchHolder11?.let {
             removeViews(
                 businessViewHolder,
@@ -326,52 +320,49 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
                 selectedAmountCurrency,
                 currentAmountCurrency
             )
-       
     }
 
     @SuppressLint("SetTextI18n")
     override fun displayOTPView(mobileNumber: String, otpType:String) {
-        if (this::bottomSheetLayout.isInitialized) {
-            AnimationEngine.applyTransition(
-                bottomSheetLayout, SLIDE
-            )
+        setSlideAnimation()
+        if(otpType== PaymentTypeEnum.GOPAY.name)
+            displayOtpGoPay(mobileNumber)
+            else if(otpType == PaymentTypeEnum.telecom.name) displayOtpTelecoms(mobileNumber)
+    }
+
+    private fun displayOtpGoPay(mobileNumber: String){
+        otpTypeString = PaymentTypeEnum.GOPAY
+        removeViews(
+            cardViewHolder11,
+            paymentInputViewHolder, saveCardSwitchHolder11
+        )
+        addViews(otpViewHolder)
+        otpViewHolder.otpView.visibility = View.VISIBLE
+        otpViewHolder.otpView.mobileNumberText.text = mobileNumber
+        otpViewHolder.otpView.changePhone.setOnClickListener {
+            goPayViewsHolder.onChangePhoneClicked()
         }
-        if(otpType== PaymentTypeEnum.GOPAY.name) {
-            otpTypeString = PaymentTypeEnum.GOPAY
-            removeViews(
-                cardViewHolder11,
-                paymentInputViewHolder, saveCardSwitchHolder11
-            )
-            addViews(otpViewHolder)
-            otpViewHolder.otpView.visibility = View.VISIBLE
-            otpViewHolder.otpView.mobileNumberText.text = mobileNumber
-            otpViewHolder.otpView.changePhone.setOnClickListener {
-                goPayViewsHolder.onChangePhoneClicked()
-            }
+    }
 
-        }else if(otpType == PaymentTypeEnum.telecom.name){
-            otpTypeString = PaymentTypeEnum.telecom
-
-            removeViews(businessViewHolder,amountViewHolder1,paymentInputViewHolder,cardViewHolder11,saveCardSwitchHolder11,otpViewHolder)
-            addViews(businessViewHolder,amountViewHolder1,cardViewHolder11,paymentInputViewHolder,saveCardSwitchHolder11,otpViewHolder)
-
-            //Added check change listener to handle showing of extra save options
-            saveCardSwitchHolder11?.view?.mainSwitch?.switchSaveMobile?.visibility = View.VISIBLE
-            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.visibility = View.GONE
-            saveCardSwitchHolder11?.view?.mainSwitch?.switchSaveMobile?.setOnCheckedChangeListener { buttonView, isChecked ->
-                if(isChecked)
-                    saveCardSwitchHolder11?.view?.cardSwitch?.switchesLayout?.visibility = View.GONE
-            }
-            saveCardSwitchHolder11?.setSwitchToggleData(PaymentActionType.telecom)
-            otpViewHolder.setMobileOtpView()
-            var replaced = ""
-            var countryCodeReplaced = ""
-            if (mobileNumber.length > 7)
-                replaced = (mobileNumber.toString()).replaceRange(1, 6, "....")
-            countryCodeReplaced = goPayViewsHolder.goPayLoginInput.countryCodePicker.selectedCountryCode.replace("+", " ")
-
-            otpViewHolder.otpView.mobileNumberTextNormalPay.text = "+$countryCodeReplaced$replaced"
+    private fun displayOtpTelecoms(mobileNumber: String){
+        otpTypeString = PaymentTypeEnum.telecom
+        removeViews(businessViewHolder,amountViewHolder1,paymentInputViewHolder,cardViewHolder11,saveCardSwitchHolder11,otpViewHolder)
+        addViews(businessViewHolder,amountViewHolder1,cardViewHolder11,paymentInputViewHolder,saveCardSwitchHolder11,otpViewHolder)
+        //Added check change listener to handle showing of extra save options
+        saveCardSwitchHolder11?.view?.mainSwitch?.switchSaveMobile?.visibility = View.VISIBLE
+        saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.visibility = View.GONE
+        saveCardSwitchHolder11?.view?.mainSwitch?.switchSaveMobile?.setOnCheckedChangeListener { buttonView, isChecked ->
+            if(isChecked) saveCardSwitchHolder11?.view?.cardSwitch?.switchesLayout?.visibility = View.GONE
         }
+        saveCardSwitchHolder11?.setSwitchToggleData(PaymentActionType.telecom)
+        otpViewHolder.setMobileOtpView()
+        var replaced = ""
+        var countryCodeReplaced = ""
+        if (mobileNumber.length > 7)
+            replaced = (mobileNumber.toString()).replaceRange(1, 6, "....")
+        countryCodeReplaced = goPayViewsHolder.goPayLoginInput.countryCodePicker.selectedCountryCode.replace("+", " ")
+
+        otpViewHolder.otpView.mobileNumberTextNormalPay.text = "+$countryCodeReplaced$replaced"
     }
 
 
@@ -600,11 +591,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
             R.drawable.loader,
             1
         ) {
-            if (this::bottomSheetLayout.isInitialized) {
-                AnimationEngine.applyTransition(
-                    bottomSheetLayout, SLIDE
-                )
-            }
+            setSlideAnimation()
             removeViews(cardViewHolder11)
             removeViews(businessViewHolder)
             removeViews(amountViewHolder1)
@@ -712,11 +699,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
 
     // Override function to open NFC fragment and scan the card via NFC.
     override fun onClickNFC() {
-        if (this::bottomSheetLayout.isInitialized) {
-            AnimationEngine.applyTransition(
-                bottomSheetLayout, SLIDE
-            )
-        }
+        setSlideAnimation()
         removeViews(
             businessViewHolder,
             amountViewHolder1,
@@ -732,11 +715,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
 
     // Override function to open card Scanner and scan the card.
     override fun onClickCardScanner() {
-        if (this::bottomSheetLayout.isInitialized) {
-            AnimationEngine.applyTransition(
-                bottomSheetLayout, SLIDE
-            )
-        }
+        setSlideAnimation()
         println("are u reachinhg scanner")
         removeViews(
             businessViewHolder,
