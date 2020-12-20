@@ -4,25 +4,25 @@
     "logo": "https://avatars3.githubusercontent.com/u/19837565?s=200&v=4"
   },
   "order":{
-    "trx_currency":"KD",
+    "trx_currency":"د.ك",
     "original_amount":"1000000",
     "items":[
       {
         "amount":1000000,
         "currency":"د.ك",
-        "description":"testing0",
+        "description":"كتاب0",
         "discount":{
           "type":"P",
           "value":0
         },
         "image":"",
         "sku":"",
-        "name":"TEST0",
+        "name":"كتاب0",
         "quantity":1
       },
       {
         "amount":1000000,
-        "currency":"KD",
+        "currency":"د.ك",
         "description":"testing1 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
         "discount":{
           "type":"P",
@@ -30,12 +30,12 @@
         },
         "image":"",
         "sku":"",
-        "name":"TEST1",
+        "name":"كتاب1",
         "quantity":2
       },
       {
         "amount":10000000,
-        "currency":"KD",
+        "currency":"د.ك",
         "description":"testing2 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
         "discount":{
           "type":"P",
@@ -43,13 +43,13 @@
         },
         "image":"",
         "sku":"",
-        "name":"TEST2",
+        "name":"كتاب2",
         "quantity":3
       }
     ],
     "shipping":{
       "amount":1,
-      "currency":"KD",
+      "currency":"د.ك",
       "description":"test",
       "provider":"ARAMEX",
       "shipping_note":"",

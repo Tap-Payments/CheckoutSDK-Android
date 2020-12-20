@@ -119,7 +119,9 @@ object CurrencyFormatter {
             }
         }
     fun currencyFormat(amount: String): String {
+        println("amount formar"+amount)
         val formatter = DecimalFormat("###,###,##0.00")
+        println("formatter"+formatter)
         return formatter.format(amount.toDouble())
     }
 
