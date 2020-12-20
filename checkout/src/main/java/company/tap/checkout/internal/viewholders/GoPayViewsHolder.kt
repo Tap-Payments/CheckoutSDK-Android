@@ -25,7 +25,7 @@ import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class GoPayViewsHolder(private val context: Context, private val baseLayouttManager: BaseLayouttManager?=null) : TapBaseViewHolder,GoPayLoginInterface,OtpButtonConfirmationInterface,
+class GoPayViewsHolder(private val context: Context, private val baseLayouttManager: BaseLayouttManager?=null,private val otpViewHolder: OTPViewHolder) : TapBaseViewHolder,GoPayLoginInterface,OtpButtonConfirmationInterface,
     OpenOTPInterface {
 
     override val view: View = LayoutInflater.from(context).inflate(R.layout.gopay_layout, null)
@@ -110,11 +110,14 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
     }
 
     override fun onOtpButtonConfirmationClick(otpNumber: String): Boolean {
+        otpViewHolder.otpView.otpHintText.visibility= View.GONE
         Log.d("isValidOTPValid", (otpNumber == "111111").toString())
         return if(otpNumber=="111111"){
             baseLayouttManager?.displayGoPay()
             true
         } else {
+            otpViewHolder.otpView.otpHintText.text= (LocalizationManager.getValue("Message", "TapOtpView", "Invalid"))
+            otpViewHolder.otpView.otpHintText.visibility= View.VISIBLE
             false
         }
     }
