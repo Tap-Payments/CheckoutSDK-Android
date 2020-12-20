@@ -164,7 +164,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
         paymentInputViewHolder = PaymenttInputViewHolder(context, this, this, saveCardSwitchHolder11,this)
         itemsViewHolder1 = ItemsViewHolder1(context, this)
         otpViewHolder = OTPViewHolder(context)
-        goPayViewsHolder = GoPayViewsHolder(context, this)
+        goPayViewsHolder = GoPayViewsHolder(context, this,otpViewHolder)
 
     }
 
