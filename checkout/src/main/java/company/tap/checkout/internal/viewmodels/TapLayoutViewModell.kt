@@ -361,7 +361,6 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
             saveCardSwitchHolder11?.view?.mainSwitch?.switchSaveMobile?.setOnCheckedChangeListener { buttonView, isChecked ->
                 if(isChecked)
                     saveCardSwitchHolder11?.view?.cardSwitch?.switchesLayout?.visibility = View.GONE
-
             }
             saveCardSwitchHolder11?.setSwitchToggleData(PaymentActionType.telecom)
             otpViewHolder.setMobileOtpView()
@@ -701,6 +700,16 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
         } else unActivateActionButton()
     }
 
+    override fun onPayCardCompleteAction(
+        isCompleted: Boolean,
+        paymentType: PaymentActionType,
+        cardNumber: String,
+        expiryDate: String,
+        cvvNumber: String
+    ) {
+        setPayButtonAction(paymentType)
+    }
+
     // Override function to open NFC fragment and scan the card via NFC.
     override fun onClickNFC() {
         if (this::bottomSheetLayout.isInitialized) {
@@ -789,15 +798,12 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
 
 
 
-      fun setPayButtonAction(paymentActionType:PaymentActionType){
+      private fun setPayButtonAction(paymentActionType:PaymentActionType){
         /**
          * payment from onSelectPaymentOptionActionListener
          */
 
         saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.setOnClickListener {
-
-//            if (saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.isActivated ==  true) {
-
                 when(paymentActionType) {
                     PaymentActionType.SAVED_CARD -> {
                         Log.d("PaymentActionType",paymentActionType.toString())
@@ -821,28 +827,17 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
                         }
                     }
                     PaymentActionType.REDIRECT -> {
-                        Log.d("PaymentActionType",paymentActionType.toString())
-
                         onClickRedirect()
                     }
                     PaymentActionType.CARD -> {
-                        Log.d("PaymentActionType",paymentActionType.toString())
+                        activateActionButton()
+                        onClickRedirect()
+                    }
+                    PaymentActionType.telecom -> {
 
 
                     }
-                    PaymentActionType.telecom -> {
-                        Log.d("PaymentActionType",paymentActionType.toString())
-
-
-                    }else -> {
-//                    onClickRedirect()
-                    Log.d("PaymentActionType",paymentActionType.toString())
-
                 }
-                }
-//            }
-
-
         }
 
     }

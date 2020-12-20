@@ -76,6 +76,10 @@ class PaymenttInputViewHolder(
     private var isadded: Boolean = false
     private  var paymentType: PaymentActionType ?= null
     private lateinit var cardBrandType: String
+    private var cardNumber: String ?= null
+    private var expiryDate: String ?= null
+    private var cvvNumber: String ?= null
+
 
     init {
         tabLayout = view.findViewById(R.id.sections_tablayout)
@@ -221,6 +225,7 @@ class PaymenttInputViewHolder(
                     /**
                      * we will get date value
                      */
+                    expiryDate = s.toString()
                     tapAlertView?.alertMessage?.text = (LocalizationManager.getValue(
                         "Warning",
                         "Hints",
@@ -246,6 +251,18 @@ class PaymenttInputViewHolder(
                 /**
                  * we will get cvv number
                  */
+                cvvNumber = s.toString()
+                cardNumber?.let {
+                    expiryDate?.let { it1 ->
+                        cvvNumber?.let {it2 ->
+                            onPaymentCardComplete.onPayCardCompleteAction(
+                                true, PaymentActionType.CARD,
+                                it, it1, it2
+                            )
+                        }
+                    }
+                }
+
             }
         })
     }
@@ -262,6 +279,7 @@ class PaymenttInputViewHolder(
                 /**
                  * we will get the full card number
                  */
+                cardNumber = s.toString()
                 Log.d("cardBrand", card.cardBrand.toString())
                 Log.d("cardBrand", (card.validationState == CardValidationState.valid).toString())
                 tabLayout.selectTab(card.cardBrand, true)

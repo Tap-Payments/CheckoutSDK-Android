@@ -10,4 +10,5 @@ All rights reserved.
  **/
 interface PaymentCardComplete {
     fun onPayCardSwitchAction(isCompleted: Boolean, paymentType: PaymentActionType)
+    fun onPayCardCompleteAction(isCompleted: Boolean, paymentType: PaymentActionType, cardNumber: String, expiryDate: String, cvvNumber : String)
 }
