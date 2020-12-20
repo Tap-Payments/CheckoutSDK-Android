@@ -36,7 +36,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
     private lateinit var viewModell :TapLayoutViewModell
      var _Activity: Activity? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _Activity = activity?.parent
@@ -83,12 +82,21 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun getBusinessHeaderData(context: Context?, viewModell22: TapLayoutViewModell) {
-        val jsonFileString = context?.let { getJsonDataFromAsset(it, "dummyapiresponsedefault.json") }
-        val gson = Gson()
-        val dummyInitApiResponse: JsonResponseDummy1 = gson.fromJson(jsonFileString, JsonResponseDummy1::class.java)
-        // Pass the api response data to LayoutManager
-        viewModell22.getDatafromAPI(dummyInitApiResponse)
+    private fun getBusinessHeaderData( context: Context?, viewModell22: TapLayoutViewModell) {
+        if (context?.let { LocalizationManager.getLocale(it).language } == "en") {
+            val jsonFileString = context?.let { getJsonDataFromAsset(it, "dummyapiresponsedefault.json") }
+            val gson = Gson()
+            val dummyInitApiResponse: JsonResponseDummy1 = gson.fromJson(jsonFileString, JsonResponseDummy1::class.java)
+            // Pass the api response data to LayoutManager
+            viewModell22.getDatafromAPI(dummyInitApiResponse)
+        }else{
+            val jsonFileStringar = context?.let { getJsonDataFromAsset(it, "dummyapiresponsedefaultar.json") }
+            val gson = Gson()
+            val dummyInitApiResponse: JsonResponseDummy1 = gson.fromJson(jsonFileStringar, JsonResponseDummy1::class.java)
+            // Pass the api response data to LayoutManager
+            viewModell22.getDatafromAPI(dummyInitApiResponse)
+        }
+
     }
 
 

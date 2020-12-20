@@ -33,6 +33,8 @@ class MainActivity : AppCompatActivity() ,InlineViewCallback{
         setContentView(R.layout.activity_main)
         ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "lighttheme")
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        setLocale(this, LocalizationManager.getLocale(this).language)
+        LocalizationManager.loadTapLocale(resources, R.raw.lang)
 
         }
     fun openBottomSheet(view: View) {
@@ -94,6 +96,7 @@ class MainActivity : AppCompatActivity() ,InlineViewCallback{
     }
 
     fun setLocale(activity: Activity, languageCode: String?) {
+        println("languageCode is$languageCode")
         val locale = Locale(languageCode)
         Locale.setDefault(locale)
         val resources: Resources = activity.resources

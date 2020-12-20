@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.businessview_layout.view.*
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class BusinessViewHolder(context: Context) : TapBaseViewHolder {
+class BusinessViewHolder(private val context: Context) : TapBaseViewHolder {
 
 
     override val view: View =
@@ -57,7 +57,7 @@ class BusinessViewHolder(context: Context) : TapBaseViewHolder {
      * @param merchantNameApi represents the merchant business name
      * */
     fun setDatafromAPI(merchantLogoApi: String, merchantNameApi: String) {
-        merchantLogo = null
+        merchantLogo = merchantLogoApi
         merchantName = merchantNameApi
         bindViewComponents()
     }
