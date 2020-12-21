@@ -1,7 +1,9 @@
 package company.tap.checkout.internal.utils
 
 import android.os.Build
+import java.math.BigDecimal
 import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 import java.text.NumberFormat
 import java.util.*
 
@@ -119,10 +121,10 @@ object CurrencyFormatter {
             }
         }
     fun currencyFormat(amount: String): String {
-        println("amount formar"+amount)
-        val formatter = DecimalFormat("###,###,##0.00")
-        println("formatter"+formatter)
-        return formatter.format(amount.toDouble())
+        println("amount formar" + amount)
+        val df: DecimalFormat = DecimalFormat("###,###,##0.00")
+        df.decimalFormatSymbols = DecimalFormatSymbols(Locale.US)
+        return  df.format(BigDecimal(amount))
     }
 
 
