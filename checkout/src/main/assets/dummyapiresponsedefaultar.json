@@ -23,7 +23,7 @@
       {
         "amount":1000000,
         "currency":"د.ك",
-        "description":"testing1 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
+        "description":"الكمبيوتر عبارة عن آلة يمكن توجيهها لتنفيذ تسلسل العمليات الحسابية أو المنطقية تلقائيًا عبر برمجة الكمبيوتر. تمتلك أجهزة الكمبيوتر الحديثة القدرة على متابعة مجموعات عامة من العمليات تسمى البرامج. تمكن هذه البرامج أجهزة الكمبيوتر من أداء مجموعة واسعة للغاية من المهام1",
         "discount":{
           "type":"P",
           "value":0
@@ -36,7 +36,7 @@
       {
         "amount":10000000,
         "currency":"د.ك",
-        "description":"testing2 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
+        "description":"الكمبيوتر عبارة عن آلة يمكن توجيهها لتنفيذ تسلسل العمليات الحسابية أو المنطقية تلقائيًا عبر برمجة الكمبيوتر. تمتلك أجهزة الكمبيوتر الحديثة القدرة على متابعة مجموعات عامة من العمليات تسمى البرامج. تمكن هذه البرامج أجهزة الكمبيوتر من أداء مجموعة واسعة للغاية من المهام2",
         "discount":{
           "type":"P",
           "value":0
