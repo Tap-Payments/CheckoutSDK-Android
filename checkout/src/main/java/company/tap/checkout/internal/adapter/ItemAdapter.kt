@@ -1,7 +1,6 @@
 package company.tap.checkout.internal.adapter
 
 import android.annotation.SuppressLint
-import android.content.ClipData
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Paint
@@ -14,8 +13,6 @@ import android.widget.RelativeLayout
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.internal.dummygener.Items1
-import company.tap.checkout.internal.dummygener.SavedCards
-import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener
 import company.tap.checkout.internal.utils.CurrencyFormatter
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.R
@@ -90,11 +87,7 @@ class ItemAdapter :
                 totalQuantity.text = adapterContentItems[position].quantity.toString()
 
                 itemViewAdapter.setItemViewDataSource(
-                    getItemViewDataSource(
-                        adapterContentItems[position].currency + CurrencyFormatter.currencyFormat(
-                            adapterContentItems[position].amount.toString()
-                        ), adapterContentItems[position].currency, adapterContentItems[position].quantity.toString()
-                    )
+                    getItemViewDataSource(null, CurrencyFormatter.currencyFormat(adapterContentItems[position].amount.toString()),adapterContentItems[position].currency ,  CurrencyFormatter.currencyFormat(adapterContentItems[position].amount.toString()), adapterContentItems[position].currency, adapterContentItems[position].quantity.toString())
                 )
             }
         }else{
@@ -274,11 +267,18 @@ class ItemAdapter :
         )
     }
 
-    private fun getItemViewDataSource(itemAmount: String, totalAmnt: String, quantity: String): ItemViewDataSource {
+    private fun getItemViewDataSource(
+        itemTitle: String?,
+        itemAmount: String,
+        itemAmountCurr:String, totalAmount: String,
+        totalAmountCurr:String, totalQuantity: String): ItemViewDataSource {
         return ItemViewDataSource(
+            itemTitle = null,
             itemAmount = itemAmount,
-            totalAmount = totalAmnt,
-            totalQuantity = quantity
+            itemAmountCurr = itemAmountCurr,
+            totalAmount =totalAmount,
+            totalAmountCurr = totalAmountCurr,
+            totalQuantity = totalQuantity
         )
     }
 

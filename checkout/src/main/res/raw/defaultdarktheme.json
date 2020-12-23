@@ -314,6 +314,7 @@
                 "labelTextFont": "Roboto-Regular,12",
                 "labelTextColor": "greyishBrown",
                 "selected": {
+                    "backgroundColor" : "black",
                     "shadow": {
                         "backgroundColor" : "black",
                         "color" : "deepSkyBlue",

@@ -41,6 +41,7 @@ import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
+import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
 import kotlinx.android.synthetic.main.gopaysavedcard_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
@@ -74,8 +75,10 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
     private lateinit var bottomSheetDialog: BottomSheetDialog
     private lateinit var fragmentManager: FragmentManager
     private lateinit var bottomSheetLayout: FrameLayout
-    private lateinit var selectedAmountCurrency: String
-    private lateinit var currentAmountCurrency: String
+    private lateinit var selectedAmount: String
+    private lateinit var selectedCurrency: String
+    private lateinit var currentCurrency: String
+    private lateinit var currentAmount: String
     private lateinit var adapter: CardTypeAdapterUIKIT
     private lateinit var otpViewHolder: OTPViewHolder
     private lateinit var webFrameLayout: FrameLayout
@@ -122,7 +125,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
                      paymentInputViewHolder,
                      saveCardSwitchHolder11
                  )
-                 saveCardSwitchHolder11?.view?.cardSwitch?.switchSaveMobile?.visibility = View.GONE
+                 saveCardSwitchHolder11?.view?.mainSwitch?.switchSaveMobile?.visibility = View.GONE
                  saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.setButtonDataSource(
                      false,
                      context.let { LocalizationManager.getLocale(it).language },
@@ -164,10 +167,14 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
     private fun initSwitchAction() {
         saveCardSwitchHolder11?.view?.mainSwitch?.visibility = View.VISIBLE
         saveCardSwitchHolder11?.view?.mainSwitch?.switchSaveMobile?.visibility = View.GONE
+        saveCardSwitchHolder11?.view?.mainSwitch?.mainSwitchLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor")))
+        saveCardSwitchHolder11?.view?.cardviewSwitch?.cardElevation = 0f
     }
 
     private fun initAmountAction() {
         amountViewHolder1.setOnItemsClickListener{}
+        amountViewHolder1.view.amount_section.mainKDAmountValue.visibility= View.GONE
+        amountViewHolder1.view.amount_section.mainKDCurrency.visibility= View.GONE
     }
 
 
@@ -314,11 +321,11 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
         }
         displayItemsOpen = !display
         amountViewHolder1.changeGroupAction(!display)
-        if (this::currentAmountCurrency.isInitialized)
+        if (this::currentAmount.isInitialized)
             amountViewHolder1.updateSelectedCurrency(
                 displayItemsOpen,
-                selectedAmountCurrency,
-                currentAmountCurrency
+                selectedAmount,selectedCurrency,
+                currentAmount,currentCurrency
             )
     }
 
@@ -381,8 +388,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
             dummyInitapiResponse1.merchant1.name
         )
         amountViewHolder1.setDatafromAPI(
-            dummyInitapiResponse1.order1.original_amount.toString(),
-            dummyInitapiResponse1.order1.trx_currency,
+            dummyInitapiResponse1.order1.original_amount,
             dummyInitapiResponse1.order1.trx_currency,
             dummyInitapiResponse1.order1.items.size.toString()
         )
@@ -733,21 +739,20 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
 
     override fun onCurrencyClicked(currencySelected: String, currencyRate: Double) {
         for (i in itemList.indices) {
-            currentAmountCurrency = orderList.trx_currency + " " + CurrencyFormatter.currencyFormat(
-                itemList[i].amount.toString()
-            )
+            currentCurrency = orderList.trx_currency
+            currentAmount= CurrencyFormatter.currencyFormat(itemList[i].amount.toString())
             itemList[i].amount = (itemList[i].amount * currencyRate).toLong()
             itemList[i].currency = currencySelected
-            selectedAmountCurrency = itemList[i].currency + " " + CurrencyFormatter.currencyFormat(
-                itemList[i].amount.toString()
-            )
+            selectedAmount= CurrencyFormatter.currencyFormat(itemList[i].amount.toString())
+            selectedCurrency = itemList[i].currency
+
         }
        // itemsViewHolder1.resetItemList(itemList)
         itemsViewHolder1.setResetItemsRecylerView(itemList)
         amountViewHolder1.updateSelectedCurrency(
             displayItemsOpen,
-            selectedAmountCurrency,
-            currentAmountCurrency
+            selectedAmount,selectedCurrency,
+            currentAmount,currentCurrency
         )
     }
 

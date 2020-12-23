@@ -28,16 +28,14 @@ class AmountViewHolder1(context: Context,private val baseLayouttManager: BaseLay
 
     override val type = SectionType.AMOUNT_ITEMS
 
-    private var selectedCurren:String?=null
-    private var currentCurren:String?=null
     private var itemCountt :String?=null
-    private var originalAmount :String=""
+    lateinit var originalAmount :String
     private var isOpenedList :Boolean=true
-    private var currentCurrencyTextView :TapTextView
+    private var transactionCurrency :String?=null
     init {
-        bindViewComponents()
+       // bindViewComponents()
         CurrentTheme.initAppTheme(R.raw.defaultlighttheme, context)
-        currentCurrencyTextView = view.findViewById(R.id.textView_currentcurrency)
+
     }
 
     override fun bindViewComponents() {
@@ -46,8 +44,8 @@ class AmountViewHolder1(context: Context,private val baseLayouttManager: BaseLay
 
     private fun getAmountDataSourceFromAPIs(): AmountViewDataSource {
         return AmountViewDataSource(
-            selectedCurr = selectedCurren +" "+ originalAmount,
-            currentCurr = currentCurren,
+            selectedCurr = originalAmount ,
+            selectedCurrText = transactionCurrency,
             itemCount = itemCountt  + "  "+ LocalizationManager.getValue("items","Common")
         )
     }
@@ -62,39 +60,46 @@ class AmountViewHolder1(context: Context,private val baseLayouttManager: BaseLay
         if (isOpen)
             changeDataSource(
                 AmountViewDataSource(
-                    selectedCurr = selectedCurren +" "+  originalAmount,
-                    currentCurr = currentCurren,
+                    selectedCurr = originalAmount ,
+                    selectedCurrText = transactionCurrency,
                     itemCount = itemCountt + "  "+ LocalizationManager.getValue("items","Common")))
         else
             changeDataSource(
                 AmountViewDataSource(
-                    selectedCurr = selectedCurren +" "+ originalAmount,
-                    currentCurr = currentCurren,
+                    selectedCurr = originalAmount ,
+                    selectedCurrText = transactionCurrency,
                     itemCount = LocalizationManager.getValue("close","Common")))
     }
 
 
     fun setOnItemsClickListener(onItemsClickListener: () -> Unit) {
-        view.amount_section.itemCount.setOnClickListener {
+        view.amount_section.itemCountButton.setOnClickListener {
             onItemsClickListener()
             baseLayouttManager?.controlCurrency(isOpenedList)
         }
     }
 
-    fun updateSelectedCurrency(isOpen: Boolean, selectedAmountCurrency: String,currentCurrency:String) {
+    fun updateSelectedCurrency(isOpen: Boolean, selectedAmount: String,selectedCurrency: String,currentAmount:String, currentCurrency:String) {
         isOpenedList = isOpen
-        currentCurrencyTextView.visibility = View.VISIBLE
+       // currentCurrencyTextView.visibility = View.VISIBLE
+        view.amount_section.mainKDCurrency.visibility = View.VISIBLE
+        view.amount_section.mainKDAmountValue.visibility = View.VISIBLE
+        println("selectedAmount"+selectedAmount+"selectedCurrency"+selectedCurrency+"currentAmount"+currentAmount+"currentCurrency"+currentCurrency)
         if (isOpen)
             changeDataSource(
                 AmountViewDataSource(
-                    selectedCurr = selectedAmountCurrency,
-                    currentCurr = currentCurrency,
+                    selectedCurr = selectedAmount ,
+                    selectedCurrText = selectedCurrency,
+                    currentCurr = currentAmount,
+                    currentCurrText = currentCurrency,
                     itemCount = itemCountt + "  "+ LocalizationManager.getValue("items","Common")))
         else
             changeDataSource(
                 AmountViewDataSource(
-                    selectedCurr =selectedAmountCurrency,
-                    currentCurr = currentCurrency,
+                    selectedCurr = selectedAmount ,
+                    selectedCurrText = selectedCurrency,
+                    currentCurr = currentAmount,
+                    currentCurrText = currentCurrency,
                     itemCount = LocalizationManager.getValue("close","Common")))
     }
 
@@ -103,15 +108,15 @@ class AmountViewHolder1(context: Context,private val baseLayouttManager: BaseLay
     /**
      * Sets data from API through LayoutManager
      * @param selectedCurrencyApi represents the currency set by the Merchant.
-     * @param currentCurrencyApi represents the currency which by default.
+     * @param transactionCurrencyApi represents the currency which by default.
      * @param itemCountApi represents the itemsCount for the Merchant.
      * @param originalAmountApi represents the default amount from API.
      * */
-    fun setDatafromAPI(originalAmountApi:String,selectedCurrencyApi :String ,currentCurrencyApi :String, itemCountApi:String){
-        selectedCurren = selectedCurrencyApi
-        currentCurren = currentCurrencyApi
+    fun setDatafromAPI(originalAmountApi:String,transactionCurrencyApi :String, itemCountApi:String){
+        println("originalAmount"+originalAmountApi+"transactionCurrencyApi"+transactionCurrencyApi)
         itemCountt  = itemCountApi
         originalAmount =CurrencyFormatter.currencyFormat(originalAmountApi)
+        transactionCurrency= transactionCurrencyApi
         bindViewComponents()
     }
 }

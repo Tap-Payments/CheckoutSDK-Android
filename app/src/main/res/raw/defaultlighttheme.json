@@ -666,7 +666,7 @@
             "backgroundColor": "switch_background",
             "SwitchOnColor": "azure",
             "title": {
-                "textFont": "Roboto-Light,11",
+                "textFont": "Roboto-Light,14",
                 "textColor": "brownGreySix"
             },
             "subtitle": {
