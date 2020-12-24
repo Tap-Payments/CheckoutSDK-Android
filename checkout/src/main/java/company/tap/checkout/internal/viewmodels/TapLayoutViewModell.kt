@@ -166,24 +166,23 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
 
     private fun initSwitchAction() {
         saveCardSwitchHolder11?.view?.mainSwitch?.visibility = View.VISIBLE
-        saveCardSwitchHolder11?.view?.mainSwitch?.switchSaveMobile?.visibility = View.GONE
-        saveCardSwitchHolder11?.view?.mainSwitch?.mainSwitchLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor")))
-        saveCardSwitchHolder11?.view?.cardviewSwitch?.cardElevation = 0f
+       // saveCardSwitchHolder11?.view?.mainSwitch?.switchSaveMobile?.visibility = View.GONE
+     //   saveCardSwitchHolder11?.view?.mainSwitch?.mainSwitchLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor")))
+
     }
 
     private fun initAmountAction() {
         amountViewHolder1.setOnItemsClickListener{}
         amountViewHolder1.view.amount_section.mainKDAmountValue.visibility= View.GONE
-        amountViewHolder1.view.amount_section.mainKDCurrency.visibility= View.GONE
+
     }
 
 
     override fun displayStartupLayout(enabledSections: ArrayList<SectionType>) {
         //Todo based on api response logic for swicth case
         addViews(businessViewHolder, amountViewHolder1, cardViewHolder11, paymentInputViewHolder, saveCardSwitchHolder11)
-        saveCardSwitchHolder11?.view?.cardSwitch?.visibility = View.VISIBLE
-        saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.visibility = View.VISIBLE
         saveCardSwitchHolder11?.view?.mainSwitch?.mainSwitchLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor")))
+        saveCardSwitchHolder11?.view?.cardviewSwitch?.cardElevation = 0f
     }
 
     fun setBottomSheetLayout(bottomSheetLayout: FrameLayout) {
@@ -680,17 +679,14 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
             saveCardSwitchHolder11?.view?.mainSwitch?.visibility = View.VISIBLE
             saveCardSwitchHolder11?.view?.mainSwitch?.switchSaveMobile?.visibility = View.VISIBLE
             saveCardSwitchHolder11?.setSwitchToggleData(paymentType)
-            saveCardSwitchHolder11?.view?.mainSwitch?.mainSwitchLinear?.setBackgroundColor(
-                Color.parseColor(
-                    ThemeManager.getValue("TapSwitchView.main.backgroundColor")
-                )
-            )
-            saveCardSwitchHolder11?.view?.cardSwitch?.visibility = View.VISIBLE
+
             activateActionButton()
+
 
             paymentActionType = paymentType
 
-        } else unActivateActionButton()
+
+        }else unActivateActionButton()
     }
 
     override fun onPayCardCompleteAction(
@@ -701,6 +697,8 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
         cvvNumber: String
     ) {
         setPayButtonAction(paymentType)
+
+
     }
 
     // Override function to open NFC fragment and scan the card via NFC.
@@ -814,7 +812,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
                         onClickRedirect()
                     }
                     PaymentActionType.CARD -> {
-                        activateActionButton()
+                       activateActionButton()
                         onClickRedirect()
                     }
                     PaymentActionType.telecom -> {

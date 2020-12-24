@@ -50,14 +50,16 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         savedInstanceState: Bundle?
     ): View? {
         view1 = inflater.inflate(R.layout.fragment_checkouttaps, container, false)
-        backgroundColor = (Color.parseColor("#00000000"))
+        backgroundColor = (Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.clear")))
         bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
         val viewModell: TapLayoutViewModell by viewModels()
         this.viewModell = viewModell
+
         val checkoutLayout: LinearLayout? = view1?.findViewById(R.id.fragment_all)
         val frameLayout: FrameLayout? = view1?.findViewById(R.id.fragment_container_nfc_lib)
         val webFrameLayout: FrameLayout? = view1?.findViewById(R.id.webFrameLayout)
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
+
         bottomSheetLayout?.let {
             viewModell.setBottomSheetLayout(it)
         }
@@ -72,6 +74,12 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
                 }
             }
         }
+
+        enableSections()
+        return view1
+    }
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun enableSections(){
         val enabledSections = ArrayList<SectionType>()
         enabledSections.add(SectionType.BUSINESS)
         enabledSections.add(SectionType.AMOUNT_ITEMS)
@@ -79,7 +87,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         viewModell.displayStartupLayout(enabledSections)
         getBusinessHeaderData(context,viewModell)
         setBottomSheetInterface(this)
-        return view1
     }
 
     @RequiresApi(Build.VERSION_CODES.N)

@@ -81,10 +81,7 @@ class AmountViewHolder1(context: Context,private val baseLayouttManager: BaseLay
 
     fun updateSelectedCurrency(isOpen: Boolean, selectedAmount: String,selectedCurrency: String,currentAmount:String, currentCurrency:String) {
         isOpenedList = isOpen
-       // currentCurrencyTextView.visibility = View.VISIBLE
-        view.amount_section.mainKDCurrency.visibility = View.VISIBLE
         view.amount_section.mainKDAmountValue.visibility = View.VISIBLE
-        println("selectedAmount"+selectedAmount+"selectedCurrency"+selectedCurrency+"currentAmount"+currentAmount+"currentCurrency"+currentCurrency)
         if (isOpen)
             changeDataSource(
                 AmountViewDataSource(
@@ -113,7 +110,6 @@ class AmountViewHolder1(context: Context,private val baseLayouttManager: BaseLay
      * @param originalAmountApi represents the default amount from API.
      * */
     fun setDatafromAPI(originalAmountApi:String,transactionCurrencyApi :String, itemCountApi:String){
-        println("originalAmount"+originalAmountApi+"transactionCurrencyApi"+transactionCurrencyApi)
         itemCountt  = itemCountApi
         originalAmount =CurrencyFormatter.currencyFormat(originalAmountApi)
         transactionCurrency= transactionCurrencyApi
