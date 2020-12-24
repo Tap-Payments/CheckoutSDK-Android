@@ -52,7 +52,7 @@ import kotlin.properties.Delegates
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActionListener,
+class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedActionListener,
     PaymentCardComplete, onCardNFCCallListener, OnCurrencyChangedActionListener, WebViewContract{
     private var savedCardList = MutableLiveData<List<SavedCards>>()
     private var goPayCardList = MutableLiveData<List<GoPaySavedCards>>()

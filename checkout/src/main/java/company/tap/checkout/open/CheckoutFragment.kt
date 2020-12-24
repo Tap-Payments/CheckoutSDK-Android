@@ -18,7 +18,7 @@ import company.tap.checkout.R
 import company.tap.checkout.internal.apiresponse.getJsonDataFromAsset
 import company.tap.checkout.internal.dummygener.JsonResponseDummy1
 import company.tap.checkout.internal.enums.SectionType
-import company.tap.checkout.internal.viewmodels.TapLayoutViewModell
+import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
@@ -32,9 +32,8 @@ import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
  */
 class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
 
-    private var view1: View? = null
     private var _Context: Context? = null
-    private lateinit var viewModell :TapLayoutViewModell
+    private lateinit var viewModel :TapLayoutViewModel
      var _Activity: Activity? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,25 +48,25 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        view1 = inflater.inflate(R.layout.fragment_checkouttaps, container, false)
+      val  view = inflater.inflate(R.layout.fragment_checkouttaps, container, false)
         backgroundColor = (Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.clear")))
         bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
-        val viewModell: TapLayoutViewModell by viewModels()
-        this.viewModell = viewModell
+        val viewModel: TapLayoutViewModel by viewModels()
+        this.viewModel = viewModel
 
-        val checkoutLayout: LinearLayout? = view1?.findViewById(R.id.fragment_all)
-        val frameLayout: FrameLayout? = view1?.findViewById(R.id.fragment_container_nfc_lib)
-        val webFrameLayout: FrameLayout? = view1?.findViewById(R.id.webFrameLayout)
+        val checkoutLayout: LinearLayout? = view?.findViewById(R.id.fragment_all)
+        val frameLayout: FrameLayout? = view?.findViewById(R.id.fragment_container_nfc_lib)
+        val webFrameLayout: FrameLayout? = view?.findViewById(R.id.webFrameLayout)
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
 
         bottomSheetLayout?.let {
-            viewModell.setBottomSheetLayout(it)
+            viewModel.setBottomSheetLayout(it)
         }
         if (checkoutLayout != null) {
             context?.let {
                 if (frameLayout != null) {
                     webFrameLayout?.let { it1 ->
-                        viewModell.initLayoutManager(bottomSheetDialog,it,childFragmentManager,checkoutLayout,frameLayout,
+                        viewModel.initLayoutManager(bottomSheetDialog,it,childFragmentManager,checkoutLayout,frameLayout,
                             it1
                         )
                     }
@@ -76,7 +75,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         }
 
         enableSections()
-        return view1
+        return view
     }
     @RequiresApi(Build.VERSION_CODES.N)
     fun enableSections(){
@@ -84,25 +83,25 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         enabledSections.add(SectionType.BUSINESS)
         enabledSections.add(SectionType.AMOUNT_ITEMS)
         enabledSections.add(SectionType.FRAGMENT)
-        viewModell.displayStartupLayout(enabledSections)
-        getBusinessHeaderData(context,viewModell)
+        viewModel.displayStartupLayout(enabledSections)
+        getBusinessHeaderData(context,viewModel)
         setBottomSheetInterface(this)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun getBusinessHeaderData( context: Context?, viewModell22: TapLayoutViewModell) {
+    private fun getBusinessHeaderData( context: Context?, viewModel: TapLayoutViewModel) {
         if (context?.let { LocalizationManager.getLocale(it).language } == "en") {
-            val jsonFileString = context?.let { getJsonDataFromAsset(it, "dummyapiresponsedefault.json") }
+            val jsonFileString = context.let { getJsonDataFromAsset(it, "dummyapiresponsedefault.json") }
             val gson = Gson()
             val dummyInitApiResponse: JsonResponseDummy1 = gson.fromJson(jsonFileString, JsonResponseDummy1::class.java)
             // Pass the api response data to LayoutManager
-            viewModell22.getDatafromAPI(dummyInitApiResponse)
+            viewModel.getDatafromAPI(dummyInitApiResponse)
         }else{
-            val jsonFileStringar = context?.let { getJsonDataFromAsset(it, "dummyapiresponsedefaultar.json") }
+            val jsonFileStringAr = context?.let { getJsonDataFromAsset(it, "dummyapiresponsedefaultar.json") }
             val gson = Gson()
-            val dummyInitApiResponse: JsonResponseDummy1 = gson.fromJson(jsonFileStringar, JsonResponseDummy1::class.java)
+            val dummyInitApiResponse: JsonResponseDummy1 = gson.fromJson(jsonFileStringAr, JsonResponseDummy1::class.java)
             // Pass the api response data to LayoutManager
-            viewModell22.getDatafromAPI(dummyInitApiResponse)
+            viewModel.getDatafromAPI(dummyInitApiResponse)
         }
 
     }
@@ -113,9 +112,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         @JvmStatic
         fun newInstance(context: Context, activity: Activity) =
             CheckoutFragment().apply {
-                arguments = Bundle().apply {
-
-                }
+                arguments = Bundle().apply {}
                 _Context = context
                _Activity=activity
             }
