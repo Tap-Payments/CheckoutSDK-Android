@@ -174,7 +174,7 @@ class TapLayoutViewModell : ViewModel(), BaseLayouttManager, OnCardSelectedActio
     private fun initAmountAction() {
         amountViewHolder1.setOnItemsClickListener{}
         amountViewHolder1.view.amount_section.mainKDAmountValue.visibility= View.GONE
-        amountViewHolder1.view.amount_section.mainKDCurrency.visibility= View.GONE
+
     }
 
 
