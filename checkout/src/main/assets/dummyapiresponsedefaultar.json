@@ -260,12 +260,6 @@
       "paymentType":"card"
     },
     {
-      "brand":"mada",
-      "icon":"https://i.ibb.co/S3VhxmR/796px-Mada-Logo-svg.png",
-      "currencies":["SAR"],
-      "paymentType":"card"
-    },
-    {
       "brand":"viva",
       "icon":"https://i.ibb.co/cw5y89V/unnamed.png",
       "currencies":["KWD"],
@@ -304,18 +298,6 @@
     {
       "brand":"wataniya",
       "icon":"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Orange_logo.svg/2560px-Orange_logo.svg.png",
-      "currencies":["EGP"],
-      "country":{
-        "nameAR": "مصر",
-        "nameEN": "Egypt",
-        "code": "20",
-        "phoneLength": 9
-      },
-      "paymentType":"telecom"
-    },
-    {
-      "brand":"unknown",
-      "icon":"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Vodafone_icon.svg/1020px-Vodafone_icon.svg.png",
       "currencies":["EGP"],
       "country":{
         "nameAR": "مصر",
