@@ -15,6 +15,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.core.widget.doAfterTextChanged
+import company.tap.cardinputwidget.CardBrandSingle
 import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardinputwidget.widget.inline.InlineCardInput
 import company.tap.checkout.R
@@ -39,6 +40,7 @@ import company.tap.tapuilibrary.uikit.views.TapMobilePaymentView
 import company.tap.tapuilibrary.uikit.views.TapSelectionTabLayout
 import kotlinx.android.synthetic.main.payment_inputt_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
+import java.lang.IllegalArgumentException
 
 
 /**
@@ -48,11 +50,11 @@ import kotlinx.android.synthetic.main.switch_layout.view.*
  */
 @RequiresApi(Build.VERSION_CODES.N)
 class PaymenttInputViewHolder(
-   private val context: Context,
+    private val context: Context,
     private val onPaymentCardComplete: PaymentCardComplete,
     private val onCardNFCCallListener: onCardNFCCallListener,
-   private val switchViewHolder11: SwitchViewHolder11?,
-   private val baseLayouttManager: BaseLayouttManager
+    private val switchViewHolder11: SwitchViewHolder11?,
+    private val baseLayouttManager: BaseLayouttManager
 ) : TapBaseViewHolder,
     TapSelectionTabLayoutInterface, CardInputListener, TapPaymentShowHideClearImage {
     override val view: View =
@@ -70,6 +72,7 @@ class PaymenttInputViewHolder(
     private var tapCardInputView: InlineCardInput
     internal var tapMobileInputView: TapMobilePaymentView
     private var linearLayoutPay: LinearLayout? = null
+    private var tapSeparatorViewLinear: LinearLayout? = null
     private var tabPosition: Int? = null
     private var tapAlertView: TapAlertView? = null
     private var imageURL: String = ""
@@ -91,6 +94,9 @@ class PaymenttInputViewHolder(
         tabLayout.setTabLayoutInterface(this)
         paymentInputContainer = view.findViewById(R.id.payment_input_layout)
         clearView = view.findViewById(R.id.clear_text)
+        tapSeparatorViewLinear = view.findViewById(R.id.tapSeparatorViewLinear)
+        tapSeparatorViewLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
+
         tabLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.backgroundColor")))
         tabLayout.changeTabItemAlphaValue(0.9f)
         bindViewComponents()
@@ -160,7 +166,7 @@ class PaymenttInputViewHolder(
             switchViewHolder11?.view?.cardSwitch?.payButton?.isActivated = false
             switchViewHolder11?.view?.cardSwitch?.payButton?.setButtonDataSource(
                 false,
-                        context.let { LocalizationManager.getLocale(it).language },
+                context.let { LocalizationManager.getLocale(it).language },
                 LocalizationManager.getValue("pay", "ActionButton"),
                 Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
                 Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
@@ -181,7 +187,10 @@ class PaymenttInputViewHolder(
                 //check if editable start with number of oridoo or zain etc
                // onPaymentCardComplete.onPaycardSwitchAction(true, PaymentType.MOBILE)
                 if(tapMobileInputView.mobileNumber.text.length>7)
-                baseLayouttManager.displayOTPView(tapMobileInputView.mobileNumber.text.toString(), PaymentTypeEnum.telecom.name)
+                baseLayouttManager.displayOTPView(
+                    tapMobileInputView.mobileNumber.text.toString(),
+                    PaymentTypeEnum.telecom.name
+                )
 
             }
         }
@@ -254,7 +263,7 @@ class PaymenttInputViewHolder(
                 cvvNumber = s.toString()
                 cardNumber?.let {
                     expiryDate?.let { it1 ->
-                        cvvNumber?.let {it2 ->
+                        cvvNumber?.let { it2 ->
                             onPaymentCardComplete.onPayCardCompleteAction(
                                 true, PaymentActionType.CARD,
                                 it, it1, it2
@@ -415,19 +424,44 @@ class PaymenttInputViewHolder(
             imageURL = imageURLApi[i].icon
             paymentType = imageURLApi[i].paymentType
             cardBrandType = imageURLApi[i].brand
-            println("cardbrandtype"+cardBrandType)
+            println("cardbrandtype" + cardBrandType)
 
             if (paymentType == PaymentActionType.telecom) {
-                itemsMobilesList.add(SectionTabItem(imageURL, imageURL, CardBrand.valueOf(cardBrandType)))
+                itemsMobilesList.add(
+                    SectionTabItem(
+                        imageURL, imageURL, CardBrand.valueOf(
+                            cardBrandType
+                        )
+                    )
+                )
             } else {
-                itemsCardsList.add(SectionTabItem(imageURL, imageURL,CardBrand.valueOf(cardBrandType)))
+                itemsCardsList.add(
+                    SectionTabItem(
+                        imageURL,
+                        imageURL,
+                        CardBrand.valueOf(cardBrandType)
+                    )
+                )
             }
         }
-        tabLayout.addSection(itemsCardsList)
-        tabLayout.changeTabItemAlphaValue(0.9f)
-        tabLayout.changeTabItemMarginBottomValue(35)
-        tabLayout.changeTabItemMarginTopValue(35)
-        tabLayout.addSection(itemsMobilesList)
+        /**
+         * if there is only one payment method we will set visibility gone for tablayout
+         * and set the payment method icon for inline input card
+         * and set visibility  for separator after chips gone
+         */
+        if(itemsCardsList.size==1 || itemsMobilesList.size==1){
+        tabLayout.visibility = View.GONE
+        tapSeparatorViewLinear?.visibility = View.GONE
+         println("CardBrandSingle"+CardBrandSingle.fromCode(cardBrandType))
+        tapCardInputView.setSingleCardInput(CardBrandSingle.fromCode(cardBrandType))
+
+        }else {
+            tabLayout.addSection(itemsCardsList)
+            tabLayout.changeTabItemAlphaValue(0.9f)
+            tabLayout.changeTabItemMarginBottomValue(35)
+            tabLayout.changeTabItemMarginTopValue(35)
+            tabLayout.addSection(itemsMobilesList)
+        }
 
     }
 

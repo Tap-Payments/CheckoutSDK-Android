@@ -135,7 +135,7 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
                  * view.cardSwitch.payButton.isActivated
                  * if YES -----> we will set Logic of function mainSwitchCheckedAction()
                  */
-               // mainSwitchCheckedAction()
+              //  mainSwitchCheckedAction()
             }else mainSwitchUncheckedAction()
         }
 
