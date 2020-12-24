@@ -52,8 +52,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
   /*  implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.188'
     api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.188'*/
-    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.230'
-    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.230'
+    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.231'
+    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.231'
     implementation 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.19'
     api 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.19'
     implementation 'company.tap:PayCards-Tap-Android:0.1.5.3'
