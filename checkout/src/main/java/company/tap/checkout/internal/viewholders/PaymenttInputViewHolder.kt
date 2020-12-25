@@ -20,7 +20,6 @@ import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardinputwidget.widget.inline.InlineCardInput
 import company.tap.checkout.R
 import company.tap.checkout.internal.dummygener.TapCardPhoneListDataSource
-import company.tap.checkout.internal.enums.PaymentActionType
 import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayouttManager
@@ -63,7 +62,7 @@ class PaymenttInputViewHolder(
     private var tabLayout: TapSelectionTabLayout
     private val paymentInputContainer: LinearLayout
     private val clearView: ImageView
-    var selectedType = PaymentActionType.CARD
+    var selectedType = PaymentTypeEnum.card
     private var shouldShowScannerOptions = true
     private var lastFocusField = CardInputListener.FocusField.FOCUS_CARD
     private var lastCardInput = ""
@@ -77,7 +76,7 @@ class PaymenttInputViewHolder(
     private var tapAlertView: TapAlertView? = null
     private var imageURL: String = ""
     private var isadded: Boolean = false
-    private  var paymentType: PaymentActionType ?= null
+    private  var paymentType: PaymentTypeEnum ?= null
     private lateinit var cardBrandType: String
     private var cardNumber: String ?= null
     private var expiryDate: String ?= null
@@ -157,8 +156,8 @@ class PaymenttInputViewHolder(
     private fun initClearText() {
         clearView.setOnClickListener {
             when (selectedType) {
-                PaymentActionType.CARD -> tapCardInputView.clear()
-                PaymentActionType.telecom -> tapMobileInputView.clearNumber()
+                PaymentTypeEnum.card -> tapCardInputView.clear()
+                PaymentTypeEnum.telecom -> tapMobileInputView.clearNumber()
             }
             switchViewHolder11?.view?.cardSwitch?.switchesLayout?.visibility = View.GONE
             switchViewHolder11?.view?.mainSwitch?.switchSaveMobile?.visibility = View.GONE
@@ -251,7 +250,7 @@ class PaymenttInputViewHolder(
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s?.trim()?.length == 3 || s?.trim()?.length == 4) {
-                    onPaymentCardComplete.onPayCardSwitchAction(true, PaymentActionType.CARD)
+                    onPaymentCardComplete.onPayCardSwitchAction(true, PaymentTypeEnum.card)
                     tapAlertView?.visibility = View.GONE
                 }
             }
@@ -265,7 +264,7 @@ class PaymenttInputViewHolder(
                     expiryDate?.let { it1 ->
                         cvvNumber?.let { it2 ->
                             onPaymentCardComplete.onPayCardCompleteAction(
-                                true, PaymentActionType.CARD,
+                                true, PaymentTypeEnum.card,
                                 it, it1, it2
                             )
                         }
@@ -368,8 +367,8 @@ class PaymenttInputViewHolder(
         paymentInputContainer.removeAllViews()
         if (position == 0) {
             println("call 1")
-            selectedType = PaymentActionType.CARD
-            switchViewHolder11?.setSwitchLocals(PaymentActionType.CARD)
+            selectedType = PaymentTypeEnum.card
+            switchViewHolder11?.setSwitchLocals(PaymentTypeEnum.card)
             switchViewHolder11?.view?.cardSwitch?.switchGoPayCheckout?.visibility = View.VISIBLE
             nfcButton?.visibility = View.VISIBLE
             cardScannerBtn?.visibility = View.VISIBLE
@@ -377,9 +376,9 @@ class PaymenttInputViewHolder(
             paymentInputContainer.addView(tapCardInputView)
             checkForFocus()
         } else {
-            selectedType = PaymentActionType.telecom
+            selectedType = PaymentTypeEnum.telecom
             println("call 2")
-            switchViewHolder11?.setSwitchLocals(PaymentActionType.telecom)
+            switchViewHolder11?.setSwitchLocals(PaymentTypeEnum.telecom)
             nfcButton?.visibility = View.GONE
             cardScannerBtn?.visibility = View.GONE
             if (tapMobileInputView.mobileNumber.text.isEmpty())
@@ -426,7 +425,7 @@ class PaymenttInputViewHolder(
             cardBrandType = imageURLApi[i].brand
             println("cardbrandtype" + cardBrandType)
 
-            if (paymentType == PaymentActionType.telecom) {
+            if (paymentType == PaymentTypeEnum.telecom) {
                 itemsMobilesList.add(
                     SectionTabItem(
                         imageURL, imageURL, CardBrand.valueOf(

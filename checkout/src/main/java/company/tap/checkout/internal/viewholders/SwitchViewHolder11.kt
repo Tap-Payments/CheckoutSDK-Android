@@ -5,7 +5,7 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import company.tap.checkout.R
-import company.tap.checkout.internal.enums.PaymentActionType
+import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
@@ -27,7 +27,7 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
     override val type = SectionType.SAVE_CARD
 
     private var merchantName: String? = null
-    private var paymentName: PaymentActionType? = null
+    private var paymentName: PaymentTypeEnum? = null
     private var switchString: String? = null
     private var goPayString: String? = null
     private var savegoPayString: String? = null
@@ -44,7 +44,7 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
 
     }
     // Function / Logic is responsible for sett ing the data to switch based on user selection
-    fun setSwitchLocals(payName:PaymentActionType) {
+    fun setSwitchLocals(payName:PaymentTypeEnum) {
         goPayString = LocalizationManager.getValue("goPayTextLabel","GoPay")
         savegoPayString = LocalizationManager.getValue("savegoPayLabel","GoPay")
         alertgoPaySignupString = LocalizationManager.getValue("goPaySignupLabel","GoPay")
@@ -79,7 +79,7 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
      * @param paymentType represents the type is card or mobile payment.Based on it will decide the
      * text of switches.
      * */
-    fun setDatafromAPI(merchantNameApi: String, paymentType: PaymentActionType) {
+    fun setDatafromAPI(merchantNameApi: String, paymentType: PaymentTypeEnum) {
         merchantName = merchantNameApi
         paymentName = paymentType
         // bindViewComponents()
@@ -155,8 +155,8 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
         )
     }
 
-    fun setSwitchToggleData(paymentType: PaymentActionType){
-        if(paymentType==PaymentActionType.CARD) {
+    fun setSwitchToggleData(paymentType: PaymentTypeEnum){
+        if(paymentType==PaymentTypeEnum.card) {
             view.mainSwitch.setSwitchDataSource(getMainSwitchDataSource(LocalizationManager.getValue("cardSaveLabel", "TapCardInputKit")))
         }else{
             view.mainSwitch.setSwitchDataSource(getMainSwitchDataSource(LocalizationManager.getValue("mobileSaveLabel","TapMobileInput")))

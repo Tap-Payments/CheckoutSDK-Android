@@ -24,7 +24,6 @@ import company.tap.checkout.internal.adapter.CardTypeAdapterUIKIT
 import company.tap.checkout.internal.adapter.CurrencyTypeAdapter
 import company.tap.checkout.internal.adapter.GoPayCardAdapterUIKIT
 import company.tap.checkout.internal.dummygener.*
-import company.tap.checkout.internal.enums.PaymentActionType
 import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.*
@@ -88,7 +87,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
     private lateinit var orderList: Order1
     private lateinit var context: Context
     private lateinit var otpTypeString: PaymentTypeEnum
-    private lateinit var paymentActionType: PaymentActionType
+    private lateinit var paymentActionType: PaymentTypeEnum
 
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -360,7 +359,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         saveCardSwitchHolder11?.view?.mainSwitch?.switchSaveMobile?.setOnCheckedChangeListener { buttonView, isChecked ->
             if(isChecked) saveCardSwitchHolder11?.view?.cardSwitch?.switchesLayout?.visibility = View.GONE
         }
-        saveCardSwitchHolder11?.setSwitchToggleData(PaymentActionType.telecom)
+        saveCardSwitchHolder11?.setSwitchToggleData(PaymentTypeEnum.telecom)
         otpViewHolder.setMobileOtpView()
         var replaced = ""
         var countryCodeReplaced = ""
@@ -556,13 +555,13 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
             5 -> {
                 // do action for saved card
                 activateActionButton()
-                setPayButtonAction(PaymentActionType.SAVED_CARD)
+                setPayButtonAction(PaymentTypeEnum.SAVEDCARD)
 
             }
             1 -> {
                 // redirect
                 activateActionButton()
-                setPayButtonAction(PaymentActionType.REDIRECT)
+                setPayButtonAction(PaymentTypeEnum.REDIRECT)
 
 //                saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.setOnClickListener{
 //                    onClickRedirect()
@@ -674,7 +673,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         }
     }
 
-    override fun onPayCardSwitchAction(isCompleted: Boolean, paymentType: PaymentActionType) {
+    override fun onPayCardSwitchAction(isCompleted: Boolean, paymentType: PaymentTypeEnum) {
         if (isCompleted) {
             saveCardSwitchHolder11?.view?.mainSwitch?.visibility = View.VISIBLE
             saveCardSwitchHolder11?.view?.mainSwitch?.switchSaveMobile?.visibility = View.VISIBLE
@@ -691,7 +690,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
 
     override fun onPayCardCompleteAction(
         isCompleted: Boolean,
-        paymentType: PaymentActionType,
+        paymentType: PaymentTypeEnum,
         cardNumber: String,
         expiryDate: String,
         cvvNumber: String
@@ -780,15 +779,15 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
 
 
 
-      private fun setPayButtonAction(paymentActionType:PaymentActionType){
+      private fun setPayButtonAction(paymentTypeEnum:PaymentTypeEnum){
         /**
          * payment from onSelectPaymentOptionActionListener
          */
 
         saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.setOnClickListener {
-                when(paymentActionType) {
-                    PaymentActionType.SAVED_CARD -> {
-                        Log.d("PaymentActionType",paymentActionType.toString())
+                when(paymentTypeEnum) {
+                    PaymentTypeEnum.SAVEDCARD -> {
+                        Log.d("PaymentTypeEnum",paymentTypeEnum.toString())
                         saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
 
                         saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.getImageView(
@@ -808,14 +807,14 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
                             )
                         }
                     }
-                    PaymentActionType.REDIRECT -> {
+                    PaymentTypeEnum.REDIRECT -> {
                         onClickRedirect()
                     }
-                    PaymentActionType.CARD -> {
+                    PaymentTypeEnum.card -> {
                        activateActionButton()
                         onClickRedirect()
                     }
-                    PaymentActionType.telecom -> {
+                    PaymentTypeEnum.telecom -> {
 
 
                     }
