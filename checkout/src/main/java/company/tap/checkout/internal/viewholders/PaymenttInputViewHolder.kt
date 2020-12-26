@@ -111,7 +111,7 @@ class PaymenttInputViewHolder(
         /**
          * set separator background
          */
-        view.separator?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
+      //  view.separator?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
     }
 
     private fun tapMobileInputViewWatcher() {

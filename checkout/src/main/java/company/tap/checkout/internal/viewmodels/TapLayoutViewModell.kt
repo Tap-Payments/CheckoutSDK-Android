@@ -36,13 +36,17 @@ import company.tap.checkout.internal.webview.WebFragment
 import company.tap.checkout.internal.webview.WebViewContract
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.themekit.theme.SeparatorViewTheme
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
+import company.tap.tapuilibrary.uikit.ktx.setTopBorders
 import kotlinx.android.synthetic.main.amountview_layout.view.*
+import kotlinx.android.synthetic.main.businessview_layout.view.*
 import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
 import kotlinx.android.synthetic.main.gopaysavedcard_layout.view.*
+import kotlinx.android.synthetic.main.payment_inputt_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 import kotlin.properties.Delegates
 
@@ -102,6 +106,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         initAmountAction()
         initSwitchAction()
         initOtpActionButton()
+        setAllSeparatorTheme()
     }
 
     private fun initOtpActionButton() {
@@ -165,7 +170,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
 
     private fun initSwitchAction() {
         saveCardSwitchHolder11?.view?.mainSwitch?.visibility = View.VISIBLE
-       // saveCardSwitchHolder11?.view?.mainSwitch?.switchSaveMobile?.visibility = View.GONE
+        saveCardSwitchHolder11?.view?.mainSwitch?.mainTextSave?.visibility = View.VISIBLE
      //   saveCardSwitchHolder11?.view?.mainSwitch?.mainSwitchLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor")))
 
     }
@@ -839,7 +844,24 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         )
     }
 
+    fun setAllSeparatorTheme() {
+        val separatorViewTheme = SeparatorViewTheme()
+        separatorViewTheme.strokeColor =
+            Color.parseColor(ThemeManager.getValue("tapSeparationLine.backgroundColor"))
+        separatorViewTheme.strokeHeight = ThemeManager.getValue("tapSeparationLine.height")
 
+        businessViewHolder.view.topSeparatorLinear.topSeparator.setTheme(separatorViewTheme)
+        amountViewHolder1.view.separator.setTheme(separatorViewTheme)
+        cardViewHolder11.view.tapSeparatorViewLinear1.separator_1.setTheme(separatorViewTheme)
+       paymentInputViewHolder.view.separatorــLayout.separatorــ.setTheme(separatorViewTheme)
+       // paymentInputViewHolder.view.separator1.setTheme(separatorViewTheme)
+
+        /**
+         * set separator background
+         */
+        businessViewHolder.view.topSeparatorLinear.setBackgroundColor((Color.parseColor(ThemeManager.getValue("merchantHeaderView.backgroundColor"))))
+       paymentInputViewHolder.view.separatorــLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor")))
+    }
 
 
 }

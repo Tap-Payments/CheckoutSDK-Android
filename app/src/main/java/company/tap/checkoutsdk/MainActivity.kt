@@ -31,7 +31,9 @@ class MainActivity : AppCompatActivity() ,InlineViewCallback{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "lighttheme")
+      //  ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "lighttheme")
+        ThemeManager.loadTapTheme(resources, R.raw.defaultdarktheme, "darktheme")
+      //  setTheme(R.style.AppThemeBlack)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         setLocale(this, LocalizationManager.getLocale(this).language)
         LocalizationManager.loadTapLocale(resources, R.raw.lang)

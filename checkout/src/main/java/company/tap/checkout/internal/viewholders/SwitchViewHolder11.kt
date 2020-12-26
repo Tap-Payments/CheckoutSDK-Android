@@ -92,8 +92,9 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
      * We will change tap card switch background if main switch checked or not
      */
     private fun configureSwitch() {
-       // view.mainSwitch.mainSwitchLinear.setBackgroundColor(Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor")))
-       // view.cardviewSwitch.cardElevation = 0f
+        view.mainSwitch.mainSwitchLinear.setBackgroundColor(Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor")))
+        view.mainSwitch.mainTextSave.visibility=View.VISIBLE
+        view.cardviewSwitch.cardElevation = 0f
         setBottomBorders(
             view.cardviewSwitch,
             30f,// corner raduis

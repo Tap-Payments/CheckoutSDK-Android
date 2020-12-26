@@ -1,7 +1,6 @@
 package company.tap.checkout.internal.interfaces
 
 import company.tap.checkout.internal.enums.PaymentTypeEnum
-import company.tap.checkout.internal.viewholders.PaymenttInputViewHolder
 
 /**
 

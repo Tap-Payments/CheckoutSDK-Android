@@ -10,17 +10,34 @@
         android:layout_height="wrap_content"
         android:background="@color/selection_tab_color"
         android:layoutDirection="locale" />
+<!--
     <company.tap.tapuilibrary.uikit.atoms.TapSeparatorView
-        android:id="@+id/separator"
+        android:id="@+id/separator1"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/separator_color" />
+
+-->
 
     <company.tap.tapuilibrary.uikit.views.TapAlertView
         android:id="@+id/alertView"
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/separatorــLayout"
+        android:layout_height="8dp">
 
+
+        <company.tap.tapuilibrary.uikit.atoms.TapSeparatorView
+            android:id="@+id/separatorــ"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/separator_color"
+            android:visibility="visible" />
+
+
+    </LinearLayout>
 
 </LinearLayout>
