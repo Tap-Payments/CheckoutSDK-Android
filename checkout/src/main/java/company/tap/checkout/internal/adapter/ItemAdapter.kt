@@ -100,7 +100,10 @@ class ItemAdapter :
         onItemClickAction(holder, position, isExpanded)
         showHideDescText(isExpanded, position, descText)
         setTheme(descriptionTextView, discount, descText, totalQuantity, totalAmount, itemName, itemSeparator, mainViewLinear, quantityRelative)
-        setFonts(itemName, totalAmount, discount, descText, descriptionTextView, totalQuantity)
+      if(LocalizationManager.getLocale(context).language=="en"){
+          setFontsEnglish(itemName, totalAmount, discount, descText, descriptionTextView, totalQuantity)
+      }else setFontsArabic(itemName, totalAmount, discount, descText, descriptionTextView, totalQuantity)
+
         checkItemListPosition(position, discount, totalAmount, itemName)
     }
 
@@ -229,7 +232,7 @@ class ItemAdapter :
     }
 
 
-    private fun setFonts(
+    private fun setFontsEnglish(
         itemName: TapTextView?, totalAmount: TapTextView?,
         discount: TapTextView?, descText: TapTextView?,
         descriptionTextView: TapTextView?, totalQuantity: TapTextView?
@@ -263,6 +266,44 @@ class ItemAdapter :
         totalQuantity?.typeface = Typeface.createFromAsset(
             context?.assets, TapFont.tapFontType(
                 TapFont.RobotoRegular
+            )
+        )
+    }
+
+    private fun setFontsArabic(
+        itemName: TapTextView?, totalAmount: TapTextView?,
+        discount: TapTextView?, descText: TapTextView?,
+        descriptionTextView: TapTextView?, totalQuantity: TapTextView?
+    ) {
+        itemName?.typeface = Typeface.createFromAsset(
+            context?.assets, TapFont.tapFontType(
+                TapFont.TajawalMedium
+            )
+        )
+        totalAmount?.typeface = Typeface.createFromAsset(
+            context?.assets, TapFont.tapFontType(
+                TapFont.TajawalMedium
+            )
+        )
+        discount?.typeface = Typeface.createFromAsset(
+            context?.assets, TapFont.tapFontType(
+                TapFont.TajawalLight
+            )
+        )
+        descText?.typeface = Typeface.createFromAsset(
+            context?.assets, TapFont.tapFontType(
+                TapFont.TajawalLight
+            )
+        )
+        descriptionTextView?.typeface = Typeface.createFromAsset(
+            context?.assets, TapFont.tapFontType(
+                TapFont.TajawalLight
+            )
+        )
+        // itemViewAdapter.setItemViewDataSource(getItemViewDataSource())
+        totalQuantity?.typeface = Typeface.createFromAsset(
+            context?.assets, TapFont.tapFontType(
+                TapFont.TajawalMedium
             )
         )
     }
