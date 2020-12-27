@@ -5,5 +5,7 @@
     <color name="gray_background">#f4f4f4</color>
     <color name="chip_back">#fff</color>
     <color name="text_color">#4b4847</color>
-    <color name="separator_color">#dfdfdf</color>
+    <!--<color name="separator_color">#dfdfdf</color>-->
+    <color name="separator_color">#404043</color>
+    <color name="black_27">#45000000</color>
 </resources>

@@ -24,7 +24,6 @@ import company.tap.checkout.internal.adapter.CardTypeAdapterUIKIT
 import company.tap.checkout.internal.adapter.CurrencyTypeAdapter
 import company.tap.checkout.internal.adapter.GoPayCardAdapterUIKIT
 import company.tap.checkout.internal.dummygener.*
-import company.tap.checkout.internal.enums.PaymentActionType
 import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.*
@@ -37,13 +36,17 @@ import company.tap.checkout.internal.webview.WebFragment
 import company.tap.checkout.internal.webview.WebViewContract
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.themekit.theme.SeparatorViewTheme
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
+import company.tap.tapuilibrary.uikit.ktx.setTopBorders
 import kotlinx.android.synthetic.main.amountview_layout.view.*
+import kotlinx.android.synthetic.main.businessview_layout.view.*
 import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
 import kotlinx.android.synthetic.main.gopaysavedcard_layout.view.*
+import kotlinx.android.synthetic.main.payment_inputt_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 import kotlin.properties.Delegates
 
@@ -88,7 +91,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
     private lateinit var orderList: Order1
     private lateinit var context: Context
     private lateinit var otpTypeString: PaymentTypeEnum
-    private lateinit var paymentActionType: PaymentActionType
+    private lateinit var paymentActionType: PaymentTypeEnum
 
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -103,6 +106,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         initAmountAction()
         initSwitchAction()
         initOtpActionButton()
+        setAllSeparatorTheme()
     }
 
     private fun initOtpActionButton() {
@@ -166,7 +170,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
 
     private fun initSwitchAction() {
         saveCardSwitchHolder11?.view?.mainSwitch?.visibility = View.VISIBLE
-       // saveCardSwitchHolder11?.view?.mainSwitch?.switchSaveMobile?.visibility = View.GONE
+        saveCardSwitchHolder11?.view?.mainSwitch?.mainTextSave?.visibility = View.VISIBLE
      //   saveCardSwitchHolder11?.view?.mainSwitch?.mainSwitchLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor")))
 
     }
@@ -360,7 +364,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         saveCardSwitchHolder11?.view?.mainSwitch?.switchSaveMobile?.setOnCheckedChangeListener { buttonView, isChecked ->
             if(isChecked) saveCardSwitchHolder11?.view?.cardSwitch?.switchesLayout?.visibility = View.GONE
         }
-        saveCardSwitchHolder11?.setSwitchToggleData(PaymentActionType.telecom)
+        saveCardSwitchHolder11?.setSwitchToggleData(PaymentTypeEnum.telecom)
         otpViewHolder.setMobileOtpView()
         var replaced = ""
         var countryCodeReplaced = ""
@@ -556,13 +560,13 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
             5 -> {
                 // do action for saved card
                 activateActionButton()
-                setPayButtonAction(PaymentActionType.SAVED_CARD)
+                setPayButtonAction(PaymentTypeEnum.SAVEDCARD)
 
             }
             1 -> {
                 // redirect
                 activateActionButton()
-                setPayButtonAction(PaymentActionType.REDIRECT)
+                setPayButtonAction(PaymentTypeEnum.REDIRECT)
 
 //                saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.setOnClickListener{
 //                    onClickRedirect()
@@ -674,7 +678,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         }
     }
 
-    override fun onPayCardSwitchAction(isCompleted: Boolean, paymentType: PaymentActionType) {
+    override fun onPayCardSwitchAction(isCompleted: Boolean, paymentType: PaymentTypeEnum) {
         if (isCompleted) {
             saveCardSwitchHolder11?.view?.mainSwitch?.visibility = View.VISIBLE
             saveCardSwitchHolder11?.view?.mainSwitch?.switchSaveMobile?.visibility = View.VISIBLE
@@ -691,7 +695,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
 
     override fun onPayCardCompleteAction(
         isCompleted: Boolean,
-        paymentType: PaymentActionType,
+        paymentType: PaymentTypeEnum,
         cardNumber: String,
         expiryDate: String,
         cvvNumber: String
@@ -780,15 +784,15 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
 
 
 
-      private fun setPayButtonAction(paymentActionType:PaymentActionType){
+      private fun setPayButtonAction(paymentTypeEnum:PaymentTypeEnum){
         /**
          * payment from onSelectPaymentOptionActionListener
          */
 
         saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.setOnClickListener {
-                when(paymentActionType) {
-                    PaymentActionType.SAVED_CARD -> {
-                        Log.d("PaymentActionType",paymentActionType.toString())
+                when(paymentTypeEnum) {
+                    PaymentTypeEnum.SAVEDCARD -> {
+                        Log.d("PaymentTypeEnum",paymentTypeEnum.toString())
                         saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
 
                         saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.getImageView(
@@ -808,14 +812,14 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
                             )
                         }
                     }
-                    PaymentActionType.REDIRECT -> {
+                    PaymentTypeEnum.REDIRECT -> {
                         onClickRedirect()
                     }
-                    PaymentActionType.CARD -> {
+                    PaymentTypeEnum.card -> {
                        activateActionButton()
                         onClickRedirect()
                     }
-                    PaymentActionType.telecom -> {
+                    PaymentTypeEnum.telecom -> {
 
 
                     }
@@ -840,7 +844,24 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         )
     }
 
+    fun setAllSeparatorTheme() {
+        val separatorViewTheme = SeparatorViewTheme()
+        separatorViewTheme.strokeColor =
+            Color.parseColor(ThemeManager.getValue("tapSeparationLine.backgroundColor"))
+        separatorViewTheme.strokeHeight = ThemeManager.getValue("tapSeparationLine.height")
 
+        businessViewHolder.view.topSeparatorLinear.topSeparator.setTheme(separatorViewTheme)
+        amountViewHolder1.view.separator.setTheme(separatorViewTheme)
+        cardViewHolder11.view.tapSeparatorViewLinear1.separator_1.setTheme(separatorViewTheme)
+       paymentInputViewHolder.view.separatorــLayout.separatorــ.setTheme(separatorViewTheme)
+       // paymentInputViewHolder.view.separator1.setTheme(separatorViewTheme)
+
+        /**
+         * set separator background
+         */
+        businessViewHolder.view.topSeparatorLinear.setBackgroundColor((Color.parseColor(ThemeManager.getValue("merchantHeaderView.backgroundColor"))))
+       paymentInputViewHolder.view.separatorــLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor")))
+    }
 
 
 }

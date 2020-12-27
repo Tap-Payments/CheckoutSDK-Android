@@ -34,8 +34,6 @@ class AmountViewHolder1(context: Context,private val baseLayouttManager: BaseLay
     private var transactionCurrency :String?=null
     init {
        // bindViewComponents()
-        CurrentTheme.initAppTheme(R.raw.defaultlighttheme, context)
-
     }
 
     override fun bindViewComponents() {

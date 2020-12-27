@@ -10,17 +10,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".open.CheckoutFragment">
+        tools:context=".open.CheckoutFragment"
+        android:background="@color/black_27"
+       >
     <LinearLayout
         android:id="@+id/fragment_all"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+       >
         <LinearLayout
             android:id="@+id/sdkContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+           >
 
             <FrameLayout
                 android:id="@+id/currency_fragment_container"

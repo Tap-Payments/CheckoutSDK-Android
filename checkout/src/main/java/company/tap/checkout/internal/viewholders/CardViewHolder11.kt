@@ -54,7 +54,7 @@ class CardViewHolder11(private val context: Context, private val onCardSelectedA
         /**
          * set separator background
          */
-        view.tapSeparatorViewLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
+        view.tapSeparatorViewLinear1?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
     }
 
     /**

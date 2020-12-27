@@ -11,12 +11,12 @@
         android:orientation="horizontal" />
 
     <LinearLayout
-        android:id="@+id/tapSeparatorViewLinear"
+        android:id="@+id/tapSeparatorViewLinear1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <company.tap.tapuilibrary.uikit.atoms.TapSeparatorView
-            android:id="@+id/separator_"
+            android:id="@+id/separator_1"
             android:layout_width="wrap_content"
             android:layout_height="1dp"
             android:layout_marginStart="@dimen/default_padding"
