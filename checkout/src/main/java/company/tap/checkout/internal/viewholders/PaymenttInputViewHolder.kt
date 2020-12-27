@@ -97,7 +97,7 @@ class PaymenttInputViewHolder(
         tapSeparatorViewLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
 
         tabLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.backgroundColor")))
-        tabLayout.changeTabItemAlphaValue(0.9f)
+        //tabLayout.changeTabItemAlphaValue(0.9f)
         bindViewComponents()
     }
 
@@ -340,7 +340,7 @@ class PaymenttInputViewHolder(
             println("card brand: ${card.validationState}")
             nfcButton?.visibility = View.GONE
             cardScannerBtn?.visibility = View.GONE
-
+            tabLayout.changeTabItemAlphaValue(0.9f)
         }
     }
 
@@ -416,7 +416,7 @@ class PaymenttInputViewHolder(
     fun setDatafromAPI(imageURLApi: List<TapCardPhoneListDataSource>) {
         val itemsMobilesList = ArrayList<SectionTabItem>()
         val itemsCardsList = ArrayList<SectionTabItem>()
-
+        tabLayout.changeTabItemAlphaValue(0.9f)
         println("iamage val  are" + imageURLApi)
         for (i in imageURLApi.indices) {
             tabLayout.resetBehaviour()
@@ -455,11 +455,14 @@ class PaymenttInputViewHolder(
         tapCardInputView.setSingleCardInput(CardBrandSingle.fromCode(cardBrandType))
 
         }else {
-            tabLayout.addSection(itemsCardsList)
             tabLayout.changeTabItemAlphaValue(0.9f)
+            tabLayout.addSection(itemsCardsList)
+
             tabLayout.changeTabItemMarginBottomValue(35)
             tabLayout.changeTabItemMarginTopValue(35)
-            tabLayout.addSection(itemsMobilesList)
+          //  tabLayout.changeTabItemAlphaValue(0.3f)
+          tabLayout.addSection(itemsMobilesList)
+
         }
 
     }

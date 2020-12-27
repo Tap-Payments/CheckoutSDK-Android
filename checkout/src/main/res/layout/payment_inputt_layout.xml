@@ -2,13 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <company.tap.tapuilibrary.uikit.organisms.TapPaymentInput
         android:id="@+id/tap_payment_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/selection_tab_color"
         android:layoutDirection="locale" />
 <!--
     <company.tap.tapuilibrary.uikit.atoms.TapSeparatorView

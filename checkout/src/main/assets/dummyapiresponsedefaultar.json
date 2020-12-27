@@ -138,7 +138,7 @@
   "goPaySavedCards": [
     {
       "chip": {
-        "title": "33333333",
+        "title": "12341234",
         "icon": "https://img.icons8.com/color/2x/amex.png"
       },
       "chipType": 5,
@@ -146,7 +146,7 @@
     },
     {
       "chip": {
-        "title": "33334444",
+        "title": "56785678",
         "icon": "https://img.icons8.com/color/2x/visa.png"
       },
       "chipType": 5,
@@ -154,7 +154,7 @@
     },
     {
       "chip": {
-        "title": "33335555",
+        "title": "91239123",
         "icon": "https://img.icons8.com/color/2x/mastercard-logo.png"
       },
       "chipType": 5,
@@ -228,7 +228,7 @@
     },
     {
       "chip": {
-        "title": ".... 5678",
+        "title": "12345678",
         "icon": "https://img.icons8.com/color/2x/visa.png"
       },
       "paymentType": "card",
@@ -236,7 +236,7 @@
     },
     {
       "chip": {
-        "title": ".... 9123",
+        "title": "12349123",
         "icon": "https://img.icons8.com/color/2x/mastercard-logo.png"
       },
       "paymentType": "card",

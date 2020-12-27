@@ -1,6 +1,7 @@
 package company.tap.checkout.internal.adapter
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Color
 import android.graphics.Color.parseColor
 import android.os.Build
@@ -17,11 +18,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import company.tap.checkout.R
+import company.tap.checkout.internal.dummygener.Chip1
 import company.tap.checkout.internal.dummygener.SavedCards
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
+import company.tap.taplocalizationkit.LocalizationManager
 
 
 import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.adapters.context
 import company.tap.tapuilibrary.uikit.interfaces.TapActionButtonInterface
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import kotlinx.android.synthetic.main.item_knet.view.*
@@ -38,12 +42,12 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     private var selectedPosition = -1
     private var lastPosition = -1
     private var arrayListRedirect:ArrayList<String> = ArrayList()
-    private var arrayListCards:ArrayList<String> = ArrayList()
+    private var arrayListCards:ArrayList<Chip1> = ArrayList()
     private var adapterContent: List<SavedCards> = java.util.ArrayList()
     private var isShaking: Boolean = false
     private var goPayOpened: Boolean = false
     private var arrayModified : ArrayList<Any> = ArrayList()
-
+    var __context: Context? = null
 
 
     companion object {
@@ -64,6 +68,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view: View
+        __context = parent.context
         return when (viewType) {
             TYPE_SAVED_CARD -> {
                 view = LayoutInflater.from(parent.context)
@@ -93,7 +98,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                 TYPE_REDIRECT
             }
             5 -> {
-                arrayListCards.add((adapterContent[position] ).chip1.icon)
+                arrayListCards.add((adapterContent[position]).chip1)
                 TYPE_SAVED_CARD
             }
             else -> {
@@ -228,9 +233,10 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     private fun bindSavedCardData(holder: RecyclerView.ViewHolder) {
         for (i in 0 until arrayListCards.size) {
             Glide.with(holder.itemView.context)
-                .load(arrayListCards[i])
+                .load(arrayListCards[i].icon)
                 .into(holder.itemView.imageView_amex)
-            holder.itemView.textViewCardDetails.text = adapterContent[holder.adapterPosition].chip1.title
+            holder.itemView.textViewCardDetails.text = maskCardNumber(arrayListCards[i].title)
+           //holder.itemView.textViewCardDetails.text = adapterContent[holder.adapterPosition].chip1.title
         }
     }
 
@@ -338,6 +344,20 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
     internal class GoPayViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
+    private fun maskCardNumber(cardInput: String): String {
+        val maskLen: Int = cardInput.length - 4
+       println("maskLen is"+maskLen)
+       println("cardInput is"+cardInput)
+       println("cardInput.length is"+ cardInput.length)
+        if (maskLen <= 0) return cardInput // Nothing to mask
+        //  return "•".repeat(maskLen) + cardinput.substring(maskLen)
+        /*  else
+            println("cardInput is arabic "+cardInput.reversed())
+
+        return (cardInput).replaceRange(0, 4, "....")*/
+       // if(__context?.let { LocalizationManager.getLocale(it).language } == "en")
+            return (cardInput).replaceRange(0, 4, "....")
+    }
 
 }
 

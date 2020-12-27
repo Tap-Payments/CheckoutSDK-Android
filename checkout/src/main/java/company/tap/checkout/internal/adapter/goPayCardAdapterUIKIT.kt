@@ -15,14 +15,16 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import company.tap.checkout.R
+import company.tap.checkout.internal.dummygener.Chip1
 import company.tap.checkout.internal.dummygener.GoPaySavedCards
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
+import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import kotlinx.android.synthetic.main.item_gopay_signout.view.*
 import kotlinx.android.synthetic.main.item_knet.view.*
 import kotlinx.android.synthetic.main.item_save_cards.view.*
-import kotlinx.android.synthetic.main.item_save_cards.view.tapCardChip2
 
 /**
 Copyright (c) 2020    Tap Payments.
@@ -36,7 +38,7 @@ class GoPayCardAdapterUIKIT(
     private var selectedPosition = -1
     private var lastPosition = -1
     private var arrayListRedirect:ArrayList<String> = ArrayList()
-    private var arrayListCards:ArrayList<String> = ArrayList()
+    private var arrayListCards:ArrayList<Chip1> = ArrayList()
     private var adapterContent: List<GoPaySavedCards> = java.util.ArrayList()
     private var isShaking: Boolean = false
 
@@ -49,25 +51,33 @@ class GoPayCardAdapterUIKIT(
         this.adapterContent = adapterContent
         notifyDataSetChanged()
     }
-    fun goPayOpenedfromMain(goPayOpened:Boolean){
+    fun goPayOpenedfromMain(goPayOpened: Boolean){
 
     }
 
     fun updateShaking(isShaking: Boolean) {
         this.isShaking = isShaking
         notifyDataSetChanged()
-        Log.d("isShakingupdate" , isShaking.toString())
+        Log.d("isShakingupdate", isShaking.toString())
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view: View
         return when (viewType) {
             TYPE_SAVED_CARD -> {
-                view = LayoutInflater.from(parent.context).inflate(R.layout.item_save_cards, parent, false)
+                view = LayoutInflater.from(parent.context).inflate(
+                    R.layout.item_save_cards,
+                    parent,
+                    false
+                )
                 SavedViewHolder(view)
             }
             else -> {
-                view = LayoutInflater.from(parent.context).inflate(R.layout.item_gopay_signout, parent, false)
+                view = LayoutInflater.from(parent.context).inflate(
+                    R.layout.item_gopay_signout,
+                    parent,
+                    false
+                )
                 GoPayViewHolder(view)
             }
         }
@@ -80,7 +90,8 @@ class GoPayCardAdapterUIKIT(
 
         return when ((adapterContent[position]).chipType ) {
             5 -> {
-                arrayListCards.add((adapterContent[position]).chip1.icon)
+                arrayListCards.add((adapterContent[position].chip1))
+
                 TYPE_SAVED_CARD
             }
             else -> TYPE_GO_PAY_SIGNOUT
@@ -118,7 +129,9 @@ class GoPayCardAdapterUIKIT(
                     holder.itemView.alpha = 0.4f
                 }
                 if (selectedPosition == position) {
-                    if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
+                    if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains(
+                            "dark"
+                        )) {
                         holder.itemView.tapCardChip4.setBackgroundResource(R.drawable.border_shadow_black)
                     } else {
                         holder.itemView.tapCardChip4.setBackgroundResource(R.drawable.border_shadow_)
@@ -133,7 +146,9 @@ class GoPayCardAdapterUIKIT(
                     )// shadow color
 
                 } else {
-                    if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
+                    if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains(
+                            "dark"
+                        )) {
                         holder.itemView.tapCardChip4.setBackgroundResource(R.drawable.border_unclick_black)
                     } else {
                         holder.itemView.tapCardChip4.setBackgroundResource(R.drawable.border_unclick)
@@ -163,10 +178,13 @@ class GoPayCardAdapterUIKIT(
     }
 
     private fun typeSavedCard(holder: RecyclerView.ViewHolder, position: Int) {
-        Log.d("isShaking" , isShaking.toString())
+        Log.d("isShaking", isShaking.toString())
         if (isShaking) {
             holder.itemView.alpha = 0.4f
-            val animShake: Animation = AnimationUtils.loadAnimation(holder.itemView.context, R.anim.shake)
+            val animShake: Animation = AnimationUtils.loadAnimation(
+                holder.itemView.context,
+                R.anim.shake
+            )
             holder.itemView.startAnimation(animShake)
             setOnClickActions(holder)
         }
@@ -215,9 +233,12 @@ class GoPayCardAdapterUIKIT(
                 holder.itemView.alpha = 0.4f
             }
             val imageViewCard = holder.itemView.findViewById<ImageView>(R.id.imageView_amex)
+            val textViewCardDetails = holder.itemView.findViewById<TapTextView>(R.id.textViewCardDetails)
             Glide.with(holder.itemView.context)
-                    .load(arrayListCards[i])
+                    .load(arrayListCards[i].icon)
                     .into(imageViewCard)
+
+            textViewCardDetails.text= maskCardNumber(arrayListCards[i].title)
         }
 
     }
@@ -260,7 +281,10 @@ class GoPayCardAdapterUIKIT(
         (holder as SingleViewHolder)
             holder.itemView.setOnClickListener {
                 if (!isShaking) {
-                onCardSelectedActionListener.onCardSelectedAction(true,adapterContent[holder.adapterPosition])
+                onCardSelectedActionListener.onCardSelectedAction(
+                    true,
+                    adapterContent[holder.adapterPosition]
+                )
                 selectedPosition = position
                 notifyDataSetChanged()
             }
@@ -275,5 +299,13 @@ class GoPayCardAdapterUIKIT(
     internal class SavedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     internal class SingleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     internal class GoPayViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+
+    private fun maskCardNumber(cardinput: String): String {
+        val maskLen: Int = cardinput.length - 4
+            if (maskLen <= 0) return cardinput // Nothing to mask
+
+        return (cardinput).replaceRange(1, 3, "....")
+
+    }
 }
 
