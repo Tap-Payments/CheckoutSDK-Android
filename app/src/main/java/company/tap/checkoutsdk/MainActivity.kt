@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() ,InlineViewCallback{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "lighttheme")
+        if (ThemeManager.currentTheme.isEmpty()) ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "lighttheme")
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         setLocale(this, LocalizationManager.getLocale(this).language)
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
@@ -68,12 +68,17 @@ class MainActivity : AppCompatActivity() ,InlineViewCallback{
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_dark -> {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            if (ThemeManager.currentTheme.isNotEmpty() && !(ThemeManager.currentTheme.contains("dark")))
+                ThemeManager.loadTapTheme(resources, R.raw.defaultdarktheme, "defaultdarktheme")
 
+            recreate()
             true
         }
         R.id.action_light -> {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-
+            if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))
+            ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "defaultlighttheme")
+            recreate()
             true
         }
         R.id.change_language -> {

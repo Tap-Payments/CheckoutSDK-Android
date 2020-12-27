@@ -4,8 +4,7 @@
 
     <item
         android:id="@+id/action_dark"
-        android:title="Dark Theme"
-        app:showAsAction="always" />
+        android:title="Dark Theme" />
     <item
         android:id="@+id/action_light"
         android:title="Light Theme" />
