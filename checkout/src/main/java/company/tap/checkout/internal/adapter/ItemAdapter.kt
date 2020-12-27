@@ -85,7 +85,6 @@ class ItemAdapter :
                 descriptionTextView.visibility = if (isExpanded) View.VISIBLE else View.GONE
                 holder.itemView.isActivated = isExpanded
                 totalQuantity.text = adapterContentItems[position].quantity.toString()
-
                 itemViewAdapter.setItemViewDataSource(
                     getItemViewDataSource(null, CurrencyFormatter.currencyFormat(adapterContentItems[position].amount.toString()),adapterContentItems[position].currency ,  CurrencyFormatter.currencyFormat(adapterContentItems[position].amount.toString()), adapterContentItems[position].currency, adapterContentItems[position].quantity.toString())
                 )
@@ -149,7 +148,8 @@ class ItemAdapter :
                 itemName?.text = adapterContentItems[position].name
                 if(adapterContentItems[position].discount1.type == "P"){
                     discount?.visibility = View.VISIBLE
-                    discount?.text = adapterContentItems[i].discount1.value.toString()
+                   // discount?.text = adapterContentItems[i].discount1.value.toString()
+                    discount?.text = LocalizationManager.getValue("Discount", "ItemList")
                     totalAmount?.paintFlags = totalAmount?.paintFlags?.or(Paint.STRIKE_THRU_TEXT_FLAG)!!
                     totalAmount.text = adapterContentItems[position].amount.toString()
 
