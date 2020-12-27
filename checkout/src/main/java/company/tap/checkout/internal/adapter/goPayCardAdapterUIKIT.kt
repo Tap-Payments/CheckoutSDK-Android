@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
@@ -41,6 +42,9 @@ class GoPayCardAdapterUIKIT(
     private var arrayListCards:ArrayList<Chip1> = ArrayList()
     private var adapterContent: List<GoPaySavedCards> = java.util.ArrayList()
     private var isShaking: Boolean = false
+    private var isLogout: Boolean = false
+    lateinit var tapCardFrameLayout: FrameLayout
+    lateinit var holderLogout: RecyclerView.ViewHolder
 
     companion object {
         private const val TYPE_SAVED_CARD = 1
@@ -50,6 +54,12 @@ class GoPayCardAdapterUIKIT(
     fun updateAdapterData(adapterContent: List<GoPaySavedCards>) {
         this.adapterContent = adapterContent
         notifyDataSetChanged()
+    }
+    fun updateSignOut(adapterContent: List<GoPaySavedCards>,isLogout:Boolean) {
+        this.adapterContent = adapterContent
+        this.isLogout = isLogout
+        notifyDataSetChanged()
+        Log.d("isLogout", isLogout.toString())
     }
     fun goPayOpenedfromMain(goPayOpened: Boolean){
 
@@ -166,13 +176,12 @@ class GoPayCardAdapterUIKIT(
 
                 }
                 (holder as GoPayViewHolder)
-                    holder.itemView.setOnClickListener {
-                        if (!isShaking) {
-                        selectedPosition = position
-                        onCardSelectedActionListener.onGoPayLogoutClicked(true)
-                        notifyDataSetChanged()
-                    }
-                }
+                holderLogout = holder
+                //holder.itemView.tapCardChip4.visibility =View.GONE
+                if(isLogout) {
+                    typeGoPaySavedCard(holder, position)
+                }else holder.itemView.tapCardChip4.visibility =View.GONE
+
             }
         }
     }
@@ -296,15 +305,33 @@ class GoPayCardAdapterUIKIT(
         }
     }
 
+    private fun typeGoPaySavedCard(holder: RecyclerView.ViewHolder, position: Int){
+        tapCardFrameLayout = holder.itemView.findViewById(R.id.tapCardChip4)
+        tapCardFrameLayout.visibility = View.VISIBLE
+
+        holder.itemView.setOnClickListener {
+            if (!isShaking) {
+                selectedPosition = position
+                onCardSelectedActionListener.onGoPayLogoutClicked(true)
+                notifyDataSetChanged()
+            }
+        }
+
+    }
+
     internal class SavedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     internal class SingleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
-    internal class GoPayViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    internal class GoPayViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+       // itemtapCardChip4
+
+
+    }
 
     private fun maskCardNumber(cardinput: String): String {
         val maskLen: Int = cardinput.length - 4
             if (maskLen <= 0) return cardinput // Nothing to mask
 
-        return (cardinput).replaceRange(1, 3, "....")
+        return (cardinput).replaceRange(0, 4, "....")
 
     }
 }

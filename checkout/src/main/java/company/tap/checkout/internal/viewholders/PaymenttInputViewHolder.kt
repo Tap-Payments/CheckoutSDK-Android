@@ -96,7 +96,7 @@ class PaymenttInputViewHolder(
         tapSeparatorViewLinear = view.findViewById(R.id.tapSeparatorViewLinear)
         tapSeparatorViewLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
 
-        tabLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.backgroundColor")))
+       // tabLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.backgroundColor")))
         //tabLayout.changeTabItemAlphaValue(0.9f)
         bindViewComponents()
     }
@@ -290,19 +290,26 @@ class PaymenttInputViewHolder(
                 cardNumber = s.toString()
                 Log.d("cardBrand", card.cardBrand.toString())
                 Log.d("cardBrand", (card.validationState == CardValidationState.valid).toString())
-                tabLayout.selectTab(card.cardBrand, true)
-            }
-            if (s.trim().length == 19 && (card.validationState == CardValidationState.invalid)) {
-                tapAlertView?.visibility = View.VISIBLE
-                tapAlertView?.alertMessage?.text =
-                    (LocalizationManager.getValue("Warning", "Hints", "missingExpiryCVV"))
-            }
 
-            lastCardInput = it.toString()
-            shouldShowScannerOptions = it.isEmpty()
-            controlScannerOptions()
-            cardBrandDetection(s.toString())
-            checkValidationState(card)
+
+
+                if (s.trim().length == 19 && (card.validationState == CardValidationState.invalid)) {
+                    tapAlertView?.visibility = View.VISIBLE
+                    tapAlertView?.alertMessage?.text =
+                        (LocalizationManager.getValue("Warning", "Hints", "missingExpiryCVV"))
+                } else if (s.trim().length == 19 && (card.validationState == CardValidationState.valid)) {
+                    tabLayout.selectTab(
+                        card.cardBrand,
+                        card.validationState == CardValidationState.valid
+                    )
+                }
+
+                lastCardInput = it.toString()
+                shouldShowScannerOptions = it.isEmpty()
+                controlScannerOptions()
+                cardBrandDetection(s.toString())
+                checkValidationState(card)
+            }
         }
     }
 
@@ -320,6 +327,7 @@ class PaymenttInputViewHolder(
             }
             CardValidationState.valid -> {
                 tapAlertView?.visibility = View.GONE
+                tabLayout.changeTabItemAlphaValue((ThemeManager.getValue("cardPhoneList.icon.otherSegmentSelected.alpha") as Double).toFloat())
             }
             else -> {
                 tapAlertView?.visibility = View.VISIBLE
@@ -340,7 +348,7 @@ class PaymenttInputViewHolder(
             println("card brand: ${card.validationState}")
             nfcButton?.visibility = View.GONE
             cardScannerBtn?.visibility = View.GONE
-            tabLayout.changeTabItemAlphaValue(0.9f)
+
         }
     }
 
@@ -416,7 +424,7 @@ class PaymenttInputViewHolder(
     fun setDatafromAPI(imageURLApi: List<TapCardPhoneListDataSource>) {
         val itemsMobilesList = ArrayList<SectionTabItem>()
         val itemsCardsList = ArrayList<SectionTabItem>()
-        tabLayout.changeTabItemAlphaValue(0.9f)
+        tabLayout.changeTabItemAlphaValue(1f)
         println("iamage val  are" + imageURLApi)
         for (i in imageURLApi.indices) {
             tabLayout.resetBehaviour()
@@ -460,7 +468,6 @@ class PaymenttInputViewHolder(
 
             tabLayout.changeTabItemMarginBottomValue(35)
             tabLayout.changeTabItemMarginTopValue(35)
-          //  tabLayout.changeTabItemAlphaValue(0.3f)
           tabLayout.addSection(itemsMobilesList)
 
         }

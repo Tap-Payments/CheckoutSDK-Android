@@ -209,6 +209,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
             goPayViewsHolder.goPayLoginInput.inputType = GoPayLoginMethod.PHONE
             goPayViewsHolder.goPayLoginInput.visibility = View.VISIBLE
         }
+        goPayAdapter.updateAdapterData(goPayCardList.value as List<GoPaySavedCards>)
         amountViewHolder1.changeGroupAction(false)
         goPayViewsHolder.goPayopened = true
     }
@@ -397,7 +398,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         )
 
         cardViewHolder11.setDatafromAPI(dummyInitapiResponse1.savedCards as MutableList<SavedCards>)
-        goPaySavedCardHolder.setDatafromAPI(dummyInitapiResponse1.goPaySavedCards)
+       // goPaySavedCardHolder.setDatafromAPI(dummyInitapiResponse1.goPaySavedCards)
         // println("dummy tapCardPhoneListDataSource" + dummyInitapiResponse1.tapCardPhoneListDataSources)
         paymentInputViewHolder.setDatafromAPI(dummyInitapiResponse1.tapCardPhoneListDataSource)
 
@@ -435,6 +436,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         cardViewHolder11.view.mainChipgroup.chipsRecycler.adapter = adapter
         adapter.updateAdapterData(savedCardList.value as List<SavedCards>)
         goPayAdapter.updateAdapterData(goPayCardList.value as List<GoPaySavedCards>)
+        goPaySavedCardHolder.view.goPayLoginView.chipsRecycler.adapter = goPayAdapter
         currencyAdapter = CurrencyTypeAdapter(this)
 //        currencyAdapter.initOnCurrencyChangedActionListener(this)
            currencyAdapter.updateAdapterData(allCurrencies.value as List<Currencies1>)
@@ -454,30 +456,29 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
                 isShaking.value = true
                 adapter.updateShaking(isShaking.value ?: true)
                 goPayAdapter.updateShaking(isShaking.value ?: true)
-                goPayAdapter.updateShaking(true)
+                goPayAdapter.updateShaking(false)
                 cardViewHolder11.view.mainChipgroup.groupAction?.text =
                     LocalizationManager.getValue("close", "Common")
             }
         }
 
         goPaySavedCardHolder.view.goPayLoginView.groupAction.setOnClickListener {
-            if (goPaySavedCardHolder.view.goPayLoginView.groupAction?.text == LocalizationManager.getValue(
-                    "close",
-                    "Common"
-                )
-            ) {
+            if (goPaySavedCardHolder.view.goPayLoginView.groupAction?.text == LocalizationManager.getValue("close", "Common")) {
                 isShaking.value = false
                 adapter.updateShaking(isShaking.value ?: false)
                 goPayAdapter.updateShaking(isShaking.value ?: false)
                 goPaySavedCardHolder.view.goPayLoginView.groupAction?.text =
                     LocalizationManager.getValue("edit", "Common")
+                goPayAdapter.updateSignOut(goPayCardList.value as List<GoPaySavedCards>,false)
+
             } else {
                 isShaking.value = true
                 adapter.updateShaking(isShaking.value ?: true)
                 Log.d("isShaking.value", isShaking.value.toString())
-                goPayAdapter.updateShaking(true)
+                goPayAdapter.updateShaking(false)
                 goPaySavedCardHolder.view.goPayLoginView.groupAction?.text =
                     LocalizationManager.getValue("close", "Common")
+                goPayAdapter.updateSignOut(goPayCardList.value as List<GoPaySavedCards>,true)
             }
         }
     }
@@ -672,6 +673,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         if (isClicked) {
             adapter.updateShaking(true)
             goPayAdapter.updateShaking(true)
+
         } else {
             adapter.updateShaking(false)
             goPayAdapter.updateShaking(false)
@@ -713,7 +715,10 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
             amountViewHolder1,
             cardViewHolder11,
             saveCardSwitchHolder11,
-            paymentInputViewHolder
+            paymentInputViewHolder,
+            otpViewHolder,
+            goPaySavedCardHolder,
+            goPayViewsHolder
         )
         addViews(businessViewHolder, amountViewHolder1)
         fragmentManager.beginTransaction().replace(R.id.fragment_container_nfc_lib, NFCFragment())
@@ -854,6 +859,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         amountViewHolder1.view.separator.setTheme(separatorViewTheme)
         cardViewHolder11.view.tapSeparatorViewLinear1.separator_1.setTheme(separatorViewTheme)
        paymentInputViewHolder.view.separatorــLayout.separatorــ.setTheme(separatorViewTheme)
+        goPaySavedCardHolder.view.tapSeparatorViewLinear.separator_.setTheme(separatorViewTheme)
        // paymentInputViewHolder.view.separator1.setTheme(separatorViewTheme)
 
         /**

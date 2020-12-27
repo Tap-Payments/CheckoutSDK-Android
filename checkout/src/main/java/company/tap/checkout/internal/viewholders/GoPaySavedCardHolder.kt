@@ -70,6 +70,8 @@ class GoPaySavedCardHolder(
         chipRecyclerView.adapter = adapter
         adapter.updateShaking(false)
         goPaySavedCardsList?.let { adapter.updateAdapterData(it) }
+       // goPaySavedCardsList?.let { adapter.updateSignOut(it,true) }
+
     }
 
 }
