@@ -136,7 +136,7 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
                  * view.cardSwitch.payButton.isActivated
                  * if YES -----> we will set Logic of function mainSwitchCheckedAction()
                  */
-              //  mainSwitchCheckedAction()
+                mainSwitchCheckedAction()
             }else mainSwitchUncheckedAction()
         }
 
@@ -189,7 +189,7 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
             view.cardSwitch.tapCardSwitchLinear.setBackgroundResource(company.tap.tapuilibrary.R.drawable.ic_blurbackgroundblack)
         } else {
-            view.cardSwitch.tapCardSwitchLinear.setBackgroundResource(company.tap.tapuilibrary.R.drawable.ic_blurbackground)
+            view.cardSwitch.tapCardSwitchLinear.setBackgroundResource(company.tap.tapuilibrary.R.drawable.blurbackground)
         }
         view.cardviewSwitch.cardElevation = 2.5f
 

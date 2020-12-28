@@ -705,5 +705,10 @@
             "textFont": "Roboto-Light,12",
             "textColor": "#ffffff"
         }
+    },
+    "Nfc": {
+        "topTextBackgroundColor": "#4cffbe60",
+        "topTextColor": "",
+        "bottomTextColor": ""
     }
 }

@@ -23,7 +23,7 @@
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    <LinearLayout
+   <!-- <LinearLayout
         android:layout_width="match_parent"
         android:id="@+id/separatorــLayout"
         android:layout_height="8dp">
@@ -37,6 +37,6 @@
             android:visibility="visible" />
 
 
-    </LinearLayout>
+    </LinearLayout>-->
 
 </LinearLayout>

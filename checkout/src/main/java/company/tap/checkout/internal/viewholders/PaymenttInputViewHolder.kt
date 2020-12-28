@@ -31,6 +31,7 @@ import company.tap.tapcardvalidator_android.CardValidator
 import company.tap.tapcardvalidator_android.DefinedCardBrand
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.themekit.theme.SeparatorViewTheme
 import company.tap.tapuilibrary.uikit.interfaces.TapPaymentShowHideClearImage
 import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
 import company.tap.tapuilibrary.uikit.models.SectionTabItem
@@ -96,7 +97,7 @@ class PaymenttInputViewHolder(
         tapSeparatorViewLinear = view.findViewById(R.id.tapSeparatorViewLinear)
         tapSeparatorViewLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
 
-       // tabLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.backgroundColor")))
+        tabLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.backgroundColor")))
         //tabLayout.changeTabItemAlphaValue(0.9f)
         bindViewComponents()
     }
@@ -112,6 +113,7 @@ class PaymenttInputViewHolder(
          * set separator background
          */
       //  view.separator?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
+        //setSeparatorTheme()
     }
 
     private fun tapMobileInputViewWatcher() {
@@ -199,6 +201,7 @@ class PaymenttInputViewHolder(
         tapCardInputView.holderNameEnabled = false
         paymentInputContainer.addView(tapCardInputView)
         tapCardInputView.clearFocus()
+        tabLayout.setUnselectedAlphaLevel(0.9f)
         cardNumberWatcher()
         expiryDateWatcher()
         cvcNumberWatcher()
@@ -208,6 +211,13 @@ class PaymenttInputViewHolder(
         tapCardInputView.setCardNumberTextWatcher(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 cardNumAfterTextChangeListener(s)
+                if (cardBrandType != null) {
+                    clearView?.visibility = View.VISIBLE
+                    tabLayout.selectTab(
+                      CardBrand.visa,
+                        true
+                    )
+                }
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -291,7 +301,7 @@ class PaymenttInputViewHolder(
                 Log.d("cardBrand", card.cardBrand.toString())
                 Log.d("cardBrand", (card.validationState == CardValidationState.valid).toString())
 
-
+            tabLayout.setUnselectedAlphaLevel(0.5f)
 
                 if (s.trim().length == 19 && (card.validationState == CardValidationState.invalid)) {
                     tapAlertView?.visibility = View.VISIBLE
@@ -482,6 +492,16 @@ class PaymenttInputViewHolder(
             tapAlertView?.visibility = View.GONE
         }
     }
+    private fun setSeparatorTheme() {
+        val separatorViewTheme = SeparatorViewTheme()
+        separatorViewTheme.strokeColor =
+            Color.parseColor(ThemeManager.getValue("tapSeparationLine.backgroundColor"))
+        separatorViewTheme.strokeHeight = ThemeManager.getValue("tapSeparationLine.height")
+        view.alertView.bottomSeparator.setTheme(separatorViewTheme)
+        view.alertView.topSeparator.setTheme(separatorViewTheme)
+       // separator.setBackgroundColor(Color.parseColor(ThemeManager.getValue("tapSeparationLine.backgroundColor")))
+    }
+
 
 }
 

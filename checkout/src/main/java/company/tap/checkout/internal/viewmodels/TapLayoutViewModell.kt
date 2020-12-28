@@ -858,7 +858,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         businessViewHolder.view.topSeparatorLinear.topSeparator.setTheme(separatorViewTheme)
         amountViewHolder1.view.separator.setTheme(separatorViewTheme)
         cardViewHolder11.view.tapSeparatorViewLinear1.separator_1.setTheme(separatorViewTheme)
-       paymentInputViewHolder.view.separatorــLayout.separatorــ.setTheme(separatorViewTheme)
+     //  paymentInputViewHolder.view.separatorــLayout.separatorــ.setTheme(separatorViewTheme)
         goPaySavedCardHolder.view.tapSeparatorViewLinear.separator_.setTheme(separatorViewTheme)
        // paymentInputViewHolder.view.separator1.setTheme(separatorViewTheme)
 
@@ -866,7 +866,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
          * set separator background
          */
         businessViewHolder.view.topSeparatorLinear.setBackgroundColor((Color.parseColor(ThemeManager.getValue("merchantHeaderView.backgroundColor"))))
-       paymentInputViewHolder.view.separatorــLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor")))
+      // paymentInputViewHolder.view.separatorــLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor")))
     }
 
 

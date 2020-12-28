@@ -696,12 +696,19 @@
         }
     },
     "TapAlertMessage": {
-        "backgroundColor": "#4cffbe60",
-        "separatorColor" : "#33ea6724",
+        "backgroundColor": "#f8e5c8",
+        "separatorColor" : "#eac6a3",
         "separatorHeight" : 1,
         "textField": {
             "textFont": "Roboto-Light,12",
             "textColor": "#ea611c"
         }
+    },
+    "Nfc": {
+        "topTextBackgroundColor": "#e0dfe0",
+        "topTextColor": "#a7a7a7",
+        "topTextFont": "Roboto-Light,12",
+        "bottomTextColor": "#a7a7a7",
+        "bottomTextFont": "Roboto-Light,12"
     }
 }
