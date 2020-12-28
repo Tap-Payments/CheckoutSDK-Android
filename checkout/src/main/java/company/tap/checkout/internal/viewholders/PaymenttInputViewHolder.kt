@@ -98,7 +98,7 @@ class PaymenttInputViewHolder(
         tapSeparatorViewLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
 
         tabLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.backgroundColor")))
-        //tabLayout.changeTabItemAlphaValue(0.9f)
+        tabLayout.changeTabItemAlphaValue(0.9f)
         bindViewComponents()
     }
 
@@ -201,7 +201,6 @@ class PaymenttInputViewHolder(
         tapCardInputView.holderNameEnabled = false
         paymentInputContainer.addView(tapCardInputView)
         tapCardInputView.clearFocus()
-        tabLayout.setUnselectedAlphaLevel(0.9f)
         cardNumberWatcher()
         expiryDateWatcher()
         cvcNumberWatcher()
@@ -211,13 +210,6 @@ class PaymenttInputViewHolder(
         tapCardInputView.setCardNumberTextWatcher(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 cardNumAfterTextChangeListener(s)
-                if (cardBrandType != null) {
-                    clearView?.visibility = View.VISIBLE
-                    tabLayout.selectTab(
-                      CardBrand.visa,
-                        true
-                    )
-                }
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -227,6 +219,7 @@ class PaymenttInputViewHolder(
                     tapAlertView?.visibility = View.GONE
                 } else {
                     clearView.visibility = View.VISIBLE
+
                 }
             }
         })
@@ -238,7 +231,7 @@ class PaymenttInputViewHolder(
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
                 if (s.isNullOrEmpty()) {
-                    tabLayout.resetBehaviour()
+                   // tabLayout.resetBehaviour()
                 } else {
                     /**
                      * we will get date value
@@ -290,29 +283,21 @@ class PaymenttInputViewHolder(
         val card = CardValidator.validate(s.toString())
         s?.let {
             if (s.isNullOrEmpty()) {
-                tabLayout.resetBehaviour()
+               // tabLayout.resetBehaviour()
                 tapAlertView?.visibility = View.GONE
             }
             if (card.cardBrand != null) {
+                tabLayout.selectTab(
+                    card.cardBrand,
+                    card.validationState == CardValidationState.valid
+                )
                 /**
                  * we will get the full card number
                  */
                 cardNumber = s.toString()
+
                 Log.d("cardBrand", card.cardBrand.toString())
                 Log.d("cardBrand", (card.validationState == CardValidationState.valid).toString())
-
-            tabLayout.setUnselectedAlphaLevel(0.5f)
-
-                if (s.trim().length == 19 && (card.validationState == CardValidationState.invalid)) {
-                    tapAlertView?.visibility = View.VISIBLE
-                    tapAlertView?.alertMessage?.text =
-                        (LocalizationManager.getValue("Warning", "Hints", "missingExpiryCVV"))
-                } else if (s.trim().length == 19 && (card.validationState == CardValidationState.valid)) {
-                    tabLayout.selectTab(
-                        card.cardBrand,
-                        card.validationState == CardValidationState.valid
-                    )
-                }
 
                 lastCardInput = it.toString()
                 shouldShowScannerOptions = it.isEmpty()
@@ -337,7 +322,6 @@ class PaymenttInputViewHolder(
             }
             CardValidationState.valid -> {
                 tapAlertView?.visibility = View.GONE
-                tabLayout.changeTabItemAlphaValue((ThemeManager.getValue("cardPhoneList.icon.otherSegmentSelected.alpha") as Double).toFloat())
             }
             else -> {
                 tapAlertView?.visibility = View.VISIBLE
@@ -350,7 +334,7 @@ class PaymenttInputViewHolder(
     // Logic to show the switches when card details are valid
     private fun cardBrandDetection(cardTyped: String) {
         if (cardTyped.isEmpty()) {
-            tabLayout.resetBehaviour()
+            //tabLayout.resetBehaviour()
             tapAlertView?.visibility = View.GONE
         }
         val card = CardValidator.validate(cardTyped)
@@ -437,7 +421,7 @@ class PaymenttInputViewHolder(
         tabLayout.changeTabItemAlphaValue(1f)
         println("iamage val  are" + imageURLApi)
         for (i in imageURLApi.indices) {
-            tabLayout.resetBehaviour()
+           // tabLayout.resetBehaviour()
             imageURL = imageURLApi[i].icon
             paymentType = imageURLApi[i].paymentType
             cardBrandType = imageURLApi[i].brand
@@ -475,10 +459,10 @@ class PaymenttInputViewHolder(
         }else {
             tabLayout.changeTabItemAlphaValue(0.9f)
             tabLayout.addSection(itemsCardsList)
-
             tabLayout.changeTabItemMarginBottomValue(35)
             tabLayout.changeTabItemMarginTopValue(35)
-          tabLayout.addSection(itemsMobilesList)
+            tabLayout.changeTabItemAlphaValue(0.9f)
+            tabLayout.addSection(itemsMobilesList)
 
         }
 
@@ -492,15 +476,7 @@ class PaymenttInputViewHolder(
             tapAlertView?.visibility = View.GONE
         }
     }
-    private fun setSeparatorTheme() {
-        val separatorViewTheme = SeparatorViewTheme()
-        separatorViewTheme.strokeColor =
-            Color.parseColor(ThemeManager.getValue("tapSeparationLine.backgroundColor"))
-        separatorViewTheme.strokeHeight = ThemeManager.getValue("tapSeparationLine.height")
-        view.alertView.bottomSeparator.setTheme(separatorViewTheme)
-        view.alertView.topSeparator.setTheme(separatorViewTheme)
-       // separator.setBackgroundColor(Color.parseColor(ThemeManager.getValue("tapSeparationLine.backgroundColor")))
-    }
+
 
 
 }
