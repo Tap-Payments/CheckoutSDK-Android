@@ -56,7 +56,8 @@ class PaymenttInputViewHolder(
     private val switchViewHolder11: SwitchViewHolder11?,
     private val baseLayouttManager: BaseLayouttManager
 ) : TapBaseViewHolder,
-    TapSelectionTabLayoutInterface, CardInputListener, TapPaymentShowHideClearImage {
+    TapSelectionTabLayoutInterface, CardInputListener, TapPaymentShowHideClearImage
+     {
     override val view: View =
         LayoutInflater.from(context).inflate(R.layout.payment_inputt_layout, null)
     override val type = SectionType.PAYMENT_INPUT
@@ -69,7 +70,7 @@ class PaymenttInputViewHolder(
     private var lastCardInput = ""
     private var cardScannerBtn: ImageView? = null
     private var nfcButton: ImageView? = null
-    private var tapCardInputView: InlineCardInput
+    var tapCardInputView: InlineCardInput
     internal var tapMobileInputView: TapMobilePaymentView
     private var linearLayoutPay: LinearLayout? = null
     private var tapSeparatorViewLinear: LinearLayout? = null
@@ -82,6 +83,7 @@ class PaymenttInputViewHolder(
     private var cardNumber: String ?= null
     private var expiryDate: String ?= null
     private var cvvNumber: String ?= null
+
 
 
     init {
@@ -99,6 +101,7 @@ class PaymenttInputViewHolder(
 
         tabLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.backgroundColor")))
         tabLayout.changeTabItemAlphaValue(0.9f)
+
         bindViewComponents()
     }
 
@@ -476,7 +479,6 @@ class PaymenttInputViewHolder(
             tapAlertView?.visibility = View.GONE
         }
     }
-
 
 
 }

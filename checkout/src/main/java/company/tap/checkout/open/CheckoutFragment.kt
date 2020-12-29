@@ -1,7 +1,9 @@
 package company.tap.checkout.open
 
+
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -11,8 +13,11 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.*
-import com.google.android.material.bottomsheet.BottomSheetBehavior
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import cards.pay.paycardsrecognizer.sdk.Card
+import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import com.google.gson.Gson
 import company.tap.checkout.R
 import company.tap.checkout.internal.apiresponse.getJsonDataFromAsset
@@ -30,17 +35,19 @@ import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
 // * Use the [CheckoutFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
+class CheckoutFragment() : TapBottomSheetDialog(), TapBottomDialogInterface, InlineViewCallback {
 
     private var _Context: Context? = null
     private lateinit var viewModel :TapLayoutViewModel
      var _Activity: Activity? = null
-
+    private lateinit var intentData: Intent
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _Activity = activity?.parent
         this._Context = context
+
         setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
+
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -50,13 +57,17 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
     ): View? {
       val  view = inflater.inflate(R.layout.fragment_checkouttaps, container, false)
         backgroundColor = (Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.clear")))
-        bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+      /*  backgroundColor =
+            (Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.main_switch_background")))*/
+       // bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+       // bottomSheetDialog.behavior.isFitToContents = true
         val viewModel: TapLayoutViewModel by viewModels()
         this.viewModel = viewModel
 
         val checkoutLayout: LinearLayout? = view?.findViewById(R.id.fragment_all)
         val frameLayout: FrameLayout? = view?.findViewById(R.id.fragment_container_nfc_lib)
         val webFrameLayout: FrameLayout? = view?.findViewById(R.id.webFrameLayout)
+        val inLineCardLayout: FrameLayout? = view?.findViewById(R.id.inline_container)
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
 
         bottomSheetLayout?.let {
@@ -66,9 +77,22 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
             context?.let {
                 if (frameLayout != null) {
                     webFrameLayout?.let { it1 ->
-                        viewModel.initLayoutManager(bottomSheetDialog,it,childFragmentManager,checkoutLayout,frameLayout,
-                            it1
-                        )
+                        if (inLineCardLayout != null) {
+                            activity?.let { it2 ->
+                                viewModel.initLayoutManager(
+                                    bottomSheetDialog,
+                                    it,
+                                    childFragmentManager,
+                                    checkoutLayout,
+                                    frameLayout,
+                                    it1,
+                                    inLineCardLayout,
+                                    this,
+                                    it2
+                                )
+                            }
+
+                        }
                     }
                 }
             }
@@ -84,22 +108,34 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
         enabledSections.add(SectionType.AMOUNT_ITEMS)
         enabledSections.add(SectionType.FRAGMENT)
         viewModel.displayStartupLayout(enabledSections)
-        getBusinessHeaderData(context,viewModel)
+        getBusinessHeaderData(context, viewModel)
         setBottomSheetInterface(this)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun getBusinessHeaderData( context: Context?, viewModel: TapLayoutViewModel) {
+    private fun getBusinessHeaderData(context: Context?, viewModel: TapLayoutViewModel) {
         if (context?.let { LocalizationManager.getLocale(it).language } == "en") {
-            val jsonFileString = context.let { getJsonDataFromAsset(it, "dummyapiresponsedefault.json") }
+            val jsonFileString = context.let { getJsonDataFromAsset(
+                it,
+                "dummyapiresponsedefault.json"
+            ) }
             val gson = Gson()
-            val dummyInitApiResponse: JsonResponseDummy1 = gson.fromJson(jsonFileString, JsonResponseDummy1::class.java)
+            val dummyInitApiResponse: JsonResponseDummy1 = gson.fromJson(
+                jsonFileString,
+                JsonResponseDummy1::class.java
+            )
             // Pass the api response data to LayoutManager
             viewModel.getDatafromAPI(dummyInitApiResponse)
         }else{
-            val jsonFileStringAr = context?.let { getJsonDataFromAsset(it, "dummyapiresponsedefaultar.json") }
+            val jsonFileStringAr = context?.let { getJsonDataFromAsset(
+                it,
+                "dummyapiresponsedefaultar.json"
+            ) }
             val gson = Gson()
-            val dummyInitApiResponse: JsonResponseDummy1 = gson.fromJson(jsonFileStringAr, JsonResponseDummy1::class.java)
+            val dummyInitApiResponse: JsonResponseDummy1 = gson.fromJson(
+                jsonFileStringAr,
+                JsonResponseDummy1::class.java
+            )
             // Pass the api response data to LayoutManager
             viewModel.getDatafromAPI(dummyInitApiResponse)
         }
@@ -110,13 +146,27 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
     companion object {
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(context: Context, activity: Activity) =
+        fun newInstance(context: Context, activity: Activity,intent: Intent) =
             CheckoutFragment().apply {
                 arguments = Bundle().apply {}
                 _Context = context
                _Activity=activity
             }
     }
+
+    override fun onScanCardFailed(e: Exception?) {
+       viewModel?.removeInlineScanner()
+    }
+
+    override fun onScanCardFinished(card: Card?, cardImage: ByteArray?) {
+        if (card != null) {
+            println("scanned card is$card")
+            viewModel?.handleScanSuccessResult(card)
+
+        }
+    }
+
+
 
 
 }

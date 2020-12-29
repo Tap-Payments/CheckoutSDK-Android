@@ -53,11 +53,13 @@ dependencies {
   /*  implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.188'
     api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.188'*/
 
-    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.246'
-    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.246'
+    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.257'
+    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.257'
     implementation 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.22'
     api 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.22'
-    implementation 'company.tap:PayCards-Tap-Android:0.1.5.3'
+    implementation 'company.tap:PayCards-Tap-Android:0.1.6.4'
+    api 'company.tap:PayCards-Tap-Android:0.1.6.4'
+
   // implementation 'com.google.firebase:firebase-analytics:18.0.0'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation "androidx.fragment:fragment-ktx:1.2.5"

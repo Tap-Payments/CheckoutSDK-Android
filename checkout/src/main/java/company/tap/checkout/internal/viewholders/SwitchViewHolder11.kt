@@ -49,13 +49,13 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
         savegoPayString = LocalizationManager.getValue("savegoPayLabel","GoPay")
         alertgoPaySignupString = LocalizationManager.getValue("goPaySignupLabel","GoPay")
         println("payname in switch"+payName.name)
-        if(payName.name == "CARD"){
+        if(payName.name == "card"){
             switchString =LocalizationManager.getValue("cardUseNFCLabel","TapCardInputKit")
             switchString?.let { getMainSwitchDataSource(it) }?.let {
                 view.mainSwitch.setSwitchDataSource(it) }
             view.cardSwitch.setSwitchDataSource(getTapSwitchDataSourceFromAPI(switchString, goPayString, savegoPayString, alertgoPaySignupString))
 
-        }else if( payName.name == "MOBILE") {
+        }else if( payName.name == "telecom") {
             mobileString = LocalizationManager.getValue("mobileUseLabel","TapMobileInput")
             view.mainSwitch.setSwitchDataSource(getMainSwitchDataSource(mobileString))
             view.cardSwitch.setSwitchDataSource(getTapSwitchDataSourceFromAPI(mobileString, goPayString, savegoPayString, alertgoPaySignupString))
@@ -185,11 +185,11 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
         view.cardviewSwitch.cardElevation = 0f
 
     }
-    fun mainSwitchCheckedAction() {
+    private fun mainSwitchCheckedAction() {
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
-            view.cardSwitch.tapCardSwitchLinear.setBackgroundResource(company.tap.tapuilibrary.R.drawable.ic_blurbackgroundblack)
+            view.cardSwitch.tapCardSwitchLinear.setBackgroundResource(R.drawable.ic_blurbackgroundblack)
         } else {
-            view.cardSwitch.tapCardSwitchLinear.setBackgroundResource(company.tap.tapuilibrary.R.drawable.blurbackground)
+            view.cardSwitch.tapCardSwitchLinear.setBackgroundResource(R.drawable.blurbackground)
         }
         view.cardviewSwitch.cardElevation = 2.5f
 

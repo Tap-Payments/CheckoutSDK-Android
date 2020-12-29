@@ -2,6 +2,7 @@ package company.tap.checkoutsdk
 
 
 import android.app.Activity
+import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Color
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import cards.pay.paycardsrecognizer.sdk.Card
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
+import company.tap.checkout.internal.interfaces.LayoutManagerCallbacks
 import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.open.CheckoutFragment
 
@@ -26,8 +28,10 @@ import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog.Companion.TAG
 import java.util.*
 
 
-class MainActivity : AppCompatActivity() ,InlineViewCallback{
+class MainActivity : AppCompatActivity() {
+
     var sdkSession:SDKSession= SDKSession()
+    lateinit var intentData: Intent
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -40,6 +44,7 @@ class MainActivity : AppCompatActivity() ,InlineViewCallback{
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
 
         }
+
     fun openBottomSheet(view: View) {
         val modalBottomSheet = CheckoutFragment()
         modalBottomSheet.arguments = getArguments()
@@ -54,13 +59,7 @@ class MainActivity : AppCompatActivity() ,InlineViewCallback{
         return arguments
     }
 
-    override fun onScanCardFailed(e: Exception?) {
 
-    }
-
-    override fun onScanCardFinished(card: Card?, cardImage: ByteArray?) {
-
-    }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.menumain, menu)
@@ -112,6 +111,12 @@ class MainActivity : AppCompatActivity() ,InlineViewCallback{
         config.setLocale(locale)
         resources.updateConfiguration(config, resources.displayMetrics)
     }
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        intentData = intent
+
+    }
+
 }
 
 
