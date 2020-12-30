@@ -308,7 +308,7 @@
             }
         },
         "chips": {
-            "radius" : 25,
+            "radius" : 15,
             "currencyChip": {
                 "backgroundColor" : "whiteTwo",
                 "labelTextFont": "Roboto-Regular,12",
@@ -539,6 +539,7 @@
         "loginBar" :{
             "backgroundColor" : "whiteTwo",
             "inputFieldBackground" : "white",
+            "selectedTabIndicatorColor": "#a8a8a8",
             "underline": {
                 "selected": {
                     "backgroundColor" : "deepSkyBlue"
