@@ -1046,7 +1046,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         println("scanned card is$emvCard")
         paymentInputViewHolder.tapCardInputView.setCardNumber(emvCard.cardNumber)
         // paymentInputViewHolder.tapCardInputView.cardHolder.setText(card.cardHolderName)
-
+        convertDateString(emvCard.expireDate.toString())
         removeNFCViewFragment()
 
     }
@@ -1062,7 +1062,18 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
     }
 
 
+    private fun convertDateString(date:String) {
+        println("date im conversion"+date)
+        val dateParts: List<String>? = date?.split(" ")
+        val month = dateParts?.get(2)?.toInt()
+        val year = dateParts?.get(5)?.toInt()
+        if (month != null) {
+            if (year != null) {
+                paymentInputViewHolder.tapCardInputView.setExpiryDate(month, year)
+            }
+        }
 
+    }
     }
 
 
