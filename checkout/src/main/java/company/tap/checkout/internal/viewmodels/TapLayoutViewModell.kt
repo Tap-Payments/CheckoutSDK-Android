@@ -109,6 +109,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
     private val nfcFragment = NFCFragment()
     private val inlineViewFragment = InlineViewFragment()
     private var isInlineOpened = false
+    private var isNFCOpened = false
     private var textRecognitionML: TapTextRecognitionML? = null
     private lateinit var intent:Intent
 
@@ -397,6 +398,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
                 currentAmount, currentCurrency
             )
         removeInlineScanner()
+        removeNFCViewFragment()
     }
 
     @SuppressLint("SetTextI18n")
@@ -812,6 +814,8 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
            R.id.webFrameLayout,
            nfcFragment
        ).commit()
+        webFrameLayout?.visibility= View.VISIBLE
+        isNFCOpened = true
         amountViewHolder1.changeGroupAction(false)
     }
 
@@ -1043,11 +1047,17 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         paymentInputViewHolder.tapCardInputView.setCardNumber(emvCard.cardNumber)
         // paymentInputViewHolder.tapCardInputView.cardHolder.setText(card.cardHolderName)
 
+        removeNFCViewFragment()
 
+    }
+
+   private fun removeNFCViewFragment(){
+       if(isNFCOpened)
         if (fragmentManager.findFragmentById(R.id.webFrameLayout) != null)
             fragmentManager?.beginTransaction()
                 .remove(fragmentManager?.findFragmentById(R.id.webFrameLayout)!!)
                 .commit()
+       isNFCOpened = false
         webFrameLayout?.visibility= View.GONE
     }
 
