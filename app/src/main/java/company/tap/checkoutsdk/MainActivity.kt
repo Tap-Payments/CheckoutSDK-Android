@@ -31,7 +31,8 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
 
     var sdkSession:SDKSession= SDKSession()
-    lateinit var intentData: Intent
+
+    val modalBottomSheet = CheckoutFragment()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -46,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         }
 
     fun openBottomSheet(view: View) {
-        val modalBottomSheet = CheckoutFragment()
+
         modalBottomSheet.arguments = getArguments()
         modalBottomSheet.show(supportFragmentManager, TAG)
     }
@@ -113,7 +114,8 @@ class MainActivity : AppCompatActivity() {
     }
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        intentData = intent
+        setIntent(intent)
+        modalBottomSheet.handleNFCResult(intent)
 
     }
 

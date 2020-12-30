@@ -2,6 +2,7 @@ package company.tap.checkout.internal.viewmodels
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ShapeDrawable
 import android.os.Build
@@ -42,17 +43,22 @@ import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.viewholders.*
 import company.tap.checkout.internal.webview.WebFragment
 import company.tap.checkout.internal.webview.WebViewContract
+import company.tap.nfcreader.open.reader.TapEmvCard
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.SeparatorViewTheme
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
+import company.tap.tapuilibrary.uikit.views.TapNFCView
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.businessview_layout.view.*
 import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
+import kotlinx.android.synthetic.main.fragment_checkouttaps.view.*
 import kotlinx.android.synthetic.main.gopaysavedcard_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.properties.Delegates
 
 
@@ -82,7 +88,6 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
     private lateinit var goPayViewsHolder: GoPayViewsHolder
     private lateinit var itemsViewHolder1: ItemsViewHolder1
     private lateinit var cardViewHolder11: CardViewHolder11
-   // private lateinit var nfcViewHolder: NFCViewHolder
     private lateinit var bottomSheetDialog: BottomSheetDialog
     private lateinit var fragmentManager: FragmentManager
     private lateinit var bottomSheetLayout: FrameLayout
@@ -105,9 +110,12 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
     private val inlineViewFragment = InlineViewFragment()
     private var isInlineOpened = false
     private var textRecognitionML: TapTextRecognitionML? = null
-    private lateinit var activity:FragmentActivity
+    private lateinit var intent:Intent
+
 
     private lateinit var  inlineViewCallback: InlineViewCallback
+
+
     @RequiresApi(Build.VERSION_CODES.N)
     fun initLayoutManager(
         bottomSheetDialog: BottomSheetDialog,
@@ -118,8 +126,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         webFrameLayout: FrameLayout,
         inLineCardLayout: FrameLayout,
         inlineViewCallback: InlineViewCallback,
-        activity: FragmentActivity
-    ) {
+        intent: Intent) {
         this.context = context
         this.fragmentManager = fragmentManager
         this.sdkLayout = sdkLayout
@@ -128,7 +135,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         this.bottomSheetDialog = bottomSheetDialog
         this.inLineCardLayout = inLineCardLayout
         this.inlineViewCallback = inlineViewCallback
-        this.activity = activity
+        this.intent = intent
 
 
         textRecognitionML = TapTextRecognitionML(this)
@@ -801,16 +808,10 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
             goPayViewsHolder
         )
         addViews(businessViewHolder, amountViewHolder1)
-
         fragmentManager.beginTransaction().remove(InlineViewFragment()).replace(
-            R.id.webFrameLayout,
-            nfcFragment
-        ).commit()
-
-       /* Handler().postDelayed({
-            nfcFragment.processNFC(activity?.intent)
-        }, 1000)*/
-
+           R.id.webFrameLayout,
+           nfcFragment
+       ).commit()
         amountViewHolder1.changeGroupAction(false)
     }
 
@@ -821,7 +822,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         println("are u reachinhg scanner")
         //bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
         //bottomSheetDialog.behavior.isFitToContents = false
-       // bottomSheetDialog.behavior.peekHeight = context.resources.displayMetrics.heightPixels
+
         removeViews(
             businessViewHolder,
             amountViewHolder1,
@@ -833,15 +834,14 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
 
       inLineCardLayout.visibility = View.VISIBLE
         FrameManager.getInstance().frameColor = Color.WHITE
-      //  InlineViewFragment().setCallBackListener(inlineViewCallback)
+
         fragmentManager
             .beginTransaction()
             .replace(R.id.inline_container, inlineViewFragment)
             .commit()
 
         isInlineOpened = true
-      //  fragmentManager.beginTransaction().add(R.id.fragment_container_nfc_lib,CardScannerFragment()).commit()
-      //  webFrameLayout.visibility = View.GONE
+
 
         amountViewHolder1.changeGroupAction(false)
     }
@@ -954,7 +954,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         )
     }
 
-    fun setAllSeparatorTheme() {
+    private fun setAllSeparatorTheme() {
         val separatorViewTheme = SeparatorViewTheme()
         separatorViewTheme.strokeColor =
             Color.parseColor(ThemeManager.getValue("tapSeparationLine.backgroundColor"))
@@ -980,7 +980,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
     }
 
     override fun onRecognitionSuccess(card: TapCard?) {
-
+//to be added for unembossed cards
     }
 
     override fun onRecognitionFailure(error: String?) {
@@ -1000,16 +1000,6 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
     }
 
 
-/* if (card != null) {
-            println("scanned card is$card")
-            paymentInputViewHolder.tapCardInputView.setCardNumber(card.cardNumber)
-          //  paymentInputViewHolder.tapCardInputView.cardHolder.setText(card.cardHolderName)
-            card.expirationDate?.toInt()?.let {
-                paymentInputViewHolder.tapCardInputView.setExpiryDate(
-                    it, card.expirationDate?.toInt()!!
-                )
-            }
-        }*/
 
 
     fun handleScanSuccessResult(card: Card){
@@ -1032,12 +1022,41 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
             val year = dateParts?.get(1)?.toInt()
             if (month != null) {
                 if (year != null) {
-                    paymentInputViewHolder.tapCardInputView.setExpiryDate(month,year)
+                    paymentInputViewHolder.tapCardInputView.setExpiryDate(month, year)
                 }
             }
 
         }
+        }
+
+    fun handleNFCScannedResult(emvCard: TapEmvCard){
+        removeViews(amountViewHolder1, businessViewHolder)
+        addViews(
+            businessViewHolder,
+            amountViewHolder1,
+            cardViewHolder11,
+            paymentInputViewHolder,
+            saveCardSwitchHolder11
+        )
+
+        println("scanned card is$emvCard")
+        paymentInputViewHolder.tapCardInputView.setCardNumber(emvCard.cardNumber)
+        // paymentInputViewHolder.tapCardInputView.cardHolder.setText(card.cardHolderName)
+
+
+        if (fragmentManager.findFragmentById(R.id.webFrameLayout) != null)
+            fragmentManager?.beginTransaction()
+                .remove(fragmentManager?.findFragmentById(R.id.webFrameLayout)!!)
+                .commit()
+        webFrameLayout?.visibility= View.GONE
     }
 
-}
+
+
+    }
+
+
+
+
+
 

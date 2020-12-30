@@ -24,10 +24,16 @@ import company.tap.checkout.internal.apiresponse.getJsonDataFromAsset
 import company.tap.checkout.internal.dummygener.JsonResponseDummy1
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
+import company.tap.nfcreader.open.reader.TapEmvCard
+import company.tap.nfcreader.open.reader.TapNfcCardReader
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
+import company.tap.tapuilibrary.uikit.views.TapNFCView
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.Disposables
 
 
 /**
@@ -40,7 +46,10 @@ class CheckoutFragment() : TapBottomSheetDialog(), TapBottomDialogInterface, Inl
     private var _Context: Context? = null
     private lateinit var viewModel :TapLayoutViewModel
      var _Activity: Activity? = null
-    private lateinit var intentData: Intent
+    private lateinit var tapNfcCardReader: TapNfcCardReader
+    private var cardReadDisposable: Disposable = Disposables.empty()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _Activity = activity?.parent
@@ -57,10 +66,7 @@ class CheckoutFragment() : TapBottomSheetDialog(), TapBottomDialogInterface, Inl
     ): View? {
       val  view = inflater.inflate(R.layout.fragment_checkouttaps, container, false)
         backgroundColor = (Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.clear")))
-      /*  backgroundColor =
-            (Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.main_switch_background")))*/
-       // bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
-       // bottomSheetDialog.behavior.isFitToContents = true
+
         val viewModel: TapLayoutViewModel by viewModels()
         this.viewModel = viewModel
 
@@ -68,7 +74,9 @@ class CheckoutFragment() : TapBottomSheetDialog(), TapBottomDialogInterface, Inl
         val frameLayout: FrameLayout? = view?.findViewById(R.id.fragment_container_nfc_lib)
         val webFrameLayout: FrameLayout? = view?.findViewById(R.id.webFrameLayout)
         val inLineCardLayout: FrameLayout? = view?.findViewById(R.id.inline_container)
+
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
+        tapNfcCardReader = TapNfcCardReader(requireActivity())
 
         bottomSheetLayout?.let {
             viewModel.setBottomSheetLayout(it)
@@ -78,18 +86,17 @@ class CheckoutFragment() : TapBottomSheetDialog(), TapBottomDialogInterface, Inl
                 if (frameLayout != null) {
                     webFrameLayout?.let { it1 ->
                         if (inLineCardLayout != null) {
-                            activity?.let { it2 ->
+                            activity?.intent?.let { it2 ->
                                 viewModel.initLayoutManager(
-                                    bottomSheetDialog,
-                                    it,
-                                    childFragmentManager,
-                                    checkoutLayout,
-                                    frameLayout,
-                                    it1,
-                                    inLineCardLayout,
-                                    this,
-                                    it2
-                                )
+                                        bottomSheetDialog,
+                                        it,
+                                        childFragmentManager,
+                                        checkoutLayout,
+                                        frameLayout,
+                                        it1,
+                                        inLineCardLayout,
+                                        this,
+                                        it2)
                             }
 
                         }
@@ -166,8 +173,26 @@ class CheckoutFragment() : TapBottomSheetDialog(), TapBottomDialogInterface, Inl
         }
     }
 
+    fun handleNFCResult(intent: Intent?) {
+        if (tapNfcCardReader?.isSuitableIntent(intent)) {
+            cardReadDisposable = tapNfcCardReader
+                .readCardRx2(intent)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ emvCard: TapEmvCard? ->
+                    if (emvCard != null) {
+                        viewModel?.handleNFCScannedResult(emvCard)
+                        println("emvCard$emvCard")
+                    }
+                },
+                    { throwable -> throwable.message?.let { println("error is nfc" + throwable.printStackTrace()) } })
+        }
 
-
+    }
+    override fun onPause() {
+        cardReadDisposable.dispose()
+        tapNfcCardReader?.disableDispatch()
+        super.onPause()
+    }
 
 }
 
