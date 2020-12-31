@@ -55,7 +55,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
             setTheme()
         }
 
-        fun setTheme() {
+        private fun setTheme() {
             var tapCard_Chip = view.findViewById<FrameLayout>(R.id.tapcard_Chip)
             tapCard_Chip?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.backgroundColor")))
             val totalQuantityTextViewTheme = TextViewTheme()

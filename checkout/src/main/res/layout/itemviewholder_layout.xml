@@ -8,8 +8,6 @@
         android:id="@+id/mainCurrencyChip"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:paddingStart="@dimen/margin_basic_16dp"
-        android:paddingEnd="@dimen/margin_basic_16dp"
         android:background="@color/chip_background"
         android:orientation="horizontal">
 
