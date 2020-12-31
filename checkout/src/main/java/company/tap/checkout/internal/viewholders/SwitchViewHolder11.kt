@@ -112,14 +112,6 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
             Color.parseColor(ThemeManager.getValue("TapSwitchView.backgroundColor"))
         )
 
-
-
-        /**
-         * Logic for save merchant switch
-         * **/
-        view.cardSwitch.switchSaveMerchant?.setOnCheckedChangeListener { _, _ ->
-            switchMerchantCheckoutChangeCheckedAction()
-        }
         /**
          * Logic for Main switch
          * **/
@@ -140,6 +132,12 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
             }else mainSwitchUncheckedAction()
         }
 
+        /**
+         * Logic for save merchant switch
+         * **/
+        view.cardSwitch.switchSaveMerchant?.setOnCheckedChangeListener { _, _ ->
+            switchMerchantCheckoutChangeCheckedAction()
+        }
         /**
          * Logic for save goPay Checkout switch
          * **/
@@ -166,7 +164,7 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
 
     }
 
-    fun mainSwitchUncheckedAction() {
+    private fun mainSwitchUncheckedAction() {
         setBorderedView(
           view.mainSwitch.card,
             0f,// corner raduis
@@ -183,6 +181,16 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
             )
         )
         view.cardviewSwitch.cardElevation = 0f
+        view.mainSwitch.switchSaveMobile?.isChecked = false
+        view.cardSwitch.switchesLayout?.visibility = View.GONE
+        view.cardSwitch.switchSaveMerchant?.visibility = View.GONE
+        view.cardSwitch.switchSaveMerchant?.isChecked = false
+        view.cardSwitch.switchGoPayCheckout?.isChecked = false
+        view.cardSwitch.switchGoPayCheckout?.visibility = View.GONE
+        view.cardSwitch.saveGoPay?.visibility = View.GONE
+        view.cardSwitch.alertGoPaySignUp?.visibility = View.GONE
+        view.cardSwitch.switchSeparator?.visibility = View.GONE
+
 
     }
     private fun mainSwitchCheckedAction() {
