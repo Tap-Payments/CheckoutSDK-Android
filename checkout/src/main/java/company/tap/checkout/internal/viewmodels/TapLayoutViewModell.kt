@@ -112,8 +112,6 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
     private var isNFCOpened = false
     private var textRecognitionML: TapTextRecognitionML? = null
     private lateinit var intent:Intent
-
-
     private lateinit var  inlineViewCallback: InlineViewCallback
 
 
@@ -580,12 +578,12 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
                 adapter.deleteSelectedCard(selectedItemsDel)
                 adapter.updateShaking(false)
                 deleteCard = false
-
             } else {
                 removeViews(goPaySavedCardHolder)
                 adapter.updateAdapterData(savedCardList.value as List<SavedCards>)
                 goPayViewsHolder.goPayopened = false
                 adapter.goPayOpenedfromMain(true)
+                adapter.updateShaking(false)
                 cardViewHolder11.view.mainChipgroup.groupAction.visibility = View.VISIBLE
             }
         } else if (response == "NO") {
@@ -593,7 +591,6 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
             deleteCard = false
 
         } else if (response == "OK"){
-
             bottomSheetDialog.dismissWithAnimation
             bottomSheetDialog.dismiss()
         }
@@ -1019,7 +1016,6 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         if (card != null) {
             println("scanned card is$card")
             paymentInputViewHolder.tapCardInputView.setCardNumber(card.cardNumber)
-
             // paymentInputViewHolder.tapCardInputView.cardHolder.setText(card.cardHolderName)
             val dateParts: List<String>? = card.expirationDate?.split("/")
             val month = dateParts?.get(0)?.toInt()
@@ -1063,7 +1059,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
 
 
     private fun convertDateString(date:String) {
-        println("date im conversion"+date)
+        println("date in conversion$date")
         val dateParts: List<String>? = date?.split(" ")
         val month = dateParts?.get(2)?.toInt()
         val year = dateParts?.get(5)?.toInt()

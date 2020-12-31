@@ -3,6 +3,7 @@ package company.tap.checkout.internal.utils
 import android.content.Context
 import com.gdacciaro.iOSDialog.iOSDialogBuilder
 import company.tap.checkout.internal.interfaces.BaseLayouttManager
+import company.tap.taplocalizationkit.LocalizationManager
 
 
 /**
@@ -21,17 +22,17 @@ object CustomUtils {
             .setBoldPositiveLabel(true)
             .setCancelable(false)
         if (btnType == 2) {
-            builder.setPositiveListener("YES") { dialog ->
+            builder.setPositiveListener(LocalizationManager.getValue("yes","Common")) { dialog ->
                 dialog.dismiss()
                 baseLayouttManager?.didDialogueExecute("YES")
 
             }
-            builder.setNegativeListener("NO") { dialog ->
+            builder.setNegativeListener(LocalizationManager.getValue("no","Common")) { dialog ->
                 dialog.dismiss()
                 baseLayouttManager?.didDialogueExecute("NO")
             }
         } else {
-            builder.setPositiveListener("OK") { dialog ->
+            builder.setPositiveListener(LocalizationManager.getValue("ok","Common")) { dialog ->
                 dialog.dismiss()
                 baseLayouttManager?.didDialogueExecute("OK")
             }
