@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -49,8 +48,6 @@ class ItemsViewHolder1(private val context: Context, private val onCurrencyChang
     private val adapterCurrency by lazy { CurrencyTypeAdapter(onCurrencyChangedActionListener) }
 
     init {
-
-
         mainCurrencyChip = view.findViewById(R.id.mainCurrencyChip)
         mainCurrencyChip.groupAction.visibility = View.GONE
         mainCurrencyChip.groupName.visibility = View.GONE
@@ -59,6 +56,13 @@ class ItemsViewHolder1(private val context: Context, private val onCurrencyChang
         currencyRecyclerView = mainCurrencyChip.findViewById<View>(R.id.chip_recycler) as RecyclerView
         headerview = view.findViewById<View>(R.id.header_view) as ConstraintLayout
         headerview.visibility = View.GONE
+        itemsRecyclerViewAction(itemsRecyclerView)
+        setRecyclerViewDivider(currencyRecyclerView)
+        mainCurrencyChip.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
+        itemsRecyclerView.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
+    }
+
+    private fun itemsRecyclerViewAction(itemsRecyclerView: RecyclerView) {
         itemsRecyclerView.setOnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN ->                         // Disallow NestedScrollView to intercept touch events.
@@ -70,16 +74,15 @@ class ItemsViewHolder1(private val context: Context, private val onCurrencyChang
             v.onTouchEvent(event)
             true
         }
+    }
+
+    private fun setRecyclerViewDivider(currencyRecyclerView: RecyclerView) {
         val divider = DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL)
         divider.setDrawable(ShapeDrawable().apply {
             intrinsicWidth = 25
             paint.color = Color.TRANSPARENT
         }) // note: currently (support version 28.0.0), we can not use tranparent color here, if we use transparent, we still see a small divider line. So if we want to display transparent space, we can set color = background color or we can create a custom ItemDecoration instead of DividerItemDecoration.
         currencyRecyclerView.addItemDecoration(divider)
-        mainCurrencyChip.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
-        itemsRecyclerView.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
-
-
     }
 
     override fun bindViewComponents() {

@@ -56,8 +56,8 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
         }
 
         private fun setTheme() {
-            var tapCard_Chip = view.findViewById<FrameLayout>(R.id.tapcard_Chip)
-            tapCard_Chip?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.backgroundColor")))
+            val tapCardChip = view.findViewById<FrameLayout>(R.id.tapcard_Chip)
+            tapCardChip?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.backgroundColor")))
             val totalQuantityTextViewTheme = TextViewTheme()
             totalQuantityTextViewTheme.textColor =
                 Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.labelTextColor"))
@@ -69,7 +69,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
             view.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
             setBorderedView(
                 itemView.CurrencyChipLinear,
-                50.0f,
+                25.0f,
                 0.0f,
                 Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.selected.shadow.color")),
                 Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.backgroundColor")),
@@ -78,60 +78,28 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
         }
     }
 
-
     override fun onBindViewHolder(holder: CurrencyHolders, position: Int) {
         holder.bindTheme()
         for (i in adapterContentCurrencies.indices) {
-            val imageViewCard = holder.itemView.findViewById<TapImageView>(R.id.imageView_currency)
-            Glide.with(holder.itemView.context)
-                .load(adapterContentCurrencies[position].currencyicon).into(
-                    imageViewCard
-                )
-
-            val itemCurrencyText = holder.itemView.findViewById<TapTextView>(R.id.textView_currency)
-            itemCurrencyText.text = adapterContentCurrencies[position].currencytitle
-            currencyRate = adapterContentCurrencies[position].conversionrate
+            bindItemData(holder,position)
         }
+        if (selectedPosition == position) drawSelectedBorder(holder)
+         else drawUnSelectedBorder(holder)
 
-        if (selectedPosition == position) {
-            /**
-             * Method to draw bordered view
-             * setBorderedView ( view: View, cornerRadius:Float,strokeWidth: Float, strokeColor: Int,tintColor: Int )
-             */
+        onItemClickListener(holder, position)
+    }
 
-            if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
-                holder.itemView.setBackgroundResource(R.drawable.border_currency_black)
-            } else {
-                holder.itemView.setBackgroundResource(R.drawable.border_currency)
-            }
+    private fun bindItemData(holder: CurrencyHolders, position: Int) {
+        val imageViewCard = holder.itemView.findViewById<TapImageView>(R.id.imageView_currency)
+        Glide.with(holder.itemView.context)
+            .load(adapterContentCurrencies[position].currencyicon).into(
+                imageViewCard)
+        val itemCurrencyText = holder.itemView.findViewById<TapTextView>(R.id.textView_currency)
+        itemCurrencyText.text = adapterContentCurrencies[position].currencytitle
+        currencyRate = adapterContentCurrencies[position].conversionrate
+    }
 
-            setBorderedView(
-                holder.itemView.CurrencyChipLinear,
-                55.0f,// corner raduis
-                0.0f,
-                Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.selected.shadow.color")),
-                Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.selected.backgroundColor")),
-                Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.selected.shadow.color"))
-            )
-
-        } else {
-
-            if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
-                holder.itemView.setBackgroundResource(R.drawable.border_unclick_black)
-            } else {
-                holder.itemView.setBackgroundResource(R.drawable.border_unclick)
-            }
-
-            setBorderedView(
-                holder.itemView.CurrencyChipLinear,
-                55.0f,// corner raduis
-                0.0f,
-                Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.unSelected.shadow.color")),
-                Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.backgroundColor")),
-                Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.unSelected.shadow.color"))
-            )
-        }
-
+    private fun onItemClickListener(holder: CurrencyHolders, position: Int) {
         holder.itemView.setOnClickListener {
             selectedPosition = position
             onCurrencyChangedActionListener.onCurrencyClicked(
@@ -140,7 +108,41 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
             )
             notifyDataSetChanged()
         }
+    }
 
+
+    private fun drawSelectedBorder(holder: CurrencyHolders) {
+        /**
+         * Method to draw bordered view
+         * setBorderedView ( view: View, cornerRadius:Float,strokeWidth: Float, strokeColor: Int,tintColor: Int )
+         */
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) holder.itemView.setBackgroundResource(R.drawable.border_currency_black)
+        else holder.itemView.setBackgroundResource(R.drawable.border_currency)
+        setBorderedView(
+            holder.itemView.CurrencyChipLinear,
+            25.0f,// corner raduis
+            0.0f,
+            Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.selected.shadow.color")),
+            Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.selected.backgroundColor")),
+            Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.selected.shadow.color"))
+        )
+    }
+
+
+    private fun drawUnSelectedBorder(holder: CurrencyHolders) {
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
+            holder.itemView.setBackgroundResource(R.drawable.border_unclick_black)
+        } else {
+            holder.itemView.setBackgroundResource(R.drawable.border_unclick)
+        }
+        setBorderedView(
+            holder.itemView.CurrencyChipLinear,
+            25.0f,// corner raduis
+            0.0f,
+            Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.unSelected.shadow.color")),
+            Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.backgroundColor")),
+            Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.unSelected.shadow.color"))
+        )
     }
 
 
