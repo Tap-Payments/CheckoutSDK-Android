@@ -36,10 +36,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        if (ThemeManager.currentTheme.isEmpty()) ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "lighttheme")
+
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))
+         ThemeManager.loadTapTheme(resources, R.raw.defaultdarktheme, "darktheme")
+        else if(ThemeManager.currentTheme.isNotEmpty() && !ThemeManager.currentTheme.contains("dark"))
         ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "lighttheme")
-       // ThemeManager.loadTapTheme(resources, R.raw.defaultdarktheme, "darktheme")
-      //  setTheme(R.style.AppThemeBlack)
+        else ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "lighttheme")
+
+
+        //  setTheme(R.style.AppThemeBlack)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         setLocale(this, LocalizationManager.getLocale(this).language)
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
@@ -71,7 +76,6 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_dark -> {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            if (ThemeManager.currentTheme.isNotEmpty() && !(ThemeManager.currentTheme.contains("dark")))
                 ThemeManager.loadTapTheme(resources, R.raw.defaultdarktheme, "defaultdarktheme")
 
             recreate()
@@ -79,7 +83,6 @@ class MainActivity : AppCompatActivity() {
         }
         R.id.action_light -> {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))
             ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "defaultlighttheme")
             recreate()
             true
