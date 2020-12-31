@@ -144,7 +144,7 @@ class GoPayCardAdapterUIKIT(
                         )) {
                         holder.itemView.tapCardChip4.setBackgroundResource(R.drawable.border_shadow_black)
                     } else {
-                        holder.itemView.tapCardChip4.setBackgroundResource(R.drawable.border_shadow_)
+                        holder.itemView.tapCardChip4.setBackgroundResource(R.drawable.border_shadow)
                     }
                     setBorderedView(
                         holder.itemView.tapCardChip4Linear,
@@ -201,7 +201,7 @@ class GoPayCardAdapterUIKIT(
             if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
                 holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.border_shadow_black)
             } else {
-                holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.border_shadow_)
+                holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.border_shadow)
             }
             setBorderedView(
                 holder.itemView.tapCardChip2Constraints,
@@ -257,7 +257,7 @@ class GoPayCardAdapterUIKIT(
             if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
                 holder.itemView.setBackgroundResource(R.drawable.border_shadow_black)
             } else {
-                holder.itemView.setBackgroundResource(R.drawable.border_shadow_)
+                holder.itemView.setBackgroundResource(R.drawable.border_shadow)
             }
             setBorderedView(
                 holder.itemView.tapCardChip3Linear,
