@@ -13,10 +13,7 @@ import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import cards.pay.paycardsrecognizer.sdk.Card
-import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
-import company.tap.checkout.internal.interfaces.LayoutManagerCallbacks
-import company.tap.checkout.internal.utils.CustomUtils
+
 import company.tap.checkout.open.CheckoutFragment
 
 
@@ -32,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
     var sdkSession:SDKSession= SDKSession()
 
-    val modalBottomSheet = CheckoutFragment()
+    private val modalBottomSheet = CheckoutFragment()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -106,7 +103,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun setLocale(activity: Activity, languageCode: String?) {
+    private fun setLocale(activity: Activity, languageCode: String) {
         println("languageCode is$languageCode")
         val locale = Locale(languageCode)
         Locale.setDefault(locale)
