@@ -466,7 +466,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun getDatafromAPI(dummyInitapiResponse1: JsonResponseDummy1) {
-        println("dummyAPIS response new value is ${dummyInitapiResponse1}")
+        println("dummyAPISq response new value is ${dummyInitapiResponse1}")
         businessViewHolder.setDatafromAPI(
             dummyInitapiResponse1.merchant1.logo,
             dummyInitapiResponse1.merchant1.name

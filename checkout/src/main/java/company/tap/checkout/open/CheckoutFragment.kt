@@ -1,6 +1,7 @@
 package company.tap.checkout.open
 
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -16,21 +17,23 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import cards.pay.paycardsrecognizer.sdk.Card
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import com.google.gson.Gson
 import company.tap.checkout.R
-import company.tap.checkout.internal.apiresponse.getJsonDataFromAsset
+import company.tap.checkout.internal.apiresponse.*
 import company.tap.checkout.internal.dummygener.JsonResponseDummy1
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
 import company.tap.nfcreader.open.reader.TapEmvCard
 import company.tap.nfcreader.open.reader.TapNfcCardReader
 import company.tap.taplocalizationkit.LocalizationManager
+import company.tap.tapnetworkkit.connection.NetworkApp
+import company.tap.tapnetworkkit.controller.NetworkController
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
-import company.tap.tapuilibrary.uikit.views.TapNFCView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
@@ -41,7 +44,7 @@ import io.reactivex.disposables.Disposables
 // * Use the [CheckoutFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class CheckoutFragment() : TapBottomSheetDialog(), TapBottomDialogInterface, InlineViewCallback {
+class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, InlineViewCallback {
 
     private var _Context: Context? = null
     private lateinit var viewModel :TapLayoutViewModel
@@ -88,15 +91,16 @@ class CheckoutFragment() : TapBottomSheetDialog(), TapBottomDialogInterface, Inl
                         if (inLineCardLayout != null) {
                             activity?.intent?.let { it2 ->
                                 viewModel.initLayoutManager(
-                                        bottomSheetDialog,
-                                        it,
-                                        childFragmentManager,
-                                        checkoutLayout,
-                                        frameLayout,
-                                        it1,
-                                        inLineCardLayout,
-                                        this,
-                                        it2)
+                                    bottomSheetDialog,
+                                    it,
+                                    childFragmentManager,
+                                    checkoutLayout,
+                                    frameLayout,
+                                    it1,
+                                    inLineCardLayout,
+                                    this,
+                                    it2
+                                )
                             }
 
                         }
@@ -121,31 +125,21 @@ class CheckoutFragment() : TapBottomSheetDialog(), TapBottomDialogInterface, Inl
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun getBusinessHeaderData(context: Context?, viewModel: TapLayoutViewModel) {
-        if (context?.let { LocalizationManager.getLocale(it).language } == "en") {
-            val jsonFileString = context.let { getJsonDataFromAsset(
-                it,
-                "dummyapiresponsedefault.json"
-            ) }
-            val gson = Gson()
-            val dummyInitApiResponse: JsonResponseDummy1 = gson.fromJson(
-                jsonFileString,
-                JsonResponseDummy1::class.java
-            )
-            // Pass the api response data to LayoutManager
-            viewModel.getDatafromAPI(dummyInitApiResponse)
-        }else{
-            val jsonFileStringAr = context?.let { getJsonDataFromAsset(
-                it,
-                "dummyapiresponsedefaultar.json"
-            ) }
-            val gson = Gson()
-            val dummyInitApiResponse: JsonResponseDummy1 = gson.fromJson(
-                jsonFileStringAr,
-                JsonResponseDummy1::class.java
-            )
-            // Pass the api response data to LayoutManager
-            viewModel.getDatafromAPI(dummyInitApiResponse)
+        NetworkApp.initNetwork(
+            context,
+            "sk_test_kovrMB0mupFJXfNZWx6Etg5y",
+            "company.tap.goSellSDKExample",
+            "https://run.mocky.io/v3/"
+        )
+        NetworkController.getInstance().setBaseUrl("e4718d85-554b-4d15-a883-3043d961c8e5", context)
+        val cardViewModel: CardViewModel by viewModels()
+        if (context != null) {
+            cardViewModel.getContext(context)
         }
+        cardViewModel.liveData.observe(this,  { consumeResponse(it) })
+        cardViewModel.processEvent(CardViewEvent.InitEvent)
+
+      //  loadDatafromAssets(context,viewModel) //Incase API not working use local
 
     }
 
@@ -153,7 +147,7 @@ class CheckoutFragment() : TapBottomSheetDialog(), TapBottomDialogInterface, Inl
     companion object {
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(context: Context, activity: Activity,intent: Intent) =
+        fun newInstance(context: Context, activity: Activity, intent: Intent) =
             CheckoutFragment().apply {
                 arguments = Bundle().apply {}
                 _Context = context
@@ -193,6 +187,41 @@ class CheckoutFragment() : TapBottomSheetDialog(), TapBottomDialogInterface, Inl
         tapNfcCardReader?.disableDispatch()
         super.onPause()
     }
+    private fun consumeResponse(response: Resource<CardViewState>) {
+        when (response) {
+            is Resource.Loading -> concatText("Loading")
+            is Resource.Finished ->   renderView(response.data)
+            is Error -> response.message?.let { concatText(it) }
+            is Resource.Success -> renderView(response.data)
+        }
+    }
+    private fun renderView(data: CardViewState?) {
+        println("init respoonse" + data)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            data?.initResponse?.let { viewModel.getDatafromAPI(it) }
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun concatText(newText: String) {
+        println("newText respoonse" + newText)
+
+    }
+     private fun loadDatafromAssets(context: Context?, viewModel: TapLayoutViewModel){
+         if (context?.let { LocalizationManager.getLocale(it).language } == "en") {
+             val jsonFileString = context.let { getJsonDataFromAsset(it, "dummyapiresponsedefault.json") }
+             val dummyInitApiResponse: JsonResponseDummy1 = Gson().fromJson(jsonFileString, JsonResponseDummy1::class.java)
+             // Pass the api response data to LayoutManager
+              viewModel.getDatafromAPI(dummyInitApiResponse)
+         }else{
+             val jsonFileStringAr = context?.let { getJsonDataFromAsset(it, "dummyapiresponsedefaultar.json") }
+             val gson = Gson()
+             val dummyInitApiResponse: JsonResponseDummy1 = gson.fromJson(jsonFileStringAr, JsonResponseDummy1::class.java)
+             // Pass the api response data to LayoutManager
+             viewModel.getDatafromAPI(dummyInitApiResponse)
+         }
+
+     }
 
 }
 

@@ -1,8 +1,11 @@
 package company.tap.checkout.internal.apiresponse
 
+import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import company.tap.cardbusinesskit.testmodels.DummyResp
+import company.tap.checkout.internal.dummygener.JsonResponseDummy1
+import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapnetworkkit.controller.NetworkController
 import company.tap.tapnetworkkit.enums.TapMethodType
 import company.tap.tapnetworkkit.exception.GoSellError
@@ -19,17 +22,15 @@ All rights reserved.
 class CardRepository : APIRequestCallback {
     val resultObservable = BehaviorSubject.create<CardViewState>()
 
-    fun getInitData() {
-        NetworkController.getInstance()
-            .processRequest(
-                TapMethodType.GET, ApiService.INIT, null, this,
-                INIT_CODE
-            )
+    fun getInitData(context: Context) {
+        if( LocalizationManager.getLocale(context).language  == "en") NetworkController.getInstance().processRequest(TapMethodType.GET, ApiService.INIT, null, this, INIT_CODE)
+        else NetworkController.getInstance().processRequest(TapMethodType.GET, ApiService.INIT_AR, null, this, INIT_CODE)
     }
     override fun onSuccess(responseCode: Int, requestCode: Int, response: Response<JsonElement>?) {
         if (requestCode == INIT_CODE) {
-            response?.body()?.let {
-                val initResponse = Gson().fromJson(it, DummyResp::class.java)
+            response?.body().let {
+                println("response body is"+response?.body())
+                val initResponse = Gson().fromJson(it, JsonResponseDummy1::class.java)
                 val viewState = CardViewState(initResponse = initResponse)
                 resultObservable.onNext(viewState)
                 resultObservable.onComplete()

@@ -1,5 +1,6 @@
 package company.tap.checkout.internal.apiresponse
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -15,6 +16,7 @@ class CardViewModel : ViewModel() {
 
     private val repository = CardRepository()
     private val compositeDisposable = CompositeDisposable()
+    private lateinit  var context : Context
     val liveData = MutableLiveData<Resource<CardViewState>>()
 
     init {
@@ -29,14 +31,17 @@ class CardViewModel : ViewModel() {
     }
 
     private fun getInitData() {
-        repository.getInitData()
+        repository.getInitData(context)
     }
 
-   /* fun processEvent(event: CardViewEvent) {
+    fun processEvent(event: CardViewEvent) {
         when (event) {
             CardViewEvent.InitEvent -> getInitData()
         }
-    }*/
+    }
+    fun getContext(context: Context){
+        this.context = context
+    }
 
     override fun onCleared() {
         super.onCleared()
