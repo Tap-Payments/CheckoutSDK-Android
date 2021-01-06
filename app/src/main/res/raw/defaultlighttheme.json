@@ -707,9 +707,9 @@
     },
     "Nfc": {
         "topTextBackgroundColor": "#e0dfe0",
-        "topTextColor": "#a7a7a7",
+        "topTextColor": "#4b4847",
         "topTextFont": "Roboto-Light,12",
-        "bottomTextColor": "#a7a7a7",
+        "bottomTextColor": "#ffffff",
         "bottomTextFont": "Roboto-Light,12"
     }
 }

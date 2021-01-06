@@ -308,7 +308,7 @@
             }
         },
         "chips": {
-            "radius" : 25,
+            "radius" : 15,
             "currencyChip": {
                 "backgroundColor" : "whiteTwo",
                 "labelTextFont": "Roboto-Regular,12",
@@ -539,6 +539,7 @@
         "loginBar" :{
             "backgroundColor" : "whiteTwo",
             "inputFieldBackground" : "white",
+            "selectedTabIndicatorColor": "#a8a8a8",
             "underline": {
                 "selected": {
                     "backgroundColor" : "deepSkyBlue"
@@ -696,12 +697,19 @@
         }
     },
     "TapAlertMessage": {
-        "backgroundColor": "#4cffbe60",
-        "separatorColor" : "#33ea6724",
+        "backgroundColor": "#f8e5c8",
+        "separatorColor" : "#eac6a3",
         "separatorHeight" : 1,
         "textField": {
             "textFont": "Roboto-Light,12",
             "textColor": "#ea611c"
         }
+    },
+    "Nfc": {
+        "topTextBackgroundColor": "#e0dfe0",
+        "topTextColor": "#4b4847",
+        "topTextFont": "Roboto-Light,12",
+        "bottomTextColor": "#ffffff",
+        "bottomTextFont": "Roboto-Light,12"
     }
 }
