@@ -17,7 +17,6 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import cards.pay.paycardsrecognizer.sdk.Card
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import com.google.gson.Gson
@@ -197,7 +196,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     }
     private fun renderView(data: CardViewState?) {
         println("init respoonse" + data)
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             data?.initResponse?.let { viewModel.getDatafromAPI(it) }
         }
     }
