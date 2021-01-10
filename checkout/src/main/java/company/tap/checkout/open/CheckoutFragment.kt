@@ -155,7 +155,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     }
 
     override fun onScanCardFailed(e: Exception?) {
-       viewModel?.removeInlineScanner()
+        println("onScanCardFailed")
+       viewModel?.handleScanFailedResult()
     }
 
     override fun onScanCardFinished(card: Card?, cardImage: ByteArray?) {

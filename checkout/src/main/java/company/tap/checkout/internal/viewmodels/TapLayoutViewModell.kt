@@ -10,6 +10,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -622,8 +623,8 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         viewHolders.forEach {
             Handler(Looper.getMainLooper()).postDelayed(Runnable {
                 sdkLayout.addView(it?.view)
-//                  val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
-//                   it.view.startAnimation(animation)
+                  val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
+                   it?.view?.startAnimation(animation)
             }, 0)
         }
     }
@@ -817,7 +818,10 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
             amountViewHolder1,
             cardViewHolder11,
             saveCardSwitchHolder11,
-            paymentInputViewHolder
+            paymentInputViewHolder,
+            otpViewHolder,
+            goPaySavedCardHolder,
+            goPayViewsHolder
         )
         addViews(businessViewHolder, amountViewHolder1)
         inLineCardLayout.visibility = View.VISIBLE
@@ -971,8 +975,22 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
             isInlineOpened = false
             inLineCardLayout.visibility = View.GONE
         }
+
     }
 
+    fun handleScanFailedResult(){
+        println("handleScanFailedResult card is")
+        removeInlineScanner()
+        removeViews(amountViewHolder1, businessViewHolder)
+        addViews(
+            businessViewHolder,
+            amountViewHolder1,
+            cardViewHolder11,
+            paymentInputViewHolder,
+            saveCardSwitchHolder11
+        )
+        paymentInputViewHolder.view.visibility = View.VISIBLE
+    }
 
     fun handleScanSuccessResult(card: Card) {
         removeInlineScanner()
