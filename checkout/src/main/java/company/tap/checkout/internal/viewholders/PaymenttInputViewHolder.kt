@@ -77,7 +77,6 @@ class PaymenttInputViewHolder(
     private var tabPosition: Int? = null
     private var tapAlertView: TapAlertView? = null
     private var imageURL: String = ""
-    private var isadded: Boolean = false
     private  var paymentType: PaymentTypeEnum ?= null
     private lateinit var cardBrandType: String
     private var cardNumber: String ?= null
