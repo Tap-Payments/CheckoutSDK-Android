@@ -152,7 +152,6 @@ class PaymenttInputViewHolder(
             onCardNFCCallListener.onClickNFC()
         }
         cardScannerBtn?.setOnClickListener {
-            tabLayout.visibility = View.GONE
             onCardNFCCallListener.onClickCardScanner()
         }
     }
