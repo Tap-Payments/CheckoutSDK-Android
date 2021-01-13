@@ -807,6 +807,11 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         webFrameLayout.visibility = View.VISIBLE
         isNFCOpened = true
         amountViewHolder1.changeGroupAction(false)
+        amountViewHolder1.updateSelectedCurrency(
+            displayItemsOpen,
+            selectedAmount, selectedCurrency,
+            currentAmount, currentCurrency
+        )
     }
 
 
@@ -832,6 +837,11 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
             .commit()
         isInlineOpened = true
         amountViewHolder1.changeGroupAction(false)
+        amountViewHolder1.updateSelectedCurrency(
+            displayItemsOpen,
+            selectedAmount, selectedCurrency,
+            currentAmount, currentCurrency
+        )
     }
 
 
@@ -841,7 +851,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
             currentAmount = CurrencyFormatter.currencyFormat(itemList[i].amount.toString())
             itemList[i].amount = (itemList[i].amount * currencyRate).toLong()
             itemList[i].currency = currencySelected
-            selectedAmount = CurrencyFormatter.currencyFormat(itemList[i].amount.toString())
+             selectedAmount = CurrencyFormatter.currencyFormat(itemList[i].amount.toString())
             selectedCurrency = itemList[i].currency
         }
         itemsViewHolder1.setResetItemsRecylerView(itemList)
@@ -966,7 +976,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
     }
 
 
-    fun removeInlineScanner() {
+    private fun removeInlineScanner() {
         if (isInlineOpened) {
             if (fragmentManager.findFragmentById(R.id.inline_container) != null)
                 fragmentManager?.beginTransaction()
@@ -989,7 +999,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
             paymentInputViewHolder,
             saveCardSwitchHolder11
         )
-        paymentInputViewHolder.view.visibility = View.VISIBLE
+
     }
 
     fun handleScanSuccessResult(card: Card) {
