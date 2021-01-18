@@ -807,11 +807,13 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         webFrameLayout.visibility = View.VISIBLE
         isNFCOpened = true
         amountViewHolder1.changeGroupAction(false)
+        if(this::selectedAmount.isInitialized&&this::selectedCurrency.isInitialized) {
         amountViewHolder1.updateSelectedCurrency(
             displayItemsOpen,
             selectedAmount, selectedCurrency,
             currentAmount, currentCurrency
         )
+        }
     }
 
 
