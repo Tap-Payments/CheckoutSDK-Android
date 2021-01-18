@@ -837,11 +837,13 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
             .commit()
         isInlineOpened = true
         amountViewHolder1.changeGroupAction(false)
-        amountViewHolder1.updateSelectedCurrency(
-            displayItemsOpen,
-            selectedAmount, selectedCurrency,
-            currentAmount, currentCurrency
-        )
+        if(this::selectedAmount.isInitialized&&this::selectedCurrency.isInitialized) {
+            amountViewHolder1.updateSelectedCurrency(
+                displayItemsOpen,
+                selectedAmount, selectedCurrency,
+                currentAmount, currentCurrency
+            )
+        }
     }
 
 
