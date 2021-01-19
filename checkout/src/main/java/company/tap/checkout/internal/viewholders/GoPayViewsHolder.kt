@@ -33,9 +33,9 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
     override val type = SectionType.GOPAY_SIGNIN
 
      val goPayLoginInput: GoPayLoginInput
-     val goPayPasswordInput: GoPayPasswordInput
-     val signInButton: TabAnimatedActionButton
-     lateinit var mobileNumber: String
+     private val goPayPasswordInput: GoPayPasswordInput
+     private val signInButton: TabAnimatedActionButton
+     private lateinit var mobileNumber: String
       var goPayopened: Boolean= false
 
     init {
