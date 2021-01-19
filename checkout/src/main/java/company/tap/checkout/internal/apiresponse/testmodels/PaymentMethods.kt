@@ -1,9 +1,9 @@
-package company.tap.cardbusinesskit.testmodels
+package company.tap.checkout.internal.apiresponse.testmodels
 
 import com.google.gson.annotations.SerializedName
 
 
-data class Payment_methods (
+data class PaymentMethods (
 
     @SerializedName("id") val id : Int,
     @SerializedName("name") val name : String,
@@ -16,5 +16,5 @@ data class Payment_methods (
     @SerializedName("asynchronous") val asynchronous : Boolean,
     @SerializedName("threeDS") val threeDS : String,
     @SerializedName("supportedNetworks") val supportedNetworks : SupportedNetworks,
-    @SerializedName("company.tap.cardbusinesskit.testmodels.MerchantCapabilities") val merchantCapabilities : MerchantCapabilities
+    @SerializedName("company.tap.checkout.internal.apiresponse.testmodels.MerchantCapabilities") val merchantCapabilities : MerchantCapabilities
 )

@@ -1,7 +1,8 @@
-package company.tap.cardbusinesskit.testmodels
+package company.tap.checkout.internal.apiresponse.testmodels
 
 import com.google.gson.annotations.SerializedName
-import company.tap.checkout.internal.apiresponse.testmodels.*
+import company.tap.cardbusinesskit.testmodels.Destinations
+import company.tap.cardbusinesskit.testmodels.Merchant
 
 
 data class DummyResp (
@@ -19,6 +20,6 @@ data class DummyResp (
     @SerializedName("post") val post : Post,
     @SerializedName("redirect") val redirect : Redirect,
     @SerializedName("merchant") val merchant : Merchant,
-    @SerializedName("payment_methods") val payment_methods : List<Payment_methods>
+    @SerializedName("payment_methods") val payment_methods : List<PaymentMethods>
 
 )
