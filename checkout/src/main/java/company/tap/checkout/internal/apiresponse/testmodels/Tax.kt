@@ -1,9 +1,8 @@
-package company.tap.cardbusinesskit.testmodels
+package company.tap.checkout.internal.apiresponse.testmodels
 
 import androidx.annotation.Nullable
 import com.google.gson.annotations.SerializedName
-
-
+import company.tap.checkout.internal.apiresponse.testmodels.Rate
 
 
 data class Tax (

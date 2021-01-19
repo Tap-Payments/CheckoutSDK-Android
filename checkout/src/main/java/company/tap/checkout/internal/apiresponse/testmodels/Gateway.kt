@@ -1,8 +1,7 @@
-package company.tap.cardbusinesskit.testmodels
+package company.tap.checkout.internal.apiresponse.testmodels
 
 import com.google.gson.annotations.SerializedName
-
-
+import company.tap.cardbusinesskit.testmodels.Route
 
 
 data class Gateway (

@@ -1,6 +1,5 @@
 package company.tap.checkout.internal.apiresponse
 
-import company.tap.cardbusinesskit.testmodels.DummyResp
 import company.tap.checkout.internal.dummygener.JsonResponseDummy1
 
 /**

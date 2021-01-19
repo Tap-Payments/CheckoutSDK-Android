@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.fragment.app.FragmentManager
 import com.google.gson.JsonElement
 import company.tap.cardbusinesskit.testmodels.*
+import company.tap.checkout.internal.apiresponse.testmodels.*
 import company.tap.checkout.internal.apiresponse.testmodels.InitOptionsRequest
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.tapnetworkkit.connection.NetworkApp
@@ -12,7 +13,6 @@ import company.tap.tapnetworkkit.controller.NetworkController
 import company.tap.tapnetworkkit.enums.TapMethodType
 import company.tap.tapnetworkkit.exception.GoSellError
 import company.tap.tapnetworkkit.interfaces.APIRequestCallback
-import company.tap.tapnetworkkit.interfaces.TapRequestBodyBase
 import retrofit2.Response
 
 /**
@@ -84,7 +84,7 @@ open class SDKSession : APIRequestCallback {
             )
 
         }
-        fun getRate(): Rate{
+        fun getRate(): Rate {
 
             return Rate(
                 "descr1", 1

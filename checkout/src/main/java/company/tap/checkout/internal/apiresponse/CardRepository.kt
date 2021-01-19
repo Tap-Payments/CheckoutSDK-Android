@@ -3,7 +3,6 @@ package company.tap.checkout.internal.apiresponse
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.JsonElement
-import company.tap.cardbusinesskit.testmodels.DummyResp
 import company.tap.checkout.internal.dummygener.JsonResponseDummy1
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapnetworkkit.controller.NetworkController

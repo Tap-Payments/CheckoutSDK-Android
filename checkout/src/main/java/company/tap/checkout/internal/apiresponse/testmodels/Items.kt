@@ -1,6 +1,7 @@
 package company.tap.cardbusinesskit.testmodels
 
 import com.google.gson.annotations.SerializedName
+import company.tap.checkout.internal.apiresponse.testmodels.Discount
 
 
 data class Items (
