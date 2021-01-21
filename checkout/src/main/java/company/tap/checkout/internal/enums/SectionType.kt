@@ -12,7 +12,7 @@ enum class SectionType {
     CARD,
     PAYMENT_INPUT,
     SAVE_CARD,
-    GOPAY_SIGNIN,
+    GOPAY_SIGN_IN,
     FRAGMENT,
     ActionButton,
     OTP_VIEW

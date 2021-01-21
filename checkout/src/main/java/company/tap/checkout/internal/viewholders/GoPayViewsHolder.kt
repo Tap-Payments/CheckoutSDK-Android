@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import company.tap.checkout.R
-import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.PaymentTypeEnum.*
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayouttManager
@@ -30,7 +29,7 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
 
     override val view: View = LayoutInflater.from(context).inflate(R.layout.gopay_layout, null)
 
-    override val type = SectionType.GOPAY_SIGNIN
+    override val type = SectionType.GOPAY_SIGN_IN
 
      val goPayLoginInput: GoPayLoginInput
      private val goPayPasswordInput: GoPayPasswordInput
