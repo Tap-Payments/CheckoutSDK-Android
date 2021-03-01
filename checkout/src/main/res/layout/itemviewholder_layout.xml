@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <company.tap.tapuilibrary.uikit.atoms.TapChipGroup
+        android:id="@+id/mainCurrencyChip"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/chip_background"
+        android:orientation="horizontal">
+
+    </company.tap.tapuilibrary.uikit.atoms.TapChipGroup>
+
+    <company.tap.tapuilibrary.uikit.atoms.TapSeparatorView
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/gray" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/itemRecylerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+</LinearLayout>

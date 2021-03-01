@@ -1,0 +1,312 @@
+{
+  "merchant": {
+    "name": "TAP PAYMENTS",
+    "logo": "https://avatars3.githubusercontent.com/u/19837565?s=200&v=4"
+  },
+  "order":{
+    "trx_currency":"KD",
+    "original_amount":"1000000",
+    "items":[
+      {
+        "amount":1000000,
+        "currency":"KD",
+        "description":"testing0",
+        "discount":{
+          "type":"A",
+          "value":0
+        },
+        "image":"",
+        "sku":"",
+        "name":"TEST0",
+        "quantity":1
+      },
+      {
+        "amount":1000000,
+        "currency":"KD",
+        "description":"testing1 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
+        "discount":{
+          "type":"P",
+          "value":0
+        },
+        "image":"",
+        "sku":"",
+        "name":"TEST1",
+        "quantity":2
+      },
+      {
+        "amount":10000000,
+        "currency":"KD",
+        "description":"testing2 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
+        "discount":{
+          "type":"A",
+          "value":0
+        },
+        "image":"",
+        "sku":"",
+        "name":"TEST2",
+        "quantity":3
+      }
+    ],
+    "shipping":{
+      "amount":1,
+      "currency":"KD",
+      "description":"test",
+      "provider":"ARAMEX",
+      "shipping_note":"",
+      "service":"test"
+    },
+    "tax":[
+      {
+        "description":"test",
+        "name":"VAT",
+        "rate":{
+          "type":"F",
+          "value":1
+        }
+      }
+    ]
+  },
+  "currencies": [
+    {
+      "currencytitle": "KD",
+      "currencyicon": "https://img.icons8.com/color/48/000000/kuwait.png",
+      "conversionrate": "1.0"
+    },
+    {
+      "currencytitle": "USD",
+        "currencyicon": "https://img.icons8.com/color/48/000000/usa.png",
+      "conversionrate": "1.0"
+      },
+    {
+        "currencytitle": "SAR",
+        "currencyicon": "https://img.icons8.com/color/48/000000/saudi-arabia.png",
+      "conversionrate": "1.0"
+      },
+       {
+        "currencytitle": "AED",
+        "currencyicon": "https://img.icons8.com/color/48/000000/united-arab-emirates.png",
+         "conversionrate": "1.0"
+      },
+
+      {
+        "currencytitle": "OMR",
+        "currencyicon": "https://img.icons8.com/color/48/000000/oman.png",
+        "conversionrate": "1.0"
+      },
+     {
+      "currencytitle": "QAR",
+      "currencyicon": "https://img.icons8.com/color/48/000000/qatar.png",
+       "conversionrate": "1.0"
+    },
+      {
+        "currencytitle": "BHD",
+        "currencyicon": "https://img.icons8.com/emoji/48/000000/bahrain-emoji.png",
+        "conversionrate": "1.0"
+      },
+      {
+        "currencytitle": "EGP",
+        "currencyicon": "https://img.icons8.com/color/48/000000/egypt.png",
+        "conversionrate": "1.0"
+      },
+     {
+        "currencytitle": "JOD",
+        "currencyicon": "https://img.icons8.com/color/48/000000/jordan.png",
+       "conversionrate": "1.0"
+      }
+
+  ],
+  "goPayCountries": [
+    {
+      "nameAR": "الكويت",
+      "nameEN": "Kuwait",
+      "code": "965",
+      "phoneLength": 8
+    },
+    {
+      "nameAR": "البحرين",
+      "nameEN": "Bahrain",
+      "code": "973",
+      "phoneLength": 8
+    },
+    {
+      "nameAR": "مصر",
+      "nameEN": "Egypt",
+      "code": "20",
+      "phoneLength": 9
+    }
+  ],
+  "goPaySavedCards": [
+    {
+      "chip": {
+        "title": "12341234",
+        "icon": "https://img.icons8.com/color/2x/amex.png"
+      },
+      "chipType": 5,
+      "paymentType": "card"
+    },
+    {
+      "chip": {
+        "title": "56785678",
+        "icon": "https://img.icons8.com/color/2x/visa.png"
+      },
+      "chipType": 5,
+      "paymentType": "card"
+    },
+    {
+      "chip": {
+        "title": "90129012",
+        "icon": "https://img.icons8.com/color/2x/mastercard-logo.png"
+      },
+      "chipType": 5,
+      "paymentType": "card"
+    },
+    {
+      "chip": {
+        "title": "",
+        "icon": ""
+      },
+      "chipType": 6,
+      "paymentType": "signout"
+    }
+  ],
+  "savedCards": [
+    {
+      "chip": {
+        "title": "",
+        "icon": ""
+      },
+      "chipType": 3,
+      "paymentType": "all"
+    },
+    {
+      "chip": {
+        "title": "KNET",
+        "icon": "https://meetanshi.com/media/catalog/product/cache/1/image/925f46717e92fbc24a8e2d03b22927e1/m/a/magento-knet-payment-354x.png"
+      },
+      "paymentType": "web",
+      "chipType": 1,
+      "currencies":[
+        "KWD"]
+    },
+    {
+      "chip": {
+        "title": "BENEFIT",
+        "icon": "https://media-exp1.licdn.com/dms/image/C510BAQG0Pwkl3gsm2w/company-logo_200_200/0?e=2159024400&v=beta&t=ragD_Mg4TUCAiVGiYOmjT2orY1IKEOOe_JEokwkzvaY"
+      },
+      "paymentType": "web",
+      "chipType": 1,
+      "currencies":[
+        "BHD"]
+    },
+    {
+      "chip": {
+        "title": "SADAD",
+        "icon": "https://www.payfort.com/wp-content/uploads/2017/09/go_glocal_mada_logo_en.png"
+      },
+      "paymentType": "web",
+      "chipType": 1,
+      "currencies":[
+        "SAR"]
+    },
+    {
+      "chip": {
+        "title": "FAWRY",
+        "icon": "https://pwstg02.blob.core.windows.net/pwfiles/ContentFiles/8468Image.jpg"
+      },
+      "paymentType": "web",
+      "chipType": 1,
+      "currencies":[
+        "EGP"]
+    },
+    {
+      "chip": {
+        "title": "12341234",
+        "icon": "https://img.icons8.com/color/2x/amex.png"
+      },
+      "paymentType": "card",
+      "chipType": 5
+    },
+    {
+      "chip": {
+        "title": "12345678",
+        "icon": "https://img.icons8.com/color/2x/visa.png"
+      },
+      "paymentType": "card",
+      "chipType": 5
+    },
+    {
+      "chip": {
+        "title": "12349123",
+        "icon": "https://img.icons8.com/color/2x/mastercard-logo.png"
+      },
+      "paymentType": "card",
+      "chipType": 5
+    }
+  ],
+  "tapCardPhoneListDataSource":[
+    {
+      "brand":"visa",
+      "icon":"https://img.icons8.com/color/2x/visa.png",
+      "paymentType":"card"
+    },
+    {
+      "brand":"masterCard",
+      "icon":"https://img.icons8.com/color/2x/mastercard.png",
+      "paymentType":"card"
+    },
+    {
+      "brand":"americanExpress",
+      "icon":"https://img.icons8.com/color/2x/amex.png",
+      "paymentType":"card"
+    },
+    {
+      "brand":"viva",
+      "icon":"https://i.ibb.co/cw5y89V/unnamed.png",
+      "currencies":["KWD"],
+      "country":{
+        "nameAR": "الكويت",
+        "nameEN": "Kuwait",
+        "code": "965",
+        "phoneLength": 8
+      },
+      "paymentType":"telecom"
+    },
+    {
+      "brand":"zain",
+      "icon":"https://i.ibb.co/mvkJXwF/zain-3x.png",
+      "currencies":["KWD"],
+      "country":{
+        "nameAR": "الكويت",
+        "nameEN": "Kuwait",
+        "code": "965",
+        "phoneLength": 8
+      },
+      "paymentType":"telecom"
+    },
+    {
+      "brand":"ooredoo",
+      "icon":"https://i.ibb.co/PCYd8Xm/ooredoo-3x.png",
+      "currencies":["KWD"],
+      "country":{
+        "nameAR": "الكويت",
+        "nameEN": "Kuwait",
+        "code": "965",
+        "phoneLength": 8
+      },
+      "paymentType":"telecom"
+    },
+    {
+      "brand":"wataniya",
+      "icon":"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Vodafone_icon.svg/1020px-Vodafone_icon.svg.png",
+      "currencies":["EGP"],
+      "country":{
+        "nameAR": "مصر",
+        "nameEN": "Egypt",
+        "code": "20",
+        "phoneLength": 9
+      },
+      "paymentType":"telecom"
+    }
+
+  ]
+}

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:id="@+id/tapCardChip4"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="8dp"
+    android:elevation="0dp"
+    android:hardwareAccelerated="true"
+    card_view:cardElevation="10dp"
+    app:cardElevation="0dp"
+    android:layout_gravity="center"
+    android:visibility="gone"
+    card_view:ignore="MissingDefaultResource">
+
+    <LinearLayout
+        android:id="@+id/tapCardChip4Linear"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <company.tap.tapuilibrary.uikit.atoms.TapImageView
+            android:id="@+id/imageView_signOut"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_basic_8dp"
+            android:layout_marginBottom="7dp"
+            android:layout_marginStart="42dp"
+            android:layout_marginEnd="42dp"
+            android:src="@drawable/login" />
+
+
+    </LinearLayout>
+
+</FrameLayout>
