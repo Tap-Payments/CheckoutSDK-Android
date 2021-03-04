@@ -74,45 +74,45 @@
     },
     {
       "currencytitle": "USD",
-        "currencyicon": "https://img.icons8.com/color/48/000000/usa.png",
+      "currencyicon": "https://img.icons8.com/color/48/000000/usa.png",
       "conversionrate": "1.0"
-      },
+    },
     {
-        "currencytitle": "SAR",
-        "currencyicon": "https://img.icons8.com/color/48/000000/saudi-arabia.png",
+      "currencytitle": "SAR",
+      "currencyicon": "https://img.icons8.com/color/48/000000/saudi-arabia.png",
       "conversionrate": "1.0"
-      },
-       {
-        "currencytitle": "AED",
-        "currencyicon": "https://img.icons8.com/color/48/000000/united-arab-emirates.png",
-         "conversionrate": "1.0"
-      },
+    },
+    {
+      "currencytitle": "AED",
+      "currencyicon": "https://img.icons8.com/color/48/000000/united-arab-emirates.png",
+      "conversionrate": "1.0"
+    },
 
-      {
-        "currencytitle": "OMR",
-        "currencyicon": "https://img.icons8.com/color/48/000000/oman.png",
-        "conversionrate": "1.0"
-      },
-     {
+    {
+      "currencytitle": "OMR",
+      "currencyicon": "https://img.icons8.com/color/48/000000/oman.png",
+      "conversionrate": "1.0"
+    },
+    {
       "currencytitle": "QAR",
       "currencyicon": "https://img.icons8.com/color/48/000000/qatar.png",
-       "conversionrate": "1.0"
+      "conversionrate": "1.0"
     },
-      {
-        "currencytitle": "BHD",
-        "currencyicon": "https://img.icons8.com/emoji/48/000000/bahrain-emoji.png",
-        "conversionrate": "1.0"
-      },
-      {
-        "currencytitle": "EGP",
-        "currencyicon": "https://img.icons8.com/color/48/000000/egypt.png",
-        "conversionrate": "1.0"
-      },
-     {
-        "currencytitle": "JOD",
-        "currencyicon": "https://img.icons8.com/color/48/000000/jordan.png",
-       "conversionrate": "1.0"
-      }
+    {
+      "currencytitle": "BHD",
+      "currencyicon": "https://img.icons8.com/emoji/48/000000/bahrain-emoji.png",
+      "conversionrate": "1.0"
+    },
+    {
+      "currencytitle": "EGP",
+      "currencyicon": "https://img.icons8.com/color/48/000000/egypt.png",
+      "conversionrate": "1.0"
+    },
+    {
+      "currencytitle": "JOD",
+      "currencyicon": "https://img.icons8.com/color/48/000000/jordan.png",
+      "conversionrate": "1.0"
+    }
 
   ],
   "goPayCountries": [
