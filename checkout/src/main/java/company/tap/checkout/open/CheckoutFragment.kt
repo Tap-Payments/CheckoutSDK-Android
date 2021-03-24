@@ -6,6 +6,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,6 +16,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -124,21 +127,23 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun getBusinessHeaderData(context: Context?, viewModel: TapLayoutViewModel) {
-        NetworkApp.initNetwork(
-            context,
-            "sk_test_kovrMB0mupFJXfNZWx6Etg5y",
-            "company.tap.goSellSDKExample",
-            "https://run.mocky.io/v3/"
-        )
-        NetworkController.getInstance().setBaseUrl("e4718d85-554b-4d15-a883-3043d961c8e5", context)
-        val cardViewModel: CardViewModel by viewModels()
-        if (context != null) {
-            cardViewModel.getContext(context)
+       if(context?.let { isNetworkAvailable(it) } == true){
+            NetworkApp.initNetwork(
+                context,
+                "sk_test_kovrMB0mupFJXfNZWx6Etg5y",
+                "company.tap.goSellSDKExample",
+                "https://run.mocky.io/v3/"
+            )
+            NetworkController.getInstance()
+                .setBaseUrl("e4718d85-554b-4d15-a883-3043d961c8e5", context)
+            val cardViewModel: CardViewModel by viewModels()
+            if (context != null) {
+                cardViewModel.getContext(context)
+            }
+            cardViewModel.liveData.observe(this, { consumeResponse(it) })
+            cardViewModel.processEvent(CardViewEvent.InitEvent)
         }
-        cardViewModel.liveData.observe(this,  { consumeResponse(it) })
-        cardViewModel.processEvent(CardViewEvent.InitEvent)
-
-      //  loadDatafromAssets(context,viewModel) //Incase API not working use local
+      else loadDatafromAssets(context,viewModel) //Incase API not working use local
 
     }
 
@@ -188,9 +193,10 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         super.onPause()
     }
     private fun consumeResponse(response: Resource<CardViewState>) {
+        println("response value is" + response.message)
         when (response) {
             is Resource.Loading -> concatText("Loading")
-            is Resource.Finished ->   renderView(response.data)
+            is Resource.Finished -> renderView(response.data)
             is Error -> response.message?.let { concatText(it) }
             is Resource.Success -> renderView(response.data)
         }
@@ -209,19 +215,38 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     }
      private fun loadDatafromAssets(context: Context?, viewModel: TapLayoutViewModel){
          if (context?.let { LocalizationManager.getLocale(it).language } == "en") {
-             val jsonFileString = context.let { getJsonDataFromAsset(it, "dummyapiresponsedefault.json") }
-             val dummyInitApiResponse: JsonResponseDummy1 = Gson().fromJson(jsonFileString, JsonResponseDummy1::class.java)
+             val jsonFileString = context.let { getJsonDataFromAsset(
+                 it,
+                 "dummyapiresponsedefault.json"
+             ) }
+             val dummyInitApiResponse: JsonResponseDummy1 = Gson().fromJson(
+                 jsonFileString,
+                 JsonResponseDummy1::class.java
+             )
              // Pass the api response data to LayoutManager
               viewModel.getDatafromAPI(dummyInitApiResponse)
          }else{
-             val jsonFileStringAr = context?.let { getJsonDataFromAsset(it, "dummyapiresponsedefaultar.json") }
+             val jsonFileStringAr = context?.let { getJsonDataFromAsset(
+                 it,
+                 "dummyapiresponsedefaultar.json"
+             ) }
              val gson = Gson()
-             val dummyInitApiResponse: JsonResponseDummy1 = gson.fromJson(jsonFileStringAr, JsonResponseDummy1::class.java)
+             val dummyInitApiResponse: JsonResponseDummy1 = gson.fromJson(
+                 jsonFileStringAr,
+                 JsonResponseDummy1::class.java
+             )
              // Pass the api response data to LayoutManager
              viewModel.getDatafromAPI(dummyInitApiResponse)
          }
 
      }
+
+    fun isNetworkAvailable(context: Context): Boolean {
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        var activeNetworkInfo: NetworkInfo? = null
+        activeNetworkInfo = cm.activeNetworkInfo
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting
+    }
 
 }
 
