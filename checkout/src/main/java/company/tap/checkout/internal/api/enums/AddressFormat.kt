@@ -1,5 +1,6 @@
 package company.tap.checkout.internal.api.enums
 
+
 /**
  * Created by AhlaamK on 6/13/21.
 
@@ -8,21 +9,22 @@ All rights reserved.
  **/
 
 /**
- * The enum Url status.
+ * The enum Address format.
  */
-enum class URLStatus {
+enum class AddressFormat {
     /**
-     * Pending url status.
+     * Format a address format.
      */
-    PENDING,
+     FORMAT_A,
 
     /**
-     * Success url status.
+     * Format b address format.
      */
-    SUCCESS,
+    FORMAT_B,
 
     /**
-     * Failed url status.
+     * Format c address format.
      */
-    FAILED
+   FORMAT_C
+
 }
