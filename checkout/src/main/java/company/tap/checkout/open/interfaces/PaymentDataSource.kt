@@ -34,7 +34,7 @@ interface PaymentDataSource {
     /**
      * Amount. Either amount or items should return nonnull value. If both return nonnull, then items is preferred. @return the amount
      */
-    fun getAmount(): BigDecimal?
+    fun getAmount(amount: BigDecimal): BigDecimal?
 
     /**
      * List of items to pay for. Either amount or items should return nonnull value. If both return nonnull, then items is preferred. @return the items

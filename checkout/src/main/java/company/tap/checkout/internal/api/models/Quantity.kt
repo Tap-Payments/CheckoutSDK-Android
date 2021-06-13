@@ -2,6 +2,8 @@ package company.tap.checkout.internal.api.models
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import company.tap.checkout.internal.api.enums.Measurement
+import company.tap.checkout.internal.interfaces.MeasurementUnit
 import java.math.BigDecimal
 
 /**

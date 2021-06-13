@@ -69,7 +69,7 @@ class PaymentItem(
         this.amountPerUnit = amountPerUnit
         this.discount = discount
         this.taxes = taxes
-        totalAmount = AmountCalculator.calculateTotalAmountOf(this)
+        //totalAmount = AmountCalculator.calculateTotalAmountOf(this,this,this)
         println("calculated total amount : $totalAmount")
     }
 
@@ -134,7 +134,8 @@ class PaymentItem(
      */
     fun getTaxesAmount(): BigDecimal? {
         val taxationAmount = getPlainAmount().subtract(getDiscountAmount())
-        return AmountCalculator.calculateTaxesOn(taxationAmount, taxes)
+       // return AmountCalculator.calculateTaxesOn(taxationAmount, taxes)
+        return null
     }
 
     /**

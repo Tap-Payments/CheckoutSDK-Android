@@ -15,13 +15,13 @@ All rights reserved.
 /**
  * The type Customer.
  */
-class Customer private constructor(
+class Customer(
     /**
      * Gets identifier.
      *
      * @return the identifier
      */
-    @field:Expose @field:SerializedName("id") val identifier: String,
+    @field:Expose @field:SerializedName("id") val identifier: String?,
     /**
      * Gets first name.
      *

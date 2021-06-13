@@ -12,7 +12,7 @@ All rights reserved.
 
 data class Receipt(
     @SerializedName("id") @Expose
-    var id: String,
+    var id: Boolean,
 
     @SerializedName("email")
     @Expose

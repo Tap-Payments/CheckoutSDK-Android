@@ -19,37 +19,235 @@ All rights reserved.
 
 object PaymentDataSource :PaymentDataSource {
     /////////////////////////////////    Props Area  //////////////////////////////////////////////
-    private val currency: TapCurrency? = null
-    private val customer: Customer? = null
-    private val amount: BigDecimal? = null
-    private val items: ArrayList<PaymentItem>? = null
-    private val transactionMode: TransactionMode? = null
-    private val taxes: ArrayList<Tax>? = null
-    private val shipping: ArrayList<Shipping>? = null
-    private val postURL: String? = null
-    private val paymentDescription: String? = null
-    private val paymentType: String? = null
-    private val paymentMetadata: HashMap<String, String>? = null
-    private val paymentReference: Reference? = null
+    private var currency: TapCurrency? = null
+    private var customer: Customer? = null
+    private var amount: BigDecimal? = null
+    private var items: ArrayList<PaymentItem>? = null
+    private var transactionMode: TransactionMode? = null
+    private var taxes: ArrayList<Tax>? = null
+    private var shipping: ArrayList<Shipping>? = null
+    private var postURL: String? = null
+    private var paymentDescription: String? = null
+    private var paymentType: String? = null
+    private var paymentMetadata: HashMap<String, String>? = null
+    private var paymentReference: Reference? = null
     private val paymentStatementDescriptor: String? = null
-    private const val requires3DSecure = false
-    private const val allowUserToSaveCard = true
-    private val receiptSettings: Receipt? = null
-    private val authorizeAction: AuthorizeAction? = null
-    private val destination: Destinations? = null
-    private val merchant: Merchant? = null
+    private var requires3DSecure = false
+    private var allowUserToSaveCard = true
+    private var receiptSettings: Receipt? = null
+    private var authorizeAction: AuthorizeAction? = null
+    private var destination: Destinations? = null
+    private var merchant: Merchant? = null
 
-    private val cardType: CardType? = null
+    private var cardType: CardType? = null
     private val context: Context? = null
 
     private const val trx_curr = "kwd"
     private const val trx_mode = "fullscreen"
 
-    private val defaultCardHolderName: String? = null
+    private var defaultCardHolderName: String? = null
 
-    private const val enableEditCardHolderName = false
+    private var enableEditCardHolderName = false
 
     private val cardIssuer: CardIssuer? = null
+
+    //////////////////////// Setter's Area  ///////////////////////////////////////
+
+    //////////////////////// Setter's Area  ///////////////////////////////////////
+    /**
+     * Set transaction currency.
+     *
+     * @param tapCurrency the tap currency
+     */
+    fun setTransactionCurrency(tapCurrency: TapCurrency) {
+        currency = tapCurrency
+    }
+
+    /**
+     * Set customer.
+     *
+     * @param customer the customer
+     */
+    fun setCustomer(customer: Customer) {
+        this.customer = customer
+    }
+
+    /**
+     * Set amount.
+     *
+     * @param amount the amount
+     */
+    fun setAmount(amount: BigDecimal?) {
+        this.amount = amount
+    }
+
+    /**
+     * Set payment items.
+     *
+     * @param paymentItems the payment items
+     */
+    fun setPaymentItems(paymentItems: ArrayList<PaymentItem>?) {
+        items = paymentItems
+    }
+
+    /**
+     * Set transaction mode.
+     *
+     * @param transactionMode the transaction mode
+     */
+    fun setTransactionMode(transactionMode: TransactionMode?) {
+        this.transactionMode = transactionMode
+    }
+
+    /**
+     * Set taxes.
+     *
+     * @param taxes the taxes
+     */
+    fun setTaxes(taxes: ArrayList<Tax>?) {
+        this.taxes = taxes
+    }
+
+    /**
+     * Set shipping.
+     *
+     * @param shippingList the shipping list
+     */
+    fun setShipping(shippingList: ArrayList<Shipping>?) {
+        shipping = shippingList
+    }
+
+    /**
+     * Set post url.
+     *
+     * @param postURL the post url
+     */
+    fun setPostURL(postURL: String?) {
+        this.postURL = postURL
+    }
+
+    /**
+     * Set payment description.
+     *
+     * @param paymentDescription the payment description
+     */
+    fun setPaymentDescription(paymentDescription: String?) {
+        this.paymentDescription = paymentDescription
+    }
+
+    /**
+     * Set payment metadata.
+     *
+     * @param paymentMetadata the payment metadata
+     */
+    fun setPaymentMetadata(paymentMetadata: HashMap<String, String>?) {
+        this.paymentMetadata = paymentMetadata
+    }
+
+    /**
+     * Set payment reference.
+     *
+     * @param paymentReference the payment reference
+     */
+    fun setPaymentReference(paymentReference: Reference?) {
+        this.paymentReference = paymentReference
+    }
+
+    /**
+     * Set payment statement descriptor.
+     *
+     * @param paymentDescription the payment description
+     */
+    fun setPaymentStatementDescriptor(paymentDescription: String?) {
+        this.paymentDescription = paymentDescription
+    }
+
+    /**
+     * Is user allowed to save his card
+     * @param saveCardStatus
+     */
+    fun isUserAllowedToSaveCard(saveCardStatus: Boolean) {
+        allowUserToSaveCard = saveCardStatus
+    }
+
+    /**
+     * choose paymentType
+     * @param paymentType
+     */
+    fun setPaymentType(paymentType: String?) {
+        this.paymentType = paymentType
+    }
+
+    /**
+     * Is requires 3 d secure.
+     *
+     * @param requires3DSecure the requires 3 d secure
+     */
+    fun isRequires3DSecure(requires3DSecure: Boolean) {
+        this.requires3DSecure = requires3DSecure
+    }
+
+    /**
+     * choose cardType
+     * @param cardType
+     */
+    fun setcardType(cardType: CardType?) {
+        this.cardType = cardType
+    }
+
+
+    /**
+     * Set receipt settings.
+     *
+     * @param receipt the receipt
+     */
+    fun setReceiptSettings(receipt: Receipt?) {
+        receiptSettings = receipt
+    }
+
+    /**
+     * Set authorize action.
+     *
+     * @param authorizeAction the authorize action
+     */
+    fun setAuthorizeAction(authorizeAction: AuthorizeAction?) {
+        this.authorizeAction = authorizeAction
+    }
+
+    /**
+     * set Destination
+     * @return
+     */
+    fun setDestination(destination: Destinations?) {
+        this.destination = destination
+    }
+
+    /**
+     * set Merchant
+     * @param merchant
+     */
+    fun setMerchant(merchant: Merchant?) {
+        this.merchant = merchant
+    }
+
+    /**
+     * Set default CardholderName.
+     *
+     * @param defaultCardHolderName the  default CardholderName
+     */
+    fun setDefaultCardHolderName(defaultCardHolderName: String?) {
+        this.defaultCardHolderName = defaultCardHolderName
+    }
+
+    /**
+     * Is user allowed to edit his cardHolderName
+     * @param enableEditCardHolderName
+     */
+    fun isUserAllowedToEditCardHolderName(enableEditCardHolderName: Boolean) {
+        this.enableEditCardHolderName = enableEditCardHolderName
+    }
+/////<<<<<<<<<<<<<<<<<<<<<<<<<,Getters Area >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>/////////////////
+
 
     override fun getCurrency(): TapCurrency? {
         return currency
@@ -59,7 +257,7 @@ object PaymentDataSource :PaymentDataSource {
        return customer
     }
 
-    override fun getAmount(): BigDecimal? {
+    override fun getAmount(amount: BigDecimal): BigDecimal? {
        return amount
     }
 
