@@ -6,5 +6,18 @@ package company.tap.checkout.internal.api.enums
 Copyright (c) 2021    Tap Payments.
 All rights reserved.
  **/
+
+/**
+ * The enum Transaction mode.
+ */
 enum class TransactionMode {
+    /**
+     * Purchase transaction mode.
+     */
+    PURCHASE,
+
+    /**
+     * Authorize capture transaction mode.
+     */
+    AUTHORIZE_CAPTURE
 }

@@ -1,6 +1,4 @@
-package company.tap.checkout.internal.apiresponse.enums
-
-import com.google.gson.annotations.SerializedName
+package company.tap.checkout.internal.api.enums
 
 /**
  * Created by AhlaamK on 6/13/21.

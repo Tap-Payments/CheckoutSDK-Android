@@ -1,4 +1,4 @@
-package company.tap.checkout.internal.apiresponse.enums
+package company.tap.checkout.internal.api.enums
 
 /**
  * Created by AhlaamK on 6/13/21.
