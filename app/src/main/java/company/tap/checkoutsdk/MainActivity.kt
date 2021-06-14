@@ -40,6 +40,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        /** Configures the theme manager by setting the provided custom theme file names
+        - Parameter customTheme: Please pass the tap checkout theme object with the names of your custom theme files if needed. If not set, the normal and default TAP theme will be used
+         */
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))
          ThemeManager.loadTapTheme(resources, R.raw.defaultdarktheme, "darktheme")
         else if(ThemeManager.currentTheme.isNotEmpty() && !ThemeManager.currentTheme.contains("dark"))
@@ -48,12 +51,32 @@ class MainActivity : AppCompatActivity() {
 
 
         //  setTheme(R.style.AppThemeBlack)
+        /** Configures the localisation manager by setting the locale, adjusting the flipping and the localisation custom file if any
+        - Parameter localiseFile: Please pass the name of the custom localisation file if needed. If not set, the normal and default TAP localisations will be used
+         */
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         setLocale(this, LocalizationManager.getLocale(this).language)
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
 
          configureSDKSession()
         }
+
+    /** Configures the Checkout shared manager by setting the provided custom data gathered by the merchant
+    - Parameter currency: Represents the original transaction currency stated by the merchant on checkout start
+    - Parameter amount: Represents the original transaction amount stated by the merchant on checkout start
+    - Parameter items: Represents the List of payment items if any. If no items are provided one will be created by default as PAY TO [MERCHANT NAME] -- Total value [Payment Item][company.tap.checkout.open.models.PaymentItem]
+    - Parameter intentModel: The loaded Intent API response model
+    - Parameter swipeDownToDismiss: If it is set then when the user swipes down the payment will close, otherwise, there will be a shown button to dismiss the screen. Default is false
+    - Parameter paymentTypes: The allowed payment types including cards, apple pay, web and telecom
+    - Parameter closeButtonStyle: Defines the required style of the sheet close button
+    - Parameter showDragHandler: Decide to show the drag handler or not
+    - Parameter transactionMode: Decide which transaction mode will be used in this call. Purchase, Authorization, Card Saving and Toknization. [TransactionMode][company.tap.checkout.open.enums.TransactionMode]
+    - Parameter customer: Decides which customer is performing this transaction. It will help you as a merchant to define the payer afterwards. Please check [TapCustomer](x-source-tag://TapCustomer)
+    - Parameter destinations: Decides which destination(s) this transaction's amount should split to. Please check [Destination][company.tap.checkout.open.models.Destination]
+    - Parameter tapMerchantID: Optional. Useful when you have multiple Tap accounts and would like to do the `switch` on the fly within the single app.
+    - Parameter taxes: Optional. List of Taxes you want to apply to the order if any.
+    - Parameter shipping: Optional. List of Shipping you want to apply to the order if any.
+     */
 
     private fun configureSDKSession() {
         // Instantiate SDK Session
@@ -74,7 +97,6 @@ class MainActivity : AppCompatActivity() {
 
         // set transaction currency associated to your account
 
-        // set transaction currency associated to your account
         sdkSession.setTransactionCurrency(TapCurrency("KWD")) //** Required **
 
 
@@ -96,12 +118,7 @@ class MainActivity : AppCompatActivity() {
         sdkSession.setPaymentItems(ArrayList()) // ** Optional ** you can pass empty array list
 
 
-//       sdkSession.setPaymentType("CARD");   //** Merchant can pass paymentType
-
-        // Set Taxes array list
-
-
-//       sdkSession.setPaymentType("CARD");   //** Merchant can pass paymentType
+     sdkSession.setPaymentType("CARD");   //** Merchant can pass paymentType
 
         // Set Taxes array list
         sdkSession.setTaxes(ArrayList()) // ** Optional ** you can pass empty array list
@@ -186,7 +203,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun openBottomSheet(view: View) {
-
+        /// Configures the bottom sheet by creating one and assigning the correct delegates and datasources
         modalBottomSheet.arguments = getArguments()
         modalBottomSheet.show(supportFragmentManager, TAG)
     }
@@ -239,6 +256,7 @@ class MainActivity : AppCompatActivity() {
             super.onOptionsItemSelected(item)
         }
     }
+
 
     private fun setLocale(activity: Activity, languageCode: String) {
         println("languageCode is$languageCode")
