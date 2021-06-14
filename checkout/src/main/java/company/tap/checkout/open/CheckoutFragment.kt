@@ -16,7 +16,6 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -49,8 +48,8 @@ import io.reactivex.disposables.Disposables
 class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, InlineViewCallback {
 
     private var _Context: Context? = null
-    private lateinit var viewModel :TapLayoutViewModel
-     var _Activity: Activity? = null
+    private lateinit var viewModel: TapLayoutViewModel
+    var _Activity: Activity? = null
     private lateinit var tapNfcCardReader: TapNfcCardReader
     private var cardReadDisposable: Disposable = Disposables.empty()
 
@@ -69,7 +68,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-      val  view = inflater.inflate(R.layout.fragment_checkouttaps, container, false)
+        val view = inflater.inflate(R.layout.fragment_checkouttaps, container, false)
         backgroundColor = (Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.clear")))
 
         val viewModel: TapLayoutViewModel by viewModels()
@@ -114,8 +113,9 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         enableSections()
         return view
     }
+
     @RequiresApi(Build.VERSION_CODES.N)
-    fun enableSections(){
+    fun enableSections() {
         val enabledSections = ArrayList<SectionType>()
         enabledSections.add(SectionType.BUSINESS)
         enabledSections.add(SectionType.AMOUNT_ITEMS)
@@ -127,7 +127,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun getBusinessHeaderData(context: Context?, viewModel: TapLayoutViewModel) {
-       if(context?.let { isNetworkAvailable(it) } == true){
+        if (context?.let { isNetworkAvailable(it) } == true) {
             NetworkApp.initNetwork(
                 context,
                 "sk_test_kovrMB0mupFJXfNZWx6Etg5y",
@@ -142,8 +142,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             }
             cardViewModel.liveData.observe(this, { consumeResponse(it) })
             cardViewModel.processEvent(CardViewEvent.InitEvent)
-        }
-      else loadDatafromAssets(context,viewModel) //Incase API not working use local
+        } else loadDatafromAssets(context, viewModel) //Incase API not working use local
 
     }
 
@@ -155,13 +154,13 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             CheckoutFragment().apply {
                 arguments = Bundle().apply {}
                 _Context = context
-               _Activity=activity
+                _Activity = activity
             }
     }
 
     override fun onScanCardFailed(e: Exception?) {
         println("onScanCardFailed")
-       viewModel?.handleScanFailedResult()
+        viewModel?.handleScanFailedResult()
     }
 
     override fun onScanCardFinished(card: Card?, cardImage: ByteArray?) {
@@ -187,11 +186,13 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         }
 
     }
+
     override fun onPause() {
         cardReadDisposable.dispose()
         tapNfcCardReader?.disableDispatch()
         super.onPause()
     }
+
     private fun consumeResponse(response: Resource<CardViewState>) {
         println("response value is" + response.message)
         when (response) {
@@ -201,6 +202,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             is Resource.Success -> renderView(response.data)
         }
     }
+
     private fun renderView(data: CardViewState?) {
         println("init respoonse" + data)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -213,33 +215,38 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         println("newText respoonse" + newText)
 
     }
-     private fun loadDatafromAssets(context: Context?, viewModel: TapLayoutViewModel){
-         if (context?.let { LocalizationManager.getLocale(it).language } == "en") {
-             val jsonFileString = context.let { getJsonDataFromAsset(
-                 it,
-                 "dummyapiresponsedefault.json"
-             ) }
-             val dummyInitApiResponse: JsonResponseDummy1 = Gson().fromJson(
-                 jsonFileString,
-                 JsonResponseDummy1::class.java
-             )
-             // Pass the api response data to LayoutManager
-              viewModel.getDatafromAPI(dummyInitApiResponse)
-         }else{
-             val jsonFileStringAr = context?.let { getJsonDataFromAsset(
-                 it,
-                 "dummyapiresponsedefaultar.json"
-             ) }
-             val gson = Gson()
-             val dummyInitApiResponse: JsonResponseDummy1 = gson.fromJson(
-                 jsonFileStringAr,3
-                 JsonResponseDummy1::class.java
-             )
-             // Pass the api response data to LayoutManager
-             viewModel.getDatafromAPI(dummyInitApiResponse)
-         }
 
-     }
+    private fun loadDatafromAssets(context: Context?, viewModel: TapLayoutViewModel) {
+        if (context?.let { LocalizationManager.getLocale(it).language } == "en") {
+            val jsonFileString = context.let {
+                getJsonDataFromAsset(
+                    it,
+                    "dummyapiresponsedefault.json"
+                )
+            }
+            val dummyInitApiResponse: JsonResponseDummy1 = Gson().fromJson(
+                jsonFileString,
+                JsonResponseDummy1::class.java
+            )
+            // Pass the api response data to LayoutManager
+            viewModel.getDatafromAPI(dummyInitApiResponse)
+        } else {
+            val jsonFileStringAr = context?.let {
+                getJsonDataFromAsset(
+                    it,
+                    "dummyapiresponsedefaultar.json"
+                )
+            }
+            val gson = Gson()
+            val dummyInitApiResponse: JsonResponseDummy1 = gson.fromJson(
+                jsonFileStringAr,
+                JsonResponseDummy1::class.java
+            )
+            // Pass the api response data to LayoutManager
+            viewModel.getDatafromAPI(dummyInitApiResponse)
+        }
+
+    }
 
     fun isNetworkAvailable(context: Context): Boolean {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
