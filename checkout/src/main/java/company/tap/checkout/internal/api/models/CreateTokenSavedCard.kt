@@ -5,15 +5,16 @@ import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 /**
- * Created by AhlaamK on 6/13/21.
+ * Created by AhlaamK on 6/14/21.
 
 Copyright (c) 2021    Tap Payments.
 All rights reserved.
  **/
-data class PhoneNumber(
-    @SerializedName("country_code") @Expose
-    var countryCode: String? = null,
-    @SerializedName("number")
+data class CreateTokenSavedCard(
+    @SerializedName("card_id") @Expose
+    private var cardId: String? = null,
+
+    @SerializedName("customer_id")
     @Expose
-    val number: String? = null
-) : Serializable
+    private val customerId: String? = null
+): Serializable

@@ -3,6 +3,7 @@ package company.tap.checkout.internal.api.models
 import com.google.gson.annotations.SerializedName
 import company.tap.checkout.internal.api.enums.AddressFormat
 import company.tap.checkout.internal.api.enums.AddressType
+import java.io.Serializable
 
 /**
  * Created by AhlaamK on 6/13/21.
@@ -61,4 +62,4 @@ data class Address(
     @SerializedName("postal_code")
     val postalCode: String
 
-)
+) : Serializable

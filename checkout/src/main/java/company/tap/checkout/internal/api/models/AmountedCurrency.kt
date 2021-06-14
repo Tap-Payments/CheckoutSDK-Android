@@ -12,7 +12,27 @@ import java.math.BigDecimal
 Copyright (c) 2021    Tap Payments.
 All rights reserved.
  **/
-abstract class AmountedCurrency {
+data class AmountedCurrency(
+    @SerializedName("currency") @Expose
+    private var currency: String,
 
+    @SerializedName("symbol")
+    @Expose
+    private val symbol: String,
+
+    @SerializedName("amount")
+    @Expose
+    private var amount: BigDecimal
+) : Serializable, Comparable<AmountedCurrency> {
+
+    override fun compareTo(other: AmountedCurrency): Int {
+        val thisDisplayName: String = CurrencyFormatter.getLocalizedCurrencyName(currency)
+        val oDisplayName: String = CurrencyFormatter.getLocalizedCurrencyName(other.currency)
+
+        return thisDisplayName.compareTo(oDisplayName, ignoreCase = true)
+    }
 
 }
+
+
+

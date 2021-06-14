@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import company.tap.checkout.internal.api.enums.Measurement
 import company.tap.checkout.internal.interfaces.MeasurementUnit
+import java.io.Serializable
 import java.math.BigDecimal
 
 /**
@@ -22,4 +23,4 @@ data class Quantity(
     @SerializedName("measurement_unit") @Expose val measurementUnit: MeasurementUnit,
 
     @SerializedName("value") @Expose val value: BigDecimal
-)
+) : Serializable
