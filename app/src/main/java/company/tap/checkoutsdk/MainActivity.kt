@@ -20,7 +20,7 @@ import company.tap.checkout.open.CheckoutFragment
 
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.enums.CardType
-import company.tap.checkout.open.models.Customer
+import company.tap.checkout.open.models.TapCustomer
 import company.tap.checkout.open.models.Receipt
 import company.tap.checkout.open.models.TapCurrency
 import company.tap.taplocalizationkit.LocalizationManager
@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
     - Parameter closeButtonStyle: Defines the required style of the sheet close button
     - Parameter showDragHandler: Decide to show the drag handler or not
     - Parameter transactionMode: Decide which transaction mode will be used in this call. Purchase, Authorization, Card Saving and Toknization. [TransactionMode][company.tap.checkout.open.enums.TransactionMode]
-    - Parameter customer: Decides which customer is performing this transaction. It will help you as a merchant to define the payer afterwards. Please check [TapCustomer](x-source-tag://TapCustomer)
+    - Parameter customer: Decides which customer is performing this transaction. It will help you as a merchant to define the payer afterwards. Please check [TapCustomer][company.tap.checkout.open.models.TapCustomer]
     - Parameter destinations: Decides which destination(s) this transaction's amount should split to. Please check [Destination][company.tap.checkout.open.models.Destination]
     - Parameter tapMerchantID: Optional. Useful when you have multiple Tap accounts and would like to do the `switch` on the fly within the single app.
     - Parameter taxes: Optional. List of Taxes you want to apply to the order if any.
@@ -100,9 +100,9 @@ class MainActivity : AppCompatActivity() {
         sdkSession.setTransactionCurrency(TapCurrency("KWD")) //** Required **
 
 
-        // Using static CustomerBuilder method available inside TAP Customer Class you can populate TAP Customer object and pass it to SDK
+        // Using static CustomerBuilder method available inside TAP TapCustomer Class you can populate TAP TapCustomer object and pass it to SDK
 
-        // Using static CustomerBuilder method available inside TAP Customer Class you can populate TAP Customer object and pass it to SDK
+        // Using static CustomerBuilder method available inside TAP TapCustomer Class you can populate TAP TapCustomer object and pass it to SDK
         sdkSession.setCustomer(setCustomer()) //** Required **
 
 
@@ -273,10 +273,10 @@ class MainActivity : AppCompatActivity() {
         modalBottomSheet.handleNFCResult(intent)
 
     }
-    fun setCustomer(): Customer { // test customer id cus_Kh1b4220191939i1KP2506448
-        val customer: Customer? = null
+    fun setCustomer(): TapCustomer { // test customer id cus_Kh1b4220191939i1KP2506448
+        val tapCustomer: TapCustomer? = null
         //if (customer != null) customer.phone else Phone(965, 69045932)
-        return Customer(
+        return TapCustomer(
             null,"firstname", "middlename",
             "lastname", "abcd@gmail.com",
             PhoneNumber("00965", "9090909090"), "description",

@@ -20,7 +20,7 @@ All rights reserved.
 object PaymentDataSource :PaymentDataSource {
     /////////////////////////////////    Props Area  //////////////////////////////////////////////
     private var currency: TapCurrency? = null
-    private var customer: Customer? = null
+    private var tapCustomer: TapCustomer? = null
     private var amount: BigDecimal? = null
     private var items: ArrayList<PaymentItem>? = null
     private var transactionMode: TransactionMode? = null
@@ -64,12 +64,12 @@ object PaymentDataSource :PaymentDataSource {
     }
 
     /**
-     * Set customer.
+     * Set tapCustomer.
      *
-     * @param customer the customer
+     * @param tapCustomer the tapCustomer
      */
-    fun setCustomer(customer: Customer) {
-        this.customer = customer
+    fun setCustomer(tapCustomer: TapCustomer) {
+        this.tapCustomer = tapCustomer
     }
 
     /**
@@ -253,8 +253,8 @@ object PaymentDataSource :PaymentDataSource {
         return currency
     }
 
-    override fun getCustomer(): Customer? {
-       return customer
+    override fun getCustomer(): TapCustomer? {
+       return tapCustomer
     }
 
     override fun getAmount(amount: BigDecimal): BigDecimal? {

@@ -54,13 +54,13 @@ open class SDKSession : APIRequestCallback {
        /* val tapCheckoutFragment = TapCheckoutFragment()
         tapCheckoutFragment.show(supportFragmentManager, null)*/
 
- /*        fun getCustomer(): Customer { // test customer id cus_Kh1b4220191939i1KP2506448
-            val customer: Customer? = null
+ /*        fun getCustomer(): TapCustomer { // test customer id cus_Kh1b4220191939i1KP2506448
+            val customer: TapCustomer? = null
 
 
              val phoneNumber: Phone =
                 if (customer != null) customer.phone else Phone(965, 69045932)
-            return Customer(
+            return TapCustomer(
                 "firstname", "middlename",
                 "lastname", "abcd@gmail.com",
                 Phone(phoneNumber.country_code, phoneNumber.number), "description", Metadata(
@@ -179,12 +179,12 @@ open class SDKSession : APIRequestCallback {
     }
 
     /**
-     * set customer
+     * set tapCustomer
      *
-     * @param customer the customer
+     * @param tapCustomer the tapCustomer
      */
-    open fun setCustomer(customer: Customer) {
-        paymentDataSource?.setCustomer(customer)
+    open fun setCustomer(tapCustomer: TapCustomer) {
+        paymentDataSource?.setCustomer(tapCustomer)
     }
 
     /**

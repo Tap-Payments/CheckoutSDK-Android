@@ -52,7 +52,7 @@ object AmountCalculator {
         var itemsPlainAmount = BigDecimal.ZERO
         var itemsDiscountAmount = BigDecimal.ZERO
         var itemsTaxesAmount = BigDecimal.ZERO
-        /*for (item in items) {
+     /*for (item in items) {
             itemsPlainAmount = itemsPlainAmount.add(item.getPlainAmount())
             itemsDiscountAmount = itemsDiscountAmount.add(item.getDiscountAmount())
             itemsTaxesAmount = itemsTaxesAmount.add(item.getTaxesAmount())

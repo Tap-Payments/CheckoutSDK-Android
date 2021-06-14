@@ -2,6 +2,7 @@ package company.tap.checkout.open.models
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 /**
  * Created by AhlaamK on 6/13/21.
@@ -37,4 +38,4 @@ data class Reference(
     @SerializedName("gosell_id")
     @Expose
     private val gosell_id: String? = null
-)
+) : Serializable

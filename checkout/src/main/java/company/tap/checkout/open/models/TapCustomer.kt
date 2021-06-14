@@ -13,9 +13,9 @@ All rights reserved.
  **/
 
 /**
- * The type Customer.
+ * The type TapCustomer.
  */
-class Customer(
+class TapCustomer(
     /**
      * Gets identifier.
      *
@@ -87,7 +87,7 @@ class Customer(
     }
 
     override fun toString(): String {
-        return """Customer {
+        return """TapCustomer {
         id =  '$identifier'
         email =  '$email'
         first_name =  '$firstName'
@@ -100,7 +100,7 @@ class Customer(
     }
     ////////////////////////// ############################ Start of Builder Region ########################### ///////////////////////
     /**
-     * The type Customer builder.
+     * The type TapCustomer builder.
      */
     class CustomerBuilder
     /**
@@ -186,8 +186,8 @@ class Customer(
          *
          * @return the customer
          */
-        fun build(): Customer {
-            return Customer(
+        fun build(): TapCustomer {
+            return TapCustomer(
                 nestedIdentifier, nestedFirstName, nestedMiddleName, nestedLastName,
                 nestedEmail, nestedPhone, nestedMetaData
             )

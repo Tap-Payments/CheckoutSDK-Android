@@ -27,9 +27,9 @@ interface PaymentDataSource {
     fun getCurrency(): TapCurrency?
 
     /**
-     * Customer. @return the customer
+     * TapCustomer. @return the customer
      */
-    fun getCustomer(): Customer?
+    fun getCustomer(): TapCustomer?
 
     /**
      * Amount. Either amount or items should return nonnull value. If both return nonnull, then items is preferred. @return the amount

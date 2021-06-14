@@ -232,7 +232,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
              ) }
              val gson = Gson()
              val dummyInitApiResponse: JsonResponseDummy1 = gson.fromJson(
-                 jsonFileStringAr,
+                 jsonFileStringAr,3
                  JsonResponseDummy1::class.java
              )
              // Pass the api response data to LayoutManager
