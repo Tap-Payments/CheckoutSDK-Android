@@ -1,5 +1,7 @@
 package company.tap.checkout.internal.api.enums
 
+import com.google.gson.annotations.SerializedName
+
 /**
  * Created by AhlaamK on 6/13/21.
 
@@ -14,10 +16,12 @@ enum class TransactionMode {
     /**
      * Purchase transaction mode.
      */
+    @SerializedName("PURCHASE")
     PURCHASE,
 
     /**
      * Authorize capture transaction mode.
      */
+    @SerializedName("AUTHORIZE_CAPTURE")
     AUTHORIZE_CAPTURE
 }

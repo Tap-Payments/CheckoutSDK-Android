@@ -1,5 +1,6 @@
 package company.tap.checkout.internal.api.enums
 
+import com.google.gson.annotations.SerializedName
 
 
 /**
@@ -12,14 +13,17 @@ enum class PaymentType(val paymentType: String) {
     /**
      * Card payment type.
      */
+    @SerializedName("card")
     CARD("card"),
     /**
      * Web payment type.
      */
+    @SerializedName("web")
     WEB("web"),
     /**
      * Saved card payment type.
      */
+    @SerializedName("savedCard")
     SavedCard("savedCard")
 
 }
