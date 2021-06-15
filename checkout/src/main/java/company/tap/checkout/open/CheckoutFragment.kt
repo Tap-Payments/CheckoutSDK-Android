@@ -132,17 +132,19 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                 context,
                 "sk_test_kovrMB0mupFJXfNZWx6Etg5y",
                 "company.tap.goSellSDKExample",
-                "https://run.mocky.io/v3/"
+                "https://api.tap.company/v2/"
             )
             NetworkController.getInstance()
-                .setBaseUrl("e4718d85-554b-4d15-a883-3043d961c8e5", context)
+                //.setBaseUrl("e4718d85-554b-4d15-a883-3043d961c8e5", context)
+                .setBaseUrl("init", context)
             val cardViewModel: CardViewModel by viewModels()
             if (context != null) {
                 cardViewModel.getContext(context)
             }
             cardViewModel.liveData.observe(this, { consumeResponse(it) })
             cardViewModel.processEvent(CardViewEvent.InitEvent)
-        } else loadDatafromAssets(context, viewModel) //Incase API not working use local
+        }
+        //else loadDatafromAssets(context, viewModel) //Incase API not working use local
 
     }
 
@@ -194,7 +196,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     }
 
     private fun consumeResponse(response: Resource<CardViewState>) {
-        println("response value is" + response.message)
+        println("response value is" + response.data)
         when (response) {
             is Resource.Loading -> concatText("Loading")
             is Resource.Finished -> renderView(response.data)
@@ -216,7 +218,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     }
 
-    private fun loadDatafromAssets(context: Context?, viewModel: TapLayoutViewModel) {
+  /*  private fun loadDatafromAssets(context: Context?, viewModel: TapLayoutViewModel) {
         if (context?.let { LocalizationManager.getLocale(it).language } == "en") {
             val jsonFileString = context.let {
                 getJsonDataFromAsset(
@@ -246,7 +248,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             viewModel.getDatafromAPI(dummyInitApiResponse)
         }
 
-    }
+    }*/
 
     fun isNetworkAvailable(context: Context): Boolean {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

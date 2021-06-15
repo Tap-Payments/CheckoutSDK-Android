@@ -32,6 +32,7 @@ import company.tap.checkout.R
 import company.tap.checkout.internal.adapter.CardTypeAdapterUIKIT
 import company.tap.checkout.internal.adapter.CurrencyTypeAdapter
 import company.tap.checkout.internal.adapter.GoPayCardAdapterUIKIT
+import company.tap.checkout.internal.api.responses.SDKSettings
 import company.tap.checkout.internal.dummygener.*
 import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.SectionType
@@ -466,19 +467,20 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
 
 
     @RequiresApi(Build.VERSION_CODES.N)
-    override fun getDatafromAPI(dummyInitapiResponse1: JsonResponseDummy1) {
-        println("dummyAPISq response new value is ${dummyInitapiResponse1}")
+    //override fun getDatafromAPI(dummyInitapiResponse1: JsonResponseDummy1) {
+    override fun getDatafromAPI(sdkSettings: SDKSettings) {
+        println("sdkSettings response new value is ${sdkSettings}")
         businessViewHolder.setDatafromAPI(
-            dummyInitapiResponse1.merchant1.logo,
-            dummyInitapiResponse1.merchant1.name
+            sdkSettings.data.merchant?.logo,
+            sdkSettings.data.merchant?.name
         )
-        amountViewHolder1.setDatafromAPI(
+       /* amountViewHolder1.setDatafromAPI(
             dummyInitapiResponse1.order1.original_amount,
             dummyInitapiResponse1.order1.trx_currency,
             dummyInitapiResponse1.order1.items.size.toString()
-        )
+        )*/
 
-        cardViewHolder11.setDatafromAPI(dummyInitapiResponse1.savedCards as MutableList<SavedCards>)
+       /* cardViewHolder11.setDatafromAPI(dummyInitapiResponse1.savedCards as MutableList<SavedCards>)
         // goPaySavedCardHolder.setDatafromAPI(dummyInitapiResponse1.goPaySavedCards)
         // println("dummy tapCardPhoneListDataSource" + dummyInitapiResponse1.tapCardPhoneListDataSources)
         paymentInputViewHolder.setDatafromAPI(dummyInitapiResponse1.tapCardPhoneListDataSource)
@@ -498,7 +500,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         savedCardList.value = dummyInitapiResponse1.savedCards
         goPayCardList.value = dummyInitapiResponse1.goPaySavedCards
         orderList = dummyInitapiResponse1.order1
-
+*/
         /**
          * Setting divider for items
          */

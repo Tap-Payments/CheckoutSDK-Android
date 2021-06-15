@@ -1,5 +1,7 @@
 package company.tap.checkout.internal.api.enums
 
+import com.google.gson.annotations.SerializedName
+
 /**
  * Created by AhlaamK on 6/13/21.
 
@@ -14,10 +16,12 @@ enum class AuthenticationType {
     /**
      * Otp authentication type.
      */
+    @SerializedName("OTP")
     OTP,
 
     /**
      * Biometrics authentication type.
      */
+    @SerializedName("BIOMETRICS")
     BIOMETRICS
 }

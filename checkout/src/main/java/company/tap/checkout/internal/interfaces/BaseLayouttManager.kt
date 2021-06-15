@@ -1,5 +1,6 @@
 package company.tap.checkout.internal.interfaces
 
+import company.tap.checkout.internal.api.responses.SDKSettings
 import company.tap.checkout.internal.dummygener.JsonResponseDummy1
 import company.tap.checkout.internal.enums.SectionType
 
@@ -16,6 +17,7 @@ interface BaseLayouttManager {
     fun displayOTPView(mobileNumber: String, otpType:String)
     fun displayRedirect(url: String)
     fun displaySaveCardOptions()
-    fun getDatafromAPI(dummyResponse1: JsonResponseDummy1)
+   // fun getDatafromAPI(dummyResponse1: JsonResponseDummy1)
+    fun getDatafromAPI(sdkSettings: SDKSettings)
     fun didDialogueExecute(response :String)
 }

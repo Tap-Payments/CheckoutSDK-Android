@@ -3,6 +3,7 @@ package company.tap.checkout.internal.apiresponse
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.JsonElement
+import company.tap.checkout.internal.api.responses.SDKSettings
 import company.tap.checkout.internal.dummygener.JsonResponseDummy1
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapnetworkkit.controller.NetworkController
@@ -29,7 +30,9 @@ class CardRepository : APIRequestCallback {
         if (requestCode == INIT_CODE) {
             response?.body().let {
                 println("response body is"+response?.body())
-                val initResponse = Gson().fromJson(it, JsonResponseDummy1::class.java)
+              /*  val initResponse = Gson().fromJson(it, JsonResponseDummy1::class.java)
+                val viewState = CardViewState(initResponse = initResponse) */
+                val initResponse = Gson().fromJson(it, SDKSettings::class.java)
                 val viewState = CardViewState(initResponse = initResponse)
                 resultObservable.onNext(viewState)
                 resultObservable.onComplete()

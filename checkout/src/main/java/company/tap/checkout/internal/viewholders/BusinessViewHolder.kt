@@ -56,7 +56,7 @@ class BusinessViewHolder(private val context: Context) : TapBaseViewHolder {
      * @param merchantLogoApi represents the merchant Logo from the Url
      * @param merchantNameApi represents the merchant business name
      * */
-    fun setDatafromAPI(merchantLogoApi: String, merchantNameApi: String) {
+    fun setDatafromAPI(merchantLogoApi: String?, merchantNameApi: String?) {
         merchantLogo = merchantLogoApi
         merchantName = merchantNameApi
         bindViewComponents()
