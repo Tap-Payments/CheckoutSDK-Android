@@ -15,6 +15,8 @@ All rights reserved.
  **/
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 data class SDKSettings(
+    @SerializedName("status")
+    var status:String,
     @SerializedName("data")
     @Expose
     var data: Data

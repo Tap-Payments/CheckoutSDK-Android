@@ -14,15 +14,15 @@ All rights reserved.
  **/
 data class AmountedCurrency(
     @SerializedName("currency") @Expose
-    private var currency: String,
+     var currency: String,
 
     @SerializedName("symbol")
     @Expose
-    private val symbol: String,
+     val symbol: String,
 
     @SerializedName("amount")
     @Expose
-    private var amount: BigDecimal
+     var amount: BigDecimal
 ) : Serializable, Comparable<AmountedCurrency> {
 
     override fun compareTo(other: AmountedCurrency): Int {
