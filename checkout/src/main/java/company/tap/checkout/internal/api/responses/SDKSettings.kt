@@ -15,13 +15,17 @@ All rights reserved.
  **/
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 data class SDKSettings(
-    @SerializedName("data") @Expose
+    @SerializedName("data")
+    @Expose
     var data: Data
 ) : Serializable
 /////////////////////////////////////////////////////////////////////
 data class Data(
     @SerializedName("live_mode") @Expose
      var livemode: Boolean = false,
+
+    @SerializedName("livemode") @Expose
+    var livemode1: Boolean = false,
 
     @SerializedName("permissions")
     @Expose
@@ -42,7 +46,13 @@ data class Data(
 
     @SerializedName("verified_application")
     @Expose
-     val verified_application: Boolean = false
+     val verified_application: Boolean = false,
+    @SerializedName("session_token")
+    @Expose
+    val sessionToken:String?=null,
+    @SerializedName("device_id")
+    @Expose
+    val  device_id:String?=null
 
 )
 /////////////////////////////////////////////////////////////////////
