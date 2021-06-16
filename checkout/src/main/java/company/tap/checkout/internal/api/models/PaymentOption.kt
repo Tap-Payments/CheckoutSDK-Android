@@ -16,31 +16,31 @@ All rights reserved.
  **/
 data class PaymentOption(
     @SerializedName("id") @Expose
-    private var id: String? = null,
+     var id: String? = null,
 
     @SerializedName("name")
     @Expose
-    private val brand: CardBrand? = null,
+     val brand: CardBrand? = null,
 
     @SerializedName("image")
     @Expose
-    private val image: String? = null,
+     val image: String? = null,
 
     @SerializedName("payment_type")
     @Expose
-    private val paymentType: PaymentType? = null,
+     val paymentType: PaymentType? = null,
 
     @SerializedName("source_id")
     @Expose
-    private val sourceId: String? = null,
+     val sourceId: String? = null,
 
     @SerializedName("supported_card_brands")
     @Expose
-    private val supportedCardBrands: ArrayList<CardBrand>? = null,
+     val supportedCardBrands: ArrayList<CardBrand>? = null,
 
     @SerializedName("extra_fees")
     @Expose
-    private val extraFees: ArrayList<ExtraFee>? = null,
+     val extraFees: ArrayList<ExtraFee>? = null,
 
     @SerializedName("supported_currencies")
     @Expose
@@ -48,15 +48,16 @@ data class PaymentOption(
 
     @SerializedName("order_by")
     @Expose
-    private val orderBy: Int = 0,
+
+    val orderBy: Int = 0,
 
     @SerializedName("threeDS")
     @Expose
-    private val threeDS: String? = null,
+     val threeDS: String? = null,
 
     @SerializedName("asynchronous")
     @Expose
-    private val asynchronous: Boolean = false
+     val asynchronous: Boolean = false
 ):Comparable<PaymentOption>, CurrenciesSupport, Serializable {
     override fun getSupportedCurrencies(): ArrayList<String>? {
        return supportedCurrencies

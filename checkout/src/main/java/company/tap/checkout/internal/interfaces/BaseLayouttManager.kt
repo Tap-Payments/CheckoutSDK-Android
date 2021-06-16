@@ -19,7 +19,8 @@ interface BaseLayouttManager {
     fun displayRedirect(url: String)
     fun displaySaveCardOptions()
    // fun getDatafromAPI(dummyResponse1: JsonResponseDummy1)
-    fun getDatafromAPI(sdkSettings: SDKSettings)
-    fun getDataPaymentOptionsResponse(paymentOptionsResponse: PaymentOptionsResponse)
+    fun getDatasfromAPIs(sdkSettings: SDKSettings?,paymentOptionsResponse: PaymentOptionsResponse?)
+   // fun getDatafromAPI(sdkSettings: SDKSettings)
+   // fun getDataPaymentOptionsResponse(paymentOptionsResponse: PaymentOptionsResponse?)
     fun didDialogueExecute(response :String)
 }

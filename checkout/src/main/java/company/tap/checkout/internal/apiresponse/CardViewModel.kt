@@ -3,6 +3,7 @@ package company.tap.checkout.internal.apiresponse
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.*
@@ -32,18 +33,18 @@ class CardViewModel : ViewModel() {
             ))
     }
 
-    private fun getInitData() {
+    private fun getInitData(viewModel: TapLayoutViewModel) {
         repository.getInitData(context)
         GlobalScope.launch(Dispatchers.Main) { // launch coroutine in the main thread
             val apiResponseTime = Random.nextInt(1000, 10000)
             delay(apiResponseTime.toLong())
-            repository.getPaymentOptions(context)
+            repository.getPaymentOptions(context,viewModel)
         }
     }
 
-    fun processEvent(event: CardViewEvent) {
+    fun processEvent(event: CardViewEvent,viewModel: TapLayoutViewModel) {
         when (event) {
-            CardViewEvent.InitEvent -> getInitData()
+            CardViewEvent.InitEvent -> getInitData(viewModel)
         }
     }
     fun getContext(context: Context){
