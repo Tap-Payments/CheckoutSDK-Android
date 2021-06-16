@@ -9,6 +9,7 @@ import company.tap.checkout.internal.api.models.PaymentOption
 import company.tap.checkout.internal.api.models.SavedCard
 import company.tap.checkout.internal.interfaces.BaseResponse
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by AhlaamK on 6/15/21.
@@ -30,7 +31,7 @@ data class PaymentOptionsResponse(
 
     @SerializedName("payment_methods")
     @Expose
-    @NonNull  val paymentOptions: List<PaymentOption>,
+    @NonNull  val paymentOptions: ArrayList<PaymentOption>,
 
     @SerializedName("currency")
     @Expose

@@ -33,7 +33,8 @@ class CardRepository : APIRequestCallback {
 
 
 
-    fun getInitData(context: Context) {
+    fun getInitData(context: Context,viewModel: TapLayoutViewModel) {
+        this.viewModel = viewModel
         if( LocalizationManager.getLocale(context).language  == "en") NetworkController.getInstance().processRequest(TapMethodType.GET, ApiService.INIT, null, this, INIT_CODE)
         else NetworkController.getInstance().processRequest(TapMethodType.GET, ApiService.INIT_AR, null, this, INIT_CODE)
     }
