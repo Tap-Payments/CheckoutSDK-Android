@@ -21,12 +21,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import cards.pay.paycardsrecognizer.sdk.Card
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
-import com.google.gson.Gson
 import company.tap.checkout.R
 import company.tap.checkout.internal.apiresponse.*
-import company.tap.checkout.internal.dummygener.JsonResponseDummy1
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
+import company.tap.checkout.open.enums.TransactionMode
 import company.tap.nfcreader.open.reader.TapEmvCard
 import company.tap.nfcreader.open.reader.TapNfcCardReader
 import company.tap.taplocalizationkit.LocalizationManager
@@ -132,11 +131,9 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                 context,
                 "sk_test_kovrMB0mupFJXfNZWx6Etg5y",
                 "company.tap.goSellSDKExample",
-                "https://api.tap.company/v2/"
+                ApiService.BASE_URL
             )
-            NetworkController.getInstance()
-                //.setBaseUrl("e4718d85-554b-4d15-a883-3043d961c8e5", context)
-                .setBaseUrl("init", context)
+            NetworkController.getInstance().setBaseUrl(ApiService.INIT, context)
             val cardViewModel: CardViewModel by viewModels()
             if (context != null) {
                 cardViewModel.getContext(context)
@@ -209,12 +206,18 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         println("init respoonse" + data)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             data?.initResponse?.let { viewModel.getDatafromAPI(it) }
+           /* data?.paymentOptionsResponse.let {
+                if (it != null) {
+                    viewModel.getDataPaymentOptionsResponse(it)
+                }
+            }*/
+
         }
     }
 
     @SuppressLint("SetTextI18n")
     private fun concatText(newText: String) {
-        println("newText respoonse" + newText)
+        println("newText respoonse$newText")
 
     }
 

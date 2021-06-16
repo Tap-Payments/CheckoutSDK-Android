@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.*
+import kotlin.random.Random
 
 /**
  * Created by AhlaamK on 11/15/20.
@@ -32,6 +34,11 @@ class CardViewModel : ViewModel() {
 
     private fun getInitData() {
         repository.getInitData(context)
+        GlobalScope.launch(Dispatchers.Main) { // launch coroutine in the main thread
+            val apiResponseTime = Random.nextInt(1000, 10000)
+            delay(apiResponseTime.toLong())
+            repository.getPaymentOptions(context)
+        }
     }
 
     fun processEvent(event: CardViewEvent) {
