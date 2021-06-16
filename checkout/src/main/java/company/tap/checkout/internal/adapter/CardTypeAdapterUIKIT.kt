@@ -18,6 +18,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import company.tap.checkout.R
+import company.tap.checkout.internal.api.enums.PaymentType
+import company.tap.checkout.internal.api.models.PaymentOption
 import company.tap.checkout.internal.dummygener.Chip1
 import company.tap.checkout.internal.dummygener.SavedCards
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
@@ -42,7 +44,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     private var selectedPosition = -1
     private var arrayListRedirect:ArrayList<String> = ArrayList()
     private var arrayListCards:ArrayList<Chip1> = ArrayList()
-    private var adapterContent: List<SavedCards> = java.util.ArrayList()
+    private var adapterContent: List<PaymentOption> = java.util.ArrayList()
     private var isShaking: Boolean = false
     private var goPayOpened: Boolean = false
     private var arrayModified : ArrayList<Any> = ArrayList()
@@ -55,7 +57,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         private const val TYPE_GO_PAY = 3
     }
 
-    fun updateAdapterData(adapterContent: List<SavedCards>) {
+    fun updateAdapterData(adapterContent: List<PaymentOption>) {
         this.adapterContent = adapterContent
         notifyDataSetChanged()
     }
@@ -91,19 +93,23 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         /**
          * here we will cast the list of any depending on card type
          */
-        return when ((adapterContent[position]).chipType ) {
-            1 -> {
-                arrayListRedirect.add((adapterContent[position]  ).chip1.icon)
+        return when ((adapterContent[position]).paymentType ) {
+           PaymentType.WEB-> {
+                (adapterContent[position]).image?.let { arrayListRedirect.add(it) }
                 TYPE_REDIRECT
+              // PaymentType.WEB
             }
-            5 -> {
-                arrayListCards.add((adapterContent[position]).chip1)
+           /* 5 -> {
+                arrayListCards.add((adapterContent[position]).image)
                 TYPE_SAVED_CARD
-            }
+            }*/
             else -> {
                 TYPE_GO_PAY
+               // PaymentType.WEB
             }
         }
+
+
     }
 
     override fun getItemCount(): Int {
@@ -169,14 +175,14 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     fun removeItems() {
         if(goPayOpened) arrayModified = ArrayList(adapterContent)
         arrayModified.removeAt(0)
-        adapterContent= arrayModified as ArrayList<SavedCards>
+       // adapterContent= arrayModified as ArrayList<SavedCards>
         notifyDataSetChanged()
     }
 
     fun deleteSelectedCard(position: Int){
         val cardDelList = ArrayList(adapterContent)
         cardDelList.removeAt(position)
-        adapterContent = cardDelList as List<SavedCards>
+            //  adapterContent = cardDelList as List<SavedCards>
         notifyDataSetChanged()
     }
 

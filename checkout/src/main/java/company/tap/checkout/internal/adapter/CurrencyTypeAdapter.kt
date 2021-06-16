@@ -2,14 +2,14 @@ package company.tap.checkout.internal.adapter
 
 import android.content.Context
 import android.graphics.Color
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import company.tap.checkout.R
-import company.tap.checkout.internal.dummygener.Currencies1
+import company.tap.checkout.internal.api.models.AmountedCurrency
 import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.TextViewTheme
@@ -17,6 +17,7 @@ import company.tap.tapuilibrary.uikit.atoms.TapImageView
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import kotlinx.android.synthetic.main.item_currency_rows.view.*
+import java.math.BigDecimal
 
 
 /**
@@ -28,11 +29,11 @@ All rights reserved.
 
 var selectedPosition = 0
 var _context: Context? = null
-var currencyRate: Double = 0.0
+lateinit var currencyRate: BigDecimal
 
 class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrencyChangedActionListener) :
     RecyclerView.Adapter<CurrencyTypeAdapter.CurrencyHolders>() {
-    private var adapterContentCurrencies: List<Currencies1> = java.util.ArrayList()
+    private var adapterContentCurrencies: List<AmountedCurrency> = java.util.ArrayList()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyHolders {
         val v =
             LayoutInflater.from(parent.context).inflate(R.layout.item_currency_rows, parent, false)
@@ -42,8 +43,8 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
 
     override fun getItemCount() = adapterContentCurrencies.size
 
-    fun updateAdapterData(adapterContentCurrencies: List<Currencies1>) {
-        println("list of currencies" + adapterContentCurrencies)
+    fun updateAdapterData(adapterContentCurrencies: List<AmountedCurrency>) {
+        println("list of currencies$adapterContentCurrencies")
         this.adapterContentCurrencies = adapterContentCurrencies
         notifyDataSetChanged()
     }
@@ -91,12 +92,13 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
 
     private fun bindItemData(holder: CurrencyHolders, position: Int) {
         val imageViewCard = holder.itemView.findViewById<TapImageView>(R.id.imageView_currency)
-        Glide.with(holder.itemView.context)
+
+       /* Glide.with(holder.itemView.context)
             .load(adapterContentCurrencies[position].currencyicon).into(
-                imageViewCard)
+                imageViewCard)*/
         val itemCurrencyText = holder.itemView.findViewById<TapTextView>(R.id.textView_currency)
-        itemCurrencyText.text = adapterContentCurrencies[position].currencytitle
-        currencyRate = adapterContentCurrencies[position].conversionrate
+        itemCurrencyText.text = adapterContentCurrencies[position].currency
+        currencyRate = adapterContentCurrencies[position].amount
     }
 
     private fun onItemClickListener(holder: CurrencyHolders, position: Int) {
@@ -104,7 +106,8 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
             selectedPosition = position
             onCurrencyChangedActionListener.onCurrencyClicked(
                 holder.itemView.textView_currency.text.toString(),
-                adapterContentCurrencies[position].conversionrate
+              // adapterContentCurrencies[position].conversionrate
+               adapterContentCurrencies[position].amount
             )
             notifyDataSetChanged()
         }

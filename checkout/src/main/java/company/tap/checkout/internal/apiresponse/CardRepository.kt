@@ -64,9 +64,12 @@ class CardRepository : APIRequestCallback {
         }
         val viewState = CardViewState(initResponse = initResponse,paymentOptionsResponse = paymentOptionsResponse )
         println("PpaymentOptionsResponse is$paymentOptionsResponse")
-        viewModel.getDatasfromAPIs(initResponse,paymentOptionsResponse)
-        resultObservable.onNext(viewState)
-        resultObservable.onComplete()
+        if(initResponse!=null && paymentOptionsResponse!=null){
+            viewModel.getDatasfromAPIs(initResponse,paymentOptionsResponse)
+            resultObservable.onNext(viewState)
+            resultObservable.onComplete()
+        }
+
     }
 
     override fun onFailure(requestCode: Int, errorDetails: GoSellError?) {
