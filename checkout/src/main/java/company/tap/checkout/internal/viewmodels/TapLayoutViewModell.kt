@@ -64,6 +64,7 @@ import kotlinx.android.synthetic.main.gopaysavedcard_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 import java.math.BigDecimal
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
 
 
@@ -349,9 +350,9 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
             itemsViewHolder1
         )
         addViews(businessViewHolder, amountViewHolder1, itemsViewHolder1)
-        // itemsViewHolder1.setDatafromAPI(allCurrencies,)
+         itemsViewHolder1.setDatafromAPI(allCurrencies.value as ArrayList<AmountedCurrency>,null)
 
-        itemsViewHolder1.setItemsRecylerView()
+     //   itemsViewHolder1.setItemsRecylerView()
         itemsViewHolder1.setCurrencyRecylerView()
         frameLayout.visibility = View.VISIBLE
         itemsViewHolder1.itemsdisplayed = true
