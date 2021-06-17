@@ -45,7 +45,7 @@ object AmountCalculator {
      * @return the big decimal
      */
     fun calculateTotalAmountOf(
-        items: PaymentItem,
+        items: ArrayList<PaymentItem>,
         taxes: ArrayList<Tax?>?,
         shippings: ArrayList<Shipping>?
     ): BigDecimal? {

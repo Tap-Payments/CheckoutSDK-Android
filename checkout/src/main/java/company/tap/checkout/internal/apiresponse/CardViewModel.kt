@@ -36,7 +36,7 @@ class CardViewModel : ViewModel() {
     private fun getInitData(viewModel: TapLayoutViewModel) {
         repository.getInitData(context,viewModel)
         GlobalScope.launch(Dispatchers.Main) { // launch coroutine in the main thread
-            val apiResponseTime = Random.nextInt(1000, 50000)
+            val apiResponseTime = Random.nextInt(1000, 20000)
             delay(apiResponseTime.toLong())
             repository.getPaymentOptions(context,viewModel)
         }

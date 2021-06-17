@@ -20,6 +20,7 @@ import company.tap.checkout.open.CheckoutFragment
 
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.enums.CardType
+import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.models.TapCustomer
 import company.tap.checkout.open.models.Receipt
 import company.tap.checkout.open.models.TapCurrency
@@ -196,7 +197,7 @@ class MainActivity : AppCompatActivity() {
 
         sdkSession.setCardType(CardType.CREDIT) // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
 
-
+          sdkSession.setTransactionMode(TransactionMode.PURCHASE)
          sdkSession.setDefaultCardHolderName("TEST TAP"); // ** Optional ** you can pass default CardHolderName of the user .So you don't need to type it.
          sdkSession.isUserAllowedToEnableCardHolderName(false); // ** Optional ** you can enable/ disable  default CardHolderName .
 

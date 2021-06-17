@@ -133,13 +133,13 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                 "company.tap.goSellSDKExample",
                 ApiService.BASE_URL
             )
-            NetworkController.getInstance().setBaseUrl(ApiService.INIT, context)
             val cardViewModel: CardViewModel by viewModels()
             if (context != null) {
                 cardViewModel.getContext(context)
             }
-            cardViewModel.liveData.observe(this, { consumeResponse(it) })
-            cardViewModel.processEvent(CardViewEvent.InitEvent)
+          //  cardViewModel.liveData.observe(this, { consumeResponse(it) })
+            cardViewModel.processEvent(CardViewEvent.InitEvent,viewModel)
+
         }
         //else loadDatafromAssets(context, viewModel) //Incase API not working use local
 
@@ -193,7 +193,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     }
 
     private fun consumeResponse(response: Resource<CardViewState>) {
-        println("response value is" + response.data)
+        println("response value is" + response.data?.initResponse)
         when (response) {
             is Resource.Loading -> concatText("Loading")
             is Resource.Finished -> renderView(response.data)
@@ -203,16 +203,16 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     }
 
     private fun renderView(data: CardViewState?) {
-        println("init respoonse" + data)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        println("renderView respoonse" + data)
+       /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             data?.initResponse?.let { viewModel.getDatafromAPI(it) }
-           /* data?.paymentOptionsResponse.let {
+            data?.paymentOptionsResponse.let {
                 if (it != null) {
                     viewModel.getDataPaymentOptionsResponse(it)
                 }
-            }*/
+            }
 
-        }
+        }*/
     }
 
     @SuppressLint("SetTextI18n")

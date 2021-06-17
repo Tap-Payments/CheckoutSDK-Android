@@ -8,6 +8,8 @@ import company.tap.checkout.internal.api.requests.PaymentOptionsRequest
 import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
 import company.tap.checkout.internal.api.responses.SDKSettings
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
+import company.tap.checkout.open.controller.SDKSession
+import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.models.TapCustomer
 import company.tap.taplocalizationkit.LocalizationManager
@@ -31,7 +33,7 @@ class CardRepository : APIRequestCallback {
     private var initResponse:SDKSettings?=null
     private lateinit var viewModel: TapLayoutViewModel
 
-
+    private var sdkSession : SDKSession =SDKSession()
 
     fun getInitData(context: Context,viewModel: TapLayoutViewModel) {
         this.viewModel = viewModel
@@ -44,26 +46,24 @@ class CardRepository : APIRequestCallback {
            Passing post request body to obtain
            response for Payment options
            */
-        val requestBody = PaymentOptionsRequest(TransactionMode.PURCHASE, 20,null,null,null,"KWD", TapCustomer.CustomerBuilder("").firstName("dsd").email("abc@gmail.com").build(),null,PaymentType.CARD)
+        val requestBody = PaymentOptionsRequest(PaymentDataSource.getTransactionMode(),20,null,null,null,"KWD", TapCustomer.CustomerBuilder("").firstName("dsd").email("abc@gmail.com").build(),null,PaymentType.CARD)
         if( LocalizationManager.getLocale(context).language  == "en") NetworkController.getInstance().processRequest(TapMethodType.POST, ApiService.PAYMENT_TYPES, requestBody, this, PAYMENT_OPTIONS_CODE)
        // else NetworkController.getInstance().processRequest(TapMethodType.GET, ApiService.INIT_AR, null, this, PAYMENT_OPTIONS_CODE)
     }
     override fun onSuccess(responseCode: Int, requestCode: Int, response: Response<JsonElement>?) {
         if (requestCode == INIT_CODE) {
             response?.body().let {
-                println("response body is"+response?.body())
                 initResponse = Gson().fromJson(it, SDKSettings::class.java)
-              //  viewModel.getDatafromAPI(initResponse)
+
             }
         }else if (requestCode == PAYMENT_OPTIONS_CODE){
             response?.body().let {
                 paymentOptionsResponse = Gson().fromJson(it, PaymentOptionsResponse::class.java)
-              // viewModel.getDataPaymentOptionsResponse(paymentOptionsResponse)
 
             }
         }
         val viewState = CardViewState(initResponse = initResponse,paymentOptionsResponse = paymentOptionsResponse )
-        println("PpaymentOptionsResponse is$paymentOptionsResponse")
+
         if(initResponse!=null && paymentOptionsResponse!=null){
             viewModel.getDatasfromAPIs(initResponse,paymentOptionsResponse)
             resultObservable.onNext(viewState)

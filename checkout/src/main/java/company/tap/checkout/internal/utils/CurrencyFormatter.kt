@@ -73,7 +73,7 @@ object CurrencyFormatter {
      * @return the localized currency symbol
      */
     fun getLocalizedCurrencySymbol(currencyCode: String, locale: Locale?): String {
-        return if (currencyCode == null || currencyCode.isEmpty()) {
+        return if (currencyCode.isEmpty()) {
             currencyCode
         } else {
             val currency = Currency.getInstance(currencyCode)

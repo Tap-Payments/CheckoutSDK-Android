@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.R
 import company.tap.checkout.internal.adapter.CurrencyTypeAdapter
 import company.tap.checkout.internal.adapter.ItemAdapter
+import company.tap.checkout.internal.api.models.AmountedCurrency
 
-import company.tap.checkout.internal.dummygener.Currencies1
 import company.tap.checkout.internal.dummygener.Items1
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener
@@ -38,7 +38,7 @@ class ItemsViewHolder1(private val context: Context, private val onCurrencyChang
     override val type = SectionType.SELECT
 
     var itemsdisplayed: Boolean = false
-    private lateinit var supportedCurrecnyList: ArrayList<Currencies1>
+    private lateinit var supportedCurrecnyList: ArrayList<AmountedCurrency>
     private lateinit var supportedItemList: List<Items1>
      var mainCurrencyChip: TapChipGroup
      var itemsRecyclerView:RecyclerView
@@ -94,10 +94,15 @@ class ItemsViewHolder1(private val context: Context, private val onCurrencyChang
      * @param supportedCurrencyApi represents the supported currency for the Merchant.
      * @param supportItemListApi represents the supported currency for the Merchant.
      * */
-    fun setDatafromAPI(supportedCurrencyApi: ArrayList<Currencies1>,supportItemListApi :List<Items1>) {
+    fun setDatafromAPI(
+        supportedCurrencyApi: ArrayList<AmountedCurrency>,
+        supportItemListApi: List<Items1>?
+    ) {
         supportedCurrecnyList = supportedCurrencyApi
-        supportedItemList = supportItemListApi
-        println("supportedItemList curr list:$supportedItemList")
+        if (supportItemListApi != null) {
+            supportedItemList = supportItemListApi
+        }
+//        println("supportedItemList curr list:$supportedItemList")
 
     }
 
@@ -110,6 +115,7 @@ class ItemsViewHolder1(private val context: Context, private val onCurrencyChang
     fun setItemsRecylerView(){
         itemsRecyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         itemsRecyclerView.adapter = adapterItems
+       // if(supportedItemList)
         adapterItems.updateAdapterData(supportedItemList)
 
     }
