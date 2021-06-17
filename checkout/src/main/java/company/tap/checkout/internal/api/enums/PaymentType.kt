@@ -24,6 +24,7 @@ enum class PaymentType(val paymentType: String) {
      * Saved card payment type.
      */
     @SerializedName("savedCard")
-    SavedCard("savedCard")
+    SavedCard("savedCard"),
+    telecom ("telecom")
 
 }

@@ -19,12 +19,15 @@ import company.tap.cardinputwidget.CardBrandSingle
 import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardinputwidget.widget.inline.InlineCardInput
 import company.tap.checkout.R
+import company.tap.checkout.internal.api.enums.PaymentType
+import company.tap.checkout.internal.api.models.PaymentOption
 import company.tap.checkout.internal.dummygener.TapCardPhoneListDataSource
 import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayouttManager
 import company.tap.checkout.internal.interfaces.onCardNFCCallListener
 import company.tap.checkout.internal.interfaces.PaymentCardComplete
+import company.tap.checkout.open.models.PaymentItem
 import company.tap.tapcardvalidator_android.CardBrand
 import company.tap.tapcardvalidator_android.CardValidationState
 import company.tap.tapcardvalidator_android.CardValidator
@@ -77,7 +80,8 @@ class PaymenttInputViewHolder(
     private var tabPosition: Int? = null
     private var tapAlertView: TapAlertView? = null
     private var imageURL: String = ""
-    private  var paymentType: PaymentTypeEnum ?= null
+  //  private  var paymentType: PaymentTypeEnum ?= null
+    private  var paymentType: PaymentType ?= null
     private lateinit var cardBrandType: String
     private var cardNumber: String ?= null
     private var expiryDate: String ?= null
@@ -416,19 +420,19 @@ class PaymenttInputViewHolder(
      * @param imageURLApi represents the images of payment methods.
      * */
     @RequiresApi(Build.VERSION_CODES.N)
-    fun setDatafromAPI(imageURLApi: List<TapCardPhoneListDataSource>) {
+    fun setDatafromAPI(imageURLApi: List<PaymentOption>) {
         val itemsMobilesList = ArrayList<SectionTabItem>()
         val itemsCardsList = ArrayList<SectionTabItem>()
         tabLayout.changeTabItemAlphaValue(1f)
         println("iamage val  are" + imageURLApi)
         for (i in imageURLApi.indices) {
            // tabLayout.resetBehaviour()
-            imageURL = imageURLApi[i].icon
+            imageURL = imageURLApi[i].image.toString()
             paymentType = imageURLApi[i].paymentType
-            cardBrandType = imageURLApi[i].brand
+            cardBrandType = imageURLApi[i].brand?.name.toString()
             println("cardbrandtype" + cardBrandType)
 
-            if (paymentType == PaymentTypeEnum.telecom) {
+            if (paymentType == PaymentType.telecom) {
                 itemsMobilesList.add(
                     SectionTabItem(
                         imageURL, imageURL, CardBrand.valueOf(

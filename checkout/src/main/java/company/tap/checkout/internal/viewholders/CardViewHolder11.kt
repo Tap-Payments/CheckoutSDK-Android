@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.R
 import company.tap.checkout.internal.adapter.CardTypeAdapterUIKIT
+import company.tap.checkout.internal.api.models.PaymentOption
 
 
 import company.tap.checkout.internal.dummygener.SavedCards
@@ -28,7 +29,7 @@ class CardViewHolder11(private val context: Context, private val onCardSelectedA
 
     override val view: View = LayoutInflater.from(context).inflate(R.layout.cardviewholder_layout1, null)
     override val type = SectionType.CARD
-    private var savedCardsList: MutableList<SavedCards>? = null
+    private var paymentCardsList: MutableList<PaymentOption>? = null
 
     init { bindViewComponents() }
 
@@ -50,7 +51,7 @@ class CardViewHolder11(private val context: Context, private val onCardSelectedA
         )
         val adapter = CardTypeAdapterUIKIT(onCardSelectedActionListener )
         view.mainChipgroup.chipsRecycler.adapter = adapter
-        savedCardsList?.let { adapter.updateAdapterData(it) }
+        paymentCardsList?.let { adapter.updateAdapterData(it) }
         /**
          * set separator background
          */
@@ -61,8 +62,8 @@ class CardViewHolder11(private val context: Context, private val onCardSelectedA
      * Sets data from API through LayoutManager
      * @param savedCardMethodsApi represents the list of payment methods available from API
      * */
-    fun setDatafromAPI(savedCardMethodsApi: MutableList<SavedCards>) {
-        savedCardsList = savedCardMethodsApi
+    fun setDatafromAPI(paymentCardMethodsApi: MutableList<PaymentOption>) {
+        paymentCardsList = paymentCardMethodsApi
         bindViewComponents()
     }
 }
