@@ -13,6 +13,7 @@ import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import company.tap.checkout.TapCheckOutSDK
 import company.tap.checkout.internal.api.models.PhoneNumber
 
 import company.tap.checkout.open.CheckoutFragment
@@ -58,9 +59,14 @@ class MainActivity : AppCompatActivity() {
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         setLocale(this, LocalizationManager.getLocale(this).language)
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
-
+        initializeSDK()
          configureSDKSession()
         }
+
+    private fun initializeSDK() {
+       TapCheckOutSDK().init(this,"sk_test_kovrMB0mupFJXfNZWx6Etg5y","company.tap.goSellSDKExample")
+       //TapCheckOutSDK().init(this,"sk_test_kovrMB0mupFJXfNZWx6Etg5y","")
+    }
 
     /** Configures the Checkout shared manager by setting the provided custom data gathered by the merchant
     - Parameter currency: Represents the original transaction currency stated by the merchant on checkout start
