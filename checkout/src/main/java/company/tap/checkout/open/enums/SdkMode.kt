@@ -8,13 +8,15 @@ import com.google.gson.annotations.SerializedName
 Copyright (c) 2021    Tap Payments.
 All rights reserved.
  **/
-enum class OperationMode {
+enum class SdkMode {
     /**
      * Sandbox is for testing purposes
      */
+    @SerializedName("Sandbox")
     SAND_BOX,
     /**
      * Production is for live
      */
+    @SerializedName("Production")
     PRODUCTION
 }
