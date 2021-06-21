@@ -7,9 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import coil.ImageLoader
+import coil.decode.SvgDecoder
+import coil.request.ImageRequest
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.model.GlideUrl
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.models.AmountedCurrency
+import company.tap.checkout.internal.api.models.SupportedCurrencies
 import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.TextViewTheme
@@ -18,6 +25,7 @@ import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import kotlinx.android.synthetic.main.item_currency_rows.view.*
 import java.math.BigDecimal
+import java.net.URL
 
 
 /**
@@ -29,11 +37,11 @@ All rights reserved.
 
 var selectedPosition = 0
 var _context: Context? = null
-lateinit var currencyRate: BigDecimal
+ var currencyRate: Double = 0.0
 
 class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrencyChangedActionListener) :
     RecyclerView.Adapter<CurrencyTypeAdapter.CurrencyHolders>() {
-    private var adapterContentCurrencies: List<AmountedCurrency> = java.util.ArrayList()
+    private var adapterContentCurrencies: List<SupportedCurrencies> = java.util.ArrayList()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyHolders {
         val v =
             LayoutInflater.from(parent.context).inflate(R.layout.item_currency_rows, parent, false)
@@ -43,7 +51,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
 
     override fun getItemCount() = adapterContentCurrencies.size
 
-    fun updateAdapterData(adapterContentCurrencies: List<AmountedCurrency>) {
+    fun updateAdapterData(adapterContentCurrencies: List<SupportedCurrencies>) {
         println("list of currencies$adapterContentCurrencies")
         this.adapterContentCurrencies = adapterContentCurrencies
         notifyDataSetChanged()
@@ -93,9 +101,11 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
     private fun bindItemData(holder: CurrencyHolders, position: Int) {
         val imageViewCard = holder.itemView.findViewById<TapImageView>(R.id.imageView_currency)
 
-       /* Glide.with(holder.itemView.context)
-            .load(adapterContentCurrencies[position].currencyicon).into(
+      /*  Glide.with(holder.itemView.context)
+            .load(adapterContentCurrencies[position].flag).into(
                 imageViewCard)*/
+        println("adapterContentCurrencies[position].amount"+ adapterContentCurrencies[position].amount)
+        adapterContentCurrencies[position]?.flag?.let { imageViewCard.loadSvg(it) }
         val itemCurrencyText = holder.itemView.findViewById<TapTextView>(R.id.textView_currency)
         itemCurrencyText.text = adapterContentCurrencies[position].currency
         currencyRate = adapterContentCurrencies[position].amount
@@ -103,12 +113,18 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
 
     private fun onItemClickListener(holder: CurrencyHolders, position: Int) {
         holder.itemView.setOnClickListener {
+
             selectedPosition = position
-            onCurrencyChangedActionListener.onCurrencyClicked(
-                holder.itemView.textView_currency.text.toString(),
-              // adapterContentCurrencies[position].conversionrate
-               adapterContentCurrencies[position].amount
-            )
+            //ToDo replace .rate with .amount currenct amount is 0.0
+            println("adapterContentCurrencies[position].rate"+adapterContentCurrencies[position].rate)
+            adapterContentCurrencies[position].rate?.let { it1 ->
+                onCurrencyChangedActionListener.onCurrencyClicked(
+                    holder.itemView.textView_currency.text.toString(),
+                    // adapterContentCurrencies[position].conversionrate
+                    // adapterContentCurrencies[position].amount
+                    it1
+                )
+            }
             notifyDataSetChanged()
         }
     }
@@ -146,6 +162,20 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
             Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.backgroundColor")),
             Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.unSelected.shadow.color"))
         )
+    }
+
+    fun ImageView.loadSvg(url: String) {
+
+        val imageLoader = ImageLoader.Builder(this.context)
+            .componentRegistry { add(SvgDecoder(this@loadSvg.context)) }
+            .build()
+
+        val request = ImageRequest.Builder(this.context)
+            .data(url)
+            .target(this)
+            .build()
+
+        imageLoader.enqueue(request)
     }
 
 
