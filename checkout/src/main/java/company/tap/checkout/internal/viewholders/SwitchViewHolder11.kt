@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import company.tap.checkout.R
+import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.taplocalizationkit.LocalizationManager
@@ -154,8 +155,8 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
         )
     }
 
-    fun setSwitchToggleData(paymentType: PaymentTypeEnum){
-        if(paymentType==PaymentTypeEnum.card) {
+    fun setSwitchToggleData(paymentType: PaymentType){
+        if(paymentType== PaymentType.CARD) {
             view.mainSwitch.setSwitchDataSource(getMainSwitchDataSource(LocalizationManager.getValue("cardSaveLabel", "TapCardInputKit")))
         }else{
             view.mainSwitch.setSwitchDataSource(getMainSwitchDataSource(LocalizationManager.getValue("mobileSaveLabel","TapMobileInput")))

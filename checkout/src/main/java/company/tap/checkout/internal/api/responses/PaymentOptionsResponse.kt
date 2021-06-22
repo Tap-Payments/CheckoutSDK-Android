@@ -7,6 +7,7 @@ import com.google.gson.annotations.SerializedName
 import company.tap.checkout.internal.api.models.AmountedCurrency
 import company.tap.checkout.internal.api.models.PaymentOption
 import company.tap.checkout.internal.api.models.SavedCard
+import company.tap.checkout.internal.api.models.SupportedCurrencies
 import company.tap.checkout.internal.interfaces.BaseResponse
 import java.util.*
 import kotlin.collections.ArrayList
@@ -39,7 +40,7 @@ data class PaymentOptionsResponse(
 
     @SerializedName("supported_currencies")
     @Expose
-    @NonNull  val supportedCurrencies: ArrayList<AmountedCurrency>,
+    @NonNull  val supportedCurrencies: ArrayList<SupportedCurrencies>,
 
     @SerializedName("cards")
     @Expose

@@ -2,7 +2,7 @@ package company.tap.checkout.internal.adapter
 
 import android.content.Context
 import android.graphics.Color
-
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,10 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.model.GlideUrl
 import company.tap.checkout.R
-import company.tap.checkout.internal.api.models.AmountedCurrency
 import company.tap.checkout.internal.api.models.SupportedCurrencies
 import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener
 import company.tap.tapuilibrary.themekit.ThemeManager
@@ -24,8 +21,7 @@ import company.tap.tapuilibrary.uikit.atoms.TapImageView
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import kotlinx.android.synthetic.main.item_currency_rows.view.*
-import java.math.BigDecimal
-import java.net.URL
+import kotlinx.android.synthetic.main.item_frame_currencies.view.*
 
 
 /**
@@ -90,7 +86,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
     override fun onBindViewHolder(holder: CurrencyHolders, position: Int) {
         holder.bindTheme()
         for (i in adapterContentCurrencies.indices) {
-            bindItemData(holder,position)
+            bindItemData(holder, position)
         }
         if (selectedPosition == position) drawSelectedBorder(holder)
          else drawUnSelectedBorder(holder)
@@ -104,7 +100,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
       /*  Glide.with(holder.itemView.context)
             .load(adapterContentCurrencies[position].flag).into(
                 imageViewCard)*/
-        println("adapterContentCurrencies[position].amount"+ adapterContentCurrencies[position].amount)
+        println("adapterContentCurrencies[position].amount" + adapterContentCurrencies[position].amount)
         adapterContentCurrencies[position]?.flag?.let { imageViewCard.loadSvg(it) }
         val itemCurrencyText = holder.itemView.findViewById<TapTextView>(R.id.textView_currency)
         itemCurrencyText.text = adapterContentCurrencies[position].currency
@@ -112,21 +108,22 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
     }
 
     private fun onItemClickListener(holder: CurrencyHolders, position: Int) {
+        holder.itemView.setOnClickListener(null)
         holder.itemView.setOnClickListener {
-
             selectedPosition = position
-            //ToDo replace .rate with .amount currenct amount is 0.0
-            println("adapterContentCurrencies[position].rate"+adapterContentCurrencies[position].rate)
-            adapterContentCurrencies[position].rate?.let { it1 ->
                 onCurrencyChangedActionListener.onCurrencyClicked(
-                    holder.itemView.textView_currency.text.toString(),
+                    //holder.itemView.textView_currency.text.toString(),
+                    adapterContentCurrencies[position].currency.toString(),
                     // adapterContentCurrencies[position].conversionrate
-                    // adapterContentCurrencies[position].amount
-                    it1
+                    adapterContentCurrencies[position].amount
+
                 )
+             notifyDataSetChanged()
             }
-            notifyDataSetChanged()
-        }
+      //  if(holder.itemView.)
+     // notifyDataSetChanged()
+
+
     }
 
 
@@ -135,7 +132,9 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
          * Method to draw bordered view
          * setBorderedView ( view: View, cornerRadius:Float,strokeWidth: Float, strokeColor: Int,tintColor: Int )
          */
-        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) holder.itemView.setBackgroundResource(R.drawable.border_currency_black)
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) holder.itemView.setBackgroundResource(
+            R.drawable.border_currency_black
+        )
         else holder.itemView.setBackgroundResource(R.drawable.border_currency)
         setBorderedView(
             holder.itemView.CurrencyChipLinear,

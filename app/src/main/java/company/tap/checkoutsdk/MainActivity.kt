@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity() {
         // Set Total Amount. The Total amount will be recalculated according to provided Taxes and Shipping
 
         // Set Total Amount. The Total amount will be recalculated according to provided Taxes and Shipping
-        sdkSession.setAmount(BigDecimal(1)) //** Required **
+        sdkSession.setAmount(BigDecimal(23)) //** Required **
 
 
         // Set Payment Items array list

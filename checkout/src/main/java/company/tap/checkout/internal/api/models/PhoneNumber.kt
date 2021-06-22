@@ -1,5 +1,6 @@
 package company.tap.checkout.internal.api.models
 
+import androidx.annotation.Nullable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
@@ -11,9 +12,10 @@ Copyright (c) 2021    Tap Payments.
 All rights reserved.
  **/
 data class PhoneNumber(
-    @SerializedName("country_code") @Expose
-    var countryCode: String? = null,
+    @SerializedName("country_code")
+    @Expose
+    @Nullable var countryCode: String?,
     @SerializedName("number")
     @Expose
-    val number: String? = null
+    @Nullable val number: String?
 ) : Serializable

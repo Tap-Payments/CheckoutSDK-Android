@@ -1,5 +1,6 @@
 package company.tap.checkout.internal.api.requests
 
+import androidx.annotation.Nullable
 import androidx.annotation.RestrictTo
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
@@ -10,7 +11,6 @@ import company.tap.checkout.open.models.PaymentItem
 import company.tap.checkout.open.models.Shipping
 import company.tap.checkout.open.models.TapCustomer
 import company.tap.checkout.open.models.Tax
-import company.tap.tapnetworkkit.interfaces.TapRequestBodyBase
 import java.math.BigDecimal
 import java.util.*
 
@@ -21,20 +21,21 @@ Copyright (c) 2021    Tap Payments.
 All rights reserved.
  **/
 @RestrictTo(RestrictTo.Scope.LIBRARY)
-class PaymentOptionsRequest(
+open class PaymentOptionsRequest(
     transactionMode: TransactionMode?,
-    amount: Int,
+    amount: BigDecimal?,
     items: ArrayList<PaymentItem>?,
     shipping: ArrayList<Shipping>?,
     taxes: ArrayList<Tax?>?,
     currency: String?,
     customer: TapCustomer?,
     merchant_id: String?,
-    payment_type: PaymentType
-) : TapRequestBodyBase{
+    payment_type: String
+
+) {
     @SerializedName("transaction_mode")
     @Expose
-    private val transactionMode: TransactionMode? = null
+    private val transactionMode: TransactionMode = transactionMode ?: TransactionMode.PURCHASE
 
     @SerializedName("items")
     @Expose
@@ -42,19 +43,19 @@ class PaymentOptionsRequest(
 
     @SerializedName("shipping")
     @Expose
-    private val shipping: ArrayList<Shipping>? = null
+    private val shipping: ArrayList<Shipping>? = shipping
 
     @SerializedName("taxes")
     @Expose
-    private val taxes: ArrayList<Tax>? = null
+    private val taxes: ArrayList<Tax?>? = taxes
 
     @SerializedName("customer")
     @Expose
-    private val customer: String? = null
+    private val customer: TapCustomer? = customer
 
     @SerializedName("currency")
     @Expose
-    private val currency: String? = null
+    private val currency: String = currency!!
 
     @SerializedName("total_amount")
     @Expose
@@ -62,17 +63,19 @@ class PaymentOptionsRequest(
 
     @SerializedName("merchant_id")
     @Expose
-    private val merchant_id: String? = null
+    @Nullable private val merchant_id: String? = merchant_id
 
     @SerializedName("payment_type")
     @Expose
-    private val payment_type: String? = null
+    private val payment_type: String = payment_type
+
+
     /**
      * Gets transaction mode.
      *
      * @return the transaction mode
      */
-    fun getTransactionMode(): TransactionMode? {
+    fun getTransactionMode(): TransactionMode {
         return transactionMode
     }
 
@@ -101,18 +104,18 @@ class PaymentOptionsRequest(
      * @param shipping        the shipping
      * @param taxes           the taxes
      * @param currency        the currency
-     * @param customer        the customer
+     * @param topUp        the topup
      */
     init {
+
         if (items != null && items.size > 0) {
             this.items = items
-            totalAmount = AmountCalculator.calculateTotalAmountOf(items, taxes, shipping)
+            totalAmount = AmountCalculator.calculateTotalAmountOf(items, taxes, shipping)!!
         } else {
             this.items = null
             val plainAmount = amount ?: BigDecimal.ZERO
-           // totalAmount =
-            //    AmountCalculator.calculateTotalAmountOf(PaymentItem, taxes, shipping)
-             //       ?.add(plainAmount)
+            totalAmount = AmountCalculator.calculateTotalAmountOf(ArrayList(), taxes, shipping)!!
+                .add(plainAmount)
         }
     }
 }

@@ -258,7 +258,8 @@ class PaymenttInputViewHolder(
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s?.trim()?.length == 3 || s?.trim()?.length == 4) {
-                    onPaymentCardComplete.onPayCardSwitchAction(true, PaymentTypeEnum.card)
+                    onPaymentCardComplete.onPayCardSwitchAction(true, PaymentType.CARD
+                        )
                     tapAlertView?.visibility = View.GONE
                 }
             }
@@ -272,7 +273,7 @@ class PaymenttInputViewHolder(
                     expiryDate?.let { it1 ->
                         cvvNumber?.let { it2 ->
                             onPaymentCardComplete.onPayCardCompleteAction(
-                                true, PaymentTypeEnum.card,
+                                true, PaymentType.CARD,
                                 it, it1, it2
                             )
                         }

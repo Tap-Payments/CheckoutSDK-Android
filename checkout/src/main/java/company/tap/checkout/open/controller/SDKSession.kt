@@ -147,7 +147,7 @@ open class SDKSession : APIRequestCallback {
      */
     open fun setAmount(amount: BigDecimal) {
         println("amount ... $amount")
-        paymentDataSource?.getAmount(amount)
+        paymentDataSource?.setAmount(amount)
     }
 
 

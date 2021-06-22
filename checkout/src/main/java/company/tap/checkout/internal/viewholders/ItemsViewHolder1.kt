@@ -15,6 +15,7 @@ import company.tap.checkout.R
 import company.tap.checkout.internal.adapter.CurrencyTypeAdapter
 import company.tap.checkout.internal.adapter.ItemAdapter
 import company.tap.checkout.internal.api.models.AmountedCurrency
+import company.tap.checkout.internal.api.models.SupportedCurrencies
 
 import company.tap.checkout.internal.dummygener.Items1
 import company.tap.checkout.internal.enums.SectionType
@@ -38,8 +39,9 @@ class ItemsViewHolder1(private val context: Context, private val onCurrencyChang
     override val type = SectionType.SELECT
 
     var itemsdisplayed: Boolean = false
-    private lateinit var supportedCurrecnyList: ArrayList<AmountedCurrency>
-    private lateinit var supportedItemList: List<Items1>
+    private lateinit var supportedCurrecnyList: ArrayList<SupportedCurrencies>
+    //private lateinit var supportedItemList: List<Items1>
+    private  var supportedItemList: List<Items1>?=null
      var mainCurrencyChip: TapChipGroup
      var itemsRecyclerView:RecyclerView
      var currencyRecyclerView:RecyclerView
@@ -95,7 +97,7 @@ class ItemsViewHolder1(private val context: Context, private val onCurrencyChang
      * @param supportItemListApi represents the supported currency for the Merchant.
      * */
     fun setDatafromAPI(
-        supportedCurrencyApi: ArrayList<AmountedCurrency>,
+        supportedCurrencyApi: ArrayList<SupportedCurrencies>,
         supportItemListApi: List<Items1>?
     ) {
         supportedCurrecnyList = supportedCurrencyApi
@@ -115,8 +117,8 @@ class ItemsViewHolder1(private val context: Context, private val onCurrencyChang
     fun setItemsRecylerView(){
         itemsRecyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         itemsRecyclerView.adapter = adapterItems
-       // if(supportedItemList)
-        adapterItems.updateAdapterData(supportedItemList)
+       // if(supportedItemList!=null)
+       // adapterItems.updateAdapterData(supportedItemList)
 
     }
 

@@ -256,7 +256,7 @@ object PaymentDataSource :PaymentDataSource {
        return tapCustomer
     }
 
-    override fun getAmount(amount: BigDecimal): BigDecimal? {
+    override fun getAmount(): BigDecimal? {
        return amount
     }
 
