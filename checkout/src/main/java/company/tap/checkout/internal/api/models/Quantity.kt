@@ -17,10 +17,23 @@ All rights reserved.
 /**
  * The type Quantity.
  */
-data class Quantity(
+class Quantity(
     @SerializedName("measurement_group") @Expose var measurementGroup: Measurement,
 
-    @SerializedName("measurement_unit") @Expose val measurementUnit: MeasurementUnit,
+    @SerializedName("measurement_unit") @Expose var measurementUnit: String,
 
-    @SerializedName("value") @Expose val value: BigDecimal
-) : Serializable
+    @SerializedName("value") @Expose var value: BigDecimal?
+) : Serializable {
+    /**
+     * Instantiates a new Quantity.
+     *
+     * @param measurementUnit the measurement unit
+     * @param value           the value
+     */
+    open fun Quantity(measurementUnit: MeasurementUnit, value: BigDecimal?) {
+        measurementGroup = measurementUnit.getMeasurementGroup()
+        this.measurementUnit = measurementUnit.toString()
+        this.value = value
+    }
+
+}

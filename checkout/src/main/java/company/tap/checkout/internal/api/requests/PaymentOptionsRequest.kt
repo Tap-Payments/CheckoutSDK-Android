@@ -4,7 +4,6 @@ import androidx.annotation.Nullable
 import androidx.annotation.RestrictTo
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.utils.AmountCalculator
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.models.PaymentItem
@@ -28,7 +27,7 @@ open class PaymentOptionsRequest(
     shipping: ArrayList<Shipping>?,
     taxes: ArrayList<Tax?>?,
     currency: String?,
-    customer: TapCustomer?,
+    customer: String?,
     merchant_id: String?,
     payment_type: String
 
@@ -51,11 +50,11 @@ open class PaymentOptionsRequest(
 
     @SerializedName("customer")
     @Expose
-    private val customer: TapCustomer? = customer
+    private val customer: String? = customer
 
     @SerializedName("currency")
     @Expose
-    private val currency: String = currency!!
+    private val currency: String? = currency
 
     @SerializedName("total_amount")
     @Expose

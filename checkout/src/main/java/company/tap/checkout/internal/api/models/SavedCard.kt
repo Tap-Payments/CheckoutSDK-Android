@@ -15,43 +15,42 @@ All rights reserved.
  **/
 data class SavedCard(
     @SerializedName("id") @Expose
-    private var id: String,
+     var id: String,
 
     @SerializedName("object")
     @Expose
-    private val `object`: String,
+     val `object`: String,
 
     @SerializedName("first_six")
     @Expose
-    private val firstSix: String,
+     val firstSix: String,
 
     @SerializedName("last_four")
-    @Expose
-    private val lastFour: String,
+    @Expose val lastFour: String,
 
     @SerializedName("brand")
     @Expose
-    private val brand: CardBrand,
+     val brand: CardBrand,
 
     @SerializedName("payment_method_id")
     @Expose
-    private val paymentOptionIdentifier: String,
+     val paymentOptionIdentifier: String,
 
     @SerializedName("expiry")
     @Expose
-    private val expiry: ExpirationDate?,
+     val expiry: ExpirationDate?,
 
     @SerializedName("name")
     @Expose
-    private val cardholderName: String,
+     val cardholderName: String,
 
     @SerializedName("currency")
     @Expose
-    private val currency: String,
+     val currency: String,
 
     @SerializedName("scheme")
     @Expose
-    private val scheme: CardScheme,
+     val scheme: CardScheme,
 
     @SerializedName("supported_currencies")
     @Expose
@@ -59,10 +58,9 @@ data class SavedCard(
 
     @SerializedName("order_by")
     @Expose
-    private val orderBy: Int = 0,
+     val orderBy: Int = 0,
 
-    @SerializedName("image")
-    private val image: String,
+    @SerializedName("image") val image: String,
 
     @SerializedName("fingerprint")
     private val fingerprint: String,
@@ -71,11 +69,11 @@ data class SavedCard(
 
     @SerializedName("exp_month")
     @Expose
-    private val exp_month: String,
+     val exp_month: String,
 
     @SerializedName("exp_year")
     @Expose
-    private val exp_year: String,
+     val exp_year: String,
 
 
     @SerializedName("funding")

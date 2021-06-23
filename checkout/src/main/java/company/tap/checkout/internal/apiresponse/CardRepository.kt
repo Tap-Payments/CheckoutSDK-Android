@@ -5,8 +5,6 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.google.gson.Gson
 import com.google.gson.JsonElement
-import company.tap.checkout.internal.api.enums.PaymentType
-import company.tap.checkout.internal.api.models.PhoneNumber
 import company.tap.checkout.internal.api.requests.PaymentOptionsRequest
 import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
 import company.tap.checkout.internal.api.responses.SDKSettings
@@ -14,7 +12,6 @@ import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.TransactionMode
-import company.tap.checkout.open.models.TapCustomer
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapnetworkkit.controller.NetworkController
 import company.tap.tapnetworkkit.enums.TapMethodType
@@ -23,7 +20,6 @@ import company.tap.tapnetworkkit.interfaces.APIRequestCallback
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.subjects.BehaviorSubject
 import retrofit2.Response
-import java.math.BigDecimal
 
 /**
  * Created by AhlaamK on 11/15/20.
@@ -58,11 +54,11 @@ class CardRepository : APIRequestCallback {
              Passing post request body to obtain
              response for Payment options
              */
-       /* val requestBody = PaymentOptionsRequest(TransactionMode.PURCHASE, BigDecimal.valueOf(12),null,null,null,"kwd", TapCustomer.CustomerBuilder(
+     /* val requestBody = PaymentOptionsRequest(TransactionMode.PURCHASE, BigDecimal.valueOf(12),null,null,null,"kwd", TapCustomer.CustomerBuilder(
             ""
-        ).firstName("dsd").lastName("last").email("abc@gmail.com").phone( PhoneNumber("00965", "53254252")).build(), null,"ALL")*/
-
-       val requestBody = PaymentOptionsRequest(TransactionMode.PURCHASE,PaymentDataSource.getAmount(),null,null,null,PaymentDataSource.getCurrency()?.isoCode,null,null,"ALL")
+        ).firstName("dsd").lastName("last").email("abc@gmail.com").phone( PhoneNumber("00965", "53254252")).build(), null,"ALL")
+*/
+       val requestBody = PaymentOptionsRequest(TransactionMode.PURCHASE,PaymentDataSource.getAmount(),null,null,null,PaymentDataSource.getCurrency()?.isoCode,PaymentDataSource.getCustomer()?.identifier,null,"ALL")
         val jsonString = Gson().toJson(requestBody)
         if( LocalizationManager.getLocale(context).language  == "en") NetworkController.getInstance().processRequest(
             TapMethodType.POST, ApiService.PAYMENT_TYPES, jsonString, this, PAYMENT_OPTIONS_CODE
