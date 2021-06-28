@@ -148,8 +148,8 @@ class PaymentItem(
         amountPerUnit: BigDecimal
     ) {
         private var nestedDescription: String? = null
-        private val nestedQuantity: Quantity
-        private val nestedAmountPerUnit: BigDecimal
+        private val nestedQuantity: Quantity = quantity
+        private val nestedAmountPerUnit: BigDecimal = amountPerUnit
         private var nestedDiscount: AmountModificator? = null
         private var nestedTaxes: ArrayList<Tax>? = null
         private var nestedTotalAmount: BigDecimal? = null
@@ -210,17 +210,6 @@ class PaymentItem(
             )
         }
 
-        /**
-         * public constructor with only required data
-         *
-         * @param name          the name
-         * @param quantity      the quantity
-         * @param amountPerUnit the amount per unit
-         */
-        init {
-            nestedQuantity = quantity
-            nestedAmountPerUnit = amountPerUnit
-        }
     }
     ////////////////////////// ############################ End of Builder Region ########################### ///////////////////////
 

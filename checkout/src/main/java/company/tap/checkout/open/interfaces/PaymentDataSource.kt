@@ -39,7 +39,7 @@ interface PaymentDataSource {
     /**
      * List of items to pay for. Either amount or items should return nonnull value. If both return nonnull, then items is preferred. @return the items
      */
-    fun getItems(): ArrayList<PaymentItem>
+    fun getItems(): ArrayList<PaymentItem>?
 
     /**
      * Transaction mode. If you return null in this method, it will be treated as PURCHASE. @return the transaction mode

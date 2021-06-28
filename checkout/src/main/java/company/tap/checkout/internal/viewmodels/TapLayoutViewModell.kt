@@ -34,6 +34,7 @@ import company.tap.checkout.internal.adapter.CurrencyTypeAdapter
 import company.tap.checkout.internal.adapter.GoPayCardAdapterUIKIT
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.api.models.PaymentOption
+import company.tap.checkout.internal.api.models.SavedCard
 import company.tap.checkout.internal.api.models.SupportedCurrencies
 import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
 import company.tap.checkout.internal.api.responses.SDKSettings
@@ -74,7 +75,7 @@ import kotlin.properties.Delegates
 class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedActionListener,
     PaymentCardComplete, onCardNFCCallListener, OnCurrencyChangedActionListener, WebViewContract,
     TapTextRecognitionCallBack {
-    //private var savedCardList = MutableLiveData<List<SavedCards>>()
+    private var savedCardList = MutableLiveData<List<SavedCard>>()
     private var paymentOptionsList = MutableLiveData<List<PaymentOption>>()
     private var goPayCardList = MutableLiveData<List<GoPaySavedCards>>()
 
@@ -495,9 +496,10 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         if (sdkSettings?.data?.verified_application == true) {
 
         }
-        println("PaymentOptionsResponse on get$paymentOptionsResponse")
+       // println("PaymentOptionsResponse on get$paymentOptionsResponse")
         allCurrencies.value = paymentOptionsResponse?.supportedCurrencies
-        println("allCurrencies on get" + allCurrencies.value)
+        savedCardList.value = paymentOptionsResponse?.cards
+        println("savedCardList on get" + savedCardList.value)
         paymentOptionsResponse?.supportedCurrencies?.let {
             itemsViewHolder1.setDatafromAPI(
                 it,
@@ -599,6 +601,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         //  goPayAdapter.updateAdapterData(goPayCardList.value as List<GoPaySavedCards>)
         currencyAdapter = CurrencyTypeAdapter(this)
         currencyAdapter.updateAdapterData(allCurrencies.value as List<SupportedCurrencies>)
+        adapter.updateAdapterDataSavedCard(savedCardList.value as List<SavedCard>)
         cardViewHolder11.view.mainChipgroup.chipsRecycler.adapter = adapter
         // goPaySavedCardHolder.view.goPayLoginView.chipsRecycler.adapter = goPayAdapter
         cardViewHolder11.view.mainChipgroup.groupAction?.visibility = View.VISIBLE
@@ -680,7 +683,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
                 deleteCard = false
             } else {
                 removeViews(goPaySavedCardHolder)
-                //  adapter.updateAdapterData(savedCardList.value as List<SavedCards>)
+                adapter.updateAdapterDataSavedCard(savedCardList.value as List<SavedCard>)
                 goPayViewsHolder.goPayopened = false
                 adapter.goPayOpenedfromMain(true)
                 adapter.updateShaking(false)

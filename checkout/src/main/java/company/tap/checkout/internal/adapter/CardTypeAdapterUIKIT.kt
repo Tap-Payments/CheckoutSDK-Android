@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.api.models.PaymentOption
+import company.tap.checkout.internal.api.models.SavedCard
 import company.tap.checkout.internal.dummygener.Chip1
 import company.tap.checkout.internal.dummygener.SavedCards
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
@@ -43,7 +44,9 @@ All rights reserved.
 class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedActionListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var selectedPosition = -1
     private var arrayListRedirect:ArrayList<String> = ArrayList()
-    private var arrayListCards:ArrayList<Chip1> = ArrayList()
+   // private var arrayListCards:ArrayList<Chip1> = ArrayList()
+    private var arrayListCards:List<SavedCard> = java.util.ArrayList()
+    private var arrayListSaveCard:ArrayList<String> = ArrayList()
     private var adapterContent: List<PaymentOption> = java.util.ArrayList()
     private var isShaking: Boolean = false
     private var goPayOpened: Boolean = false
@@ -52,13 +55,17 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
 
     companion object {
-        private const val TYPE_SAVED_CARD = 1
+        private const val TYPE_SAVED_CARD = 5
         private const val TYPE_REDIRECT = 2
         private const val TYPE_GO_PAY = 3
     }
 
     fun updateAdapterData(adapterContent: List<PaymentOption>) {
         this.adapterContent = adapterContent
+        notifyDataSetChanged()
+    }
+    fun updateAdapterDataSavedCard(adapterSavedCard: List<SavedCard>) {
+        this.arrayListCards = adapterSavedCard
         notifyDataSetChanged()
     }
 
@@ -90,17 +97,20 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     }
 
     override fun getItemViewType(position: Int): Int {
-        /**
+       // println("adapterContent[position]).paymentType}}}"+adapterContent[position].paymentType)
+      //  println("PaymentType.WEB"+ PaymentType.WEB)
+       /**
          * here we will cast the list of any depending on card type
          */
-        return when ((adapterContent[position]).paymentType ) {
+        return when (adapterContent[position].paymentType) {
            PaymentType.WEB-> {
                 (adapterContent[position]).image?.let { arrayListRedirect.add(it) }
                 TYPE_REDIRECT
               // PaymentType.WEB
             }
-           /* 5 -> {
-                arrayListCards.add((adapterContent[position]).image)
+            /*PaymentType.CARD -> {
+                arrayListSaveCard.add(arrayListCards[position].lastFour)
+                arrayListSaveCard.add(arrayListCards[position].image)
                 TYPE_SAVED_CARD
             }*/
             else -> {
@@ -112,8 +122,20 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
     }
 
+  /*  override fun getItemViewType(position: Int): Int {
+        if (arrayListCards[position].`object` == PaymentType.CARD.name) {
+            arrayListSaveCard.add(arrayListCards[position].lastFour)
+            arrayListSaveCard.add(arrayListCards[position].image)
+            return TYPE_SAVED_CARD
+        } else if (adapterContent[position].paymentType == PaymentType.WEB) {
+            (adapterContent[position]).image?.let { arrayListRedirect.add(it) }
+            return TYPE_REDIRECT
+        }
+        return TYPE_GO_PAY
+    }*/
     override fun getItemCount(): Int {
-        return adapterContent.size
+      return adapterContent.size
+
     }
 
 
@@ -122,7 +144,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         else holder.itemView.deleteImageViewSaved?.visibility = View.GONE
         holder.itemView.deleteImageViewSaved?.setOnClickListener {
             onCardSelectedActionListener.onDeleteIconClicked(true, holder.itemView.id)
-            arrayListCards.removeAt(holder.itemView.id)
+          //TODO  COMMENTED arrayListCards.removeAt(holder.itemView.id)
             holder.itemView.clearAnimation()
             it.animate().cancel()
             it.clearAnimation()
@@ -134,7 +156,9 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     @SuppressLint("ResourceAsColor")
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        arrayListCards = ArrayList()
+        //arrayListCards = ArrayList()
+        print("arrayListCards on bind"+arrayListCards.size)
+        print("adapter content on bind"+adapterContent.size)
         when {
             /**
              * Saved Cards Type
@@ -238,9 +262,9 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     private fun bindSavedCardData(holder: RecyclerView.ViewHolder) {
         for (i in 0 until arrayListCards.size) {
             Glide.with(holder.itemView.context)
-                .load(arrayListCards[i].icon)
+                .load(arrayListCards[i].image)
                 .into(holder.itemView.imageView_amex)
-            holder.itemView.textViewCardDetails.text = maskCardNumber(arrayListCards[i].title)
+            holder.itemView.textViewCardDetails.text = maskCardNumber(arrayListCards[i].lastFour)
            //holder.itemView.textViewCardDetails.text = adapterContent[holder.adapterPosition].chip1.title
         }
     }

@@ -14,5 +14,5 @@ interface MeasurementUnit {
      *
      * @return the measurement group
      */
-    fun getMeasurementGroup(): Measurement?
+    fun getMeasurementGroup(): Measurement
 }

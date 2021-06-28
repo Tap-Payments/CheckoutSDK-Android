@@ -14,17 +14,19 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import company.tap.checkout.TapCheckOutSDK
+import company.tap.checkout.internal.api.enums.AmountModificatorType
+import company.tap.checkout.internal.api.enums.Measurement
+import company.tap.checkout.internal.api.models.AmountModificator
 import company.tap.checkout.internal.api.models.PhoneNumber
-
+import company.tap.checkout.internal.api.models.Quantity
 import company.tap.checkout.open.CheckoutFragment
-
-
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.enums.CardType
 import company.tap.checkout.open.enums.TransactionMode
-import company.tap.checkout.open.models.TapCustomer
+import company.tap.checkout.open.models.PaymentItem
 import company.tap.checkout.open.models.Receipt
 import company.tap.checkout.open.models.TapCurrency
+import company.tap.checkout.open.models.TapCustomer
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.models.DialogConfigurations
@@ -64,7 +66,11 @@ class MainActivity : AppCompatActivity() {
         }
 
     private fun initializeSDK() {
-       TapCheckOutSDK().init(this,"sk_test_kovrMB0mupFJXfNZWx6Etg5y","company.tap.goSellSDKExample")
+       TapCheckOutSDK().init(
+           this,
+           "sk_test_kovrMB0mupFJXfNZWx6Etg5y",
+           "company.tap.goSellSDKExample"
+       )
        //TapCheckOutSDK().init(this,"sk_test_kovrMB0mupFJXfNZWx6Etg5y","")
     }
 
@@ -122,7 +128,8 @@ class MainActivity : AppCompatActivity() {
         // Set Payment Items array list
 
         // Set Payment Items array list
-        sdkSession.setPaymentItems(ArrayList()) // ** Optional ** you can pass empty array list
+       // sdkSession.setPaymentItems(ArrayList()) // ** Optional ** you can pass empty array list
+        sdkSession.setPaymentItems(getPaymentItems()) // ** Optional ** you can pass empty array list
 
 
      sdkSession.setPaymentType("CARD");   //** Merchant can pass paymentType
@@ -284,11 +291,24 @@ class MainActivity : AppCompatActivity() {
         val tapCustomer: TapCustomer? = null
         //if (customer != null) customer.phone else Phone(965, 69045932)
         return TapCustomer(
-            null,"firstname", "middlename",
+            "cus_Kh1b4220191939i1KP2506448", "firstname", "middlename",
             "lastname", "abcd@gmail.com",
             PhoneNumber("00965", "9090909090"), "description",
         )
 
+    }
+
+    private fun getPaymentItems(): ArrayList<PaymentItem>? {
+        val items: ArrayList<PaymentItem> = ArrayList<PaymentItem>()
+        items.add(
+            PaymentItem.PaymentItemBuilder("Items1", Quantity(Measurement.MASS,
+                Measurement.UNITS.unit, BigDecimal.ONE), BigDecimal.ONE)
+                .description("Description for test item #1")
+                .discount(AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO))
+                .taxes(null)
+                .build()
+        )
+        return items
     }
 
 }

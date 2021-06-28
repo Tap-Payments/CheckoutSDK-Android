@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.R
 import company.tap.checkout.internal.adapter.CardTypeAdapterUIKIT
 import company.tap.checkout.internal.api.models.PaymentOption
+import company.tap.checkout.internal.api.models.SavedCard
 
 
 import company.tap.checkout.internal.dummygener.SavedCards
@@ -30,6 +31,7 @@ class CardViewHolder11(private val context: Context, private val onCardSelectedA
     override val view: View = LayoutInflater.from(context).inflate(R.layout.cardviewholder_layout1, null)
     override val type = SectionType.CARD
     private var paymentCardsList: MutableList<PaymentOption>? = null
+    private var saveCardsList: MutableList<SavedCard>? = null
 
     init { bindViewComponents() }
 
@@ -52,6 +54,7 @@ class CardViewHolder11(private val context: Context, private val onCardSelectedA
         val adapter = CardTypeAdapterUIKIT(onCardSelectedActionListener )
         view.mainChipgroup.chipsRecycler.adapter = adapter
         paymentCardsList?.let { adapter.updateAdapterData(it) }
+        saveCardsList?.let { adapter.updateAdapterDataSavedCard(it) }
         /**
          * set separator background
          */

@@ -9,6 +9,7 @@ import company.tap.checkout.open.interfaces.PaymentDataSource
 import company.tap.checkout.open.models.*
 import java.math.BigDecimal
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by AhlaamK on 10/5/20.
@@ -86,7 +87,7 @@ object PaymentDataSource :PaymentDataSource {
      * @param paymentItems the payment items
      */
     fun setPaymentItems(paymentItems: ArrayList<PaymentItem>?) {
-        items = paymentItems
+        this.items = paymentItems
     }
 
     /**
@@ -260,8 +261,9 @@ object PaymentDataSource :PaymentDataSource {
        return amount
     }
 
-    override fun getItems(): ArrayList<PaymentItem> {
-        return items ?: ArrayList()
+    override fun getItems(): ArrayList<PaymentItem>? {
+
+       return items
     }
 
     override fun getTransactionMode(): TransactionMode? {

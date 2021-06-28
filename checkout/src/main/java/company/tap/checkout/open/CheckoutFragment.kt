@@ -127,12 +127,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     @RequiresApi(Build.VERSION_CODES.N)
     private fun getBusinessHeaderData(context: Context?, viewModel: TapLayoutViewModel) {
         if (context?.let { isNetworkAvailable(it) } == true) {
-           /* NetworkApp.initNetwork(
-                context,
-                "sk_test_kovrMB0mupFJXfNZWx6Etg5y",
-                "company.tap.goSellSDKExample",
-                ApiService.BASE_URL
-            )*/
             val cardViewModel: CardViewModel by viewModels()
             if (context != null) {
                 cardViewModel.getContext(context)
