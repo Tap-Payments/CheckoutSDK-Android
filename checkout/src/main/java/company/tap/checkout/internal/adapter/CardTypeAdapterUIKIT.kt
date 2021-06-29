@@ -52,6 +52,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     private var goPayOpened: Boolean = false
     private var arrayModified : ArrayList<Any> = ArrayList()
     private var __context: Context? = null
+    private var totalArraySize: Int =0
 
 
     companion object {
@@ -97,44 +98,34 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     }
 
     override fun getItemViewType(position: Int): Int {
-       // println("adapterContent[position]).paymentType}}}"+adapterContent[position].paymentType)
-      //  println("PaymentType.WEB"+ PaymentType.WEB)
-       /**
-         * here we will cast the list of any depending on card type
-         */
-        return when (adapterContent[position].paymentType) {
-           PaymentType.WEB-> {
+        if(position < adapterContent.size){
+            if(adapterContent[position].paymentType==PaymentType.WEB){
                 (adapterContent[position]).image?.let { arrayListRedirect.add(it) }
-                TYPE_REDIRECT
-              // PaymentType.WEB
+                return TYPE_REDIRECT
             }
-            /*PaymentType.CARD -> {
-                arrayListSaveCard.add(arrayListCards[position].lastFour)
-                arrayListSaveCard.add(arrayListCards[position].image)
-                TYPE_SAVED_CARD
-            }*/
-            else -> {
-                TYPE_GO_PAY
-               // PaymentType.WEB
+
+        }
+
+       else if(position.minus(adapterContent.size) < arrayListCards.size){
+           println("pos is<><><>"+ arrayListCards[position.minus(adapterContent.size)].`object`.toUpperCase())
+            if(arrayListCards[position.minus(adapterContent.size)].`object`.toUpperCase()==PaymentType.CARD.name){
+                arrayListSaveCard.add(arrayListCards[position.minus(adapterContent.size)].lastFour)
+                arrayListSaveCard.add(arrayListCards[position.minus(adapterContent.size)].image)
+              return  TYPE_SAVED_CARD
             }
         }
 
+        return -1
 
     }
 
-  /*  override fun getItemViewType(position: Int): Int {
-        if (arrayListCards[position].`object` == PaymentType.CARD.name) {
-            arrayListSaveCard.add(arrayListCards[position].lastFour)
-            arrayListSaveCard.add(arrayListCards[position].image)
-            return TYPE_SAVED_CARD
-        } else if (adapterContent[position].paymentType == PaymentType.WEB) {
-            (adapterContent[position]).image?.let { arrayListRedirect.add(it) }
-            return TYPE_REDIRECT
-        }
-        return TYPE_GO_PAY
-    }*/
+
+
+
+
     override fun getItemCount(): Int {
-      return adapterContent.size
+           totalArraySize = adapterContent.size.plus(arrayListCards.size)
+           return totalArraySize
 
     }
 
@@ -156,9 +147,6 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     @SuppressLint("ResourceAsColor")
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        //arrayListCards = ArrayList()
-        print("arrayListCards on bind"+arrayListCards.size)
-        print("adapter content on bind"+adapterContent.size)
         when {
             /**
              * Saved Cards Type
@@ -228,7 +216,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         else setUnSelectedCardTypeSavedShadowAndBackground(holder)
 
         (holder as SavedViewHolder)
-        bindSavedCardData(holder)
+        bindSavedCardData(holder,position)
         setOnSavedCardOnClickAction(holder, position)
         deleteSelectedCard(holder,position)
     }
@@ -259,12 +247,12 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     }
 
 
-    private fun bindSavedCardData(holder: RecyclerView.ViewHolder) {
-        for (i in 0 until arrayListCards.size) {
+    private fun bindSavedCardData(holder: RecyclerView.ViewHolder,position: Int) {
+        for (i in arrayListCards.indices) {
             Glide.with(holder.itemView.context)
-                .load(arrayListCards[i].image)
+                .load(arrayListCards[position.minus(adapterContent.size)].image)
                 .into(holder.itemView.imageView_amex)
-            holder.itemView.textViewCardDetails.text = maskCardNumber(arrayListCards[i].lastFour)
+            holder.itemView.textViewCardDetails.text = maskCardNumber(arrayListCards[position.minus(adapterContent.size)].lastFour)
            //holder.itemView.textViewCardDetails.text = adapterContent[holder.adapterPosition].chip1.title
         }
     }
