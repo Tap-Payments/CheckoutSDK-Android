@@ -192,9 +192,9 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     }
 
     fun deleteSelectedCard(position: Int){
-        val cardDelList = ArrayList(adapterContent)
+        val cardDelList = ArrayList(arrayListCards)
         cardDelList.removeAt(position)
-            //  adapterContent = cardDelList as List<SavedCards>
+        arrayListCards = cardDelList as List<SavedCard>
         notifyDataSetChanged()
     }
 
@@ -225,7 +225,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     private fun setOnSavedCardOnClickAction(holder: RecyclerView.ViewHolder, position: Int) {
         holder.itemView.setOnClickListener {
             if (!isShaking) {
-                onCardSelectedActionListener.onCardSelectedAction(true, adapterContent[holder.adapterPosition])
+                onCardSelectedActionListener.onCardSelectedAction(true, arrayListCards[holder.adapterPosition])
                 selectedPosition = position
                 notifyDataSetChanged()
             }

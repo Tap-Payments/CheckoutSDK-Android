@@ -279,7 +279,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
             goPayViewsHolder.goPayLoginInput.inputType = GoPayLoginMethod.PHONE
             goPayViewsHolder.goPayLoginInput.visibility = View.VISIBLE
         }
-        goPayAdapter.updateAdapterData(goPayCardList.value as List<GoPaySavedCards>)
+       //TODO goPayAdapter.updateAdapterData(goPayCardList.value as List<GoPaySavedCards>)
         amountViewHolder1.changeGroupAction(false)
         goPayViewsHolder.goPayopened = true
     }
@@ -601,7 +601,9 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         //  goPayAdapter.updateAdapterData(goPayCardList.value as List<GoPaySavedCards>)
         currencyAdapter = CurrencyTypeAdapter(this)
         currencyAdapter.updateAdapterData(allCurrencies.value as List<SupportedCurrencies>)
+        if(savedCardList.value?.isNotEmpty() == true){
         adapter.updateAdapterDataSavedCard(savedCardList.value as List<SavedCard>)
+        }
         cardViewHolder11.view.mainChipgroup.chipsRecycler.adapter = adapter
         // goPaySavedCardHolder.view.goPayLoginView.chipsRecycler.adapter = goPayAdapter
         cardViewHolder11.view.mainChipgroup.groupAction?.visibility = View.VISIBLE
@@ -738,23 +740,19 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
     }
 
     override fun onCardSelectedAction(isSelected: Boolean, savedCardsModel: Any) {
-        when ((savedCardsModel as PaymentOption).orderBy) {
-            5 -> {
-                // do action for saved card
-                activateActionButton()
-                setPayButtonAction(PaymentType.SavedCard)
-            }
-            1 -> {
-                // redirect
+        when (savedCardsModel) {
+                is SavedCard -> {
+                    activateActionButton()
+                    setPayButtonAction(PaymentType.SavedCard)
+        }
+        else -> {
+            if((savedCardsModel as PaymentOption).paymentType==PaymentType.WEB){
                 activateActionButton()
                 setPayButtonAction(PaymentType.WEB)
-            }
-            else -> {
+            }else
                 displayGoPayLogin()
-                //goPayViewsHolder.goPayopened
-            }
         }
-
+    }
     }
 
 
