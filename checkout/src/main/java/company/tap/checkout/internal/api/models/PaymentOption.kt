@@ -40,7 +40,7 @@ data class PaymentOption(
 
     @SerializedName("extra_fees")
     @Expose
-     val extraFees: ArrayList<ExtraFee>? = null,
+     var extraFees: ArrayList<ExtraFee>? = null,
 
     @SerializedName("supported_currencies")
     @Expose

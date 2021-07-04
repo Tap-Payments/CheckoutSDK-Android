@@ -1,5 +1,6 @@
 package company.tap.checkout.internal.api.models
 
+import androidx.annotation.Nullable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import company.tap.checkout.internal.api.enums.AmountModificatorType
@@ -16,39 +17,49 @@ All rights reserved.
 /**
  * The type Amount modificator.
  */
-class AmountModificator(type: AmountModificatorType, value: BigDecimal) :
-    Serializable {
-    @SerializedName("type")
-    @Expose
-    private val type: AmountModificatorType = type
+open class AmountModificator(
+        @SerializedName("type")
+    @Expose var amnttype: AmountModificatorType? = null,
 
-    /**
-     * Gets value.
-     *
-     * @return the value
-     */
-    @SerializedName("value")
-    @Expose
-    val value: BigDecimal = value
+        @SerializedName("value")
+@Expose var bigvalue: BigDecimal? = null
+):Serializable{
 
-    /**
-     * Gets type.
-     *
-     * @return the type
-     */
-    fun getType(): AmountModificatorType {
-        return type
-    }//why
 
-    /**
-     * Gets normalized value.
-     *
-     * @return the normalized value
-     */
-    val normalizedValue: BigDecimal
-        get() = if (type !== AmountModificatorType.PERCENTAGE) {
-            value
-        } else value.multiply(BigDecimal.valueOf(0.01))
+
+
+
+/**
+ * Gets type.
+ *
+ * @return the type
+ */
+fun getType(): AmountModificatorType? {
+    return amnttype
+}
+
+/**
+ * Gets value.
+ *
+ * @return the value
+ */
+fun getValue(): BigDecimal? {
+    return bigvalue
+}
+
+/**
+ * Gets normalized value.
+ *
+ * @return the normalized value
+ */
+fun getNormalizedValue(): BigDecimal? {
+    return if (this.amnttype !== AmountModificatorType.PERCENTAGE) {
+        this.bigvalue
+    } else this.bigvalue?.multiply(BigDecimal.valueOf(0.01))
     //why
-
+}
+    init {
+        this.amnttype = amnttype
+        this.bigvalue = bigvalue
+    }
 }

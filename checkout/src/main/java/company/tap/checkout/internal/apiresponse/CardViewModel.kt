@@ -1,6 +1,9 @@
 package company.tap.checkout.internal.apiresponse
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
@@ -19,6 +22,7 @@ class CardViewModel : ViewModel() {
 
     private val repository = CardRepository()
     private val compositeDisposable = CompositeDisposable()
+    @SuppressLint("StaticFieldLeak")
     private lateinit  var context : Context
     val liveData = MutableLiveData<Resource<CardViewState>>()
 
@@ -33,6 +37,7 @@ class CardViewModel : ViewModel() {
             ))
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun getInitData(viewModel: TapLayoutViewModel) {
         repository.getInitData(context,viewModel)
         GlobalScope.launch(Dispatchers.Main) { // launch coroutine in the main thread
@@ -42,11 +47,20 @@ class CardViewModel : ViewModel() {
         }
     }
 
-    fun processEvent(event: CardViewEvent,viewModel: TapLayoutViewModel) {
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun processEvent(event: CardViewEvent, viewModel: TapLayoutViewModel) {
         when (event) {
             CardViewEvent.InitEvent -> getInitData(viewModel)
+            CardViewEvent.ChargeEvent -> createChargeRequest(viewModel)
         }
     }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun createChargeRequest(viewModel: TapLayoutViewModel) {
+        repository.createChargeRequest(context,viewModel)
+
+    }
+
     fun getContext(context: Context){
         this.context = context
     }

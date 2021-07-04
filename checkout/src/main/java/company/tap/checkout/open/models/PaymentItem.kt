@@ -121,8 +121,8 @@ class PaymentItem(
         return if (getDiscount() == null) {
             BigDecimal.ZERO
         } else when (getDiscount()?.getType()) {
-            AmountModificatorType.PERCENTAGE -> getPlainAmount().multiply(getDiscount()?.value)
-            AmountModificatorType.FIXED -> getDiscount()?.value
+            AmountModificatorType.PERCENTAGE -> getPlainAmount().multiply(getDiscount()?.bigvalue)
+            AmountModificatorType.FIXED -> getDiscount()?.bigvalue
             else -> BigDecimal.ZERO
         }
     }

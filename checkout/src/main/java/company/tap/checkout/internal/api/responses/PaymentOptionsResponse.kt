@@ -32,7 +32,7 @@ data class PaymentOptionsResponse(
 
     @SerializedName("payment_methods")
     @Expose
-    @NonNull  val paymentOptions: ArrayList<PaymentOption>,
+    @NonNull  var paymentOptions: ArrayList<PaymentOption>,
 
     @SerializedName("currency")
     @Expose

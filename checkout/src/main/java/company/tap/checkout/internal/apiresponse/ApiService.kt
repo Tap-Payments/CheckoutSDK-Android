@@ -12,5 +12,6 @@ object ApiService {
     const val BASE_URL = "https://api.tap.company/v2/"
     const val INIT = "init"
     const val PAYMENT_TYPES = "payment/types"
+    const val CHARGES ="charges"
     const val INIT_AR = "https://run.mocky.io/v3/491462af-994e-4d99-9218-041289a1ae5d"
 }

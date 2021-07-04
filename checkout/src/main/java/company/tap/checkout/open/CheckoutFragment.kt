@@ -25,12 +25,9 @@ import company.tap.checkout.R
 import company.tap.checkout.internal.apiresponse.*
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
-import company.tap.checkout.open.enums.TransactionMode
 import company.tap.nfcreader.open.reader.TapEmvCard
 import company.tap.nfcreader.open.reader.TapNfcCardReader
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapnetworkkit.connection.NetworkApp
-import company.tap.tapnetworkkit.controller.NetworkController
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
@@ -72,7 +69,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
         val viewModel: TapLayoutViewModel by viewModels()
         this.viewModel = viewModel
-
+        val cardViewModel: CardViewModel by viewModels()
+        _Context?.let { cardViewModel.getContext(it) }
         val checkoutLayout: LinearLayout? = view?.findViewById(R.id.fragment_all)
         val frameLayout: FrameLayout? = view?.findViewById(R.id.fragment_container_nfc_lib)
         val webFrameLayout: FrameLayout? = view?.findViewById(R.id.webFrameLayout)
@@ -99,7 +97,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                                     it1,
                                     inLineCardLayout,
                                     this,
-                                    it2
+                                    it2,
+                                        cardViewModel
                                 )
                             }
 
@@ -137,6 +136,19 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         }
         //else loadDatafromAssets(context, viewModel) //Incase API not working use local
 
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+     fun createChargeReq(context: Context?, viewModel: TapLayoutViewModel){
+        if (context?.let { isNetworkAvailable(it) } == true) {
+            val cardViewModel: CardViewModel by viewModels()
+            if (context != null) {
+                cardViewModel.getContext(context)
+            }
+            //  cardViewModel.liveData.observe(this, { consumeResponse(it) })
+            cardViewModel.processEvent(CardViewEvent.ChargeEvent,viewModel)
+
+        }
     }
 
 

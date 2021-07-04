@@ -10,6 +10,7 @@ All rights reserved.
  **/
 sealed class CardViewEvent {
     object InitEvent : CardViewEvent()
+    object ChargeEvent :CardViewEvent()
     data class SaveCardEvent(val card: TapCard) : CardViewEvent()
     data class TokenizeCardEvent(val card: TapCard) : CardViewEvent()
 }

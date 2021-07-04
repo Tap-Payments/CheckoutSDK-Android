@@ -291,7 +291,7 @@ class MainActivity : AppCompatActivity() {
         val tapCustomer: TapCustomer? = null
         //if (customer != null) customer.phone else Phone(965, 69045932)
         return TapCustomer(
-            null, "firstname", "middlename",
+            "cus_Kh1b4220191939i1KP2506448", "firstname", "middlename",
             "lastname", "abcd@gmail.com",
             PhoneNumber("00965", "9090909090"), "description",
         )
