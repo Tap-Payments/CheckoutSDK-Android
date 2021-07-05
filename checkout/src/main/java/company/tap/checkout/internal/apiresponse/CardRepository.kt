@@ -41,7 +41,7 @@ All rights reserved.
  **/
 class CardRepository : APIRequestCallback {
     val resultObservable = BehaviorSubject.create<CardViewState>()
-    val resultObservableCharge = BehaviorSubject.create<ChargeViewState>()
+
     private var paymentOptionsResponse :PaymentOptionsResponse?= null
     private var initResponse:SDKSettings?=null
     private var chargeResponse:Charge?=null
@@ -100,9 +100,6 @@ class CardRepository : APIRequestCallback {
         paymentOptionsResponse?.paymentOptions?.get(0)?.sourceId?.let { SourceRequest(it) }?.let { callChargeOrAuthorizeOrSaveCardAPI(it, paymentOptionsResponse?.paymentOptions!![0], null, null,context) }
             }
 
-
-        // else NetworkController.getInstance().processRequest(TapMethodType.GET, ApiService.INIT_AR, null, this, PAYMENT_OPTIONS_CODE)
-
     override fun onSuccess(responseCode: Int, requestCode: Int, response: Response<JsonElement>?) {
         if (requestCode == INIT_CODE) {
             response?.body().let {
@@ -131,6 +128,9 @@ class CardRepository : APIRequestCallback {
             viewModel.getDatasfromAPIs(initResponse, paymentOptionsResponse)
             resultObservable.onNext(viewState)
             resultObservable.onComplete()
+        }
+        if(chargeResponse!=null){
+            chargeResponse?.transaction?.url?.let { viewModel.displayRedirect(it) }
         }
 
 

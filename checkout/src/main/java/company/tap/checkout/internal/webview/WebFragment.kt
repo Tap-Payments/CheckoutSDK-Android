@@ -92,8 +92,7 @@ class WebFragment constructor(private val webViewContract: WebViewContract) : Fr
         web_view.settings.loadWithOverviewMode = true
 
 //        web_view.loadUrl("https://www.google.com")
-        web_view.loadUrl("https://kpaytest.com.kw/kpg/paymentpage.htm?PaymentID=100202118593755615#d")
-      //  web_view.loadUrl(webViewUrl)
+        web_view.loadUrl(webViewUrl)
         web_view.setOnKeyListener { _, keyCode, event ->
             if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                 if (web_view.canGoBack()) {

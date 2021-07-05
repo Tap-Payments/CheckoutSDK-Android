@@ -126,6 +126,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
     private lateinit var inlineViewCallback: InlineViewCallback
     lateinit var tapCardPhoneListDataSource: ArrayList<TapCardPhoneListDataSource>
     lateinit var paymentOptionsResponse: PaymentOptionsResponse
+    lateinit var redirectURL: String
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun initLayoutManager(
@@ -483,7 +484,18 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
 
 
     override fun displayRedirect(url: String) {
-        Toast.makeText(context, "url redirecting$url", Toast.LENGTH_SHORT).show()
+        this.redirectURL = url
+        Toast.makeText(context, "url redirecting$redirectURL", Toast.LENGTH_SHORT).show()
+        if(::redirectURL.isInitialized && redirectURL!=null){
+            fragmentManager.beginTransaction()
+                    .replace(
+                            R.id.webFrameLayout, WebFragment.newInstance(
+                            redirectURL,
+                            this
+                    )
+                    ).commitNow()
+            // .commit()
+        }
     }
 
     override fun displaySaveCardOptions() {}
@@ -797,14 +809,17 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
             removeViews(paymentInputViewHolder)
             println("fragmentManager<<<"+ R.id.webFrameLayout)
             cardViewModel.processEvent(CardViewEvent.ChargeEvent,this)
+           /* if(::redirectURL.isInitialized && redirectURL!=null){
                 fragmentManager.beginTransaction()
                         .replace(
                                 R.id.webFrameLayout, WebFragment.newInstance(
-                                "https://www.google.com/",
+                                redirectURL,
                                 this
                         )
                         ).commitNow()
-                       // .commit()
+                // .commit()
+            }*/
+
 
         }?.let {
             saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.addChildView(
