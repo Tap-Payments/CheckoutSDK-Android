@@ -20,15 +20,15 @@ import company.tap.checkout.open.models.TapCustomer;
 public class Charge implements BaseResponse, Serializable {
     @SerializedName("id")
     @Expose
-    private String id;
+     String id;
 
     @SerializedName("merchant")
     @Expose
-    private Merchant merchant;
+     Merchant merchant;
 
     @SerializedName("amount")
     @Expose
-    private double amount;
+     double amount;
 
     @SerializedName("currency")
     @Expose
@@ -82,7 +82,7 @@ public class Charge implements BaseResponse, Serializable {
 
     @SerializedName("transaction")
     @Expose
-    private TransactionDetails transaction;
+     TransactionDetails transaction;
 
     @SerializedName("description")
     @Expose

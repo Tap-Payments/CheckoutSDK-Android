@@ -131,4 +131,6 @@ interface PaymentDataSource {
      */
     fun getCardIssuer(): CardIssuer?
 
+    fun getTopup(): TopUp?
+
 }

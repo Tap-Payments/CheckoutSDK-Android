@@ -21,22 +21,22 @@ All rights reserved.
 object PaymentDataSource :PaymentDataSource {
     /////////////////////////////////    Props Area  //////////////////////////////////////////////
     private var currency: TapCurrency? = null
-    private var tapCustomer: TapCustomer? = null
+    private lateinit var tapCustomer: TapCustomer
     private var amount: BigDecimal? = null
     private var items: ArrayList<PaymentItem>? = null
-    private var transactionMode: TransactionMode? = null
+    private lateinit var transactionMode: TransactionMode
     private var taxes: ArrayList<Tax>? = null
     private var shipping: ArrayList<Shipping>? = null
     private var postURL: String? = null
     private var paymentDescription: String? = null
     private var paymentType: String? = null
-    private var paymentMetadata: HashMap<String, String>? = null
+    private lateinit var paymentMetadata: HashMap<String, String>
     private var paymentReference: Reference? = null
     private val paymentStatementDescriptor: String? = null
     private var requires3DSecure = false
     private var allowUserToSaveCard = true
     private var receiptSettings: Receipt? = null
-    private var authorizeAction: AuthorizeAction? = null
+    private  var authorizeAction: AuthorizeAction?=null
     private var destination: Destinations? = null
     private var merchant: Merchant? = null
 
@@ -51,6 +51,8 @@ object PaymentDataSource :PaymentDataSource {
     private var enableEditCardHolderName = false
 
     private val cardIssuer: CardIssuer? = null
+
+    private var topup: TopUp? = null
 
 
     //////////////////////// Setter's Area  ///////////////////////////////////////
@@ -95,7 +97,7 @@ object PaymentDataSource :PaymentDataSource {
      *
      * @param transactionMode the transaction mode
      */
-    fun setTransactionMode(transactionMode: TransactionMode?) {
+    fun setTransactionMode(transactionMode: TransactionMode) {
         this.transactionMode = transactionMode
     }
 
@@ -140,7 +142,7 @@ object PaymentDataSource :PaymentDataSource {
      *
      * @param paymentMetadata the payment metadata
      */
-    fun setPaymentMetadata(paymentMetadata: HashMap<String, String>?) {
+    fun setPaymentMetadata(paymentMetadata: HashMap<String, String>) {
         this.paymentMetadata = paymentMetadata
     }
 
@@ -253,7 +255,7 @@ object PaymentDataSource :PaymentDataSource {
         return currency
     }
 
-    override fun getCustomer(): TapCustomer? {
+    override fun getCustomer(): TapCustomer {
        return tapCustomer
     }
 
@@ -266,7 +268,7 @@ object PaymentDataSource :PaymentDataSource {
        return items
     }
 
-    override fun getTransactionMode(): TransactionMode? {
+    override fun getTransactionMode(): TransactionMode {
         return transactionMode
     }
 
@@ -286,7 +288,7 @@ object PaymentDataSource :PaymentDataSource {
        return paymentDescription
     }
 
-    override fun getPaymentMetadata(): HashMap<String, String>? {
+    override fun getPaymentMetadata(): HashMap<String, String> {
        return paymentMetadata
     }
 
@@ -311,7 +313,8 @@ object PaymentDataSource :PaymentDataSource {
     }
 
     override fun getAuthorizeAction(): AuthorizeAction? {
-        return authorizeAction
+        //return authorizeAction
+        return null
     }
 
     override fun getDestination(): Destinations? {
@@ -339,6 +342,10 @@ object PaymentDataSource :PaymentDataSource {
     }
 
     override fun getCardIssuer(): CardIssuer? {
-       return cardIssuer
+        return cardIssuer
+    }
+
+    override fun getTopup(): TopUp? {
+       return topup
     }
 }

@@ -35,26 +35,26 @@ All rights reserved.
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 class CreateChargeRequest(
-    merchant: Merchant?,
-    amount: BigDecimal,
-    currency: String?,
-    selectedAmount: BigDecimal,
-    selectedCurrency: String,
-    customer: TapCustomer,
-    fee: BigDecimal,
-    order: Order,
-    redirect: TrackingURL,
-    post: TrackingURL?,
-    source: SourceRequest,
-    description: String?,
-    metadata: HashMap<String, String>?,
-    reference: Reference?,
-    saveCard: Boolean,
-    statementDescriptor: String?,
-    threeDSecure: Boolean,
-    receipt: Receipt?,
-    destinations: Destinations?,
-    topUp: TopUp?
+        merchant: Merchant?,
+        amount: BigDecimal,
+        currency: String?,
+        selectedAmount: BigDecimal,
+        selectedCurrency: String,
+        customer: TapCustomer,
+        fee: BigDecimal,
+        order: Order,
+        redirect: TrackingURL,
+        post: TrackingURL?,
+        source: SourceRequest,
+        description: String?,
+        metadata: HashMap<String, String>?,
+        reference: Reference?,
+        saveCard: Boolean,
+        statementDescriptor: String?,
+        threeDSecure: Boolean,
+        receipt: Receipt?,
+        destinations: Destinations?,
+        topUp: TopUp?
 ) {
     @SerializedName("merchant")
     @Expose

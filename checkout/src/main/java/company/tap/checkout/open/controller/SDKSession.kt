@@ -4,6 +4,7 @@ package company.tap.checkout.open.controller
 import android.content.Context
 import androidx.fragment.app.FragmentManager
 import com.google.gson.JsonElement
+import company.tap.checkout.internal.PaymentDataProvider
 import company.tap.checkout.internal.api.models.Merchant
 
 
@@ -40,6 +41,11 @@ open class SDKSession : APIRequestCallback {
 
     private fun initPaymentDataSource() {
         this.paymentDataSource = PaymentDataSource
+        if(paymentDataSource!=null){
+            println("paymentDataSource sdk ${paymentDataSource.toString()}")
+            PaymentDataProvider().setExternalDataSource(paymentDataSource!!)
+        }
+
 
     }
 
@@ -174,7 +180,7 @@ open class SDKSession : APIRequestCallback {
      *
      * @param transactionMode the transaction mode
      */
-    open fun setTransactionMode(transactionMode: TransactionMode?) {
+    open fun setTransactionMode(transactionMode: TransactionMode) {
         paymentDataSource?.setTransactionMode(transactionMode)
     }
 
@@ -237,7 +243,7 @@ open class SDKSession : APIRequestCallback {
      *
      * @param paymentMetadata the payment metadata
      */
-    open fun setPaymentMetadata(paymentMetadata: HashMap<String, String>?) {
+    open fun setPaymentMetadata(paymentMetadata: HashMap<String, String>) {
         paymentDataSource?.setPaymentMetadata(paymentMetadata)
     }
 

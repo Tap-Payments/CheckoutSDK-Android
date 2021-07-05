@@ -511,11 +511,12 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
                     null
             )
         }
-        paymentOptionsResponse?.currency?.let {
+        if(paymentOptionsResponse?.supportedCurrencies!=null)
+       paymentOptionsResponse?.currency?.let {
             amountViewHolder1.setDatafromAPI(
                     paymentOptionsResponse?.supportedCurrencies[0].amount.toString(),
                     it,
-                    "Qq"
+                    "1"
             )
         }
         paymentOptionsResponse?.supportedCurrencies?.let {
@@ -611,7 +612,8 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         goPayAdapter = GoPayCardAdapterUIKIT(this)
         //  goPayAdapter.updateAdapterData(goPayCardList.value as List<GoPaySavedCards>)
         currencyAdapter = CurrencyTypeAdapter(this)
-        currencyAdapter.updateAdapterData(allCurrencies.value as List<SupportedCurrencies>)
+        if(allCurrencies.value?.isNotEmpty() == true){
+        currencyAdapter.updateAdapterData(allCurrencies.value as List<SupportedCurrencies>)}
         if(savedCardList.value?.isNotEmpty() == true){
             adapter.updateAdapterDataSavedCard(savedCardList.value as List<SavedCard>)
         }
@@ -1189,21 +1191,23 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
     @RequiresApi(Build.VERSION_CODES.N)
     fun filterModels(currency: String) {
         println(" filterModels currency are$currency")
-        val paymentOptionsWorker: java.util.ArrayList<PaymentOption> =
-                java.util.ArrayList<PaymentOption>(paymentOptionsResponse?.paymentOptions)
-        val webPaymentOptions: java.util.ArrayList<PaymentOption> = filteredByPaymentTypeAndCurrencyAndSortedList(
-                paymentOptionsWorker,
-                PaymentType.WEB,
-                currency
-        )
-        println("webPaymentOptions are$webPaymentOptions")
-        adapter.updateAdapterData(webPaymentOptions)
-        val cardPaymentOptions = filteredByPaymentTypeAndCurrencyAndSortedList(
-                paymentOptionsWorker,
-                PaymentType.CARD,
-                currency
-        )
-        paymentInputViewHolder.setDatafromAPI(cardPaymentOptions)
+        if (paymentOptionsResponse?.paymentOptions != null) {
+            val paymentOptionsWorker: java.util.ArrayList<PaymentOption> =
+                    java.util.ArrayList<PaymentOption>(paymentOptionsResponse?.paymentOptions)
+            val webPaymentOptions: java.util.ArrayList<PaymentOption> = filteredByPaymentTypeAndCurrencyAndSortedList(
+                    paymentOptionsWorker,
+                    PaymentType.WEB,
+                    currency
+            )
+            println("webPaymentOptions are$webPaymentOptions")
+            adapter.updateAdapterData(webPaymentOptions)
+            val cardPaymentOptions = filteredByPaymentTypeAndCurrencyAndSortedList(
+                    paymentOptionsWorker,
+                    PaymentType.CARD,
+                    currency
+            )
+            paymentInputViewHolder.setDatafromAPI(cardPaymentOptions)
+        }
     }
 
 

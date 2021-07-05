@@ -24,7 +24,7 @@ data class TransactionDetails(
 
     @SerializedName("url")
     @Expose
-    private val url: String? = null,
+     val url: String? = null,
 
     @SerializedName("order")
     @Expose

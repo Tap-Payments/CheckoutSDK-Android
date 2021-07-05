@@ -12,16 +12,16 @@ Copyright (c) 2021    Tap Payments.
 All rights reserved.
  **/
 data class TrackingURL(
-    /**
+        /**
      * The Status.
      */
     @SerializedName("status") @Expose
-    var status: URLStatus = URLStatus.PENDING,
+        var status: URLStatus? = URLStatus.PENDING,
 
-    /**
+        /**
      * The Url.
      */
     @SerializedName("url")
     @Expose
-    var url: String? = null
+        var url: String? = null
 ) : Serializable

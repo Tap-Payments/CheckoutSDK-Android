@@ -25,6 +25,7 @@ class CardViewModel : ViewModel() {
     @SuppressLint("StaticFieldLeak")
     private lateinit  var context : Context
     val liveData = MutableLiveData<Resource<CardViewState>>()
+    val liveDatacharge = MutableLiveData<Resource<ChargeViewState>>()
 
     init {
         compositeDisposable.add(repository.resultObservable
@@ -32,9 +33,10 @@ class CardViewModel : ViewModel() {
             .doOnSubscribe { liveData.value = Resource.Loading() }
             .doOnTerminate { liveData.value = Resource.Finished() }
             .subscribe(
-                { data -> liveData.value = Resource.Success(data) },
+                { data -> liveData.value = Resource.Success(data)},
                 { error -> liveData.value = error.message?.let { Resource.Error(it) } }
             ))
+
     }
 
     @RequiresApi(Build.VERSION_CODES.N)

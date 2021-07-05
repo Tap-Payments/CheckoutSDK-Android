@@ -1,5 +1,6 @@
 package company.tap.checkout.internal.apiresponse
 
+import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
 import company.tap.checkout.internal.api.responses.SDKSettings
 import company.tap.checkout.internal.dummygener.JsonResponseDummy1
@@ -14,4 +15,8 @@ data class CardViewState(
    // var initResponse: JsonResponseDummy1? = null
     var initResponse: SDKSettings ?= null,
     var paymentOptionsResponse: PaymentOptionsResponse? = null
-)
+){
+    data class ChargeViewState(var charge: Charge?=null)
+
+}
+
