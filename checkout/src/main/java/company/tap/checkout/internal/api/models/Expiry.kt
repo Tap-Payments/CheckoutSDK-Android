@@ -12,9 +12,9 @@ All rights reserved.
  **/
 data class Expiry(
     @SerializedName("period") @Expose
-    private var period: Double = 0.0,
+     var period: Double = 0.0,
 
     @SerializedName("type")
     @Expose
-    private var type: String? = null
+     var type: String? = null
 ) : Serializable

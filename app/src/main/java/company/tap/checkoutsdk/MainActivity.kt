@@ -11,23 +11,22 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import company.tap.checkout.TapCheckOutSDK
 import company.tap.checkout.internal.api.enums.AmountModificatorType
 import company.tap.checkout.internal.api.enums.Measurement
-import company.tap.checkout.internal.api.models.AmountModificator
-import company.tap.checkout.internal.api.models.PhoneNumber
-import company.tap.checkout.internal.api.models.Quantity
+import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.enums.CardType
 import company.tap.checkout.open.enums.TransactionMode
-import company.tap.checkout.open.models.PaymentItem
+import company.tap.checkout.open.interfaces.SessionDelegate
+import company.tap.checkout.open.models.*
 import company.tap.checkout.open.models.Receipt
-import company.tap.checkout.open.models.TapCurrency
-import company.tap.checkout.open.models.TapCustomer
 import company.tap.taplocalizationkit.LocalizationManager
+import company.tap.tapnetworkkit.exception.GoSellError
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.models.DialogConfigurations
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog.Companion.TAG
@@ -35,9 +34,9 @@ import java.math.BigDecimal
 import java.util.*
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() , SessionDelegate{
 
-    var sdkSession:SDKSession= SDKSession()
+   var sdkSession:SDKSession= SDKSession
 
     private val modalBottomSheet = CheckoutFragment()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,9 +66,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun initializeSDK() {
        TapCheckOutSDK().init(
-           this,
-           "sk_test_kovrMB0mupFJXfNZWx6Etg5y",
-           "company.tap.goSellSDKExample"
+               this,
+               "sk_test_kovrMB0mupFJXfNZWx6Etg5y",
+               "company.tap.goSellSDKExample"
        )
        //TapCheckOutSDK().init(this,"sk_test_kovrMB0mupFJXfNZWx6Etg5y","")
     }
@@ -95,22 +94,19 @@ class MainActivity : AppCompatActivity() {
         // Instantiate SDK Session
 
 
-
         // pass your activity as a session delegate to listen to SDK internal payment process follow
-
-        // pass your activity as a session delegate to listen to SDK internal payment process follow
-        //sdkSession.addSessionDelegate(this) //** Required **
+        sdkSession.addSessionDelegate(this) //** Required **
 
 
         // initiate PaymentDataSource
 
         // initiate PaymentDataSource
-      // sdkSession.instantiatePaymentDataSource() //** Required **
+       sdkSession.instantiatePaymentDataSource() //** Required **
 
 
         // set transaction currency associated to your account
 
-        sdkSession.setTransactionCurrency(TapCurrency("KWD")) //** Required **
+        sdkSession.setTransactionCurrency(TapCurrency("BHD")) //** Required **
 
 
         // Using static CustomerBuilder method available inside TAP TapCustomer Class you can populate TAP TapCustomer object and pass it to SDK
@@ -189,10 +185,10 @@ class MainActivity : AppCompatActivity() {
 
         //Set Receipt Settings [SMS - Email ]
         sdkSession.setReceiptSettings(
-            Receipt(
-                false,
-                false
-            )
+                Receipt(
+                        false,
+                        false
+                )
         ) // ** Optional ** you can pass Receipt object or null
 
 
@@ -291,9 +287,9 @@ class MainActivity : AppCompatActivity() {
         val tapCustomer: TapCustomer? = null
         //if (customer != null) customer.phone else Phone(965, 69045932)
         return TapCustomer(
-            "cus_Kh1b4220191939i1KP2506448", "firstname", "middlename",
-            "lastname", "abcd@gmail.com",
-            PhoneNumber("00965", "9090909090"), "description",
+                "cus_Kh1b4220191939i1KP2506448", "firstname", "middlename",
+                "lastname", "abcd@gmail.com",
+                PhoneNumber("00965", "9090909090"), "description",
         )
 
     }
@@ -301,14 +297,126 @@ class MainActivity : AppCompatActivity() {
     private fun getPaymentItems(): ArrayList<PaymentItem>? {
         val items: ArrayList<PaymentItem> = ArrayList<PaymentItem>()
         items.add(
-            PaymentItem.PaymentItemBuilder("Items1", Quantity(Measurement.MASS,
-                Measurement.UNITS.unit, BigDecimal.ONE), BigDecimal.ONE)
-                .description("Description for test item #1")
-                .discount(AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO))
-                .taxes(null)
-                .build()
+                PaymentItem.PaymentItemBuilder("Items1", Quantity(Measurement.MASS,
+                        Measurement.UNITS.unit, BigDecimal.ONE), BigDecimal.ONE)
+                        .description("Description for test item #1")
+                        .discount(AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO))
+                        .taxes(null)
+                        .build()
         )
         return items
+    }
+
+    override fun paymentSucceed(charge: Charge) {
+        println("Payment Succeeded : charge status : " + charge.status)
+        println("Payment Succeeded : description : " + charge.description)
+        println("Payment Succeeded : message : " + charge.response.message)
+        println("##############################################################################")
+        if (charge.card != null) {
+            println("Payment Succeeded : first six : " + charge.card?.firstSix)
+            System.out.println("Payment Succeeded : last four: " + charge.card?.lastFour)
+            System.out.println("Payment Succeeded : card object : " + charge.card?.`object`)
+            System.out.println("Payment Succeeded : brand : " + charge.card?.brand)
+            //  System.out.println("Payment Succeeded : expiry : " + charge.getCard().getExpiry().getMonth()+"\n"+charge.getCard().getExpiry().getYear());
+        }
+
+        println("##############################################################################")
+        if (charge.acquirer != null) {
+            println("Payment Succeeded : acquirer id : " + charge?.acquirer?.id)
+            println("Payment Succeeded : acquirer response code : " + charge?.acquirer?.response?.code)
+            println("Payment Succeeded : acquirer response message: " + charge.acquirer?.response?.message)
+        }
+        println("##############################################################################")
+        if (charge.source != null) {
+            println("Payment Succeeded : source id: " + charge.source?.id)
+            println("Payment Succeeded : source channel: " + charge.source?.channel)
+            println("Payment Succeeded : source object: " + charge.source?.`object`)
+            println("Payment Succeeded : source payment method: " + charge.source?.paymentMethod)
+            println("Payment Succeeded : source payment type: " + charge.source.paymentType)
+            println("Payment Succeeded : source type: " + charge.source.type)
+        }
+        println("##############################################################################")
+        if (charge.topup != null) {
+            System.out.println("Payment Succeeded : topupWalletId : " + charge.topup?.walletId)
+            System.out.println("Payment Succeeded : Id : " + charge.topup?.Id)
+            System.out.println("Payment Succeeded : TopUpApp : " + charge.topup?.application?.amount)
+        }
+
+        println("##############################################################################")
+        if (charge.expiry != null) {
+            System.out.println("Payment Succeeded : expiry type :" + charge.expiry?.type)
+            System.out.println("Payment Succeeded : expiry period :" + charge.expiry?.period)
+        }
+        Toast.makeText(this, charge.id, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun paymentFailed(charge: Charge?) {
+       println("paymentFailed" + charge)
+    }
+
+    override fun authorizationSucceed(authorize: Authorize) {
+        println("authorizationSucceed" + authorize)
+    }
+
+    override fun authorizationFailed(authorize: Authorize?) {
+        println("authorizationFailed>>>>>" + authorize)
+    }
+
+    override fun cardSaved(charge: Charge) {
+        println("cardSaved>>>>>" + charge)
+    }
+
+    override fun cardSavingFailed(charge: Charge) {
+        println("cardSavingFailed>>>>>" + charge)
+    }
+
+    override fun cardTokenizedSuccessfully(token: Token) {
+        println("cardTokenizedSuccessfully>>>>>" + token)
+    }
+
+    override fun savedCardsList(cardsList: CardsList) {
+        println("savedCardsList>>>>>" + cardsList)
+    }
+
+    override fun sdkError(goSellError: GoSellError?) {
+        println("sdkError>>>>>" + goSellError)
+    }
+
+    override fun sessionIsStarting() {
+        println("sessionIsStarting>>>>>")
+    }
+
+    override fun sessionHasStarted() {
+        println("sessionHasStarted>>>>>")
+    }
+
+    override fun sessionCancelled() {
+        println("sessionCancelled>>>>>")
+    }
+
+    override fun sessionFailedToStart() {
+        println("invalidCardDetails>>>>>")
+    }
+
+    override fun invalidCardDetails() {
+        println("invalidCardDetails>>>>>")
+    }
+
+    override fun backendUnknownError(message: String?) {
+        println("backendUnknownError>>>>>" + message)
+    }
+
+    override fun invalidTransactionMode() {
+        println("invalidTransactionMode>>>>>")
+    }
+
+    override fun invalidCustomerID() {
+        println("invalidCustomerID>>>>>")
+
+    }
+
+    override fun userEnabledSaveCardOption(saveCardEnabled: Boolean) {
+       println("userEnabledSaveCardOption>>>>>" + saveCardEnabled)
     }
 
 }

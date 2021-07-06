@@ -15,28 +15,28 @@ All rights reserved.
  **/
 data class Source(
     @SerializedName("id") @Expose
-    private var id: String? = null,
+     var id: String? = null,
 
 
     @SerializedName("object")
     @Expose
-    private val `object`: String? = null,
+     val `object`: String? = null,
 
     @SerializedName("type")
     @Expose
-    private val type: SourceType? = null,
+     val type: SourceType? = null,
 
 
     @SerializedName("payment_type")
     @Expose
-    private val paymentType: String? = null,
+     val paymentType: String? = null,
 
 
     @SerializedName("payment_method")
     @Expose
-    private val paymentMethod: CardBrand? = null,
+     val paymentMethod: CardBrand? = null,
 
     @SerializedName("channel")
     @Expose
-    private var channel: SourceChannel? = null
+     var channel: SourceChannel? = null
 ) : Serializable

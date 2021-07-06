@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
+import company.tap.checkout.open.controller.SDKSession
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.*
@@ -54,12 +55,18 @@ class CardViewModel : ViewModel() {
         when (event) {
             CardViewEvent.InitEvent -> getInitData(viewModel)
             CardViewEvent.ChargeEvent -> createChargeRequest(viewModel)
+            CardViewEvent.RetreiveChargeEvent -> retrieveChargeRequest(viewModel)
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun createChargeRequest(viewModel: TapLayoutViewModel) {
         repository.createChargeRequest(context,viewModel)
+
+    }
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun retrieveChargeRequest(viewModel: TapLayoutViewModel) {
+        repository.retrieveChargeRequest(context,viewModel)
 
     }
 

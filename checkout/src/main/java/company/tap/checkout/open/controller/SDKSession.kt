@@ -1,6 +1,7 @@
 package company.tap.checkout.open.controller
 
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.fragment.app.FragmentManager
 import com.google.gson.JsonElement
@@ -11,6 +12,7 @@ import company.tap.checkout.internal.api.models.Merchant
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.CardType
 import company.tap.checkout.open.enums.TransactionMode
+import company.tap.checkout.open.interfaces.SessionDelegate
 import company.tap.checkout.open.models.*
 import company.tap.tapnetworkkit.exception.GoSellError
 import company.tap.tapnetworkkit.interfaces.APIRequestCallback
@@ -24,13 +26,19 @@ Copyright (c) 2020    Tap Payments.
 All rights reserved.
  **/
 //Responsible for setting data given by Merchant  and starting the session
-open class SDKSession : APIRequestCallback {
+@SuppressLint("StaticFieldLeak")
+object  SDKSession : APIRequestCallback {
     private var paymentDataSource: PaymentDataSource? = null
     private var contextSDK: Context? = null
+    private lateinit var sessionDelegate: SessionDelegate
+
     init {
         initPaymentDataSource()
 
+
+
     }
+
 
     private fun checkSessionStatus() {
         if (SessionManager.isSessionEnabled()) {
@@ -49,6 +57,24 @@ open class SDKSession : APIRequestCallback {
 
     }
 
+    open fun addSessionDelegate(_sessionDelegate: SessionDelegate) {
+        println("addSessionDelegate sdk ${_sessionDelegate}")
+        this.sessionDelegate = _sessionDelegate
+
+
+    }
+
+
+      fun getListener(): SessionDelegate? {
+          return sessionDelegate
+    }
+
+    /**
+     * Instantiate payment data source.
+     */
+    open fun instantiatePaymentDataSource() {
+        paymentDataSource = PaymentDataSource
+    }
     fun startSDK(supportFragmentManager: FragmentManager, context: Context) {
         println("is session enabled ${SessionManager.isSessionEnabled()}")
        /* if (SessionManager.isSessionEnabled()) {
@@ -317,7 +343,7 @@ open class SDKSession : APIRequestCallback {
      */
     open fun setMerchantID(merchantId: String?) {
         if (merchantId != null && merchantId.trim { it <= ' ' }.isNotEmpty()) paymentDataSource?.setMerchant(
-            Merchant(merchantId)
+                Merchant(merchantId)
         ) else paymentDataSource?.setMerchant(null)
     }
 

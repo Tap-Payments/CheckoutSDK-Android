@@ -13,7 +13,7 @@ import company.tap.checkout.internal.interfaces.BaseResponse;
 import company.tap.checkout.open.models.Destinations;
 
 import company.tap.checkout.open.models.TapCustomer;
-
+import company.tap.checkout.open.models.TopUp;
 
 
 //@RestrictTo(RestrictTo.Scope.LIBRARY)
@@ -126,6 +126,10 @@ public class Charge implements BaseResponse, Serializable {
     @Expose
     @Nullable private Expiry expiry;
 
+    @SerializedName("topup")
+    @Expose
+    @Nullable private TopUp topUp;
+
 
     @Nullable
     public Card getCard() {
@@ -140,6 +144,10 @@ public class Charge implements BaseResponse, Serializable {
     @Nullable
     public Expiry getExpiry() {
         return expiry;
+    }
+@Nullable
+    public TopUp getTopup() {
+        return topUp;
     }
 
     /**

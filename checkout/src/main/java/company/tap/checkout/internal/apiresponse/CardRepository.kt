@@ -7,7 +7,10 @@ import androidx.annotation.RequiresApi
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import company.tap.checkout.internal.PaymentDataProvider
+import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.enums.URLStatus
+import company.tap.checkout.open.models.Receipt
+import company.tap.checkout.open.models.Reference
 import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.internal.api.requests.CreateChargeRequest
 import company.tap.checkout.internal.api.requests.PaymentOptionsRequest
@@ -19,19 +22,17 @@ import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.models.*
-import company.tap.checkout.open.models.Receipt
-import company.tap.checkout.open.models.Reference
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapnetworkkit.controller.NetworkController
 import company.tap.tapnetworkkit.enums.TapMethodType
 import company.tap.tapnetworkkit.exception.GoSellError
 import company.tap.tapnetworkkit.interfaces.APIRequestCallback
+import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog.Companion.TAG
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.subjects.BehaviorSubject
 import retrofit2.Response
 import java.math.BigDecimal
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * Created by AhlaamK on 11/15/20.
@@ -47,7 +48,7 @@ class CardRepository : APIRequestCallback {
     private var chargeResponse:Charge?=null
     private lateinit var viewModel: TapLayoutViewModel
 
-    private var sdkSession : SDKSession =SDKSession()
+    private var sdkSession : SDKSession = SDKSession
     private var dataProvider: IPaymentDataProvider= PaymentDataProvider()
 
     fun getDataProvider(): IPaymentDataProvider {
@@ -63,6 +64,7 @@ class CardRepository : APIRequestCallback {
                 this,
                 INIT_CODE
         )
+
       //  else NetworkController.getInstance().processRequest(TapMethodType.GET, ApiService.INIT_AR, null, this, INIT_CODE)
     }
     @RequiresApi(Build.VERSION_CODES.N)
@@ -97,8 +99,15 @@ class CardRepository : APIRequestCallback {
     @RequiresApi(Build.VERSION_CODES.N)
     fun createChargeRequest(context: Context, viewModel: TapLayoutViewModel) {
         this.viewModel = viewModel
-        paymentOptionsResponse?.paymentOptions?.get(0)?.sourceId?.let { SourceRequest(it) }?.let { callChargeOrAuthorizeOrSaveCardAPI(it, paymentOptionsResponse?.paymentOptions!![0], null, null,context) }
+        paymentOptionsResponse?.paymentOptions?.get(0)?.sourceId?.let { SourceRequest(it) }?.let { callChargeOrAuthorizeOrSaveCardAPI(it, paymentOptionsResponse?.paymentOptions!![0], null, null, context) }
             }
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun retrieveChargeRequest(context: Context, viewModel: TapLayoutViewModel) {
+        this.viewModel = viewModel
+        NetworkController.getInstance().processRequest(TapMethodType.GET, ApiService.CHARGE_ID + chargeResponse?.id, null,
+                this, CHARGE_RETRIEVE_CODE
+        )
+    }
 
     override fun onSuccess(responseCode: Int, requestCode: Int, response: Response<JsonElement>?) {
         if (requestCode == INIT_CODE) {
@@ -119,6 +128,16 @@ class CardRepository : APIRequestCallback {
 
             }
         }
+        else if(requestCode == CHARGE_RETRIEVE_CODE) {
+            response?.body().let {
+                chargeResponse = Gson().fromJson(it, Charge::class.java)
+                println("CHARGE_RETRIEVE_CODE" + chargeResponse)
+                if(chargeResponse?.status?.name == ChargeStatus.CAPTURED.name){
+                    fireWebPaymentCallBack(chargeResponse)
+                    viewModel?.redirectLoadingFinished(true)
+                }
+            }
+        }
         val viewState = CardViewState(
                 initResponse = initResponse,
                 paymentOptionsResponse = paymentOptionsResponse
@@ -130,7 +149,9 @@ class CardRepository : APIRequestCallback {
             resultObservable.onComplete()
         }
         if(chargeResponse!=null){
+            if(::viewModel.isInitialized)
             chargeResponse?.transaction?.url?.let { viewModel.displayRedirect(it) }
+
         }
 
 
@@ -152,18 +173,19 @@ class CardRepository : APIRequestCallback {
         private const val INIT_CODE = 1
         private const val PAYMENT_OPTIONS_CODE = 2
         private const val CHARGE_REQ_CODE = 3
+        private const val CHARGE_RETRIEVE_CODE = 4
     }
 
      @RequiresApi(Build.VERSION_CODES.N)
      private fun callChargeOrAuthorizeOrSaveCardAPI(source: SourceRequest,
                                                     paymentOption: PaymentOption,
-                                                    cardBIN: String?, saveCard: Boolean?, context:Context) {
+                                                    cardBIN: String?, saveCard: Boolean?, context: Context) {
         Log.e("OkHttp", "CALL CHARGE API OR AUTHORIZE API")
         val provider: IPaymentDataProvider = getDataProvider()
         val supportedCurrencies: java.util.ArrayList<SupportedCurrencies>? = provider.getSupportedCurrencies()
         val orderID: String = provider.getPaymentOptionsOrderID()
          val postURL: String? = provider.getPostURL()
-         val post = if (postURL == null) null else TrackingURL(URLStatus.PENDING,postURL)
+         val post = if (postURL == null) null else TrackingURL(URLStatus.PENDING, postURL)
         val amountedCurrency: AmountedCurrency? = provider.getSelectedCurrency()
         //     Log.d("callChargeOrAuthorizeOr"," step 5 : callChargeOrAuthorizeOrSaveCardAPI : in class "+ "["+this.getClass().getName()+"] with amountedCurrency=["+amountedCurrency.getAmount()+"]  ");
         val transactionCurrency: AmountedCurrency? = provider.getTransactionCurrency()
@@ -172,7 +194,7 @@ class CardRepository : APIRequestCallback {
        //todo if (paymentOption != null) fee = AmountCalculator.calculateExtraFeesAmount(paymentOption.extraFees, supportedCurrencies, amountedCurrency)
         Log.d("PaymentProcessManager", "fee : $fee")
         val order = Order(orderID)
-        val redirect = TrackingURL(URLStatus.PENDING,ApiService.RETURN_URL)
+        val redirect = TrackingURL(URLStatus.PENDING, ApiService.RETURN_URL)
         val paymentDescription: String? = provider.getPaymentDescription()
         val paymentMetadata: HashMap<String, String>? = provider.getPaymentMetadata()
         val reference: Reference? = provider.getPaymentReference()
@@ -232,8 +254,8 @@ class CardRepository : APIRequestCallback {
                 val jsonString = Gson().toJson(chargeRequest)
                 if (LocalizationManager.getLocale(context).language == "en")
                     NetworkController.getInstance().processRequest(
-                        TapMethodType.POST, ApiService.CHARGES, jsonString, this, CHARGE_REQ_CODE
-                )
+                            TapMethodType.POST, ApiService.CHARGES, jsonString, this, CHARGE_REQ_CODE
+                    )
             }
           /*  TransactionMode.AUTHORIZE_CAPTURE -> {
                 val authorizeAction: AuthorizeAction = provider.getAuthorizeAction()
@@ -290,6 +312,28 @@ class CardRepository : APIRequestCallback {
                 )
 
             }*/
+        }
+    }
+
+    private fun fireWebPaymentCallBack(charge: Charge?) {
+        when (charge?.status) {
+            ChargeStatus.CAPTURED, ChargeStatus.AUTHORIZED -> try {
+                // closePaymentActivity()
+                sdkSession.getListener()?.paymentSucceed(charge)
+                //  SDKSession().getListener()?.paymentSucceed(charge)
+            } catch (e: Exception) {
+                Log.e(TAG, "fireWebPaymentCallBack: ",e)
+                Log.d("cardrepo", " Error while calling fireWebPaymentCallBack >>> method paymentSucceed(charge)")
+                //closePaymentActivity()
+            }
+            ChargeStatus.FAILED, ChargeStatus.ABANDONED, ChargeStatus.CANCELLED, ChargeStatus.DECLINED, ChargeStatus.RESTRICTED, ChargeStatus.UNKNOWN, ChargeStatus.TIMEDOUT -> try {
+                //closePaymentActivity()
+                SDKSession.getListener()?.paymentFailed(charge)
+
+            } catch (e: Exception) {
+                Log.d("cardrepo", " Error while calling fireWebPaymentCallBack >>> method paymentFailed(charge)")
+               // closePaymentActivity()
+            }
         }
     }
 

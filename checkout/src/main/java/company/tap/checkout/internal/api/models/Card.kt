@@ -12,41 +12,41 @@ All rights reserved.
  **/
 data class Card(
     @SerializedName("id") @Expose
-    private var id: String? = null,
+     var id: String? = null,
 
     @SerializedName("object")
     @Expose
-    private val `object`: String? = null,
+     val `object`: String? = null,
 
     @SerializedName("first_six")
     @Expose
-    private val firstSix: String? = null,
+     val firstSix: String? = null,
 
     @SerializedName("last_four")
     @Expose
-    private val lastFour: String? = null,
+     val lastFour: String? = null,
 
     @SerializedName("exp_month")
     @Expose
-    private val exp_month: String? = null,
+     val exp_month: String? = null,
 
     @SerializedName("exp_year")
     @Expose
-    private val exp_year: String? = null,
+     val exp_year: String? = null,
 
     @SerializedName("brand")
     @Expose
-    private val brand: String? = null,
+     val brand: String? = null,
 
     @SerializedName("name")
     @Expose
-    private val name: String? = null,
+     val name: String? = null,
 
     @SerializedName("bin")
     @Expose
-    private val bin: String? = null,
+     val bin: String? = null,
 
     @SerializedName("expiry")
     @Expose
-    private var expiry: ExpirationDate? = null
+     var expiry: ExpirationDate? = null
 ) : Serializable

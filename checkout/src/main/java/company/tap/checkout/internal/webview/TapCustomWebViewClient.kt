@@ -3,12 +3,18 @@ package company.tap.checkout.internal.webview
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.util.Log
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.annotation.NonNull
+import androidx.annotation.RequiresApi
+import company.tap.checkout.internal.apiresponse.ApiService
+import company.tap.checkout.internal.apiresponse.CardViewEvent
+import company.tap.checkout.internal.apiresponse.CardViewModel
+import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
 
 /**
  * Created by OlaMonir on 7/27/20.
@@ -16,7 +22,7 @@ import androidx.annotation.NonNull
 Copyright (c) 2020    Tap Payments.
 All rights reserved.
  **/
-class TapCustomWebViewClient constructor(private val customWebViewClientContract: CustomWebViewClientContract) : WebViewClient() {
+class TapCustomWebViewClient constructor(private val customWebViewClientContract: CustomWebViewClientContract,private val cardViewModel:CardViewModel) : WebViewClient() {
 
     override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
         checkPaymentError(request.url.toString().toLowerCase())
@@ -24,7 +30,7 @@ class TapCustomWebViewClient constructor(private val customWebViewClientContract
         checkCreditCardPaymentStatus(request.url.toString().toLowerCase())
         checkCreditCardToken(request.url.toString().toLowerCase())
         showLoadingToCheckCreditCardToken(request.url.toString().toLowerCase())
-        Log.d("url", request.url.toString())
+        Log.d("urlincustom", request.toString())
         view.loadUrl(request.url.toString(), getCustomHeaders())
         return true
     }
@@ -43,13 +49,18 @@ class TapCustomWebViewClient constructor(private val customWebViewClientContract
 
 
     private fun checkKnetPaymentStatus(url: String) {
-        if (url.contains("response/receiptKnet".toLowerCase())) {
+       // if (url.contains("response/receiptKnet".toLowerCase())) {
+        val urlIsReturnURL: Boolean = url.startsWith(ApiService.RETURN_URL)
+        val shouldLoad = !urlIsReturnURL
+        val redirectionFinished = urlIsReturnURL
+        val shouldCloseWebPaymentScreen = false
+        if (urlIsReturnURL) {
             if (checkPaymentSuccess(url)) {
                 customWebViewClientContract.submitResponseStatus(true)
             } else {
                 val urlQuerySanitizer: Uri = Uri.parse(url)
                 val msg: String = urlQuerySanitizer.getQueryParameter("message").toString()
-                customWebViewClientContract.submitResponseStatus( false)
+                customWebViewClientContract.submitResponseStatus(false)
             }
         }
     }
@@ -91,13 +102,17 @@ class TapCustomWebViewClient constructor(private val customWebViewClientContract
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun checkPaymentSuccess(url: String): Boolean {
         return try {
             val urlQuerySanitizer: Uri = Uri.parse(url)
-            val status: String = urlQuerySanitizer.getQueryParameter("result").toString()
+            println("urlQuerySanitizer on checkpayment" + urlQuerySanitizer)
+            cardViewModel.processEvent(CardViewEvent.RetreiveChargeEvent, viewModel = TapLayoutViewModel())
+            val status: String = urlQuerySanitizer.getQueryParameter("tap_id").toString()
+            println("status on checkpayment" + status)
             status.equals("CAPTURED", ignoreCase = true) || status.equals(
-                "0",
-                ignoreCase = true
+                    "0",
+                    ignoreCase = true
             )
         } catch (ex: Exception) {
             false
@@ -113,15 +128,15 @@ class TapCustomWebViewClient constructor(private val customWebViewClientContract
 
     override fun onPageFinished(@NonNull view: WebView?, url: String?) {
         super.onPageFinished(view, url)
-        Log.d("url1", url.toString())
+        Log.d("onPageFinished", url.toString())
         url?.let { customWebViewClientContract.getRedirectedURL(it) }
     }
 
 
     @SuppressLint("NewApi")
     override fun shouldInterceptRequest(
-        view: WebView?,
-        request: WebResourceRequest?
+            view: WebView?,
+            request: WebResourceRequest?
     ): WebResourceResponse? {
         return null
     }

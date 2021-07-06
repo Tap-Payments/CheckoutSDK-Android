@@ -13,7 +13,6 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
@@ -52,6 +51,7 @@ import company.tap.checkout.internal.utils.Utils
 import company.tap.checkout.internal.viewholders.*
 import company.tap.checkout.internal.webview.WebFragment
 import company.tap.checkout.internal.webview.WebViewContract
+import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.nfcreader.open.reader.TapEmvCard
 import company.tap.taplocalizationkit.LocalizationManager
@@ -127,6 +127,8 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
     lateinit var tapCardPhoneListDataSource: ArrayList<TapCardPhoneListDataSource>
     lateinit var paymentOptionsResponse: PaymentOptionsResponse
     lateinit var redirectURL: String
+    private var sdkSession: SDKSession = SDKSession
+
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun initLayoutManager(
@@ -159,6 +161,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         initSwitchAction()
         initOtpActionButton()
         setAllSeparatorTheme()
+
     }
 
     private fun initOtpActionButton() {
@@ -263,6 +266,8 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         )
         inLineCardLayout.visibility = View.GONE
         saveCardSwitchHolder11?.view?.cardviewSwitch?.cardElevation = 0f
+
+
     }
 
     fun setBottomSheetLayout(bottomSheetLayout: FrameLayout) {
@@ -485,13 +490,13 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
 
     override fun displayRedirect(url: String) {
         this.redirectURL = url
-        Toast.makeText(context, "url redirecting$redirectURL", Toast.LENGTH_SHORT).show()
+      //  Toast.makeText(context, "url redirecting$redirectURL", Toast.LENGTH_SHORT).show()
         if(::redirectURL.isInitialized && redirectURL!=null){
             fragmentManager.beginTransaction()
                     .replace(
                             R.id.webFrameLayout, WebFragment.newInstance(
                             redirectURL,
-                            this
+                            this,cardViewModel
                     )
                     ).commitNow()
             // .commit()
@@ -506,24 +511,27 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         if (paymentOptionsResponse != null) {
             this.paymentOptionsResponse = paymentOptionsResponse
         }
-        businessViewHolder.setDatafromAPI(
-                sdkSettings?.data?.merchant?.logo,
-                sdkSettings?.data?.merchant?.name
-        )
-        if (sdkSettings?.data?.verified_application == true) {
+        if(::businessViewHolder.isInitialized) {
+            businessViewHolder.setDatafromAPI(
+                    sdkSettings?.data?.merchant?.logo,
+                    sdkSettings?.data?.merchant?.name
+            )
+            if (sdkSettings?.data?.verified_application == true) {
 
+            }
         }
         // println("PaymentOptionsResponse on get$paymentOptionsResponse")
         allCurrencies.value = paymentOptionsResponse?.supportedCurrencies
         savedCardList.value = paymentOptionsResponse?.cards
         println("savedCardList on get" + savedCardList.value)
+        if(::itemsViewHolder1.isInitialized)
         paymentOptionsResponse?.supportedCurrencies?.let {
             itemsViewHolder1.setDatafromAPI(
                     it,
                     null
             )
         }
-        if(paymentOptionsResponse?.supportedCurrencies!=null)
+        if(paymentOptionsResponse?.supportedCurrencies!=null && ::amountViewHolder1.isInitialized)
        paymentOptionsResponse?.currency?.let {
             amountViewHolder1.setDatafromAPI(
                     paymentOptionsResponse?.supportedCurrencies[0].amount.toString(),
@@ -531,12 +539,14 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
                     "1"
             )
         }
+        if(::itemsViewHolder1.isInitialized)
         paymentOptionsResponse?.supportedCurrencies?.let {
             itemsViewHolder1.setDatafromAPI(
                     it,
                     null
             )
         }
+
         sdkSettings?.data?.merchant?.name?.let {
             saveCardSwitchHolder11?.setDatafromAPI(
                     it,
@@ -545,6 +555,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         }
         paymentOptionsList.value = paymentOptionsResponse?.paymentOptions
         println("paymentOptions value" + paymentOptionsResponse?.paymentOptions)
+        if(::context.isInitialized)
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             val divider = DividerItemDecoration(
                     context,
@@ -555,7 +566,6 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
                 paint.color = Color.TRANSPARENT
             }) // note: currently (support version 28.0.0), we can not use tranparent color here, if we use transparent, we still see a small divider line. So if we want to display transparent space, we can set color = background color or we can create a custom ItemDecoration instead of DividerItemDecoration.
             cardViewHolder11.view.mainChipgroup.chipsRecycler.addItemDecoration(divider)
-
             initAdaptersAction()
 
         }
@@ -1007,9 +1017,10 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
     @SuppressLint("ResourceType")
     override fun redirectLoadingFinished(done: Boolean) {
         if (done) {
+            if(::webFrameLayout.isInitialized)
             webFrameLayout.visibility = View.GONE
             removeAllViews()
-            addViews(saveCardSwitchHolder11)
+         /* addViews(saveCardSwitchHolder11)
             saveCardSwitchHolder11?.view?.cardSwitch?.showOnlyPayButton()
             saveCardSwitchHolder11?.view?.cardviewSwitch?.visibility = View.GONE
             saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.isActivated = true
@@ -1024,7 +1035,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
                 saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.addChildView(
                         it
                 )
-            }
+            }*/
         }
     }
 
@@ -1078,6 +1089,8 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
 //    override fun onStateChanged(state: ActionButtonState) {}
 
     private fun removeAllViews() {
+        if(::businessViewHolder.isInitialized&&::amountViewHolder1.isInitialized&& ::cardViewHolder11.isInitialized&& ::paymentInputViewHolder.isInitialized&&
+                ::goPayViewsHolder.isInitialized  && ::otpViewHolder.isInitialized )
         removeViews(
                 businessViewHolder,
                 amountViewHolder1,
@@ -1231,7 +1244,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
     private fun filteredByPaymentTypeAndCurrencyAndSortedList(
             list: java.util.ArrayList<PaymentOption>, paymentType: PaymentType, currency: String
     ): java.util.ArrayList<PaymentOption> {
-        var currency: String? = currency
+        var currencyFilter: String? = currency
         val filters: java.util.ArrayList<Utils.List.Filter<PaymentOption>> = java.util.ArrayList<Utils.List.Filter<PaymentOption>>()
 
         /**
@@ -1241,21 +1254,21 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
         var trxCurrencySupported = false
         if (paymentOptionsResponse.supportedCurrencies != null) {
             for (amountedCurrency in paymentOptionsResponse.supportedCurrencies) {
-                if (amountedCurrency.currency == currency) {
+                if (amountedCurrency.currency == currencyFilter) {
                     trxCurrencySupported = true
                     break
                 }
             }
-            if (!trxCurrencySupported) currency = paymentOptionsResponse.supportedCurrencies[0].currency
+            if (!trxCurrencySupported) currencyFilter = paymentOptionsResponse.supportedCurrencies[0].currency
 
 
         }
 
 
-        if (currency != null) {
-            this.getCurrenciesFilter<PaymentOption>(currency)?.let { filters.add(it) }
+        if (currencyFilter != null) {
+            this.getCurrenciesFilter<PaymentOption>(currencyFilter)?.let { filters.add(it) }
         }
-        println("currency tap" + currency)
+        println("currency tap" + currencyFilter)
 
         //  filters.add(getPaymentOptionsFilter(paymentType))
         //  val filter: CompoundFilter<PaymentOption> = CompoundFilter(filters)

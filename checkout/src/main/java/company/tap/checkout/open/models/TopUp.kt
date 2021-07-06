@@ -59,15 +59,15 @@ data class TopCustomerModel(
 
 data class TopUpApplication(
     @SerializedName("amount") @Expose
-    private var amount: BigDecimal? = null,
+     var amount: BigDecimal? = null,
     @SerializedName("currency") @Expose
-    private var currency: String? = null
+     var currency: String? = null
 )
 
 data class TopUpReference(
     @SerializedName("order") @Expose
-    private var order: String? = null,
+     var order: String? = null,
     @SerializedName("transaction")
     @Expose
-    private val transaction: String? = null
+     val transaction: String? = null
 )

@@ -6,7 +6,6 @@ Copyright (c) 2020    Tap Payments.
 All rights reserved.
  **/
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -17,19 +16,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import company.tap.checkout.R
-import company.tap.checkout.internal.api.models.Charge
+import company.tap.checkout.internal.apiresponse.CardViewEvent
+import company.tap.checkout.internal.apiresponse.CardViewModel
+import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import company.tap.tapuilibrary.uikit.ktx.setTopBorders
 import kotlinx.android.synthetic.main.fragment_web.*
 
 
-class WebFragment constructor(private val webViewContract: WebViewContract) : Fragment(),
+class WebFragment(private val webViewContract: WebViewContract,private val cardViewModel: CardViewModel) : Fragment(),
     CustomWebViewClientContract {
 
     private var webViewUrl: String? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,6 +45,8 @@ class WebFragment constructor(private val webViewContract: WebViewContract) : Fr
         super.onViewCreated(view, savedInstanceState)
         setTopDraggerView()
         webViewUrl = arguments?.getString(KEY_URL)
+
+
         if (TextUtils.isEmpty(webViewUrl)) {
             throw IllegalArgumentException("Empty URL passed to WebViewFragment!")
         }
@@ -88,7 +93,7 @@ class WebFragment constructor(private val webViewContract: WebViewContract) : Fr
         if (Build.VERSION.SDK_INT >= 21) {
             web_view.settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
         }
-        web_view.webViewClient = TapCustomWebViewClient(this)
+        web_view.webViewClient = TapCustomWebViewClient(this,cardViewModel)
         web_view.settings.loadWithOverviewMode = true
 
 //        web_view.loadUrl("https://www.google.com")
@@ -120,14 +125,16 @@ class WebFragment constructor(private val webViewContract: WebViewContract) : Fr
     }
 
     override fun getRedirectedURL(url: String) {
-        webViewContract.redirectLoadingFinished(url.contains("https://www.google.com/search?"))
+       // webViewContract.redirectLoadingFinished(url.contains("https://www.google.com/search?"))
+        webViewContract.redirectLoadingFinished(url.contains("gosellsdk://return_url"))
     }
 
 
     companion object {
          const val KEY_URL = "key:url"
-        fun newInstance(url: String, webViewContract: WebViewContract): WebFragment {
-            val fragment = WebFragment(webViewContract)
+
+        fun newInstance(url: String, webViewContract: WebViewContract, cardViewModel: CardViewModel): WebFragment {
+            val fragment = WebFragment(webViewContract,cardViewModel)
             val args = Bundle()
             args.putString(KEY_URL, url)
             fragment.arguments = args
