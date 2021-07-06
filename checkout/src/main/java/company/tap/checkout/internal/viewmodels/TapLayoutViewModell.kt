@@ -114,6 +114,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     private lateinit var inLineCardLayout: FrameLayout
     private lateinit var sdkLayout: LinearLayout
     private lateinit var itemList: List<Items1>
+    private lateinit var selectedPaymentOption: PaymentOption
     private lateinit var orderList: Order1
     private lateinit var context: Context
     private lateinit var cardViewModel: CardViewModel
@@ -776,6 +777,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.isActivated = false
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCardSelectedAction(isSelected: Boolean, savedCardsModel: Any) {
         when (savedCardsModel) {
             is SavedCard -> {
@@ -820,7 +822,8 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             removeViews(saveCardSwitchHolder11)
             removeViews(paymentInputViewHolder)
             println("fragmentManager<<<"+ R.id.webFrameLayout)
-            cardViewModel.processEvent(CardViewEvent.ChargeEvent,this)
+            selectedPaymentOption =paymentOptionsResponse?.paymentOptions?.get(0)
+            cardViewModel.processEvent(CardViewEvent.ChargeEvent,this,selectedPaymentOption)
            /* if(::redirectURL.isInitialized && redirectURL!=null){
                 fragmentManager.beginTransaction()
                         .replace(

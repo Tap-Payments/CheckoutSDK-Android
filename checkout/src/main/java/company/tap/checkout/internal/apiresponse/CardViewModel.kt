@@ -6,8 +6,8 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import company.tap.checkout.internal.api.models.PaymentOption
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
-import company.tap.checkout.open.controller.SDKSession
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.*
@@ -51,17 +51,17 @@ class CardViewModel : ViewModel() {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun processEvent(event: CardViewEvent, viewModel: TapLayoutViewModel) {
+    fun processEvent(event: CardViewEvent, viewModel: TapLayoutViewModel, selectedPaymentOption: PaymentOption?) {
         when (event) {
             CardViewEvent.InitEvent -> getInitData(viewModel)
-            CardViewEvent.ChargeEvent -> createChargeRequest(viewModel)
+            CardViewEvent.ChargeEvent -> createChargeRequest(viewModel,selectedPaymentOption)
             CardViewEvent.RetreiveChargeEvent -> retrieveChargeRequest(viewModel)
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun createChargeRequest(viewModel: TapLayoutViewModel) {
-        repository.createChargeRequest(context,viewModel)
+    private fun createChargeRequest(viewModel: TapLayoutViewModel,selectedPaymentOption:PaymentOption?) {
+        repository.createChargeRequest(context,viewModel,selectedPaymentOption)
 
     }
     @RequiresApi(Build.VERSION_CODES.N)

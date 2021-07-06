@@ -98,15 +98,13 @@ class CardRepository : APIRequestCallback {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun createChargeRequest(context: Context, viewModel: TapLayoutViewModel) {
+    fun createChargeRequest(context: Context, viewModel: TapLayoutViewModel,selectedPaymentOption: PaymentOption?) {
         this.viewModel = viewModel
         //  Log.d("PaymentProcessManager",
         //           "startPaymentProcessWithWebPaymentModel >>> paymentOption.getSourceId : " + paymentOption
         //                   .getSourceId());
 
-
-
-        paymentOptionsResponse?.paymentOptions?.get(1)?.sourceId?.let { SourceRequest(it) }?.let { callChargeOrAuthorizeOrSaveCardAPI(it, paymentOptionsResponse?.paymentOptions!![0], null, null, context) }
+        selectedPaymentOption?.sourceId?.let { SourceRequest(it) }?.let { callChargeOrAuthorizeOrSaveCardAPI(it,selectedPaymentOption,null,null,context) }
             }
     @RequiresApi(Build.VERSION_CODES.N)
     fun retrieveChargeRequest(context: Context, viewModel: TapLayoutViewModel) {
@@ -184,7 +182,7 @@ class CardRepository : APIRequestCallback {
 
      @RequiresApi(Build.VERSION_CODES.N)
      private fun callChargeOrAuthorizeOrSaveCardAPI(source: SourceRequest,
-                                                    paymentOption: PaymentOption,
+                                                    paymentOption: PaymentOption?,
                                                     cardBIN: String?, saveCard: Boolean?, context: Context) {
         Log.e("OkHttp", "CALL CHARGE API OR AUTHORIZE API")
         val provider: IPaymentDataProvider = getDataProvider()
@@ -219,13 +217,13 @@ class CardRepository : APIRequestCallback {
         /**
          * Condition added for 3Ds for merchant
          */
-        if (paymentOption.threeDS != null) {
-            if (paymentOption.threeDS.equals("N")) {
+        if (paymentOption?.threeDS != null) {
+            if (paymentOption?.threeDS.equals("N")) {
                 require3DSecure = false
-            } else if (paymentOption.threeDS.equals("Y")) {
+            } else if (paymentOption?.threeDS.equals("Y")) {
                 require3DSecure = true
-            } else if (paymentOption.threeDS.equals("U")) {
-                require3DSecure = provider.getRequires3DSecure()
+            } else if (paymentOption?.threeDS.equals("U")) {
+                require3DSecure = provider?.getRequires3DSecure()
             }
         }
         when (transactionMode) {
