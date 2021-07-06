@@ -11,6 +11,5 @@ Copyright (c) 2021    Tap Payments.
 All rights reserved.
  **/
 data class SourceRequest(
-    @SerializedName("id") @Expose
-    private var identifier: String
+    @SerializedName("id") @Expose var identifier: String
 ) : Serializable

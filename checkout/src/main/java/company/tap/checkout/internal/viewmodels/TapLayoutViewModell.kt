@@ -14,6 +14,7 @@ import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
+import androidx.annotation.RestrictTo
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -74,7 +75,8 @@ import kotlin.properties.Delegates
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedActionListener,
+@RestrictTo(RestrictTo.Scope.LIBRARY)
+open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedActionListener,
         PaymentCardComplete, onCardNFCCallListener, OnCurrencyChangedActionListener, WebViewContract,
         TapTextRecognitionCallBack {
     private var savedCardList = MutableLiveData<List<SavedCard>>()
@@ -1242,8 +1244,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
 
 
     private fun filteredByPaymentTypeAndCurrencyAndSortedList(
-            list: java.util.ArrayList<PaymentOption>, paymentType: PaymentType, currency: String
-    ): java.util.ArrayList<PaymentOption> {
+            list: java.util.ArrayList<PaymentOption>, paymentType: PaymentType, currency: String): java.util.ArrayList<PaymentOption> {
         var currencyFilter: String? = currency
         val filters: java.util.ArrayList<Utils.List.Filter<PaymentOption>> = java.util.ArrayList<Utils.List.Filter<PaymentOption>>()
 
@@ -1276,7 +1277,7 @@ class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAction
 
         var filtered: ArrayList<PaymentOption> =
                 list.filter { items -> items.paymentType == paymentType && items.getSupportedCurrencies()?.contains(
-                        currency
+                        currencyFilter
                 ) == true } as ArrayList<PaymentOption>
 
         //if(filtered!=null && filtered.size()==0)

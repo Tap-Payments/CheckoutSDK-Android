@@ -9,8 +9,6 @@ import com.google.gson.JsonElement
 import company.tap.checkout.internal.PaymentDataProvider
 import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.enums.URLStatus
-import company.tap.checkout.open.models.Receipt
-import company.tap.checkout.open.models.Reference
 import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.internal.api.requests.CreateChargeRequest
 import company.tap.checkout.internal.api.requests.PaymentOptionsRequest
@@ -18,10 +16,13 @@ import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
 import company.tap.checkout.internal.api.responses.SDKSettings
 import company.tap.checkout.internal.interfaces.IPaymentDataProvider
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
+import company.tap.checkout.internal.viewmodels.WebPaymentViewModel
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.models.*
+import company.tap.checkout.open.models.Receipt
+import company.tap.checkout.open.models.Reference
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapnetworkkit.controller.NetworkController
 import company.tap.tapnetworkkit.enums.TapMethodType
@@ -81,8 +82,8 @@ class CardRepository : APIRequestCallback {
        val requestBody = PaymentOptionsRequest(
                TransactionMode.PURCHASE,
                PaymentDataSource.getAmount(),
-               null,
-               null,
+               PaymentDataSource.getItems(),
+               PaymentDataSource.getShipping(),
                null,
                PaymentDataSource.getCurrency()?.isoCode,
                PaymentDataSource.getCustomer()?.identifier,
@@ -99,7 +100,13 @@ class CardRepository : APIRequestCallback {
     @RequiresApi(Build.VERSION_CODES.N)
     fun createChargeRequest(context: Context, viewModel: TapLayoutViewModel) {
         this.viewModel = viewModel
-        paymentOptionsResponse?.paymentOptions?.get(0)?.sourceId?.let { SourceRequest(it) }?.let { callChargeOrAuthorizeOrSaveCardAPI(it, paymentOptionsResponse?.paymentOptions!![0], null, null, context) }
+        //  Log.d("PaymentProcessManager",
+        //           "startPaymentProcessWithWebPaymentModel >>> paymentOption.getSourceId : " + paymentOption
+        //                   .getSourceId());
+
+
+
+        paymentOptionsResponse?.paymentOptions?.get(1)?.sourceId?.let { SourceRequest(it) }?.let { callChargeOrAuthorizeOrSaveCardAPI(it, paymentOptionsResponse?.paymentOptions!![0], null, null, context) }
             }
     @RequiresApi(Build.VERSION_CODES.N)
     fun retrieveChargeRequest(context: Context, viewModel: TapLayoutViewModel) {
@@ -131,7 +138,6 @@ class CardRepository : APIRequestCallback {
         else if(requestCode == CHARGE_RETRIEVE_CODE) {
             response?.body().let {
                 chargeResponse = Gson().fromJson(it, Charge::class.java)
-                println("CHARGE_RETRIEVE_CODE" + chargeResponse)
                 if(chargeResponse?.status?.name == ChargeStatus.CAPTURED.name){
                     fireWebPaymentCallBack(chargeResponse)
                     viewModel?.redirectLoadingFinished(true)
@@ -322,7 +328,7 @@ class CardRepository : APIRequestCallback {
                 sdkSession.getListener()?.paymentSucceed(charge)
                 //  SDKSession().getListener()?.paymentSucceed(charge)
             } catch (e: Exception) {
-                Log.e(TAG, "fireWebPaymentCallBack: ",e)
+                Log.e(TAG, "fireWebPaymentCallBack: ", e)
                 Log.d("cardrepo", " Error while calling fireWebPaymentCallBack >>> method paymentSucceed(charge)")
                 //closePaymentActivity()
             }
@@ -332,7 +338,7 @@ class CardRepository : APIRequestCallback {
 
             } catch (e: Exception) {
                 Log.d("cardrepo", " Error while calling fireWebPaymentCallBack >>> method paymentFailed(charge)")
-               // closePaymentActivity()
+                // closePaymentActivity()
             }
         }
     }
