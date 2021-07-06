@@ -164,11 +164,13 @@ class CardRepository : APIRequestCallback {
 
     override fun onFailure(requestCode: Int, errorDetails: GoSellError?) {
         errorDetails?.let {
-            if (it.throwable != null)
+            if (it.throwable != null) {
                 resultObservable.onError(it.throwable)
-            else
+                sdkSession.getListener()?.sdkError(errorDetails)
+            }else
                // resultObservable.onError(Throwable(it.errorMessage))
                    RxJavaPlugins.setErrorHandler(Throwable::printStackTrace)
+            sdkSession.getListener()?.backendUnknownError(errorDetails.errorMessage)
 
         }
     }
