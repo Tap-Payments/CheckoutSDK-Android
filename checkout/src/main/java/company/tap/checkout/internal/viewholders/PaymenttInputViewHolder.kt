@@ -15,26 +15,24 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.core.widget.doAfterTextChanged
+import com.google.android.material.tabs.TabLayout
 import company.tap.cardinputwidget.CardBrandSingle
 import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardinputwidget.widget.inline.InlineCardInput
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.api.models.PaymentOption
-import company.tap.checkout.internal.dummygener.TapCardPhoneListDataSource
 import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayouttManager
 import company.tap.checkout.internal.interfaces.onCardNFCCallListener
 import company.tap.checkout.internal.interfaces.PaymentCardComplete
-import company.tap.checkout.open.models.PaymentItem
 import company.tap.tapcardvalidator_android.CardBrand
 import company.tap.tapcardvalidator_android.CardValidationState
 import company.tap.tapcardvalidator_android.CardValidator
 import company.tap.tapcardvalidator_android.DefinedCardBrand
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.themekit.theme.SeparatorViewTheme
 import company.tap.tapuilibrary.uikit.interfaces.TapPaymentShowHideClearImage
 import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
 import company.tap.tapuilibrary.uikit.models.SectionTabItem
@@ -43,7 +41,6 @@ import company.tap.tapuilibrary.uikit.views.TapMobilePaymentView
 import company.tap.tapuilibrary.uikit.views.TapSelectionTabLayout
 import kotlinx.android.synthetic.main.payment_inputt_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
-import java.lang.IllegalArgumentException
 
 
 /**
@@ -64,8 +61,9 @@ class PaymenttInputViewHolder(
     override val view: View =
         LayoutInflater.from(context).inflate(R.layout.payment_inputt_layout, null)
     override val type = SectionType.PAYMENT_INPUT
-    private var tabLayout: TapSelectionTabLayout
-    private val paymentInputContainer: LinearLayout
+    private var tabLayout: TapSelectionTabLayout = view.findViewById(R.id.sections_tablayout)
+   private var intertabLayout:TabLayout = tabLayout.findViewById(R.id.tab_layout)
+         private val paymentInputContainer: LinearLayout
     private val clearView: ImageView
     var selectedType = PaymentTypeEnum.card
     private var shouldShowScannerOptions = true
@@ -86,11 +84,12 @@ class PaymenttInputViewHolder(
     private var cardNumber: String ?= null
     private var expiryDate: String ?= null
     private var cvvNumber: String ?= null
+    @JvmField
+     var itemcardListAdded: Boolean = false
 
 
 
     init {
-        tabLayout = view.findViewById(R.id.sections_tablayout)
         tabLayout.setTabLayoutInterface(this)
         tapMobileInputView = TapMobilePaymentView(context, null)
         tapMobileInputView.setTapPaymentShowHideClearImage(this)
@@ -425,13 +424,14 @@ class PaymenttInputViewHolder(
         val itemsMobilesList = ArrayList<SectionTabItem>()
         val itemsCardsList = ArrayList<SectionTabItem>()
         tabLayout.changeTabItemAlphaValue(1f)
-        println("iamage val  are" + imageURLApi)
+
+        println("iamage val  are" + imageURLApi.size)
         for (i in imageURLApi.indices) {
-           // tabLayout.resetBehaviour()
+            tabLayout.resetBehaviour()
             imageURL = imageURLApi[i].image.toString()
             paymentType = imageURLApi[i].paymentType
             cardBrandType = imageURLApi[i].brand?.name.toString()
-            println("cardbrandtype" + cardBrandType)
+            println("paymentType" + paymentType)
 
             if (paymentType == PaymentType.telecom) {
                 itemsMobilesList.add(
@@ -441,7 +441,7 @@ class PaymenttInputViewHolder(
                         )
                     )
                 )
-            } else {
+            } else if (paymentType?.name == PaymentType.CARD.name) {
                 itemsCardsList.add(
                     SectionTabItem(
                         imageURL,
