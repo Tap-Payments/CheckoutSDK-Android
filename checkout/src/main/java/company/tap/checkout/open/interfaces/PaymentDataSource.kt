@@ -133,4 +133,8 @@ interface PaymentDataSource {
 
     fun getTopup(): TopUp?
 
+    fun getSelectedCurrency():String?
+
+    fun getSelectedAmount():BigDecimal?
+
 }

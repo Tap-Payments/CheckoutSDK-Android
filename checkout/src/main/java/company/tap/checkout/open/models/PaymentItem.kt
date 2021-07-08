@@ -1,5 +1,6 @@
 package company.tap.checkout.open.models
 
+import androidx.annotation.Nullable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import company.tap.checkout.internal.api.enums.AmountModificatorType
@@ -15,17 +16,15 @@ import java.util.*
 Copyright (c) 2021    Tap Payments.
 All rights reserved.
  **/
-class PaymentItem(
-    nestedName: String,
-    nestedDescription: String?,
-    nestedQuantity: Quantity,
-    nestedAmountPerUnit: BigDecimal,
-    nestedDiscount: AmountModificator?,
-    nestedTaxes: ArrayList<Tax>?
-) {
+class PaymentItem(name: String,
+                  @Nullable description: String,
+                  quantity: Quantity,
+                  amountPerUnit: BigDecimal,
+                  @Nullable discount: AmountModificator?,
+                  @Nullable taxes: ArrayList<Tax>?){
     @SerializedName("name")
     @Expose
-    private var name: String? = null
+    var name: String? = null
 
 
     @SerializedName("description")
@@ -52,25 +51,17 @@ class PaymentItem(
     @Expose
     private var totalAmount: BigDecimal? = null
 
-    /**
-     * Constructor is private to prevent access from client app, it must be through inner Builder class only
-     */
-    private fun PaymentItem(
-        name: String,
-        description: String?,
-        quantity: Quantity,
-        amountPerUnit: BigDecimal,
-        discount: AmountModificator?,
-        taxes: ArrayList<Tax>?
-    ) {
+
+    init {
         this.name = name
         this.description = description
         this.quantity = quantity
         this.amountPerUnit = amountPerUnit
         this.discount = discount
         this.taxes = taxes
-        //totalAmount = AmountCalculator.calculateTotalAmountOf(this,this,this)
-        println("calculated total amount : $totalAmount")
+        totalAmount = AmountCalculator.calculateTotalAmountOf(listOf(this),null,null)
+
+        println("calculated total amount : " + totalAmount)
     }
 
     /**
@@ -78,7 +69,7 @@ class PaymentItem(
      *
      * @return the amount per unit
      */
-    private fun getAmountPerUnit(): BigDecimal? {
+    fun getAmountPerUnit(): BigDecimal? {
         return amountPerUnit
     }
 
@@ -87,7 +78,7 @@ class PaymentItem(
      *
      * @return the quantity
      */
-    private fun getQuantity(): Quantity? {
+    fun getQuantity(): Quantity? {
         return quantity
     }
 
@@ -96,7 +87,7 @@ class PaymentItem(
      *
      * @return the discount
      */
-    private fun getDiscount(): AmountModificator? {
+    fun getDiscount(): AmountModificator? {
         return discount
     }
 
@@ -107,7 +98,7 @@ class PaymentItem(
      */
     fun getPlainAmount(): BigDecimal {
         println("  #### getPlainAmount : " + getAmountPerUnit())
-        println("  #### this.getQuantity().getValue() : " + getQuantity()?.value)
+        System.out.println("  #### this.getQuantity().getValue() : " + getQuantity()?.value)
         println("  #### result : " + getAmountPerUnit()!!.multiply(getQuantity()?.value))
         return getAmountPerUnit()!!.multiply(getQuantity()?.value)
     }
@@ -120,9 +111,9 @@ class PaymentItem(
     fun getDiscountAmount(): BigDecimal? {
         return if (getDiscount() == null) {
             BigDecimal.ZERO
-        } else when (getDiscount()?.getType()) {
-            AmountModificatorType.PERCENTAGE -> getPlainAmount().multiply(getDiscount()?.bigvalue)
-            AmountModificatorType.FIXED -> getDiscount()?.bigvalue
+        } else when (getDiscount()!!.getType()) {
+            AmountModificatorType.PERCENTAGE -> getPlainAmount().multiply(getDiscount()!!.getNormalizedValue())
+            AmountModificatorType.FIXED -> getDiscount()?.getValue()
             else -> BigDecimal.ZERO
         }
     }
@@ -134,22 +125,21 @@ class PaymentItem(
      */
     fun getTaxesAmount(): BigDecimal? {
         val taxationAmount = getPlainAmount().subtract(getDiscountAmount())
-       // return AmountCalculator.calculateTaxesOn(taxationAmount, taxes)
-        return null
+        return AmountCalculator.calculateTaxesOn(taxationAmount, taxes)
     }
 
+
+    class PaymentItemBuilder
     /**
-     * The type Payment item builder.
-     */
-    ////////////////////////// ############################ Start of Builder Region ########################### ///////////////////////
-    class PaymentItemBuilder(
-        private val nestedName: String,
-        quantity: Quantity,
-        amountPerUnit: BigDecimal
-    ) {
+     * public constructor with only required data
+     *
+     * @param name          the name
+     * @param quantity      the quantity
+     * @param amountPerUnit the amount per unit
+     */(private var nestedName: String,
+        private var nestedQuantity: Quantity,
+        private var nestedAmountPerUnit: BigDecimal) {
         private var nestedDescription: String? = null
-        private val nestedQuantity: Quantity = quantity
-        private val nestedAmountPerUnit: BigDecimal = amountPerUnit
         private var nestedDiscount: AmountModificator? = null
         private var nestedTaxes: ArrayList<Tax>? = null
         private var nestedTotalAmount: BigDecimal? = null
@@ -204,15 +194,10 @@ class PaymentItem(
          * @return the payment item
          */
         fun build(): PaymentItem {
-            return PaymentItem(
-                nestedName, nestedDescription, nestedQuantity, nestedAmountPerUnit,
-                nestedDiscount, nestedTaxes
-            )
+            return PaymentItem(nestedName, nestedDescription!!, nestedQuantity, nestedAmountPerUnit,
+                    nestedDiscount, nestedTaxes)
         }
-
     }
-    ////////////////////////// ############################ End of Builder Region ########################### ///////////////////////
 
 
 }
-

@@ -10,4 +10,5 @@ All rights reserved.
 interface CustomWebViewClientContract {
     fun submitResponseStatus( success : Boolean)
     fun getRedirectedURL(url : String)
+
 }

@@ -53,6 +53,8 @@ object PaymentDataSource :PaymentDataSource {
     private val cardIssuer: CardIssuer? = null
 
     private var topup: TopUp? = null
+    private var selectedCurrency: String? = null
+    private var selectedAmount: BigDecimal? = null
 
 
     //////////////////////// Setter's Area  ///////////////////////////////////////
@@ -248,6 +250,14 @@ object PaymentDataSource :PaymentDataSource {
     fun isUserAllowedToEditCardHolderName(enableEditCardHolderName: Boolean) {
         this.enableEditCardHolderName = enableEditCardHolderName
     }
+
+    fun setSelectedCurrency(selectedCurrency: String){
+        this.selectedCurrency =selectedCurrency
+    }
+
+    fun setSelectedAmount(selectedAmount: BigDecimal){
+        this.selectedAmount =selectedAmount
+    }
 /////<<<<<<<<<<<<<<<<<<<<<<<<<,Getters Area >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>/////////////////
 
 
@@ -347,5 +357,13 @@ object PaymentDataSource :PaymentDataSource {
 
     override fun getTopup(): TopUp? {
        return topup
+    }
+
+    override fun getSelectedCurrency(): String? {
+       return selectedCurrency
+    }
+
+    override fun getSelectedAmount(): BigDecimal? {
+     return selectedAmount
     }
 }

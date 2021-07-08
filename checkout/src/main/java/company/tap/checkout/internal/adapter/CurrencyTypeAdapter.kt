@@ -22,6 +22,7 @@ import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import kotlinx.android.synthetic.main.item_currency_rows.view.*
 import kotlinx.android.synthetic.main.item_frame_currencies.view.*
+import java.math.BigDecimal
 
 
 /**
@@ -118,7 +119,8 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
                         adapterContentCurrencies[position].currency.toString(),
                         // adapterContentCurrencies[position].conversionrate
                         adapterContentCurrencies[position].amount)
-             TapLayoutViewModel().selectedPos = adapterContentCurrencies[position].currency.toString()
+             TapLayoutViewModel().selectedCurrencyPos = adapterContentCurrencies[position].currency.toString()
+             TapLayoutViewModel().selectedAmountPos = BigDecimal.valueOf(adapterContentCurrencies[position].amount)
              notifyDataSetChanged()
             }
 

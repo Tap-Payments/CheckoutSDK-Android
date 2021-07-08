@@ -9,4 +9,5 @@ All rights reserved.
 
 interface WebViewContract {
     fun redirectLoadingFinished(done: Boolean)
+    fun directLoadingFinished(done: Boolean)
 }

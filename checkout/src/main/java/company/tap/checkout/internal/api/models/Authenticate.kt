@@ -19,11 +19,11 @@ data class Authenticate(
 
     @SerializedName("object")
     @Expose
-    private val `object`: String,
+     val `object`: String,
 
     @SerializedName("type")
     @Expose
-    private val type: AuthenticationType,
+     val type: AuthenticationType,
 
     @SerializedName("by")
     @Expose
@@ -31,7 +31,7 @@ data class Authenticate(
 
     @SerializedName("status")
     @Expose
-    private val status: AuthenticationStatus,
+     val status: AuthenticationStatus,
 
     @SerializedName("retry_attempt")
     @Expose

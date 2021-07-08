@@ -1,15 +1,11 @@
 package company.tap.checkout.internal.utils
 
 import company.tap.checkout.internal.api.enums.AmountModificatorType
-import company.tap.checkout.internal.api.models.AmountedCurrency
-import company.tap.checkout.internal.api.models.ExtraFee
 import company.tap.checkout.internal.api.models.SupportedCurrencies
 import company.tap.checkout.open.models.PaymentItem
 import company.tap.checkout.open.models.Shipping
 import company.tap.checkout.open.models.Tax
 import java.math.BigDecimal
-import java.math.MathContext
-import kotlin.collections.ArrayList
 
 
 /**
@@ -23,7 +19,7 @@ object AmountCalculator {
      * @param taxes  the taxes
      * @return the big decimal
      */
-    fun calculateTaxesOn(amount: BigDecimal, taxes: ArrayList<Tax?>?): BigDecimal? {
+    fun calculateTaxesOn(amount: BigDecimal, taxes: java.util.ArrayList<Tax>?): BigDecimal? {
         var result = BigDecimal.ZERO
         if (taxes == null) {
             return result
@@ -48,19 +44,15 @@ object AmountCalculator {
      * @param shippings the shippings
      * @return the big decimal
      */
-    fun calculateTotalAmountOf(
-        items: ArrayList<PaymentItem>,
-        taxes: ArrayList<Tax?>?,
-        shippings: ArrayList<Shipping>?
-    ): BigDecimal? {
+    open fun calculateTotalAmountOf(items:List<PaymentItem>, taxes: java.util.ArrayList<Tax>?, shippings: java.util.ArrayList<Shipping>?): BigDecimal? {
         var itemsPlainAmount = BigDecimal.ZERO
         var itemsDiscountAmount = BigDecimal.ZERO
         var itemsTaxesAmount = BigDecimal.ZERO
-     /*for (item in items) {
+        for (item in items) {
             itemsPlainAmount = itemsPlainAmount.add(item.getPlainAmount())
             itemsDiscountAmount = itemsDiscountAmount.add(item.getDiscountAmount())
             itemsTaxesAmount = itemsTaxesAmount.add(item.getTaxesAmount())
-        }*/
+        }
         val discountedAmount = itemsPlainAmount.subtract(itemsDiscountAmount)
         var shippingAmount = BigDecimal.ZERO
         if (shippings != null) {
@@ -72,7 +64,6 @@ object AmountCalculator {
         val totalTaxesAmount = itemsTaxesAmount.add(taxesAmount)
         return discountedAmount.add(shippingAmount).add(totalTaxesAmount)
     }
-
     /**
      * Calculate extra fees amount big decimal.
      *
@@ -161,8 +152,8 @@ object AmountCalculator {
     }*/
 
     private fun getAmountedCurrency(
-        amountedCurrencies: ArrayList<SupportedCurrencies?>?,
-        currency: String
+            amountedCurrencies: ArrayList<SupportedCurrencies?>?,
+            currency: String
     ): SupportedCurrencies? {
         if (amountedCurrencies != null) {
             for (amountedCurrency in amountedCurrencies) {

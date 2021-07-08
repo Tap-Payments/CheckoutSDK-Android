@@ -12,15 +12,15 @@ All rights reserved.
  **/
 data class TransactionDetails(
     @SerializedName("created") @Expose
-    private var created: Long = 0,
+     var created: Long = 0,
 
     @SerializedName("timezone")
     @Expose
-    private val timezone: String,
+     val timezone: String,
 
     @SerializedName("authorization_id")
     @Expose
-    private val authorizationID: String? = null,
+     val authorizationID: String? = null,
 
     @SerializedName("url")
     @Expose
@@ -28,13 +28,13 @@ data class TransactionDetails(
 
     @SerializedName("order")
     @Expose
-    private val order: Order? = null,
+     val order: Order? = null,
 
     @SerializedName("expiry")
     @Expose
-    private val expiry: Expiry? = null,
+     val expiry: Expiry? = null,
 
     @SerializedName("asynchronous")
     @Expose
-    private val asynchronous: Boolean = false
+     val asynchronous: Boolean = false
 ) : Serializable

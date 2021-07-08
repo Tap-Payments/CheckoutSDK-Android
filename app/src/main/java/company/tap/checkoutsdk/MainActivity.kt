@@ -15,7 +15,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import company.tap.checkout.TapCheckOutSDK
-import company.tap.checkout.internal.api.enums.AmountModificatorType
 import company.tap.checkout.internal.api.enums.Measurement
 import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.open.CheckoutFragment
@@ -106,7 +105,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
         // set transaction currency associated to your account
 
-        sdkSession.setTransactionCurrency(TapCurrency("BHD")) //** Required **
+        sdkSession.setTransactionCurrency(TapCurrency("KWD")) //** Required **
 
 
         // Using static CustomerBuilder method available inside TAP TapCustomer Class you can populate TAP TapCustomer object and pass it to SDK
@@ -118,23 +117,19 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         // Set Total Amount. The Total amount will be recalculated according to provided Taxes and Shipping
 
         // Set Total Amount. The Total amount will be recalculated according to provided Taxes and Shipping
-        sdkSession.setAmount(BigDecimal(23)) //** Required **
+        sdkSession.setAmount(BigDecimal(22)) //** Required **
 
-
-        // Set Payment Items array list
 
         // Set Payment Items array list
        // sdkSession.setPaymentItems(ArrayList()) // ** Optional ** you can pass empty array list
-        sdkSession.setPaymentItems(getPaymentItems()) // ** Optional ** you can pass empty array list
+       sdkSession.setPaymentItems(getPaymentItems()) // ** Optional ** you can pass empty array list
 
 
-     sdkSession.setPaymentType("CARD");   //** Merchant can pass paymentType
+        sdkSession.setPaymentType("CARD")  //** Merchant can pass paymentType
 
         // Set Taxes array list
         sdkSession.setTaxes(ArrayList()) // ** Optional ** you can pass empty array list
 
-
-        // Set Shipping array list
 
         // Set Shipping array list
         sdkSession.setShipping(ArrayList()) // ** Optional ** you can pass empty array list
@@ -287,7 +282,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         val tapCustomer: TapCustomer? = null
         //if (customer != null) customer.phone else Phone(965, 69045932)
         return TapCustomer(
-                "cus_Kh1b4220191939i1KP2506448", "firstname", "middlename",
+                null, "firstname", "middlename",
                 "lastname", "abcd@gmail.com",
                 PhoneNumber("00965", "9090909090"), "description",
         )
@@ -296,14 +291,13 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
     private fun getPaymentItems(): ArrayList<PaymentItem>? {
         val items: ArrayList<PaymentItem> = ArrayList<PaymentItem>()
-        items.add(
-                PaymentItem.PaymentItemBuilder("Items1", Quantity(Measurement.MASS,
-                        Measurement.UNITS.unit, BigDecimal.ONE), BigDecimal.ONE)
-                        .description("Description for test item #1")
-                        .discount(AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO))
-                        .taxes(null)
-                        .build()
-        )
+        items.add(PaymentItem("Items1",
+                        "Description for test item #1",
+                        Quantity(Measurement.UNITS,Measurement.MASS.name, BigDecimal.valueOf(22))
+                        , BigDecimal.valueOf(22),
+                       null,null ))
+        println("item are<<<<"+items)
+
         return items
     }
 

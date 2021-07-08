@@ -8,7 +8,6 @@ import company.tap.checkout.internal.utils.AmountCalculator
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.models.PaymentItem
 import company.tap.checkout.open.models.Shipping
-import company.tap.checkout.open.models.TapCustomer
 import company.tap.checkout.open.models.Tax
 import java.math.BigDecimal
 import java.util.*
@@ -25,7 +24,7 @@ open class PaymentOptionsRequest(
     amount: BigDecimal?,
     items: ArrayList<PaymentItem>?,
     shipping: ArrayList<Shipping>?,
-    taxes: ArrayList<Tax?>?,
+    taxes: ArrayList<Tax>?,
     currency: String?,
     customer: String?,
     merchant_id: String?,
@@ -46,7 +45,7 @@ open class PaymentOptionsRequest(
 
     @SerializedName("taxes")
     @Expose
-    private val taxes: ArrayList<Tax?>? = taxes
+    private val taxes: ArrayList<Tax>? = taxes
 
     @SerializedName("customer")
     @Expose
@@ -109,7 +108,7 @@ open class PaymentOptionsRequest(
 
         if (items != null && items.size > 0) {
             this.items = items
-            totalAmount = AmountCalculator.calculateTotalAmountOf(items, taxes, shipping)!!
+            totalAmount = AmountCalculator.calculateTotalAmountOf(items, taxes, shipping)
         } else {
             this.items = null
             val plainAmount = amount ?: BigDecimal.ZERO

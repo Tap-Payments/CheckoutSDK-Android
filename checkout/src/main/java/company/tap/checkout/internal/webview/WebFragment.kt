@@ -96,7 +96,6 @@ class WebFragment(private val webViewContract: WebViewContract,private val cardV
         web_view.webViewClient = TapCustomWebViewClient(this,cardViewModel)
         web_view.settings.loadWithOverviewMode = true
 
-//        web_view.loadUrl("https://www.google.com")
         web_view.loadUrl(webViewUrl)
         web_view.setOnKeyListener { _, keyCode, event ->
             if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
@@ -126,8 +125,14 @@ class WebFragment(private val webViewContract: WebViewContract,private val cardV
 
     override fun getRedirectedURL(url: String) {
        // webViewContract.redirectLoadingFinished(url.contains("https://www.google.com/search?"))
+        if(url.contains("gosellsdk://return_url")){
         webViewContract.redirectLoadingFinished(url.contains("gosellsdk://return_url"))
+        }else{
+            webViewContract.directLoadingFinished(true)
+        }
     }
+
+
 
 
     companion object {
