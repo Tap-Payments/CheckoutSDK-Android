@@ -292,11 +292,10 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
     private fun getPaymentItems(): ArrayList<PaymentItem>? {
         val items: ArrayList<PaymentItem> = ArrayList<PaymentItem>()
         items.add(PaymentItem("Items1",
-                        "Description for test item #1",
-                        Quantity(Measurement.UNITS,Measurement.MASS.name, BigDecimal.valueOf(22))
-                        , BigDecimal.valueOf(22),
-                       null,null ))
-        println("item are<<<<"+items)
+                "Description for test item #1",
+                Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(22)), BigDecimal.valueOf(22),
+                null, null))
+        println("item are<<<<" + items)
 
         return items
     }
@@ -342,10 +341,15 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
             System.out.println("Payment Succeeded : expiry period :" + charge.expiry?.period)
         }
         Toast.makeText(this, charge.id, Toast.LENGTH_SHORT).show()
+        modalBottomSheet.dismiss()
     }
 
     override fun paymentFailed(charge: Charge?) {
-       println("paymentFailed" + charge)
+        println("Payment Failed : " + charge?.status)
+        println("Payment Failed : " + charge?.description)
+        println("Payment Failed : " + charge?.response?.message)
+
+        modalBottomSheet.dismiss()
     }
 
     override fun authorizationSucceed(authorize: Authorize) {

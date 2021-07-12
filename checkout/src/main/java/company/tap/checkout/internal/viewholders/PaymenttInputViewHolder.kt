@@ -14,6 +14,8 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
+import androidx.core.view.get
+import androidx.core.view.size
 import androidx.core.widget.doAfterTextChanged
 import com.google.android.material.tabs.TabLayout
 import company.tap.cardinputwidget.CardBrandSingle
@@ -423,11 +425,14 @@ class PaymenttInputViewHolder(
     fun setDatafromAPI(imageURLApi: List<PaymentOption>) {
         val itemsMobilesList = ArrayList<SectionTabItem>()
         val itemsCardsList = ArrayList<SectionTabItem>()
+        intertabLayout.removeAllTabs()
         tabLayout.changeTabItemAlphaValue(1f)
+        tabLayout.setUnselectedAlphaLevel(1f)
+        //tabLayout.resetBehaviour()
 
         println("iamage val  are" + imageURLApi.size)
         for (i in imageURLApi.indices) {
-            tabLayout.resetBehaviour()
+            //tabLayout.resetBehaviour()
             imageURL = imageURLApi[i].image.toString()
             paymentType = imageURLApi[i].paymentType
             cardBrandType = imageURLApi[i].brand?.name.toString()
@@ -462,7 +467,7 @@ class PaymenttInputViewHolder(
          println("CardBrandSingle"+CardBrandSingle.fromCode(cardBrandType))
         tapCardInputView.setSingleCardInput(CardBrandSingle.fromCode(cardBrandType))
 
-        }else {
+        }else
             tabLayout.changeTabItemAlphaValue(0.9f)
             tabLayout.addSection(itemsCardsList)
             tabLayout.changeTabItemMarginBottomValue(35)
@@ -472,7 +477,7 @@ class PaymenttInputViewHolder(
 
         }
 
-    }
+
 
     override fun showHideClearImage(show: Boolean) {
         if (show) {

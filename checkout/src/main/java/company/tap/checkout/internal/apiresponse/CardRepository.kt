@@ -166,7 +166,7 @@ class CardRepository : APIRequestCallback {
     }
 
     private fun handleChargeResponse(chargeResponse: Charge) {
-        if (chargeResponse == null) return;
+        if (chargeResponse == null) return
         Log.e("Charge status", (chargeResponse.status).name)
         when (chargeResponse.status) {
             ChargeStatus.INITIATED -> {
