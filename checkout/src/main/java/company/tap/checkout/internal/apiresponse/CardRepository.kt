@@ -48,6 +48,7 @@ class CardRepository : APIRequestCallback {
     private var paymentOptionsResponse :PaymentOptionsResponse?= null
     private var initResponse:SDKSettings?=null
     lateinit var chargeResponse:Charge
+    lateinit var binLookupResponse: BINLookupResponse
     private lateinit var viewModel: TapLayoutViewModel
 
     private var sdkSession : SDKSession = SDKSession
@@ -114,6 +115,13 @@ class CardRepository : APIRequestCallback {
         )
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun retrieveBinLookup(context: Context, viewModel: TapLayoutViewModel,binValue:String?) {
+        this.viewModel = viewModel
+        NetworkController.getInstance().processRequest(TapMethodType.GET, ApiService.BIN +binValue , null,
+            this, BIN_RETRIEVE_CODE
+        )
+    }
     override fun onSuccess(responseCode: Int, requestCode: Int, response: Response<JsonElement>?) {
         if (requestCode == INIT_CODE) {
             response?.body().let {
@@ -143,6 +151,12 @@ class CardRepository : APIRequestCallback {
                 }
             }
             handleChargeResponse(chargeResponse)
+        }
+        else if(requestCode == BIN_RETRIEVE_CODE){
+            response?.body().let {
+                binLookupResponse = Gson().fromJson(it, BINLookupResponse::class.java)
+               println("binLookupResponse value is>>>>"+binLookupResponse)
+            }
         }
         val viewState = CardViewState(
                 initResponse = initResponse,
@@ -222,6 +236,7 @@ class CardRepository : APIRequestCallback {
         private const val PAYMENT_OPTIONS_CODE = 2
         private const val CHARGE_REQ_CODE = 3
         private const val CHARGE_RETRIEVE_CODE = 4
+        private const val BIN_RETRIEVE_CODE = 5
     }
 
     @RequiresApi(Build.VERSION_CODES.N)

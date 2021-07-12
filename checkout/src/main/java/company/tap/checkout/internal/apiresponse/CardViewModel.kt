@@ -51,11 +51,12 @@ class CardViewModel : ViewModel() {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun processEvent(event: CardViewEvent, viewModel: TapLayoutViewModel, selectedPaymentOption: PaymentOption?) {
+    fun processEvent(event: CardViewEvent, viewModel: TapLayoutViewModel, selectedPaymentOption: PaymentOption?,binValue:String?) {
         when (event) {
             CardViewEvent.InitEvent -> getInitData(viewModel)
             CardViewEvent.ChargeEvent -> createChargeRequest(viewModel,selectedPaymentOption)
             CardViewEvent.RetreiveChargeEvent -> retrieveChargeRequest(viewModel)
+            CardViewEvent.RetreiveBinLookupEvent -> retrieveBinlookup(viewModel,binValue)
         }
     }
 
@@ -67,6 +68,11 @@ class CardViewModel : ViewModel() {
     @RequiresApi(Build.VERSION_CODES.N)
     private fun retrieveChargeRequest(viewModel: TapLayoutViewModel) {
         repository.retrieveChargeRequest(context,viewModel)
+
+    }
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun retrieveBinlookup(viewModel: TapLayoutViewModel,binValue: String?) {
+        repository.retrieveBinLookup(context,viewModel,binValue)
 
     }
 

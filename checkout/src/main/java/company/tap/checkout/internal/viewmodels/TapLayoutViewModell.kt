@@ -230,15 +230,17 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                 this,
                 this,
                 saveCardSwitchHolder11,
-                this
+                this,
+            cardViewModel
         )
         itemsViewHolder1 = ItemsViewHolder1(context, this)
         paymentInputViewHolder = PaymenttInputViewHolder(
-                context,
-                this,
-                this,
-                saveCardSwitchHolder11,
-                this
+            context,
+            this,
+            this,
+            saveCardSwitchHolder11,
+            this,
+            cardViewModel
         )
         itemsViewHolder1 = ItemsViewHolder1(context, this)
         otpViewHolder = OTPViewHolder(context)
@@ -839,32 +841,10 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             removeViews(saveCardSwitchHolder11)
             removeViews(paymentInputViewHolder)
             println("fragmentManager<<<" + R.id.webFrameLayout)
-           /* for (i in paymentOptionsResponse?.paymentOptions.indices){
-              //  if(paymentOptionsResponse?.paymentOptions[i].asynchronous)
-                println("support<<<" +paymentOptionsResponse?.paymentOptions[i].getSupportedCurrencies())
-                println("selectedCurrency<<<" +selectedCurrency)
-                if(paymentOptionsResponse?.paymentOptions[i].getSupportedCurrencies()?.contains(selectedCurrency) == true){
-                    selectedPaymentOption =paymentOptionsResponse?.paymentOptions?.get(i)
-                    break
-                }
-
-            }*/
             selectedPaymentOption =savedCardsModel as PaymentOption
             println("selectedPaymentOption<<<" +selectedPaymentOption)
-            cardViewModel.processEvent(CardViewEvent.ChargeEvent, this, selectedPaymentOption)
+            cardViewModel.processEvent(CardViewEvent.ChargeEvent, this, selectedPaymentOption,null)
 
-
-          //  selectedPaymentOption =paymentOptionsResponse?.paymentOptions?.get(i)
-           /* if(::redirectURL.isInitialized && redirectURL!=null){
-                fragmentManager.beginTransaction()
-                        .replace(
-                                R.id.webFrameLayout, WebFragment.newInstance(
-                                redirectURL,
-                                this,cardViewModel) ).commitNow()
-                // .commit()
-            }
-
-*/
         }?.let {
             saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.addChildView(
                     it
@@ -889,7 +869,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             println("fragmentManager<<<" + R.id.webFrameLayout)
             paymentOptionsResponse?.paymentOptions?.get(0).paymentType
             selectedPaymentOption =paymentOptionsResponse?.paymentOptions?.get(0)
-            cardViewModel.processEvent(CardViewEvent.ChargeEvent, this, selectedPaymentOption)
+            cardViewModel.processEvent(CardViewEvent.ChargeEvent, this, selectedPaymentOption,null)
 
         }?.let {
             saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.addChildView(

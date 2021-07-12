@@ -14,8 +14,6 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
-import androidx.core.view.get
-import androidx.core.view.size
 import androidx.core.widget.doAfterTextChanged
 import com.google.android.material.tabs.TabLayout
 import company.tap.cardinputwidget.CardBrandSingle
@@ -24,11 +22,14 @@ import company.tap.cardinputwidget.widget.inline.InlineCardInput
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.api.models.PaymentOption
+import company.tap.checkout.internal.apiresponse.CardViewEvent
+import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayouttManager
-import company.tap.checkout.internal.interfaces.onCardNFCCallListener
 import company.tap.checkout.internal.interfaces.PaymentCardComplete
+import company.tap.checkout.internal.interfaces.onCardNFCCallListener
+import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
 import company.tap.tapcardvalidator_android.CardBrand
 import company.tap.tapcardvalidator_android.CardValidationState
 import company.tap.tapcardvalidator_android.CardValidator
@@ -41,7 +42,6 @@ import company.tap.tapuilibrary.uikit.models.SectionTabItem
 import company.tap.tapuilibrary.uikit.views.TapAlertView
 import company.tap.tapuilibrary.uikit.views.TapMobilePaymentView
 import company.tap.tapuilibrary.uikit.views.TapSelectionTabLayout
-import kotlinx.android.synthetic.main.payment_inputt_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 
 
@@ -56,7 +56,8 @@ class PaymenttInputViewHolder(
     private val onPaymentCardComplete: PaymentCardComplete,
     private val onCardNFCCallListener: onCardNFCCallListener,
     private val switchViewHolder11: SwitchViewHolder11?,
-    private val baseLayouttManager: BaseLayouttManager
+    private val baseLayouttManager: BaseLayouttManager,
+    private val cardViewModel: CardViewModel
 ) : TapBaseViewHolder,
     TapSelectionTabLayoutInterface, CardInputListener, TapPaymentShowHideClearImage
      {
@@ -86,9 +87,7 @@ class PaymenttInputViewHolder(
     private var cardNumber: String ?= null
     private var expiryDate: String ?= null
     private var cvvNumber: String ?= null
-    @JvmField
-     var itemcardListAdded: Boolean = false
-
+    private val BIN_NUMBER_LENGTH = 6
 
 
     init {
@@ -237,7 +236,7 @@ class PaymenttInputViewHolder(
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
                 if (s.isNullOrEmpty()) {
-                   // tabLayout.resetBehaviour()
+                    // tabLayout.resetBehaviour()
                 } else {
                     /**
                      * we will get date value
@@ -259,8 +258,9 @@ class PaymenttInputViewHolder(
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s?.trim()?.length == 3 || s?.trim()?.length == 4) {
-                    onPaymentCardComplete.onPayCardSwitchAction(true, PaymentType.CARD
-                        )
+                    onPaymentCardComplete.onPayCardSwitchAction(
+                        true, PaymentType.CARD
+                    )
                     tapAlertView?.visibility = View.GONE
                 }
             }
@@ -298,6 +298,13 @@ class PaymenttInputViewHolder(
                     card.cardBrand,
                     card.validationState == CardValidationState.valid
                 )
+                println("s.trim().toString()" + s.trim().toString())
+                if(s.trim().toString().replace(" ", "").length == BIN_NUMBER_LENGTH) {
+                    cardViewModel.processEvent(
+                        CardViewEvent.RetreiveBinLookupEvent,
+                        TapLayoutViewModel(), null, s.trim().toString().replace(" ", "")
+                    )
+                }
                 /**
                  * we will get the full card number
                  */
@@ -464,7 +471,7 @@ class PaymenttInputViewHolder(
         if(itemsCardsList.size==1 || itemsMobilesList.size==1){
         tabLayout.visibility = View.GONE
         tapSeparatorViewLinear?.visibility = View.GONE
-         println("CardBrandSingle"+CardBrandSingle.fromCode(cardBrandType))
+         println("CardBrandSingle" + CardBrandSingle.fromCode(cardBrandType))
         tapCardInputView.setSingleCardInput(CardBrandSingle.fromCode(cardBrandType))
 
         }else

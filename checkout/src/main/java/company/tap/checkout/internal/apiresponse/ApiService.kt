@@ -17,6 +17,7 @@ object ApiService {
     const val CHARGES ="charges"
     const val RETURN_URL ="gosellsdk://return_url"
     const val TAP_ID ="tap_id"
+    const val BIN ="bin/"
 
     /**
      * The Charge id.
