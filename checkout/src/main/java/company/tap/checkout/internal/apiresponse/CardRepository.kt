@@ -13,6 +13,7 @@ import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.enums.URLStatus
 import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.internal.api.requests.CreateChargeRequest
+import company.tap.checkout.internal.api.requests.CreateTokenWithCardDataRequest
 import company.tap.checkout.internal.api.requests.PaymentOptionsRequest
 import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
 import company.tap.checkout.internal.api.responses.SDKSettings
@@ -49,6 +50,7 @@ class CardRepository : APIRequestCallback {
     private var initResponse:SDKSettings?=null
     lateinit var chargeResponse:Charge
     lateinit var binLookupResponse: BINLookupResponse
+    lateinit var tokenResponse: Token
     private lateinit var viewModel: TapLayoutViewModel
 
     private var sdkSession : SDKSession = SDKSession
@@ -122,11 +124,21 @@ class CardRepository : APIRequestCallback {
             this, BIN_RETRIEVE_CODE
         )
     }
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun createTokenWithEncryptedCard(context: Context, viewModel: TapLayoutViewModel, createTokenWithCardDataRequest: CreateTokenCard?) {
+        this.viewModel = viewModel
+        println("createTokenWithCardDataRequest<<<<>>>>"+createTokenWithCardDataRequest)
+        val createTokenWithCardDataReq = createTokenWithCardDataRequest?.let { CreateTokenWithCardDataRequest(it) }
+        val jsonString = Gson().toJson(createTokenWithCardDataReq)
+        NetworkController.getInstance().processRequest(TapMethodType.POST, ApiService.TOKEN  , jsonString,
+            this, CREATE_TOKEN_CODE
+        )
+    }
     override fun onSuccess(responseCode: Int, requestCode: Int, response: Response<JsonElement>?) {
         if (requestCode == INIT_CODE) {
             response?.body().let {
                 initResponse = Gson().fromJson(it, SDKSettings::class.java)
-
+                PaymentDataSource.setSDKSettings(initResponse)
             }
         }else if (requestCode == PAYMENT_OPTIONS_CODE){
             response?.body().let {
@@ -156,6 +168,12 @@ class CardRepository : APIRequestCallback {
             response?.body().let {
                 binLookupResponse = Gson().fromJson(it, BINLookupResponse::class.java)
                println("binLookupResponse value is>>>>"+binLookupResponse)
+            }
+        }
+        else if(requestCode == CREATE_TOKEN_CODE){
+            response?.body().let {
+                tokenResponse = Gson().fromJson(it, Token::class.java)
+               println("tokenResponse value is>>>>"+tokenResponse)
             }
         }
         val viewState = CardViewState(
@@ -237,6 +255,7 @@ class CardRepository : APIRequestCallback {
         private const val CHARGE_REQ_CODE = 3
         private const val CHARGE_RETRIEVE_CODE = 4
         private const val BIN_RETRIEVE_CODE = 5
+        private const val CREATE_TOKEN_CODE = 6
     }
 
     @RequiresApi(Build.VERSION_CODES.N)

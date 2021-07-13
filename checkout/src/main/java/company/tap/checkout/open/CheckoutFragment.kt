@@ -131,7 +131,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                 cardViewModel.getContext(context)
             }
           //  cardViewModel.liveData.observe(this, { consumeResponse(it) })
-            cardViewModel.processEvent(CardViewEvent.InitEvent, viewModel, null,null)
+            cardViewModel.processEvent(CardViewEvent.InitEvent, viewModel, null,null,null)
 
         }
         //else loadDatafromAssets(context, viewModel) //Incase API not working use local
@@ -146,7 +146,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                 cardViewModel.getContext(context)
             }
             //  cardViewModel.liveData.observe(this, { consumeResponse(it) })
-            cardViewModel.processEvent(CardViewEvent.ChargeEvent, viewModel, null,null)
+            cardViewModel.processEvent(CardViewEvent.ChargeEvent, viewModel, null,null,null)
 
         }
     }

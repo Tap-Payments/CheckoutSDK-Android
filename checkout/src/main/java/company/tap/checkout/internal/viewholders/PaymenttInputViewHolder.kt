@@ -21,6 +21,7 @@ import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardinputwidget.widget.inline.InlineCardInput
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.PaymentType
+import company.tap.checkout.internal.api.models.CreateTokenCard
 import company.tap.checkout.internal.api.models.PaymentOption
 import company.tap.checkout.internal.apiresponse.CardViewEvent
 import company.tap.checkout.internal.apiresponse.CardViewModel
@@ -52,12 +53,12 @@ import kotlinx.android.synthetic.main.switch_layout.view.*
  */
 @RequiresApi(Build.VERSION_CODES.N)
 class PaymenttInputViewHolder(
-    private val context: Context,
-    private val onPaymentCardComplete: PaymentCardComplete,
-    private val onCardNFCCallListener: onCardNFCCallListener,
-    private val switchViewHolder11: SwitchViewHolder11?,
-    private val baseLayouttManager: BaseLayouttManager,
-    private val cardViewModel: CardViewModel
+        private val context: Context,
+        private val onPaymentCardComplete: PaymentCardComplete,
+        private val onCardNFCCallListener: onCardNFCCallListener,
+        private val switchViewHolder11: SwitchViewHolder11?,
+        private val baseLayouttManager: BaseLayouttManager,
+        private val cardViewModel: CardViewModel
 ) : TapBaseViewHolder,
     TapSelectionTabLayoutInterface, CardInputListener, TapPaymentShowHideClearImage
      {
@@ -87,6 +88,7 @@ class PaymenttInputViewHolder(
     private var cardNumber: String ?= null
     private var expiryDate: String ?= null
     private var cvvNumber: String ?= null
+    private var cardHolderName: String ?= null
     private val BIN_NUMBER_LENGTH = 6
 
 
@@ -171,11 +173,11 @@ class PaymenttInputViewHolder(
             tapAlertView?.visibility = View.GONE
             switchViewHolder11?.view?.cardSwitch?.payButton?.isActivated = false
             switchViewHolder11?.view?.cardSwitch?.payButton?.setButtonDataSource(
-                false,
-                context.let { LocalizationManager.getLocale(it).language },
-                LocalizationManager.getValue("pay", "ActionButton"),
-                Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
-                Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
+                    false,
+                    context.let { LocalizationManager.getLocale(it).language },
+                    LocalizationManager.getValue("pay", "ActionButton"),
+                    Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
+                    Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
             )
         }
     }
@@ -194,8 +196,8 @@ class PaymenttInputViewHolder(
                // onPaymentCardComplete.onPaycardSwitchAction(true, PaymentType.MOBILE)
                 if(tapMobileInputView.mobileNumber.text.length>7)
                 baseLayouttManager.displayOTPView(
-                    tapMobileInputView.mobileNumber.text.toString(),
-                    PaymentTypeEnum.telecom.name
+                        tapMobileInputView.mobileNumber.text.toString(),
+                        PaymentTypeEnum.telecom.name
                 )
 
             }
@@ -242,10 +244,11 @@ class PaymenttInputViewHolder(
                      * we will get date value
                      */
                     expiryDate = s.toString()
+                    println("expiryDate is"+expiryDate)
                     tapAlertView?.alertMessage?.text = (LocalizationManager.getValue(
-                        "Warning",
-                        "Hints",
-                        "missingCVV"
+                            "Warning",
+                            "Hints",
+                            "missingCVV"
                     ))
                     tapAlertView?.visibility = View.VISIBLE
                 }
@@ -259,7 +262,7 @@ class PaymenttInputViewHolder(
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s?.trim()?.length == 3 || s?.trim()?.length == 4) {
                     onPaymentCardComplete.onPayCardSwitchAction(
-                        true, PaymentType.CARD
+                            true, PaymentType.CARD
                     )
                     tapAlertView?.visibility = View.GONE
                 }
@@ -274,8 +277,8 @@ class PaymenttInputViewHolder(
                     expiryDate?.let { it1 ->
                         cvvNumber?.let { it2 ->
                             onPaymentCardComplete.onPayCardCompleteAction(
-                                true, PaymentType.CARD,
-                                it, it1, it2
+                                    true, PaymentType.CARD,
+                                    it, it1, it2
                             )
                         }
                     }
@@ -295,14 +298,14 @@ class PaymenttInputViewHolder(
             }
             if (card.cardBrand != null) {
                 tabLayout.selectTab(
-                    card.cardBrand,
-                    card.validationState == CardValidationState.valid
+                        card.cardBrand,
+                        card.validationState == CardValidationState.valid
                 )
                 println("s.trim().toString()" + s.trim().toString())
                 if(s.trim().toString().replace(" ", "").length == BIN_NUMBER_LENGTH) {
                     cardViewModel.processEvent(
-                        CardViewEvent.RetreiveBinLookupEvent,
-                        TapLayoutViewModel(), null, s.trim().toString().replace(" ", "")
+                            CardViewEvent.RetreiveBinLookupEvent,
+                            TapLayoutViewModel(), null, s.trim().toString().replace(" ", ""), null
                     )
                 }
                 /**
@@ -327,12 +330,12 @@ class PaymenttInputViewHolder(
             CardValidationState.invalid -> {
                 tapAlertView?.visibility = View.VISIBLE
                 tapAlertView?.alertMessage?.text =
-                    (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
+                        (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
             }
             CardValidationState.incomplete -> {
                 tapAlertView?.visibility = View.VISIBLE
                 tapAlertView?.alertMessage?.text =
-                    (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
+                        (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
             }
             CardValidationState.valid -> {
                 tapAlertView?.visibility = View.GONE
@@ -447,19 +450,19 @@ class PaymenttInputViewHolder(
 
             if (paymentType == PaymentType.telecom) {
                 itemsMobilesList.add(
-                    SectionTabItem(
-                        imageURL, imageURL, CardBrand.valueOf(
-                            cardBrandType
+                        SectionTabItem(
+                                imageURL, imageURL, CardBrand.valueOf(
+                                cardBrandType
                         )
-                    )
+                        )
                 )
             } else if (paymentType?.name == PaymentType.CARD.name) {
                 itemsCardsList.add(
-                    SectionTabItem(
-                        imageURL,
-                        imageURL,
-                        CardBrand.valueOf(cardBrandType)
-                    )
+                        SectionTabItem(
+                                imageURL,
+                                imageURL,
+                                CardBrand.valueOf(cardBrandType)
+                        )
                 )
             }
         }
@@ -495,8 +498,35 @@ class PaymenttInputViewHolder(
         }
     }
 
+         fun getCard(): CreateTokenCard? {
+             val number: String? = cardNumber
+            val expiryDate: String? = expiryDate
+           //  val expMonth: String = getExpirationMonth()
+            // val expYear: String = getExpirationYear()
+             val cvc: String? = cvvNumber
+             val cardholderName: String? = cardHolderName
+            // return if (number == null || expMonth == null || expYear == null || cvc == null || cardholderName == null) {
+             return if (number == null || expiryDate == null|| cvc == null) {
+                 null
+             } else /*CreateTokenCard(
+                     number.replace(" ", ""),
+                     expMonth,
+                     if (expMonth.length == 4) expYear.substring(2) else expirationYear,
+                     cvc,
+                     cardholderName,
+                     null)*/
+                         CreateTokenCard(
+                      number.replace(" ", ""),
+                      expiryDate.substring(2) ,
+                      expiryDate.subSequence(0,1) as String,
+                      cvc,
+                     null,null)
 
-}
+             // TODO: Add address handling here.
+         }
+
+
+     }
 
 
 

@@ -4,7 +4,10 @@ import com.google.gson.Gson
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import company.tap.checkout.internal.api.crypto.CryptoUtil
+import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
+import company.tap.checkout.internal.api.responses.SDKSettings
 import company.tap.checkout.internal.interfaces.SecureSerializable
+import company.tap.checkout.open.data_managers.PaymentDataSource
 import java.io.Serializable
 
 /**
@@ -13,7 +16,12 @@ import java.io.Serializable
 Copyright (c) 2021    Tap Payments.
 All rights reserved.
  **/
- class CreateTokenCard : Serializable {
+ class CreateTokenCard constructor(cardNumber: String,
+                                     expirationMonth: String,
+                                     expirationYear: String,
+                                     cvc: String,
+                                     cardholderName: String?,
+                                     address: Address?) : Serializable {
 
     @SerializedName("crypted_data") @Expose
     var sensitiveCardData: String? = null
@@ -21,34 +29,6 @@ All rights reserved.
     @SerializedName("address") @Expose
     var address: Address? = null
 
-
-    /**
-     * Instantiates a new Create token card.
-     *
-     * @param cardNumber      the card number
-     * @param expirationMonth the expiration month
-     * @param expirationYear  the expiration year
-     * @param cvc             the cvc
-     * @param cardholderName  the cardholder name
-     * @param address         the address
-     */
-    fun CreateTokenCard(
-        cardNumber: String,
-        expirationMonth: String,
-        expirationYear: String,
-        cvc: String,
-        cardholderName: String,
-        address: Address?
-    ) {
-        val _sensitiveCardData =
-            SensitiveCardData(cardNumber, expirationYear, expirationMonth, cvc, cardholderName)
-        val cryptedDataJson = Gson().toJson(_sensitiveCardData)
-        this.sensitiveCardData = CryptoUtil.encryptJsonString(
-            cryptedDataJson,
-          TODO()//  PaymentDataManager.getInstance().getSDKSettings().getData().getEncryptionKey()
-        )
-        this.address = address
-    }
 
     class SensitiveCardData internal constructor(
         @field:Expose @field:SerializedName("number") private val number: String,
@@ -59,6 +39,19 @@ All rights reserved.
         @field:Expose @field:SerializedName(
             "cvc"
         ) private val cvc: String,
-        @field:Expose @field:SerializedName("name") private val cardholderName: String
+        @field:Expose @field:SerializedName("name") private val cardholderName: String?
     ) : SecureSerializable
+
+    init {
+        val _sensitiveCardData =
+                SensitiveCardData(cardNumber, expirationYear, expirationMonth, cvc, cardholderName)
+        val cryptedDataJson = Gson().toJson(_sensitiveCardData)
+        this.sensitiveCardData = PaymentDataSource.getSDKSettings()?.data?.encryptionKey?.let {
+            CryptoUtil.encryptJsonString(
+                    cryptedDataJson,
+                    it
+            )
+        }
+        this.address = address
+    }
 }

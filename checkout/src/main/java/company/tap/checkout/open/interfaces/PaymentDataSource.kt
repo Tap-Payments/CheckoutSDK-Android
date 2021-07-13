@@ -3,6 +3,7 @@ package company.tap.checkout.open.interfaces
 import androidx.annotation.RestrictTo
 import company.tap.checkout.internal.api.models.CardIssuer
 import company.tap.checkout.internal.api.models.Merchant
+import company.tap.checkout.internal.api.responses.SDKSettings
 import company.tap.checkout.open.enums.CardType
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.models.*
@@ -136,5 +137,6 @@ interface PaymentDataSource {
     fun getSelectedCurrency():String?
 
     fun getSelectedAmount():BigDecimal?
+    fun getSDKSettings():SDKSettings?
 
 }

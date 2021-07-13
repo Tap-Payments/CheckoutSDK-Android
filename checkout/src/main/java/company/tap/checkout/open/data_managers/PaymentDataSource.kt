@@ -3,6 +3,7 @@ package company.tap.checkout.open.data_managers
 import android.content.Context
 import company.tap.checkout.internal.api.models.CardIssuer
 import company.tap.checkout.internal.api.models.Merchant
+import company.tap.checkout.internal.api.responses.SDKSettings
 import company.tap.checkout.open.enums.CardType
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.interfaces.PaymentDataSource
@@ -55,6 +56,7 @@ object PaymentDataSource :PaymentDataSource {
     private var topup: TopUp? = null
     private var selectedCurrency: String? = null
     private var selectedAmount: BigDecimal? = null
+    private var sdkSettings: SDKSettings? = null
 
 
     //////////////////////// Setter's Area  ///////////////////////////////////////
@@ -258,6 +260,15 @@ object PaymentDataSource :PaymentDataSource {
     fun setSelectedAmount(selectedAmount: BigDecimal){
         this.selectedAmount =selectedAmount
     }
+
+    /**
+     * Set sdkSettings.
+     *
+     * @param sdkSettings the sdkSettings
+     */
+    fun setSDKSettings(sdkSettings: SDKSettings?) {
+        this.sdkSettings = sdkSettings
+    }
 /////<<<<<<<<<<<<<<<<<<<<<<<<<,Getters Area >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>/////////////////
 
 
@@ -365,5 +376,9 @@ object PaymentDataSource :PaymentDataSource {
 
     override fun getSelectedAmount(): BigDecimal? {
      return selectedAmount
+    }
+
+    override fun getSDKSettings(): SDKSettings? {
+        return sdkSettings
     }
 }

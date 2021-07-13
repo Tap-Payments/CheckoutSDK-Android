@@ -6,6 +6,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import company.tap.checkout.internal.api.models.CreateTokenCard
 import company.tap.checkout.internal.api.models.PaymentOption
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -51,14 +52,16 @@ class CardViewModel : ViewModel() {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun processEvent(event: CardViewEvent, viewModel: TapLayoutViewModel, selectedPaymentOption: PaymentOption?,binValue:String?) {
+    fun processEvent(event: CardViewEvent, viewModel: TapLayoutViewModel, selectedPaymentOption: PaymentOption?, binValue:String?, cardDataRequest: CreateTokenCard?) {
         when (event) {
             CardViewEvent.InitEvent -> getInitData(viewModel)
             CardViewEvent.ChargeEvent -> createChargeRequest(viewModel,selectedPaymentOption)
             CardViewEvent.RetreiveChargeEvent -> retrieveChargeRequest(viewModel)
             CardViewEvent.RetreiveBinLookupEvent -> retrieveBinlookup(viewModel,binValue)
+            CardViewEvent.CreateTokenEvent -> createTokenWithEncryptedCard(viewModel,cardDataRequest)
         }
     }
+
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun createChargeRequest(viewModel: TapLayoutViewModel,selectedPaymentOption:PaymentOption?) {
@@ -73,6 +76,15 @@ class CardViewModel : ViewModel() {
     @RequiresApi(Build.VERSION_CODES.N)
     private fun retrieveBinlookup(viewModel: TapLayoutViewModel,binValue: String?) {
         repository.retrieveBinLookup(context,viewModel,binValue)
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun createTokenWithEncryptedCard(viewModel: TapLayoutViewModel, createTokenWithEncryptedDataRequest: CreateTokenCard?) {
+        println("createTokenWithEncryptedDataRequest>>."+createTokenWithEncryptedDataRequest)
+        if (createTokenWithEncryptedDataRequest != null) {
+            repository.createTokenWithEncryptedCard(context,viewModel,createTokenWithEncryptedDataRequest)
+        }
 
     }
 

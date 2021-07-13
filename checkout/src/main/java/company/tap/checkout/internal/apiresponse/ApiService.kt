@@ -20,6 +20,11 @@ object ApiService {
     const val BIN ="bin/"
 
     /**
+     * The Token.
+     */
+    const val TOKEN = "/tokens"
+
+    /**
      * The Charge id.
      */
   //  const val CHARGE_ID = "charge_id/"
