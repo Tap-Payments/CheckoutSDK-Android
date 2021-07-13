@@ -14,41 +14,41 @@ All rights reserved.
  **/
 data class Token(
     @SerializedName("id") @Expose
-    private var id: String? = null,
+     var id: String? = null,
 
     @SerializedName("object")
     @Expose
-    private val `object`: String? = null,
+     val `object`: String? = null,
 
     @SerializedName("card")
     @Expose
-    private val card: TokenizedCard? = null,
+     val card: TokenizedCard? = null,
 
     @SerializedName("type")
     @Expose
-    private val type: TokenType? = null,
+     val type: TokenType? = null,
 
     @SerializedName("created")
     @Expose
-    private val created: Long = 0,
+     val created: Long = 0,
 
     @SerializedName("client_ip")
     @Expose
-    private val client_ip: String? = null,
+     val client_ip: String? = null,
 
     @SerializedName("livemode")
     @Expose
-    private val livemode: Boolean = false,
+     val livemode: Boolean = false,
 
     @SerializedName("used")
     @Expose
-    private val used: Boolean = false,
+     val used: Boolean = false,
 
     @SerializedName("currency")
     @Expose
-    private val currency: String? = null,
+     val currency: String? = null,
 
     @SerializedName("name")
     @Expose
-    private var name: String? = null
+     var name: String? = null
 ) : Serializable , BaseResponse

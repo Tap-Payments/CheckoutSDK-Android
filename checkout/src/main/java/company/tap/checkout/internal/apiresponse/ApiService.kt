@@ -22,7 +22,7 @@ object ApiService {
     /**
      * The Token.
      */
-    const val TOKEN = "/tokens"
+    const val TOKEN = "tokens"
 
     /**
      * The Charge id.

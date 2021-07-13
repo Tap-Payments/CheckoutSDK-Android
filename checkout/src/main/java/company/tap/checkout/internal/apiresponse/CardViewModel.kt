@@ -55,7 +55,7 @@ class CardViewModel : ViewModel() {
     fun processEvent(event: CardViewEvent, viewModel: TapLayoutViewModel, selectedPaymentOption: PaymentOption?, binValue:String?, cardDataRequest: CreateTokenCard?) {
         when (event) {
             CardViewEvent.InitEvent -> getInitData(viewModel)
-            CardViewEvent.ChargeEvent -> createChargeRequest(viewModel,selectedPaymentOption)
+            CardViewEvent.ChargeEvent -> createChargeRequest(viewModel,selectedPaymentOption,null)
             CardViewEvent.RetreiveChargeEvent -> retrieveChargeRequest(viewModel)
             CardViewEvent.RetreiveBinLookupEvent -> retrieveBinlookup(viewModel,binValue)
             CardViewEvent.CreateTokenEvent -> createTokenWithEncryptedCard(viewModel,cardDataRequest)
@@ -64,8 +64,8 @@ class CardViewModel : ViewModel() {
 
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun createChargeRequest(viewModel: TapLayoutViewModel,selectedPaymentOption:PaymentOption?) {
-        repository.createChargeRequest(context,viewModel,selectedPaymentOption)
+    private fun createChargeRequest(viewModel: TapLayoutViewModel, selectedPaymentOption: PaymentOption?,cardtoken:String?) {
+        repository.createChargeRequest(context, viewModel, selectedPaymentOption,cardtoken)
 
     }
     @RequiresApi(Build.VERSION_CODES.N)

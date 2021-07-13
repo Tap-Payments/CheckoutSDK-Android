@@ -866,10 +866,8 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             removeViews(amountViewHolder1)
             removeViews(saveCardSwitchHolder11)
             removeViews(paymentInputViewHolder)
-            println("fragmentManager<<<" + R.id.webFrameLayout)
-
-            println("paymentInputViewHolder<<<" + paymentInputViewHolder.getCard())
             cardViewModel.processEvent(CardViewEvent.CreateTokenEvent, this, null,null,paymentInputViewHolder.getCard())
+            cardViewModel.processEvent(CardViewEvent.ChargeEvent, this, null,null,null)
 
         }?.let {
             saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.addChildView(
@@ -1045,7 +1043,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         )
 
         PaymentDataSource?.setSelectedCurrency(selectedCurrency = selectedCurrency)
-        PaymentDataSource?.setSelectedAmount(selectedAmount = selectedAmount.toBigDecimal())
+        PaymentDataSource?.setSelectedAmount(currencyRate.toBigDecimal())
         filterViewModels(currencySelected)
 
 

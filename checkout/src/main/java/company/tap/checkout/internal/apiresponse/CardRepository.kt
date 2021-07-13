@@ -51,6 +51,7 @@ class CardRepository : APIRequestCallback {
     lateinit var chargeResponse:Charge
     lateinit var binLookupResponse: BINLookupResponse
     lateinit var tokenResponse: Token
+    lateinit var context: Context
     private lateinit var viewModel: TapLayoutViewModel
 
     private var sdkSession : SDKSession = SDKSession
@@ -69,7 +70,7 @@ class CardRepository : APIRequestCallback {
                 this,
                 INIT_CODE
         )
-
+        this.context = context
         //  else NetworkController.getInstance().processRequest(TapMethodType.GET, ApiService.INIT_AR, null, this, INIT_CODE)
     }
     @RequiresApi(Build.VERSION_CODES.N)
@@ -102,10 +103,11 @@ class CardRepository : APIRequestCallback {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun createChargeRequest(context: Context, viewModel: TapLayoutViewModel,selectedPaymentOption: PaymentOption?) {
+    fun createChargeRequest(context: Context, viewModel: TapLayoutViewModel, selectedPaymentOption: PaymentOption?, identifier: String?) {
         this.viewModel = viewModel
-
-            selectedPaymentOption?.sourceId?.let { SourceRequest(it) }?.let { callChargeOrAuthorizeOrSaveCardAPI(it,selectedPaymentOption,null,null,context) }
+        if(identifier!=null)callChargeOrAuthorizeOrSaveCardAPI(SourceRequest(identifier),selectedPaymentOption,null,null,context)
+        else
+            selectedPaymentOption?.sourceId?.let { SourceRequest(it) }?.let { callChargeOrAuthorizeOrSaveCardAPI(it, selectedPaymentOption, null, null, context) }
     }
 
 
@@ -118,22 +120,22 @@ class CardRepository : APIRequestCallback {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun retrieveBinLookup(context: Context, viewModel: TapLayoutViewModel,binValue:String?) {
+    fun retrieveBinLookup(context: Context, viewModel: TapLayoutViewModel, binValue: String?) {
         this.viewModel = viewModel
-        NetworkController.getInstance().processRequest(TapMethodType.GET, ApiService.BIN +binValue , null,
-            this, BIN_RETRIEVE_CODE
+        NetworkController.getInstance().processRequest(TapMethodType.GET, ApiService.BIN + binValue, null,
+                this, BIN_RETRIEVE_CODE
         )
     }
     @RequiresApi(Build.VERSION_CODES.N)
     fun createTokenWithEncryptedCard(context: Context, viewModel: TapLayoutViewModel, createTokenWithCardDataRequest: CreateTokenCard?) {
         this.viewModel = viewModel
-        println("createTokenWithCardDataRequest<<<<>>>>"+createTokenWithCardDataRequest)
         val createTokenWithCardDataReq = createTokenWithCardDataRequest?.let { CreateTokenWithCardDataRequest(it) }
         val jsonString = Gson().toJson(createTokenWithCardDataReq)
-        NetworkController.getInstance().processRequest(TapMethodType.POST, ApiService.TOKEN  , jsonString,
-            this, CREATE_TOKEN_CODE
+        NetworkController.getInstance().processRequest(TapMethodType.POST, ApiService.TOKEN, jsonString,
+                this, CREATE_TOKEN_CODE
         )
     }
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onSuccess(responseCode: Int, requestCode: Int, response: Response<JsonElement>?) {
         if (requestCode == INIT_CODE) {
             response?.body().let {
@@ -167,13 +169,17 @@ class CardRepository : APIRequestCallback {
         else if(requestCode == BIN_RETRIEVE_CODE){
             response?.body().let {
                 binLookupResponse = Gson().fromJson(it, BINLookupResponse::class.java)
-               println("binLookupResponse value is>>>>"+binLookupResponse)
+               println("binLookupResponse value is>>>>" + binLookupResponse)
             }
         }
         else if(requestCode == CREATE_TOKEN_CODE){
             response?.body().let {
                 tokenResponse = Gson().fromJson(it, Token::class.java)
-               println("tokenResponse value is>>>>"+tokenResponse)
+               println("tokenResponse value is>>>>" + tokenResponse)
+                if(tokenResponse!=null){
+                    createChargeRequest(context,viewModel,null,tokenResponse.id)
+                }
+
             }
         }
         val viewState = CardViewState(
@@ -221,15 +227,15 @@ class CardRepository : APIRequestCallback {
             }
             ChargeStatus.AUTHORIZED -> SDKSession.getListener()?.paymentSucceed(chargeResponse)
             ChargeStatus.FAILED -> SDKSession.getListener()?.paymentFailed(chargeResponse)
-            ChargeStatus.ABANDONED ->  SDKSession.getListener()?.paymentFailed(chargeResponse)
+            ChargeStatus.ABANDONED -> SDKSession.getListener()?.paymentFailed(chargeResponse)
             ChargeStatus.CANCELLED -> SDKSession.getListener()?.paymentFailed(chargeResponse)
             ChargeStatus.DECLINED -> SDKSession.getListener()?.paymentFailed(chargeResponse)
             ChargeStatus.RESTRICTED -> SDKSession.getListener()?.paymentFailed(chargeResponse)
-            ChargeStatus.UNKNOWN ->  SDKSession.getListener()?.paymentFailed(chargeResponse)
-            ChargeStatus.TIMEDOUT ->  SDKSession.getListener()?.paymentFailed(chargeResponse)
+            ChargeStatus.UNKNOWN -> SDKSession.getListener()?.paymentFailed(chargeResponse)
+            ChargeStatus.TIMEDOUT -> SDKSession.getListener()?.paymentFailed(chargeResponse)
             ChargeStatus.IN_PROGRESS -> {
-                if (chargeResponse.transaction != null && chargeResponse.transaction.asynchronous){
-                        println("open INPROGRESS")
+                if (chargeResponse.transaction != null && chargeResponse.transaction.asynchronous) {
+                    println("open INPROGRESS")
                 }
             }
         }
@@ -269,10 +275,10 @@ class CardRepository : APIRequestCallback {
         val postURL: String? = provider.getPostURL()
         val post = if (postURL == null) null else TrackingURL(URLStatus.PENDING, postURL)
         val amountedCurrency: AmountedCurrency? = provider.getSelectedCurrency()
-        println("amountedCurrency in cad"+amountedCurrency)
+        println("amountedCurrency in cad" + amountedCurrency)
         //     Log.d("callChargeOrAuthorizeOr"," step 5 : callChargeOrAuthorizeOrSaveCardAPI : in class "+ "["+this.getClass().getName()+"] with amountedCurrency=["+amountedCurrency.getAmount()+"]  ");
         val transactionCurrency: AmountedCurrency? = provider.getTransactionCurrency()
-        println("transactionCurrency in cad"+transactionCurrency)
+        println("transactionCurrency in cad" + transactionCurrency)
         val customer: TapCustomer = provider.getCustomer()
         var fee = BigDecimal.ZERO
         //todo if (paymentOption != null) fee = AmountCalculator.calculateExtraFeesAmount(paymentOption.extraFees, supportedCurrencies, amountedCurrency)
@@ -334,7 +340,7 @@ class CardRepository : APIRequestCallback {
                         )
                     }
                 }
-                println("chargere"+chargeRequest)
+                println("chargere" + chargeRequest)
 
                 val jsonString = Gson().toJson(chargeRequest)
                 if (LocalizationManager.getLocale(context).language == "en")

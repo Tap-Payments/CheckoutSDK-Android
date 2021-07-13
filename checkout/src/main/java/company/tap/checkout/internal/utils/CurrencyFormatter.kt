@@ -123,9 +123,11 @@ object CurrencyFormatter {
     fun currencyFormat(amount: String): String {
         println("amount formar" + amount)
         val df: DecimalFormat = DecimalFormat("###,###,##0.00")
+        //val df: DecimalFormat = DecimalFormat("#,###,##0.00")
         df.decimalFormatSymbols = DecimalFormatSymbols(Locale.US)
         return  df.format(BigDecimal(amount))
     }
+
 
 
 }

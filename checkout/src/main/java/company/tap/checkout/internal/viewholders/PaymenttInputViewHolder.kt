@@ -244,7 +244,7 @@ class PaymenttInputViewHolder(
                      * we will get date value
                      */
                     expiryDate = s.toString()
-                    println("expiryDate is"+expiryDate)
+                    println("expiryDate is" + expiryDate)
                     tapAlertView?.alertMessage?.text = (LocalizationManager.getValue(
                             "Warning",
                             "Hints",
@@ -501,27 +501,22 @@ class PaymenttInputViewHolder(
          fun getCard(): CreateTokenCard? {
              val number: String? = cardNumber
             val expiryDate: String? = expiryDate
-           //  val expMonth: String = getExpirationMonth()
-            // val expYear: String = getExpirationYear()
              val cvc: String? = cvvNumber
-             val cardholderName: String? = cardHolderName
-            // return if (number == null || expMonth == null || expYear == null || cvc == null || cardholderName == null) {
-             return if (number == null || expiryDate == null|| cvc == null) {
+         //temporrary    val cardholderName: String? = cardholderName
+             val cardholderName: String? = "cardholder"
+             return if (number == null || expiryDate == null|| cvc == null || cardholderName ==null) {
                  null
-             } else /*CreateTokenCard(
-                     number.replace(" ", ""),
-                     expMonth,
-                     if (expMonth.length == 4) expYear.substring(2) else expirationYear,
-                     cvc,
-                     cardholderName,
-                     null)*/
-                         CreateTokenCard(
-                      number.replace(" ", ""),
-                      expiryDate.substring(2) ,
-                      expiryDate.subSequence(0,1) as String,
-                      cvc,
-                     null,null)
-
+             } else {
+                 val dateParts: List<String>? = expiryDate?.split("/")
+             return dateParts?.get(0)?.let {
+                 CreateTokenCard(
+                         number.replace(" ", ""),
+                         it,
+                         dateParts[1],
+                         cvc,
+                         cardholderName, null)
+             }
+             }
              // TODO: Add address handling here.
          }
 
