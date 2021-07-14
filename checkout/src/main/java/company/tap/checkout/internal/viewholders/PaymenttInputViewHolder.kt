@@ -21,8 +21,10 @@ import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardinputwidget.widget.inline.InlineCardInput
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.PaymentType
+import company.tap.checkout.internal.api.models.BINLookupResponse
 import company.tap.checkout.internal.api.models.CreateTokenCard
 import company.tap.checkout.internal.api.models.PaymentOption
+import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
 import company.tap.checkout.internal.apiresponse.CardViewEvent
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.enums.PaymentTypeEnum
@@ -31,6 +33,7 @@ import company.tap.checkout.internal.interfaces.BaseLayouttManager
 import company.tap.checkout.internal.interfaces.PaymentCardComplete
 import company.tap.checkout.internal.interfaces.onCardNFCCallListener
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
+import company.tap.commonmodels.CardScheme
 import company.tap.tapcardvalidator_android.CardBrand
 import company.tap.tapcardvalidator_android.CardValidationState
 import company.tap.tapcardvalidator_android.CardValidator
@@ -90,6 +93,7 @@ class PaymenttInputViewHolder(
     private var cvvNumber: String ?= null
     private var cardHolderName: String ?= null
     private val BIN_NUMBER_LENGTH = 6
+    private lateinit var cardSchema:String
 
 
     init {
@@ -296,11 +300,13 @@ class PaymenttInputViewHolder(
                // tabLayout.resetBehaviour()
                 tapAlertView?.visibility = View.GONE
             }
+
             if (card.cardBrand != null) {
                 tabLayout.selectTab(
-                        card.cardBrand,
+                       card.cardBrand,
                         card.validationState == CardValidationState.valid
                 )
+               // }
                 println("s.trim().toString()" + s.trim().toString())
                 if(s.trim().toString().replace(" ", "").length == BIN_NUMBER_LENGTH) {
                     cardViewModel.processEvent(
@@ -325,7 +331,15 @@ class PaymenttInputViewHolder(
         }
     }
 
-    private fun checkValidationState(card: DefinedCardBrand) {
+         private fun comparecardbrandwithcardscheme(cardBrand: CardBrand, cardSchema: String): Boolean {
+             println("cardBrand>>" + cardBrand.name + "cardSchema>>>>>>" + cardSchema)
+            if(!cardBrand.name.equals(cardSchema)){
+                return true
+            }else return false
+         }
+
+         private fun checkValidationState(card: DefinedCardBrand) {
+             println("card check>>" + card.cardBrand.name)
         when (card.validationState) {
             CardValidationState.invalid -> {
                 tapAlertView?.visibility = View.VISIBLE
@@ -355,7 +369,8 @@ class PaymenttInputViewHolder(
             tapAlertView?.visibility = View.GONE
         }
         val card = CardValidator.validate(cardTyped)
-        if (card.cardBrand != null) {
+        println("card brand is: ${card.cardBrand}")
+        if (card.cardBrand != null&& ::cardSchema.isInitialized) {
             println("card brand: ${card.validationState}")
             nfcButton?.visibility = View.GONE
             cardScannerBtn?.visibility = View.GONE
@@ -519,7 +534,9 @@ class PaymenttInputViewHolder(
              }
              // TODO: Add address handling here.
          }
-
+        fun setCurrentBinData(binLookupResponse: BINLookupResponse){
+            cardSchema = binLookupResponse?.scheme.toString()
+        }
 
      }
 

@@ -1,5 +1,6 @@
 package company.tap.checkout.internal.interfaces
 
+import company.tap.checkout.internal.api.models.BINLookupResponse
 import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
 import company.tap.checkout.internal.api.responses.SDKSettings
 import company.tap.checkout.internal.dummygener.JsonResponseDummy1
@@ -18,6 +19,7 @@ interface BaseLayouttManager {
     fun displayOTPView(mobileNumber: String, otpType:String)
     fun displayRedirect(url: String)
     fun displaySaveCardOptions()
+    fun setBinLookupData(binLookupResponse: BINLookupResponse)
    // fun getDatafromAPI(dummyResponse1: JsonResponseDummy1)
     fun getDatasfromAPIs(sdkSettings: SDKSettings?,paymentOptionsResponse: PaymentOptionsResponse?)
    // fun getDatafromAPI(sdkSettings: SDKSettings)

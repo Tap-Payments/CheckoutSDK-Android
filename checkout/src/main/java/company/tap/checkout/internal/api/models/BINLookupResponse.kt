@@ -14,29 +14,29 @@ All rights reserved.
  **/
 data class BINLookupResponse(
     @SerializedName("address_required") @Expose
-    private var addressRequired: Boolean = false,
+      var addressRequired: Boolean = false,
 
     @SerializedName("bank")
     @Expose
-    private val bank: String,
+      val bank: String,
 
     @SerializedName("bank_logo")
     @Expose
-    private val bank_logo: String,
+      val bank_logo: String,
 
     @SerializedName("bin")
     @Expose
-    private val bin: String,
+      val bin: String,
 
     @SerializedName("card_brand")
     @Expose
-    private val cardBrand: CardBrand,
+      val cardBrand: CardBrand,
 
     @SerializedName("card_scheme")
     @Expose
-    private val scheme: CardScheme,
+      val scheme: CardScheme,
 
     @SerializedName("country")
     @Expose
-    private val country: String
+      val country: String
 ) : Serializable

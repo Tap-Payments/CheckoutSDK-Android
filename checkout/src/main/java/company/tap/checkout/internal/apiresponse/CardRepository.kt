@@ -170,6 +170,8 @@ class CardRepository : APIRequestCallback {
             response?.body().let {
                 binLookupResponse = Gson().fromJson(it, BINLookupResponse::class.java)
                println("binLookupResponse value is>>>>" + binLookupResponse)
+                if(binLookupResponse!=null)
+                viewModel.setBinLookupData(binLookupResponse)
             }
         }
         else if(requestCode == CREATE_TOKEN_CODE){

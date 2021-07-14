@@ -33,6 +33,7 @@ import company.tap.checkout.internal.adapter.CardTypeAdapterUIKIT
 import company.tap.checkout.internal.adapter.CurrencyTypeAdapter
 import company.tap.checkout.internal.adapter.GoPayCardAdapterUIKIT
 import company.tap.checkout.internal.api.enums.PaymentType
+import company.tap.checkout.internal.api.models.BINLookupResponse
 import company.tap.checkout.internal.api.models.PaymentOption
 import company.tap.checkout.internal.api.models.SavedCard
 import company.tap.checkout.internal.api.models.SupportedCurrencies
@@ -519,6 +520,11 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     }
 
     override fun displaySaveCardOptions() {}
+    override fun setBinLookupData(binLookupResponse: BINLookupResponse) {
+        if(::paymentInputViewHolder.isInitialized && binLookupResponse!=null)
+       paymentInputViewHolder?.setCurrentBinData(binLookupResponse)
+    }
+
     override fun getDatasfromAPIs(
             sdkSettings: SDKSettings?,
             paymentOptionsResponse: PaymentOptionsResponse?
