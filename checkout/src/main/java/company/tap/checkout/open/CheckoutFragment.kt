@@ -131,25 +131,13 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                 cardViewModel.getContext(context)
             }
           //  cardViewModel.liveData.observe(this, { consumeResponse(it) })
-            cardViewModel.processEvent(CardViewEvent.InitEvent, viewModel, null,null,null)
+            cardViewModel.processEvent(CardViewEvent.InitEvent, viewModel, null,null,null,cardViewModel)
 
         }
         //else loadDatafromAssets(context, viewModel) //Incase API not working use local
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
-     fun createChargeReq(context: Context?, viewModel: TapLayoutViewModel){
-        if (context?.let { isNetworkAvailable(it) } == true) {
-            val cardViewModel: CardViewModel by viewModels()
-            if (context != null) {
-                cardViewModel.getContext(context)
-            }
-            //  cardViewModel.liveData.observe(this, { consumeResponse(it) })
-            cardViewModel.processEvent(CardViewEvent.ChargeEvent, viewModel, null,null,null)
-
-        }
-    }
 
 
     companion object {

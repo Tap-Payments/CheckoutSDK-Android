@@ -1,5 +1,6 @@
 package company.tap.checkout.internal.apiresponse
 
+import company.tap.checkout.internal.api.models.BINLookupResponse
 import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
 import company.tap.checkout.internal.api.responses.SDKSettings
@@ -17,6 +18,7 @@ data class CardViewState(
     var paymentOptionsResponse: PaymentOptionsResponse? = null
 ){
     data class ChargeViewState(var charge: Charge?=null)
+    data class  BinLookupViewState(var binLookupResponse: BINLookupResponse?=null)
 
 }
 

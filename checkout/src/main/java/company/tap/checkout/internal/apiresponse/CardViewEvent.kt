@@ -14,6 +14,7 @@ sealed class CardViewEvent {
     object RetreiveChargeEvent :CardViewEvent()
     object RetreiveBinLookupEvent :CardViewEvent()
     object CreateTokenEvent :CardViewEvent()
+    object CreateAuthorizeEvent :CardViewEvent()
     data class SaveCardEvent(val card: TapCard) : CardViewEvent()
     data class TokenizeCardEvent(val card: TapCard) : CardViewEvent()
 }

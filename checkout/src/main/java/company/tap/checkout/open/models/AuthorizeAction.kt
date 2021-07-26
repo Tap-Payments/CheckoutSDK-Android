@@ -10,22 +10,22 @@ import company.tap.checkout.internal.api.enums.AuthorizeActionType
 Copyright (c) 2021    Tap Payments.
 All rights reserved.
  **/
-class AuthorizeAction {
+class AuthorizeAction(void: AuthorizeActionType, i: Int) {
     @SerializedName("type")
     @Expose
-    private var type: AuthorizeActionType? = null
+    private var type: AuthorizeActionType? = AuthorizeActionType.VOID
 
     @SerializedName("time")
     @Expose
-    private var timeInHours = 0
+    private var timeInHours = 168
 
     /**
      * Gets default.
      *
      * @return the default
      */
-    open fun getDefault() {
-       return AuthorizeAction(AuthorizeActionType.VOID, 168)
+   open fun getDefault() {
+        return AuthorizeAction(AuthorizeActionType.VOID, 168)
     }
 
     /**
@@ -52,7 +52,7 @@ class AuthorizeAction {
      * @param type        the type
      * @param timeInHours the time in hours
      */
-   open fun AuthorizeAction(type: AuthorizeActionType?, timeInHours: Int) {
+    fun AuthorizeAction(type: AuthorizeActionType?, timeInHours: Int) {
         this.type = type
         this.timeInHours = timeInHours
     }

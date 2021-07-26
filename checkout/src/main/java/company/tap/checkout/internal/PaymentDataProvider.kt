@@ -1,16 +1,14 @@
 package company.tap.checkout.internal
 
+import company.tap.checkout.internal.api.enums.AuthorizeActionType
 import company.tap.checkout.internal.api.models.AmountedCurrency
 import company.tap.checkout.internal.api.models.CardIssuer
 import company.tap.checkout.internal.api.models.Merchant
 import company.tap.checkout.internal.api.models.SupportedCurrencies
-import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
 import company.tap.checkout.internal.interfaces.IPaymentDataProvider
-import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.models.*
-import java.math.BigDecimal
 import java.util.*
 
 /**
@@ -109,12 +107,12 @@ else return TransactionMode.PURCHASE
 
     override fun getAuthorizeAction(): AuthorizeAction? {
            var authorizeAction: AuthorizeAction? = getExternalDataSource().getAuthorizeAction()
-     /* if (authorizeAction == null) {
-           // authorizeAction = AuthorizeAction().getDefault()
-          return authorizeAction
-        }
-      else*/
-        return null
+        println("authorizeAction>>>"+authorizeAction)
+      if (authorizeAction == null) {
+           return AuthorizeAction(AuthorizeActionType.VOID, 168)
+      }
+      else
+        return authorizeAction
     }
 
     override fun getDestination(): Destinations? {

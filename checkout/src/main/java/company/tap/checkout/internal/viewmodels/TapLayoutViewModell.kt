@@ -235,15 +235,6 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             cardViewModel
         )
         itemsViewHolder1 = ItemsViewHolder1(context, this)
-        paymentInputViewHolder = PaymenttInputViewHolder(
-            context,
-            this,
-            this,
-            saveCardSwitchHolder11,
-            this,
-            cardViewModel
-        )
-        itemsViewHolder1 = ItemsViewHolder1(context, this)
         otpViewHolder = OTPViewHolder(context)
         goPayViewsHolder = GoPayViewsHolder(context, this, otpViewHolder)
 
@@ -520,15 +511,26 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     }
 
     override fun displaySaveCardOptions() {}
-    override fun setBinLookupData(binLookupResponse: BINLookupResponse) {
+    @RequiresApi(Build.VERSION_CODES.N)
+    override fun setBinLookupData(binLookupResponse: BINLookupResponse, context: Context,cardViewModel: CardViewModel) {
+        println("binLookupResponse in viewModel"+binLookupResponse)
+        paymentInputViewHolder = PaymenttInputViewHolder(
+            context,
+            this,
+            this,
+            saveCardSwitchHolder11,
+            this,
+            cardViewModel
+        )
         if(::paymentInputViewHolder.isInitialized && binLookupResponse!=null)
-       paymentInputViewHolder?.setCurrentBinData(binLookupResponse)
+            paymentInputViewHolder?.setCurrentBinData(binLookupResponse)
     }
 
     override fun getDatasfromAPIs(
             sdkSettings: SDKSettings?,
             paymentOptionsResponse: PaymentOptionsResponse?
     ) {
+        println("if(::businessViewHolder.isInitialized getpay"+::businessViewHolder.isInitialized)
         if (paymentOptionsResponse != null) {
             this.paymentOptionsResponse = paymentOptionsResponse
         }
@@ -849,7 +851,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             println("fragmentManager<<<" + R.id.webFrameLayout)
             selectedPaymentOption =savedCardsModel as PaymentOption
             println("selectedPaymentOption<<<" +selectedPaymentOption)
-            cardViewModel.processEvent(CardViewEvent.ChargeEvent, this, selectedPaymentOption,null,null)
+            cardViewModel.processEvent(CardViewEvent.ChargeEvent, this, selectedPaymentOption,null,null,null)
 
         }?.let {
             saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.addChildView(
@@ -872,8 +874,8 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             removeViews(amountViewHolder1)
             removeViews(saveCardSwitchHolder11)
             removeViews(paymentInputViewHolder)
-            cardViewModel.processEvent(CardViewEvent.CreateTokenEvent, this, null,null,paymentInputViewHolder.getCard())
-            cardViewModel.processEvent(CardViewEvent.ChargeEvent, this, null,null,null)
+            cardViewModel.processEvent(CardViewEvent.CreateTokenEvent, this, null,null,paymentInputViewHolder.getCard(),null)
+            cardViewModel.processEvent(CardViewEvent.ChargeEvent, this, null,null,null,null)
 
         }?.let {
             saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.addChildView(

@@ -64,11 +64,12 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         }
 
     private fun initializeSDK() {
-       TapCheckOutSDK().init(
+     TapCheckOutSDK().init(
                this,
                "sk_test_kovrMB0mupFJXfNZWx6Etg5y",
                "company.tap.goSellSDKExample"
        )
+
        //TapCheckOutSDK().init(this,"sk_test_kovrMB0mupFJXfNZWx6Etg5y","")
     }
 
@@ -121,8 +122,8 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
 
         // Set Payment Items array list
-       // sdkSession.setPaymentItems(ArrayList()) // ** Optional ** you can pass empty array list
-       sdkSession.setPaymentItems(getPaymentItems()) // ** Optional ** you can pass empty array list
+        sdkSession.setPaymentItems(ArrayList()) // ** Optional ** you can pass empty array list
+      // sdkSession.setPaymentItems(getPaymentItems()) // ** Optional ** you can pass empty array list
 
 
         sdkSession.setPaymentType("CARD")  //** Merchant can pass paymentType
@@ -201,7 +202,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
         sdkSession.setCardType(CardType.CREDIT) // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
 
-          sdkSession.setTransactionMode(TransactionMode.PURCHASE)
+          sdkSession.setTransactionMode(TransactionMode.AUTHORIZE_CAPTURE)
          sdkSession.setDefaultCardHolderName("TEST TAP"); // ** Optional ** you can pass default CardHolderName of the user .So you don't need to type it.
          sdkSession.isUserAllowedToEnableCardHolderName(false); // ** Optional ** you can enable/ disable  default CardHolderName .
 

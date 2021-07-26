@@ -34,7 +34,7 @@ All rights reserved.
  * The type Create charge request.
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
-class CreateChargeRequest(
+open class CreateChargeRequest(
         merchant: Merchant?,
         amount: BigDecimal,
         currency: String?,

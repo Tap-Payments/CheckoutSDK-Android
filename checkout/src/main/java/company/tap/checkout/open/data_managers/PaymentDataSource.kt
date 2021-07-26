@@ -334,8 +334,8 @@ object PaymentDataSource :PaymentDataSource {
     }
 
     override fun getAuthorizeAction(): AuthorizeAction? {
-        //return authorizeAction
-        return null
+        return authorizeAction
+        //return null
     }
 
     override fun getDestination(): Destinations? {

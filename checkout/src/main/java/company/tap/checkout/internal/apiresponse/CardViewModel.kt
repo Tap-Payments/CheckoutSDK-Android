@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import company.tap.checkout.internal.api.models.CreateTokenCard
 import company.tap.checkout.internal.api.models.PaymentOption
+import company.tap.checkout.internal.api.requests.CreateAuthorizeRequest
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -42,8 +43,8 @@ class CardViewModel : ViewModel() {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun getInitData(viewModel: TapLayoutViewModel) {
-        repository.getInitData(context,viewModel)
+    private fun getInitData(viewModel: TapLayoutViewModel,cardViewModel: CardViewModel?) {
+        repository.getInitData(context,viewModel,cardViewModel)
         GlobalScope.launch(Dispatchers.Main) { // launch coroutine in the main thread
             val apiResponseTime = Random.nextInt(1000, 20000)
             delay(apiResponseTime.toLong())
@@ -52,13 +53,14 @@ class CardViewModel : ViewModel() {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun processEvent(event: CardViewEvent, viewModel: TapLayoutViewModel, selectedPaymentOption: PaymentOption?, binValue:String?, cardDataRequest: CreateTokenCard?) {
+    fun processEvent(event: CardViewEvent, viewModel: TapLayoutViewModel, selectedPaymentOption: PaymentOption?, binValue:String?, cardDataRequest: CreateTokenCard?,cardViewModel: CardViewModel?) {
         when (event) {
-            CardViewEvent.InitEvent -> getInitData(viewModel)
+            CardViewEvent.InitEvent -> getInitData(viewModel,cardViewModel)
             CardViewEvent.ChargeEvent -> createChargeRequest(viewModel,selectedPaymentOption,null)
             CardViewEvent.RetreiveChargeEvent -> retrieveChargeRequest(viewModel)
             CardViewEvent.RetreiveBinLookupEvent -> retrieveBinlookup(viewModel,binValue)
             CardViewEvent.CreateTokenEvent -> createTokenWithEncryptedCard(viewModel,cardDataRequest)
+            CardViewEvent.CreateAuthorizeEvent -> createAuthorizeCard(viewModel,selectedPaymentOption)
         }
     }
 
@@ -84,6 +86,14 @@ class CardViewModel : ViewModel() {
         println("createTokenWithEncryptedDataRequest>>."+createTokenWithEncryptedDataRequest)
         if (createTokenWithEncryptedDataRequest != null) {
             repository.createTokenWithEncryptedCard(context,viewModel,createTokenWithEncryptedDataRequest)
+        }
+
+    }
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun createAuthorizeCard(viewModel: TapLayoutViewModel,selectedPaymentOption: PaymentOption?) {
+        println("createAuthorizeCard>>."+selectedPaymentOption)
+        if (selectedPaymentOption != null) {
+            repository.createAuthorizeRequest(context,viewModel,selectedPaymentOption)
         }
 
     }

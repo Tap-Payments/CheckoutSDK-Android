@@ -20,6 +20,11 @@ object ApiService {
     const val BIN ="bin/"
 
     /**
+     * The Authorize.
+     */
+    const val AUTHORIZE = "authorize"
+
+    /**
      * The Token.
      */
     const val TOKEN = "tokens"

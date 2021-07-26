@@ -12,6 +12,7 @@ import company.tap.checkout.internal.api.enums.AuthenticationType
 import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.enums.URLStatus
 import company.tap.checkout.internal.api.models.*
+import company.tap.checkout.internal.api.requests.CreateAuthorizeRequest
 import company.tap.checkout.internal.api.requests.CreateChargeRequest
 import company.tap.checkout.internal.api.requests.CreateTokenWithCardDataRequest
 import company.tap.checkout.internal.api.requests.PaymentOptionsRequest
@@ -23,6 +24,7 @@ import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.models.*
+import company.tap.checkout.open.models.AuthorizeAction
 import company.tap.checkout.open.models.Receipt
 import company.tap.checkout.open.models.Reference
 import company.tap.taplocalizationkit.LocalizationManager
@@ -50,9 +52,11 @@ class CardRepository : APIRequestCallback {
     private var initResponse:SDKSettings?=null
     lateinit var chargeResponse:Charge
     lateinit var binLookupResponse: BINLookupResponse
+    lateinit var authorizeActionResponse: Authorize
     lateinit var tokenResponse: Token
     lateinit var context: Context
     private lateinit var viewModel: TapLayoutViewModel
+    private lateinit var cardViewModel: CardViewModel
 
     private var sdkSession : SDKSession = SDKSession
     private var dataProvider: IPaymentDataProvider= PaymentDataProvider()
@@ -61,8 +65,11 @@ class CardRepository : APIRequestCallback {
         return dataProvider
     }
     @RequiresApi(Build.VERSION_CODES.N)
-    fun getInitData(context: Context, viewModel: TapLayoutViewModel) {
+    fun getInitData(context: Context, viewModel: TapLayoutViewModel,cardViewModel: CardViewModel?) {
         this.viewModel = viewModel
+        if (cardViewModel != null) {
+            this.cardViewModel = cardViewModel
+        }
         if( LocalizationManager.getLocale(context).language  == "en") NetworkController.getInstance().processRequest(
                 TapMethodType.GET,
                 ApiService.INIT,
@@ -120,6 +127,21 @@ class CardRepository : APIRequestCallback {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
+    fun createAuthorizeRequest(
+        context: Context,
+        viewModel: TapLayoutViewModel,
+        selectedPaymentOption: PaymentOption
+    ){
+        this.viewModel = viewModel
+
+        selectedPaymentOption.sourceId?.let { SourceRequest(it) }?.let {
+            callChargeOrAuthorizeOrSaveCardAPI(
+                it,selectedPaymentOption,null,null,context)
+        }
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
     fun retrieveBinLookup(context: Context, viewModel: TapLayoutViewModel, binValue: String?) {
         this.viewModel = viewModel
         NetworkController.getInstance().processRequest(TapMethodType.GET, ApiService.BIN + binValue, null,
@@ -170,8 +192,8 @@ class CardRepository : APIRequestCallback {
             response?.body().let {
                 binLookupResponse = Gson().fromJson(it, BINLookupResponse::class.java)
                println("binLookupResponse value is>>>>" + binLookupResponse)
-                if(binLookupResponse!=null)
-                viewModel.setBinLookupData(binLookupResponse)
+                if(::binLookupResponse.isInitialized)
+                viewModel.setBinLookupData(binLookupResponse,context,cardViewModel)
             }
         }
         else if(requestCode == CREATE_TOKEN_CODE){
@@ -184,12 +206,24 @@ class CardRepository : APIRequestCallback {
 
             }
         }
+        else if(requestCode == CREATE_AUTHORIZE_CODE){
+            response?.body().let {
+                authorizeActionResponse = Gson().fromJson(it, Authorize::class.java)
+               println("authorizeActionResponse value is>>>>" + authorizeActionResponse.id)
+                if(authorizeActionResponse!=null){
+                    createChargeRequest(context,viewModel,null,authorizeActionResponse.id)
+                }
+
+            }
+        }
         val viewState = CardViewState(
                 initResponse = initResponse,
                 paymentOptionsResponse = paymentOptionsResponse
         )
         if(::chargeResponse.isInitialized)
         CardViewState.ChargeViewState(charge = chargeResponse)
+        if(::binLookupResponse.isInitialized)
+            CardViewState.BinLookupViewState(binLookupResponse = binLookupResponse)
         if(initResponse!=null && paymentOptionsResponse!=null){
             viewModel.getDatasfromAPIs(initResponse, paymentOptionsResponse)
             resultObservable.onNext(viewState)
@@ -264,6 +298,7 @@ class CardRepository : APIRequestCallback {
         private const val CHARGE_RETRIEVE_CODE = 4
         private const val BIN_RETRIEVE_CODE = 5
         private const val CREATE_TOKEN_CODE = 6
+        private const val CREATE_AUTHORIZE_CODE = 7
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -350,37 +385,55 @@ class CardRepository : APIRequestCallback {
                             TapMethodType.POST, ApiService.CHARGES, jsonString, this, CHARGE_REQ_CODE
                     )
             }
-            /*  TransactionMode.AUTHORIZE_CAPTURE -> {
-                  val authorizeAction: AuthorizeAction = provider.getAuthorizeAction()
-                  *//* System.out.println(">>> ["+transactionCurrency.getAmount()+"]");
-                System.out.println(">>> ["+transactionCurrency.getCurrency()+"]");
-                System.out.println(">>> ["+amountedCurrency.getAmount()+"]");
-                System.out.println(">>> ["+amountedCurrency.getCurrency()+"]");*//*
-                val authorizeRequest = CreateAuthorizeRequest(
-                        merchant,
-                        transactionCurrency.getAmount(),
-                        transactionCurrency.getCurrency(),
-                        amountedCurrency.getAmount(),
-                        amountedCurrency.getCurrency(),
-                        customer,
-                        fee,
-                        order,
-                        redirect,
-                        post,
-                        source,
-                        paymentDescription,
-                        paymentMetadata,
-                        reference,
-                        shouldSaveCard,
-                        statementDescriptor,
-                        require3DSecure,
-                        receipt,
-                        authorizeAction,
-                        destinations,
-                        topUp
-                )
+            TransactionMode.AUTHORIZE_CAPTURE -> {
+                val authorizeAction: AuthorizeAction? = provider.getAuthorizeAction()
+                System.out.println(">>> [" + transactionCurrency?.amount + "]")
+                System.out.println(">>> [" + transactionCurrency?.currency + "]")
+                System.out.println(">>> [" + amountedCurrency?.amount + "]")
+                System.out.println(">>> [" + amountedCurrency?.currency + "]")
+                System.out.println(">>> [" + merchant + "]")
+                val authorizeRequest = authorizeAction?.let {
+                    transactionCurrency?.amount?.let { it1 ->
+                            amountedCurrency?.amount?.let { it2 ->
+                                CreateAuthorizeRequest(
+                                    merchant,
+                                    it1,
+                                    transactionCurrency?.currency,
+                                    it2,
+                                    amountedCurrency?.currency,
+                                    customer,
+                                    fee,
+                                    order,
+                                    redirect,
+                                    post,
+                                    source,
+                                    paymentDescription,
+                                    paymentMetadata,
+                                    reference,
+                                    shouldSaveCard,
+                                    statementDescriptor,
+                                    require3DSecure,
+                                    receipt,
+                                    it,
+                                    destinations,
+                                    topUp
+                                )
+                            }
+                        }
 
-            }*/
+                }
+                val jsonString = Gson().toJson(authorizeRequest)
+                println("jsonString for auth>>"+jsonString)
+                if (LocalizationManager.getLocale(context).language == "en")
+                    NetworkController.getInstance().processRequest(
+                        TapMethodType.POST,
+                        ApiService.AUTHORIZE,
+                        jsonString,
+                        this,
+                        CREATE_AUTHORIZE_CODE
+                    )
+
+            }
             /*  TransactionMode.SAVE_CARD -> {
                   val saveCardRequest = CreateSaveCardRequest(
                           amountedCurrency.getCurrency(),
