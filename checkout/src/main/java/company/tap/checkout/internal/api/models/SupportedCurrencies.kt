@@ -34,5 +34,5 @@ data class SupportedCurrencies(
     var rate: Double? = null,
     @SerializedName("amount")
     @Expose
-    var amount: Double,
+    var amount: BigDecimal,
     )

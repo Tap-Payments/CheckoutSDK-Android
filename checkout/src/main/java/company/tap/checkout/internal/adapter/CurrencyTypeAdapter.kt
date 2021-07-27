@@ -34,7 +34,7 @@ All rights reserved.
 
 var selectedPosition = 0
 var _context: Context? = null
- var currencyRate: Double = 0.0
+ var currencyRate: BigDecimal= BigDecimal.ZERO
 
 class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrencyChangedActionListener) :
     RecyclerView.Adapter<CurrencyTypeAdapter.CurrencyHolders>() {
@@ -120,7 +120,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
                         // adapterContentCurrencies[position].conversionrate
                         adapterContentCurrencies[position].amount)
              TapLayoutViewModel().selectedCurrencyPos = adapterContentCurrencies[position].currency.toString()
-             TapLayoutViewModel().selectedAmountPos = BigDecimal.valueOf(adapterContentCurrencies[position].amount)
+             TapLayoutViewModel().selectedAmountPos = adapterContentCurrencies[position].amount
              notifyDataSetChanged()
             }
 

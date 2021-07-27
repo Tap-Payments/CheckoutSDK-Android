@@ -24,7 +24,6 @@ import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.api.models.BINLookupResponse
 import company.tap.checkout.internal.api.models.CreateTokenCard
 import company.tap.checkout.internal.api.models.PaymentOption
-import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
 import company.tap.checkout.internal.apiresponse.CardViewEvent
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.enums.PaymentTypeEnum
@@ -33,7 +32,6 @@ import company.tap.checkout.internal.interfaces.BaseLayouttManager
 import company.tap.checkout.internal.interfaces.PaymentCardComplete
 import company.tap.checkout.internal.interfaces.onCardNFCCallListener
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
-import company.tap.commonmodels.CardScheme
 import company.tap.tapcardvalidator_android.CardBrand
 import company.tap.tapcardvalidator_android.CardValidationState
 import company.tap.tapcardvalidator_android.CardValidator
@@ -301,26 +299,31 @@ class PaymenttInputViewHolder(
                 tapAlertView?.visibility = View.GONE
             }
 
-            if (card.cardBrand != null) {
+            if (card.cardBrand != null ) {
+
                 tabLayout.selectTab(
-                       card.cardBrand,
+                        card.cardBrand,
                         card.validationState == CardValidationState.valid
                 )
-               // }
+                }
                 println("s.trim().toString()" + s.trim().toString())
+
                 if(s.trim().toString().replace(" ", "").length == BIN_NUMBER_LENGTH) {
                     cardViewModel.processEvent(
                             CardViewEvent.RetreiveBinLookupEvent,
-                            TapLayoutViewModel(), null, s.trim().toString().replace(" ", ""), null
+                            TapLayoutViewModel(), null, s.trim().toString().replace(" ", ""), null, null
                     )
+
                 }
                 /**
                  * we will get the full card number
                  */
                 cardNumber = s.toString()
 
-                Log.d("cardBrand", card.cardBrand.toString())
-                Log.d("cardBrand", (card.validationState == CardValidationState.valid).toString())
+            if(card.cardBrand!=null)
+                Log.e("cardBrand????", card.cardBrand.toString())
+                Log.e("cardBrand????", card.cardBrand.toString())
+                Log.e("cardBrand", (card.validationState == CardValidationState.valid).toString())
 
                 lastCardInput = it.toString()
                 shouldShowScannerOptions = it.isEmpty()
@@ -329,17 +332,22 @@ class PaymenttInputViewHolder(
                 checkValidationState(card)
             }
         }
-    }
+    //}
 
          private fun comparecardbrandwithcardscheme(cardBrand: CardBrand, cardSchema: String): Boolean {
-             println("cardBrand>>" + cardBrand.name + "cardSchema>>>>>>" + cardSchema)
-            if(!cardBrand.name.equals(cardSchema)){
-                return true
-            }else return false
+             println("cardBrand comparator >>" + cardBrand.name + "cardSchema>>>>>>" + cardSchema)
+             return if (!cardBrand.name.equals(cardSchema, false)) {
+                 return true
+             } else false
+
+           /*  return if (cardBrand.toString().compareTo(cardSchema) === 0) {
+                 return true
+             }*/
+
          }
 
          private fun checkValidationState(card: DefinedCardBrand) {
-             println("card check>>" + card.cardBrand.name)
+//             println("card check>>" + card.cardBrand.name)
         when (card.validationState) {
             CardValidationState.invalid -> {
                 tapAlertView?.visibility = View.VISIBLE
@@ -364,12 +372,15 @@ class PaymenttInputViewHolder(
 
     // Logic to show the switches when card details are valid
     private fun cardBrandDetection(cardTyped: String) {
-        if (cardTyped.isEmpty()) {
+        if (cardTyped.toString().isEmpty()) {
             //tabLayout.resetBehaviour()
             tapAlertView?.visibility = View.GONE
         }
-        val card = CardValidator.validate(cardTyped)
-        println("card brand is: ${card.cardBrand}")
+        println("cardTyped brand is: ${cardTyped}")
+        val card = CardValidator.validate(cardTyped.toString())
+
+        println("card brand on detect is: ${card.cardBrand}")
+       // checkValidationState(card.cardBrand)
         if (card.cardBrand != null&& ::cardSchema.isInitialized) {
             println("card brand: ${card.validationState}")
             nfcButton?.visibility = View.GONE
@@ -536,6 +547,8 @@ class PaymenttInputViewHolder(
          }
         fun setCurrentBinData(binLookupResponse: BINLookupResponse){
             cardSchema = binLookupResponse?.scheme.toString()
+            println("cardSchema values " + cardSchema)
+          //  cardViewModel.setPaymentOption(binLookupResponse?.cardBrand, if (binLookupResponse == null) null else binLookupResponse.scheme)
         }
 
      }

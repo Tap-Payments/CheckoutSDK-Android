@@ -1,11 +1,15 @@
 package company.tap.checkout.internal.utils
 
 import company.tap.checkout.internal.api.enums.AmountModificatorType
+import company.tap.checkout.internal.api.models.AmountedCurrency
+import company.tap.checkout.internal.api.models.ExtraFee
 import company.tap.checkout.internal.api.models.SupportedCurrencies
+import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.models.PaymentItem
 import company.tap.checkout.open.models.Shipping
 import company.tap.checkout.open.models.Tax
 import java.math.BigDecimal
+import java.math.MathContext
 
 
 /**
@@ -44,7 +48,7 @@ object AmountCalculator {
      * @param shippings the shippings
      * @return the big decimal
      */
-    open fun calculateTotalAmountOf(items:List<PaymentItem>, taxes: java.util.ArrayList<Tax>?, shippings: java.util.ArrayList<Shipping>?): BigDecimal? {
+    open fun calculateTotalAmountOf(items: List<PaymentItem>, taxes: java.util.ArrayList<Tax>?, shippings: java.util.ArrayList<Shipping>?): BigDecimal? {
         var itemsPlainAmount = BigDecimal.ZERO
         var itemsDiscountAmount = BigDecimal.ZERO
         var itemsTaxesAmount = BigDecimal.ZERO
@@ -64,6 +68,7 @@ object AmountCalculator {
         val totalTaxesAmount = itemsTaxesAmount.add(taxesAmount)
         return discountedAmount.add(shippingAmount).add(totalTaxesAmount)
     }
+
     /**
      * Calculate extra fees amount big decimal.
      *
@@ -72,72 +77,47 @@ object AmountCalculator {
      * @param currency            the currency
      * @return the big decimal
      */
-    /*fun calculateExtraFeesAmount(
-        fees: ArrayList<ExtraFee>?,
-        supportedCurrencies: ArrayList<SupportedCurrencies>,
-        currency: AmountedCurrency
-    ): BigDecimal? {
+    fun calculateExtraFeesAmount(fees: java.util.ArrayList<ExtraFee>?, supportedCurrencies: java.util.ArrayList<SupportedCurrencies>?, currency: AmountedCurrency?): BigDecimal? {
         var result = BigDecimal.ZERO
         if (fees != null) {
             for (fee in fees) {
                 var increase = BigDecimal.ZERO
                 when (fee.getType()) {
                     AmountModificatorType.FIXED -> {
-                        val amountedCurrency: SupportedCurrencies? =
-                            fee.currency?.let {
-                                AmountCalculator.getAmountedCurrency(
-                                    supportedCurrencies,
-                                    it
-                                )
-                            }
-                        *//***
+                        val amountedCurrency: SupportedCurrencies? = fee?.currency?.let { AmountCalculator.getAmountedCurrency(supportedCurrencies, it) }
+                        /***
                          * Based on JS Lib added check for Settlement currency equals the amounted currency.
-                         *//*
-                       *//* if (PaymentDataManager.getInstance().getPaymentOptionsDataManager()
-                                .getPaymentOptionsResponse().getSettlement_currency() != null
-                        ) increase =
-                            if (PaymentDataManager.getInstance().getPaymentOptionsDataManager()
-                                    .getPaymentOptionsResponse().getSettlement_currency()
-                                    .equals(currency.currency)
-                            ) {
-                                return fee.getValue()
-                            } else {
-                                *//**//***
-                                 * Based on JS Lib Condition for extra fees calculation changed.
-                                 * var rate =  settlement_currency.amount / current_currency.amount
-                                 * extra_fee = fee.value * rate;
-                                 *
-                                 *//**//*
-
-                                val rate: BigDecimal? = amountedCurrency?.amount.divide(currency.amount, MathContext.DECIMAL64)
-                                fee.getValue()?.multiply(rate)
-                            }*//*
+                         */
+                        if (PaymentDataSource.getPaymentOptionsResponse()?.settlement_currency != null) increase = if (PaymentDataSource.getPaymentOptionsResponse()?.settlement_currency.equals(currency?.currency)) {
+                            return fee.getValue()
+                        } else {
+                            /***
+                             * Based on JS Lib Condition for extra fees calculation changed.
+                             * var rate =  settlement_currency.amount / current_currency.amount
+                             * extra_fee = fee.value * rate;
+                             *
+                             */
+                            //                      increase = currency.getAmount().multiply(fee.getValue()).divide(amountedCurrency.getAmount());
+                            // increase = currency.getAmount().multiply(fee.getValue()).divide(amountedCurrency.getAmount(), MathContext.DECIMAL64); /// handling issue of  quotient has a non terminating decimal expansion
+                            val rate: BigDecimal? = amountedCurrency?.amount?.divide(currency?.amount, MathContext.DECIMAL64)
+                            fee.getValue()?.multiply(rate)
+                        }
                     }
                     AmountModificatorType.PERCENTAGE -> {
 
-
-                        *//***
+                        // increase = currency.getAmount().multiply(fee.getNormalizedValue());
+                        /***
                          * Increase i.e change in currency changed as per JS Lib FORMULA: extra_fee =  {amount} / (1 - fee.value / 100) - {amount};
-                         *//*
-                        increase = currency.amount.divide(
-                            BigDecimal.valueOf(1).subtract(
-                                fee.getValue()?.divide(
-                                    BigDecimal.valueOf(100)
-                                )
-                            ), MathContext.DECIMAL64
-                        )
-                            .subtract(currency.amount)
+                         */
+                        increase = currency?.amount?.divide(BigDecimal.valueOf(1).subtract(fee.getValue()?.divide(BigDecimal.valueOf(100))), MathContext.DECIMAL64)?.subtract(currency.amount)
                         // System.out.println("increase = " + increase );
-                        *//**
+                        /**
                          * Applying Min and Max values based on the calculated extra fees.
-                         *//*
+                         */
                         if (fee.minimum_fee != null && fee.minimum_fee !== 0.0 || fee.maximum_fee != null && fee.maximum_fee !== 0.0) {
-                            if (java.lang.Double.valueOf(increase.toString()) > fee.minimum_fee!! && java.lang.Double.valueOf(
-                                    increase.toString()
-                                ) < fee.maximum_fee!!
-                            ) {
+                            if (java.lang.Double.valueOf(increase.toString()) > fee?.minimum_fee!! && java.lang.Double.valueOf(increase.toString()) < fee.maximum_fee!!) {
                                 increase = increase
-                            } else if (java.lang.Double.valueOf(increase.toString()) < fee.minimum_fee!!) {
+                            } else if (java.lang.Double.valueOf(increase.toString()) < fee.maximum_fee!!) {
                                 increase = fee.minimum_fee?.let { BigDecimal.valueOf(it) }
                             } else if (java.lang.Double.valueOf(increase.toString()) > fee.maximum_fee!!) {
                                 increase = fee.maximum_fee?.let { BigDecimal.valueOf(it) }
@@ -149,12 +129,15 @@ object AmountCalculator {
             }
         }
         return result
-    }*/
+    }
 
-    private fun getAmountedCurrency(
-            amountedCurrencies: ArrayList<SupportedCurrencies?>?,
-            currency: String
-    ): SupportedCurrencies? {
+
+
+
+        private fun getAmountedCurrency(
+                amountedCurrencies: ArrayList<SupportedCurrencies>?,
+                currency: String
+        ): SupportedCurrencies? {
         if (amountedCurrencies != null) {
             for (amountedCurrency in amountedCurrencies) {
                 if (amountedCurrency?.currency.equals(currency)) {

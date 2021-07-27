@@ -32,6 +32,7 @@ import company.tap.checkout.R
 import company.tap.checkout.internal.adapter.CardTypeAdapterUIKIT
 import company.tap.checkout.internal.adapter.CurrencyTypeAdapter
 import company.tap.checkout.internal.adapter.GoPayCardAdapterUIKIT
+import company.tap.checkout.internal.api.enums.ExtraFeesStatus
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.api.models.BINLookupResponse
 import company.tap.checkout.internal.api.models.PaymentOption
@@ -45,11 +46,8 @@ import company.tap.checkout.internal.dummygener.*
 import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.*
-import company.tap.checkout.internal.utils.AnimationEngine
+import company.tap.checkout.internal.utils.*
 import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
-import company.tap.checkout.internal.utils.CurrencyFormatter
-import company.tap.checkout.internal.utils.CustomUtils
-import company.tap.checkout.internal.utils.Utils
 import company.tap.checkout.internal.viewholders.*
 import company.tap.checkout.internal.webview.WebFragment
 import company.tap.checkout.internal.webview.WebViewContract
@@ -232,7 +230,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                 this,
                 saveCardSwitchHolder11,
                 this,
-            cardViewModel
+                cardViewModel
         )
         itemsViewHolder1 = ItemsViewHolder1(context, this)
         otpViewHolder = OTPViewHolder(context)
@@ -496,7 +494,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
     override fun displayRedirect(url: String) {
         this.redirectURL = url
-        println("redirectURL>>>"+redirectURL)
+        println("redirectURL>>>" + redirectURL)
       //  Toast.makeText(context, "url redirecting$redirectURL", Toast.LENGTH_SHORT).show()
         if(::redirectURL.isInitialized && redirectURL!=null && ::fragmentManager.isInitialized){
             fragmentManager.beginTransaction()
@@ -512,15 +510,15 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
     override fun displaySaveCardOptions() {}
     @RequiresApi(Build.VERSION_CODES.N)
-    override fun setBinLookupData(binLookupResponse: BINLookupResponse, context: Context,cardViewModel: CardViewModel) {
-        println("binLookupResponse in viewModel"+binLookupResponse)
+    override fun setBinLookupData(binLookupResponse: BINLookupResponse, context: Context, cardViewModel: CardViewModel) {
+        println("binLookupResponse in viewModel" + binLookupResponse)
         paymentInputViewHolder = PaymenttInputViewHolder(
-            context,
-            this,
-            this,
-            saveCardSwitchHolder11,
-            this,
-            cardViewModel
+                context,
+                this,
+                this,
+                saveCardSwitchHolder11,
+                this,
+                cardViewModel
         )
         if(::paymentInputViewHolder.isInitialized && binLookupResponse!=null)
             paymentInputViewHolder?.setCurrentBinData(binLookupResponse)
@@ -530,7 +528,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             sdkSettings: SDKSettings?,
             paymentOptionsResponse: PaymentOptionsResponse?
     ) {
-        println("if(::businessViewHolder.isInitialized getpay"+::businessViewHolder.isInitialized)
+        println("if(::businessViewHolder.isInitialized getpay" + ::businessViewHolder.isInitialized)
         if (paymentOptionsResponse != null) {
             this.paymentOptionsResponse = paymentOptionsResponse
         }
@@ -765,6 +763,29 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
     }
 
+    override fun dialogueExecuteExtraFees(response: String, paymentType: PaymentType) {
+        if (response == "YES") {
+            if (paymentType === PaymentType.WEB) {
+                   //fireWebPaymentExtraFeesUserDecision(ExtraFeesStatus.ACCEPT_EXTRA_FEES)
+               } else if (paymentType === PaymentType.CARD) {
+
+                           fireCardPaymentExtraFeesUserDecision(ExtraFeesStatus.ACCEPT_EXTRA_FEES)
+               } else if (paymentType === PaymentType.SavedCard) {
+
+                  // fireSavedCardPaymentExtraFeesUserDecision(ExtraFeesStatus.ACCEPT_EXTRA_FEES)
+               }
+           } else {
+               if (paymentType === PaymentType.WEB) {
+                  // fireWebPaymentExtraFeesUserDecision(ExtraFeesStatus.REFUSE_EXTRA_FEES)
+               } else if (paymentType === PaymentType.CARD) {
+                  fireCardPaymentExtraFeesUserDecision(ExtraFeesStatus.REFUSE_EXTRA_FEES)
+               } else if (paymentType === PaymentType.SavedCard) {
+                 //  fireSavedCardPaymentExtraFeesUserDecision(ExtraFeesStatus.REFUSE_EXTRA_FEES)
+               }
+
+        }
+    }
+
 
     private fun removeViews(vararg viewHolders: TapBaseViewHolder?) {
         viewHolders.forEach {
@@ -782,8 +803,8 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     private fun addViews(vararg viewHolders: TapBaseViewHolder?) {
         viewHolders.forEach {
             Handler(Looper.getMainLooper()).postDelayed(Runnable {
-                if(::sdkLayout.isInitialized)
-                sdkLayout.addView(it?.view)
+                if (::sdkLayout.isInitialized)
+                    sdkLayout.addView(it?.view)
                 val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
                 it?.view?.startAnimation(animation)
             }, 0)
@@ -808,13 +829,13 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         when (savedCardsModel) {
             is SavedCard -> {
                 activateActionButton()
-                setPayButtonAction(PaymentType.SavedCard,savedCardsModel)
+                setPayButtonAction(PaymentType.SavedCard, savedCardsModel)
             }
             else -> {
                 if((savedCardsModel as PaymentOption).paymentType==PaymentType.WEB){
                     activateActionButton()
-                    println("savedCardsModel<<<>>>"+savedCardsModel)
-                    setPayButtonAction(PaymentType.WEB,savedCardsModel)
+                    println("savedCardsModel<<<>>>" + savedCardsModel)
+                    setPayButtonAction(PaymentType.WEB, savedCardsModel)
                 }else
                     displayGoPayLogin()
             }
@@ -850,8 +871,8 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             removeViews(paymentInputViewHolder)
             println("fragmentManager<<<" + R.id.webFrameLayout)
             selectedPaymentOption =savedCardsModel as PaymentOption
-            println("selectedPaymentOption<<<" +selectedPaymentOption)
-            cardViewModel.processEvent(CardViewEvent.ChargeEvent, this, selectedPaymentOption,null,null,null)
+            println("selectedPaymentOption<<<" + selectedPaymentOption)
+            cardViewModel.processEvent(CardViewEvent.ChargeEvent, this, selectedPaymentOption, null, null, null)
 
         }?.let {
             saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.addChildView(
@@ -862,7 +883,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun onClickCardPayment() {
+    private fun onClickCardPayment(savedCardsModel: Any?) {
         saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
         saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.getImageView(
                 R.drawable.loader,
@@ -874,8 +895,9 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             removeViews(amountViewHolder1)
             removeViews(saveCardSwitchHolder11)
             removeViews(paymentInputViewHolder)
-            cardViewModel.processEvent(CardViewEvent.CreateTokenEvent, this, null,null,paymentInputViewHolder.getCard(),null)
-            cardViewModel.processEvent(CardViewEvent.ChargeEvent, this, null,null,null,null)
+
+            cardViewModel.processEvent(CardViewEvent.CreateTokenEvent, this, null, null, paymentInputViewHolder.getCard(), null)
+           // cardViewModel.processEvent(CardViewEvent.ChargeEvent, this, null,null,null,null)
 
         }?.let {
             saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.addChildView(
@@ -966,7 +988,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             expiryDate: String,
             cvvNumber: String
     ) {
-        setPayButtonAction(paymentType,null)
+        setPayButtonAction(paymentType, null)
     }
 
     // Override function to open NFC fragment and scan the card via NFC.
@@ -1033,7 +1055,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
 
     @RequiresApi(Build.VERSION_CODES.N)
-    override fun onCurrencyClicked(currencySelected: String, currencyRate: Double) {
+    override fun onCurrencyClicked(currencySelected: String, currencyRate: BigDecimal) {
         println("currencySelected$currencySelected")
         println("currencyRate:$currencyRate")
 
@@ -1051,7 +1073,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         )
 
         PaymentDataSource?.setSelectedCurrency(selectedCurrency = selectedCurrency)
-        PaymentDataSource?.setSelectedAmount(currencyRate.toBigDecimal())
+        PaymentDataSource?.setSelectedAmount(currencyRate)
         filterViewModels(currencySelected)
 
 
@@ -1090,7 +1112,8 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun setPayButtonAction(paymentTypeEnum: PaymentType,savedCardsModel: Any?) {
+    private fun setPayButtonAction(paymentTypeEnum: PaymentType, savedCardsModel: Any?) {
+        println("savedCardsModel on pay acction" + savedCardsModel)
         /**
          * payment from onSelectPaymentOptionActionListener
          */
@@ -1106,7 +1129,9 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                 }
                 PaymentType.CARD -> {
                     activateActionButton()
-                    onClickCardPayment()
+
+                    showExtraFees(currentAmount, currentCurrency, paymentTypeEnum)
+                    onClickCardPayment(savedCardsModel)
                 }
                 PaymentType.telecom -> {
                 }
@@ -1341,8 +1366,8 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         val hasWebPaymentOptions = webPaymentOptions.size > 0
         val hasCardPaymentOptions = cardPaymentOptions.size > 0
         val hasOtherPaymentOptions = hasWebPaymentOptions || hasCardPaymentOptions
- println("webPaymentOptions based on currency"+webPaymentOptions)
- println("cardPaymentOptions based on currency"+cardPaymentOptions)
+ println("webPaymentOptions based on currency" + webPaymentOptions)
+ println("cardPaymentOptions based on currency" + cardPaymentOptions)
 
         adapter.updateAdapterData(webPaymentOptions)
         paymentInputViewHolder.setDatafromAPI(cardPaymentOptions)
@@ -1350,11 +1375,39 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
        }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun filterCardTypes(currency: String,paymentOptionsWorker: java.util.ArrayList<PaymentOption>) {
+    private fun filterCardTypes(currency: String, paymentOptionsWorker: java.util.ArrayList<PaymentOption>) {
         val cardPaymentOptions: java.util.ArrayList<PaymentOption> = filteredByPaymentTypeAndCurrencyAndSortedList(
                 paymentOptionsWorker, PaymentType.CARD, currency)
-      println("filterCardTypes: "+cardPaymentOptions)
+      println("filterCardTypes: " + cardPaymentOptions)
         paymentInputViewHolder.setDatafromAPI(cardPaymentOptions)
+    }
+
+     fun showExtraFees(amount: String,
+                       extraFeesAmount: String,
+                       paymentType: PaymentType
+     ) {
+//     Log.d("showExtraFees"," step 2 : show extra fees : in class "+ "["+this.getClass().getName()+"] +  PaymentType: ["+paymentType.name()+"]");
+       //  val totalAmount = SupportedCurrencies(amount.currency,
+        //amount.amount.add(extraFeesAmount.amount), amount.symbol)
+
+
+       //  val extraFeesText: String = CurrencyFormatter.currencyFormat(extraFeesAmount)
+       //  val totalAmountText: String = CurrencyFormatter.currencyFormat(totalAmount)
+         var title = "Confirm extra charges"
+         var localizedMessage = "You will be charged an additional fee of $extraFeesAmount for this type of payment, totaling an amount of $amount"
+
+         CustomUtils.showDialog(title, localizedMessage, context, 3, this, paymentType)
+
+
+    }
+    open fun fireCardPaymentExtraFeesUserDecision(userChoice: ExtraFeesStatus?) {
+
+        when (userChoice) {
+            ExtraFeesStatus.ACCEPT_EXTRA_FEES, ExtraFeesStatus.NO_EXTRA_FEES -> {"continue"}
+            ExtraFeesStatus.REFUSE_EXTRA_FEES -> {
+               unActivateActionButton()
+            }
+        }
     }
 
 }

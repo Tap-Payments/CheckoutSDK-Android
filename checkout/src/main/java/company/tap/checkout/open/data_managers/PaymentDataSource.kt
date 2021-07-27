@@ -2,7 +2,9 @@ package company.tap.checkout.open.data_managers
 
 import android.content.Context
 import company.tap.checkout.internal.api.models.CardIssuer
+import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.api.models.Merchant
+import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
 import company.tap.checkout.internal.api.responses.SDKSettings
 import company.tap.checkout.open.enums.CardType
 import company.tap.checkout.open.enums.TransactionMode
@@ -57,6 +59,8 @@ object PaymentDataSource :PaymentDataSource {
     private var selectedCurrency: String? = null
     private var selectedAmount: BigDecimal? = null
     private var sdkSettings: SDKSettings? = null
+    private var paymentOptionsResponse: PaymentOptionsResponse? = null
+    private var chargeOrAuthorize: Charge? = null
 
 
     //////////////////////// Setter's Area  ///////////////////////////////////////
@@ -269,6 +273,23 @@ object PaymentDataSource :PaymentDataSource {
     fun setSDKSettings(sdkSettings: SDKSettings?) {
         this.sdkSettings = sdkSettings
     }
+
+    /**
+     * Sets charge or authorize.
+     *
+     * @param charge the charge
+     */
+    fun setChargeOrAuthorize(charge: Charge) {
+        this.chargeOrAuthorize = charge
+    }
+    /**
+     * Set sdkSettings.
+     *
+     * @param sdkSettings the sdkSettings
+     */
+    fun setPaymentOptionsResponse(paymentOptionsResponse:PaymentOptionsResponse?) {
+        this.paymentOptionsResponse = paymentOptionsResponse
+    }
 /////<<<<<<<<<<<<<<<<<<<<<<<<<,Getters Area >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>/////////////////
 
 
@@ -376,6 +397,10 @@ object PaymentDataSource :PaymentDataSource {
 
     override fun getSelectedAmount(): BigDecimal? {
      return selectedAmount
+    }
+
+    override fun getPaymentOptionsResponse(): PaymentOptionsResponse? {
+        return paymentOptionsResponse
     }
 
     override fun getSDKSettings(): SDKSettings? {

@@ -65,10 +65,10 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
     private fun initializeSDK() {
      TapCheckOutSDK().init(
-               this,
-               "sk_test_kovrMB0mupFJXfNZWx6Etg5y",
-               "company.tap.goSellSDKExample"
-       )
+             this,
+             "sk_test_kovrMB0mupFJXfNZWx6Etg5y",
+             "company.tap.goSellSDKExample"
+     )
 
        //TapCheckOutSDK().init(this,"sk_test_kovrMB0mupFJXfNZWx6Etg5y","")
     }
@@ -354,7 +354,40 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
     }
 
     override fun authorizationSucceed(authorize: Authorize) {
-        println("authorizationSucceed" + authorize)
+        println("Authorize Succeeded : " + authorize.status)
+        println("Authorize Succeeded : " + authorize.response.message)
+
+        if (authorize.card != null) {
+            println("Payment Authorized Succeeded : first six : " + authorize?.card?.firstSix)
+            println("Payment Authorized Succeeded : last four: " + authorize?.card?.lastFour)
+            println("Payment Authorized Succeeded : card object : " + authorize?.card?.`object`)
+        }
+
+        println("##############################################################################")
+        if (authorize.acquirer != null) {
+            println("Payment Authorized Succeeded : acquirer id : " + authorize?.acquirer?.id)
+            println("Payment Authorized Succeeded : acquirer response code : " + authorize?.acquirer?.response?.code)
+            println("Payment Authorized Succeeded : acquirer response message: " + authorize?.acquirer?.response?.message)
+        }
+        println("##############################################################################")
+        if (authorize.source != null) {
+            println("Payment Authorized Succeeded : source id: " + authorize.source.id)
+            println("Payment Authorized Succeeded : source channel: " + authorize.source.channel)
+            println("Payment Authorized Succeeded : source object: " + authorize.source.`object`)
+            println("Payment Authorized Succeeded : source payment method: " + authorize.source.paymentMethod)
+            println("Payment Authorized Succeeded : source payment type: " + authorize.source.paymentType)
+            println("Payment Authorized Succeeded : source type: " + authorize.source.type)
+        }
+
+        println("##############################################################################")
+        if (authorize.expiry != null) {
+            println("Payment Authorized Succeeded : expiry type :" + authorize?.expiry?.type)
+            println("Payment Authorized Succeeded : expiry period :" + authorize?.expiry?.period)
+        }
+        Toast.makeText(this, authorize.id, Toast.LENGTH_SHORT).show()
+        modalBottomSheet.dismiss()
+
+
     }
 
     override fun authorizationFailed(authorize: Authorize?) {

@@ -8,7 +8,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import company.tap.checkout.internal.api.models.CreateTokenCard
 import company.tap.checkout.internal.api.models.PaymentOption
-import company.tap.checkout.internal.api.requests.CreateAuthorizeRequest
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -61,6 +60,7 @@ class CardViewModel : ViewModel() {
             CardViewEvent.RetreiveBinLookupEvent -> retrieveBinlookup(viewModel,binValue)
             CardViewEvent.CreateTokenEvent -> createTokenWithEncryptedCard(viewModel,cardDataRequest)
             CardViewEvent.CreateAuthorizeEvent -> createAuthorizeCard(viewModel,selectedPaymentOption)
+            CardViewEvent.RetreiveAuthorizeEvent -> retrieveAuthorize(viewModel)
         }
     }
 
@@ -80,6 +80,11 @@ class CardViewModel : ViewModel() {
         repository.retrieveBinLookup(context,viewModel,binValue)
 
     }
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun retrieveAuthorize(viewModel: TapLayoutViewModel) {
+        repository.retrieveAuthorizeRequest(context,viewModel)
+
+    }
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun createTokenWithEncryptedCard(viewModel: TapLayoutViewModel, createTokenWithEncryptedDataRequest: CreateTokenCard?) {
@@ -93,7 +98,7 @@ class CardViewModel : ViewModel() {
     private fun createAuthorizeCard(viewModel: TapLayoutViewModel,selectedPaymentOption: PaymentOption?) {
         println("createAuthorizeCard>>."+selectedPaymentOption)
         if (selectedPaymentOption != null) {
-            repository.createAuthorizeRequest(context,viewModel,selectedPaymentOption)
+            repository.createAuthorizeRequest(context, viewModel, selectedPaymentOption, repository.tokenResponse.id)
         }
 
     }

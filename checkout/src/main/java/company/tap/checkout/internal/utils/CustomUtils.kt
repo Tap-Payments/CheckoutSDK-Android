@@ -2,6 +2,7 @@ package company.tap.checkout.internal.utils
 
 import android.content.Context
 import com.gdacciaro.iOSDialog.iOSDialogBuilder
+import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.interfaces.BaseLayouttManager
 import company.tap.taplocalizationkit.LocalizationManager
 
@@ -14,7 +15,7 @@ All rights reserved.
  **/
 object CustomUtils {
 
-    fun showDialog(title: String, messageString: String, context: Context, btnType: Int? = null, baseLayouttManager: BaseLayouttManager?) {
+    fun showDialog(title: String, messageString: String, context: Context, btnType: Int? = null, baseLayouttManager: BaseLayouttManager?,paymentType: PaymentType?=null) {
         val builder = iOSDialogBuilder(context)
         builder
             .setTitle(title)
@@ -31,7 +32,22 @@ object CustomUtils {
                 dialog.dismiss()
                 baseLayouttManager?.didDialogueExecute("NO")
             }
-        } else {
+        } else if (btnType == 3) {
+            builder.setPositiveListener(LocalizationManager.getValue("yes","Common")) { dialog ->
+                dialog.dismiss()
+                if (paymentType != null) {
+                    baseLayouttManager?.dialogueExecuteExtraFees("YES",paymentType)
+                }
+
+            }
+            builder.setNegativeListener(LocalizationManager.getValue("no","Common")) { dialog ->
+                dialog.dismiss()
+                if (paymentType != null) {
+                    baseLayouttManager?.dialogueExecuteExtraFees("NO",paymentType)
+                }
+            }
+        }
+        else {
             builder.setPositiveListener(LocalizationManager.getValue("ok","Common")) { dialog ->
                 dialog.dismiss()
                 baseLayouttManager?.didDialogueExecute("OK")

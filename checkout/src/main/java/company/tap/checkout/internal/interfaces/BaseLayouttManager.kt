@@ -1,6 +1,7 @@
 package company.tap.checkout.internal.interfaces
 
 import android.content.Context
+import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.api.models.BINLookupResponse
 import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
 import company.tap.checkout.internal.api.responses.SDKSettings
@@ -26,4 +27,5 @@ interface BaseLayouttManager {
    // fun getDatafromAPI(sdkSettings: SDKSettings)
    // fun getDataPaymentOptionsResponse(paymentOptionsResponse: PaymentOptionsResponse?)
     fun didDialogueExecute(response :String)
+    fun dialogueExecuteExtraFees(response :String,paymentType: PaymentType)
 }
