@@ -1129,7 +1129,6 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                 }
                 PaymentType.CARD -> {
                     activateActionButton()
-
                     showExtraFees(currentAmount, currentCurrency, paymentTypeEnum)
                     onClickCardPayment(savedCardsModel)
                 }

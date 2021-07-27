@@ -214,7 +214,10 @@ class CardRepository : APIRequestCallback {
                     if (PaymentDataSource.getTransactionMode() == TransactionMode.AUTHORIZE_CAPTURE) {
                         createAuthorizeRequest(context, viewModel, null, tokenResponse.id)
 
-                    } else {
+                    }
+                    else if(PaymentDataSource.getTransactionMode()==TransactionMode.TOKENIZE_CARD){
+                        SDKSession?.getListener()?.cardTokenizedSuccessfully(tokenResponse)
+                    }else {
                         createChargeRequest(context, viewModel, null, tokenResponse.id)
 
                     }

@@ -320,11 +320,11 @@ class PaymenttInputViewHolder(
                  */
                 cardNumber = s.toString()
 
-            if(card.cardBrand!=null)
+            if(card.cardBrand!=null) {
                 Log.e("cardBrand????", card.cardBrand.toString())
                 Log.e("cardBrand????", card.cardBrand.toString())
                 Log.e("cardBrand", (card.validationState == CardValidationState.valid).toString())
-
+            }
                 lastCardInput = it.toString()
                 shouldShowScannerOptions = it.isEmpty()
                 controlScannerOptions()

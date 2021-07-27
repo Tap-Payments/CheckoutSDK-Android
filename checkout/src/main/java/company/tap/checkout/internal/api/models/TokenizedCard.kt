@@ -13,47 +13,47 @@ All rights reserved.
  **/
 data class TokenizedCard(
     @SerializedName("id") @Expose
-    private var id: String? = null,
+     var id: String? = null,
 
     @SerializedName("object")
     @Expose
-    private val `object`: String? = null,
+     val `object`: String? = null,
 
     @SerializedName("address")
     @Expose
-    private val address: Address? = null,
+     val address: Address? = null,
 
     @SerializedName("funding")
     @Expose
-    private val funding: String? = null,
+     val funding: String? = null,
 
     @SerializedName("fingerprint")
     @Expose
-    private val fingerprint: String? = null,
+     val fingerprint: String? = null,
 
     @SerializedName("brand")
-    private val brand: CardBrand? = null,
+     val brand: CardBrand? = null,
 
 
     @SerializedName("exp_month")
     @Expose
-    private val expirationMonth: Int = 0,
+     val expirationMonth: Int = 0,
 
     @SerializedName("exp_year")
     @Expose
-    private val expirationYear: Int = 0,
+     val expirationYear: Int = 0,
 
     @SerializedName("last_four")
     @Expose
-    private val lastFour: String? = null,
+     val lastFour: String? = null,
 
 
     @SerializedName("first_six")
     @Expose
-    private val firstSix: String? = null,
+     val firstSix: String? = null,
 
 
     @SerializedName("name")
     @Expose
-    private var name: String? = null
+     var name: String? = null
 ) : Serializable

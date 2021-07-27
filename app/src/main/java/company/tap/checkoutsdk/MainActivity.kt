@@ -202,7 +202,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
         sdkSession.setCardType(CardType.CREDIT) // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
 
-          sdkSession.setTransactionMode(TransactionMode.AUTHORIZE_CAPTURE)
+          sdkSession.setTransactionMode(TransactionMode.TOKENIZE_CARD)
          sdkSession.setDefaultCardHolderName("TEST TAP"); // ** Optional ** you can pass default CardHolderName of the user .So you don't need to type it.
          sdkSession.isUserAllowedToEnableCardHolderName(false); // ** Optional ** you can enable/ disable  default CardHolderName .
 
@@ -403,7 +403,12 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
     }
 
     override fun cardTokenizedSuccessfully(token: Token) {
-        println("cardTokenizedSuccessfully>>>>>" + token)
+        println("Card Tokenized Succeeded : ")
+        println("Token card : " + token.card?.firstSix.toString() + " **** " + token.card?.lastFour)
+        println("Token card : " + token.card?.fingerprint.toString() + " **** " + token.card?.funding)
+        println("Token card : " + token.card?.id.toString() + " ****** " + token.card?.name)
+        println("Token card : " + token.card?.address.toString() + " ****** " + token.card?.`object`)
+        println("Token card : " + token.card?.expirationMonth.toString() + " ****** " + token.card?.expirationYear)
     }
 
     override fun savedCardsList(cardsList: CardsList) {
