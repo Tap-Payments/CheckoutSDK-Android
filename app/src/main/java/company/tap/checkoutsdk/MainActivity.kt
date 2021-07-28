@@ -409,6 +409,8 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         println("Token card : " + token.card?.id.toString() + " ****** " + token.card?.name)
         println("Token card : " + token.card?.address.toString() + " ****** " + token.card?.`object`)
         println("Token card : " + token.card?.expirationMonth.toString() + " ****** " + token.card?.expirationYear)
+        Toast.makeText(this, token?.id, Toast.LENGTH_SHORT).show()
+        modalBottomSheet.dismiss()
     }
 
     override fun savedCardsList(cardsList: CardsList) {
