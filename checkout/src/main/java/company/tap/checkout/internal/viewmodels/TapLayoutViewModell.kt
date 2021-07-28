@@ -34,6 +34,7 @@ import company.tap.checkout.internal.adapter.CurrencyTypeAdapter
 import company.tap.checkout.internal.adapter.GoPayCardAdapterUIKIT
 import company.tap.checkout.internal.api.enums.ExtraFeesStatus
 import company.tap.checkout.internal.api.enums.PaymentType
+import company.tap.checkout.internal.api.enums.TransactionMode
 import company.tap.checkout.internal.api.models.BINLookupResponse
 import company.tap.checkout.internal.api.models.PaymentOption
 import company.tap.checkout.internal.api.models.SavedCard
@@ -253,6 +254,14 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
     override fun displayStartupLayout(enabledSections: ArrayList<SectionType>) {
         //Todo based on api response logic for swicth case
+
+        if(PaymentDataSource?.getTransactionMode() == company.tap.checkout.open.enums.TransactionMode.TOKENIZE_CARD){
+            addViews(businessViewHolder,
+                    paymentInputViewHolder,
+                    saveCardSwitchHolder11
+            )
+
+        }else{
         addViews(
                 businessViewHolder,
                 amountViewHolder1,
@@ -260,6 +269,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                 paymentInputViewHolder,
                 saveCardSwitchHolder11
         )
+        }
         saveCardSwitchHolder11?.view?.mainSwitch?.mainSwitchLinear?.setBackgroundColor(
                 Color.parseColor(
                         ThemeManager.getValue(
@@ -532,7 +542,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         if (paymentOptionsResponse != null) {
             this.paymentOptionsResponse = paymentOptionsResponse
         }
-        if(::businessViewHolder.isInitialized) {
+        if(::businessViewHolder.isInitialized && PaymentDataSource?.getTransactionMode()!= company.tap.checkout.open.enums.TransactionMode.TOKENIZE_CARD) {
             businessViewHolder.setDatafromAPI(
                     sdkSettings?.data?.merchant?.logo,
                     sdkSettings?.data?.merchant?.name

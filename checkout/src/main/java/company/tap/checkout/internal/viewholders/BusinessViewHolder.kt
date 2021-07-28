@@ -34,8 +34,13 @@ class BusinessViewHolder(private val context: Context) : TapBaseViewHolder {
 
     override fun bindViewComponents() {
 
-        if (merchantName != null)
+        if (merchantName != null){
             view.headerView.setHeaderDataSource(getHeaderDataSourceFromAPI())
+        }else {
+            view.headerView.setHeaderDataSource(HeaderDataSource("Enter Card Details",null,null))
+            view.headerView.businessIcon.visibility= View.GONE
+        }
+
         /**
          * set separator background
          */
