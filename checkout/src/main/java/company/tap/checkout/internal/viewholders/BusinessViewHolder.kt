@@ -36,6 +36,7 @@ class BusinessViewHolder(private val context: Context) : TapBaseViewHolder {
 
         if (merchantName != null){
             view.headerView.setHeaderDataSource(getHeaderDataSourceFromAPI())
+            view.headerView.businessIcon.visibility= View.VISIBLE
         }else {
             view.headerView.setHeaderDataSource(HeaderDataSource("Enter Card Details",null,null))
             view.headerView.businessIcon.visibility= View.GONE
