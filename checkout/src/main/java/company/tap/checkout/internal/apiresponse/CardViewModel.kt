@@ -52,7 +52,7 @@ class CardViewModel : ViewModel() {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun processEvent(event: CardViewEvent, viewModel: TapLayoutViewModel, selectedPaymentOption: PaymentOption?, binValue:String?, cardDataRequest: CreateTokenCard?,cardViewModel: CardViewModel?) {
+    fun processEvent(event: CardViewEvent, viewModel: TapLayoutViewModel, selectedPaymentOption: PaymentOption?, binValue: String? = null, cardDataRequest: CreateTokenCard?, cardViewModel: CardViewModel? = null, customerId: String?=null, cardId: String?=null) {
         when (event) {
             CardViewEvent.InitEvent -> getInitData(viewModel,cardViewModel)
             CardViewEvent.ChargeEvent -> createChargeRequest(viewModel,selectedPaymentOption,null)
@@ -62,6 +62,7 @@ class CardViewModel : ViewModel() {
             CardViewEvent.CreateAuthorizeEvent -> createAuthorizeCard(viewModel,selectedPaymentOption)
             CardViewEvent.RetreiveAuthorizeEvent -> retrieveAuthorize(viewModel)
             CardViewEvent.RetreiveSaveCardEvent -> retrieveSaveCard(viewModel)
+            CardViewEvent.DeleteSaveCardEvent -> callDeleteCardAPI(viewModel,cardId,customerId )
         }
     }
 
@@ -89,6 +90,11 @@ class CardViewModel : ViewModel() {
     @RequiresApi(Build.VERSION_CODES.N)
     private fun retrieveSaveCard(viewModel: TapLayoutViewModel) {
         repository.retrieveSaveCard(context,viewModel)
+
+    }
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun callDeleteCardAPI(viewModel: TapLayoutViewModel, deleteCardId: String?, customerId: String?) {
+        repository.callDeleteCardAPI(context,viewModel,deleteCardId,customerId)
 
     }
 

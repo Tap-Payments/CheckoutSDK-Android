@@ -113,13 +113,13 @@ class TapCustomWebViewClient constructor(private val customWebViewClientContract
             val urlQuerySanitizer: Uri = Uri.parse(url)
             println("urlQuerySanitizer on checkpayment" + urlQuerySanitizer)
             if(url.contains("authorize")){
-                cardViewModel.processEvent(CardViewEvent.RetreiveAuthorizeEvent,TapLayoutViewModel(),  null,null,null,null)
+                cardViewModel.processEvent(CardViewEvent.RetreiveAuthorizeEvent, TapLayoutViewModel(), null, null, null, null)
 
             }else if(url.contains("auth")){
-                cardViewModel.processEvent(CardViewEvent.RetreiveSaveCardEvent,TapLayoutViewModel(),  null,null,null,null)
+                cardViewModel.processEvent(CardViewEvent.RetreiveSaveCardEvent, TapLayoutViewModel(), null, null, null, null)
 
             }else{
-            cardViewModel.processEvent(CardViewEvent.RetreiveChargeEvent,TapLayoutViewModel(),  null,null,null,null)}
+            cardViewModel.processEvent(CardViewEvent.RetreiveChargeEvent, TapLayoutViewModel(), null, null, null, null)}
             val status: String = urlQuerySanitizer.getQueryParameter("tap_id").toString()
             println("status on checkpayment" + status)
             status.equals("CAPTURED", ignoreCase = true) || status.equals(

@@ -38,6 +38,10 @@ object ApiService {
      * The Charge id.
      */
   //  const val CHARGE_ID = "charge_id/"
+    /**
+     * Delete Card API
+     */
+    const val DELETE_CARD = "card"
     const val CHARGE_ID = "charges/"
     const val AUTHORIZE_ID = "authorize/"
     const val SAVE_CARD_ID = "card/verify/"

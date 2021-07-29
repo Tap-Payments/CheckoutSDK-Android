@@ -34,7 +34,6 @@ import company.tap.checkout.internal.adapter.CurrencyTypeAdapter
 import company.tap.checkout.internal.adapter.GoPayCardAdapterUIKIT
 import company.tap.checkout.internal.api.enums.ExtraFeesStatus
 import company.tap.checkout.internal.api.enums.PaymentType
-import company.tap.checkout.internal.api.enums.TransactionMode
 import company.tap.checkout.internal.api.models.BINLookupResponse
 import company.tap.checkout.internal.api.models.PaymentOption
 import company.tap.checkout.internal.api.models.SavedCard
@@ -133,6 +132,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     lateinit var tapCardPhoneListDataSource: ArrayList<TapCardPhoneListDataSource>
     lateinit var paymentOptionsResponse: PaymentOptionsResponse
     lateinit var redirectURL: String
+    lateinit var cardId: String
     private var sdkSession: SDKSession = SDKSession
     @JvmField
     var selectedAmountPos: BigDecimal ? = null
@@ -758,11 +758,13 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     @SuppressLint("WrongConstant")
     override fun didDialogueExecute(response: String) {
         println("response are$response")
         if (response == "YES") {
             if (deleteCard) {
+                cardViewModel.processEvent(CardViewEvent.DeleteSaveCardEvent, this, null, null, null, null,"customerId",cardId)
                 adapter.deleteSelectedCard(selectedItemsDel)
                 adapter.updateShaking(false)
                 deleteCard = false
@@ -937,8 +939,11 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         }
     }
 
-    override fun onDeleteIconClicked(stopAnimation: Boolean, itemId: Int) {
+    @RequiresApi(Build.VERSION_CODES.N)
+    override fun onDeleteIconClicked(stopAnimation: Boolean, itemId: Int, cardId:String) {
         println("delete icon is clicked:$stopAnimation" + "itemId is" + itemId)
+        println("stopAnimation icon is clicked:$stopAnimation")
+        this.cardId = cardId
         if (stopAnimation) {
             stopDeleteActionAnimation(itemId)
         } else {
@@ -951,6 +956,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     }
 
     private fun stopDeleteActionAnimation(itemId: Int) {
+        println("itemId"+itemId)
         isShaking.value = false
         cardViewHolder11.view.mainChipgroup.groupAction?.text = LocalizationManager.getValue(
                 "GatewayHeader",
@@ -968,7 +974,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                 this
         )
         selectedItemsDel = itemId
-        deleteCard = true
+       // deleteCard = true
 
     }
 

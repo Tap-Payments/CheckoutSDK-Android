@@ -32,6 +32,7 @@ object CustomUtils {
                 dialog.dismiss()
                 baseLayouttManager?.didDialogueExecute("NO")
             }
+                    .build().show()
         } else if (btnType == 3) {
             builder.setPositiveListener(LocalizationManager.getValue("yes","Common")) { dialog ->
                 dialog.dismiss()
@@ -53,7 +54,7 @@ object CustomUtils {
                 baseLayouttManager?.didDialogueExecute("OK")
             }
         }
-            .build().show()
+       .build().show()
 
     }
 }

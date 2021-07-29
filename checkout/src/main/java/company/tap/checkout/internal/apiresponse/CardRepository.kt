@@ -10,6 +10,7 @@ import company.tap.checkout.internal.PaymentDataProvider
 import company.tap.checkout.internal.api.enums.*
 import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.internal.api.requests.*
+import company.tap.checkout.internal.api.responses.DeleteCardResponse
 import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
 import company.tap.checkout.internal.api.responses.SDKSettings
 import company.tap.checkout.internal.interfaces.IPaymentDataProvider
@@ -48,6 +49,7 @@ class CardRepository : APIRequestCallback {
     lateinit var chargeResponse:Charge
     lateinit var binLookupResponse: BINLookupResponse
     lateinit var authorizeActionResponse: Authorize
+    lateinit var deleteCardResponse: DeleteCardResponse
     lateinit var saveCardResponse: SaveCard
     lateinit var tokenResponse: Token
     lateinit var context: Context
@@ -160,6 +162,13 @@ class CardRepository : APIRequestCallback {
         )
     }
     @RequiresApi(Build.VERSION_CODES.N)
+    fun callDeleteCardAPI(context: Context, viewModel: TapLayoutViewModel, deleteCardId: String?, customerId: String?) {
+        this.viewModel = viewModel
+        NetworkController.getInstance().processRequest(TapMethodType.DELETE, ApiService.DELETE_CARD + "/"+customerId+"/"+deleteCardId, null, this,
+                DEL_SAVE_CARD_CODE
+        )
+    }
+    @RequiresApi(Build.VERSION_CODES.N)
     fun createTokenWithEncryptedCard(context: Context, viewModel: TapLayoutViewModel, createTokenWithCardDataRequest: CreateTokenCard?) {
         this.viewModel = viewModel
         val createTokenWithCardDataReq = createTokenWithCardDataRequest?.let { CreateTokenWithCardDataRequest(it) }
@@ -253,6 +262,14 @@ class CardRepository : APIRequestCallback {
                       //  viewModel?.redirectLoadingFinished(true)
 
                     }else  handleAuthorizeResponse(authorizeActionResponse)
+
+
+            }
+        }
+        else if(requestCode == DEL_SAVE_CARD_CODE){
+            response?.body().let {
+                deleteCardResponse = Gson().fromJson(it, DeleteCardResponse::class.java)
+                println("deleteCardResponse is"+deleteCardResponse)
 
 
             }
@@ -391,14 +408,12 @@ class CardRepository : APIRequestCallback {
     }
 
     private fun handleSaveCardResponse(saveCard: SaveCard) {
-
         // Log.d("CardRepository"," Cards >> didReceiveSaveCard * * * " + saveCard);
         if (saveCard == null) return
-        //   Log.d("GoSellPaymentActivity"," Cards >> didReceiveSaveCard * * * status :" + saveCard.getStatus());
-
-        when (saveCard.getStatus()) {
+        //   Log.d("CardRepository"," Cards >> didReceiveSaveCard * * * status :" + saveCard.getStatus());
+        when (saveCard.status) {
             ChargeStatus.INITIATED -> {
-                val authenticate: Authenticate = saveCard.getAuthenticate()
+                val authenticate: Authenticate = saveCard.authenticate
                 if (authenticate != null && authenticate.status === AuthenticationStatus.INITIATED) {
                     when (authenticate.type) {
                         AuthenticationType.BIOMETRICS -> {
@@ -426,7 +441,6 @@ class CardRepository : APIRequestCallback {
         }
     }
 
-
     override fun onFailure(requestCode: Int, errorDetails: GoSellError?) {
         errorDetails?.let {
             if (it.throwable != null) {
@@ -451,6 +465,7 @@ class CardRepository : APIRequestCallback {
         private const val RETRIEVE_AUTHORIZE_CODE = 8
         private const val CREATE_SAVE_CARD = 9
         private const val RETRIEVE_SAVE_CARD_CODE = 10
+        private const val DEL_SAVE_CARD_CODE = 11
 
 
     }

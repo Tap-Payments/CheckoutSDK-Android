@@ -134,7 +134,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         if (isShaking) holder.itemView.deleteImageViewSaved?.visibility = View.VISIBLE
         else holder.itemView.deleteImageViewSaved?.visibility = View.GONE
         holder.itemView.deleteImageViewSaved?.setOnClickListener {
-            onCardSelectedActionListener.onDeleteIconClicked(true, holder.itemView.id)
+         //   onCardSelectedActionListener.onDeleteIconClicked(true, holder.itemView.id,arrayListSaveCard[selectedPosition].id)
           //TODO  COMMENTED arrayListCards.removeAt(holder.itemView.id)
             holder.itemView.clearAnimation()
             it.animate().cancel()
@@ -235,8 +235,8 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         }
     private fun deleteSelectedCard(holder: RecyclerView.ViewHolder, position: Int){
         holder.itemView.deleteImageViewSaved?.setOnClickListener {
-            println("delete imageview clicked!!")
-            onCardSelectedActionListener.onDeleteIconClicked(true, position)
+            println("delete imageview clicked!!"+arrayListCards[position].id)
+            onCardSelectedActionListener.onDeleteIconClicked(true, position,arrayListCards[position].id)
             holder.itemView.clearAnimation()
             it.animate().cancel()
             it.clearAnimation()
