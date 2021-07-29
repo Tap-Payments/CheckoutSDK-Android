@@ -30,10 +30,16 @@ object ApiService {
     const val TOKEN = "tokens"
 
     /**
+     * The Save card.
+     */
+    const val SAVE_CARD = "card/verify"
+
+    /**
      * The Charge id.
      */
   //  const val CHARGE_ID = "charge_id/"
     const val CHARGE_ID = "charges/"
     const val AUTHORIZE_ID = "authorize/"
+    const val SAVE_CARD_ID = "card/verify/"
     const val INIT_AR = "https://run.mocky.io/v3/491462af-994e-4d99-9218-041289a1ae5d"
 }

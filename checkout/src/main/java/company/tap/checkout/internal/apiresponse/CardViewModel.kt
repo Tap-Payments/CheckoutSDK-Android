@@ -61,6 +61,7 @@ class CardViewModel : ViewModel() {
             CardViewEvent.CreateTokenEvent -> createTokenWithEncryptedCard(viewModel,cardDataRequest)
             CardViewEvent.CreateAuthorizeEvent -> createAuthorizeCard(viewModel,selectedPaymentOption)
             CardViewEvent.RetreiveAuthorizeEvent -> retrieveAuthorize(viewModel)
+            CardViewEvent.RetreiveSaveCardEvent -> retrieveSaveCard(viewModel)
         }
     }
 
@@ -85,6 +86,11 @@ class CardViewModel : ViewModel() {
         repository.retrieveAuthorizeRequest(context,viewModel)
 
     }
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun retrieveSaveCard(viewModel: TapLayoutViewModel) {
+        repository.retrieveSaveCard(context,viewModel)
+
+    }
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun createTokenWithEncryptedCard(viewModel: TapLayoutViewModel, createTokenWithEncryptedDataRequest: CreateTokenCard?) {
@@ -99,6 +105,14 @@ class CardViewModel : ViewModel() {
         println("createAuthorizeCard>>."+selectedPaymentOption)
         if (selectedPaymentOption != null) {
             repository.createAuthorizeRequest(context, viewModel, selectedPaymentOption, repository.tokenResponse.id)
+        }
+
+    }
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun createSaveCard(viewModel: TapLayoutViewModel,selectedPaymentOption: PaymentOption?) {
+        println("createSaveCard>>."+selectedPaymentOption)
+        if (selectedPaymentOption != null) {
+            repository.createSaveCard(context, viewModel, null, repository.tokenResponse.id)
         }
 
     }

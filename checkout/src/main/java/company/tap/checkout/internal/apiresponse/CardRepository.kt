@@ -12,10 +12,7 @@ import company.tap.checkout.internal.api.enums.AuthenticationType
 import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.enums.URLStatus
 import company.tap.checkout.internal.api.models.*
-import company.tap.checkout.internal.api.requests.CreateAuthorizeRequest
-import company.tap.checkout.internal.api.requests.CreateChargeRequest
-import company.tap.checkout.internal.api.requests.CreateTokenWithCardDataRequest
-import company.tap.checkout.internal.api.requests.PaymentOptionsRequest
+import company.tap.checkout.internal.api.requests.*
 import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
 import company.tap.checkout.internal.api.responses.SDKSettings
 import company.tap.checkout.internal.interfaces.IPaymentDataProvider
@@ -55,6 +52,7 @@ class CardRepository : APIRequestCallback {
     lateinit var chargeResponse:Charge
     lateinit var binLookupResponse: BINLookupResponse
     lateinit var authorizeActionResponse: Authorize
+    lateinit var saveCardResponse: SaveCard
     lateinit var tokenResponse: Token
     lateinit var context: Context
     private lateinit var viewModel: TapLayoutViewModel
@@ -159,6 +157,13 @@ class CardRepository : APIRequestCallback {
         )
     }
     @RequiresApi(Build.VERSION_CODES.N)
+    fun retrieveSaveCard(context: Context, viewModel: TapLayoutViewModel) {
+        this.viewModel = viewModel
+        NetworkController.getInstance().processRequest(TapMethodType.GET, ApiService.SAVE_CARD_ID +saveCardResponse.id, null, this,
+                 RETRIEVE_SAVE_CARD_CODE
+        )
+    }
+    @RequiresApi(Build.VERSION_CODES.N)
     fun createTokenWithEncryptedCard(context: Context, viewModel: TapLayoutViewModel, createTokenWithCardDataRequest: CreateTokenCard?) {
         this.viewModel = viewModel
         val createTokenWithCardDataReq = createTokenWithCardDataRequest?.let { CreateTokenWithCardDataRequest(it) }
@@ -166,6 +171,19 @@ class CardRepository : APIRequestCallback {
         NetworkController.getInstance().processRequest(TapMethodType.POST, ApiService.TOKEN, jsonString,
                 this, CREATE_TOKEN_CODE
         )
+    }
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun createSaveCard(
+        context: Context,
+        viewModel: TapLayoutViewModel,
+        selectedPaymentOption: PaymentOption?,
+        identifier: String?
+    ) {
+        this.viewModel = viewModel
+
+        if(identifier!=null)callChargeOrAuthorizeOrSaveCardAPI(SourceRequest(identifier), selectedPaymentOption, null, null, context)
+        else
+            selectedPaymentOption?.sourceId?.let { SourceRequest(it) }?.let { callChargeOrAuthorizeOrSaveCardAPI(it, selectedPaymentOption, null, null, context) }
     }
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onSuccess(responseCode: Int, requestCode: Int, response: Response<JsonElement>?) {
@@ -217,7 +235,11 @@ class CardRepository : APIRequestCallback {
                     }
                     else if(PaymentDataSource.getTransactionMode()==TransactionMode.TOKENIZE_CARD){
                         SDKSession?.getListener()?.cardTokenizedSuccessfully(tokenResponse)
-                    }else {
+                    }
+                    else if(PaymentDataSource.getTransactionMode()==TransactionMode.SAVE_CARD){
+                        createSaveCard(context,viewModel,null,tokenResponse.id)
+                    }
+                    else {
                         createChargeRequest(context, viewModel, null, tokenResponse.id)
 
                     }
@@ -238,6 +260,26 @@ class CardRepository : APIRequestCallback {
 
 
             }
+        }
+        else if(requestCode == CREATE_SAVE_CARD){
+            response?.body().let {
+                saveCardResponse = Gson().fromJson(it, SaveCard::class.java)
+                if(saveCardResponse?.status?.name == ChargeStatus.INITIATED.name){
+                    saveCardResponse?.transaction?.url?.let { it1 -> viewModel?.displayRedirect(it1) }
+
+                }else  handleChargeResponse(saveCardResponse)
+
+            }
+        }
+        else if(requestCode == RETRIEVE_SAVE_CARD_CODE){
+            println("data in resp body>>"+response?.body())
+            response?.body().let {
+                saveCardResponse = Gson().fromJson(it, SaveCard::class.java)
+                println("saveCardResponse value is>>>>" + saveCardResponse.status.name)
+                sdkSession.getListener()?.cardSaved(saveCardResponse)
+            }
+
+
         }
         else if(requestCode == RETRIEVE_AUTHORIZE_CODE){
             response?.body().let {
@@ -334,6 +376,10 @@ class CardRepository : APIRequestCallback {
         private const val CREATE_TOKEN_CODE = 6
         private const val CREATE_AUTHORIZE_CODE = 7
         private const val RETRIEVE_AUTHORIZE_CODE = 8
+        private const val CREATE_SAVE_CARD = 9
+        private const val RETRIEVE_SAVE_CARD_CODE = 10
+
+
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -457,8 +503,7 @@ class CardRepository : APIRequestCallback {
                 }
                 val jsonString = Gson().toJson(authorizeRequest)
                 println("jsonString for auth>>" + jsonString)
-                if (LocalizationManager.getLocale(context).language == "en")
-                    NetworkController.getInstance().processRequest(
+                NetworkController.getInstance().processRequest(
                             TapMethodType.POST,
                             ApiService.AUTHORIZE,
                             jsonString,
@@ -467,9 +512,10 @@ class CardRepository : APIRequestCallback {
                     )
 
             }
-            /*  TransactionMode.SAVE_CARD -> {
-                  val saveCardRequest = CreateSaveCardRequest(
-                          amountedCurrency.getCurrency(),
+              TransactionMode.SAVE_CARD -> {
+                  val saveCardRequest = amountedCurrency?.currency?.let {
+                      CreateSaveCardRequest(
+                          it,
                           customer,
                           order,
                           redirect,
@@ -488,9 +534,18 @@ class CardRepository : APIRequestCallback {
                           true,
                           true,
                           cardIssuer
+                      )
+                  }
+                  val jsonString = Gson().toJson(saveCardRequest)
+                  NetworkController.getInstance().processRequest(
+                      TapMethodType.POST,
+                      ApiService.SAVE_CARD,
+                      jsonString,
+                      this,
+                      CREATE_SAVE_CARD
                   )
 
-              }*/
+              }
         }
     }
 

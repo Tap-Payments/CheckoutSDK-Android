@@ -11,26 +11,26 @@ All rights reserved.
  **/
 data class SaveCard(
     @SerializedName("save_card") @Expose
-    private var save_card: Boolean = false,
+     var save_card: Boolean = false,
 
 
     @SerializedName("risk")
     @Expose
-    private val risk: Boolean = false,
+     val risk: Boolean = false,
 
     @SerializedName("issuer")
     @Expose
-    private val issuer: Boolean = false,
+     val issuer: Boolean = false,
 
     @SerializedName("promo")
     @Expose
-    private val promo: Boolean = false,
+     val promo: Boolean = false,
 
     @SerializedName("loyalty")
     @Expose
-    private val loyalty: Boolean = false,
+     val loyalty: Boolean = false,
 
     @SerializedName("card_issuer")
     @Expose
-    private var card_issuer: CardIssuer? = null
+     var card_issuer: CardIssuer? = null
 ): Charge()

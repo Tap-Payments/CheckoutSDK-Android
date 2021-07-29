@@ -202,7 +202,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
         sdkSession.setCardType(CardType.CREDIT) // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
 
-          sdkSession.setTransactionMode(TransactionMode.TOKENIZE_CARD)
+          sdkSession.setTransactionMode(TransactionMode.SAVE_CARD)
          sdkSession.setDefaultCardHolderName("TEST TAP"); // ** Optional ** you can pass default CardHolderName of the user .So you don't need to type it.
          sdkSession.isUserAllowedToEnableCardHolderName(false); // ** Optional ** you can enable/ disable  default CardHolderName .
 
@@ -395,7 +395,18 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
     }
 
     override fun cardSaved(charge: Charge) {
-        println("cardSaved>>>>>" + charge)
+        // Cast charge object to SaveCard first to get all the Card info.
+        if (charge is SaveCard) {
+            println("Card Saved Succeeded : first six digits : " + charge.card?.firstSix.toString() + "  last four :" + charge.card?.lastFour)
+        }
+        println("Card Saved Succeeded : " + charge.status)
+        println("Card Saved Succeeded : " + charge.card?.brand)
+        println("Card Saved Succeeded : " + charge.description)
+        println("Card Saved Succeeded : " + charge.response?.message)
+        println("Card Saved Succeeded : " + (charge as SaveCard)?.card_issuer?.name)
+        println("Card Saved Succeeded : " + charge.card_issuer?.id)
+        Toast.makeText(this, charge?.id, Toast.LENGTH_SHORT).show()
+        modalBottomSheet.dismiss()
     }
 
     override fun cardSavingFailed(charge: Charge) {

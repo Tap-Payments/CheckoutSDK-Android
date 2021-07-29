@@ -2,6 +2,7 @@ package company.tap.checkout.internal.api.models
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 /**
  * Created by AhlaamK on 6/13/21.
@@ -11,13 +12,13 @@ All rights reserved.
  **/
 data class CardIssuer(
     @SerializedName("id") @Expose
-    private var id: String,
+     var id: String,
 
     @SerializedName("name")
     @Expose
-    private val name: String,
+     val name: String,
 
     @SerializedName("country")
     @Expose
-    private val country: String
-)
+     val country: String
+):Serializable

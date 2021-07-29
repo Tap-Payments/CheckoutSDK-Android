@@ -254,22 +254,34 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
     override fun displayStartupLayout(enabledSections: ArrayList<SectionType>) {
         //Todo based on api response logic for swicth case
+        when(PaymentDataSource?.getTransactionMode()) {
 
-        if(PaymentDataSource?.getTransactionMode() == company.tap.checkout.open.enums.TransactionMode.TOKENIZE_CARD){
-            addViews(businessViewHolder,
+            company.tap.checkout.open.enums.TransactionMode.TOKENIZE_CARD -> {
+                addViews(
+                    businessViewHolder,
                     paymentInputViewHolder,
                     saveCardSwitchHolder11
-            )
+                )
 
-        }else{
-        addViews(
-                businessViewHolder,
-                amountViewHolder1,
-                cardViewHolder11,
-                paymentInputViewHolder,
-                saveCardSwitchHolder11
-        )
+            }
+            company.tap.checkout.open.enums.TransactionMode.SAVE_CARD -> {
+                addViews(
+                    businessViewHolder,
+                    paymentInputViewHolder,
+                    saveCardSwitchHolder11
+                )
+            }
+            else ->{
+                addViews(
+                    businessViewHolder,
+                    amountViewHolder1,
+                    cardViewHolder11,
+                    paymentInputViewHolder,
+                    saveCardSwitchHolder11
+                )
+            }
         }
+
         saveCardSwitchHolder11?.view?.mainSwitch?.mainSwitchLinear?.setBackgroundColor(
                 Color.parseColor(
                         ThemeManager.getValue(
@@ -1124,6 +1136,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     @RequiresApi(Build.VERSION_CODES.N)
     private fun setPayButtonAction(paymentTypeEnum: PaymentType, savedCardsModel: Any?) {
         println("savedCardsModel on pay acction" + savedCardsModel)
+        println("paymentTypeEnum on pay acction" + paymentTypeEnum)
         /**
          * payment from onSelectPaymentOptionActionListener
          */

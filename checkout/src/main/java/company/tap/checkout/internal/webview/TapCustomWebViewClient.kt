@@ -68,6 +68,7 @@ class TapCustomWebViewClient constructor(private val customWebViewClientContract
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun checkCreditCardPaymentStatus(url: String) {
         if (url.contains("response/receiptCC".toLowerCase())) {
             if (checkPaymentSuccess(url)) customWebViewClientContract.submitResponseStatus(true) else customWebViewClientContract.submitResponseStatus(false)
@@ -76,6 +77,7 @@ class TapCustomWebViewClient constructor(private val customWebViewClientContract
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun checkCreditCardToken(url: String) {
         if (url.contains("response/receipt_checkout".toLowerCase())) {
             if (checkPaymentSuccess(url)) customWebViewClientContract.submitResponseStatus(true) else customWebViewClientContract.submitResponseStatus(false)
@@ -110,8 +112,11 @@ class TapCustomWebViewClient constructor(private val customWebViewClientContract
         return try {
             val urlQuerySanitizer: Uri = Uri.parse(url)
             println("urlQuerySanitizer on checkpayment" + urlQuerySanitizer)
-            if(url.contains("auth")){
+            if(url.contains("authorize")){
                 cardViewModel.processEvent(CardViewEvent.RetreiveAuthorizeEvent,TapLayoutViewModel(),  null,null,null,null)
+
+            }else if(url.contains("auth")){
+                cardViewModel.processEvent(CardViewEvent.RetreiveSaveCardEvent,TapLayoutViewModel(),  null,null,null,null)
 
             }else{
             cardViewModel.processEvent(CardViewEvent.RetreiveChargeEvent,TapLayoutViewModel(),  null,null,null,null)}
