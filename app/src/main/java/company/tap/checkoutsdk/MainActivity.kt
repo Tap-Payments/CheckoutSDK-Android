@@ -391,7 +391,9 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
     }
 
     override fun authorizationFailed(authorize: Authorize?) {
-        println("authorizationFailed>>>>>" + authorize)
+        println("Authorize Failed : " + authorize!!.status)
+        println("Authorize Failed : " + authorize.description)
+        println("Authorize Failed : " + authorize.response.message)
     }
 
     override fun cardSaved(charge: Charge) {
@@ -410,7 +412,9 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
     }
 
     override fun cardSavingFailed(charge: Charge) {
-        println("cardSavingFailed>>>>>" + charge)
+        println("Card Saved Failed : " + charge.status)
+        println("Card Saved Failed : " + charge.description)
+        println("Card Saved Failed : " + charge.response.message)
     }
 
     override fun cardTokenizedSuccessfully(token: Token) {
