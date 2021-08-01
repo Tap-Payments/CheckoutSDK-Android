@@ -341,7 +341,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
             System.out.println("Payment Succeeded : expiry type :" + charge.expiry?.type)
             System.out.println("Payment Succeeded : expiry period :" + charge.expiry?.period)
         }
-        Toast.makeText(this, charge.id, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this,"paymentSucceed"+charge.id, Toast.LENGTH_SHORT).show()
         modalBottomSheet.dismiss()
     }
 
@@ -349,6 +349,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         println("Payment Failed : " + charge?.status)
         println("Payment Failed : " + charge?.description)
         println("Payment Failed : " + charge?.response?.message)
+        Toast.makeText(this,"paymentFailed"+charge?.response?.message, Toast.LENGTH_SHORT).show()
 
         modalBottomSheet.dismiss()
     }
@@ -384,7 +385,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
             println("Payment Authorized Succeeded : expiry type :" + authorize?.expiry?.type)
             println("Payment Authorized Succeeded : expiry period :" + authorize?.expiry?.period)
         }
-        Toast.makeText(this, authorize.id, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "authorizationSucceed"+authorize.id, Toast.LENGTH_SHORT).show()
         modalBottomSheet.dismiss()
 
 
@@ -407,7 +408,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         println("Card Saved Succeeded : " + charge.response?.message)
         println("Card Saved Succeeded : " + (charge as SaveCard)?.card_issuer?.name)
         println("Card Saved Succeeded : " + charge.card_issuer?.id)
-        Toast.makeText(this, charge?.id, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "cardSaved"+charge?.id, Toast.LENGTH_SHORT).show()
         modalBottomSheet.dismiss()
     }
 
@@ -424,7 +425,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         println("Token card : " + token.card?.id.toString() + " ****** " + token.card?.name)
         println("Token card : " + token.card?.address.toString() + " ****** " + token.card?.`object`)
         println("Token card : " + token.card?.expirationMonth.toString() + " ****** " + token.card?.expirationYear)
-        Toast.makeText(this, token?.id, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this,"cardTokenizedSuccessfully"+token?.id, Toast.LENGTH_SHORT).show()
         modalBottomSheet.dismiss()
     }
 
