@@ -192,9 +192,11 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     }
 
     fun deleteSelectedCard(position: Int){
+        println("position in deleteSelection"+position)
         val cardDelList = ArrayList(arrayListCards)
         cardDelList.removeAt(position)
         arrayListCards = cardDelList as List<SavedCard>
+        println("deleteSelectedCard"+arrayListCards)
         notifyDataSetChanged()
     }
 

@@ -94,6 +94,7 @@ class CardViewModel : ViewModel() {
     }
     @RequiresApi(Build.VERSION_CODES.N)
     private fun callDeleteCardAPI(viewModel: TapLayoutViewModel, deleteCardId: String?, customerId: String?) {
+        println("<<customerId>>"+customerId+"<<<deleteCardId>>>"+deleteCardId)
         repository.callDeleteCardAPI(context,viewModel,deleteCardId,customerId)
 
     }

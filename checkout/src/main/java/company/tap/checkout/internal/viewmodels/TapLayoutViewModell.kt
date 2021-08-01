@@ -38,6 +38,7 @@ import company.tap.checkout.internal.api.models.BINLookupResponse
 import company.tap.checkout.internal.api.models.PaymentOption
 import company.tap.checkout.internal.api.models.SavedCard
 import company.tap.checkout.internal.api.models.SupportedCurrencies
+import company.tap.checkout.internal.api.responses.DeleteCardResponse
 import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
 import company.tap.checkout.internal.api.responses.SDKSettings
 import company.tap.checkout.internal.apiresponse.CardViewEvent
@@ -764,10 +765,8 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         println("response are$response")
         if (response == "YES") {
             if (deleteCard) {
-                cardViewModel.processEvent(CardViewEvent.DeleteSaveCardEvent, this, null, null, null, null,"customerId",cardId)
-                adapter.deleteSelectedCard(selectedItemsDel)
-                adapter.updateShaking(false)
-                deleteCard = false
+                cardViewModel.processEvent(CardViewEvent.DeleteSaveCardEvent, this, null, null, null, null,PaymentDataSource?.getCustomer().identifier,cardId)
+
             } else {
                 removeViews(goPaySavedCardHolder)
                 adapter.updateAdapterDataSavedCard(savedCardList.value as List<SavedCard>)
@@ -808,6 +807,15 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                }
 
         }
+    }
+
+    override fun deleteSelectedCardListener(delSelectedCard: DeleteCardResponse) {
+        println("delSelectedCard value is"+delSelectedCard)
+       if(delSelectedCard?.deleted){
+           adapter.deleteSelectedCard(selectedItemsDel)
+           adapter.updateShaking(false)
+           deleteCard = false
+       }
     }
 
 
@@ -974,7 +982,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                 this
         )
         selectedItemsDel = itemId
-       // deleteCard = true
+        deleteCard = true
 
     }
 

@@ -270,8 +270,7 @@ class CardRepository : APIRequestCallback {
             response?.body().let {
                 deleteCardResponse = Gson().fromJson(it, DeleteCardResponse::class.java)
                 println("deleteCardResponse is"+deleteCardResponse)
-
-
+                viewModel?.deleteSelectedCardListener(deleteCardResponse)
             }
         }
         else if(requestCode == CREATE_SAVE_CARD){

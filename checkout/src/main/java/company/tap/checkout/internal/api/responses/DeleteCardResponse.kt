@@ -12,20 +12,7 @@ Copyright (c) 2021    Tap Payments.
 All rights reserved.
  **/
 @RestrictTo(RestrictTo.Scope.LIBRARY)
-class DeleteCardResponse : BaseResponse {
-    @SerializedName("id")
-    @Expose
-    var id: String? = null
-
-    @SerializedName("deleted")
-    @Expose
-    var deleted = false
-    @JvmName("getId1")
-    fun getId(): String? {
-        return id
-    }
-
-    fun isDeleted(): Boolean {
-        return deleted
-    }
-}
+class DeleteCardResponse( @SerializedName("id") @Expose
+                          var id: String? = null,
+                          @SerializedName("deleted") @Expose
+                          var deleted:Boolean) : BaseResponse
