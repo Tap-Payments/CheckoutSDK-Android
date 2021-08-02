@@ -60,7 +60,6 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     fun updateAdapterDataSavedCard(adapterSavedCard: List<SavedCard>) {
         arrayListCards=java.util.ArrayList()
         this.arrayListCards = adapterSavedCard
-        println("arrayListCards in adapter>>"+arrayListCards)
         notifyDataSetChanged()
     }
 
@@ -102,11 +101,10 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         }
 
        else if(position.minus(adapterContent.size) < arrayListCards.size){
-           println("pos is<><><>" + arrayListCards[position.minus(adapterContent.size)].`object`.toUpperCase())
             if(arrayListCards[position.minus(adapterContent.size)].`object`.toUpperCase()==PaymentType.CARD.name){
                 arrayListSaveCard.clear()
                 arrayListSaveCard.add(arrayListCards)
-              return  TYPE_SAVED_CARD
+                return  TYPE_SAVED_CARD
             }
         }
 
@@ -131,7 +129,6 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         holder.itemView.deleteImageViewSaved?.setOnClickListener {
             onCardSelectedActionListener.onDeleteIconClicked(true, position.minus(adapterContent.size), arrayListCards[position.minus(adapterContent.size)].id)
           //TODO  COMMENTED arrayListCards.removeAt(holder.itemView.id)
-           // arrayListSaveCard.removeAt(holder.itemView.id)
             holder.itemView.clearAnimation()
             it.animate().cancel()
             it.clearAnimation()
@@ -225,11 +222,9 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
         }
     fun deleteSelectedCard(position: Int){
-        val cardDelList = ArrayList(arrayListCards)
-        cardDelList.removeAt(position)
-        arrayListCards = cardDelList as List<SavedCard>
-        updateAdapterDataSavedCard(arrayListCards)
-        notifyDataSetChanged()
+        (arrayListCards as java.util.List<String>).remove(position)
+        this.notifyDataSetChanged()
+
     }
     private fun deleteSelectedCard(holder: RecyclerView.ViewHolder, position: Int){
         holder.itemView.deleteImageViewSaved?.setOnClickListener {

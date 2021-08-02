@@ -518,7 +518,6 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     override fun displayRedirect(url: String) {
         this.redirectURL = url
         println("redirectURL>>>" + redirectURL)
-      //  Toast.makeText(context, "url redirecting$redirectURL", Toast.LENGTH_SHORT).show()
         if(::redirectURL.isInitialized && redirectURL!=null && ::fragmentManager.isInitialized){
             fragmentManager.beginTransaction()
                     .replace(
@@ -527,7 +526,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                             this, cardViewModel
                     )
                     ).commitNow()
-            // .commit()
+
         }
     }
 
@@ -615,6 +614,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun initAdaptersAction() {
         adapter = CardTypeAdapterUIKIT(this)
         goPayAdapter = GoPayCardAdapterUIKIT(this)
@@ -754,15 +754,8 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
     override fun deleteSelectedCardListener(delSelectedCard: DeleteCardResponse) {
         println("delSelectedCard value is"+delSelectedCard.deleted)
-        println("deletecardID value is"+delSelectedCard.id)
-        println("selectedItemsDel deleteSelectedCardListener is$selectedItemsDel")
         //todo check why delSelectedCard.deleted is changing to false while its true from the API
        if(!delSelectedCard?.deleted){
-         //  val cardDelList = ArrayList(savedCardList.value as List<SavedCard>)
-         //  cardDelList.removeAt(selectedItemsDel)
-         // val newArrayListCards = cardDelList as List<SavedCard>
-         //  println("deleteSelectedCard"+newArrayListCards)
-          //  adapter.updateAdapterDataSavedCard(newArrayListCards)
             adapter.deleteSelectedCard(selectedItemsDel)
             adapter.updateShaking(false)
             deleteCard = false
