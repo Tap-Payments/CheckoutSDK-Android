@@ -54,6 +54,7 @@ import company.tap.checkout.internal.webview.WebFragment
 import company.tap.checkout.internal.webview.WebViewContract
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.data_managers.PaymentDataSource
+import company.tap.checkout.open.enums.CardType
 import company.tap.nfcreader.open.reader.TapEmvCard
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
@@ -622,8 +623,12 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         currencyAdapter = CurrencyTypeAdapter(this)
         if(allCurrencies.value?.isNotEmpty() == true){
         currencyAdapter.updateAdapterData(allCurrencies.value as List<SupportedCurrencies>)}
-        if(savedCardList.value?.isNotEmpty() == true){
-            adapter.updateAdapterDataSavedCard(savedCardList.value as List<SavedCard>)
+        if(savedCardList.value?.isNotEmpty() == true ){
+            println("getCardType"+ PaymentDataSource?.getCardType())
+            if(PaymentDataSource?.getCardType()!=null && PaymentDataSource?.getCardType()!= CardType.ALL){
+                filterSavedCardTypes(savedCardList.value as List<SavedCard> )
+            }
+            else adapter.updateAdapterDataSavedCard(savedCardList.value as List<SavedCard>)
         }
 
         cardViewHolder11.view.mainChipgroup.chipsRecycler.adapter = adapter
@@ -654,6 +659,15 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             paymentInputViewHolder.setDatafromAPI(filteredCardList)
         }
     }
+
+    private fun filterSavedCardTypes(savedCardList: List<SavedCard>){
+        val filteredSavedCardList: List<SavedCard> =
+                savedCardList.filter { items -> items.funding == PaymentDataSource?.getCardType().toString() }
+
+        adapter?.updateAdapterDataSavedCard(filteredSavedCardList)
+    }
+
+
 
 
     private fun setMainChipGroupActionListener() {

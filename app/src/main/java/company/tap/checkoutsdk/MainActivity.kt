@@ -182,7 +182,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         sdkSession.setMerchantID(null) // ** Optional ** you can pass merchant id or null
 
 
-         sdkSession.setCardType(CardType.CREDIT) // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
+         sdkSession.setCardType(CardType.ALL) // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
 
           sdkSession.setTransactionMode(TransactionMode.PURCHASE)
          sdkSession.setDefaultCardHolderName("TEST TAP"); // ** Optional ** you can pass default CardHolderName of the user .So you don't need to type it.
