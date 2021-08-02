@@ -756,16 +756,16 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         println("delSelectedCard value is"+delSelectedCard.deleted)
         println("deletecardID value is"+delSelectedCard.id)
         println("selectedItemsDel deleteSelectedCardListener is$selectedItemsDel")
-        //todo check why delSelectedCard.delted is changing to false while its true from the API
+        //todo check why delSelectedCard.deleted is changing to false while its true from the API
        if(!delSelectedCard?.deleted){
-         //  adapter.deleteSelectedCardFromView(selectedItemsDel)
-           val cardDelList = ArrayList(savedCardList.value as List<SavedCard>)
-           cardDelList.removeAt(selectedItemsDel)
-          var arrayListCards = cardDelList as List<SavedCard>
-           println("deleteSelectedCard"+arrayListCards)
-          adapter.updateAdapterDataSavedCard(arrayListCards)
-           adapter.updateShaking(false)
-           deleteCard = false
+         //  val cardDelList = ArrayList(savedCardList.value as List<SavedCard>)
+         //  cardDelList.removeAt(selectedItemsDel)
+         // val newArrayListCards = cardDelList as List<SavedCard>
+         //  println("deleteSelectedCard"+newArrayListCards)
+          //  adapter.updateAdapterDataSavedCard(newArrayListCards)
+            adapter.deleteSelectedCard(selectedItemsDel)
+            adapter.updateShaking(false)
+            deleteCard = false
        }
     }
 
@@ -1280,11 +1280,6 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         }
     }
 
-
-
-
-
-
     private fun filteredByPaymentTypeAndCurrencyAndSortedList(
             list: java.util.ArrayList<PaymentOption>, paymentType: PaymentType, currency: String): java.util.ArrayList<PaymentOption> {
         var currencyFilter: String? = currency
@@ -1322,7 +1317,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                         currencyFilter
                 ) == true } as ArrayList<PaymentOption>
 
-        //if(filtered!=null && filtered.size()==0)
+
         return filtered
     }
 

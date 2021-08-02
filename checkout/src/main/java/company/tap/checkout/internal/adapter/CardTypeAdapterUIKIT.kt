@@ -58,10 +58,12 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         notifyDataSetChanged()
     }
     fun updateAdapterDataSavedCard(adapterSavedCard: List<SavedCard>) {
+        arrayListCards=java.util.ArrayList()
         this.arrayListCards = adapterSavedCard
         println("arrayListCards in adapter>>"+arrayListCards)
         notifyDataSetChanged()
     }
+
 
     fun updateShaking(isShaking: Boolean) {
         this.isShaking = isShaking
@@ -104,8 +106,6 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
             if(arrayListCards[position.minus(adapterContent.size)].`object`.toUpperCase()==PaymentType.CARD.name){
                 arrayListSaveCard.clear()
                 arrayListSaveCard.add(arrayListCards)
-               // arrayListSaveCard.add(arrayListCards[position.minus(adapterContent.size)].image)
-               // arrayListSaveCard.add(arrayListCards[position.minus(adapterContent.size)].id)
               return  TYPE_SAVED_CARD
             }
         }
@@ -125,12 +125,13 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     }
 
 
-    private fun setOnClickActions(holder: RecyclerView.ViewHolder) {
+    private fun setOnClickActions(holder: RecyclerView.ViewHolder,position: Int) {
         if (isShaking) holder.itemView.deleteImageViewSaved?.visibility = View.VISIBLE
         else holder.itemView.deleteImageViewSaved?.visibility = View.GONE
         holder.itemView.deleteImageViewSaved?.setOnClickListener {
-         //   onCardSelectedActionListener.onDeleteIconClicked(true, holder.itemView.id,arrayListSaveCard[selectedPosition].id)
+            onCardSelectedActionListener.onDeleteIconClicked(true, position.minus(adapterContent.size), arrayListCards[position.minus(adapterContent.size)].id)
           //TODO  COMMENTED arrayListCards.removeAt(holder.itemView.id)
+           // arrayListSaveCard.removeAt(holder.itemView.id)
             holder.itemView.clearAnimation()
             it.animate().cancel()
             it.clearAnimation()
@@ -186,16 +187,8 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         notifyDataSetChanged()
     }
 
-    fun deleteSelectedCardFromView(position: Int){
-       arrayListSaveCard.removeAt(position)
-        updateAdapterDataSavedCard(arrayListSaveCard as List<SavedCard>)
-        notifyDataSetChanged()
-        println("arrayListSaveCard" + arrayListSaveCard)
-        println("deleteSelectedCardFromView>>" + arrayListCards)
-    }
 
 
-    
     fun goPayOpenedfromMain(goPayOpened: Boolean){
         this.goPayOpened= goPayOpened
         notifyDataSetChanged()
@@ -215,7 +208,8 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         (holder as SavedViewHolder)
         bindSavedCardData(holder, position)
         setOnSavedCardOnClickAction(holder, position)
-        deleteSelectedCard(holder, position)
+      //  deleteSelectedCard(holder, position)
+        setOnClickActions(holder,position)
     }
 
 
@@ -230,11 +224,17 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         }
 
         }
+    fun deleteSelectedCard(position: Int){
+        val cardDelList = ArrayList(arrayListCards)
+        cardDelList.removeAt(position)
+        arrayListCards = cardDelList as List<SavedCard>
+        updateAdapterDataSavedCard(arrayListCards)
+        notifyDataSetChanged()
+    }
     private fun deleteSelectedCard(holder: RecyclerView.ViewHolder, position: Int){
         holder.itemView.deleteImageViewSaved?.setOnClickListener {
-//            println("delete imageview clicked!!"+arrayListCards[position].id)
-         //   //Check is added Arrayoutofbound exception
             onCardSelectedActionListener.onDeleteIconClicked(true, position.minus(adapterContent.size), arrayListCards[position.minus(adapterContent.size)].id)
+           // arrayListSaveCard.removeAt(position.minus(adapterContent.size))
             holder.itemView.clearAnimation()
             it.animate().cancel()
             it.clearAnimation()
