@@ -707,6 +707,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         println("response are$response")
         if (response == "YES") {
             if (deleteCard) {
+                //saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
                 cardViewModel.processEvent(CardViewEvent.DeleteSaveCardEvent, this, null, null, null, null,PaymentDataSource?.getCustomer().identifier,cardId)
 
             } else {
@@ -759,6 +760,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             adapter.deleteSelectedCard(selectedItemsDel)
             adapter.updateShaking(false)
             deleteCard = false
+           //saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)
        }
     }
 
@@ -810,7 +812,6 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             else -> {
                 if((savedCardsModel as PaymentOption).paymentType==PaymentType.WEB){
                     activateActionButton()
-                    println("savedCardsModel<<<>>>" + savedCardsModel)
                     setPayButtonAction(PaymentType.WEB, savedCardsModel)
                 }else
                     displayGoPayLogin()
@@ -892,12 +893,12 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    override fun onDeleteIconClicked(stopAnimation: Boolean, itemId: Int, cardId:String) {
+    override fun onDeleteIconClicked(stopAnimation: Boolean, itemId: Int, cardId:String,maskedCardNumber:String) {
         println("delete icon is clicked:$stopAnimation" + "itemId is" + itemId)
         println("stopAnimation icon is clicked:$stopAnimation")
         this.cardId = cardId
         if (stopAnimation) {
-            stopDeleteActionAnimation(itemId)
+            stopDeleteActionAnimation(itemId,maskedCardNumber)
         } else {
             cardViewHolder11.view.mainChipgroup.groupAction?.text = LocalizationManager.getValue(
                     "close",
@@ -905,9 +906,10 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             )
             deleteCard = false
         }
+
     }
 
-    private fun stopDeleteActionAnimation(itemId: Int) {
+    private fun stopDeleteActionAnimation(itemId: Int,maskedCardNumber: String) {
         println("itemId"+itemId)
         isShaking.value = false
         cardViewHolder11.view.mainChipgroup.groupAction?.text = LocalizationManager.getValue(
@@ -915,8 +917,10 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                 "HorizontalHeaders",
                 "rightTitle"
         )
+        val title:String =  LocalizationManager.getValue("deletegoPayCard", "GoPay")
+        //if(title.contains("?")) title.replace("?","")
         CustomUtils.showDialog(
-                LocalizationManager.getValue("deletegoPayCard", "GoPay"),
+                title.replace("?","")+ maskedCardNumber+" ?",
                 LocalizationManager.getValue(
                         "deleteMessage",
                         "GoPay"
@@ -943,11 +947,11 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         if (isClicked) {
             adapter.updateShaking(true)
             goPayAdapter.updateShaking(true)
-
         } else {
             adapter.updateShaking(false)
             goPayAdapter.updateShaking(false)
         }
+
     }
 
     override fun onPayCardSwitchAction(isCompleted: Boolean, paymentType: PaymentType) {

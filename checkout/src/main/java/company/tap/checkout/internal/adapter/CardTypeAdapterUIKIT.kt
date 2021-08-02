@@ -124,10 +124,13 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
 
     private fun setOnClickActions(holder: RecyclerView.ViewHolder,position: Int) {
-        if (isShaking) holder.itemView.deleteImageViewSaved?.visibility = View.VISIBLE
-        else holder.itemView.deleteImageViewSaved?.visibility = View.GONE
+        if (isShaking) {
+            holder.itemView.deleteImageViewSaved?.visibility = View.VISIBLE
+            setUnSelectedCardTypeSavedShadowAndBackground(holder)
+        }else{holder.itemView.deleteImageViewSaved?.visibility = View.GONE}
+
         holder.itemView.deleteImageViewSaved?.setOnClickListener {
-            onCardSelectedActionListener.onDeleteIconClicked(true, position.minus(adapterContent.size), arrayListCards[position.minus(adapterContent.size)].id)
+            onCardSelectedActionListener.onDeleteIconClicked(true, position.minus(adapterContent.size), arrayListCards[position.minus(adapterContent.size)].id,maskCardNumber(arrayListCards[position.minus(adapterContent.size)].lastFour))
           //TODO  COMMENTED arrayListCards.removeAt(holder.itemView.id)
             holder.itemView.clearAnimation()
             it.animate().cancel()
@@ -228,7 +231,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     }
     private fun deleteSelectedCard(holder: RecyclerView.ViewHolder, position: Int){
         holder.itemView.deleteImageViewSaved?.setOnClickListener {
-            onCardSelectedActionListener.onDeleteIconClicked(true, position.minus(adapterContent.size), arrayListCards[position.minus(adapterContent.size)].id)
+            onCardSelectedActionListener.onDeleteIconClicked(true, position.minus(adapterContent.size), arrayListCards[position.minus(adapterContent.size)].id,maskCardNumber(arrayListCards[position.minus(adapterContent.size)].lastFour))
            // arrayListSaveCard.removeAt(position.minus(adapterContent.size))
             holder.itemView.clearAnimation()
             it.animate().cancel()
