@@ -3,6 +3,7 @@ package company.tap.checkout.internal.interfaces
 import android.content.Context
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.api.models.BINLookupResponse
+import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.api.responses.DeleteCardResponse
 import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
 import company.tap.checkout.internal.api.responses.SDKSettings
@@ -19,7 +20,7 @@ interface BaseLayouttManager {
     fun displayGoPayLogin()
     fun displayGoPay()
     fun controlCurrency(display: Boolean)
-    fun displayOTPView(mobileNumber: String, otpType:String)
+    fun displayOTPView(mobileNumber: String, otpType:String,chargeResponse: Charge?=null)
     fun displayRedirect(url: String)
     fun displaySaveCardOptions()
     fun setBinLookupData(binLookupResponse: BINLookupResponse, context: Context,cardViewModel: CardViewModel)

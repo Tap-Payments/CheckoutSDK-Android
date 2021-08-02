@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import company.tap.checkout.internal.api.models.CreateTokenCard
+import company.tap.checkout.internal.api.models.CreateTokenSavedCard
 import company.tap.checkout.internal.api.models.PaymentOption
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -26,7 +27,7 @@ class CardViewModel : ViewModel() {
     private val compositeDisposable = CompositeDisposable()
     @SuppressLint("StaticFieldLeak")
     private lateinit  var context : Context
-    val liveData = MutableLiveData<Resource<CardViewState>>()
+    private val liveData = MutableLiveData<Resource<CardViewState>>()
 
 
     init {
@@ -52,7 +53,7 @@ class CardViewModel : ViewModel() {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun processEvent(event: CardViewEvent, viewModel: TapLayoutViewModel, selectedPaymentOption: PaymentOption?, binValue: String? = null, cardDataRequest: CreateTokenCard?, cardViewModel: CardViewModel? = null, customerId: String?=null, cardId: String?=null) {
+    fun processEvent(event: CardViewEvent, viewModel: TapLayoutViewModel, selectedPaymentOption: PaymentOption?, binValue: String? = null, cardDataRequest: CreateTokenCard?, cardViewModel: CardViewModel? = null, customerId: String?=null, cardId: String?=null, createTokenWithExistingCardRequest: CreateTokenSavedCard?=null) {
         when (event) {
             CardViewEvent.InitEvent -> getInitData(viewModel,cardViewModel)
             CardViewEvent.ChargeEvent -> createChargeRequest(viewModel,selectedPaymentOption,null)
@@ -63,6 +64,7 @@ class CardViewModel : ViewModel() {
             CardViewEvent.RetreiveAuthorizeEvent -> retrieveAuthorize(viewModel)
             CardViewEvent.RetreiveSaveCardEvent -> retrieveSaveCard(viewModel)
             CardViewEvent.DeleteSaveCardEvent -> callDeleteCardAPI(viewModel,cardId,customerId )
+            CardViewEvent.CreateTokenExistingCardEvent -> createTokenWithExistingCard(viewModel,createTokenWithExistingCardRequest )
         }
     }
 
@@ -104,6 +106,15 @@ class CardViewModel : ViewModel() {
         println("createTokenWithEncryptedDataRequest>>."+createTokenWithEncryptedDataRequest)
         if (createTokenWithEncryptedDataRequest != null) {
             repository.createTokenWithEncryptedCard(context,viewModel,createTokenWithEncryptedDataRequest)
+        }
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun createTokenWithExistingCard(viewModel: TapLayoutViewModel, createTokenWithExistingCardRequest: CreateTokenSavedCard?) {
+        println("createTokenWithExistingCard>>."+createTokenWithExistingCardRequest)
+        if (createTokenWithExistingCardRequest != null) {
+            repository.createTokenWithExistingCard(context,viewModel,createTokenWithExistingCardRequest)
         }
 
     }

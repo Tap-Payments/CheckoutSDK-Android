@@ -216,7 +216,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     private fun setOnSavedCardOnClickAction(holder: RecyclerView.ViewHolder, position: Int) {
         holder.itemView.setOnClickListener {
             if (!isShaking) {
-                onCardSelectedActionListener.onCardSelectedAction(true, arrayListCards[holder.adapterPosition])
+                onCardSelectedActionListener.onCardSelectedAction(true, arrayListCards[position.minus(adapterContent.size)])
                 selectedPosition = position
                 notifyDataSetChanged()
             }

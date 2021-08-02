@@ -13,6 +13,7 @@ import company.tap.checkout.internal.api.requests.*
 import company.tap.checkout.internal.api.responses.DeleteCardResponse
 import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
 import company.tap.checkout.internal.api.responses.SDKSettings
+import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.interfaces.IPaymentDataProvider
 import company.tap.checkout.internal.utils.AmountCalculator
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
@@ -190,6 +191,18 @@ class CardRepository : APIRequestCallback {
         else
             selectedPaymentOption?.sourceId?.let { SourceRequest(it) }?.let { callChargeOrAuthorizeOrSaveCardAPI(it, selectedPaymentOption, null, null, context) }
     }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun createTokenWithExistingCard(
+            context: Context, viewModel: TapLayoutViewModel, createTokenSavedCard: CreateTokenSavedCard
+    ) {
+        this.viewModel = viewModel
+       // val createTokenSavedCard = createTokenSavedCard?.let { createTokenSavedCard(it) }
+        val jsonString = Gson().toJson(createTokenSavedCard)
+        NetworkController.getInstance().processRequest(TapMethodType.POST, ApiService.TOKEN, jsonString,
+                this, CREATE_SAVE_EXISTING_CODE
+        )
+    }
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onSuccess(responseCode: Int, requestCode: Int, response: Response<JsonElement>?) {
         if (requestCode == INIT_CODE) {
@@ -343,7 +356,8 @@ class CardRepository : APIRequestCallback {
                             AuthenticationType.OTP -> {
                                 Log.d("cardREpose", " coming charge type is ...  caller setChargeOrAuthorize");
                                 PaymentDataSource?.setChargeOrAuthorize(chargeResponse)
-                                //  openOTPScreen(charge)
+                                viewModel?.displayOTPView(PaymentDataSource?.getCustomer()?.getPhone()?.number.toString(),PaymentTypeEnum.SAVEDCARD.toString(),chargeResponse)
+
                             }
 
                         }
@@ -386,6 +400,7 @@ class CardRepository : APIRequestCallback {
                         AuthenticationType.OTP -> {
                             // PaymentDataManager.getInstance().setChargeOrAuthorize(authorize as Authorize?)
                             //  openOTPScreen(authorize as Authorize?)
+                            viewModel?.displayOTPView(PaymentDataSource?.getCustomer()?.getPhone()?.number.toString(),PaymentTypeEnum.SAVEDCARD.toString(),authorize as Authorize)
                         }
                     }
                 }
@@ -466,6 +481,7 @@ class CardRepository : APIRequestCallback {
         private const val CREATE_SAVE_CARD = 9
         private const val RETRIEVE_SAVE_CARD_CODE = 10
         private const val DEL_SAVE_CARD_CODE = 11
+        private const val CREATE_SAVE_EXISTING_CODE = 12
 
 
     }
