@@ -254,7 +254,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
 
     override fun displayStartupLayout(enabledSections: ArrayList<SectionType>) {
-        //Todo based on api response logic for swicth case
+        //Todo based on api response logic for switch case
         when(PaymentDataSource?.getTransactionMode()) {
 
             company.tap.checkout.open.enums.TransactionMode.TOKENIZE_CARD -> {
@@ -615,64 +615,6 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         }
     }
 
-
-    @RequiresApi(Build.VERSION_CODES.N)
-
-    /* override fun getDatafromAPI(sdkSettings: SDKSettings?) {
-
-        businessViewHolder.setDatafromAPI(
-            sdkSettings.data.merchant?.logo,
-            sdkSettings.data.merchant?.name
-        )
-        if(sdkSettings.data.verified_application){
-
-        }
-
-       *//* amountViewHolder1.setDatafromAPI(
-            dummyInitapiResponse1.order1.original_amount,
-            dummyInitapiResponse1.order1.trx_currency,
-            dummyInitapiResponse1.order1.items.size.toString()
-        )*//*
-
-       *//* cardViewHolder11.setDatafromAPI(dummyInitapiResponse1.savedCards as MutableList<SavedCards>)
-        // goPaySavedCardHolder.setDatafromAPI(dummyInitapiResponse1.goPaySavedCards)
-        // println("dummy tapCardPhoneListDataSource" + dummyInitapiResponse1.tapCardPhoneListDataSources)
-        paymentInputViewHolder.setDatafromAPI(dummyInitapiResponse1.tapCardPhoneListDataSource)
-
-
-        saveCardSwitchHolder11?.setDatafromAPI(
-            dummyInitapiResponse1.merchant1.name,
-            paymentInputViewHolder.selectedType
-        )
-        itemsViewHolder1.setDatafromAPI(
-            dummyInitapiResponse1.currencies1 as ArrayList<Currencies1>,
-            dummyInitapiResponse1.order1.items
-        )
-
-        allCurrencies.value = dummyInitapiResponse1.currencies1
-        itemList = dummyInitapiResponse1.order1.items
-        savedCardList.value = dummyInitapiResponse1.savedCards
-        goPayCardList.value = dummyInitapiResponse1.goPaySavedCards
-        orderList = dummyInitapiResponse1.order1
-*//*
-        */
-    /**
-     * Setting divider for items
-     *//*
-        val divider = DividerItemDecoration(
-            context,
-            DividerItemDecoration.HORIZONTAL
-        )
-        divider.setDrawable(ShapeDrawable().apply {
-            intrinsicWidth = 10
-            paint.color = Color.TRANSPARENT
-        }) // note: currently (support version 28.0.0), we can not use tranparent color here, if we use transparent, we still see a small divider line. So if we want to display transparent space, we can set color = background color or we can create a custom ItemDecoration instead of DividerItemDecoration.
-        cardViewHolder11.view.mainChipgroup.chipsRecycler.addItemDecoration(divider)
-        initAdaptersAction()
-    }*/
-
-
-
     private fun initAdaptersAction() {
         adapter = CardTypeAdapterUIKIT(this)
         goPayAdapter = GoPayCardAdapterUIKIT(this)
@@ -768,8 +710,9 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                 cardViewModel.processEvent(CardViewEvent.DeleteSaveCardEvent, this, null, null, null, null,PaymentDataSource?.getCustomer().identifier,cardId)
 
             } else {
+                println("else block is calle are")
                 removeViews(goPaySavedCardHolder)
-                adapter.updateAdapterDataSavedCard(savedCardList.value as List<SavedCard>)
+              //  adapter.updateAdapterDataSavedCard(savedCardList.value as List<SavedCard>)
                 goPayViewsHolder.goPayopened = false
                 adapter.goPayOpenedfromMain(true)
                 adapter.updateShaking(false)
@@ -810,9 +753,17 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     }
 
     override fun deleteSelectedCardListener(delSelectedCard: DeleteCardResponse) {
-        println("delSelectedCard value is"+delSelectedCard)
-       if(delSelectedCard?.deleted){
-           adapter.deleteSelectedCard(selectedItemsDel)
+        println("delSelectedCard value is"+delSelectedCard.deleted)
+        println("deletecardID value is"+delSelectedCard.id)
+        println("selectedItemsDel deleteSelectedCardListener is$selectedItemsDel")
+        //todo check why delSelectedCard.delted is changing to false while its true from the API
+       if(!delSelectedCard?.deleted){
+         //  adapter.deleteSelectedCardFromView(selectedItemsDel)
+           val cardDelList = ArrayList(savedCardList.value as List<SavedCard>)
+           cardDelList.removeAt(selectedItemsDel)
+          var arrayListCards = cardDelList as List<SavedCard>
+           println("deleteSelectedCard"+arrayListCards)
+          adapter.updateAdapterDataSavedCard(arrayListCards)
            adapter.updateShaking(false)
            deleteCard = false
        }
@@ -1410,23 +1361,17 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
        }
 
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun filterCardTypes(currency: String, paymentOptionsWorker: java.util.ArrayList<PaymentOption>) {
-        val cardPaymentOptions: java.util.ArrayList<PaymentOption> = filteredByPaymentTypeAndCurrencyAndSortedList(
-                paymentOptionsWorker, PaymentType.CARD, currency)
-      println("filterCardTypes: " + cardPaymentOptions)
-        paymentInputViewHolder.setDatafromAPI(cardPaymentOptions)
-    }
 
-     fun showExtraFees(amount: String,
-                       extraFeesAmount: String,
-                       paymentType: PaymentType
+
+     private fun showExtraFees(amount: String,
+                               extraFeesAmount: String,
+                               paymentType: PaymentType
      ) {
 //     Log.d("showExtraFees"," step 2 : show extra fees : in class "+ "["+this.getClass().getName()+"] +  PaymentType: ["+paymentType.name()+"]");
        //  val totalAmount = SupportedCurrencies(amount.currency,
         //amount.amount.add(extraFeesAmount.amount), amount.symbol)
 
-
+         println("extraFeesAmount"+extraFeesAmount+"amount"+amount)
        //  val extraFeesText: String = CurrencyFormatter.currencyFormat(extraFeesAmount)
        //  val totalAmountText: String = CurrencyFormatter.currencyFormat(totalAmount)
          var title = "Confirm extra charges"

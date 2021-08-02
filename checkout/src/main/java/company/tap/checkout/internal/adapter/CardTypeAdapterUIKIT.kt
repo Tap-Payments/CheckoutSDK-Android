@@ -1,5 +1,6 @@
 package company.tap.checkout.internal.adapter
 
+
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
@@ -11,25 +12,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.webkit.URLUtil
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.api.models.PaymentOption
 import company.tap.checkout.internal.api.models.SavedCard
-import company.tap.checkout.internal.dummygener.Chip1
-import company.tap.checkout.internal.dummygener.SavedCards
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
-import company.tap.taplocalizationkit.LocalizationManager
-
-
 import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.uikit.adapters.context
-import company.tap.tapuilibrary.uikit.interfaces.TapActionButtonInterface
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import kotlinx.android.synthetic.main.item_knet.view.*
 import kotlinx.android.synthetic.main.item_save_cards.view.*
@@ -46,7 +38,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     private var arrayListRedirect:ArrayList<String> = ArrayList()
    // private var arrayListCards:ArrayList<Chip1> = ArrayList()
     private var arrayListCards:List<SavedCard> = java.util.ArrayList()
-    private var arrayListSaveCard:ArrayList<String> = ArrayList()
+    private var arrayListSaveCard:ArrayList<List<SavedCard>> = ArrayList()
     private var adapterContent: List<PaymentOption> = java.util.ArrayList()
     private var isShaking: Boolean = false
     private var goPayOpened: Boolean = false
@@ -67,6 +59,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     }
     fun updateAdapterDataSavedCard(adapterSavedCard: List<SavedCard>) {
         this.arrayListCards = adapterSavedCard
+        println("arrayListCards in adapter>>"+arrayListCards)
         notifyDataSetChanged()
     }
 
@@ -81,12 +74,12 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         return when (viewType) {
             TYPE_SAVED_CARD -> {
                 view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_save_cards, parent, false)
+                        .inflate(R.layout.item_save_cards, parent, false)
                 SavedViewHolder(view)
             }
             TYPE_REDIRECT -> {
                 view =
-                    LayoutInflater.from(parent.context).inflate(R.layout.item_knet, parent, false)
+                        LayoutInflater.from(parent.context).inflate(R.layout.item_knet, parent, false)
                 SingleViewHolder(view)
             }
             else -> {
@@ -107,10 +100,12 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         }
 
        else if(position.minus(adapterContent.size) < arrayListCards.size){
-           println("pos is<><><>"+ arrayListCards[position.minus(adapterContent.size)].`object`.toUpperCase())
+           println("pos is<><><>" + arrayListCards[position.minus(adapterContent.size)].`object`.toUpperCase())
             if(arrayListCards[position.minus(adapterContent.size)].`object`.toUpperCase()==PaymentType.CARD.name){
-                arrayListSaveCard.add(arrayListCards[position.minus(adapterContent.size)].lastFour)
-                arrayListSaveCard.add(arrayListCards[position.minus(adapterContent.size)].image)
+                arrayListSaveCard.clear()
+                arrayListSaveCard.add(arrayListCards)
+               // arrayListSaveCard.add(arrayListCards[position.minus(adapterContent.size)].image)
+               // arrayListSaveCard.add(arrayListCards[position.minus(adapterContent.size)].id)
               return  TYPE_SAVED_CARD
             }
         }
@@ -191,17 +186,17 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         notifyDataSetChanged()
     }
 
-    fun deleteSelectedCard(position: Int){
-        println("position in deleteSelection"+position)
-        val cardDelList = ArrayList(arrayListCards)
-        cardDelList.removeAt(position)
-        arrayListCards = cardDelList as List<SavedCard>
-        println("deleteSelectedCard"+arrayListCards)
+    fun deleteSelectedCardFromView(position: Int){
+       arrayListSaveCard.removeAt(position)
+        updateAdapterDataSavedCard(arrayListSaveCard as List<SavedCard>)
         notifyDataSetChanged()
+        println("arrayListSaveCard" + arrayListSaveCard)
+        println("deleteSelectedCardFromView>>" + arrayListCards)
     }
 
+
     
-    fun goPayOpenedfromMain(goPayOpened:Boolean){
+    fun goPayOpenedfromMain(goPayOpened: Boolean){
         this.goPayOpened= goPayOpened
         notifyDataSetChanged()
     }
@@ -218,9 +213,9 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         else setUnSelectedCardTypeSavedShadowAndBackground(holder)
 
         (holder as SavedViewHolder)
-        bindSavedCardData(holder,position)
+        bindSavedCardData(holder, position)
         setOnSavedCardOnClickAction(holder, position)
-        deleteSelectedCard(holder,position)
+        deleteSelectedCard(holder, position)
     }
 
 
@@ -237,8 +232,9 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         }
     private fun deleteSelectedCard(holder: RecyclerView.ViewHolder, position: Int){
         holder.itemView.deleteImageViewSaved?.setOnClickListener {
-            println("delete imageview clicked!!"+arrayListCards[position].id)
-            onCardSelectedActionListener.onDeleteIconClicked(true, position,arrayListCards[position].id)
+//            println("delete imageview clicked!!"+arrayListCards[position].id)
+         //   //Check is added Arrayoutofbound exception
+            onCardSelectedActionListener.onDeleteIconClicked(true, position.minus(adapterContent.size), arrayListCards[position.minus(adapterContent.size)].id)
             holder.itemView.clearAnimation()
             it.animate().cancel()
             it.clearAnimation()
@@ -249,7 +245,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     }
 
 
-    private fun bindSavedCardData(holder: RecyclerView.ViewHolder,position: Int) {
+    private fun bindSavedCardData(holder: RecyclerView.ViewHolder, position: Int) {
         for (i in arrayListCards.indices) {
             Glide.with(holder.itemView.context)
                 .load(arrayListCards[position.minus(adapterContent.size)].image)
@@ -261,7 +257,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
     private fun setSavedCardShakingAnimation(holder: RecyclerView.ViewHolder) {
         if (isShaking) {
-            Log.d("isShaking" , isShaking.toString())
+            Log.d("isShaking", isShaking.toString())
             val animShake: Animation = AnimationUtils.loadAnimation(holder.itemView.context, R.anim.shake)
             holder.itemView.startAnimation(animShake)
             holder.itemView.deleteImageViewSaved?.visibility = View.VISIBLE
@@ -275,12 +271,12 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
             holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.border_shadow)
         }
         setBorderedView(
-            holder.itemView.tapCardChip2Constraints,
-            (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
-            0.0f,
-            parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
-            Color.parseColor(ThemeManager.getValue("horizontalList.chips.savedCardChip.backgroundColor")),// tint color
-            parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
+                holder.itemView.tapCardChip2Constraints,
+                (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
+                0.0f,
+                parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
+                Color.parseColor(ThemeManager.getValue("horizontalList.chips.savedCardChip.backgroundColor")),// tint color
+                parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
         )// shadow color
     }
 
@@ -293,12 +289,12 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         }
 
         setBorderedView(
-            holder.itemView.tapCardChip2Constraints,
-            (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
-            0.0f,
-            parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
-            Color.parseColor(ThemeManager.getValue("horizontalList.chips.savedCardChip.backgroundColor")),// tint color
-            parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
+                holder.itemView.tapCardChip2Constraints,
+                (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
+                0.0f,
+                parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
+                Color.parseColor(ThemeManager.getValue("horizontalList.chips.savedCardChip.backgroundColor")),// tint color
+                parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
         )// shadow color
     }
 
@@ -306,11 +302,11 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         if (selectedPosition == position) setSelectedCardTypeRedirectShadowAndBackground(holder)
         else setUnSelectedCardTypeRedirectShadowAndBackground(holder)
         (holder as SingleViewHolder)
-        holder.itemView.setOnClickListener {if (!isShaking) { setOnRedirectCardOnClickAction(holder,position) }}
+        holder.itemView.setOnClickListener {if (!isShaking) { setOnRedirectCardOnClickAction(holder, position) }}
         bindRedirectCardImage(holder)
     }
 
-    private fun setOnRedirectCardOnClickAction( holder: RecyclerView.ViewHolder,position: Int) {
+    private fun setOnRedirectCardOnClickAction(holder: RecyclerView.ViewHolder, position: Int) {
         onCardSelectedActionListener.onCardSelectedAction(true, adapterContent[holder.adapterPosition])
         selectedPosition = position
         notifyDataSetChanged()
@@ -327,32 +323,32 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
     private fun setSelectedCardTypeRedirectShadowAndBackground(holder: RecyclerView.ViewHolder) {
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) (holder.itemView.setBackgroundResource(
-            R.drawable.border_shadow_black
+                R.drawable.border_shadow_black
         ))
         else holder.itemView.setBackgroundResource(R.drawable.border_shadow)
 
         setBorderedView(
-            holder.itemView.tapCardChip3Linear,
-            (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
-            0.0f,
-            parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
-            parseColor(ThemeManager.getValue("horizontalList.chips.gatewayChip.backgroundColor")),// tint color
-            parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
+                holder.itemView.tapCardChip3Linear,
+                (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
+                0.0f,
+                parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
+                parseColor(ThemeManager.getValue("horizontalList.chips.gatewayChip.backgroundColor")),// tint color
+                parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
         )// shadow color
     }
 
     private fun setUnSelectedCardTypeRedirectShadowAndBackground(holder: RecyclerView.ViewHolder) {
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) holder.itemView.setBackgroundResource(
-            R.drawable.border_unclick_black
+                R.drawable.border_unclick_black
         )
         else holder.itemView.setBackgroundResource(R.drawable.border_unclick)
         setBorderedView(
-            holder.itemView.tapCardChip3Linear,
-            (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
-            0.0f,
-            parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
-            parseColor(ThemeManager.getValue("horizontalList.chips.gatewayChip.backgroundColor")),// tint color
-            parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
+                holder.itemView.tapCardChip3Linear,
+                (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
+                0.0f,
+                parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
+                parseColor(ThemeManager.getValue("horizontalList.chips.gatewayChip.backgroundColor")),// tint color
+                parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
         )// shadow color
     }
 

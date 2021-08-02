@@ -54,6 +54,7 @@ class CardViewHolder11(private val context: Context, private val onCardSelectedA
         val adapter = CardTypeAdapterUIKIT(onCardSelectedActionListener )
         view.mainChipgroup.chipsRecycler.adapter = adapter
         paymentCardsList?.let { adapter.updateAdapterData(it) }
+        println("saveCardsList in adapter"+saveCardsList)
         saveCardsList?.let { adapter.updateAdapterDataSavedCard(it) }
         /**
          * set separator background

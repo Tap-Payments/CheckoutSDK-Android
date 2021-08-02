@@ -303,15 +303,16 @@ class CardRepository : APIRequestCallback {
                 sdkSession.getListener()?.authorizationSucceed(authorizeActionResponse)
             }
         }
-        val viewState = CardViewState(
-                initResponse = initResponse,
-                paymentOptionsResponse = paymentOptionsResponse
-        )
+
         if(::chargeResponse.isInitialized)
         CardViewState.ChargeViewState(charge = chargeResponse)
         if(::binLookupResponse.isInitialized)
             CardViewState.BinLookupViewState(binLookupResponse = binLookupResponse)
         if(initResponse!=null && paymentOptionsResponse!=null){
+            val viewState = CardViewState(
+                    initResponse = initResponse,
+                    paymentOptionsResponse = paymentOptionsResponse
+            )
             viewModel.getDatasfromAPIs(initResponse, paymentOptionsResponse)
             resultObservable.onNext(viewState)
             resultObservable.onComplete()
