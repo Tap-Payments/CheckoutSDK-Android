@@ -17,20 +17,19 @@ class OTPViewHolder(context: Context) : TapBaseViewHolder {
 
     override val type = SectionType.OTP_VIEW
 
-    val otpView: OTPView
+    val otpView: OTPView = view.findViewById(R.id.otpView)
 
     init {
-        otpView = view.findViewById(R.id.otpView)
         bindViewComponents()
 
 
     }
 
     override fun bindViewComponents() {
-
     }
 
     fun setMobileOtpView() {
+
         otpView.visibility = View.VISIBLE
         otpView.changePhoneCardView.visibility = View.GONE
         otpView.otpSentConstraintGoPay.visibility = View.VISIBLE
@@ -39,5 +38,7 @@ class OTPViewHolder(context: Context) : TapBaseViewHolder {
 
     }
 
-
 }
+
+
+

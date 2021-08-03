@@ -15,6 +15,7 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.annotation.RestrictTo
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -119,7 +120,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     private lateinit var orderList: Order1
     private lateinit var context: Context
     private lateinit var cardViewModel: CardViewModel
-    private lateinit var otpTypeString: PaymentTypeEnum
+    private  var otpTypeString: PaymentTypeEnum = PaymentTypeEnum.SAVEDCARD
     private lateinit var paymentActionType: PaymentType
     private val nfcFragment = NFCFragment()
     private val inlineViewFragment = InlineViewFragment()
@@ -177,6 +178,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         otpViewHolder.otpView.otpViewActionButton.setOnClickListener {
             when (otpTypeString) {
                 PaymentTypeEnum.GOPAY -> goPayViewsHolder.onOtpButtonConfirmationClick(otpViewHolder.otpView.otpViewInput1.text.toString() + otpViewHolder.otpView.otpViewInput2.text.toString())
+                PaymentTypeEnum.SAVEDCARD -> confirmOTPCode(otpViewHolder.otpView.otpViewInput1.text.toString() + otpViewHolder.otpView.otpViewInput2.text.toString())
                 else -> {
                     removeViews(
                             businessViewHolder,
@@ -215,6 +217,11 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             }
         }
 
+    }
+
+    private fun confirmOTPCode(otpCode: String) {
+        cardViewModel.processEvent(CardViewEvent.AuthenticateChargeTransaction, this, null, null,null, null,null,null,null,otpCode)
+        println("acall authencicate"+otpCode)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -475,7 +482,6 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     }
 
     private fun displayOtpCharge(mobileNumber: String, chargeResponse: Charge?) {
-        // otpTypeString = PaymentTypeEnum.GOPAY //temporray
         removeViews(
                 cardViewHolder11,
                 paymentInputViewHolder, saveCardSwitchHolder11
@@ -483,13 +489,15 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         addViews(otpViewHolder)
         otpViewHolder.otpView.visibility = View.VISIBLE
         otpViewHolder.otpView.mobileNumberText.text = mobileNumber
-        otpViewHolder.otpView.changePhone.setOnClickListener {
-            goPayViewsHolder.onChangePhoneClicked()
-        }
-        val typedOTPSTring: String = otpViewHolder.otpView.otpViewInput1.text.toString() + otpViewHolder.otpView.otpViewInput2.text.toString()
-        //toDO call authenticate api
-        cardViewModel.processEvent(CardViewEvent.AuthenticateChargeTransaction, this, null, null,null, null,null,null,null,typedOTPSTring)
 
+        otpViewHolder.otpView.timerText.setOnClickListener {
+            resendOTPCode(chargeResponse)
+        }
+
+    }
+
+    private fun resendOTPCode(chargeResponse: Charge?) {
+        println("resendOTPCode"+chargeResponse)
 
     }
 
@@ -534,6 +542,9 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
 
     override fun displayRedirect(url: String) {
+        if(otpViewHolder.otpView.isVisible){
+            removeViews(businessViewHolder,amountViewHolder1,otpViewHolder)
+        }
         this.redirectURL = url
         println("redirectURL>>>" + redirectURL)
         if(::redirectURL.isInitialized && redirectURL!=null && ::fragmentManager.isInitialized){
@@ -1155,6 +1166,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun payActionSavedCard(savedCardsModel: SavedCard?) {
         saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(
                 ActionButtonState.LOADING
@@ -1163,7 +1175,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                 R.drawable.loader,
                 1
         ) {
-            // TODO replace with API call
+
             startSavedCardPaymentProcess(savedCardsModel as SavedCard)
 
           /*  CustomUtils.showDialog(

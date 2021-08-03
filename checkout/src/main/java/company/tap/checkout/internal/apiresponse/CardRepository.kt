@@ -211,7 +211,7 @@ class CardRepository : APIRequestCallback {
         val createOTPVerificationRequest: CreateOTPVerificationRequest = CreateOTPVerificationRequest.Builder(AuthenticationType.OTP, otpCode).build()
 
         val jsonString = Gson().toJson(createOTPVerificationRequest)
-        NetworkController.getInstance().processRequest(TapMethodType.POST, ApiService.CHARGES + "/" + ApiService.AUTHENTICATE + "/" + chargeResponse.id, jsonString,
+        NetworkController.getInstance().processRequest(TapMethodType.POST, ApiService.CHARGES+"/"+ ApiService.AUTHENTICATE+ "/" + chargeResponse.id, jsonString,
                 this, AUTHENTICATE_CODE
         )
     }
@@ -250,7 +250,6 @@ class CardRepository : APIRequestCallback {
         else if(requestCode == BIN_RETRIEVE_CODE){
             response?.body().let {
                 binLookupResponse = Gson().fromJson(it, BINLookupResponse::class.java)
-               println("binLookupResponse value is>>>>" + binLookupResponse)
                 if(::binLookupResponse.isInitialized)
                 viewModel.setBinLookupData(binLookupResponse, context, cardViewModel)
             }
@@ -337,9 +336,9 @@ class CardRepository : APIRequestCallback {
         }
         else if(requestCode == AUTHENTICATE_CODE){
             response?.body().let {
-                tokenResponse = Gson().fromJson(it, Token::class.java)
-                println("AUTHENTICATE_CODE tokenResponse >>>>" + tokenResponse)
-                createChargeRequest(context, viewModel, null, tokenResponse.id)
+                chargeResponse = Gson().fromJson(it, Charge::class.java)
+                println("AUTHENTICATE_CODE tokenResponse >>>>" +  response?.body())
+              handleChargeResponse(chargeResponse)
             }
         }
 
