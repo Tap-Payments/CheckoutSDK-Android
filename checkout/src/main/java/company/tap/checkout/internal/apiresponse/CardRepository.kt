@@ -225,6 +225,14 @@ class CardRepository : APIRequestCallback {
                 this, AUTHENTICATE_CODE
         )
     }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun requestAuthenticateForAuthorizeTransaction(viewModel: TapLayoutViewModel, authorize: Authorize?) {
+        //TODO check this case
+        NetworkController.getInstance().processRequest(TapMethodType.PUT, ApiService.CHARGES+"/"+ ApiService.AUTHENTICATE+ "/" + authorize?.id,null,
+            this, AUTHENTICATE_CODE
+        )
+    }
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onSuccess(responseCode: Int, requestCode: Int, response: Response<JsonElement>?) {
         if (requestCode == INIT_CODE) {
@@ -710,6 +718,8 @@ class CardRepository : APIRequestCallback {
             }
         }
     }
+
+
 
 
 }

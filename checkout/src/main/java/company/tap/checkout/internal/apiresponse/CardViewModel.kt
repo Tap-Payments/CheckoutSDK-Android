@@ -6,10 +6,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import company.tap.checkout.internal.api.models.Charge
-import company.tap.checkout.internal.api.models.CreateTokenCard
-import company.tap.checkout.internal.api.models.CreateTokenSavedCard
-import company.tap.checkout.internal.api.models.PaymentOption
+import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.internal.api.requests.CreateOTPVerificationRequest
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -159,5 +156,9 @@ class CardViewModel : ViewModel() {
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.clear()
+    }
+
+    fun requestAuthenticateForAuthorizeTransactio(viewModel: TapLayoutViewModel, authorize: Authorize?) {
+        repository.requestAuthenticateForAuthorizeTransaction(viewModel,authorize)
     }
 }
