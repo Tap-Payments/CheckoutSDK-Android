@@ -65,6 +65,7 @@ class CardViewModel : ViewModel() {
             CardViewEvent.RetreiveSaveCardEvent -> retrieveSaveCard(viewModel)
             CardViewEvent.DeleteSaveCardEvent -> callDeleteCardAPI(viewModel,cardId,customerId )
             CardViewEvent.CreateTokenExistingCardEvent -> createTokenWithExistingCard(viewModel,createTokenWithExistingCardRequest )
+
         }
     }
 

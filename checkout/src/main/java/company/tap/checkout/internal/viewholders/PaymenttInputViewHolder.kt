@@ -239,24 +239,30 @@ class PaymenttInputViewHolder(
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
-                if (s.isNullOrEmpty()) {
-                    // tabLayout.resetBehaviour()
-                } else {
-                    /**
-                     * we will get date value
-                     */
-                    expiryDate = s.toString()
-                    println("expiryDate is" + expiryDate)
-                    tapAlertView?.alertMessage?.text = (LocalizationManager.getValue(
-                            "Warning",
-                            "Hints",
-                            "missingCVV"
-                    ))
-                    tapAlertView?.visibility = View.VISIBLE
-                }
+                afterTextChangeAction(s)
             }
         })
     }
+
+         private fun afterTextChangeAction(s: Editable?) {
+             if (s.isNullOrEmpty()) {
+                 // tabLayout.resetBehaviour()
+             } else {
+                 /**
+                  * we will get date value
+                  */
+                 expiryDate = s.toString()
+                 println("expiryDate is" + expiryDate)
+                 tapAlertView?.alertMessage?.text = (LocalizationManager.getValue(
+                     "Warning",
+                     "Hints",
+                     "missingCVV"
+                 ))
+                 tapAlertView?.visibility = View.VISIBLE
+             }
+         }
+
+
 
     private fun cvcNumberWatcher() {
         tapCardInputView.setCvcNumberTextWatcher(object : TextWatcher {
@@ -302,19 +308,20 @@ class PaymenttInputViewHolder(
             if (card.cardBrand != null ) {
 
 
-                tabLayout.selectTab(
-                        card.cardBrand,
-                        card.validationState == CardValidationState.valid
-                )
-                }
-                println("s.trim().toString()" + s.trim().toString())
+//                tabLayout.selectTab(
+//                        card.cardBrand,
+//                        card.validationState == CardValidationState.valid
+//                )
 
                 if(s.trim().toString().replace(" ", "").length == BIN_NUMBER_LENGTH) {
                     cardViewModel.processEvent(
-                            CardViewEvent.RetreiveBinLookupEvent,
-                            TapLayoutViewModel(), null, s.trim().toString().replace(" ", ""), null, null )
-
+                        CardViewEvent.RetreiveBinLookupEvent,
+                        TapLayoutViewModel(), null, s.trim().toString().replace(" ", ""), null, null )
                 }
+                }
+                println("s.trim().toString()" + s.trim().toString())
+
+
                 /**
                  * we will get the full card number
                  */
@@ -548,9 +555,6 @@ class PaymenttInputViewHolder(
         fun setCurrentBinData(binLookupResponse: BINLookupResponse){
            if (binLookupResponse.cardBrand.name == binLookupResponse.scheme.name){
                // we will send card brand to validator
-
-
-
                tabLayout.selectTab(
                    binLookupResponse.cardBrand,
                    true

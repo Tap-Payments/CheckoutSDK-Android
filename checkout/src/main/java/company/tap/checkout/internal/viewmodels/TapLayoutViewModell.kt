@@ -45,6 +45,7 @@ import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.*
 import company.tap.checkout.internal.utils.*
+import company.tap.checkout.internal.utils.AmountCalculator.calculateExtraFeesAmount
 import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
 import company.tap.checkout.internal.viewholders.*
 import company.tap.checkout.internal.webview.WebFragment
@@ -547,7 +548,6 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     override fun displaySaveCardOptions() {}
     @RequiresApi(Build.VERSION_CODES.N)
     override fun setBinLookupData(binLookupResponse: BINLookupResponse, context: Context, cardViewModel: CardViewModel) {
-        println("binLookupResponse in viewModel" + binLookupResponse)
         paymentInputViewHolder = PaymenttInputViewHolder(
                 context,
                 this,
@@ -556,8 +556,8 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                 this,
                 cardViewModel
         )
-        if(::paymentInputViewHolder.isInitialized && binLookupResponse!=null)
-            paymentInputViewHolder?.setCurrentBinData(binLookupResponse)
+        if(::paymentInputViewHolder.isInitialized)
+            paymentInputViewHolder.setCurrentBinData(binLookupResponse)
     }
 
     override fun getDatasfromAPIs(
@@ -1151,6 +1151,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun payActionSavedCard(savedCardsModel: SavedCard?) {
         saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(
                 ActionButtonState.LOADING
@@ -1400,6 +1401,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         //amount.amount.add(extraFeesAmount.amount), amount.symbol)
 
          println("extraFeesAmount" + extraFeesAmount + "amount" + amount)
+//         calculateExtraFeesAmount(selectedPaymentOption.extraFees,selectedPaymentOption.getSupportedCurrencies())
        //  val extraFeesText: String = CurrencyFormatter.currencyFormat(extraFeesAmount)
        //  val totalAmountText: String = CurrencyFormatter.currencyFormat(totalAmount)
          var title = "Confirm extra charges"
