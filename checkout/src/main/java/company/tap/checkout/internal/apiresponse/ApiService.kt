@@ -25,10 +25,14 @@ object ApiService {
     const val AUTHORIZE = "authorize"
 
     /**
+     * The Tokens.
+     */
+    const val TOKENS = "tokens"
+
+    /**
      * The Token.
      */
     const val TOKEN = "tokens"
-
     /**
      * The Save card.
      */

@@ -19,14 +19,6 @@ All rights reserved.
 class CreateTokenWithCardDataRequest(card: CreateTokenCard) : CreateTokenRequest {
     @SerializedName("card")
     @Expose
-    val card: CreateTokenCard
+    val card: CreateTokenCard = card
 
-    /**
-     * Instantiates a new Create token with card data request.
-     *
-     * @param card the card
-     */
-    init {
-        this.card = card
-    }
 }

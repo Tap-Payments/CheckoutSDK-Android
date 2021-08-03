@@ -13,9 +13,9 @@ All rights reserved.
 data class ExpirationDate(
     @SerializedName("month")
     @Expose
-    private var month: String,
+     var month: String,
 
     @SerializedName("year")
     @Expose
-    private val year: String
+     val year: String
 ) : Serializable

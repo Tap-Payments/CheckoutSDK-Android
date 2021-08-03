@@ -12,9 +12,9 @@ All rights reserved.
  **/
 data class CreateTokenSavedCard(
     @SerializedName("card_id") @Expose
-    private var cardId: String? = null,
+     var cardId: String? = null,
 
     @SerializedName("customer_id")
     @Expose
-    private val customerId: String? = null
+     val customerId: String? = null
 ): Serializable

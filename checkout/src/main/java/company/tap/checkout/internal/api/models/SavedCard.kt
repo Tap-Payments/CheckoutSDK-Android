@@ -78,11 +78,11 @@ data class SavedCard(
 
     @SerializedName("funding")
     @Expose
-    private val funding: String,
+     val funding: String,
 
     @SerializedName("customer")
     @Expose
-    private val customer: String? = null
+     val customer: String? = null
 
 ): Comparable<SavedCard> ,CurrenciesSupport ,java.io.Serializable{
     override fun compareTo(other: SavedCard): Int {

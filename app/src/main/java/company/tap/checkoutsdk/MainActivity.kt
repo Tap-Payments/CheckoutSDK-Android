@@ -135,44 +135,26 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         // Set Shipping array list
         sdkSession.setShipping(ArrayList()) // ** Optional ** you can pass empty array list
 
-
-        // Post URL
-
         // Post URL
         sdkSession.setPostURL("") // ** Optional **
 
 
         // Payment Description
-
-        // Payment Description
         sdkSession.setPaymentDescription("") //** Optional **
-
-
-        // Payment Extra Info
 
         // Payment Extra Info
         sdkSession.setPaymentMetadata(HashMap()) // ** Optional ** you can pass empty array hash map
 
-
-        // Payment Reference
-
         // Payment Reference
         sdkSession.setPaymentReference(null) // ** Optional ** you can pass null
-
-
-        // Payment Statement Descriptor
 
         // Payment Statement Descriptor
         sdkSession.setPaymentStatementDescriptor("") // ** Optional **
 
 
         // Enable or Disable Saving Card
-
-        // Enable or Disable Saving Card
         sdkSession.isUserAllowedToSaveCard(true) //  ** Required ** you can pass boolean
 
-
-        // Enable or Disable 3DSecure
 
         // Enable or Disable 3DSecure
         sdkSession.isRequires3DSecure(true)
@@ -200,7 +182,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         sdkSession.setMerchantID(null) // ** Optional ** you can pass merchant id or null
 
 
-         sdkSession.setCardType(CardType.CREDIT) // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
+         sdkSession.setCardType(CardType.ALL) // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
 
           sdkSession.setTransactionMode(TransactionMode.PURCHASE)
          sdkSession.setDefaultCardHolderName("TEST TAP"); // ** Optional ** you can pass default CardHolderName of the user .So you don't need to type it.
