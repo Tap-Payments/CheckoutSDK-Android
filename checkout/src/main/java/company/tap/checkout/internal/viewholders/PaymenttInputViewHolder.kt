@@ -11,6 +11,7 @@ import android.transition.TransitionManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
@@ -92,6 +93,8 @@ class PaymenttInputViewHolder(
     private var cardHolderName: String? = null
     private val BIN_NUMBER_LENGTH = 6
     private lateinit var cardSchema: String
+    private  var binLookupResponse: BINLookupResponse? =null
+
 
 
     init {
@@ -129,7 +132,6 @@ class PaymenttInputViewHolder(
     private fun tapMobileInputViewWatcher() {
         tapMobileInputView.mobileNumber.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                val card = CardValidator.validate(s.toString())
                 if (s?.trim()?.length!! > 2) {
                     if (s.trim()[0].toInt() == 5) {
                         println("is that called")
@@ -154,7 +156,7 @@ class PaymenttInputViewHolder(
         nfcButton?.visibility = View.VISIBLE
         cardScannerBtn?.visibility = View.VISIBLE
         linearLayoutPay = view.findViewById(R.id.linear_paylayout)
-        tapCardInputView.clearFocus()
+//        tapCardInputView.clearFocus()
         clearView.visibility = View.GONE
         nfcButton?.setOnClickListener {
             onCardNFCCallListener.onClickNFC()
@@ -217,11 +219,12 @@ class PaymenttInputViewHolder(
     private fun cardNumberWatcher() {
         tapCardInputView.setCardNumberTextWatcher(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                cardNumAfterTextChangeListener(s)
+//                cardNumAfterTextChangeListener(s)
             }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                onCardTextChange(s)
+                    onCardTextChange(s)
+                    cardNumAfterTextChangeListener(s)
             }
         })
     }
@@ -295,9 +298,18 @@ class PaymenttInputViewHolder(
             }
         })
     }
+    fun EditText.updateText(text: String) {
+        val focussed = hasFocus()
+        if (focussed) {
+            clearFocus()
+        }
+        setText(text)
+        if (focussed) {
+            requestFocus()
+        }
+    }
 
-
-    fun cardNumAfterTextChangeListener(s: Editable?) {
+    fun cardNumAfterTextChangeListener(s: CharSequence?) {
         val card = CardValidator.validate(s.toString())
         s?.let {
             if (s.isNullOrEmpty()) {
@@ -305,15 +317,35 @@ class PaymenttInputViewHolder(
                 tapAlertView?.visibility = View.GONE
             }
 
-//            if (card.cardBrand != null) {
-////                tabLayout.selectTab(
-////                        card.cardBrand,
-////                        card.validationState == CardValidationState.valid
-////                )
-//
-//
-//            }
-            callCardBinNumberApi(s)
+            if (card.cardBrand != null) {
+                tabLayout.selectTab(
+                        card.cardBrand,
+                        card.validationState == CardValidationState.valid
+                )
+
+                if (binLookupResponse?.cardBrand?.name == binLookupResponse?.scheme?.name) {
+
+                    // we will send card brand to validator
+                    binLookupResponse?.cardBrand?.let { it1 ->
+                        tabLayout.selectTab(
+                            it1,
+                            true
+                        )
+                    }
+                } else {
+                    //we will send scheme
+                    binLookupResponse?.cardBrand?.let { it1 ->
+                        tabLayout.selectTab(
+                            it1,
+                            true
+                        )
+                    }
+                }
+
+
+                if (s.length > 2)  callCardBinNumberApi(s)
+            }
+
 
             /**
              * we will get the full card number
@@ -327,7 +359,7 @@ class PaymenttInputViewHolder(
         }
     }
 
-    private fun callCardBinNumberApi(s: Editable) {
+    private fun callCardBinNumberApi(s: CharSequence) {
         if (s.trim().toString().replace(" ", "").length == BIN_NUMBER_LENGTH) {
             cardViewModel.processEvent(
                 CardViewEvent.RetreiveBinLookupEvent,
@@ -555,6 +587,9 @@ class PaymenttInputViewHolder(
     }
 
     fun setCurrentBinData(binLookupResponse: BINLookupResponse) {
+        println("mmmmmmmmmm" + binLookupResponse.cardBrand + binLookupResponse.scheme.cardBrand)
+        this.binLookupResponse = binLookupResponse
+        cardNumberWatcher()
         if (binLookupResponse.cardBrand.name == binLookupResponse.scheme.name) {
             // we will send card brand to validator
             tabLayout.selectTab(
@@ -563,14 +598,10 @@ class PaymenttInputViewHolder(
             )
         } else {
             //we will send scheme
-            CardBrand.values().forEach {
-                if (binLookupResponse.scheme.name == it.name) tabLayout.selectTab(
-                    it,
-                    true
-                )
-            }
-
-
+            tabLayout.selectTab(
+                CardBrand.visa,
+                true
+            )
         }
         cardSchema = binLookupResponse.scheme.toString()
         println("cardSchema values " + cardSchema)
