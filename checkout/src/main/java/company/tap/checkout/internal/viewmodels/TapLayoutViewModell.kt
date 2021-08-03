@@ -481,10 +481,11 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun displayOtpCharge(mobileNumber: String, chargeResponse: Charge?) {
         removeViews(
                 cardViewHolder11,
-                paymentInputViewHolder, saveCardSwitchHolder11
+                paymentInputViewHolder, saveCardSwitchHolder11, otpViewHolder
         )
         addViews(otpViewHolder)
         otpViewHolder.otpView.visibility = View.VISIBLE
@@ -492,12 +493,16 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
         otpViewHolder.otpView.timerText.setOnClickListener {
             resendOTPCode(chargeResponse)
+
         }
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun resendOTPCode(chargeResponse: Charge?) {
-        println("resendOTPCode"+chargeResponse)
+        if (chargeResponse != null) {
+            cardViewModel?.requestAuthenticateForChargeTransaction(this,chargeResponse)
+        }
 
     }
 

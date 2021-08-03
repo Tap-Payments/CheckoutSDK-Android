@@ -191,6 +191,16 @@ class CardRepository : APIRequestCallback {
         else
             selectedPaymentOption?.sourceId?.let { SourceRequest(it) }?.let { callChargeOrAuthorizeOrSaveCardAPI(it, selectedPaymentOption, null, null, context) }
     }
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun requestAuthenticateForChargeTransaction(
+        viewModel: TapLayoutViewModel,
+        chargeResponse: Charge
+    ) {
+        NetworkController.getInstance().processRequest(TapMethodType.PUT, ApiService.CHARGES+"/"+ ApiService.AUTHENTICATE+ "/" + chargeResponse.id,null,
+            this, AUTHENTICATE_CODE
+        )
+        }
+
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun createTokenWithExistingCard(

@@ -6,6 +6,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.api.models.CreateTokenCard
 import company.tap.checkout.internal.api.models.CreateTokenSavedCard
 import company.tap.checkout.internal.api.models.PaymentOption
@@ -144,6 +145,11 @@ class CardViewModel : ViewModel() {
             repository.createSaveCard(context, viewModel, null, repository.tokenResponse.id)
         }
 
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun requestAuthenticateForChargeTransaction(viewModel: TapLayoutViewModel, chargeResponse:Charge){
+        repository.requestAuthenticateForChargeTransaction(viewModel,chargeResponse)
     }
 
     fun getContext(context: Context){
