@@ -80,7 +80,7 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
      * @param paymentType represents the type is card or mobile payment.Based on it will decide the
      * text of switches.
      * */
-    fun setDatafromAPI(merchantNameApi: String, paymentType: PaymentTypeEnum) {
+    fun setDataFromAPI(merchantNameApi: String, paymentType: PaymentTypeEnum) {
         merchantName = merchantNameApi
         paymentName = paymentType
         // bindViewComponents()

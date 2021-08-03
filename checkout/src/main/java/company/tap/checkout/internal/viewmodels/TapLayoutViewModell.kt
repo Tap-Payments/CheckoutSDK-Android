@@ -386,7 +386,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                 itemsViewHolder1
         )
         addViews(businessViewHolder, amountViewHolder1, itemsViewHolder1)
-        itemsViewHolder1.setDataFromAPI(
+        itemsViewHolder1.setDatafromAPI(
                 allCurrencies.value as ArrayList<SupportedCurrencies>,
                 null
         )
@@ -569,7 +569,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             this.paymentOptionsResponse = paymentOptionsResponse
         }
         if(::businessViewHolder.isInitialized && PaymentDataSource?.getTransactionMode()!= company.tap.checkout.open.enums.TransactionMode.TOKENIZE_CARD) {
-            businessViewHolder.setDataFromAPI(
+            businessViewHolder.setDatafromAPI(
                     sdkSettings?.data?.merchant?.logo,
                     sdkSettings?.data?.merchant?.name
             )
@@ -583,14 +583,14 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         println("savedCardList on get" + savedCardList.value)
         if(::itemsViewHolder1.isInitialized)
         paymentOptionsResponse?.supportedCurrencies?.let {
-            itemsViewHolder1.setDataFromAPI(
+            itemsViewHolder1.setDatafromAPI(
                     it,
                     null
             )
         }
         if(paymentOptionsResponse?.supportedCurrencies!=null && ::amountViewHolder1.isInitialized)
        paymentOptionsResponse?.currency?.let {
-            amountViewHolder1.setDataFromAPI(
+            amountViewHolder1.setDatafromAPI(
                     paymentOptionsResponse?.supportedCurrencies[0].amount.toString(),
                     it,
                     "1"
@@ -598,15 +598,14 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         }
         if(::itemsViewHolder1.isInitialized)
         paymentOptionsResponse?.supportedCurrencies?.let {
-            itemsViewHolder1.setDataFromAPI(
+            itemsViewHolder1.setDatafromAPI(
                     it,
                     null
             )
         }
 
         sdkSettings?.data?.merchant?.name?.let {
-            saveCardSwitchHolder11?.setDataFromAPI
-            (
+            saveCardSwitchHolder11?.setDataFromAPI (
                     it,
                     paymentInputViewHolder.selectedType
             )
@@ -670,7 +669,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
         println("filteredCardList value " + filteredCardList.size)
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            paymentInputViewHolder.setDatafromAPI(filteredCardList)
+            paymentInputViewHolder.setDataFromAPI(filteredCardList)
         }
     }
 
