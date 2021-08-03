@@ -13,7 +13,7 @@ All rights reserved.
 /**
  * The type Create token with existing card data request.
  */
-class CreateTokenWithExistingCardDataRequest private constructor(savedCard: CreateTokenSavedCard) {
+class CreateTokenWithExistingCardDataRequest(savedCard: CreateTokenSavedCard) {
     @SerializedName("saved_card")
     @Expose
     private val savedCard: CreateTokenSavedCard = savedCard
@@ -21,7 +21,7 @@ class CreateTokenWithExistingCardDataRequest private constructor(savedCard: Crea
     /**
      * The type Builder.
      */
-    class Builder(card: CreateTokenSavedCard) {
+    open class Builder(card: CreateTokenSavedCard) {
         private val createTokenWithExistingCardDataRequest: CreateTokenWithExistingCardDataRequest = CreateTokenWithExistingCardDataRequest(card)
 
         /**

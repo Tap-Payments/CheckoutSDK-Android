@@ -165,7 +165,7 @@ class CardRepository : APIRequestCallback {
     @RequiresApi(Build.VERSION_CODES.N)
     fun callDeleteCardAPI(context: Context, viewModel: TapLayoutViewModel, deleteCardId: String?, customerId: String?) {
         this.viewModel = viewModel
-        NetworkController.getInstance().processRequest(TapMethodType.DELETE, ApiService.DELETE_CARD + "/"+customerId+"/"+deleteCardId, null, this,
+        NetworkController.getInstance().processRequest(TapMethodType.DELETE, ApiService.DELETE_CARD + "/" + customerId + "/" + deleteCardId, null, this,
                 DEL_SAVE_CARD_CODE
         )
     }
@@ -197,8 +197,9 @@ class CardRepository : APIRequestCallback {
             context: Context, viewModel: TapLayoutViewModel, createTokenSavedCard: CreateTokenSavedCard
     ) {
         this.viewModel = viewModel
-       // val createTokenSavedCard = createTokenSavedCard?.let { createTokenSavedCard(it) }
-        val jsonString = Gson().toJson(createTokenSavedCard)
+        val createTokenSavedCardReq: CreateTokenWithExistingCardDataRequest = CreateTokenWithExistingCardDataRequest.Builder(createTokenSavedCard).build()
+
+        val jsonString = Gson().toJson(createTokenSavedCardReq)
         NetworkController.getInstance().processRequest(TapMethodType.POST, ApiService.TOKEN, jsonString,
                 this, CREATE_SAVE_EXISTING_CODE
         )
@@ -282,7 +283,7 @@ class CardRepository : APIRequestCallback {
         else if(requestCode == DEL_SAVE_CARD_CODE){
             response?.body().let {
                 deleteCardResponse = Gson().fromJson(it, DeleteCardResponse::class.java)
-                println("deleteCardResponse is"+deleteCardResponse)
+                println("deleteCardResponse is" + deleteCardResponse)
                 viewModel?.deleteSelectedCardListener(deleteCardResponse)
             }
         }
@@ -318,7 +319,9 @@ class CardRepository : APIRequestCallback {
         }
         else if(requestCode == CREATE_SAVE_EXISTING_CODE){
             response?.body().let {
-                println("CREATE_SAVE_EXISTING_CODE >>>>" + CREATE_SAVE_EXISTING_CODE)
+                tokenResponse = Gson().fromJson(it, Token::class.java)
+                println("CREATE_SAVE_EXISTING_CODE tokenResponse >>>>" + tokenResponse)
+                createChargeRequest(context, viewModel, null, tokenResponse.id)
             }
         }
 
@@ -361,7 +364,7 @@ class CardRepository : APIRequestCallback {
                             AuthenticationType.OTP -> {
                                 Log.d("cardREpose", " coming charge type is ...  caller setChargeOrAuthorize");
                                 PaymentDataSource?.setChargeOrAuthorize(chargeResponse)
-                                viewModel?.displayOTPView(PaymentDataSource?.getCustomer()?.getPhone()?.number.toString(),PaymentTypeEnum.SAVEDCARD.toString(),chargeResponse)
+                                viewModel?.displayOTPView(PaymentDataSource?.getCustomer()?.getPhone()?.number.toString(), PaymentTypeEnum.SAVEDCARD.toString(), chargeResponse)
 
                             }
 
@@ -405,7 +408,7 @@ class CardRepository : APIRequestCallback {
                         AuthenticationType.OTP -> {
                             // PaymentDataManager.getInstance().setChargeOrAuthorize(authorize as Authorize?)
                             //  openOTPScreen(authorize as Authorize?)
-                            viewModel?.displayOTPView(PaymentDataSource?.getCustomer()?.getPhone()?.number.toString(),PaymentTypeEnum.SAVEDCARD.toString(),authorize as Authorize)
+                            viewModel?.displayOTPView(PaymentDataSource?.getCustomer()?.getPhone()?.number.toString(), PaymentTypeEnum.SAVEDCARD.toString(), authorize as Authorize)
                         }
                     }
                 }
@@ -440,8 +443,8 @@ class CardRepository : APIRequestCallback {
                         }
                         AuthenticationType.OTP -> {
                             Log.d("CardRepository", " start otp for save card mode........")
-                           // PaymentDataManager.getInstance().setChargeOrAuthorize(saveCard)
-                          //  openOTPScreen(saveCard)
+                            // PaymentDataManager.getInstance().setChargeOrAuthorize(saveCard)
+                            //  openOTPScreen(saveCard)
                         }
                     }
                 }

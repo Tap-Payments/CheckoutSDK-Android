@@ -1176,11 +1176,10 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun startSavedCardPaymentProcess(savedCard: SavedCard?) {
         val createTokenSavedCard = CreateTokenSavedCard(savedCard?.id, PaymentDataSource?.getCustomer().identifier)
-
-
-
+        cardViewModel?.processEvent(CardViewEvent.CreateTokenExistingCardEvent,this,null,null,null,null,null,null,createTokenSavedCard)
     }
 
 

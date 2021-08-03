@@ -111,10 +111,10 @@ class CardViewModel : ViewModel() {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun createTokenWithExistingCard(viewModel: TapLayoutViewModel, createTokenWithExistingCardRequest: CreateTokenSavedCard?) {
-        println("createTokenWithExistingCard>>."+createTokenWithExistingCardRequest)
-        if (createTokenWithExistingCardRequest != null) {
-            repository.createTokenWithExistingCard(context,viewModel,createTokenWithExistingCardRequest)
+    private fun createTokenWithExistingCard(viewModel: TapLayoutViewModel, createTokenSavedCard: CreateTokenSavedCard?) {
+        println("createTokenSavedCard>>."+createTokenSavedCard)
+        if (createTokenSavedCard != null) {
+            repository.createTokenWithExistingCard(context,viewModel,createTokenSavedCard)
         }
 
     }
