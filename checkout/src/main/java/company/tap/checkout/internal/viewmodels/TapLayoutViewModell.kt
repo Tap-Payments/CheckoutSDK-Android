@@ -517,7 +517,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
     override fun displayRedirect(url: String) {
         this.redirectURL = url
-        println("redirectURL>>>" + redirectURL)
+        println("redishowExtraFeesrectURL>>>" + redirectURL)
       //  Toast.makeText(context, "url redirecting$redirectURL", Toast.LENGTH_SHORT).show()
         if(::redirectURL.isInitialized && redirectURL!=null && ::fragmentManager.isInitialized){
             fragmentManager.beginTransaction()

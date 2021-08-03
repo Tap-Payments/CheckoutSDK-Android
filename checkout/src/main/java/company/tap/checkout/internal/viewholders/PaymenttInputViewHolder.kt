@@ -301,6 +301,7 @@ class PaymenttInputViewHolder(
 
             if (card.cardBrand != null ) {
 
+
                 tabLayout.selectTab(
                         card.cardBrand,
                         card.validationState == CardValidationState.valid
@@ -311,8 +312,7 @@ class PaymenttInputViewHolder(
                 if(s.trim().toString().replace(" ", "").length == BIN_NUMBER_LENGTH) {
                     cardViewModel.processEvent(
                             CardViewEvent.RetreiveBinLookupEvent,
-                            TapLayoutViewModel(), null, s.trim().toString().replace(" ", ""), null, null
-                    )
+                            TapLayoutViewModel(), null, s.trim().toString().replace(" ", ""), null, null )
 
                 }
                 /**
@@ -529,7 +529,7 @@ class PaymenttInputViewHolder(
             val expiryDate: String? = expiryDate
              val cvc: String? = cvvNumber
          //temporrary    val cardholderName: String? = cardholderName
-             val cardholderName: String? = "cardholder"
+             val cardholderName: String = "cardholder"
              return if (number == null || expiryDate == null|| cvc == null || cardholderName ==null) {
                  null
              } else {
@@ -546,7 +546,25 @@ class PaymenttInputViewHolder(
              // TODO: Add address handling here.
          }
         fun setCurrentBinData(binLookupResponse: BINLookupResponse){
-            cardSchema = binLookupResponse?.scheme.toString()
+           if (binLookupResponse.cardBrand.name == binLookupResponse.scheme.name){
+               // we will send card brand to validator
+
+
+
+               tabLayout.selectTab(
+                   binLookupResponse.cardBrand,
+                   true
+               )
+           }else{
+               //we will send scheme
+               CardBrand.values().forEach { if (binLookupResponse.scheme.name == it.name)  tabLayout.selectTab(
+                   it,
+                   true
+               ) }
+
+
+           }
+            cardSchema = binLookupResponse.scheme.toString()
             println("cardSchema values " + cardSchema)
           //  cardViewModel.setPaymentOption(binLookupResponse?.cardBrand, if (binLookupResponse == null) null else binLookupResponse.scheme)
         }
