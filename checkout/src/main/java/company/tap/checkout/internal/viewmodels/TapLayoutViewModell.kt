@@ -486,7 +486,11 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         otpViewHolder.otpView.changePhone.setOnClickListener {
             goPayViewsHolder.onChangePhoneClicked()
         }
+        val typedOTPSTring: String = otpViewHolder.otpView.otpViewInput1.text.toString() + otpViewHolder.otpView.otpViewInput2.text.toString()
         //toDO call authenticate api
+        cardViewModel.processEvent(CardViewEvent.AuthenticateChargeTransaction, this, null, null,null, null,null,null,null,typedOTPSTring)
+
+
     }
 
     private fun displayOtpTelecoms(mobileNumber: String) {

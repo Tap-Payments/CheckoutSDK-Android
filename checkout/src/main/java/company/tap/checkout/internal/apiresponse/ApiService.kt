@@ -39,6 +39,11 @@ object ApiService {
     const val SAVE_CARD = "card/verify"
 
     /**
+     * The Authenticate.
+     */
+    const val AUTHENTICATE = "authenticate"
+
+    /**
      * The Charge id.
      */
   //  const val CHARGE_ID = "charge_id/"

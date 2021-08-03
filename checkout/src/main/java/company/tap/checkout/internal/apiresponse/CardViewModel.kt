@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import company.tap.checkout.internal.api.models.CreateTokenCard
 import company.tap.checkout.internal.api.models.CreateTokenSavedCard
 import company.tap.checkout.internal.api.models.PaymentOption
+import company.tap.checkout.internal.api.requests.CreateOTPVerificationRequest
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -53,7 +54,7 @@ class CardViewModel : ViewModel() {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun processEvent(event: CardViewEvent, viewModel: TapLayoutViewModel, selectedPaymentOption: PaymentOption?, binValue: String? = null, cardDataRequest: CreateTokenCard?, cardViewModel: CardViewModel? = null, customerId: String?=null, cardId: String?=null, createTokenWithExistingCardRequest: CreateTokenSavedCard?=null) {
+    fun processEvent(event: CardViewEvent, viewModel: TapLayoutViewModel, selectedPaymentOption: PaymentOption?, binValue: String? = null, cardDataRequest: CreateTokenCard?, cardViewModel: CardViewModel? = null, customerId: String?=null, cardId: String?=null, createTokenWithExistingCardRequest: CreateTokenSavedCard?=null,otpString:String?=null) {
         when (event) {
             CardViewEvent.InitEvent -> getInitData(viewModel,cardViewModel)
             CardViewEvent.ChargeEvent -> createChargeRequest(viewModel,selectedPaymentOption,null)
@@ -64,9 +65,11 @@ class CardViewModel : ViewModel() {
             CardViewEvent.RetreiveAuthorizeEvent -> retrieveAuthorize(viewModel)
             CardViewEvent.RetreiveSaveCardEvent -> retrieveSaveCard(viewModel)
             CardViewEvent.DeleteSaveCardEvent -> callDeleteCardAPI(viewModel,cardId,customerId )
-            CardViewEvent.CreateTokenExistingCardEvent -> createTokenWithExistingCard(viewModel,createTokenWithExistingCardRequest )
+            CardViewEvent.CreateTokenExistingCardEvent -> createTokenWithExistingCard(viewModel,createTokenWithExistingCardRequest)
+            CardViewEvent.AuthenticateChargeTransaction -> authenticateChargeTransaction(viewModel,otpString)
         }
     }
+
 
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -115,6 +118,14 @@ class CardViewModel : ViewModel() {
         println("createTokenSavedCard>>."+createTokenSavedCard)
         if (createTokenSavedCard != null) {
             repository.createTokenWithExistingCard(context,viewModel,createTokenSavedCard)
+        }
+
+    }
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun authenticateChargeTransaction(viewModel: TapLayoutViewModel, otpString: String?) {
+        println("otpString>>."+otpString)
+        if (otpString != null) {
+                repository.authenticate(context,viewModel,otpString)
         }
 
     }

@@ -204,6 +204,17 @@ class CardRepository : APIRequestCallback {
                 this, CREATE_SAVE_EXISTING_CODE
         )
     }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun  authenticate(context: Context, viewModel: TapLayoutViewModel,otpCode:String) {
+        this.viewModel = viewModel
+        val createOTPVerificationRequest: CreateOTPVerificationRequest = CreateOTPVerificationRequest.Builder(AuthenticationType.OTP, otpCode).build()
+
+        val jsonString = Gson().toJson(createOTPVerificationRequest)
+        NetworkController.getInstance().processRequest(TapMethodType.POST, ApiService.CHARGES + "/" + ApiService.AUTHENTICATE + "/" + chargeResponse.id, jsonString,
+                this, AUTHENTICATE_CODE
+        )
+    }
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onSuccess(responseCode: Int, requestCode: Int, response: Response<JsonElement>?) {
         if (requestCode == INIT_CODE) {
@@ -321,6 +332,13 @@ class CardRepository : APIRequestCallback {
             response?.body().let {
                 tokenResponse = Gson().fromJson(it, Token::class.java)
                 println("CREATE_SAVE_EXISTING_CODE tokenResponse >>>>" + tokenResponse)
+                createChargeRequest(context, viewModel, null, tokenResponse.id)
+            }
+        }
+        else if(requestCode == AUTHENTICATE_CODE){
+            response?.body().let {
+                tokenResponse = Gson().fromJson(it, Token::class.java)
+                println("AUTHENTICATE_CODE tokenResponse >>>>" + tokenResponse)
                 createChargeRequest(context, viewModel, null, tokenResponse.id)
             }
         }
@@ -490,6 +508,7 @@ class CardRepository : APIRequestCallback {
         private const val RETRIEVE_SAVE_CARD_CODE = 10
         private const val DEL_SAVE_CARD_CODE = 11
         private const val CREATE_SAVE_EXISTING_CODE = 12
+        private const val AUTHENTICATE_CODE = 13
 
 
     }

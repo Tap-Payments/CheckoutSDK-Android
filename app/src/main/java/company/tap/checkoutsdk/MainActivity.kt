@@ -265,9 +265,9 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         val tapCustomer: TapCustomer? = null
         //if (customer != null) customer.phone else Phone(965, 69045932)
         return TapCustomer(
-                "cus_TS012520211349Za012907577", "firstname", "middlename",
+                "cus_TS012520211349Za012907577", "ahlaam", "middlename",
                 "lastname", "abcd@gmail.com",
-                PhoneNumber("00965", "9090909090"), "description",
+                PhoneNumber("00965", "69045932"), "description",
         )
 
     }
