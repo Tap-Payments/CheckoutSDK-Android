@@ -9,11 +9,9 @@ import com.google.gson.JsonElement
 import company.tap.checkout.internal.PaymentDataProvider
 import company.tap.checkout.internal.api.enums.*
 import company.tap.checkout.internal.api.models.*
+import company.tap.checkout.internal.api.models.Merchant
 import company.tap.checkout.internal.api.requests.*
-import company.tap.checkout.internal.api.responses.AuthenticateResponse
-import company.tap.checkout.internal.api.responses.DeleteCardResponse
-import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
-import company.tap.checkout.internal.api.responses.SDKSettings
+import company.tap.checkout.internal.api.responses.*
 import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.interfaces.IPaymentDataProvider
 import company.tap.checkout.internal.utils.AmountCalculator
@@ -49,7 +47,7 @@ class CardRepository : APIRequestCallback {
     var paymentOptionsResponse :PaymentOptionsResponse?= null
     private var initResponse:SDKSettings?=null
     lateinit var chargeResponse:Charge
-    lateinit var authenticateResponse: AuthenticateResponse
+    lateinit var listCardsResponse: ListCardsResponse
     lateinit var binLookupResponse: BINLookupResponse
     lateinit var authorizeActionResponse: Authorize
     lateinit var deleteCardResponse: DeleteCardResponse
@@ -240,9 +238,15 @@ class CardRepository : APIRequestCallback {
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun requestAuthenticateForAuthorizeTransaction(viewModel: TapLayoutViewModel, authorize: Authorize?) {
-        //TODO check this case
         NetworkController.getInstance().processRequest(TapMethodType.PUT, ApiService.AUTHORIZE+"/"+ ApiService.AUTHENTICATE+ "/" + authorize?.id,null,
             this, AUTHENTICATE_CODE
+        )
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun listAllCards(viewModel: TapLayoutViewModel, customerId: String?) {
+        NetworkController.getInstance().processRequest(TapMethodType.GET, ApiService.LIST_CARD+"/"+customerId,null,
+            this, LIST_ALL_CARD_CODE
         )
     }
     @RequiresApi(Build.VERSION_CODES.N)
@@ -389,6 +393,13 @@ class CardRepository : APIRequestCallback {
                     handleChargeResponse(chargeResponse)
             }
         }
+        else if(requestCode == LIST_ALL_CARD_CODE){
+            response?.body().let {
+                listCardsResponse = Gson().fromJson(it, ListCardsResponse::class.java)
+                println("LIST_ALL_CARD_CODE >>>>" + listCardsResponse)
+                println("")
+            }
+        }
 
         if(::chargeResponse.isInitialized)
         CardViewState.ChargeViewState(charge = chargeResponse)
@@ -413,6 +424,7 @@ class CardRepository : APIRequestCallback {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun handleChargeResponse(chargeResponse: Charge) {
         if (chargeResponse == null) return
         Log.e("Charge status", (chargeResponse.status).name)
@@ -555,6 +567,7 @@ class CardRepository : APIRequestCallback {
         private const val DEL_SAVE_CARD_CODE = 11
         private const val CREATE_SAVE_EXISTING_CODE = 12
         private const val AUTHENTICATE_CODE = 13
+        private const val LIST_ALL_CARD_CODE = 14
 
 
     }

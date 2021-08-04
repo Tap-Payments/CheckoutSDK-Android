@@ -66,9 +66,14 @@ class CardViewModel : ViewModel() {
             CardViewEvent.CreateTokenExistingCardEvent -> createTokenWithExistingCard(viewModel,createTokenWithExistingCardRequest)
             CardViewEvent.AuthenticateChargeTransaction -> authenticateChargeTransaction(viewModel,otpString)
             CardViewEvent.AuthenticateAuthorizeTransaction -> authenticateAuthorizeTransaction(viewModel,otpString)
+            CardViewEvent.ListAllCards -> listAllCards(viewModel,customerId)
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun listAllCards(viewModel: TapLayoutViewModel, customerId: String?) {
+        repository?.listAllCards(viewModel,customerId)
+    }
 
 
     @RequiresApi(Build.VERSION_CODES.N)
