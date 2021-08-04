@@ -20,6 +20,7 @@ sealed class CardViewEvent {
     object DeleteSaveCardEvent :CardViewEvent()
     object CreateTokenExistingCardEvent :CardViewEvent()
     object AuthenticateChargeTransaction :CardViewEvent()
+    object AuthenticateAuthorizeTransaction :CardViewEvent()
     data class SaveCardEvent(val card: TapCard) : CardViewEvent()
     data class TokenizeCardEvent(val card: TapCard) : CardViewEvent()
 }

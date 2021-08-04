@@ -225,11 +225,21 @@ class CardRepository : APIRequestCallback {
                 this, AUTHENTICATE_CODE
         )
     }
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun  authenticateAuthorizeTransaction(context: Context, viewModel: TapLayoutViewModel,otpCode:String) {
+        this.viewModel = viewModel
+        val createOTPVerificationRequest: CreateOTPVerificationRequest = CreateOTPVerificationRequest.Builder(AuthenticationType.OTP, otpCode).build()
+
+        val jsonString = Gson().toJson(createOTPVerificationRequest)
+        NetworkController.getInstance().processRequest(TapMethodType.POST, ApiService.AUTHORIZE+"/"+ ApiService.AUTHENTICATE+ "/" + authorizeActionResponse.id, jsonString,
+                this, AUTHENTICATE_CODE
+        )
+    }
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun requestAuthenticateForAuthorizeTransaction(viewModel: TapLayoutViewModel, authorize: Authorize?) {
         //TODO check this case
-        NetworkController.getInstance().processRequest(TapMethodType.PUT, ApiService.CHARGES+"/"+ ApiService.AUTHENTICATE+ "/" + authorize?.id,null,
+        NetworkController.getInstance().processRequest(TapMethodType.PUT, ApiService.AUTHORIZE+"/"+ ApiService.AUTHENTICATE+ "/" + authorize?.id,null,
             this, AUTHENTICATE_CODE
         )
     }
@@ -300,8 +310,9 @@ class CardRepository : APIRequestCallback {
 
                     if(authorizeActionResponse?.status?.name == ChargeStatus.INITIATED.name){
                        // fireWebPaymentCallBack(authorizeActionResponse)
-                        authorizeActionResponse?.transaction?.url?.let { it1 -> viewModel?.displayRedirect(it1) }
-                      //  viewModel?.redirectLoadingFinished(true)
+                           if(authorizeActionResponse?.transaction.url != null){
+                               authorizeActionResponse?.transaction?.url?.let { it1 -> viewModel?.displayRedirect(it1) }
+                           }else handleAuthorizeResponse(authorizeActionResponse)
 
                     }else  handleAuthorizeResponse(authorizeActionResponse)
 
@@ -349,7 +360,22 @@ class CardRepository : APIRequestCallback {
             response?.body().let {
                 tokenResponse = Gson().fromJson(it, Token::class.java)
                 println("CREATE_SAVE_EXISTING_CODE tokenResponse >>>>" + tokenResponse)
-                createChargeRequest(context, viewModel, null, tokenResponse.id)
+                if(tokenResponse!=null) {
+                    if (PaymentDataSource.getTransactionMode() == TransactionMode.AUTHORIZE_CAPTURE) {
+                        createAuthorizeRequest(context, viewModel, null, tokenResponse.id)
+
+                    }
+                    else if(PaymentDataSource.getTransactionMode()==TransactionMode.TOKENIZE_CARD){
+                        SDKSession?.getListener()?.cardTokenizedSuccessfully(tokenResponse)
+                    }
+                    else if(PaymentDataSource.getTransactionMode()==TransactionMode.SAVE_CARD){
+                        createSaveCard(context, viewModel, null, tokenResponse.id)
+                    }
+                    else {
+                        createChargeRequest(context, viewModel, null, tokenResponse.id)
+
+                    }
+                }
             }
         }
         else if(requestCode == AUTHENTICATE_CODE){
@@ -442,7 +468,6 @@ class CardRepository : APIRequestCallback {
                         }
                         AuthenticationType.OTP -> {
                             // PaymentDataManager.getInstance().setChargeOrAuthorize(authorize as Authorize?)
-                            //  openOTPScreen(authorize as Authorize?)
                             viewModel?.displayOTPView(PaymentDataSource?.getCustomer()?.getPhone()?.number.toString(), PaymentTypeEnum.SAVEDCARD.toString(), authorize as Authorize)
                         }
                     }

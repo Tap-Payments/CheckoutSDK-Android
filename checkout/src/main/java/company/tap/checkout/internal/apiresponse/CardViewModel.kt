@@ -65,6 +65,7 @@ class CardViewModel : ViewModel() {
             CardViewEvent.DeleteSaveCardEvent -> callDeleteCardAPI(viewModel,cardId,customerId )
             CardViewEvent.CreateTokenExistingCardEvent -> createTokenWithExistingCard(viewModel,createTokenWithExistingCardRequest)
             CardViewEvent.AuthenticateChargeTransaction -> authenticateChargeTransaction(viewModel,otpString)
+            CardViewEvent.AuthenticateAuthorizeTransaction -> authenticateAuthorizeTransaction(viewModel,otpString)
         }
     }
 
@@ -128,6 +129,14 @@ class CardViewModel : ViewModel() {
 
     }
     @RequiresApi(Build.VERSION_CODES.N)
+    private fun authenticateAuthorizeTransaction(viewModel: TapLayoutViewModel, otpString: String?) {
+        println("authenticateAuthorizeTransaction>>."+otpString)
+        if (otpString != null) {
+                repository.authenticateAuthorizeTransaction(context,viewModel,otpString)
+        }
+
+    }
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun createAuthorizeCard(viewModel: TapLayoutViewModel,selectedPaymentOption: PaymentOption?) {
         println("createAuthorizeCard>>."+selectedPaymentOption)
         if (selectedPaymentOption != null) {
@@ -149,6 +158,11 @@ class CardViewModel : ViewModel() {
         repository.requestAuthenticateForChargeTransaction(viewModel,chargeResponse)
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun requestAuthenticateForAuthorizeTransaction(viewModel: TapLayoutViewModel, authorize: Authorize?) {
+        repository.requestAuthenticateForAuthorizeTransaction(viewModel,authorize)
+    }
+
     fun getContext(context: Context){
         this.context = context
     }
@@ -158,7 +172,4 @@ class CardViewModel : ViewModel() {
         compositeDisposable.clear()
     }
 
-    fun requestAuthenticateForAuthorizeTransactio(viewModel: TapLayoutViewModel, authorize: Authorize?) {
-        repository.requestAuthenticateForAuthorizeTransaction(viewModel,authorize)
-    }
 }

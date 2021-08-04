@@ -53,6 +53,7 @@ import company.tap.checkout.internal.webview.WebViewContract
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.CardType
+import company.tap.checkout.open.enums.TransactionMode
 import company.tap.nfcreader.open.reader.TapEmvCard
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
@@ -220,6 +221,30 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     }
 
     private fun confirmOTPCode(otpCode: String) {
+        when(PaymentDataSource?.getTransactionMode()){
+            TransactionMode.PURCHASE-> sendChargeOTPCode(otpCode)
+            TransactionMode.AUTHORIZE_CAPTURE-> sendAuthorizeOTPCode(otpCode)
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun sendAuthorizeOTPCode(otpCode: String) {
+        cardViewModel.processEvent(
+            CardViewEvent.AuthenticateAuthorizeTransaction,
+            this,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            otpCode
+        )
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun sendChargeOTPCode(otpCode: String) {
         cardViewModel.processEvent(
             CardViewEvent.AuthenticateChargeTransaction,
             this,
@@ -232,7 +257,6 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             null,
             otpCode
         )
-        println("acall authencicate" + otpCode)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -501,7 +525,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         addViews(otpViewHolder)
         otpViewHolder.otpView.visibility = View.VISIBLE
         otpViewHolder.otpView.mobileNumberText.text = mobileNumber
-
+        otpViewHolder.otpView.changePhone.visibility = View.INVISIBLE
         otpViewHolder.otpView.timerText.setOnClickListener {
             resendOTPCode(chargeResponse)
 
@@ -518,10 +542,12 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun resendAuthorizeOTPCode(authorize: Authorize?) {
         cardViewModel?.requestAuthenticateForAuthorizeTransaction(this, authorize)
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun resendChargeOTPCode(charge: Charge?) {
         if (charge != null) {
             cardViewModel?.requestAuthenticateForChargeTransaction(this, charge)
