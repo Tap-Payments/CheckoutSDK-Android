@@ -131,7 +131,7 @@ class ItemAdapter :
         totalAmount: TapTextView?,
         itemName: TapTextView?
     ) {
-        if(adapterContentItems.size==0) {
+        if(adapterContentItems.isEmpty()) {
             if (position % 2 == 0) {
                 discount?.visibility = View.VISIBLE
                 discount?.text = LocalizationManager.getValue("Discount", "ItemList")
@@ -144,7 +144,7 @@ class ItemAdapter :
                     "VERY LOOOONNGGGG ITEM TITLE ITEM TITLE TITLE ITEM TITLETITLE ITEM TITLETITLE ITEM TITLETITLE ITEM TITLETITLE ITEM TITLETITLE ITEM TITLE " + adapterContentItems[position]
             }
         }else
-            for (i in 0 until adapterContentItems.size) {
+            for (i in adapterContentItems.indices) {
                 itemName?.text = adapterContentItems[position].name
                 if(adapterContentItems[position].discount1.type == "P"){
                     discount?.visibility = View.VISIBLE
@@ -162,7 +162,7 @@ class ItemAdapter :
     }
 
 
-    fun setTheme(
+    private fun setTheme(
         descriptionTextView: TapTextView?,
         discount: TapTextView?,
         descText: TapTextView?,
@@ -243,7 +243,7 @@ class ItemAdapter :
             )
         )
         totalAmount?.typeface = Typeface.createFromAsset(
-            context?.assets, TapFont.tapFontType(
+            context.assets, TapFont.tapFontType(
                 TapFont.RobotoRegular
             )
         )
