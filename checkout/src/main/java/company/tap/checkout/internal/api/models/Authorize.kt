@@ -11,5 +11,5 @@ All rights reserved.
  **/
 data class Authorize(
     @SerializedName("auto") @Expose
-    private var autorizeAction: AuthorizeActionResponse
+    var autorizeAction: AuthorizeActionResponse
 ): Charge()

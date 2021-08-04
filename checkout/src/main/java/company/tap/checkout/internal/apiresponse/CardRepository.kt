@@ -10,6 +10,7 @@ import company.tap.checkout.internal.PaymentDataProvider
 import company.tap.checkout.internal.api.enums.*
 import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.internal.api.requests.*
+import company.tap.checkout.internal.api.responses.AuthenticateResponse
 import company.tap.checkout.internal.api.responses.DeleteCardResponse
 import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
 import company.tap.checkout.internal.api.responses.SDKSettings
@@ -48,6 +49,7 @@ class CardRepository : APIRequestCallback {
     var paymentOptionsResponse :PaymentOptionsResponse?= null
     private var initResponse:SDKSettings?=null
     lateinit var chargeResponse:Charge
+    lateinit var authenticateResponse: AuthenticateResponse
     lateinit var binLookupResponse: BINLookupResponse
     lateinit var authorizeActionResponse: Authorize
     lateinit var deleteCardResponse: DeleteCardResponse
@@ -222,7 +224,7 @@ class CardRepository : APIRequestCallback {
 
         val jsonString = Gson().toJson(createOTPVerificationRequest)
         NetworkController.getInstance().processRequest(TapMethodType.POST, ApiService.CHARGES+"/"+ ApiService.AUTHENTICATE+ "/" + chargeResponse.id, jsonString,
-                this, AUTHENTICATE_CODE
+                this, CHARGE_REQ_CODE
         )
     }
     @RequiresApi(Build.VERSION_CODES.N)
@@ -232,7 +234,7 @@ class CardRepository : APIRequestCallback {
 
         val jsonString = Gson().toJson(createOTPVerificationRequest)
         NetworkController.getInstance().processRequest(TapMethodType.POST, ApiService.AUTHORIZE+"/"+ ApiService.AUTHENTICATE+ "/" + authorizeActionResponse.id, jsonString,
-                this, AUTHENTICATE_CODE
+                this, CREATE_AUTHORIZE_CODE
         )
     }
 
@@ -382,7 +384,9 @@ class CardRepository : APIRequestCallback {
             response?.body().let {
                 chargeResponse = Gson().fromJson(it, Charge::class.java)
                 println("AUTHENTICATE_CODE tokenResponse >>>>" +  response?.body())
-              handleChargeResponse(chargeResponse)
+                if(chargeResponse is Authorize)handleAuthorizeResponse(chargeResponse as Authorize)
+                else
+                    handleChargeResponse(chargeResponse)
             }
         }
 
@@ -461,7 +465,7 @@ class CardRepository : APIRequestCallback {
 
         when (authorize.status) {
             ChargeStatus.INITIATED -> {
-                val authenticate: Authenticate = authorize.getAuthenticate()
+                val authenticate: Authenticate = authorize.authenticate
                 if (authenticate != null && authenticate.status === AuthenticationStatus.INITIATED) {
                     when (authenticate.type) {
                         AuthenticationType.BIOMETRICS -> {

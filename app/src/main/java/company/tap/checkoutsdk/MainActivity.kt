@@ -184,7 +184,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
          sdkSession.setCardType(CardType.ALL) // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
 
-          sdkSession.setTransactionMode(TransactionMode.AUTHORIZE_CAPTURE)
+          sdkSession.setTransactionMode(TransactionMode.PURCHASE)
          sdkSession.setDefaultCardHolderName("TEST TAP"); // ** Optional ** you can pass default CardHolderName of the user .So you don't need to type it.
          sdkSession.isUserAllowedToEnableCardHolderName(false); // ** Optional ** you can enable/ disable  default CardHolderName .
 
@@ -374,9 +374,11 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
     }
 
     override fun authorizationFailed(authorize: Authorize?) {
-        println("Authorize Failed : " + authorize!!.status)
-        println("Authorize Failed : " + authorize.description)
-        println("Authorize Failed : " + authorize.response.message)
+        println("Authorize Failed : " + authorize?.status)
+        println("Authorize Failed : " + authorize?.description)
+        println("Authorize Failed : " + authorize?.response?.message)
+        Toast.makeText(this, "authorizationFailed"+authorize?.response?.message, Toast.LENGTH_SHORT).show()
+        modalBottomSheet.dismiss()
     }
 
     override fun cardSaved(charge: Charge) {

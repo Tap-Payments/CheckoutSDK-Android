@@ -44,6 +44,11 @@ object ApiService {
     const val AUTHENTICATE = "authenticate"
 
     /**
+     *
+     */
+    const val LIST_CARD = "card"
+
+    /**
      * The Charge id.
      */
   //  const val CHARGE_ID = "charge_id/"

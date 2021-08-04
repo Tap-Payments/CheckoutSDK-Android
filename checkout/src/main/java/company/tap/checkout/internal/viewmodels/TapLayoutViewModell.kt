@@ -493,6 +493,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         frameLayout.visibility = View.GONE
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     @SuppressLint("SetTextI18n")
     override fun displayOTPView(mobileNumber: String, otpType: String, chargeResponse: Charge?) {
         setSlideAnimation()
