@@ -1509,8 +1509,11 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                 BigDecimal.ZERO
             )!! > 0
         ) {
+            var feesAmount = BigDecimal.ZERO
+            feesAmount = calculateExtraFeesAmount(extraFees, paymentOptionsResponse.supportedCurrencies, PaymentDataProvider().getSelectedCurrency())
+            var amountTotal = feesAmount.add(PaymentDataProvider().getSelectedCurrency()?.amount)
             val localizedMessage =
-                "You will be charged an additional fee of $extraFeesAmount for this type of payment, totaling an amount of $amount"
+                "You will be charged an additional fee of $feesAmount${PaymentDataProvider().getSelectedCurrency()?.symbol} for this type of payment, totaling an amount of $amountTotal"
             CustomUtils.showDialog(title, localizedMessage, context, 3, this, paymentType,savedCardsModel)
 
         } else
