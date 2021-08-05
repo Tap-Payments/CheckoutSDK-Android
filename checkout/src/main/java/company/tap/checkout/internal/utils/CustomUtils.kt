@@ -15,7 +15,7 @@ All rights reserved.
  **/
 object CustomUtils {
 
-    fun showDialog(title: String, messageString: String, context: Context, btnType: Int? = null, baseLayouttManager: BaseLayouttManager?,paymentType: PaymentType?=null) {
+    fun showDialog(title: String, messageString: String, context: Context, btnType: Int? = null, baseLayouttManager: BaseLayouttManager?,paymentType: PaymentType?=null, savedCardsModel: Any?= null) {
         val builder = iOSDialogBuilder(context)
         builder
             .setTitle(title)
@@ -37,14 +37,14 @@ object CustomUtils {
             builder.setPositiveListener(LocalizationManager.getValue("yes","Common")) { dialog ->
                 dialog.dismiss()
                 if (paymentType != null) {
-                    baseLayouttManager?.dialogueExecuteExtraFees("YES",paymentType)
+                    baseLayouttManager?.dialogueExecuteExtraFees("YES",paymentType,savedCardsModel)
                 }
 
             }
             builder.setNegativeListener(LocalizationManager.getValue("no","Common")) { dialog ->
                 dialog.dismiss()
                 if (paymentType != null) {
-                    baseLayouttManager?.dialogueExecuteExtraFees("NO",paymentType)
+                    baseLayouttManager?.dialogueExecuteExtraFees("NO",paymentType,savedCardsModel)
                 }
             }
         }

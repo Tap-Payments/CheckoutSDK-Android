@@ -28,6 +28,6 @@ interface BaseLayouttManager {
     fun getDatasfromAPIs(sdkSettings: SDKSettings?,paymentOptionsResponse: PaymentOptionsResponse?)
     // fun getDataPaymentOptionsResponse(paymentOptionsResponse: PaymentOptionsResponse?)
     fun didDialogueExecute(response :String)
-    fun dialogueExecuteExtraFees(response :String,paymentType: PaymentType)
+    fun dialogueExecuteExtraFees(response :String,paymentType: PaymentType, savedCardsModel: Any?)
     fun deleteSelectedCardListener(delSelectedCard:DeleteCardResponse)
 }

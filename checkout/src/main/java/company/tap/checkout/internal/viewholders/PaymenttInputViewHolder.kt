@@ -513,7 +513,7 @@ class PaymenttInputViewHolder(
             paymentType = imageURLApi[i].paymentType
             cardBrandType = imageURLApi[i].brand?.name.toString()
             println("paymentType" + paymentType)
-
+/// set payment option object for all payment types and send it to paymentcompletion action function and i will pass it to show extra fees
             if (paymentType == PaymentType.telecom) {
                 itemsMobilesList.add(
                     SectionTabItem(

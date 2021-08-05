@@ -30,6 +30,7 @@ import company.tap.cardscanner.TapCard
 import company.tap.cardscanner.TapTextRecognitionCallBack
 import company.tap.cardscanner.TapTextRecognitionML
 import company.tap.checkout.R
+import company.tap.checkout.internal.PaymentDataProvider
 import company.tap.checkout.internal.adapter.CardTypeAdapterUIKIT
 import company.tap.checkout.internal.adapter.CurrencyTypeAdapter
 import company.tap.checkout.internal.adapter.GoPayCardAdapterUIKIT
@@ -846,37 +847,6 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
-    override fun dialogueExecuteExtraFees(response: String, paymentType: PaymentType) {
-        if (response == "YES") {
-            when {
-                paymentType === PaymentType.WEB -> {
-                    //fireWebPaymentExtraFeesUserDecision(ExtraFeesStatus.ACCEPT_EXTRA_FEES)
-                }
-                paymentType === PaymentType.CARD -> {
-
-                    fireCardPaymentExtraFeesUserDecision(ExtraFeesStatus.ACCEPT_EXTRA_FEES)
-                }
-                paymentType === PaymentType.SavedCard -> {
-
-                    // fireSavedCardPaymentExtraFeesUserDecision(ExtraFeesStatus.ACCEPT_EXTRA_FEES)
-                }
-            }
-        } else {
-            when {
-                paymentType === PaymentType.WEB -> {
-                    // fireWebPaymentExtraFeesUserDecision(ExtraFeesStatus.REFUSE_EXTRA_FEES)
-                }
-                paymentType === PaymentType.CARD -> {
-                    fireCardPaymentExtraFeesUserDecision(ExtraFeesStatus.REFUSE_EXTRA_FEES)
-                }
-                paymentType === PaymentType.SavedCard -> {
-                    //  fireSavedCardPaymentExtraFeesUserDecision(ExtraFeesStatus.REFUSE_EXTRA_FEES)
-                }
-            }
-
-        }
-    }
 
     override fun deleteSelectedCardListener(delSelectedCard: DeleteCardResponse) {
         println("delSelectedCard value is" + delSelectedCard.deleted)
@@ -1235,7 +1205,12 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.setOnClickListener {
             when (paymentTypeEnum) {
                 PaymentType.SavedCard -> {
-                    payActionSavedCard(savedCardsModel as SavedCard)
+                    showExtraFees(
+                        currentAmount,
+                        currentCurrency,
+                        paymentTypeEnum,savedCardsModel
+                    )
+//                    payActionSavedCard(savedCardsModel as SavedCard)
                 }
                 PaymentType.WEB -> {
                     if (savedCardsModel != null) {
@@ -1247,11 +1222,17 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                     showExtraFees(
                         currentAmount,
                         currentCurrency,
-                        paymentTypeEnum
+                        paymentTypeEnum,savedCardsModel
                     )
+//                    (savedCardsModel as PaymentOption).
 //                    onClickCardPayment(savedCardsModel)
                 }
                 PaymentType.telecom -> {
+                    showExtraFees(
+                        currentAmount,
+                        currentCurrency,
+                        paymentTypeEnum,savedCardsModel
+                    )
                 }
             }
         }
@@ -1507,39 +1488,94 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     }
 
     var title = "Confirm Extra charges"
+     var extraFees: java.util.ArrayList<ExtraFee>? = null
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun showExtraFees(
-         amount: String,
+        amount: String,
         extraFeesAmount: String,
-        paymentType: PaymentType
+        paymentType: PaymentType,savedCardsModel: Any?
     ) {
-//        if (calculateExtraFeesAmount(
-//                (savedCardsModel as PaymentOption).extraFees,
-//                allCurrencies.value as ArrayList<SupportedCurrencies>,
-//                null
-//            )?.compareTo(
-//                BigDecimal.ZERO
-//            )!! > 0
-//        ) {
-            var localizedMessage =
+        for (i in paymentOptionsResponse.paymentOptions.indices) {
+            if (paymentOptionsResponse.paymentOptions[i].paymentType == paymentType) {
+                extraFees = paymentOptionsResponse.paymentOptions[i].extraFees
+            }
+        }
+        if (calculateExtraFeesAmount(
+                extraFees,
+                paymentOptionsResponse.supportedCurrencies,
+                PaymentDataProvider().getSelectedCurrency()
+            )?.compareTo(
+                BigDecimal.ZERO
+            )!! > 0
+        ) {
+            val localizedMessage =
                 "You will be charged an additional fee of $extraFeesAmount for this type of payment, totaling an amount of $amount"
-            CustomUtils.showDialog(title, localizedMessage, context, 3, this, paymentType)
+            CustomUtils.showDialog(title, localizedMessage, context, 3, this, paymentType,savedCardsModel)
 
-//        }else{    onClickCardPayment()  }
+        } else
+            setDifferentPaymentsAction(paymentType, savedCardsModel)
+
+
+    }
+
+//    @RequiresApi(Build.VERSION_CODES.N)
+//    open fun fireCardPaymentExtraFeesUserDecision(
+//        userChoice: ExtraFeesStatus?,
+//    ) {
+//        when (userChoice) {
+//            ExtraFeesStatus.ACCEPT_EXTRA_FEES, ExtraFeesStatus.NO_EXTRA_FEES -> {
+//                "continue"
+////                onClickCardPayment()
+//            }
+//            ExtraFeesStatus.REFUSE_EXTRA_FEES -> {
+//
+////                unActivateActionButton()
+//            }
+//        }
+//    }
+
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    override fun dialogueExecuteExtraFees(
+        response: String,
+        paymentType: PaymentType,
+        savedCardsModel: Any?
+    ) {
+        if (response == "YES") {
+            setDifferentPaymentsAction(paymentType, savedCardsModel)
+        } else {
+            when {
+                paymentType === PaymentType.WEB -> {
+                    // fireWebPaymentExtraFeesUserDecision(ExtraFeesStatus.REFUSE_EXTRA_FEES)
+                }
+                paymentType === PaymentType.CARD -> {
+//                    fireCardPaymentExtraFeesUserDecision(ExtraFeesStatus.REFUSE_EXTRA_FEES)
+                }
+                paymentType === PaymentType.SavedCard -> {
+                    //  fireSavedCardPaymentExtraFeesUserDecision(ExtraFeesStatus.REFUSE_EXTRA_FEES)
+                }
+            }
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    open fun fireCardPaymentExtraFeesUserDecision(
-        userChoice: ExtraFeesStatus?,
-        ) {
-        when (userChoice) {
-            ExtraFeesStatus.ACCEPT_EXTRA_FEES, ExtraFeesStatus.NO_EXTRA_FEES -> {
-                "continue"
+    private fun setDifferentPaymentsAction(
+        paymentType: PaymentType,
+        savedCardsModel: Any?
+    ) {
+        when {
+            paymentType === PaymentType.WEB -> {
+                if (savedCardsModel != null) {
+                    onClickRedirect(savedCardsModel)
+                }
+            }
+            paymentType === PaymentType.CARD -> {
                 onClickCardPayment()
             }
-            ExtraFeesStatus.REFUSE_EXTRA_FEES -> {
+            paymentType === PaymentType.SavedCard -> {
 
-//                unActivateActionButton()
+                payActionSavedCard(savedCardsModel as SavedCard)
             }
         }
     }
