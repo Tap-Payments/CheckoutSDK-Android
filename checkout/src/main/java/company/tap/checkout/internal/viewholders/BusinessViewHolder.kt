@@ -9,6 +9,7 @@ import company.tap.checkout.internal.enums.SectionType
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.datasource.HeaderDataSource
+import gotap.com.tapglkitandroid.gl.Views.TapLoadingView
 import kotlinx.android.synthetic.main.businessview_layout.view.*
 
 
@@ -28,6 +29,7 @@ class BusinessViewHolder(private val context: Context) : TapBaseViewHolder {
     private var merchantName: String? = null
     private var merchantLogo: String? = null
 
+
     init {
         bindViewComponents()
     }
@@ -37,8 +39,12 @@ class BusinessViewHolder(private val context: Context) : TapBaseViewHolder {
         if (merchantName != null){
             view.headerView.setHeaderDataSource(getHeaderDataSourceFromAPI())
             view.headerView.businessIcon.visibility= View.VISIBLE
+            view.headerView.showHideLoading(false)
+
         }else {
-            view.headerView.setHeaderDataSource(HeaderDataSource("Enter Card Details",null,null))
+            view.headerView.showHideLoading(true)
+
+//            view.headerView.setHeaderDataSource(HeaderDataSource("Enter Card Details",null,null))
             view.headerView.businessIcon.visibility= View.GONE
         }
 

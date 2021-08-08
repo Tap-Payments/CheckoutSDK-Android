@@ -31,6 +31,7 @@ import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
+import gotap.com.tapglkitandroid.gl.Views.TapLoadingView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
@@ -50,6 +51,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     private var cardReadDisposable: Disposable = Disposables.empty()
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _Activity = activity?.parent
@@ -66,15 +68,16 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     ): View? {
         val view = inflater.inflate(R.layout.fragment_checkouttaps, container, false)
         backgroundColor = (Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.clear")))
-
         val viewModel: TapLayoutViewModel by viewModels()
-        this.viewModel = viewModel
         val cardViewModel: CardViewModel by viewModels()
+        this.viewModel = viewModel
         _Context?.let { cardViewModel.getContext(it) }
         val checkoutLayout: LinearLayout? = view?.findViewById(R.id.fragment_all)
         val frameLayout: FrameLayout? = view?.findViewById(R.id.fragment_container_nfc_lib)
         val webFrameLayout: FrameLayout? = view?.findViewById(R.id.webFrameLayout)
         val inLineCardLayout: FrameLayout? = view?.findViewById(R.id.inline_container)
+
+
 
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
         tapNfcCardReader = TapNfcCardReader(requireActivity())
@@ -127,9 +130,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     private fun getBusinessHeaderData(context: Context?, viewModel: TapLayoutViewModel) {
         if (context?.let { isNetworkAvailable(it) } == true) {
             val cardViewModel: CardViewModel by viewModels()
-            if (context != null) {
-                cardViewModel.getContext(context)
-            }
+            cardViewModel.getContext(context)
           //  cardViewModel.liveData.observe(this, { consumeResponse(it) })
             cardViewModel.processEvent(CardViewEvent.InitEvent, viewModel, null, null, null, cardViewModel)
 
@@ -153,25 +154,25 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     override fun onScanCardFailed(e: Exception?) {
         println("onScanCardFailed")
-        viewModel?.handleScanFailedResult()
+        viewModel.handleScanFailedResult()
     }
 
     override fun onScanCardFinished(card: Card?, cardImage: ByteArray?) {
         if (card != null) {
             println("scanned card is$card")
-            viewModel?.handleScanSuccessResult(card)
+            viewModel.handleScanSuccessResult(card)
 
         }
     }
 
     fun handleNFCResult(intent: Intent?) {
-        if (tapNfcCardReader?.isSuitableIntent(intent)) {
+        if (tapNfcCardReader.isSuitableIntent(intent)) {
             cardReadDisposable = tapNfcCardReader
                 .readCardRx2(intent)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ emvCard: TapEmvCard? ->
                     if (emvCard != null) {
-                        viewModel?.handleNFCScannedResult(emvCard)
+                        viewModel.handleNFCScannedResult(emvCard)
                         println("emvCard$emvCard")
                     }
                 },
@@ -182,7 +183,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     override fun onPause() {
         cardReadDisposable.dispose()
-        tapNfcCardReader?.disableDispatch()
+        tapNfcCardReader.disableDispatch()
         super.onPause()
     }
 
@@ -193,6 +194,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             is Resource.Finished -> renderView(response.data)
             is Error -> response.message?.let { concatText(it) }
             is Resource.Success -> renderView(response.data)
+
         }
     }
 
@@ -247,7 +249,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     }*/
 
-    fun isNetworkAvailable(context: Context): Boolean {
+    private fun isNetworkAvailable(context: Context): Boolean {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         var activeNetworkInfo: NetworkInfo? = null
         activeNetworkInfo = cm.activeNetworkInfo
