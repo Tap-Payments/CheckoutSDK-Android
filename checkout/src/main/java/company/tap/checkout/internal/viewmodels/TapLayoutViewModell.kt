@@ -8,6 +8,8 @@ import android.graphics.drawable.ShapeDrawable
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -26,6 +28,7 @@ import cards.pay.paycardsrecognizer.sdk.FrameManager
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewFragment
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import company.tap.cardinputwidget.utils.TextValidator
 import company.tap.cardscanner.TapCard
 import company.tap.cardscanner.TapTextRecognitionCallBack
 import company.tap.cardscanner.TapTextRecognitionML
@@ -638,7 +641,10 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         )
         if (::paymentInputViewHolder.isInitialized)
             paymentInputViewHolder.setCurrentBinData(binLookupResponse)
-    }
+        //paymentInputViewHolder?.setTablayoutbasedOnApi(PaymentDataSource?.getBinLookupResponse())
+        }
+
+
 
     override fun getDatasfromAPIs(
         sdkSettings: SDKSettings?,
@@ -1365,6 +1371,8 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             saveCardSwitchHolder11
         )
         println("scanned card is$card")
+        callBinLookupApi(card.cardNumber?.substring(0, 6))
+
         paymentInputViewHolder.tapCardInputView.setCardNumber(card.cardNumber)
         // paymentInputViewHolder.tapCardInputView.cardHolder.setText(card.cardHolderName)
         val dateParts: List<String>? = card.expirationDate?.split("/")
@@ -1375,6 +1383,15 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                 paymentInputViewHolder.tapCardInputView.setExpiryDate(month, year)
             }
         }
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun callBinLookupApi(binLookUpStr: String?) {
+        cardViewModel.processEvent(
+                CardViewEvent.RetreiveBinLookupEvent,
+                TapLayoutViewModel(), null, binLookUpStr, null, null
+        )
 
     }
 

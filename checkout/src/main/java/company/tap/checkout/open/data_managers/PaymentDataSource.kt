@@ -1,6 +1,7 @@
 package company.tap.checkout.open.data_managers
 
 import android.content.Context
+import company.tap.checkout.internal.api.models.BINLookupResponse
 import company.tap.checkout.internal.api.models.CardIssuer
 import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.api.models.Merchant
@@ -60,6 +61,7 @@ object PaymentDataSource :PaymentDataSource {
     private var selectedAmount: BigDecimal? = null
     private var sdkSettings: SDKSettings? = null
     private var paymentOptionsResponse: PaymentOptionsResponse? = null
+    private var binLookupResponse: BINLookupResponse? = null
     private var chargeOrAuthorize: Charge? = null
 
 
@@ -290,6 +292,10 @@ object PaymentDataSource :PaymentDataSource {
     fun setPaymentOptionsResponse(paymentOptionsResponse:PaymentOptionsResponse?) {
         this.paymentOptionsResponse = paymentOptionsResponse
     }
+
+    fun setBinLookupResponse(binLookupResponse: BINLookupResponse){
+        this.binLookupResponse = binLookupResponse
+    }
 /////<<<<<<<<<<<<<<<<<<<<<<<<<,Getters Area >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>/////////////////
 
 
@@ -405,5 +411,9 @@ object PaymentDataSource :PaymentDataSource {
 
     override fun getSDKSettings(): SDKSettings? {
         return sdkSettings
+    }
+
+    override fun getBinLookupResponse(): BINLookupResponse? {
+       return binLookupResponse
     }
 }

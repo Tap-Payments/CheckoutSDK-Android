@@ -1,6 +1,7 @@
 package company.tap.checkout.open.interfaces
 
 import androidx.annotation.RestrictTo
+import company.tap.checkout.internal.api.models.BINLookupResponse
 import company.tap.checkout.internal.api.models.CardIssuer
 import company.tap.checkout.internal.api.models.Merchant
 import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
@@ -142,5 +143,7 @@ interface PaymentDataSource {
     fun getPaymentOptionsResponse():PaymentOptionsResponse?
 
     fun getSDKSettings(): SDKSettings?
+
+    fun getBinLookupResponse() : BINLookupResponse?
 
 }
