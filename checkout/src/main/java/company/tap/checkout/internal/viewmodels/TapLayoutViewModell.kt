@@ -1026,10 +1026,9 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             "HorizontalHeaders",
             "rightTitle"
         )
-        val title: String = LocalizationManager.getValue("deletegoPayCard", "GoPay")
-        //if(title.contains("?")) title.replace("?","")
+        val title: String = LocalizationManager.getValue("deleteSavedCardTitle", "saveCardTitle")
         CustomUtils.showDialog(
-            title.replace("?", "") + maskedCardNumber + " ?",
+            title+ maskedCardNumber + " ?",
             LocalizationManager.getValue(
                 "deleteMessage",
                 "GoPay"
@@ -1208,7 +1207,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                     showExtraFees(
                         currentAmount,
                         currentCurrency,
-                        paymentTypeEnum,savedCardsModel
+                        paymentTypeEnum,savedCardsModel as SavedCard
                     )
 //                    payActionSavedCard(savedCardsModel as SavedCard)
                 }
@@ -1487,7 +1486,8 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         paymentInputViewHolder.setDataFromAPI(cardPaymentOptions)
     }
 
-    var title = "Confirm Extra charges"
+
+    var title:String = LocalizationManager.getValue("extraFeesAlertTitle","ExtraFees")
      var extraFees: java.util.ArrayList<ExtraFee>? = null
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -1512,8 +1512,9 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             var feesAmount = BigDecimal.ZERO
             feesAmount = calculateExtraFeesAmount(extraFees, paymentOptionsResponse.supportedCurrencies, PaymentDataProvider().getSelectedCurrency())
             var amountTotal = feesAmount.add(PaymentDataProvider().getSelectedCurrency()?.amount)
-            val localizedMessage =
-                "You will be charged an additional fee of $feesAmount${PaymentDataProvider().getSelectedCurrency()?.symbol} for this type of payment, totaling an amount of $amountTotal"
+            val localizedMessage:String =   LocalizationManager.getValue("extraFeesAlertMessage","ExtraFees")
+          //  val localizedMessage=   "You will be charged an additional fee of $feesAmount${PaymentDataProvider().getSelectedCurrency()?.symbol} for this type of payment, totaling an amount of $amountTotal"
+
             CustomUtils.showDialog(title, localizedMessage, context, 3, this, paymentType,savedCardsModel)
 
         } else

@@ -69,7 +69,7 @@ class CardRepository : APIRequestCallback {
         if (cardViewModel != null) {
             this.cardViewModel = cardViewModel
         }
-        if( LocalizationManager.getLocale(context).language  == "en") NetworkController.getInstance().processRequest(
+         NetworkController.getInstance().processRequest(
                 TapMethodType.GET,
                 ApiService.INIT,
                 null,
@@ -102,7 +102,7 @@ class CardRepository : APIRequestCallback {
                 "ALL"
         )
         val jsonString = Gson().toJson(requestBody)
-        if( LocalizationManager.getLocale(context).language  == "en") NetworkController.getInstance().processRequest(
+        NetworkController.getInstance().processRequest(
                 TapMethodType.POST, ApiService.PAYMENT_TYPES, jsonString, this, PAYMENT_OPTIONS_CODE
         )
         // else NetworkController.getInstance().processRequest(TapMethodType.GET, ApiService.INIT_AR, null, this, PAYMENT_OPTIONS_CODE)
@@ -652,9 +652,7 @@ class CardRepository : APIRequestCallback {
                     }
                 }
                 println("chargere" + chargeRequest)
-
                 val jsonString = Gson().toJson(chargeRequest)
-                if (LocalizationManager.getLocale(context).language == "en")
                     NetworkController.getInstance().processRequest(
                             TapMethodType.POST, ApiService.CHARGES, jsonString, this, CHARGE_REQ_CODE
                     )
