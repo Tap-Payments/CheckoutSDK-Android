@@ -8,8 +8,6 @@ import android.graphics.drawable.ShapeDrawable
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -28,7 +26,6 @@ import cards.pay.paycardsrecognizer.sdk.FrameManager
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewFragment
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import company.tap.cardinputwidget.utils.TextValidator
 import company.tap.cardscanner.TapCard
 import company.tap.cardscanner.TapTextRecognitionCallBack
 import company.tap.cardscanner.TapTextRecognitionML
@@ -37,7 +34,6 @@ import company.tap.checkout.internal.PaymentDataProvider
 import company.tap.checkout.internal.adapter.CardTypeAdapterUIKIT
 import company.tap.checkout.internal.adapter.CurrencyTypeAdapter
 import company.tap.checkout.internal.adapter.GoPayCardAdapterUIKIT
-import company.tap.checkout.internal.api.enums.ExtraFeesStatus
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.internal.api.responses.DeleteCardResponse
@@ -217,13 +213,13 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                     )
                     saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.visibility = View.VISIBLE
                     paymentInputViewHolder.tapMobileInputView.clearNumber()
-                    CustomUtils.showDialog(
+                   /* CustomUtils.showDialog(
                         "Payment Done",
                         "Payment id 2e412321eqqweq32131",
                         context,
                         1,
                         this
-                    )
+                    )*/
                 }
             }
         }
@@ -817,7 +813,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
     @RequiresApi(Build.VERSION_CODES.N)
     @SuppressLint("WrongConstant")
-    override fun didDialogueExecute(response: String) {
+    override fun didDialogueExecute(response: String, cardTypeDialog: Boolean?) {
         println("response are$response")
         if (response == "YES") {
             if (deleteCard) {
@@ -847,8 +843,15 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             deleteCard = false
 
         } else if (response == "OK") {
-            bottomSheetDialog.dismissWithAnimation
-            bottomSheetDialog.dismiss()
+            if(cardTypeDialog == true){
+                paymentInputViewHolder?.tapCardInputView?.clear()
+                paymentInputViewHolder?.tabLayout?.resetBehaviour()
+            }else{
+                 bottomSheetDialog.dismissWithAnimation
+                 bottomSheetDialog.dismiss()
+            }
+
+
         }
 
     }
@@ -1041,7 +1044,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             ),
             context,
             2,
-            this
+            this,null,null,false
         )
         selectedItemsDel = itemId
         deleteCard = true
@@ -1053,7 +1056,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             LocalizationManager.getValue("goPaySignOut", "GoPay"), LocalizationManager.getValue(
                 "goPaySaveCards",
                 "GoPay"
-            ), context, 2, this
+            ), context, 2, this,null,null,false
         )
     }
 
@@ -1360,6 +1363,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     fun handleScanSuccessResult(card: Card) {
         removeInlineScanner()
         removeViews(amountViewHolder1, businessViewHolder)
@@ -1373,8 +1377,29 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         println("scanned card is$card")
         callBinLookupApi(card.cardNumber?.substring(0, 6))
 
-        paymentInputViewHolder.tapCardInputView.setCardNumber(card.cardNumber)
+        Handler().postDelayed({
+            val binLookupResponse: BINLookupResponse? = PaymentDataSource?.getBinLookupResponse()
+            if(PaymentDataSource?.getCardType()!=null && PaymentDataSource?.getCardType()==CardType.ALL){
+                setScannedCardDetails(card)
+
+            }else{
+                if(binLookupResponse!=null){
+                    paymentInputViewHolder?.checkAllowedCardTypes(binLookupResponse)
+                    setScannedCardDetails(card)
+                }
+
+            }
+        }, 300)
+
+
+
         // paymentInputViewHolder.tapCardInputView.cardHolder.setText(card.cardHolderName)
+
+
+    }
+
+    private fun setScannedCardDetails(card: Card) {
+        paymentInputViewHolder.tapCardInputView.setCardNumber(card.cardNumber)
         val dateParts: List<String>? = card.expirationDate?.split("/")
         val month = dateParts?.get(0)?.toInt()
         val year = dateParts?.get(1)?.toInt()
@@ -1383,7 +1408,6 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                 paymentInputViewHolder.tapCardInputView.setExpiryDate(month, year)
             }
         }
-
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -1395,6 +1419,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     fun handleNFCScannedResult(emvCard: TapEmvCard) {
         removeViews(amountViewHolder1, businessViewHolder)
         addViews(
@@ -1404,9 +1429,30 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             paymentInputViewHolder,
             saveCardSwitchHolder11
         )
+
+        callBinLookupApi(emvCard.cardNumber?.substring(0, 6))
+
+        Handler().postDelayed({
+            val binLookupResponse: BINLookupResponse? = PaymentDataSource?.getBinLookupResponse()
+            if(PaymentDataSource?.getCardType()!=null && PaymentDataSource?.getCardType()==CardType.ALL){
+                setNfcCardDetails(emvCard)
+
+            }else{
+                if(binLookupResponse!=null){
+                    paymentInputViewHolder?.checkAllowedCardTypes(binLookupResponse)
+                    setNfcCardDetails(emvCard)
+                }
+
+            }
+        }, 300)
+
+        removeNFCViewFragment()
+    }
+
+    private fun setNfcCardDetails(emvCard: TapEmvCard) {
         paymentInputViewHolder.tapCardInputView.setCardNumber(emvCard.cardNumber)
         convertDateString(emvCard.expireDate.toString())
-        removeNFCViewFragment()
+
     }
 
     private fun removeNFCViewFragment() {
@@ -1532,7 +1578,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             val localizedMessage:String =   LocalizationManager.getValue("extraFeesAlertMessage","ExtraFees")
           //  val localizedMessage=   "You will be charged an additional fee of $feesAmount${PaymentDataProvider().getSelectedCurrency()?.symbol} for this type of payment, totaling an amount of $amountTotal"
 
-            CustomUtils.showDialog(title, localizedMessage, context, 3, this, paymentType,savedCardsModel)
+            CustomUtils.showDialog(title, localizedMessage, context, 3, this, paymentType,savedCardsModel,false)
 
         } else
             setDifferentPaymentsAction(paymentType, savedCardsModel)

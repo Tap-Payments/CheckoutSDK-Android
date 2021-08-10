@@ -62,6 +62,7 @@ class AmountViewHolder1(context: Context,private val baseLayouttManager: BaseLay
                     selectedCurrText = transactionCurrency,
                     itemCount = itemCountt + "  "+ LocalizationManager.getValue("items","Common")))
         else
+            if(::originalAmount.isInitialized)
             changeDataSource(
                 AmountViewDataSource(
                     selectedCurr = originalAmount ,

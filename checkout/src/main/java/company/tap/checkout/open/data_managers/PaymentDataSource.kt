@@ -293,7 +293,7 @@ object PaymentDataSource :PaymentDataSource {
         this.paymentOptionsResponse = paymentOptionsResponse
     }
 
-    fun setBinLookupResponse(binLookupResponse: BINLookupResponse){
+    fun setBinLookupResponse(binLookupResponse: BINLookupResponse?){
         this.binLookupResponse = binLookupResponse
     }
 /////<<<<<<<<<<<<<<<<<<<<<<<<<,Getters Area >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>/////////////////

@@ -57,8 +57,8 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         - Parameter localiseFile: Please pass the name of the custom localisation file if needed. If not set, the normal and default TAP localisations will be used
          */
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-       // setLocale(this, LocalizationManager.getLocale(this).language)
-        setLocale(this,"ar")
+        setLocale(this, LocalizationManager.getLocale(this).language)
+       // setLocale(this,"ar")
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
         initializeSDK()
          configureSDKSession()

@@ -69,7 +69,7 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
     override fun onEmailValidated() {
         //to be replace dummy check when validating via api
         if(goPayLoginInput.textInput.text.toString()=="a.k@g.com"){
-            CustomUtils.showDialog(LocalizationManager.getValue("GoPayAlert", "Hints", "goPayTitle"),LocalizationManager.getValue("GoPayAlert", "Hints", "goPayemailalert"),context,null,baseLayouttManager)
+            CustomUtils.showDialog(LocalizationManager.getValue("GoPayAlert", "Hints", "goPayTitle"),LocalizationManager.getValue("GoPayAlert", "Hints", "goPayemailalert"),context,null,baseLayouttManager,null,null,false)
         return
         }else {
             goPayLoginInput.visibility = View.GONE
@@ -85,7 +85,7 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
         goPayLoginInput.visibility = View.GONE
         //to be replace dummy check when validating via api
         if(goPayLoginInput.textInput.text.toString()=="69045932"){
-            CustomUtils.showDialog(LocalizationManager.getValue("GoPayAlert", "Hints", "goPayTitle"),LocalizationManager.getValue("GoPayAlert", "Hints", "goPayphonealert"),context,null,baseLayouttManager)
+            CustomUtils.showDialog(LocalizationManager.getValue("GoPayAlert", "Hints", "goPayTitle"),LocalizationManager.getValue("GoPayAlert", "Hints", "goPayphonealert"),context,null,baseLayouttManager,null,null,false)
             return
         }else{
             println(" you clicked to display otp!!!")

@@ -32,9 +32,30 @@ data class BINLookupResponse(
     @Expose
       val cardBrand: CardBrand,
 
+    @SerializedName("card_type")
+    @Expose
+    val cardType: String,
+    @SerializedName("card_category")
+    @Expose
+    val cardCategory: String,
+
     @SerializedName("card_scheme")
     @Expose
       val scheme: CardScheme,
+
+    @SerializedName("website")
+    @Expose
+      val website: String,
+
+    @SerializedName("phone")
+    @Expose
+      val phone: String,
+    @SerializedName("api_version")
+    @Expose
+      val apiVersion: String,
+    @SerializedName("issuer_id")
+    @Expose
+      val issuerID: String,
 
     @SerializedName("country")
     @Expose

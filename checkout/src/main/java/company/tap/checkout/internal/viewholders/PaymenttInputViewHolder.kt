@@ -4,7 +4,6 @@ package company.tap.checkout.internal.viewholders
 import android.content.Context
 import android.graphics.Color
 import android.os.Build
-import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.transition.Fade
@@ -32,8 +31,10 @@ import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayouttManager
 import company.tap.checkout.internal.interfaces.PaymentCardComplete
 import company.tap.checkout.internal.interfaces.onCardNFCCallListener
+import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
 import company.tap.checkout.open.data_managers.PaymentDataSource
+import company.tap.checkout.open.enums.CardType
 import company.tap.tapcardvalidator_android.CardBrand
 import company.tap.tapcardvalidator_android.CardValidationState
 import company.tap.tapcardvalidator_android.CardValidator
@@ -69,7 +70,7 @@ class PaymenttInputViewHolder(
     override val view: View =
             LayoutInflater.from(context).inflate(R.layout.payment_inputt_layout, null)
     override val type = SectionType.PAYMENT_INPUT
-    private var tabLayout: TapSelectionTabLayout = view.findViewById(R.id.sections_tablayout)
+     var tabLayout: TapSelectionTabLayout = view.findViewById(R.id.sections_tablayout)
     private var intertabLayout: TabLayout = tabLayout.findViewById(R.id.tab_layout)
     private val paymentInputContainer: LinearLayout
     private val clearView: ImageView
@@ -96,8 +97,6 @@ class PaymenttInputViewHolder(
     private var cardHolderName: String? = null
     private val BIN_NUMBER_LENGTH = 6
     private lateinit var cardSchema: String
-    private var binLookupResponse: BINLookupResponse? = null
-    private var timer: Timer? = null
 
 
     init {
@@ -186,6 +185,7 @@ class PaymenttInputViewHolder(
                     Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
                     Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
             )
+            tabLayout?.resetBehaviour()
         }
     }
 
@@ -329,25 +329,15 @@ class PaymenttInputViewHolder(
             }
 
                if (card?.cardBrand != null) {
-                   Handler().postDelayed({ // do something after 1s = 1000 miliseconds since set response takes time
-                       val binLookupResponsedd: BINLookupResponse? = PaymentDataSource?.getBinLookupResponse()
-                       if (binLookupResponsedd?.cardBrand?.name == binLookupResponsedd?.scheme?.name) {
+                   val binLookupResponse: BINLookupResponse? = PaymentDataSource?.getBinLookupResponse()
+                   if(PaymentDataSource?.getCardType()!=null && PaymentDataSource?.getCardType()==CardType.ALL){
+                       setTablayoutBasedOnApiResponse(binLookupResponse)
+                   }else{
+                       checkAllowedCardTypes(binLookupResponse)
+                       PaymentDataSource?.setBinLookupResponse(null)
+                       setTablayoutBasedOnApiResponse(binLookupResponse)
+                   }
 
-                           // we will send card brand to validator
-                           binLookupResponsedd?.cardBrand?.let { it1 ->
-                               tabLayout.selectTab(
-                                       it1,
-                                       true
-                               )
-                           }
-                       } else {
-                           //we will send scheme
-                               binLookupResponsedd?.scheme?.cardBrand?.let { it1 -> tabLayout?.selectTab(it1,true) }
-
-                       }
-
-
-            }, 500) //Time in mis
 
                }
 
@@ -366,6 +356,23 @@ class PaymenttInputViewHolder(
         }
     }
 
+    private fun setTablayoutBasedOnApiResponse(binLookupResponse: BINLookupResponse?) {
+        if (binLookupResponse?.cardBrand?.name == binLookupResponse?.scheme?.name) {
+
+            // we will send card brand to validator
+            binLookupResponse?.cardBrand?.let { it1 ->
+                tabLayout.selectTab(
+                        it1,
+                        true
+                )
+            }
+        } else {
+            //we will send scheme
+            binLookupResponse?.scheme?.cardBrand?.let { it1 -> tabLayout?.selectTab(it1, true) }
+
+        }
+    }
+
     private fun callCardBinNumberApi(s: CharSequence, textWatcher: TextWatcher) {
 
         if (s.trim().toString().replace(" ", "").length == BIN_NUMBER_LENGTH) {
@@ -376,14 +383,12 @@ class PaymenttInputViewHolder(
             tapCardInputView?.removeCardNumberTextWatcher(textWatcher)
             tapCardInputView?.setCardNumberTextWatcher(textWatcher)
 
-            return
         }
     }
-    //}
+
 
 
     private fun checkValidationState(card: DefinedCardBrand) {
-//             println("card check>>" + card.cardBrand.name)
         when (card.validationState) {
             CardValidationState.invalid -> {
                 tapAlertView?.visibility = View.VISIBLE
@@ -590,10 +595,17 @@ class PaymenttInputViewHolder(
     fun setCurrentBinData(binLookupResponse: BINLookupResponse?) {
         cardNumberWatcher()
         cardSchema = binLookupResponse?.scheme.toString()
+  }
 
+     fun checkAllowedCardTypes(binLookupResponse: BINLookupResponse?){
+                if (binLookupResponse != null && PaymentDataSource?.getCardType().toString() != null){
+                    if(PaymentDataSource?.getCardType().toString() != binLookupResponse.cardType) {
+                        CustomUtils.showDialog(LocalizationManager.getValue("alertUnsupportedCardTitle","AlertBox"),LocalizationManager.getValue("alertUnsupportedCardMessage","AlertBox"),context,1,baseLayouttManager,null,null,true)
 
-    }
+                    }
+                }
 
+        }
 
 
 

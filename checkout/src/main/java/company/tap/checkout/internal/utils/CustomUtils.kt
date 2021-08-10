@@ -15,7 +15,7 @@ All rights reserved.
  **/
 object CustomUtils {
 
-    fun showDialog(title: String, messageString: String, context: Context, btnType: Int? = null, baseLayouttManager: BaseLayouttManager?,paymentType: PaymentType?=null, savedCardsModel: Any?= null) {
+    fun showDialog(title: String, messageString: String, context: Context, btnType: Int? = null, baseLayouttManager: BaseLayouttManager?,paymentType: PaymentType?=null, savedCardsModel: Any?= null,cardTypeDialog:Boolean) {
         val builder = iOSDialogBuilder(context)
         builder
             .setTitle(title)
@@ -25,12 +25,12 @@ object CustomUtils {
         if (btnType == 2) {
             builder.setPositiveListener(LocalizationManager.getValue("yes","Common")) { dialog ->
                 dialog.dismiss()
-                baseLayouttManager?.didDialogueExecute("YES")
+                baseLayouttManager?.didDialogueExecute("YES", cardTypeDialog)
 
             }
             builder.setNegativeListener(LocalizationManager.getValue("no","Common")) { dialog ->
                 dialog.dismiss()
-                baseLayouttManager?.didDialogueExecute("NO")
+                baseLayouttManager?.didDialogueExecute("NO", cardTypeDialog)
             }
                     .build().show()
         } else if (btnType == 3) {
@@ -51,7 +51,7 @@ object CustomUtils {
         else {
             builder.setPositiveListener(LocalizationManager.getValue("ok","Common")) { dialog ->
                 dialog.dismiss()
-                baseLayouttManager?.didDialogueExecute("OK")
+                baseLayouttManager?.didDialogueExecute("OK",cardTypeDialog)
             }
         }
        .build().show()
