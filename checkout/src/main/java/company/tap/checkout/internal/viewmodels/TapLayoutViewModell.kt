@@ -907,18 +907,21 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    override fun onCardSelectedAction(isSelected: Boolean, savedCardsModel: Any) {
+    override fun onCardSelectedAction(isSelected: Boolean, savedCardsModel: Any?) {
         when (savedCardsModel) {
             is SavedCard -> {
                 activateActionButton()
                 setPayButtonAction(PaymentType.SavedCard, savedCardsModel)
             }
             else -> {
-                if ((savedCardsModel as PaymentOption).paymentType == PaymentType.WEB) {
-                    activateActionButton()
-                    setPayButtonAction(PaymentType.WEB, savedCardsModel)
-                } else
+                if(savedCardsModel!= null){
+                    if ((savedCardsModel as PaymentOption).paymentType == PaymentType.WEB) {
+                        activateActionButton()
+                        setPayButtonAction(PaymentType.WEB, savedCardsModel)
+                    }
+                }else
                     displayGoPayLogin()
+
             }
         }
     }

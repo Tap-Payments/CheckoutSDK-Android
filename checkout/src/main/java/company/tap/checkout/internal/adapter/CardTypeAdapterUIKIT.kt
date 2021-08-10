@@ -118,7 +118,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
     override fun getItemCount(): Int {
            totalArraySize = adapterContent.size.plus(arrayListCards.size)
-           return totalArraySize
+           return totalArraySize.plus(1)
 
     }
 
@@ -170,8 +170,8 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                     holder.itemView.setOnClickListener {
                         if (!isShaking) {
                         selectedPosition = position
-                        println("goPay is clicked")
-                        onCardSelectedActionListener.onCardSelectedAction(true, adapterContent[holder.adapterPosition])
+                        println("goPay is clicked"+selectedPosition)
+                        onCardSelectedActionListener.onCardSelectedAction(true, null)
                         goPayOpenedfromMain(goPayOpened)
                         notifyDataSetChanged()
                     }
