@@ -22,7 +22,10 @@ import androidx.fragment.app.viewModels
 import cards.pay.paycardsrecognizer.sdk.Card
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import company.tap.checkout.R
-import company.tap.checkout.internal.apiresponse.*
+import company.tap.checkout.internal.apiresponse.CardViewEvent
+import company.tap.checkout.internal.apiresponse.CardViewModel
+import company.tap.checkout.internal.apiresponse.CardViewState
+import company.tap.checkout.internal.apiresponse.Resource
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
 import company.tap.nfcreader.open.reader.TapEmvCard
@@ -101,7 +104,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                                     inLineCardLayout,
                                     this,
                                     it2,
-                                        cardViewModel
+                                    cardViewModel
                                 )
                             }
 
@@ -110,20 +113,22 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                 }
             }
         }
+        getBusinessHeaderData(context, viewModel)
 
-        enableSections()
+       // enableSections()
         return view
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun enableSections() {
+    fun enableSections(): ArrayList<SectionType> {
         val enabledSections = ArrayList<SectionType>()
         enabledSections.add(SectionType.BUSINESS)
         enabledSections.add(SectionType.AMOUNT_ITEMS)
         enabledSections.add(SectionType.FRAGMENT)
-        viewModel.displayStartupLayout(enabledSections)
-        getBusinessHeaderData(context, viewModel)
+      //  viewModel.displayStartupLayout(enabledSections)
+      //  getBusinessHeaderData(context, viewModel)
         setBottomSheetInterface(this)
+        return enabledSections
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -199,18 +204,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     }
 
     private fun renderView(data: CardViewState?) {
-        println("renderView respoonse" + data)
-       /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            data?.initResponse?.let { viewModel.getDatafromAPI(it) }
-            data?.paymentOptionsResponse.let {
-                if (it != null) {
-                    viewModel.getDataPaymentOptionsResponse(it)
-                }
-            }
 
-        }*/
     }
-
     @SuppressLint("SetTextI18n")
     private fun concatText(newText: String) {
         println("newText respoonse$newText")

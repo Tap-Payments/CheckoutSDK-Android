@@ -56,6 +56,7 @@ import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.CardType
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.nfcreader.open.reader.TapEmvCard
+import company.tap.tapcardvalidator_android.CardBrand
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.SeparatorViewTheme
@@ -145,6 +146,8 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
     @JvmField
     var selectedCurrencyPos: String? = null
+    @JvmField
+    var binLookupResponse1:BINLookupResponse? = null
     lateinit var paymentOptionsWorker: java.util.ArrayList<PaymentOption>
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -636,6 +639,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             this,
             cardViewModel
         )
+        paymentInputViewHolder?.tapCardInputView.invalidate()
         if (::paymentInputViewHolder.isInitialized)
             paymentInputViewHolder.setCurrentBinData(binLookupResponse)
         //paymentInputViewHolder?.setTablayoutbasedOnApi(PaymentDataSource?.getBinLookupResponse())

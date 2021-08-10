@@ -16,6 +16,7 @@ import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.interfaces.IPaymentDataProvider
 import company.tap.checkout.internal.utils.AmountCalculator
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
+import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.TransactionMode
@@ -260,6 +261,8 @@ class CardRepository : APIRequestCallback {
             response?.body().let {
                 paymentOptionsResponse = Gson().fromJson(it, PaymentOptionsResponse::class.java)
                 PaymentDataSource.setPaymentOptionsResponse(paymentOptionsResponse)
+
+                viewModel.displayStartupLayout(CheckoutFragment().enableSections())
             }
 
 
