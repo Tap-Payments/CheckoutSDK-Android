@@ -40,11 +40,11 @@ class BusinessViewHolder(private val context: Context) : TapBaseViewHolder {
             view.headerView.setHeaderDataSource(getHeaderDataSourceFromAPI())
             view.headerView.businessIcon.visibility= View.VISIBLE
             view.headerView.showHideLoading(false)
+            view.headerView.constraint.visibility= View.VISIBLE
 
         }else {
-            view.headerView.showHideLoading(true)
-
-//            view.headerView.setHeaderDataSource(HeaderDataSource("Enter Card Details",null,null))
+//            view.headerView.showHideLoading(true)
+            view.headerView.setHeaderDataSource(HeaderDataSource("Enter Card Details",null,null))
             view.headerView.businessIcon.visibility= View.GONE
         }
 
