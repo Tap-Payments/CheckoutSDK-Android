@@ -503,10 +503,11 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     @SuppressLint("SetTextI18n")
     override fun displayOTPView(mobileNumber: String, otpType: String, chargeResponse: Charge?) {
         setSlideAnimation()
-        if (otpType == PaymentTypeEnum.GOPAY.name)
-            displayOtpGoPay(mobileNumber)
-        else if (otpType == PaymentTypeEnum.telecom.name) displayOtpTelecoms(mobileNumber)
-        else displayOtpCharge(mobileNumber, chargeResponse)
+        when (otpType) {
+            PaymentTypeEnum.GOPAY.name -> displayOtpGoPay(mobileNumber)
+            PaymentTypeEnum.telecom.name -> displayOtpTelecoms(mobileNumber)
+            else -> displayOtpCharge(mobileNumber, chargeResponse)
+        }
     }
 
     private fun displayOtpGoPay(mobileNumber: String) {
@@ -671,9 +672,9 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                 )
             }
         if (paymentOptionsResponse?.supportedCurrencies != null && ::amountViewHolder1.isInitialized)
-            paymentOptionsResponse?.currency?.let {
+            paymentOptionsResponse.currency.let {
                 amountViewHolder1.setDatafromAPI(
-                    paymentOptionsResponse?.supportedCurrencies[0].amount.toString(),
+                    paymentOptionsResponse.supportedCurrencies[0].amount.toString(),
                     it,
                     "1"
                 )
