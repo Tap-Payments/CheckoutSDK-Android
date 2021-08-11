@@ -48,7 +48,7 @@ class AmountViewHolder1(context: Context,private val baseLayouttManager: BaseLay
         )
     }
 
-    fun changeDataSource(amountViewDataSource: AmountViewDataSource) {
+    private fun changeDataSource(amountViewDataSource: AmountViewDataSource) {
         view.amount_section.setAmountViewDataSource(amountViewDataSource)
     }
 

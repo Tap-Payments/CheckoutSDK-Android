@@ -315,7 +315,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         //Todo based on api response logic for switch case
         when (PaymentDataSource?.getTransactionMode()) {
 
-            company.tap.checkout.open.enums.TransactionMode.TOKENIZE_CARD -> {
+           TransactionMode.TOKENIZE_CARD -> {
                 addViews(
                     businessViewHolder,
                     paymentInputViewHolder,
@@ -323,7 +323,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                 )
 
             }
-            company.tap.checkout.open.enums.TransactionMode.SAVE_CARD -> {
+           TransactionMode.SAVE_CARD -> {
                 addViews(
                     businessViewHolder,
                     paymentInputViewHolder,
@@ -451,6 +451,8 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             allCurrencies.value as ArrayList<SupportedCurrencies>,
             null
         )
+
+
 
         //   itemsViewHolder1.setItemsRecylerView()
         itemsViewHolder1.setCurrencyRecylerView()
@@ -1071,9 +1073,9 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             "HorizontalHeaders",
             "rightTitle"
         )
-        val title: String = LocalizationManager.getValue("deleteSavedCardTitle", "saveCardTitle")
+        val title: String = LocalizationManager.getValue("deleteSavedCardTitle", "SavedCardTitle")
         CustomUtils.showDialog(
-            title+ maskedCardNumber + " ?",
+            "$title$maskedCardNumber ?",
             LocalizationManager.getValue(
                 "deleteMessage",
                 "GoPay"

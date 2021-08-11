@@ -263,12 +263,15 @@ class PaymenttInputViewHolder(
              * we will get date value
              */
             expiryDate = s.toString()
-            tapAlertView?.alertMessage?.text = (LocalizationManager.getValue(
+            if(s.length>=5){
+                tapAlertView?.alertMessage?.text = (LocalizationManager.getValue(
                     "Warning",
                     "Hints",
                     "missingCVV"
-            ))
-            tapAlertView?.visibility = View.VISIBLE
+                ))
+                tapAlertView?.visibility = View.VISIBLE
+            }
+
         }
     }
 

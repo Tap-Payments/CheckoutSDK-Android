@@ -130,7 +130,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         }else{holder.itemView.deleteImageViewSaved?.visibility = View.GONE}
 
         holder.itemView.deleteImageViewSaved?.setOnClickListener {
-            onCardSelectedActionListener.onDeleteIconClicked(true, position.minus(adapterContent.size), arrayListCards[position.minus(adapterContent.size)].id,maskCardNumber(arrayListCards[position.minus(adapterContent.size)].lastFour))
+            onCardSelectedActionListener.onDeleteIconClicked(true, position.minus(adapterContent.size), arrayListCards[position.minus(adapterContent.size)].id,maskCardNumber(arrayListCards[position.minus(adapterContent.size)].firstSix+arrayListCards[position.minus(adapterContent.size)].lastFour))
           //TODO  COMMENTED arrayListCards.removeAt(holder.itemView.id)
             holder.itemView.clearAnimation()
             it.animate().cancel()
@@ -231,7 +231,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     }
     private fun deleteSelectedCard(holder: RecyclerView.ViewHolder, position: Int){
         holder.itemView.deleteImageViewSaved?.setOnClickListener {
-            onCardSelectedActionListener.onDeleteIconClicked(true, position.minus(adapterContent.size), arrayListCards[position.minus(adapterContent.size)].id,maskCardNumber(arrayListCards[position.minus(adapterContent.size)].lastFour))
+            onCardSelectedActionListener.onDeleteIconClicked(true, position.minus(adapterContent.size), arrayListCards[position.minus(adapterContent.size)].id,maskCardNumber(arrayListCards[position.minus(adapterContent.size)].firstSix+arrayListCards[position.minus(adapterContent.size)].lastFour))
            // arrayListSaveCard.removeAt(position.minus(adapterContent.size))
             holder.itemView.clearAnimation()
             it.animate().cancel()
@@ -248,7 +248,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
             Glide.with(holder.itemView.context)
                 .load(arrayListCards[position.minus(adapterContent.size)].image)
                 .into(holder.itemView.imageView_amex)
-            holder.itemView.textViewCardDetails.text = maskCardNumber(arrayListCards[position.minus(adapterContent.size)].lastFour)
+            holder.itemView.textViewCardDetails.text = maskCardNumber(arrayListCards[position.minus(adapterContent.size)].firstSix+arrayListCards[position.minus(adapterContent.size)].lastFour)
            //holder.itemView.textViewCardDetails.text = adapterContent[holder.adapterPosition].chip1.title
         }
     }
@@ -360,7 +360,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     private fun maskCardNumber(cardInput: String): String {
         val maskLen: Int = cardInput.length - 4
         if (maskLen <= 0) return cardInput // Nothing to mask
-        return (cardInput).replaceRange(0, 4, "....")
+        return (cardInput).replaceRange(0, 6, "••••")
     }
 
 }
