@@ -59,6 +59,7 @@ import company.tap.nfcreader.open.reader.TapEmvCard
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.SeparatorViewTheme
+import company.tap.tapuilibrary.uikit.datasource.AmountViewDataSource
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
@@ -90,6 +91,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     private val isShaking = MutableLiveData<Boolean>()
     private var deleteCard: Boolean = false
     private var displayItemsOpen: Boolean = false
+    private var displayOtpIsOpen: Boolean = false
     private var saveCardSwitchHolder11: SwitchViewHolder11? = null
 
     private lateinit var paymentInputViewHolder: PaymenttInputViewHolder
@@ -287,11 +289,18 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         otpViewHolder = OTPViewHolder(context)
         goPayViewsHolder = GoPayViewsHolder(context, this, otpViewHolder)
 
+
         // nfcViewHolder = NFCViewHolder(context as Activity, context, this, fragmentManager)
     }
 
     private fun initSwitchAction() {
         saveCardSwitchHolder11?.view?.mainSwitch?.mainSwitch?.visibility = View.VISIBLE
+        //By Default switchGoPayCheckout will be hidden , will appear only when goPayLoggedin
+        saveCardSwitchHolder11?.view?.cardSwitch?.switchGoPayCheckout?.isChecked = false
+        saveCardSwitchHolder11?.view?.cardSwitch?.switchGoPayCheckout?.visibility = View.GONE
+        saveCardSwitchHolder11?.view?.cardSwitch?.saveGoPay?.visibility = View.GONE
+        saveCardSwitchHolder11?.view?.cardSwitch?.alertGoPaySignUp?.visibility = View.GONE
+        saveCardSwitchHolder11?.view?.cardSwitch?.switchSeparator?.visibility = View.GONE
         // saveCardSwitchHolder11?.view?.mainSwitch?.mainSwitch?.visibility = View.VISIBLE
         //   saveCardSwitchHolder11?.view?.mainSwitch?.mainSwitchLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor")))
     }
@@ -364,6 +373,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         if (goPayViewsHolder.goPayopened) {
             goPayViewsHolder.goPayLoginInput.inputType = GoPayLoginMethod.PHONE
             goPayViewsHolder.goPayLoginInput.visibility = View.VISIBLE
+            saveCardSwitchHolder11?.view?.cardSwitch?.switchGoPayCheckout?.visibility = View.VISIBLE
         }
         //TODO goPayAdapter.updateAdapterData(goPayCardList.value as List<GoPaySavedCards>)
         amountViewHolder1.changeGroupAction(false)
@@ -402,6 +412,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
         cardViewHolder11.view.mainChipgroup.groupAction.visibility = View.INVISIBLE
         saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.visibility = View.VISIBLE
+        saveCardSwitchHolder11?.goPayisLoggedin = true
         adapter.goPayOpenedfromMain(true)
         adapter.removeItems()
     }
@@ -504,13 +515,16 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
     @RequiresApi(Build.VERSION_CODES.N)
     @SuppressLint("SetTextI18n")
-    override fun displayOTPView(mobileNumber: PhoneNumber?, otpType: String, chargeResponse: Charge?) {
+    override fun displayOTPView(phoneNumber: PhoneNumber?, otpType: String, chargeResponse: Charge?) {
         setSlideAnimation()
         when (otpType) {
-            PaymentTypeEnum.GOPAY.name -> displayOtpGoPay(mobileNumber)
-            PaymentTypeEnum.telecom.name -> displayOtpTelecoms(mobileNumber)
-            else -> displayOtpCharge(mobileNumber, chargeResponse)
+            PaymentTypeEnum.GOPAY.name -> displayOtpGoPay(phoneNumber)
+            PaymentTypeEnum.telecom.name -> displayOtpTelecoms(phoneNumber)
+            else -> displayOtpCharge(phoneNumber, chargeResponse)
         }
+        displayOtpIsOpen = true
+        println("items anm"+amountViewHolder1?.view?.amount_section?.itemCountButton?.text.toString()
+        )
     }
 
     private fun displayOtpGoPay(phoneNumber: PhoneNumber?) {
@@ -520,6 +534,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             paymentInputViewHolder, saveCardSwitchHolder11
         )
         addViews(otpViewHolder)
+
         otpViewHolder.otpView.visibility = View.VISIBLE
         setOtpPhoneNumber(phoneNumber)
         otpViewHolder.otpView.changePhone.setOnClickListener {
@@ -1234,11 +1249,12 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.setOnClickListener {
             when (paymentTypeEnum) {
                 PaymentType.SavedCard -> {
-                    showExtraFees(
+                  /*  showExtraFees(
                         currentAmount,
                         currentCurrency,
                         paymentTypeEnum, savedCardsModel
-                    )
+                    )*/
+                    setDifferentPaymentsAction(paymentTypeEnum,savedCardsModel)
                 }
                 PaymentType.WEB -> {
                     if (savedCardsModel != null) {
@@ -1610,7 +1626,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                         3,
                         this,
                         paymentType,
-                        savedCardsModel
+                        savedCardsModel,true
                     )
 
                 }

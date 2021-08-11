@@ -329,6 +329,10 @@ class PaymenttInputViewHolder(
             }
 
                if (card?.cardBrand != null) {
+                   tabLayout.selectTab(
+                       card.cardBrand,
+                       card.validationState == CardValidationState.valid
+                   )
                    val binLookupResponse: BINLookupResponse? = PaymentDataSource?.getBinLookupResponse()
                    if(PaymentDataSource?.getCardType()!=null && PaymentDataSource?.getCardType()==CardType.ALL){
                        setTablayoutBasedOnApiResponse(binLookupResponse)
@@ -358,7 +362,6 @@ class PaymenttInputViewHolder(
 
     private fun setTablayoutBasedOnApiResponse(binLookupResponse: BINLookupResponse?) {
         if (binLookupResponse?.cardBrand?.name == binLookupResponse?.scheme?.name) {
-
             // we will send card brand to validator
             binLookupResponse?.cardBrand?.let { it1 ->
                 tabLayout.selectTab(
@@ -477,7 +480,11 @@ class PaymenttInputViewHolder(
     private fun swapInputViewsPosition0() {
         selectedType = PaymentTypeEnum.card
         switchViewHolder11?.setSwitchLocals(PaymentTypeEnum.card)
-        switchViewHolder11?.view?.cardSwitch?.switchGoPayCheckout?.visibility = View.VISIBLE
+        //It will be hidden until goPay is Logged in
+        if(switchViewHolder11?.goPayisLoggedin == true){
+            switchViewHolder11?.view?.cardSwitch?.switchGoPayCheckout?.visibility = View.VISIBLE
+        }else switchViewHolder11?.view?.cardSwitch?.switchGoPayCheckout?.visibility = View.GONE
+
         nfcButton?.visibility = View.VISIBLE
         cardScannerBtn?.visibility = View.VISIBLE
         clearView.visibility = View.GONE

@@ -34,6 +34,8 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
     private var savegoPayString: String? = null
     private var alertgoPaySignupString: String? = null
     lateinit var mobileString:String
+    @JvmField
+     var goPayisLoggedin:Boolean=false
      var mainTextSave:TapTextView
     init {
         bindViewComponents()
@@ -46,6 +48,7 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
     }
     // Function / Logic is responsible for sett ing the data to switch based on user selection
     fun setSwitchLocals(payName:PaymentTypeEnum) {
+
         goPayString = LocalizationManager.getValue("goPayTextLabel","GoPay")
         savegoPayString = LocalizationManager.getValue("savegoPayLabel","GoPay")
         alertgoPaySignupString = LocalizationManager.getValue("goPaySignupLabel","GoPay")
@@ -142,9 +145,13 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
         /**
          * Logic for save goPay Checkout switch
          * **/
-        view.cardSwitch.switchGoPayCheckout?.setOnCheckedChangeListener { _, _ ->
-            switchGoPayCheckoutChangeCheckedAction()
-        }
+       if(goPayisLoggedin){
+           view.cardSwitch.switchGoPayCheckout.visibility= View.VISIBLE
+           view.cardSwitch.switchGoPayCheckout?.setOnCheckedChangeListener { _, _ ->
+               switchGoPayCheckoutChangeCheckedAction()
+           }
+       }
+
 
 
     }
@@ -222,11 +229,20 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
         view.cardSwitch.switchesLayout?.visibility = View.VISIBLE
         view.cardSwitch.switchSaveMerchant?.visibility = View.VISIBLE
         view.cardSwitch.switchSaveMerchant?.isChecked = true
-        view.cardSwitch.switchGoPayCheckout?.isChecked = true
-        view.cardSwitch.switchGoPayCheckout?.visibility = View.VISIBLE
-        view.cardSwitch.saveGoPay?.visibility = View.VISIBLE
-        view.cardSwitch.alertGoPaySignUp?.visibility = View.VISIBLE
-        view.cardSwitch.switchSeparator?.visibility = View.VISIBLE
+        /**
+         * Here we will check if goPay is Loggedin if NOT ----> We will just hide the switches
+         *
+         * if YES -----> we will show the switches also
+         * Please NOTE : @paramgoPayisLoggedin is false for now will update when api is added
+         */
+        if(goPayisLoggedin){
+            view.cardSwitch.switchGoPayCheckout?.isChecked = true
+            view.cardSwitch.switchGoPayCheckout?.visibility = View.VISIBLE
+            view.cardSwitch.saveGoPay?.visibility = View.VISIBLE
+            view.cardSwitch.alertGoPaySignUp?.visibility = View.VISIBLE
+            view.cardSwitch.switchSeparator?.visibility = View.VISIBLE
+        }
+
     }
 
     private fun switchGoPayCheckoutChangeCheckedAction(){
