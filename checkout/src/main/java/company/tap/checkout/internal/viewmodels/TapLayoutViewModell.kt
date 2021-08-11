@@ -1459,7 +1459,8 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                         savedCardsModel
                     )
 
-                } else setDifferentPaymentsAction(paymentType, savedCardsModel)
+                }
+//                else setDifferentPaymentsAction(paymentType, savedCardsModel)
             }
         }
 //        println(paymentType.paymentType + "  --->>> extraFeeeeees--->>  "+ extraFeesAmount)
