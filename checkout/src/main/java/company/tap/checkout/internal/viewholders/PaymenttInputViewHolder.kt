@@ -13,6 +13,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.widget.doAfterTextChanged
 import com.google.android.material.tabs.TabLayout
@@ -35,6 +36,7 @@ import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.CardType
+import company.tap.nfcreader.open.utils.TapNfcUtils
 import company.tap.tapcardvalidator_android.CardBrand
 import company.tap.tapcardvalidator_android.CardValidationState
 import company.tap.tapcardvalidator_android.CardValidator
@@ -155,7 +157,7 @@ class PaymenttInputViewHolder(
     private fun initializeCardForm() {
         cardScannerBtn = view.findViewById(R.id.card_scanner_button)
         nfcButton = view.findViewById(R.id.nfc_button)
-        nfcButton?.visibility = View.VISIBLE
+
         cardScannerBtn?.visibility = View.VISIBLE
         linearLayoutPay = view.findViewById(R.id.linear_paylayout)
 //        tapCardInputView.clearFocus()
@@ -429,7 +431,10 @@ class PaymenttInputViewHolder(
 
     private fun controlScannerOptions() {
         if (shouldShowScannerOptions) {
-            nfcButton?.visibility = View.VISIBLE
+            if(TapNfcUtils.isNfcAvailable(context)){
+                nfcButton?.visibility = View.VISIBLE
+            }else  nfcButton?.visibility = View.GONE
+
             cardScannerBtn?.visibility = View.VISIBLE
         } else {
 
