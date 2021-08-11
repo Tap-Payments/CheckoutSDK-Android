@@ -4,7 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../../layout/custom_preview.xml" value="0.14479166666666668" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="checkout/src/main/res/drawable-anydpi/ic_visa_black.xml" value="0.26851851851851855" />
+        <entry key="checkout/src/main/res/layout/action_button_animation.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/businessview_layout.xml" value="0.1118659420289855" />
         <entry key="checkout/src/main/res/layout/fragment_checkouttaps.xml" value="0.1" />
       </map>

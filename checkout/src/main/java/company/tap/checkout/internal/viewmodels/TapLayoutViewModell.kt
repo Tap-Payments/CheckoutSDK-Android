@@ -1140,13 +1140,16 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                     showExtraFees(
                         currentAmount,
                         currentCurrency,
-                        paymentTypeEnum,savedCardsModel
+                        paymentTypeEnum, savedCardsModel
                     )
-//                    payActionSavedCard(savedCardsModel as SavedCard)
                 }
                 PaymentType.WEB -> {
                     if (savedCardsModel != null) {
-                        onClickRedirect(savedCardsModel)
+                        showExtraFees(
+                            currentAmount,
+                            currentCurrency,
+                            paymentTypeEnum, savedCardsModel
+                        )
                     }
                 }
                 PaymentType.CARD -> {
@@ -1154,16 +1157,15 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                     showExtraFees(
                         currentAmount,
                         currentCurrency,
-                        paymentTypeEnum,savedCardsModel
+                        paymentTypeEnum, savedCardsModel
                     )
-//                    (savedCardsModel as PaymentOption).
-//                    onClickCardPayment(savedCardsModel)
+
                 }
                 PaymentType.telecom -> {
                     showExtraFees(
                         currentAmount,
                         currentCurrency,
-                        paymentTypeEnum,savedCardsModel
+                        paymentTypeEnum, savedCardsModel
                     )
                 }
             }
@@ -1417,52 +1419,64 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     }
 
     var title = "Confirm Extra charges"
-     var extraFees: java.util.ArrayList<ExtraFee>? = null
+    var extraFees: java.util.ArrayList<ExtraFee>? = null
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun showExtraFees(
         amount: String,
         extraFeesAmount: String,
-        paymentType: PaymentType,savedCardsModel: Any?
+        paymentType: PaymentType, savedCardsModel: Any?
     ) {
         for (i in paymentOptionsResponse.paymentOptions.indices) {
             if (paymentOptionsResponse.paymentOptions[i].paymentType == paymentType) {
                 extraFees = paymentOptionsResponse.paymentOptions[i].extraFees
+//                println(paymentType.paymentType + "  --->>> extraFeeeeees--->>  " + extraFees)
+
+                println(
+                    paymentType.paymentType + "  --->>> extraFeeeeees--->>  " + (AmountCalculator.calculateExtraFeesAmount(
+                        extraFees,
+                        paymentOptionsResponse.supportedCurrencies,
+                        PaymentDataProvider().getSelectedCurrency()
+                    )).toString()
+                )
+                println(paymentType.paymentType + "  --->>> extraFeeeeees--->>  " + extraFees + paymentOptionsResponse.supportedCurrencies + PaymentDataProvider().getSelectedCurrency())
+
+                if (calculateExtraFeesAmount(
+                        extraFees,
+                        paymentOptionsResponse.supportedCurrencies,
+                        PaymentDataProvider().getSelectedCurrency()
+                    )!! > BigDecimal.ZERO
+                ) {
+                    val localizedMessage =
+                        "You will be charged an additional fee of $extraFeesAmount for this type of payment, totaling an amount of $amount"
+                    CustomUtils.showDialog(
+                        title,
+                        localizedMessage,
+                        context,
+                        3,
+                        this,
+                        paymentType,
+                        savedCardsModel
+                    )
+
+                } else setDifferentPaymentsAction(paymentType, savedCardsModel)
             }
         }
-        if (calculateExtraFeesAmount(
-                extraFees,
-                paymentOptionsResponse.supportedCurrencies,
-                PaymentDataProvider().getSelectedCurrency()
-            )?.compareTo(
-                BigDecimal.ZERO
-            )!! > 0
-        ) {
-            val localizedMessage =
-                "You will be charged an additional fee of $extraFeesAmount for this type of payment, totaling an amount of $amount"
-            CustomUtils.showDialog(title, localizedMessage, context, 3, this, paymentType,savedCardsModel)
+//        println(paymentType.paymentType + "  --->>> extraFeeeeees--->>  "+ extraFeesAmount)
+//
+//        println(paymentType.paymentType + "  --->>> extraFeeeeees--->>  "+ (AmountCalculator.calculateExtraFeesAmount(
+//            extraFees,
+//            paymentOptionsResponse.supportedCurrencies,
+//            PaymentDataProvider().getSelectedCurrency()
+//        )).toString())
+//
+//        println(paymentType.paymentType + "  --->>> extraFeeeeees--->>  "+ extraFees + paymentOptionsResponse.supportedCurrencies +PaymentDataProvider().getSelectedCurrency())
 
-        } else
-            setDifferentPaymentsAction(paymentType, savedCardsModel)
+
+//            setDifferentPaymentsAction(paymentType, savedCardsModel)
 
 
     }
-
-//    @RequiresApi(Build.VERSION_CODES.N)
-//    open fun fireCardPaymentExtraFeesUserDecision(
-//        userChoice: ExtraFeesStatus?,
-//    ) {
-//        when (userChoice) {
-//            ExtraFeesStatus.ACCEPT_EXTRA_FEES, ExtraFeesStatus.NO_EXTRA_FEES -> {
-//                "continue"
-////                onClickCardPayment()
-//            }
-//            ExtraFeesStatus.REFUSE_EXTRA_FEES -> {
-//
-////                unActivateActionButton()
-//            }
-//        }
-//    }
 
 
     @RequiresApi(Build.VERSION_CODES.N)
