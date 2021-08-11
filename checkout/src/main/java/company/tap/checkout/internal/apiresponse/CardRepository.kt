@@ -593,6 +593,7 @@ class CardRepository : APIRequestCallback {
         println("transactionCurrency in cad" + transactionCurrency)
         val customer: TapCustomer = provider.getCustomer()
         var fee = BigDecimal.ZERO
+        println( "  --->>> extraFeeeeeesee--->>  "+ paymentOption?.extraFees)
 
         if (paymentOption != null) fee = AmountCalculator.calculateExtraFeesAmount(paymentOption.extraFees, supportedCurrencies, amountedCurrency)
         Log.d("PaymentProcessManager", "fee : $fee")
