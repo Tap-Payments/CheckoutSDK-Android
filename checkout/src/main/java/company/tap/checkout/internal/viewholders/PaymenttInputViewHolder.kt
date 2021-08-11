@@ -13,7 +13,6 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.widget.doAfterTextChanged
 import com.google.android.material.tabs.TabLayout
@@ -50,7 +49,6 @@ import company.tap.tapuilibrary.uikit.views.TapAlertView
 import company.tap.tapuilibrary.uikit.views.TapMobilePaymentView
 import company.tap.tapuilibrary.uikit.views.TapSelectionTabLayout
 import kotlinx.android.synthetic.main.switch_layout.view.*
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -204,7 +202,7 @@ class PaymenttInputViewHolder(
                 // onPaymentCardComplete.onPaycardSwitchAction(true, PaymentType.MOBILE)
                 if (tapMobileInputView.mobileNumber.text.length > 7)
                     baseLayouttManager.displayOTPView(
-                            tapMobileInputView.mobileNumber.text.toString(),
+                            PaymentDataSource?.getCustomer()?.getPhone(),
                             PaymentTypeEnum.telecom.name
                     )
 

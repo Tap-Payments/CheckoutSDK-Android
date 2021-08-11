@@ -4,6 +4,7 @@ import android.content.Context
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.api.models.BINLookupResponse
 import company.tap.checkout.internal.api.models.Charge
+import company.tap.checkout.internal.api.models.PhoneNumber
 import company.tap.checkout.internal.api.responses.DeleteCardResponse
 import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
 import company.tap.checkout.internal.api.responses.SDKSettings
@@ -20,7 +21,7 @@ interface BaseLayouttManager {
     fun displayGoPayLogin()
     fun displayGoPay()
     fun controlCurrency(display: Boolean)
-    fun displayOTPView(mobileNumber: String, otpType:String,chargeResponse: Charge?=null)
+    fun displayOTPView(mobileNumber: PhoneNumber?, otpType:String, chargeResponse: Charge?=null)
     fun displayRedirect(url: String)
     fun displaySaveCardOptions()
     fun setBinLookupData(binLookupResponse: BINLookupResponse, context: Context,cardViewModel: CardViewModel)
@@ -30,4 +31,5 @@ interface BaseLayouttManager {
     fun didDialogueExecute(response: String, cardTypeDialog: Boolean?)
     fun dialogueExecuteExtraFees(response :String,paymentType: PaymentType, savedCardsModel: Any?)
     fun deleteSelectedCardListener(delSelectedCard:DeleteCardResponse)
+
 }

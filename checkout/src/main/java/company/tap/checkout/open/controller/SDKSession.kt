@@ -2,14 +2,17 @@ package company.tap.checkout.open.controller
 
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentManager
 import com.google.gson.JsonElement
 import company.tap.checkout.internal.PaymentDataProvider
 import company.tap.checkout.internal.api.models.Merchant
+import company.tap.checkout.internal.apiresponse.CardRepository
+import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
 import company.tap.checkout.open.CheckoutFragment
-
-
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.CardType
 import company.tap.checkout.open.enums.TransactionMode
@@ -17,6 +20,9 @@ import company.tap.checkout.open.interfaces.SessionDelegate
 import company.tap.checkout.open.models.*
 import company.tap.tapnetworkkit.exception.GoSellError
 import company.tap.tapnetworkkit.interfaces.APIRequestCallback
+import company.tap.tapuilibrary.uikit.enums.ActionButtonState
+import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
+import kotlinx.android.synthetic.main.action_button_animation.view.*
 import retrofit2.Response
 import java.math.BigDecimal
 import java.util.*
@@ -28,12 +34,16 @@ All rights reserved.
  **/
 //Responsible for setting data given by Merchant  and starting the session
 @SuppressLint("StaticFieldLeak")
-object  SDKSession : APIRequestCallback {
+object  SDKSession : APIRequestCallback  {
     private var paymentDataSource: PaymentDataSource? = null
     private var contextSDK: Context? = null
     @JvmField
     var sessionDelegate: SessionDelegate?= null
-
+    @JvmField
+    var tabAnimatedActionButton: TabAnimatedActionButton?= null
+    private var activityListener: Activity? = null
+    private const val SDK_REQUEST_CODE = 0
+    private var sessionActive = false
     init {
         initPaymentDataSource()
 
@@ -85,29 +95,8 @@ object  SDKSession : APIRequestCallback {
         println("we are already active!!!")
         val tapCheckoutFragment = CheckoutFragment()
         tapCheckoutFragment.show(supportFragmentManager, null)
-
-
-
-    /*    NetworkApp.initNetwork(
-            contextSDK,
-            "sk_test_kovrMB0mupFJXfNZWx6Etg5y",
-            "company.tap.goSellSDKExample",
-            "https://api.tap.company/v2/"
-        )
-
-        NetworkController.getInstance().processRequest(
-            TapMethodType.POST,
-            "intent",
-            requestBody,
-            this,
-            11
-        )
-      *//*  TapCheckoutFragment().apply {
-            show(supportFragmentManager, tag)
-        }*//*
         // start session
-        SessionManager.setActiveSession(true)*/
-
+        SessionManager.setActiveSession(true)
 
     }
 
@@ -280,7 +269,7 @@ object  SDKSession : APIRequestCallback {
      */
     open fun setMerchantID(merchantId: String?) {
         if (merchantId != null && merchantId.trim { it <= ' ' }.isNotEmpty()) paymentDataSource?.setMerchant(
-                Merchant(merchantId)
+            Merchant(merchantId)
         ) else paymentDataSource?.setMerchant(null)
     }
 
@@ -318,6 +307,42 @@ object  SDKSession : APIRequestCallback {
     override fun onFailure(requestCode: Int, errorDetails: GoSellError?) {
         println("onFailure is being called ${errorDetails?.errorBody}")
     }
+
+    /**
+     * Sets button view.
+     *
+     * @param buttonView       the button view
+     * @param activity         the activity
+     * @param SDK_REQUEST_CODE the sdk request code
+     */
+
+    fun setButtonView(
+        payButtonView: TabAnimatedActionButton,
+        activity: Activity,
+        supportFragmentManager: FragmentManager
+    ) {
+        payButtonView.setOnClickListener {
+           if (sessionActive) return@setOnClickListener
+
+            if (PaymentDataSource?.getTransactionMode() == null) {
+                sessionDelegate?.invalidTransactionMode()
+                return@setOnClickListener
+            } else {
+                sessionActive = true
+                startSDK(supportFragmentManager,activity?.baseContext)
+                this.tabAnimatedActionButton = payButtonView
+                if(tabAnimatedActionButton!=null){
+                    tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
+                }
+
+            }
+        }
+        this.activityListener = activity
+    }
+
+
+
+
 }
 
 

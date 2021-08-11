@@ -16,19 +16,21 @@ import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.interfaces.IPaymentDataProvider
 import company.tap.checkout.internal.utils.AmountCalculator
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
+
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession
+import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.models.*
 import company.tap.checkout.open.models.AuthorizeAction
 import company.tap.checkout.open.models.Receipt
 import company.tap.checkout.open.models.Reference
-import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapnetworkkit.controller.NetworkController
 import company.tap.tapnetworkkit.enums.TapMethodType
 import company.tap.tapnetworkkit.exception.GoSellError
 import company.tap.tapnetworkkit.interfaces.APIRequestCallback
+import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog.Companion.TAG
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.subjects.BehaviorSubject
@@ -253,9 +255,12 @@ class CardRepository : APIRequestCallback {
             response?.body().let {
                 paymentOptionsResponse = Gson().fromJson(it, PaymentOptionsResponse::class.java)
                 PaymentDataSource.setPaymentOptionsResponse(paymentOptionsResponse)
-
                 viewModel.displayStartupLayout(CheckoutFragment().enableSections())
                 sdkSession?.sessionDelegate?.sessionHasStarted()
+                if(tabAnimatedActionButton!=null){
+                    tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
+                }
+
             }
 
 
@@ -370,6 +375,7 @@ class CardRepository : APIRequestCallback {
                     }
                     else if(PaymentDataSource.getTransactionMode()==TransactionMode.TOKENIZE_CARD){
                         SDKSession?.getListener()?.cardTokenizedSuccessfully(tokenResponse)
+                        SDKSession?.tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
                     }
                     else if(PaymentDataSource.getTransactionMode()==TransactionMode.SAVE_CARD){
                         createSaveCard(context, viewModel, null, tokenResponse.id)
@@ -408,6 +414,7 @@ class CardRepository : APIRequestCallback {
                     paymentOptionsResponse = paymentOptionsResponse
             )
             viewModel.getDatasfromAPIs(initResponse, paymentOptionsResponse)
+
             resultObservable.onNext(viewState)
             resultObservable.onComplete()
         }
@@ -438,7 +445,7 @@ class CardRepository : APIRequestCallback {
                             AuthenticationType.OTP -> {
                                 Log.d("cardREpose", " coming charge type is ...  caller setChargeOrAuthorize");
                                 PaymentDataSource?.setChargeOrAuthorize(chargeResponse)
-                                viewModel?.displayOTPView(PaymentDataSource?.getCustomer()?.getPhone()?.number.toString(), PaymentTypeEnum.SAVEDCARD.toString(), chargeResponse)
+                                viewModel?.displayOTPView(chargeResponse?.customer?.getPhone(), PaymentTypeEnum.SAVEDCARD.toString(), chargeResponse)
 
                             }
 
@@ -448,7 +455,6 @@ class CardRepository : APIRequestCallback {
             }
             ChargeStatus.CAPTURED -> {
                 SDKSession.getListener()?.paymentSucceed(chargeResponse)
-
             }
             ChargeStatus.AUTHORIZED -> {
                 SDKSession.getListener()?.authorizationSucceed(chargeResponse as Authorize)
@@ -481,7 +487,7 @@ class CardRepository : APIRequestCallback {
                         }
                         AuthenticationType.OTP -> {
                             // PaymentDataManager.getInstance().setChargeOrAuthorize(authorize as Authorize?)
-                            viewModel?.displayOTPView(PaymentDataSource?.getCustomer()?.getPhone()?.number.toString(), PaymentTypeEnum.SAVEDCARD.toString(), authorize as Authorize)
+                            viewModel?.displayOTPView(authorize?.customer.getPhone(), PaymentTypeEnum.SAVEDCARD.toString(), authorize as Authorize)
                         }
                     }
                 }
@@ -738,7 +744,9 @@ class CardRepository : APIRequestCallback {
         when (charge?.status) {
             ChargeStatus.CAPTURED, ChargeStatus.AUTHORIZED -> try {
                 // closePaymentActivity()
-                sdkSession.getListener()?.paymentSucceed(charge)
+                    sdkSession.getListener()?.paymentSucceed(charge)
+
+
                 //  SDKSession().getListener()?.paymentSucceed(charge)
             } catch (e: Exception) {
                 Log.e(TAG, "fireWebPaymentCallBack: ", e)

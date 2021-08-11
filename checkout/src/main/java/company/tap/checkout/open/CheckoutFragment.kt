@@ -29,11 +29,13 @@ import company.tap.checkout.internal.apiresponse.Resource
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
 import company.tap.checkout.open.controller.SDKSession.sessionDelegate
+import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
 import company.tap.checkout.open.interfaces.SessionDelegate
 import company.tap.nfcreader.open.reader.TapEmvCard
 import company.tap.nfcreader.open.reader.TapNfcCardReader
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
 import gotap.com.tapglkitandroid.gl.Views.TapLoadingView
@@ -61,7 +63,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         super.onCreate(savedInstanceState)
         _Activity = activity?.parent
         this._Context = context
-
         setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
 
     }
@@ -71,12 +72,15 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_checkouttaps, container, false)
-        backgroundColor = (Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.clear")))
         val viewModel: TapLayoutViewModel by viewModels()
         val cardViewModel: CardViewModel by viewModels()
         this.viewModel = viewModel
         _Context?.let { cardViewModel.getContext(it) }
+        getBusinessHeaderData(context, viewModel)
+        val view = inflater.inflate(R.layout.fragment_checkouttaps, container, false)
+        backgroundColor = (Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.clear")))
+
+
         val checkoutLayout: LinearLayout? = view?.findViewById(R.id.fragment_all)
         val frameLayout: FrameLayout? = view?.findViewById(R.id.fragment_container_nfc_lib)
         val webFrameLayout: FrameLayout? = view?.findViewById(R.id.webFrameLayout)
@@ -91,7 +95,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             viewModel.setBottomSheetLayout(it)
         }
         if (checkoutLayout != null) {
-            getBusinessHeaderData(context, viewModel)
             context?.let {
                 if (frameLayout != null) {
                     webFrameLayout?.let { it1 ->
@@ -133,7 +136,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun getBusinessHeaderData(context: Context?, viewModel: TapLayoutViewModel) {
+    fun getBusinessHeaderData(context: Context?, viewModel: TapLayoutViewModel) {
         if (context?.let { isNetworkAvailable(it) } == true) {
             val cardViewModel: CardViewModel by viewModels()
             cardViewModel.getContext(context)

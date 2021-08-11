@@ -56,7 +56,6 @@ import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.CardType
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.nfcreader.open.reader.TapEmvCard
-import company.tap.tapcardvalidator_android.CardBrand
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.SeparatorViewTheme
@@ -140,6 +139,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     lateinit var redirectURL: String
     lateinit var cardId: String
     private var sdkSession: SDKSession = SDKSession
+
 
     @JvmField
     var selectedAmountPos: BigDecimal? = null
@@ -504,7 +504,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
     @RequiresApi(Build.VERSION_CODES.N)
     @SuppressLint("SetTextI18n")
-    override fun displayOTPView(mobileNumber: String, otpType: String, chargeResponse: Charge?) {
+    override fun displayOTPView(mobileNumber: PhoneNumber?, otpType: String, chargeResponse: Charge?) {
         setSlideAnimation()
         when (otpType) {
             PaymentTypeEnum.GOPAY.name -> displayOtpGoPay(mobileNumber)
@@ -513,7 +513,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         }
     }
 
-    private fun displayOtpGoPay(mobileNumber: String) {
+    private fun displayOtpGoPay(phoneNumber: PhoneNumber?) {
         // otpTypeString = PaymentTypeEnum.GOPAY //temporray
         removeViews(
             cardViewHolder11,
@@ -521,27 +521,37 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         )
         addViews(otpViewHolder)
         otpViewHolder.otpView.visibility = View.VISIBLE
-        otpViewHolder.otpView.mobileNumberText.text = mobileNumber
+        setOtpPhoneNumber(phoneNumber)
         otpViewHolder.otpView.changePhone.setOnClickListener {
             goPayViewsHolder.onChangePhoneClicked()
         }
     }
 
+    @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun displayOtpCharge(mobileNumber: String, chargeResponse: Charge?) {
+    private fun displayOtpCharge(phoneNumber: PhoneNumber?, chargeResponse: Charge?) {
         removeViews(
             cardViewHolder11,
             paymentInputViewHolder, saveCardSwitchHolder11, otpViewHolder
         )
         addViews(otpViewHolder)
         otpViewHolder.otpView.visibility = View.VISIBLE
-        otpViewHolder.otpView.mobileNumberText.text = mobileNumber
+        setOtpPhoneNumber(phoneNumber)
         otpViewHolder.otpView.changePhone.visibility = View.INVISIBLE
         otpViewHolder.otpView.timerText.setOnClickListener {
             resendOTPCode(chargeResponse)
 
         }
 
+    }
+    private fun setOtpPhoneNumber(phoneNumber:PhoneNumber?){
+
+        var replaced = ""
+        var countryCodeReplaced = ""
+        countryCodeReplaced = phoneNumber?.countryCode?.replace("0","").toString()
+        if (phoneNumber?.number?.length!! > 7)
+            replaced = (phoneNumber?.number?.toString()).replaceRange(1, 6, "••••")
+        otpViewHolder.otpView.mobileNumberText.text = "+$countryCodeReplaced $replaced"
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -565,7 +575,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         }
     }
 
-    private fun displayOtpTelecoms(mobileNumber: String) {
+    private fun displayOtpTelecoms(phoneNumber:  PhoneNumber?) {
         otpTypeString = PaymentTypeEnum.telecom
         removeViews(
             businessViewHolder,
@@ -594,8 +604,8 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         otpViewHolder.setMobileOtpView()
         var replaced = ""
         var countryCodeReplaced = ""
-        if (mobileNumber.length > 7)
-            replaced = (mobileNumber.toString()).replaceRange(1, 6, "....")
+        if (phoneNumber?.number?.length!! > 7)
+            replaced = (phoneNumber?.number?.toString()).replaceRange(1, 6, "....")
         countryCodeReplaced =
             goPayViewsHolder.goPayLoginInput.countryCodePicker.selectedCountryCode.replace(
                 "+",
@@ -606,6 +616,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
 
     override fun displayRedirect(url: String) {
+        setSlideAnimation()
         if(otpViewHolder.otpView.isVisible){
             removeViews(businessViewHolder, amountViewHolder1, otpViewHolder)
         }
@@ -872,6 +883,8 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             //saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)
         }
     }
+
+
 
 
     private fun removeViews(vararg viewHolders: TapBaseViewHolder?) {

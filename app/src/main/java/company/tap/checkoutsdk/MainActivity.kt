@@ -193,7 +193,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
          sdkSession.setCardType(CardType.ALL) // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
 
-          sdkSession.setTransactionMode(TransactionMode.PURCHASE)
+          sdkSession.setTransactionMode(TransactionMode.AUTHORIZE_CAPTURE)
          sdkSession.setDefaultCardHolderName("TEST TAP"); // ** Optional ** you can pass default CardHolderName of the user .So you don't need to type it.
          sdkSession.isUserAllowedToEnableCardHolderName(false); // ** Optional ** you can enable/ disable  default CardHolderName .
 
@@ -202,7 +202,8 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
     fun openBottomSheet(view: View) {
         /// Configures the bottom sheet by creating one and assigning the correct delegates and datasources
         modalBottomSheet.arguments = getArguments()
-        modalBottomSheet.show(supportFragmentManager, TAG)
+        sdkSession.startSDK(supportFragmentManager,this)
+       // modalBottomSheet.show(supportFragmentManager, TAG)
     }
     private fun getArguments(): Bundle {
         val arguments = Bundle()
@@ -264,12 +265,12 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         config.setLocale(locale)
         resources.updateConfiguration(config, resources.displayMetrics)
     }
-    override fun onNewIntent(intent: Intent) {
+  /*  override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
         modalBottomSheet.handleNFCResult(intent)
 
-    }
+    }*/
     fun setCustomer(): TapCustomer { // test customer id cus_Kh1b4220191939i1KP2506448
         val tapCustomer: TapCustomer? = null
         //if (customer != null) customer.phone else Phone(965, 69045932)
@@ -294,12 +295,14 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
     private fun initActionButton() {
        payButton.setButtonDataSource(
-                false,
+                true,
                 this?.let { LocalizationManager.getLocale(it).language },
                 LocalizationManager.getValue("pay", "ActionButton"),
-                Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
-                Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
+                Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
+                Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
         )
+       sdkSession?.setButtonView(payButton,this,supportFragmentManager)
+
 
     }
 
@@ -344,7 +347,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
             System.out.println("Payment Succeeded : expiry period :" + charge.expiry?.period)
         }
         Toast.makeText(this,"paymentSucceed"+charge.id, Toast.LENGTH_SHORT).show()
-        modalBottomSheet.dismiss()
+       // modalBottomSheet.dismiss()
     }
 
     override fun paymentFailed(charge: Charge?) {

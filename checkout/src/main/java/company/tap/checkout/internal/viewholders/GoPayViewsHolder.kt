@@ -9,6 +9,7 @@ import company.tap.checkout.internal.enums.PaymentTypeEnum.*
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayouttManager
 import company.tap.checkout.internal.utils.CustomUtils
+import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.uikit.datasource.GoPayLoginDataSource
 import company.tap.tapuilibrary.uikit.interfaces.GoPayLoginInterface
@@ -89,7 +90,7 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
             return
         }else{
             println(" you clicked to display otp!!!")
-            baseLayouttManager?.displayOTPView(mobileNumber, GOPAY.name)
+            baseLayouttManager?.displayOTPView(PaymentDataSource?.getCustomer()?.getPhone(), GOPAY.name)
 
 
         }
