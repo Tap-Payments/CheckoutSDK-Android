@@ -28,6 +28,7 @@ import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapnetworkkit.exception.GoSellError
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.models.DialogConfigurations
+import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog.Companion.TAG
 import java.math.BigDecimal
 import java.util.*
@@ -36,11 +37,17 @@ import java.util.*
 class MainActivity : AppCompatActivity() , SessionDelegate{
 
    var sdkSession:SDKSession= SDKSession
+    val payButton by lazy { findViewById<TabAnimatedActionButton>(R.id.payButton) }
 
     private val modalBottomSheet = CheckoutFragment()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        //Loading the theme and localization files prior to loading the view to avoid crashes
+        /** Configures the LocalizationManager by setting the provided language  file names
+        - Parameter custom language json: Please pass the tap checkout theme object with the names of your custom theme files if needed. If not set, the normal and default TAP theme will be used
+         */
+        LocalizationManager.loadTapLocale(resources, R.raw.lang)
+
 
         /** Configures the theme manager by setting the provided custom theme file names
         - Parameter customTheme: Please pass the tap checkout theme object with the names of your custom theme files if needed. If not set, the normal and default TAP theme will be used
@@ -59,9 +66,10 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         setLocale(this, LocalizationManager.getLocale(this).language)
        // setLocale(this,"ar")
-        LocalizationManager.loadTapLocale(resources, R.raw.lang)
+        setContentView(R.layout.activity_main)
         initializeSDK()
-         configureSDKSession()
+        configureSDKSession()
+        initActionButton()
         }
 
     private fun initializeSDK() {
@@ -71,7 +79,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
              "company.tap.goSellSDKExample"
      )
 
-       //TapCheckOutSDK().init(this,"sk_test_kovrMB0mupFJXfNZWx6Etg5y","")
+
     }
 
     /** Configures the Checkout shared manager by setting the provided custom data gathered by the merchant
@@ -282,6 +290,17 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         println("item are<<<<" + items)
 
         return items
+    }
+
+    private fun initActionButton() {
+       payButton.setButtonDataSource(
+                false,
+                this?.let { LocalizationManager.getLocale(it).language },
+                LocalizationManager.getValue("pay", "ActionButton"),
+                Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
+                Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
+        )
+
     }
 
     override fun paymentSucceed(charge: Charge) {

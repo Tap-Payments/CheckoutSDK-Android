@@ -80,6 +80,6 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation "androidx.fragment:fragment-ktx:1.3.5"
     implementation 'com.gdacciaro:iosdialog:1.0.3'
-    implementation 'com.github.Tap-Payments:LocalisationManager-Android:0.0.1.21'
+    implementation 'com.github.Tap-Payments:LocalisationManager-Android:0.0.1.22'
 
 }

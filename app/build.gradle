@@ -52,8 +52,8 @@ dependencies {
   /*  implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.188'
     api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.188'*/
 
-    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.273'
-    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.273'
+    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.279'
+    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.279'
     implementation 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.23'
     api 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.23'
     implementation 'company.tap:PayCards-Tap-Android:0.1.6.4'
@@ -63,6 +63,7 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation "androidx.fragment:fragment-ktx:1.3.5"
     implementation "com.github.Tap-Payments:TapGLKit-Android:1.18"
+    implementation 'com.github.Tap-Payments:LocalisationManager-Android:0.0.1.22'
 
 
 }

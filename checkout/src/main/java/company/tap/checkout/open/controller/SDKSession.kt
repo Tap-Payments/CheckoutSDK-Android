@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentManager
 import com.google.gson.JsonElement
 import company.tap.checkout.internal.PaymentDataProvider
 import company.tap.checkout.internal.api.models.Merchant
+import company.tap.checkout.open.CheckoutFragment
 
 
 import company.tap.checkout.open.data_managers.PaymentDataSource
@@ -30,7 +31,8 @@ All rights reserved.
 object  SDKSession : APIRequestCallback {
     private var paymentDataSource: PaymentDataSource? = null
     private var contextSDK: Context? = null
-    private lateinit var sessionDelegate: SessionDelegate
+    @JvmField
+    var sessionDelegate: SessionDelegate?= null
 
     init {
         initPaymentDataSource()
@@ -75,81 +77,18 @@ object  SDKSession : APIRequestCallback {
     }
     fun startSDK(supportFragmentManager: FragmentManager, context: Context) {
         println("is session enabled ${SessionManager.isSessionEnabled()}")
-       /* if (SessionManager.isSessionEnabled()) {
+        if (SessionManager.isSessionEnabled()) {
             println("Session already active!!!")
             return
-        }*/
+        }
         contextSDK = context
         println("we are already active!!!")
-       /* val tapCheckoutFragment = TapCheckoutFragment()
-        tapCheckoutFragment.show(supportFragmentManager, null)*/
-
- /*        fun getCustomer(): TapCustomer { // test customer id cus_Kh1b4220191939i1KP2506448
-            val customer: TapCustomer? = null
+        val tapCheckoutFragment = CheckoutFragment()
+        tapCheckoutFragment.show(supportFragmentManager, null)
 
 
-             val phoneNumber: Phone =
-                if (customer != null) customer.phone else Phone(965, 69045932)
-            return TapCustomer(
-                "firstname", "middlename",
-                "lastname", "abcd@gmail.com",
-                Phone(phoneNumber.country_code, phoneNumber.number), "description", Metadata(
-                    "abc1",
-                    "def2"
-                ), "KWD"
-            )
 
-        }
-        fun getItems(): Items {
-
-            return Items(
-                21, "kwd", "descrp1",
-                Discount("P", 10), "wewqewewqeqwewewewewew", "dsa", "name", 1
-            )
-
-        }
-        fun getShipping(): Shipping {
-
-            return Shipping(
-                21, "kwd", "descrp1",
-                "provider1", "ship1", "hello"
-            )
-
-        }
-        fun getRate(): Rate {
-
-            return Rate(
-                "descr1", 1
-            )
-
-        }
-        fun getTax(): Tax {
-
-            return Tax(
-                "descr1", "name1", getRate()
-            )
-
-        }
-
- fun getOrder(): Order {
-
-            return Order(
-                "KWD", 100, listOf(getItems()),
-                getShipping(), listOf(getTax())
-            )
-
-        }*/
-
-
-        /*
-             Passing post request body to obtain
-             response for Payment options
-             */
-      /*  val requestBody = InitOptionsRequest("charge", true, getCustomer(), getOrder())
-        println("requests body" + requestBody)
-
-
-        NetworkApp.initNetwork(
+    /*    NetworkApp.initNetwork(
             contextSDK,
             "sk_test_kovrMB0mupFJXfNZWx6Etg5y",
             "company.tap.goSellSDKExample",

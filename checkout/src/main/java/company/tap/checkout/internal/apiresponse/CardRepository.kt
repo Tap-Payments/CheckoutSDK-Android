@@ -83,14 +83,7 @@ class CardRepository : APIRequestCallback {
     @RequiresApi(Build.VERSION_CODES.N)
     fun getPaymentOptions(context: Context, viewModel: TapLayoutViewModel) {
         this.viewModel = viewModel
-        /*
-             Passing post request body to obtain
-             response for Payment options
-             */
-        /* val requestBody = PaymentOptionsRequest(TransactionMode.PURCHASE, BigDecimal.valueOf(12),null,null,null,"kwd", TapCustomer.CustomerBuilder(
-               ""
-           ).firstName("dsd").lastName("last").email("abc@gmail.com").phone( PhoneNumber("00965", "53254252")).build(), null,"ALL")
-   */
+
         val requestBody = PaymentOptionsRequest(
                 TransactionMode.PURCHASE,
                 PaymentDataSource.getAmount(),
@@ -106,7 +99,6 @@ class CardRepository : APIRequestCallback {
         NetworkController.getInstance().processRequest(
                 TapMethodType.POST, ApiService.PAYMENT_TYPES, jsonString, this, PAYMENT_OPTIONS_CODE
         )
-        // else NetworkController.getInstance().processRequest(TapMethodType.GET, ApiService.INIT_AR, null, this, PAYMENT_OPTIONS_CODE)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -263,6 +255,7 @@ class CardRepository : APIRequestCallback {
                 PaymentDataSource.setPaymentOptionsResponse(paymentOptionsResponse)
 
                 viewModel.displayStartupLayout(CheckoutFragment().enableSections())
+                sdkSession?.sessionDelegate?.sessionHasStarted()
             }
 
 

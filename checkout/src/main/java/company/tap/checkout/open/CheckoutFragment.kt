@@ -28,6 +28,8 @@ import company.tap.checkout.internal.apiresponse.CardViewState
 import company.tap.checkout.internal.apiresponse.Resource
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
+import company.tap.checkout.open.controller.SDKSession.sessionDelegate
+import company.tap.checkout.open.interfaces.SessionDelegate
 import company.tap.nfcreader.open.reader.TapEmvCard
 import company.tap.nfcreader.open.reader.TapNfcCardReader
 import company.tap.taplocalizationkit.LocalizationManager
@@ -89,6 +91,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             viewModel.setBottomSheetLayout(it)
         }
         if (checkoutLayout != null) {
+            getBusinessHeaderData(context, viewModel)
             context?.let {
                 if (frameLayout != null) {
                     webFrameLayout?.let { it1 ->
@@ -113,9 +116,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                 }
             }
         }
-        getBusinessHeaderData(context, viewModel)
-
-       // enableSections()
+        // enableSections()
         return view
     }
 
@@ -140,8 +141,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             cardViewModel.processEvent(CardViewEvent.InitEvent, viewModel, null, null, null, cardViewModel)
 
         }
-        //else loadDatafromAssets(context, viewModel) //Incase API not working use local
 
+        sessionDelegate?.sessionIsStarting()
     }
 
 
@@ -212,37 +213,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     }
 
-  /*  private fun loadDatafromAssets(context: Context?, viewModel: TapLayoutViewModel) {
-        if (context?.let { LocalizationManager.getLocale(it).language } == "en") {
-            val jsonFileString = context.let {
-                getJsonDataFromAsset(
-                    it,
-                    "dummyapiresponsedefault.json"
-                )
-            }
-            val dummyInitApiResponse: JsonResponseDummy1 = Gson().fromJson(
-                jsonFileString,
-                JsonResponseDummy1::class.java
-            )
-            // Pass the api response data to LayoutManager
-            viewModel.getDatafromAPI(dummyInitApiResponse)
-        } else {
-            val jsonFileStringAr = context?.let {
-                getJsonDataFromAsset(
-                    it,
-                    "dummyapiresponsedefaultar.json"
-                )
-            }
-            val gson = Gson()
-            val dummyInitApiResponse: JsonResponseDummy1 = gson.fromJson(
-                jsonFileStringAr,
-                JsonResponseDummy1::class.java
-            )
-            // Pass the api response data to LayoutManager
-            viewModel.getDatafromAPI(dummyInitApiResponse)
-        }
-
-    }*/
 
     private fun isNetworkAvailable(context: Context): Boolean {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
