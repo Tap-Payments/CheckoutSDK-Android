@@ -179,11 +179,11 @@ class PaymenttInputViewHolder(
             tapAlertView?.visibility = View.GONE
             switchViewHolder11?.view?.cardSwitch?.payButton?.isActivated = false
             switchViewHolder11?.view?.cardSwitch?.payButton?.setButtonDataSource(
-                    false,
-                    context.let { LocalizationManager.getLocale(it).language },
-                    LocalizationManager.getValue("pay", "ActionButton"),
-                    Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
-                    Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
+                false,
+                context.let { LocalizationManager.getLocale(it).language },
+                LocalizationManager.getValue("pay", "ActionButton"),
+                Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
+                Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
             )
             tabLayout?.resetBehaviour()
         }
@@ -202,8 +202,8 @@ class PaymenttInputViewHolder(
                 // onPaymentCardComplete.onPaycardSwitchAction(true, PaymentType.MOBILE)
                 if (tapMobileInputView.mobileNumber.text.length > 7)
                     baseLayouttManager.displayOTPView(
-                            PaymentDataSource?.getCustomer()?.getPhone(),
-                            PaymentTypeEnum.telecom.name
+                        PaymentDataSource?.getCustomer()?.getPhone(),
+                        PaymentTypeEnum.telecom.name
                     )
 
             }
@@ -263,14 +263,16 @@ class PaymenttInputViewHolder(
              * we will get date value
              */
             expiryDate = s.toString()
-            if(s.length>=5){
+            if (s.length >= 5) {
                 tapAlertView?.alertMessage?.text = (LocalizationManager.getValue(
                     "Warning",
                     "Hints",
                     "missingCVV"
                 ))
                 tapAlertView?.visibility = View.VISIBLE
+
             }
+
 
         }
     }
@@ -282,7 +284,7 @@ class PaymenttInputViewHolder(
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s?.trim()?.length == 3 || s?.trim()?.length == 4) {
                     onPaymentCardComplete.onPayCardSwitchAction(
-                            true, PaymentType.CARD
+                        true, PaymentType.CARD
                     )
                     tapAlertView?.visibility = View.GONE
                 }
@@ -297,8 +299,8 @@ class PaymenttInputViewHolder(
                     expiryDate?.let { it1 ->
                         cvvNumber?.let { it2 ->
                             onPaymentCardComplete.onPayCardCompleteAction(
-                                    true, PaymentType.CARD,
-                                    it, it1, it2
+                                true, PaymentType.CARD,
+                                it, it1, it2
                             )
                         }
                     }
@@ -320,7 +322,7 @@ class PaymenttInputViewHolder(
     }
 
     fun cardNumAfterTextChangeListener(s: CharSequence?, textWatcher: TextWatcher) {
-          val card = CardValidator.validate(s.toString())
+        val card = CardValidator.validate(s.toString())
 
         if (s != null) {
             if (s.length > 2) s?.let { callCardBinNumberApi(it, textWatcher) }
@@ -331,22 +333,23 @@ class PaymenttInputViewHolder(
                 tapAlertView?.visibility = View.GONE
             }
 
-               if (card?.cardBrand != null) {
-                   tabLayout.selectTab(
-                       card.cardBrand,
-                       card.validationState == CardValidationState.valid
-                   )
-                   val binLookupResponse: BINLookupResponse? = PaymentDataSource?.getBinLookupResponse()
-                   if(PaymentDataSource?.getCardType()!=null && PaymentDataSource?.getCardType()==CardType.ALL){
-                       setTablayoutBasedOnApiResponse(binLookupResponse)
-                   }else{
-                       checkAllowedCardTypes(binLookupResponse)
-                       PaymentDataSource?.setBinLookupResponse(null)
-                       setTablayoutBasedOnApiResponse(binLookupResponse)
-                   }
+            if (card?.cardBrand != null) {
+                tabLayout.selectTab(
+                    card.cardBrand,
+                    card.validationState == CardValidationState.valid
+                )
+                val binLookupResponse: BINLookupResponse? =
+                    PaymentDataSource?.getBinLookupResponse()
+                if (PaymentDataSource?.getCardType() != null && PaymentDataSource?.getCardType() == CardType.ALL) {
+                    setTabLayoutBasedOnApiResponse(binLookupResponse)
+                } else {
+                    checkAllowedCardTypes(binLookupResponse)
+                    PaymentDataSource?.setBinLookupResponse(null)
+                    setTabLayoutBasedOnApiResponse(binLookupResponse)
+                }
 
 
-               }
+            }
 
 
             /**
@@ -363,13 +366,13 @@ class PaymenttInputViewHolder(
         }
     }
 
-    private fun setTablayoutBasedOnApiResponse(binLookupResponse: BINLookupResponse?) {
+    private fun setTabLayoutBasedOnApiResponse(binLookupResponse: BINLookupResponse?) {
         if (binLookupResponse?.cardBrand?.name == binLookupResponse?.scheme?.name) {
             // we will send card brand to validator
             binLookupResponse?.cardBrand?.let { it1 ->
                 tabLayout.selectTab(
-                        it1,
-                        true
+                    it1,
+                    true
                 )
             }
         } else {
@@ -383,8 +386,8 @@ class PaymenttInputViewHolder(
 
         if (s.trim().toString().replace(" ", "").length == BIN_NUMBER_LENGTH) {
             cardViewModel.processEvent(
-                    CardViewEvent.RetreiveBinLookupEvent,
-                    TapLayoutViewModel(), null, s.trim().toString().replace(" ", ""), null, null
+                CardViewEvent.RetreiveBinLookupEvent,
+                TapLayoutViewModel(), null, s.trim().toString().replace(" ", ""), null, null
             )
             tapCardInputView?.removeCardNumberTextWatcher(textWatcher)
             tapCardInputView?.setCardNumberTextWatcher(textWatcher)
@@ -393,18 +396,17 @@ class PaymenttInputViewHolder(
     }
 
 
-
     private fun checkValidationState(card: DefinedCardBrand) {
         when (card.validationState) {
             CardValidationState.invalid -> {
                 tapAlertView?.visibility = View.VISIBLE
                 tapAlertView?.alertMessage?.text =
-                        (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
+                    (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
             }
             CardValidationState.incomplete -> {
                 tapAlertView?.visibility = View.VISIBLE
                 tapAlertView?.alertMessage?.text =
-                        (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
+                    (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
             }
             CardValidationState.valid -> {
                 tapAlertView?.visibility = View.GONE
@@ -412,7 +414,7 @@ class PaymenttInputViewHolder(
             else -> {
                 tapAlertView?.visibility = View.VISIBLE
                 tapAlertView?.alertMessage?.text =
-                        (LocalizationManager.getValue("Warning", "Hints", "missingExpiryCVV"))
+                    (LocalizationManager.getValue("Warning", "Hints", "missingExpiryCVV"))
             }
         }
     }
@@ -435,9 +437,9 @@ class PaymenttInputViewHolder(
 
     private fun controlScannerOptions() {
         if (shouldShowScannerOptions) {
-            if(TapNfcUtils.isNfcAvailable(context)){
+            if (TapNfcUtils.isNfcAvailable(context)) {
                 nfcButton?.visibility = View.VISIBLE
-            }else  nfcButton?.visibility = View.GONE
+            } else nfcButton?.visibility = View.GONE
 
             cardScannerBtn?.visibility = View.VISIBLE
         } else {
@@ -484,9 +486,9 @@ class PaymenttInputViewHolder(
         selectedType = PaymentTypeEnum.card
         switchViewHolder11?.setSwitchLocals(PaymentTypeEnum.card)
         //It will be hidden until goPay is Logged in
-        if(switchViewHolder11?.goPayisLoggedin == true){
+        if (switchViewHolder11?.goPayisLoggedin == true) {
             switchViewHolder11?.view?.cardSwitch?.switchGoPayCheckout?.visibility = View.VISIBLE
-        }else switchViewHolder11?.view?.cardSwitch?.switchGoPayCheckout?.visibility = View.GONE
+        } else switchViewHolder11?.view?.cardSwitch?.switchGoPayCheckout?.visibility = View.GONE
 
         nfcButton?.visibility = View.VISIBLE
         cardScannerBtn?.visibility = View.VISIBLE
@@ -497,8 +499,8 @@ class PaymenttInputViewHolder(
 
     private fun checkForFocus() {
         shouldShowScannerOptions =
-                lastFocusField == CardInputListener.FocusField.FOCUS_CARD
-                        && lastCardInput.isEmpty()
+            lastFocusField == CardInputListener.FocusField.FOCUS_CARD
+                    && lastCardInput.isEmpty()
         controlScannerOptions()
     }
 
@@ -535,19 +537,19 @@ class PaymenttInputViewHolder(
 /// set payment option object for all payment types and send it to paymentcompletion action function and i will pass it to show extra fees
             if (paymentType == PaymentType.telecom) {
                 itemsMobilesList.add(
-                        SectionTabItem(
-                                imageURL, imageURL, CardBrand.valueOf(
-                                cardBrandType
+                    SectionTabItem(
+                        imageURL, imageURL, CardBrand.valueOf(
+                            cardBrandType
                         )
-                        )
+                    )
                 )
             } else if (paymentType?.name == PaymentType.CARD.name) {
                 itemsCardsList.add(
-                        SectionTabItem(
-                                imageURL,
-                                imageURL,
-                                CardBrand.valueOf(cardBrandType)
-                        )
+                    SectionTabItem(
+                        imageURL,
+                        imageURL,
+                        CardBrand.valueOf(cardBrandType)
+                    )
                 )
             }
         }
@@ -594,11 +596,11 @@ class PaymenttInputViewHolder(
             val dateParts: List<String>? = expiryDate?.split("/")
             return dateParts?.get(0)?.let {
                 CreateTokenCard(
-                        number.replace(" ", ""),
-                        it,
-                        dateParts[1],
-                        cvc,
-                        cardholderName, null
+                    number.replace(" ", ""),
+                    it,
+                    dateParts[1],
+                    cvc,
+                    cardholderName, null
                 )
             }
         }
@@ -608,21 +610,35 @@ class PaymenttInputViewHolder(
     fun setCurrentBinData(binLookupResponse: BINLookupResponse?) {
         cardNumberWatcher()
         cardSchema = binLookupResponse?.scheme.toString()
-  }
+    }
 
-     fun checkAllowedCardTypes(binLookupResponse: BINLookupResponse?){
-                if (binLookupResponse != null && PaymentDataSource?.getCardType().toString() != null){
-                    if(PaymentDataSource?.getCardType().toString() != binLookupResponse.cardType) {
-                        CustomUtils.showDialog(LocalizationManager.getValue("alertUnsupportedCardTitle","AlertBox"),LocalizationManager.getValue("alertUnsupportedCardMessage","AlertBox"),context,1,baseLayouttManager,null,null,true)
+    fun checkAllowedCardTypes(binLookupResponse: BINLookupResponse?) {
+        if (binLookupResponse != null && PaymentDataSource?.getCardType().toString() != null) {
+            if (PaymentDataSource?.getCardType().toString() != binLookupResponse.cardType) {
+                CustomUtils.showDialog(
+                    LocalizationManager.getValue(
+                        "alertUnsupportedCardTitle",
+                        "AlertBox"
+                    ),
+                    LocalizationManager.getValue("alertUnsupportedCardMessage", "AlertBox"),
+                    context,
+                    1,
+                    baseLayouttManager,
+                    null,
+                    null,
+                    true
+                )
 
-                    }
-                }
-
+            }
         }
+
+    }
 
 
 
 }
+
+
 
 
 

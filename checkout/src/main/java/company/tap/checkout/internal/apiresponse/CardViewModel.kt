@@ -49,8 +49,10 @@ class CardViewModel : ViewModel() {
         _context: Context?
     ) {
         if (_context != null) {
+            this.context =_context
             repository.getInitData(_context,viewModel,cardViewModel)
         }
+
 
         GlobalScope.launch(Dispatchers.Main) { // launch coroutine in the main thread
             val apiResponseTime = Random.nextInt(1000, 8000)
