@@ -20,6 +20,7 @@ import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
 
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession
+import company.tap.checkout.open.controller.SDKSession.contextSDK
 import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
 import company.tap.checkout.open.controller.SessionManager
 import company.tap.checkout.open.data_managers.PaymentDataSource
@@ -59,7 +60,7 @@ class CardRepository : APIRequestCallback {
     lateinit var saveCardResponse: SaveCard
     lateinit var tokenResponse: Token
     lateinit var supportFragmentManager: FragmentManager
-    lateinit var context: Context
+    lateinit var cardRepositoryContext: Context
     private lateinit var viewModel: TapLayoutViewModel
     private lateinit var cardViewModel: CardViewModel
 
@@ -70,7 +71,7 @@ class CardRepository : APIRequestCallback {
         return dataProvider
     }
     @RequiresApi(Build.VERSION_CODES.N)
-    fun getInitData(context: Context, viewModel: TapLayoutViewModel, cardViewModel: CardViewModel?) {
+    fun getInitData(_context: Context, viewModel: TapLayoutViewModel, cardViewModel: CardViewModel?) {
         this.viewModel = viewModel
         if (cardViewModel != null) {
             this.cardViewModel = cardViewModel
@@ -82,12 +83,12 @@ class CardRepository : APIRequestCallback {
                 this,
                 INIT_CODE
         )
-        this.context = context
+        this.cardRepositoryContext = _context
         //  else NetworkController.getInstance().processRequest(TapMethodType.GET, ApiService.INIT_AR, null, this, INIT_CODE)
     }
     @RequiresApi(Build.VERSION_CODES.N)
     fun getPaymentOptions(
-        context: Context,
+        _context: Context,
         viewModel: TapLayoutViewModel,
         supportFragmentManagerdata: FragmentManager
     ) {
@@ -109,14 +110,15 @@ class CardRepository : APIRequestCallback {
                 TapMethodType.POST, ApiService.PAYMENT_TYPES, jsonString, this, PAYMENT_OPTIONS_CODE
         )
         this.supportFragmentManager = supportFragmentManagerdata
+       // this.cardRepositoryContext = _context
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun createChargeRequest(context: Context, viewModel: TapLayoutViewModel, selectedPaymentOption: PaymentOption?, identifier: String?) {
         this.viewModel = viewModel
-        if(identifier!=null)callChargeOrAuthorizeOrSaveCardAPI(SourceRequest(identifier), selectedPaymentOption, null, null, context)
+        if(identifier!=null)callChargeOrAuthorizeOrSaveCardAPI(SourceRequest(identifier), selectedPaymentOption, null, null)
         else
-            selectedPaymentOption?.sourceId?.let { SourceRequest(it) }?.let { callChargeOrAuthorizeOrSaveCardAPI(it, selectedPaymentOption, null, null, context) }
+            selectedPaymentOption?.sourceId?.let { SourceRequest(it) }?.let { callChargeOrAuthorizeOrSaveCardAPI(it, selectedPaymentOption, null, null) }
     }
 
 
@@ -130,16 +132,16 @@ class CardRepository : APIRequestCallback {
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun createAuthorizeRequest(
-            context: Context,
+            _context: Context,
             viewModel: TapLayoutViewModel,
             selectedPaymentOption: PaymentOption?,
             identifier: String?
     ){
         this.viewModel = viewModel
 
-        if(identifier!=null)callChargeOrAuthorizeOrSaveCardAPI(SourceRequest(identifier), selectedPaymentOption, null, null, context)
+        if(identifier!=null)callChargeOrAuthorizeOrSaveCardAPI(SourceRequest(identifier), selectedPaymentOption, null, null)
         else
-            selectedPaymentOption?.sourceId?.let { SourceRequest(it) }?.let { callChargeOrAuthorizeOrSaveCardAPI(it, selectedPaymentOption, null, null, context) }
+            selectedPaymentOption?.sourceId?.let { SourceRequest(it) }?.let { callChargeOrAuthorizeOrSaveCardAPI(it, selectedPaymentOption, null, null) }
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -190,9 +192,9 @@ class CardRepository : APIRequestCallback {
     ) {
         this.viewModel = viewModel
 
-        if(identifier!=null)callChargeOrAuthorizeOrSaveCardAPI(SourceRequest(identifier), selectedPaymentOption, null, null, context)
+        if(identifier!=null)callChargeOrAuthorizeOrSaveCardAPI(SourceRequest(identifier), selectedPaymentOption, null, null)
         else
-            selectedPaymentOption?.sourceId?.let { SourceRequest(it) }?.let { callChargeOrAuthorizeOrSaveCardAPI(it, selectedPaymentOption, null, null, context) }
+            selectedPaymentOption?.sourceId?.let { SourceRequest(it) }?.let { callChargeOrAuthorizeOrSaveCardAPI(it, selectedPaymentOption, null, null) }
     }
     @RequiresApi(Build.VERSION_CODES.N)
     fun requestAuthenticateForChargeTransaction(
@@ -295,17 +297,18 @@ class CardRepository : APIRequestCallback {
         else if(requestCode == BIN_RETRIEVE_CODE){
             response?.body().let {
                 binLookupResponse = Gson().fromJson(it, BINLookupResponse::class.java)
-                if(::binLookupResponse.isInitialized&&::context.isInitialized)
-                viewModel.setBinLookupData(binLookupResponse, context, cardViewModel)
+                if(::binLookupResponse.isInitialized&&::cardRepositoryContext.isInitialized)
+                viewModel.setBinLookupData(binLookupResponse, cardRepositoryContext, cardViewModel)
                 PaymentDataSource?.setBinLookupResponse(binLookupResponse)
+
             }
         }
         else if(requestCode == CREATE_TOKEN_CODE){
             response?.body().let {
                 tokenResponse = Gson().fromJson(it, Token::class.java)
-                if(tokenResponse!=null) {
+                if(tokenResponse!=null ) {
                     if (PaymentDataSource.getTransactionMode() == TransactionMode.AUTHORIZE_CAPTURE) {
-                        createAuthorizeRequest(context, viewModel, null, tokenResponse.id)
+                        createAuthorizeRequest(cardRepositoryContext, viewModel, null, tokenResponse.id)
 
                     }
                     else if(PaymentDataSource.getTransactionMode()==TransactionMode.TOKENIZE_CARD){
@@ -313,10 +316,10 @@ class CardRepository : APIRequestCallback {
 
                     }
                     else if(PaymentDataSource.getTransactionMode()==TransactionMode.SAVE_CARD){
-                        createSaveCard(context, viewModel, null, tokenResponse.id)
+                        createSaveCard(cardRepositoryContext, viewModel, null, tokenResponse.id)
                     }
                     else {
-                        createChargeRequest(context, viewModel, null, tokenResponse.id)
+                        contextSDK?.let { it1 -> createChargeRequest(it1, viewModel, null, tokenResponse.id) }
 
                     }
                 }
@@ -381,7 +384,7 @@ class CardRepository : APIRequestCallback {
                 println("CREATE_SAVE_EXISTING_CODE tokenResponse >>>>" + tokenResponse)
                 if(tokenResponse!=null) {
                     if (PaymentDataSource.getTransactionMode() == TransactionMode.AUTHORIZE_CAPTURE) {
-                        createAuthorizeRequest(context, viewModel, null, tokenResponse.id)
+                        createAuthorizeRequest(cardRepositoryContext, viewModel, null, tokenResponse.id)
 
                     }
                     else if(PaymentDataSource.getTransactionMode()==TransactionMode.TOKENIZE_CARD){
@@ -389,10 +392,10 @@ class CardRepository : APIRequestCallback {
                         SDKSession?.tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
                     }
                     else if(PaymentDataSource.getTransactionMode()==TransactionMode.SAVE_CARD){
-                        createSaveCard(context, viewModel, null, tokenResponse.id)
+                        createSaveCard(cardRepositoryContext, viewModel, null, tokenResponse.id)
                     }
                     else {
-                        createChargeRequest(context, viewModel, null, tokenResponse.id)
+                        createChargeRequest(cardRepositoryContext, viewModel, null, tokenResponse.id)
 
                     }
                 }
@@ -487,6 +490,7 @@ class CardRepository : APIRequestCallback {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun handleAuthorizeResponse(authorize: Authorize) {
         Log.d("cardRepository", " Cards >> didReceiveAuthorize * * * ")
         if (authorize == null) return
@@ -591,7 +595,7 @@ class CardRepository : APIRequestCallback {
     @RequiresApi(Build.VERSION_CODES.N)
     private fun callChargeOrAuthorizeOrSaveCardAPI(source: SourceRequest,
                                                    paymentOption: PaymentOption?,
-                                                   cardBIN: String?, saveCard: Boolean?, context: Context) {
+                                                   cardBIN: String?, saveCard: Boolean?) {
         Log.e("OkHttp", "CALL CHARGE API OR AUTHORIZE API")
         val provider: IPaymentDataProvider = getDataProvider()
         val supportedCurrencies: java.util.ArrayList<SupportedCurrencies>? = provider.getSupportedCurrencies()

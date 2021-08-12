@@ -312,8 +312,7 @@ object PaymentDataSource :PaymentDataSource {
     }
 
     override fun getItems(): ArrayList<PaymentItem>? {
-
-       return items
+        return items
     }
 
     override fun getTransactionMode(): TransactionMode {

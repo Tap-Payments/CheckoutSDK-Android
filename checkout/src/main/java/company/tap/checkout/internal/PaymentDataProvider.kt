@@ -20,16 +20,30 @@ All rights reserved.
 internal class PaymentDataProvider:IPaymentDataProvider {
     private  var externalDataSource: PaymentDataSource = PaymentDataSource
     override fun getTransactionCurrency(): AmountedCurrency? {
-        return getExternalDataSource()?.getCurrency()?.isoCode?.let { getExternalDataSource().getCurrency()?.isoCode?.let { it1 -> getExternalDataSource().getAmount()?.let { it2 -> AmountedCurrency(it, it1, it2) } } }
+        return getExternalDataSource()?.getCurrency()?.isoCode?.let { getExternalDataSource().getCurrency()?.isoCode?.let { it1 -> getExternalDataSource().getAmount()?.let { it2 -> AmountedCurrency(
+            it,
+            it1,
+            it2
+        ) } } }
 
     }
 
     override fun getSelectedCurrency(): AmountedCurrency? {
+
+
      //   return AmountedCurrency("kwd","kwd",BigDecimal.valueOf(222))
         return if(getExternalDataSource().getSelectedCurrency()!=null){
-            getExternalDataSource().getSelectedAmount()?.let { AmountedCurrency(getExternalDataSource().getSelectedCurrency().toString(),getExternalDataSource().getSelectedCurrency().toString(), it) }
+            getExternalDataSource().getSelectedAmount()?.let { AmountedCurrency(
+                getExternalDataSource().getSelectedCurrency().toString(),
+                getExternalDataSource().getSelectedCurrency().toString(),
+                it
+            ) }
         }else{
-            getExternalDataSource().getCurrency()?.isoCode?.let { getExternalDataSource().getCurrency()?.isoCode?.let { it1 -> getExternalDataSource().getAmount()?.let { it2 -> AmountedCurrency(it, it1, it2) } } }
+            getExternalDataSource().getCurrency()?.isoCode?.let { getExternalDataSource().getCurrency()?.isoCode?.let { it1 -> getExternalDataSource().getAmount()?.let { it2 -> AmountedCurrency(
+                it,
+                it1,
+                it2
+            ) } } }
 
         }
     }
@@ -107,7 +121,7 @@ else return TransactionMode.PURCHASE
 
     override fun getAuthorizeAction(): AuthorizeAction? {
            var authorizeAction: AuthorizeAction? = getExternalDataSource().getAuthorizeAction()
-        println("authorizeAction>>>"+authorizeAction)
+        println("authorizeAction>>>" + authorizeAction)
       if (authorizeAction == null) {
            return AuthorizeAction(AuthorizeActionType.VOID, 168)
       }

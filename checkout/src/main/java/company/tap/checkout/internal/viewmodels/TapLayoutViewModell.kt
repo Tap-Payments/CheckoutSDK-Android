@@ -633,13 +633,14 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
 
     override fun displayRedirect(url: String) {
-        setSlideAnimation()
-        if(otpViewHolder.otpView.isVisible){
-            removeViews(businessViewHolder, amountViewHolder1, otpViewHolder)
-        }
+
         this.redirectURL = url
         println("redirectURL>>>" + redirectURL)
         if (::redirectURL.isInitialized && redirectURL != null && ::fragmentManager.isInitialized) {
+            setSlideAnimation()
+            if(otpViewHolder.otpView.isVisible){
+                removeViews(businessViewHolder, amountViewHolder1, otpViewHolder)
+            }
             fragmentManager.beginTransaction()
                 .replace(
                     R.id.webFrameLayout, WebFragment.newInstance(
@@ -1216,9 +1217,9 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         if (done) {
             if (::webFrameLayout.isInitialized)
                 webFrameLayout.visibility = View.GONE
-            removeAllViews()
-            //  addViews(saveCardSwitchHolder11)
-            /*          saveCardSwitchHolder11?.view?.cardSwitch?.showOnlyPayButton()
+         /*   removeAllViews()
+             addViews(saveCardSwitchHolder11)
+                    saveCardSwitchHolder11?.view?.cardSwitch?.showOnlyPayButton()
                       saveCardSwitchHolder11?.view?.cardviewSwitch?.visibility = View.GONE
                       saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.isActivated = true
                       saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)
@@ -1226,8 +1227,8 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                               R.drawable.success,
                               1
                       ) {
-                          removeAllViews()
-                          bottomSheetDialog.dismiss()
+                          //removeAllViews()
+                         // bottomSheetDialog.dismiss()
                       }?.let {
                           saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.addChildView(
                                   it
@@ -1240,7 +1241,12 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         if (done) {
             if (::webFrameLayout.isInitialized)
                 webFrameLayout.visibility = View.VISIBLE
+            removeAllViews()
+            addViews(saveCardSwitchHolder11)
+            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)
         }
+
+
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -1599,20 +1605,13 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         extraFeesAmount: String,
         paymentType: PaymentType, savedCardsModel: Any?
     ) {
+
         for (i in paymentOptionsResponse.paymentOptions.indices) {
             if (paymentOptionsResponse.paymentOptions[i].paymentType == paymentType) {
                 extraFees = paymentOptionsResponse.paymentOptions[i].extraFees
-//                println(paymentType.paymentType + "  --->>> extraFeeeeees--->>  " + extraFees)
-
-                println(
-                    paymentType.paymentType + "  --->>> extraFeeeeees--->>  " + (AmountCalculator.calculateExtraFeesAmount(
-                        extraFees,
-                        paymentOptionsResponse.supportedCurrencies,
-                        PaymentDataProvider().getSelectedCurrency()
-                    )).toString()
-                )
-                println(paymentType.paymentType + "  --->>> extraFeeeeees--->>  " + extraFees + paymentOptionsResponse.supportedCurrencies + PaymentDataProvider().getSelectedCurrency())
-
+                var fee = BigDecimal.ZERO
+                fee = calculateExtraFeesAmount(extraFees,  paymentOptionsResponse.supportedCurrencies, PaymentDataProvider()?.getSelectedCurrency())
+                val totalAmount = fee.add(PaymentDataProvider()?.getSelectedCurrency()?.amount)
                 if (calculateExtraFeesAmount(
                         extraFees,
                         paymentOptionsResponse.supportedCurrencies,
@@ -1620,7 +1619,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                     )!! > BigDecimal.ZERO
                 ) {
                     val localizedMessage =
-                        "You will be charged an additional fee of $extraFeesAmount for this type of payment, totaling an amount of $amount"
+                        "You will be charged an additional fee of $fee for this type of payment, totaling an amount of $totalAmount"
                     CustomUtils.showDialog(
                         title,
                         localizedMessage,

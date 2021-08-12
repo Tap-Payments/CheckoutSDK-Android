@@ -15,8 +15,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import company.tap.checkout.TapCheckOutSDK
+import company.tap.checkout.internal.api.enums.AmountModificatorType
 import company.tap.checkout.internal.api.enums.Measurement
 import company.tap.checkout.internal.api.models.*
+import company.tap.checkout.internal.apiresponse.testmodels.Discount
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.enums.CardType
@@ -132,8 +134,8 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
 
         // Set Payment Items array list
-        sdkSession.setPaymentItems(ArrayList()) // ** Optional ** you can pass empty array list
-      // sdkSession.setPaymentItems(getPaymentItems()) // ** Optional ** you can pass empty array list
+       // sdkSession.setPaymentItems(ArrayList()) // ** Optional ** you can pass empty array list
+       sdkSession.setPaymentItems(getPaymentItems()) // ** Optional ** you can pass empty array list
 
 
         sdkSession.setPaymentType("CARD")  //** Merchant can pass paymentType
@@ -287,8 +289,8 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         val items: ArrayList<PaymentItem> = ArrayList<PaymentItem>()
         items.add(PaymentItem("Items1",
                 "Description for test item #1",
-                Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(22)), BigDecimal.valueOf(22),
-                null, null))
+                Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(1)), BigDecimal.valueOf(1),
+                AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO), null))
         println("item are<<<<" + items)
 
         return items
