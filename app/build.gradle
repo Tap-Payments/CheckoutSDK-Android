@@ -52,8 +52,9 @@ dependencies {
   /*  implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.188'
     api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.188'*/
 
-    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.284'
-    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.284'
+
+    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.292'
+    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.292'
     implementation 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.23'
     api 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.23'
     implementation 'company.tap:PayCards-Tap-Android:0.1.6.4'
