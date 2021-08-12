@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.FragmentManager
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import company.tap.checkout.internal.PaymentDataProvider
@@ -20,6 +21,7 @@ import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
+import company.tap.checkout.open.controller.SessionManager
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.models.*
@@ -56,6 +58,7 @@ class CardRepository : APIRequestCallback {
     lateinit var deleteCardResponse: DeleteCardResponse
     lateinit var saveCardResponse: SaveCard
     lateinit var tokenResponse: Token
+    lateinit var supportFragmentManager: FragmentManager
     lateinit var context: Context
     private lateinit var viewModel: TapLayoutViewModel
     private lateinit var cardViewModel: CardViewModel
@@ -83,7 +86,11 @@ class CardRepository : APIRequestCallback {
         //  else NetworkController.getInstance().processRequest(TapMethodType.GET, ApiService.INIT_AR, null, this, INIT_CODE)
     }
     @RequiresApi(Build.VERSION_CODES.N)
-    fun getPaymentOptions(context: Context, viewModel: TapLayoutViewModel) {
+    fun getPaymentOptions(
+        context: Context,
+        viewModel: TapLayoutViewModel,
+        supportFragmentManagerdata: FragmentManager
+    ) {
         this.viewModel = viewModel
 
         val requestBody = PaymentOptionsRequest(
@@ -101,6 +108,7 @@ class CardRepository : APIRequestCallback {
         NetworkController.getInstance().processRequest(
                 TapMethodType.POST, ApiService.PAYMENT_TYPES, jsonString, this, PAYMENT_OPTIONS_CODE
         )
+        this.supportFragmentManager = supportFragmentManagerdata
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -251,18 +259,20 @@ class CardRepository : APIRequestCallback {
                 initResponse = Gson().fromJson(it, SDKSettings::class.java)
                 PaymentDataSource.setSDKSettings(initResponse)
             }
-        }else if (requestCode == PAYMENT_OPTIONS_CODE){
-            response?.body().let {
-                paymentOptionsResponse = Gson().fromJson(it, PaymentOptionsResponse::class.java)
-                PaymentDataSource.setPaymentOptionsResponse(paymentOptionsResponse)
-                viewModel.displayStartupLayout(CheckoutFragment().enableSections())
-                sdkSession?.sessionDelegate?.sessionHasStarted()
-                if(tabAnimatedActionButton!=null){
-                    tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
+        }else if (requestCode == PAYMENT_OPTIONS_CODE) {
+            if (response?.body() != null) {
+                response?.body().let {
+                    paymentOptionsResponse = Gson().fromJson(it, PaymentOptionsResponse::class.java)
+                    PaymentDataSource.setPaymentOptionsResponse(paymentOptionsResponse)
+
+                    if (tabAnimatedActionButton != null) {
+                        tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
+                    }
                 }
 
+            }else {
+                sdkSession?.sessionDelegate?.sessionFailedToStart()
             }
-
 
         }else if(requestCode == CHARGE_REQ_CODE) {
             response?.body().let {
@@ -300,6 +310,7 @@ class CardRepository : APIRequestCallback {
                     }
                     else if(PaymentDataSource.getTransactionMode()==TransactionMode.TOKENIZE_CARD){
                         SDKSession?.getListener()?.cardTokenizedSuccessfully(tokenResponse)
+
                     }
                     else if(PaymentDataSource.getTransactionMode()==TransactionMode.SAVE_CARD){
                         createSaveCard(context, viewModel, null, tokenResponse.id)
@@ -413,8 +424,10 @@ class CardRepository : APIRequestCallback {
                     initResponse = initResponse,
                     paymentOptionsResponse = paymentOptionsResponse
             )
-            viewModel.getDatasfromAPIs(initResponse, paymentOptionsResponse)
-
+            val tapCheckoutFragment = CheckoutFragment()
+            tapCheckoutFragment.show(supportFragmentManager, null)
+            sdkSession?.sessionDelegate?.sessionHasStarted()
+            SessionManager.setActiveSession(false)
             resultObservable.onNext(viewState)
             resultObservable.onComplete()
         }

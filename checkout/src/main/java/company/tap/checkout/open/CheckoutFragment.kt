@@ -30,6 +30,7 @@ import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
 import company.tap.checkout.open.controller.SDKSession.sessionDelegate
 import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
+import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.interfaces.SessionDelegate
 import company.tap.nfcreader.open.reader.TapEmvCard
 import company.tap.nfcreader.open.reader.TapNfcCardReader
@@ -76,7 +77,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         val cardViewModel: CardViewModel by viewModels()
         this.viewModel = viewModel
         _Context?.let { cardViewModel.getContext(it) }
-        getBusinessHeaderData(context, viewModel)
+
         val view = inflater.inflate(R.layout.fragment_checkouttaps, container, false)
         backgroundColor = (Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.clear")))
 
@@ -119,7 +120,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                 }
             }
         }
-        // enableSections()
+        sessionDelegate?.sessionIsStarting()
+         enableSections()
         return view
     }
 
@@ -129,24 +131,12 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         enabledSections.add(SectionType.BUSINESS)
         enabledSections.add(SectionType.AMOUNT_ITEMS)
         enabledSections.add(SectionType.FRAGMENT)
-      //  viewModel.displayStartupLayout(enabledSections)
-      //  getBusinessHeaderData(context, viewModel)
+       viewModel.displayStartupLayout(enabledSections)
+        viewModel.getDatasfromAPIs(PaymentDataSource?.getSDKSettings(),PaymentDataSource?.getPaymentOptionsResponse())
         setBottomSheetInterface(this)
         return enabledSections
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
-    fun getBusinessHeaderData(context: Context?, viewModel: TapLayoutViewModel) {
-        if (context?.let { isNetworkAvailable(it) } == true) {
-            val cardViewModel: CardViewModel by viewModels()
-            cardViewModel.getContext(context)
-          //  cardViewModel.liveData.observe(this, { consumeResponse(it) })
-            cardViewModel.processEvent(CardViewEvent.InitEvent, viewModel, null, null, null, cardViewModel)
-
-        }
-
-        sessionDelegate?.sessionIsStarting()
-    }
 
 
 
@@ -216,13 +206,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     }
 
-
-    private fun isNetworkAvailable(context: Context): Boolean {
-        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        var activeNetworkInfo: NetworkInfo? = null
-        activeNetworkInfo = cm.activeNetworkInfo
-        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting
-    }
 
 }
 

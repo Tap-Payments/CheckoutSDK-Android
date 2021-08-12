@@ -4,13 +4,18 @@ package company.tap.checkout.open.controller
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.viewModels
 import com.google.gson.JsonElement
 import company.tap.checkout.internal.PaymentDataProvider
 import company.tap.checkout.internal.api.models.Merchant
-import company.tap.checkout.internal.apiresponse.CardRepository
+import company.tap.checkout.internal.apiresponse.CardViewEvent
+import company.tap.checkout.internal.apiresponse.CardViewModel
+import company.tap.checkout.internal.utils.CustomUtils.showDialog
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.data_managers.PaymentDataSource
@@ -34,21 +39,26 @@ All rights reserved.
  **/
 //Responsible for setting data given by Merchant  and starting the session
 @SuppressLint("StaticFieldLeak")
-object  SDKSession : APIRequestCallback  {
+object  SDKSession : APIRequestCallback {
     private var paymentDataSource: PaymentDataSource? = null
-    private var contextSDK: Context? = null
+    var contextSDK: Context? = null
+   var supportFragmentManager: FragmentManager ?=null
     @JvmField
-    var sessionDelegate: SessionDelegate?= null
+    var sessionDelegate: SessionDelegate? = null
+
     @JvmField
-    var tabAnimatedActionButton: TabAnimatedActionButton?= null
-    private var activityListener: Activity? = null
-    private const val SDK_REQUEST_CODE = 0
+    var tabAnimatedActionButton: TabAnimatedActionButton? = null
+
     private var sessionActive = false
+
     init {
         initPaymentDataSource()
 
     }
 
+    private fun persistPaymentDataSource() {
+        paymentDataSource?.let { PaymentDataProvider().setExternalDataSource(it) }
+    }
 
     private fun checkSessionStatus() {
         if (SessionManager.isSessionEnabled()) {
@@ -59,7 +69,7 @@ object  SDKSession : APIRequestCallback  {
 
     private fun initPaymentDataSource() {
         this.paymentDataSource = PaymentDataSource
-        if(paymentDataSource!=null){
+        if (paymentDataSource != null) {
             println("paymentDataSource sdk ${paymentDataSource.toString()}")
             PaymentDataProvider().setExternalDataSource(paymentDataSource!!)
         }
@@ -75,8 +85,8 @@ object  SDKSession : APIRequestCallback  {
     }
 
 
-      fun getListener(): SessionDelegate? {
-          return sessionDelegate
+    fun getListener(): SessionDelegate? {
+        return sessionDelegate
     }
 
     /**
@@ -85,16 +95,18 @@ object  SDKSession : APIRequestCallback  {
     open fun instantiatePaymentDataSource() {
         paymentDataSource = PaymentDataSource
     }
+
     fun startSDK(supportFragmentManager: FragmentManager, context: Context) {
         println("is session enabled ${SessionManager.isSessionEnabled()}")
         if (SessionManager.isSessionEnabled()) {
             println("Session already active!!!")
             return
         }
-        contextSDK = context
-        println("we are already active!!!")
-        val tapCheckoutFragment = CheckoutFragment()
-        tapCheckoutFragment.show(supportFragmentManager, null)
+        this.contextSDK = context
+
+        getPaymentOptions(supportFragmentManager)
+        /*val tapCheckoutFragment = CheckoutFragment()
+        tapCheckoutFragment.show(supportFragmentManager, null)*/
         // start session
         SessionManager.setActiveSession(true)
 
@@ -268,7 +280,8 @@ object  SDKSession : APIRequestCallback  {
      * @param merchantId
      */
     open fun setMerchantID(merchantId: String?) {
-        if (merchantId != null && merchantId.trim { it <= ' ' }.isNotEmpty()) paymentDataSource?.setMerchant(
+        if (merchantId != null && merchantId.trim { it <= ' ' }
+                .isNotEmpty()) paymentDataSource?.setMerchant(
             Merchant(merchantId)
         ) else paymentDataSource?.setMerchant(null)
     }
@@ -301,7 +314,7 @@ object  SDKSession : APIRequestCallback  {
     }
 
     override fun onSuccess(responseCode: Int, requestCode: Int, response: Response<JsonElement>?) {
-       println("onSuccess is being called ")
+        println("onSuccess is being called ")
     }
 
     override fun onFailure(requestCode: Int, errorDetails: GoSellError?) {
@@ -318,32 +331,91 @@ object  SDKSession : APIRequestCallback  {
 
     fun setButtonView(
         payButtonView: TabAnimatedActionButton,
-        activity: Activity,
+        context: Context,
         supportFragmentManager: FragmentManager
     ) {
         payButtonView.setOnClickListener {
-           if (sessionActive) return@setOnClickListener
+            if (sessionActive) return@setOnClickListener
 
             if (PaymentDataSource?.getTransactionMode() == null) {
                 sessionDelegate?.invalidTransactionMode()
                 return@setOnClickListener
             } else {
                 sessionActive = true
-                startSDK(supportFragmentManager,activity?.baseContext)
+                startSDK(supportFragmentManager, context)
                 this.tabAnimatedActionButton = payButtonView
-                if(tabAnimatedActionButton!=null){
+                if (tabAnimatedActionButton != null) {
                     tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
                 }
 
             }
         }
-        this.activityListener = activity
+
+    }
+
+
+    /**
+     * call payment methods API
+     */
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun getPaymentOptions(supportFragmentManager: FragmentManager) {
+        when (isInternetConnectionAvailable()) {
+            ErrorTypes.SDK_NOT_CONFIGURED_WITH_VALID_CONTEXT -> contextSDK?.let {
+                showDialog(
+                    "SDK Error",
+                    "SDK Not Configured Correctly", it,null,null,null,null,false
+                )
+            }
+            ErrorTypes.CONNECTIVITY_MANAGER_ERROR -> contextSDK?.let {
+                showDialog(
+                    "SDK Error",
+                    "Device has a problem in Connectivity manager", it,null,null,null,null,false
+                )
+            }
+            ErrorTypes.INTERNET_NOT_AVAILABLE -> contextSDK?.let {
+                showDialog(
+                    "Connection Error",
+                    "Internet connection is not available", it,null,null,null,null,false
+                )
+            }
+            ErrorTypes.INTERNET_AVAILABLE -> startPayment(supportFragmentManager)
+        }
+    }
+    private fun isInternetConnectionAvailable(): ErrorTypes? {
+        val ctx: Context = SDKSession.contextSDK
+            ?: return ErrorTypes.SDK_NOT_CONFIGURED_WITH_VALID_CONTEXT
+        val connectivityManager =
+            ctx.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (connectivityManager != null) {
+            val activeNetworkInfo = connectivityManager.activeNetworkInfo
+            return if (activeNetworkInfo != null && activeNetworkInfo.isConnected) ErrorTypes.INTERNET_AVAILABLE else ErrorTypes.INTERNET_NOT_AVAILABLE
+        }
+        return ErrorTypes.CONNECTIVITY_MANAGER_ERROR
     }
 
 
 
 
+    /**
+     * Error Type
+     */
+    enum class ErrorTypes {
+        SDK_NOT_CONFIGURED_WITH_VALID_CONTEXT, INTERNET_NOT_AVAILABLE, INTERNET_AVAILABLE, CONNECTIVITY_MANAGER_ERROR
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun startPayment(_supportFragmentManager:FragmentManager) {
+        persistPaymentDataSource()
+        if (tabAnimatedActionButton != null) tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
+        println(" this.paymentDataSource.getTransactionMode() : " + paymentDataSource?.getTransactionMode())
+        CardViewModel().processEvent(CardViewEvent.InitEvent, TapLayoutViewModel(),null,null,null,null,null,null,null,null,
+            _supportFragmentManager,contextSDK)
+
+
+    }
+
 }
+
 
 
 

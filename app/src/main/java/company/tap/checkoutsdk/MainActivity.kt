@@ -27,6 +27,7 @@ import company.tap.checkout.open.models.Receipt
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapnetworkkit.exception.GoSellError
 import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.models.DialogConfigurations
 import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog.Companion.TAG
@@ -193,7 +194,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
          sdkSession.setCardType(CardType.ALL) // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
 
-          sdkSession.setTransactionMode(TransactionMode.AUTHORIZE_CAPTURE)
+          sdkSession.setTransactionMode(TransactionMode.PURCHASE)
          sdkSession.setDefaultCardHolderName("TEST TAP"); // ** Optional ** you can pass default CardHolderName of the user .So you don't need to type it.
          sdkSession.isUserAllowedToEnableCardHolderName(false); // ** Optional ** you can enable/ disable  default CardHolderName .
 
@@ -265,12 +266,12 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         config.setLocale(locale)
         resources.updateConfiguration(config, resources.displayMetrics)
     }
-  /*  override fun onNewIntent(intent: Intent) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
         modalBottomSheet.handleNFCResult(intent)
 
-    }*/
+    }
     fun setCustomer(): TapCustomer { // test customer id cus_Kh1b4220191939i1KP2506448
         val tapCustomer: TapCustomer? = null
         //if (customer != null) customer.phone else Phone(965, 69045932)
@@ -301,7 +302,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
                 Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
                 Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
         )
-       sdkSession?.setButtonView(payButton,this,supportFragmentManager)
+        sdkSession?.setButtonView(payButton,this,supportFragmentManager)
 
 
     }
@@ -348,6 +349,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         }
         Toast.makeText(this,"paymentSucceed"+charge.id, Toast.LENGTH_SHORT).show()
        // modalBottomSheet.dismiss()
+        payButton?.changeButtonState(ActionButtonState.SUCCESS)
     }
 
     override fun paymentFailed(charge: Charge?) {
@@ -357,6 +359,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         Toast.makeText(this,"paymentFailed"+charge?.response?.message, Toast.LENGTH_SHORT).show()
 
         modalBottomSheet.dismiss()
+        payButton?.changeButtonState(ActionButtonState.ERROR)
     }
 
     override fun authorizationSucceed(authorize: Authorize) {
@@ -446,18 +449,23 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
     override fun sessionIsStarting() {
         println("sessionIsStarting>>>>>")
+        payButton?.changeButtonState(ActionButtonState.LOADING)
     }
 
     override fun sessionHasStarted() {
         println("sessionHasStarted>>>>>")
+
     }
 
     override fun sessionCancelled() {
         println("sessionCancelled>>>>>")
+        //CLose the bottomsheet and keep buttonto old state
+
     }
 
     override fun sessionFailedToStart() {
         println("invalidCardDetails>>>>>")
+        payButton?.changeButtonState(ActionButtonState.ERROR)
     }
 
     override fun invalidCardDetails() {

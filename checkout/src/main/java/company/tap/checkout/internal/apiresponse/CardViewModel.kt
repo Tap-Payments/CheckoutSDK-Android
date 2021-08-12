@@ -4,10 +4,10 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import company.tap.checkout.internal.api.models.*
-import company.tap.checkout.internal.api.requests.CreateOTPVerificationRequest
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -42,19 +42,31 @@ class CardViewModel : ViewModel() {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun getInitData(viewModel: TapLayoutViewModel,cardViewModel: CardViewModel?) {
-        repository.getInitData(context,viewModel,cardViewModel)
+    private fun getInitData(
+        viewModel: TapLayoutViewModel,
+        cardViewModel: CardViewModel?,
+        supportFragmentManagerdata: FragmentManager?,
+        _context: Context?
+    ) {
+        if (_context != null) {
+            repository.getInitData(_context,viewModel,cardViewModel)
+        }
+
         GlobalScope.launch(Dispatchers.Main) { // launch coroutine in the main thread
-            val apiResponseTime = Random.nextInt(1000, 10000)
+            val apiResponseTime = Random.nextInt(1000, 8000)
             delay(apiResponseTime.toLong())
-            repository.getPaymentOptions(context,viewModel)
+            if (_context != null) {
+                if (supportFragmentManagerdata != null) {
+                    repository.getPaymentOptions(_context,viewModel,supportFragmentManagerdata)
+                }
+            }
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun processEvent(event: CardViewEvent, viewModel: TapLayoutViewModel, selectedPaymentOption: PaymentOption?, binValue: String? = null, cardDataRequest: CreateTokenCard?, cardViewModel: CardViewModel? = null, customerId: String?=null, cardId: String?=null, createTokenWithExistingCardRequest: CreateTokenSavedCard?=null,otpString:String?=null) {
+    fun processEvent(event: CardViewEvent, viewModel: TapLayoutViewModel, selectedPaymentOption: PaymentOption?, binValue: String? = null, cardDataRequest: CreateTokenCard?, cardViewModel: CardViewModel? = null, customerId: String?=null, cardId: String?=null, createTokenWithExistingCardRequest: CreateTokenSavedCard?=null,otpString:String?=null,supportFragmentManager: FragmentManager?=null,context: Context?=null) {
         when (event) {
-            CardViewEvent.InitEvent -> getInitData(viewModel,cardViewModel)
+            CardViewEvent.InitEvent -> getInitData(viewModel,cardViewModel,supportFragmentManager,context)
             CardViewEvent.ChargeEvent -> createChargeRequest(viewModel,selectedPaymentOption,null)
             CardViewEvent.RetreiveChargeEvent -> retrieveChargeRequest(viewModel)
             CardViewEvent.RetreiveBinLookupEvent -> retrieveBinlookup(viewModel,binValue)
