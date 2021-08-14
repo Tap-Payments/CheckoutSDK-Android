@@ -114,7 +114,7 @@ class CardRepository : APIRequestCallback {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun createChargeRequest(context: Context, viewModel: TapLayoutViewModel, selectedPaymentOption: PaymentOption?, identifier: String?) {
+    fun createChargeRequest( viewModel: TapLayoutViewModel, selectedPaymentOption: PaymentOption?, identifier: String?) {
         this.viewModel = viewModel
         if(identifier!=null)callChargeOrAuthorizeOrSaveCardAPI(SourceRequest(identifier), selectedPaymentOption, null, null)
         else
@@ -277,6 +277,7 @@ class CardRepository : APIRequestCallback {
             }
 
         }else if(requestCode == CHARGE_REQ_CODE) {
+
             response?.body().let {
                 chargeResponse = Gson().fromJson(it, Charge::class.java)
 
@@ -319,9 +320,10 @@ class CardRepository : APIRequestCallback {
                         createSaveCard(cardRepositoryContext, viewModel, null, tokenResponse.id)
                     }
                     else {
-                        contextSDK?.let { it1 -> createChargeRequest(it1, viewModel, null, tokenResponse.id) }
-
+                      createChargeRequest(viewModel, null, tokenResponse.id)
                     }
+
+
                 }
             }
         }
@@ -395,7 +397,7 @@ class CardRepository : APIRequestCallback {
                         createSaveCard(cardRepositoryContext, viewModel, null, tokenResponse.id)
                     }
                     else {
-                        createChargeRequest(cardRepositoryContext, viewModel, null, tokenResponse.id)
+                        createChargeRequest( viewModel, null, tokenResponse.id)
 
                     }
                 }
@@ -459,7 +461,7 @@ class CardRepository : APIRequestCallback {
                         when (authenicate.type) {
                             AuthenticationType.BIOMETRICS -> "d"
                             AuthenticationType.OTP -> {
-                                Log.d("cardREpose", " coming charge type is ...  caller setChargeOrAuthorize");
+                                Log.d("cardRepose", " coming charge type is ...  caller setChargeOrAuthorize");
                                 PaymentDataSource?.setChargeOrAuthorize(chargeResponse)
                                 viewModel?.displayOTPView(chargeResponse?.customer?.getPhone(), PaymentTypeEnum.SAVEDCARD.toString(), chargeResponse)
 
@@ -563,6 +565,7 @@ class CardRepository : APIRequestCallback {
     }
 
     override fun onFailure(requestCode: Int, errorDetails: GoSellError?) {
+        println("response body CHARGE_REQ_CODE>>"+errorDetails)
         errorDetails?.let {
             if (it.throwable != null) {
                 resultObservable.onError(it.throwable)
@@ -571,6 +574,8 @@ class CardRepository : APIRequestCallback {
             // resultObservable.onError(Throwable(it.errorMessage))
                 RxJavaPlugins.setErrorHandler(Throwable::printStackTrace)
             sdkSession.getListener()?.backendUnknownError(errorDetails.errorMessage)
+            viewModel?.handleSuccessFailureResponseButton("failure")
+
 
         }
     }
@@ -605,7 +610,11 @@ class CardRepository : APIRequestCallback {
         val postURL: String? = provider.getPostURL()
         val post = if (postURL == null) null else TrackingURL(URLStatus.PENDING, postURL)
         val amountedCurrency: AmountedCurrency? = provider.getSelectedCurrency()
-        println("amountedCurrency in cad" + amountedCurrency)
+        val amountedCurrency1: BigDecimal? = PaymentDataSource?.getSelectedAmount()
+        val amountedCurrency2: String? = PaymentDataSource?.getSelectedCurrency()
+        println("amountedCamountedCurrencyurrency in cad" + amountedCurrency)
+        println("amountedCurrency1 in cad" + amountedCurrency1)
+        println("amountedCurrency2 in cad" + amountedCurrency2)
         println("source in crad" + source)
         //     Log.d("callChargeOrAuthorizeOr"," step 5 : callChargeOrAuthorizeOrSaveCardAPI : in class "+ "["+this.getClass().getName()+"] with amountedCurrency=["+amountedCurrency.getAmount()+"]  ");
         val transactionCurrency: AmountedCurrency? = provider.getTransactionCurrency()
@@ -651,27 +660,30 @@ class CardRepository : APIRequestCallback {
                 val chargeRequest = transactionCurrency?.amount?.let {
                     amountedCurrency?.currency?.let { it1 ->
                         CreateChargeRequest(
-                                merchant,
-                                it,
-                                transactionCurrency?.currency,
-                                amountedCurrency?.amount,
-                                it1,
-                                customer,
-                                fee,
-                                order,
-                                redirect,
-                                post,
-                                source,
-                                paymentDescription,
-                                paymentMetadata,
-                                reference,
-                                shouldSaveCard,
-                                statementDescriptor,
-                                require3DSecure,
-                                receipt,
-                                destinations,
-                                topUp
-                        )
+                                    merchant,
+                                    it,
+                                    transactionCurrency?.currency,
+                                     amountedCurrency?.amount,
+                                    it1,
+                                    customer,
+                                    fee,
+                                    order,
+                                    redirect,
+                                    post,
+                                    source,
+                                    paymentDescription,
+                                    paymentMetadata,
+                                    reference,
+                                    shouldSaveCard,
+                                    statementDescriptor,
+                                    require3DSecure,
+                                    receipt,
+                                    destinations,
+                                    topUp
+                                )
+
+
+
                     }
                 }
                 println("chargere" + chargeRequest)

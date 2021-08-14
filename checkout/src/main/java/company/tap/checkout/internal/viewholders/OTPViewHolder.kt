@@ -21,15 +21,12 @@ class OTPViewHolder(context: Context) : TapBaseViewHolder {
 
     init {
         bindViewComponents()
-
-
     }
 
     override fun bindViewComponents() {
     }
 
     fun setMobileOtpView() {
-
         otpView.visibility = View.VISIBLE
         otpView.changePhoneCardView.visibility = View.GONE
         otpView.otpSentConstraintGoPay.visibility = View.VISIBLE

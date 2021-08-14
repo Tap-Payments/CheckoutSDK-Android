@@ -51,6 +51,7 @@ import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
 import company.tap.checkout.internal.viewholders.*
 import company.tap.checkout.internal.webview.WebFragment
 import company.tap.checkout.internal.webview.WebViewContract
+import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.CardType
@@ -950,6 +951,8 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
              //  saveCardSwitchHolder11?.view?.cardSwitch?.showOnlyPayButton()
            }
            else->{
+               bottomSheetDialog.dismiss()
+
                saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.ERROR)
                saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.getImageView(
                    R.drawable.loader,
@@ -1683,7 +1686,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                 extraFees = paymentOptionsResponse.paymentOptions[i].extraFees
                 var fee = BigDecimal.ZERO
                 fee = calculateExtraFeesAmount(extraFees,  paymentOptionsResponse.supportedCurrencies, PaymentDataProvider()?.getSelectedCurrency())
-                val totalAmount = fee.add(PaymentDataProvider()?.getSelectedCurrency()?.amount)
+                val totalAmount = fee.add(PaymentDataSource?.getSelectedAmount())
                 if (calculateExtraFeesAmount(
                         extraFees,
                         paymentOptionsResponse.supportedCurrencies,
