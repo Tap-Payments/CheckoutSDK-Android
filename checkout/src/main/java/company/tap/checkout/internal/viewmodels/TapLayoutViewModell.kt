@@ -658,10 +658,9 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
 
     override fun displayRedirect(url: String) {
-
         this.redirectURL = url
         println("redirectURL>>>" + redirectURL)
-        if (::redirectURL.isInitialized && redirectURL != null && ::fragmentManager.isInitialized) {
+        if (::redirectURL.isInitialized && ::fragmentManager.isInitialized) {
             setSlideAnimation()
             if(otpViewHolder.otpView.isVisible){
                 removeViews(businessViewHolder, amountViewHolder1, otpViewHolder)
@@ -675,6 +674,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                     )
                 ).commitNow()
         }
+        saveCardSwitchHolder11?.view?.visibility=View.GONE
     }
 
     override fun displaySaveCardOptions() {
