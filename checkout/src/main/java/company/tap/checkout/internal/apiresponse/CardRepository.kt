@@ -504,7 +504,7 @@ class CardRepository : APIRequestCallback {
                         }
                         AuthenticationType.OTP -> {
                             // PaymentDataManager.getInstance().setChargeOrAuthorize(authorize as Authorize?)
-                            viewModel?.displayOTPView(authorize?.customer.getPhone(), PaymentTypeEnum.SAVEDCARD.toString(), authorize as Authorize)
+                            viewModel.displayOTPView(authorize.customer.getPhone(), PaymentTypeEnum.SAVEDCARD.toString(), authorize as Authorize)
                         }
                     }
                 }

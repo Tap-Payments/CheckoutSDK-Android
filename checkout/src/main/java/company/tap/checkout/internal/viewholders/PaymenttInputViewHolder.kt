@@ -171,13 +171,22 @@ class PaymenttInputViewHolder(
     private fun initClearText() {
         clearView.setOnClickListener {
             when (selectedType) {
-                PaymentTypeEnum.card -> tapCardInputView.clear()
-                PaymentTypeEnum.telecom -> tapMobileInputView.clearNumber()
+                PaymentTypeEnum.card -> {
+                    tapCardInputView.clear()
+                    switchViewHolder11?.setSwitchLocals(PaymentTypeEnum.card)
+                }
+                PaymentTypeEnum.telecom -> {
+                    tapMobileInputView.clearNumber()
+                    switchViewHolder11?.setSwitchLocals(PaymentTypeEnum.telecom)
+
+                }
             }
             switchViewHolder11?.view?.cardSwitch?.switchesLayout?.visibility = View.GONE
             switchViewHolder11?.view?.mainSwitch?.switchSaveMobile?.visibility = View.GONE
             tapAlertView?.visibility = View.GONE
             switchViewHolder11?.view?.cardSwitch?.payButton?.isActivated = false
+            switchViewHolder11?.view?.cardSwitch?.showOnlyPayButton()
+            switchViewHolder11?.bindViewComponents()
             switchViewHolder11?.view?.cardSwitch?.payButton?.setButtonDataSource(
                 false,
                 context.let { LocalizationManager.getLocale(it).language },
@@ -185,7 +194,7 @@ class PaymenttInputViewHolder(
                 Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
                 Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
             )
-            tabLayout?.resetBehaviour()
+            tabLayout.resetBehaviour()
         }
     }
 
@@ -202,8 +211,8 @@ class PaymenttInputViewHolder(
                 // onPaymentCardComplete.onPaycardSwitchAction(true, PaymentType.MOBILE)
                 if (tapMobileInputView.mobileNumber.text.length > 7)
                     baseLayouttManager.displayOTPView(
-                        PaymentDataSource?.getCustomer()?.getPhone(),
-                        PaymentTypeEnum.telecom.name
+                            PaymentDataSource.getCustomer().getPhone(),
+                            PaymentTypeEnum.telecom.name
                     )
 
             }
