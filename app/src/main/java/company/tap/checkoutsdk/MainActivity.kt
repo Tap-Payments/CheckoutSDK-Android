@@ -129,7 +129,6 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
         // Set Total Amount. The Total amount will be recalculated according to provided Taxes and Shipping
 
-        // Set Total Amount. The Total amount will be recalculated according to provided Taxes and Shipping
         sdkSession.setAmount(BigDecimal(22)) //** Required **
 
 

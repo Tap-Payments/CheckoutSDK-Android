@@ -80,7 +80,11 @@ class AmountViewHolder1(context: Context,private val baseLayouttManager: BaseLay
 
     fun updateSelectedCurrency(isOpen: Boolean, selectedAmount: String,selectedCurrency: String,currentAmount:String, currentCurrency:String) {
         isOpenedList = isOpen
+        if(selectedAmount==currentAmount && selectedCurrency==currentCurrency){
+            view.amount_section.mainKDAmountValue.visibility = View.GONE
+        }else{
         view.amount_section.mainKDAmountValue.visibility = View.VISIBLE
+        }
         if (isOpen)
             changeDataSource(
                 AmountViewDataSource(

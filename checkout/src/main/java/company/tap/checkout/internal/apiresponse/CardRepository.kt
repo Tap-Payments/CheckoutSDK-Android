@@ -288,7 +288,7 @@ class CardRepository : APIRequestCallback {
                 chargeResponse = Gson().fromJson(it, Charge::class.java)
                 if(chargeResponse?.status?.name == ChargeStatus.CAPTURED.name){
                     fireWebPaymentCallBack(chargeResponse)
-                    chargeResponse?.transaction?.url?.let { it1 -> viewModel?.displayRedirect(it1) }
+                  //  chargeResponse?.transaction?.url?.let { it1 -> viewModel?.displayRedirect(it1) }
                   //  viewModel?.redirectLoadingFinished(true)
                 }
             }
@@ -471,6 +471,8 @@ class CardRepository : APIRequestCallback {
             }
             ChargeStatus.CAPTURED -> {
                 SDKSession.getListener()?.paymentSucceed(chargeResponse)
+                viewModel?.handleSuccessFailureResponseButton("success")
+
             }
             ChargeStatus.AUTHORIZED -> {
                 SDKSession.getListener()?.authorizationSucceed(chargeResponse as Authorize)
@@ -599,7 +601,7 @@ class CardRepository : APIRequestCallback {
         Log.e("OkHttp", "CALL CHARGE API OR AUTHORIZE API")
         val provider: IPaymentDataProvider = getDataProvider()
         val supportedCurrencies: java.util.ArrayList<SupportedCurrencies>? = provider.getSupportedCurrencies()
-        val orderID: String = provider.getPaymentOptionsOrderID()
+        val orderID: String? = provider.getPaymentOptionsOrderID()
         val postURL: String? = provider.getPostURL()
         val post = if (postURL == null) null else TrackingURL(URLStatus.PENDING, postURL)
         val amountedCurrency: AmountedCurrency? = provider.getSelectedCurrency()
@@ -763,6 +765,7 @@ class CardRepository : APIRequestCallback {
             ChargeStatus.CAPTURED, ChargeStatus.AUTHORIZED -> try {
                 // closePaymentActivity()
                     sdkSession.getListener()?.paymentSucceed(charge)
+                viewModel?.handleSuccessFailureResponseButton("success")
 
 
                 //  SDKSession().getListener()?.paymentSucceed(charge)

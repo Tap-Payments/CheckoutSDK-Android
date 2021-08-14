@@ -57,7 +57,7 @@ interface IPaymentDataProvider {
      *
      * @return the payment options order id
      */
-    fun getPaymentOptionsOrderID(): String
+    fun getPaymentOptionsOrderID(): String?
 
     /**
      * Gets post url.

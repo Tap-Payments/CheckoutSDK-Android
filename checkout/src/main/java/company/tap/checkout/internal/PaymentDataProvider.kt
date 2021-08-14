@@ -33,11 +33,14 @@ internal class PaymentDataProvider:IPaymentDataProvider {
 
      //   return AmountedCurrency("kwd","kwd",BigDecimal.valueOf(222))
         return if(getExternalDataSource().getSelectedCurrency()!=null){
-            getExternalDataSource().getSelectedAmount()?.let { AmountedCurrency(
-                getExternalDataSource().getSelectedCurrency().toString(),
-                getExternalDataSource().getSelectedCurrency().toString(),
-                it
-            ) }
+            PaymentDataSource?.getAmount()?.let {
+                AmountedCurrency(
+                    PaymentDataSource?.getSelectedCurrency().toString(),
+                    PaymentDataSource?.getSelectedCurrency().toString(), it
+                )
+
+            }
+
         }else{
             getExternalDataSource().getCurrency()?.isoCode?.let { getExternalDataSource().getCurrency()?.isoCode?.let { it1 -> getExternalDataSource().getAmount()?.let { it2 -> AmountedCurrency(
                 it,
@@ -51,12 +54,12 @@ internal class PaymentDataProvider:IPaymentDataProvider {
     override fun getSupportedCurrencies(): ArrayList<SupportedCurrencies>? {
        // return getPaymentOptionsDataManager().getPaymentOptionsResponse().getSupportedCurrencies()
        // return PaymentOptionsResponse.supportedCurrencies
-        return null
+        return PaymentDataSource?.getPaymentOptionsResponse()?.supportedCurrencies
     }
 
-    override fun getPaymentOptionsOrderID(): String {
+    override fun getPaymentOptionsOrderID(): String? {
       //return getPaymentOptionsDataManager().getPaymentOptionsResponse().getOrderID()
-        return "dsfsd"
+        return PaymentDataSource?.getPaymentOptionsResponse()?.orderID
     }
 
     override fun getPostURL(): String? {

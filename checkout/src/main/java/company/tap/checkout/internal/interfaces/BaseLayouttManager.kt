@@ -25,11 +25,10 @@ interface BaseLayouttManager {
     fun displayRedirect(url: String)
     fun displaySaveCardOptions()
     fun setBinLookupData(binLookupResponse: BINLookupResponse, context: Context,cardViewModel: CardViewModel)
-   // fun getDatafromAPI(dummyResponse1: JsonResponseDummy1)
     fun getDatasfromAPIs(sdkSettings: SDKSettings?,paymentOptionsResponse: PaymentOptionsResponse?)
-    // fun getDataPaymentOptionsResponse(paymentOptionsResponse: PaymentOptionsResponse?)
     fun didDialogueExecute(response: String, cardTypeDialog: Boolean?)
     fun dialogueExecuteExtraFees(response :String,paymentType: PaymentType, savedCardsModel: Any?)
     fun deleteSelectedCardListener(delSelectedCard:DeleteCardResponse)
+     fun handleSuccessFailureResponseButton(response: String)
 
 }
