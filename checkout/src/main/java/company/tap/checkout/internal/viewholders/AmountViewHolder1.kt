@@ -6,6 +6,7 @@ import android.view.View
 
 import company.tap.checkout.R
 import company.tap.checkout.internal.enums.SectionType
+import company.tap.checkout.internal.interfaces.AmountInterface
 import company.tap.checkout.internal.interfaces.BaseLayouttManager
 import company.tap.checkout.internal.utils.CurrencyFormatter
 import company.tap.checkout.internal.utils.CurrentTheme
@@ -13,6 +14,7 @@ import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.uikit.atoms.TapButton
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.datasource.AmountViewDataSource
+import kotlinx.android.synthetic.main.action_button_animation.view.*
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 
 
@@ -21,7 +23,8 @@ import kotlinx.android.synthetic.main.amountview_layout.view.*
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class AmountViewHolder1(context: Context,private val baseLayouttManager: BaseLayouttManager?=null) : TapBaseViewHolder {
+class AmountViewHolder1(context: Context,private val baseLayouttManager: BaseLayouttManager?=null) : TapBaseViewHolder,
+    AmountInterface {
 
 
     override val view: View = LayoutInflater.from(context).inflate(R.layout.amountview_layout, null)
@@ -29,11 +32,12 @@ class AmountViewHolder1(context: Context,private val baseLayouttManager: BaseLay
     override val type = SectionType.AMOUNT_ITEMS
 
     private var itemCountt :String?=null
-    lateinit var originalAmount :String
+     var originalAmount :String?=null
     private var isOpenedList :Boolean=true
     private var transactionCurrency :String?=null
+
     init {
-       // bindViewComponents()
+        bindViewComponents()
     }
 
     override fun bindViewComponents() {
@@ -52,8 +56,7 @@ class AmountViewHolder1(context: Context,private val baseLayouttManager: BaseLay
         view.amount_section.setAmountViewDataSource(amountViewDataSource)
     }
 
-    fun changeGroupAction(isOpen: Boolean) {
-        println("isOpen in groupaction"+isOpen)
+    override fun changeGroupAction(isOpen: Boolean) {
         isOpenedList = isOpen
         if (isOpen)
             changeDataSource(
@@ -61,14 +64,20 @@ class AmountViewHolder1(context: Context,private val baseLayouttManager: BaseLay
                     selectedCurr = originalAmount ,
                     selectedCurrText = transactionCurrency,
                     itemCount = itemCountt + "  "+ LocalizationManager.getValue("items","Common")))
-        else
-            if(::originalAmount.isInitialized)
-            changeDataSource(
-                AmountViewDataSource(
-                    selectedCurr = originalAmount ,
-                    selectedCurrText = transactionCurrency,
-                    itemCount = LocalizationManager.getValue("close","Common")))
+        else {
+//            if (::originalAmount?.isInitialized)
+                changeDataSource(
+                    AmountViewDataSource(
+                        selectedCurr = originalAmount,
+                        selectedCurrText = transactionCurrency,
+                        itemCount = LocalizationManager.getValue("close", "Common")
+                    )
+                )
+            view.amount_section.itemCountButton.text = LocalizationManager.getValue("close", "Common")
+
+        }
     }
+
 
 
     fun setOnItemsClickListener(onItemsClickListener: () -> Unit) {

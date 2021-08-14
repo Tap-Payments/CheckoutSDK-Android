@@ -40,7 +40,7 @@ import java.util.*
 class MainActivity : AppCompatActivity() , SessionDelegate{
 
    var sdkSession:SDKSession= SDKSession
-    val payButton by lazy { findViewById<TabAnimatedActionButton>(R.id.payButton) }
+    private val payButton by lazy { findViewById<TabAnimatedActionButton>(R.id.payButton) }
 
     private val modalBottomSheet = CheckoutFragment()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,7 +73,9 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         initializeSDK()
         configureSDKSession()
         initActionButton()
-        }
+        if (modalBottomSheet.isDetached )        payButton.changeButtonState(ActionButtonState.IDLE)
+
+    }
 
     private fun initializeSDK() {
      TapCheckOutSDK().init(
@@ -298,12 +300,13 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
     private fun initActionButton() {
        payButton.setButtonDataSource(
                 true,
-                this?.let { LocalizationManager.getLocale(it).language },
+                this.let { LocalizationManager.getLocale(it).language },
                 LocalizationManager.getValue("pay", "ActionButton"),
                 Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
                 Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
         )
-        sdkSession?.setButtonView(payButton,this,supportFragmentManager)
+
+       sdkSession.setButtonView(payButton,this,supportFragmentManager)
 
 
     }
@@ -361,6 +364,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
         modalBottomSheet.dismiss()
         payButton?.changeButtonState(ActionButtonState.ERROR)
+
     }
 
     override fun authorizationSucceed(authorize: Authorize) {
@@ -406,6 +410,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         println("Authorize Failed : " + authorize?.response?.message)
         Toast.makeText(this, "authorizationFailed"+authorize?.response?.message, Toast.LENGTH_SHORT).show()
         modalBottomSheet.dismiss()
+
     }
 
     override fun cardSaved(charge: Charge) {
@@ -446,6 +451,8 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
     override fun sdkError(goSellError: GoSellError?) {
         println("sdkError>>>>>" + goSellError)
+        payButton.changeButtonState(ActionButtonState.IDLE)
+
     }
 
     override fun sessionIsStarting() {
@@ -461,6 +468,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
     override fun sessionCancelled() {
         println("sessionCancelled>>>>>")
         //CLose the bottomsheet and keep buttonto old state
+        payButton.changeButtonState(ActionButtonState.IDLE)
 
     }
 

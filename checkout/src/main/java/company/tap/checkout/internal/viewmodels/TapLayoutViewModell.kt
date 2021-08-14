@@ -93,6 +93,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     private var displayItemsOpen: Boolean = false
     private var displayOtpIsOpen: Boolean = false
     private var saveCardSwitchHolder11: SwitchViewHolder11? = null
+    private var amountInterface: AmountInterface? = null
 
     private lateinit var paymentInputViewHolder: PaymenttInputViewHolder
     private lateinit var goPaySavedCardHolder: GoPaySavedCardHolder
@@ -186,6 +187,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun initOtpActionButton() {
         otpViewHolder.otpView.otpViewActionButton.setOnClickListener {
             when (otpTypeString) {
@@ -231,8 +233,9 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun confirmOTPCode(otpCode: String) {
-        when(PaymentDataSource?.getTransactionMode()){
+        when(PaymentDataSource.getTransactionMode()){
             TransactionMode.PURCHASE-> sendChargeOTPCode(otpCode)
             TransactionMode.AUTHORIZE_CAPTURE-> sendAuthorizeOTPCode(otpCode)
         }
@@ -524,23 +527,34 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     @SuppressLint("SetTextI18n")
     override fun displayOTPView(phoneNumber: PhoneNumber?, otpType: String, chargeResponse: Charge?) {
         setSlideAnimation()
-        when (otpType) {
-            PaymentTypeEnum.GOPAY.name -> displayOtpGoPay(phoneNumber)
-            PaymentTypeEnum.telecom.name -> displayOtpTelecoms(phoneNumber)
-            else -> displayOtpCharge(phoneNumber, chargeResponse)
-        }
+
+        amountViewHolder1.changeGroupAction(false)
+        amountViewHolder1.view.amount_section.itemCountButton.text= "close"
+
         displayOtpIsOpen = true
-        println("items anm"+amountViewHolder1?.view?.amount_section?.itemCountButton?.text.toString()
-        )
+        displayItemsOpen= false
+        when (otpType) {
+            PaymentTypeEnum.GOPAY.name -> {
+                displayOtpGoPay(phoneNumber)
+            }
+            PaymentTypeEnum.telecom.name -> {
+                displayOtpTelecoms(phoneNumber)
+            }PaymentTypeEnum.SAVEDCARD.name ->{
+            displayOtpCharge(phoneNumber, chargeResponse)
+            }
+            else -> {
+                displayOtpCharge(phoneNumber, chargeResponse)
+            }
+        }
     }
 
     private fun displayOtpGoPay(phoneNumber: PhoneNumber?) {
         // otpTypeString = PaymentTypeEnum.GOPAY //temporray
         removeViews(
             cardViewHolder11,
-            paymentInputViewHolder, saveCardSwitchHolder11
+            paymentInputViewHolder, saveCardSwitchHolder11,amountViewHolder1
         )
-        addViews(otpViewHolder)
+        addViews(amountViewHolder1,otpViewHolder)
 
         otpViewHolder.otpView.visibility = View.VISIBLE
         setOtpPhoneNumber(phoneNumber)
@@ -552,19 +566,24 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.N)
     private fun displayOtpCharge(phoneNumber: PhoneNumber?, chargeResponse: Charge?) {
+
+        // otpTypeString = PaymentTypeEnum.GOPAY //temporray
+       println( "mmmmmmmm" +  amountViewHolder1.view.amount_section.itemCountButton.text)
+
         removeViews(
             cardViewHolder11,
-            paymentInputViewHolder, saveCardSwitchHolder11, otpViewHolder
+            paymentInputViewHolder, saveCardSwitchHolder11, otpViewHolder,amountViewHolder1
         )
-        addViews(otpViewHolder)
+        bottomSheetDialog.dismissWithAnimation
+
+        addViews(amountViewHolder1,otpViewHolder)
         otpViewHolder.otpView.visibility = View.VISIBLE
         setOtpPhoneNumber(phoneNumber)
         otpViewHolder.otpView.changePhone.visibility = View.INVISIBLE
         otpViewHolder.otpView.timerText.setOnClickListener {
             resendOTPCode(chargeResponse)
-
         }
-
+        amountViewHolder1.changeGroupAction(false)
     }
     private fun setOtpPhoneNumber(phoneNumber:PhoneNumber?){
 
@@ -572,7 +591,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         var countryCodeReplaced = ""
         countryCodeReplaced = phoneNumber?.countryCode?.replace("0","").toString()
         if (phoneNumber?.number?.length!! > 7)
-            replaced = (phoneNumber?.number?.toString()).replaceRange(1, 6, "••••")
+            replaced = (phoneNumber.number?.toString()).replaceRange(1, 6, "••••")
         otpViewHolder.otpView.mobileNumberText.text = "+$countryCodeReplaced $replaced"
     }
 
@@ -587,13 +606,13 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun resendAuthorizeOTPCode(authorize: Authorize?) {
-        cardViewModel?.requestAuthenticateForAuthorizeTransaction(this, authorize)
+        cardViewModel.requestAuthenticateForAuthorizeTransaction(this, authorize)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun resendChargeOTPCode(charge: Charge?) {
         if (charge != null) {
-            cardViewModel?.requestAuthenticateForChargeTransaction(this, charge)
+            cardViewModel.requestAuthenticateForChargeTransaction(this, charge)
         }
     }
 
@@ -627,7 +646,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         var replaced = ""
         var countryCodeReplaced = ""
         if (phoneNumber?.number?.length!! > 7)
-            replaced = (phoneNumber?.number?.toString()).replaceRange(1, 6, "....")
+            replaced = (phoneNumber.number.toString()).replaceRange(1, 6, "....")
         countryCodeReplaced =
             goPayViewsHolder.goPayLoginInput.countryCodePicker.selectedCountryCode.replace(
                 "+",
@@ -654,7 +673,6 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                         this, cardViewModel
                     )
                 ).commitNow()
-
         }
     }
 
@@ -886,23 +904,20 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
         } else if (response == "OK") {
             if(cardTypeDialog == true){
-                paymentInputViewHolder?.tapCardInputView?.clear()
-                paymentInputViewHolder?.tabLayout?.resetBehaviour()
+                paymentInputViewHolder.tapCardInputView.clear()
+                paymentInputViewHolder.tabLayout.resetBehaviour()
             }else{
                  bottomSheetDialog.dismissWithAnimation
                  bottomSheetDialog.dismiss()
             }
-
-
         }
-
     }
 
 
     override fun deleteSelectedCardListener(delSelectedCard: DeleteCardResponse) {
         println("delSelectedCard value is" + delSelectedCard.deleted)
         //todo check why delSelectedCard.deleted is changing to false while its true from the API
-        if (!delSelectedCard?.deleted) {
+        if (!delSelectedCard.deleted) {
             adapter.deleteSelectedCard(selectedItemsDel)
             adapter.updateShaking(false)
             deleteCard = false
@@ -1092,7 +1107,6 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                 it
             )
         }
-
     }
 
     private fun changeBottomSheetTransition() {
