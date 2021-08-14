@@ -16,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
+import android.widget.ProgressBar
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import company.tap.checkout.R
@@ -23,6 +24,7 @@ import company.tap.checkout.internal.apiresponse.CardViewEvent
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
 import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.atoms.TapImageView
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import company.tap.tapuilibrary.uikit.ktx.setTopBorders
 import kotlinx.android.synthetic.main.fragment_web.*
@@ -32,6 +34,7 @@ class WebFragment(private val webViewContract: WebViewContract,private val cardV
     CustomWebViewClientContract {
 
     private var webViewUrl: String? = null
+    val progressBar by lazy { view?.findViewById<ProgressBar>(R.id.progressBar) }
 
 
     override fun onCreateView(
@@ -44,9 +47,11 @@ class WebFragment(private val webViewContract: WebViewContract,private val cardV
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTopDraggerView()
+        progressBar?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("merchantHeaderView.backgroundColor")))
+//        progressBar?.colo
         webViewUrl = arguments?.getString(KEY_URL)
-
-
+        progressBar?.max = 100;
+        progressBar?.progress = 1;
         if (TextUtils.isEmpty(webViewUrl)) {
             throw IllegalArgumentException("Empty URL passed to WebViewFragment!")
         }
@@ -121,6 +126,8 @@ class WebFragment(private val webViewContract: WebViewContract,private val cardV
      */
     override fun submitResponseStatus(success: Boolean) {
         webViewContract.redirectLoadingFinished(success)
+        progressBar?.progress = 100
+
     }
 
     override fun getRedirectedURL(url: String) {
