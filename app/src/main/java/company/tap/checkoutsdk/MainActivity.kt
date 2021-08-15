@@ -78,17 +78,17 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
     }
 
     private fun initializeSDK() {
-    /* TapCheckOutSDK().init(
+     TapCheckOutSDK().init(
              this,
              "sk_test_kovrMB0mupFJXfNZWx6Etg5y",
              "company.tap.goSellSDKExample"
-     ) */
-        TapCheckOutSDK().init(
+     )
+      /*  TapCheckOutSDK().init(
              this,
              "sk_live_QglH8V7Fw6NPAom4qRcynDK2",
              "company.tap.goSellSDKExample"
      )
-
+*/
 
     }
 

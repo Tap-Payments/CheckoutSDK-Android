@@ -51,7 +51,6 @@ import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
 import company.tap.checkout.internal.viewholders.*
 import company.tap.checkout.internal.webview.WebFragment
 import company.tap.checkout.internal.webview.WebViewContract
-import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.CardType
@@ -61,7 +60,6 @@ import company.tap.nfcreader.open.reader.TapEmvCard
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.SeparatorViewTheme
-import company.tap.tapuilibrary.uikit.datasource.AmountViewDataSource
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
@@ -101,7 +99,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     private lateinit var goPaySavedCardHolder: GoPaySavedCardHolder
     private lateinit var businessViewHolder: BusinessViewHolder
     private lateinit var amountViewHolder1: AmountViewHolder1
-   // private lateinit var currencyAdapter: CurrencyTypeAdapter
+    private lateinit var currencyAdapter: CurrencyTypeAdapter
     private lateinit var goPayAdapter: GoPayCardAdapterUIKIT
     private lateinit var goPayViewsHolder: GoPayViewsHolder
     private lateinit var itemsViewHolder1: ItemsViewHolder1
@@ -130,7 +128,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     @SuppressLint("StaticFieldLeak")
     private lateinit var context: Context
     private lateinit var cardViewModel: CardViewModel
-    private  var otpTypeString: PaymentTypeEnum = PaymentTypeEnum.SAVEDCARD
+    private var otpTypeString: PaymentTypeEnum = PaymentTypeEnum.SAVEDCARD
     private lateinit var paymentActionType: PaymentType
     private val nfcFragment = NFCFragment()
     private val inlineViewFragment = InlineViewFragment()
@@ -151,8 +149,9 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
     @JvmField
     var selectedCurrencyPos: String? = null
+
     @JvmField
-    var binLookupResponse1:BINLookupResponse? = null
+    var binLookupResponse1: BINLookupResponse? = null
     lateinit var paymentOptionsWorker: java.util.ArrayList<PaymentOption>
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -222,7 +221,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                     )
                     saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.visibility = View.VISIBLE
                     paymentInputViewHolder.tapMobileInputView.clearNumber()
-                   /* CustomUtils.showDialog(
+                    /* CustomUtils.showDialog(
                         "Payment Done",
                         "Payment id 2e412321eqqweq32131",
                         context,
@@ -237,9 +236,9 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun confirmOTPCode(otpCode: String) {
-        when(PaymentDataSource.getTransactionMode()){
-            TransactionMode.PURCHASE-> sendChargeOTPCode(otpCode)
-            TransactionMode.AUTHORIZE_CAPTURE-> sendAuthorizeOTPCode(otpCode)
+        when (PaymentDataSource.getTransactionMode()) {
+            TransactionMode.PURCHASE -> sendChargeOTPCode(otpCode)
+            TransactionMode.AUTHORIZE_CAPTURE -> sendAuthorizeOTPCode(otpCode)
         }
     }
 
@@ -320,7 +319,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         //Todo based on api response logic for switch case
         when (PaymentDataSource?.getTransactionMode()) {
 
-           TransactionMode.TOKENIZE_CARD -> {
+            TransactionMode.TOKENIZE_CARD -> {
                 addViews(
                     businessViewHolder,
                     paymentInputViewHolder,
@@ -328,7 +327,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                 )
 
             }
-           TransactionMode.SAVE_CARD -> {
+            TransactionMode.SAVE_CARD -> {
                 addViews(
                     businessViewHolder,
                     paymentInputViewHolder,
@@ -430,15 +429,15 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         amountViewHolder1.changeGroupAction(!display)
         // if (this::currentAmount.isInitialized)
         if (currentAmount != null && this::selectedAmount.isInitialized && this::selectedCurrency.isInitialized) {
-            if(selectedAmount==currentAmount && selectedCurrency==currentCurrency){
+            if (selectedAmount == currentAmount && selectedCurrency == currentCurrency) {
                 amountViewHolder1.view.amount_section.mainKDAmountValue.visibility = View.GONE
 
-            }else
-            amountViewHolder1.updateSelectedCurrency(
-                displayItemsOpen,
-                selectedAmount, selectedCurrency,
-                currentAmount, currentCurrency
-            )
+            } else
+                amountViewHolder1.updateSelectedCurrency(
+                    displayItemsOpen,
+                    selectedAmount, selectedCurrency,
+                    currentAmount, currentCurrency
+                )
         }
         removeInlineScanner()
         removeNFCViewFragment()
@@ -463,8 +462,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         )*/
 
 
-
-      //  itemsViewHolder1.setItemsRecylerView()
+        //  itemsViewHolder1.setItemsRecylerView()
 
 
         frameLayout.visibility = View.VISIBLE
@@ -521,29 +519,34 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             )
         }
         // itemsViewHolder1.resetView()
-         itemsViewHolder1.setItemsRecylerView()
+        itemsViewHolder1.setItemsRecylerView()
         itemsViewHolder1.setCurrencyRecylerView()
         frameLayout.visibility = View.GONE
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     @SuppressLint("SetTextI18n")
-    override fun displayOTPView(phoneNumber: PhoneNumber?, otpType: String, chargeResponse: Charge?) {
+    override fun displayOTPView(
+        phoneNumber: PhoneNumber?,
+        otpType: String,
+        chargeResponse: Charge?
+    ) {
         setSlideAnimation()
 
         amountViewHolder1.changeGroupAction(false)
-        amountViewHolder1.view.amount_section.itemCountButton.text= "close"
+        amountViewHolder1.view.amount_section.itemCountButton.text = "close"
 
         displayOtpIsOpen = true
-        displayItemsOpen= false
+        displayItemsOpen = false
         when (otpType) {
             PaymentTypeEnum.GOPAY.name -> {
                 displayOtpGoPay(phoneNumber)
             }
             PaymentTypeEnum.telecom.name -> {
                 displayOtpTelecoms(phoneNumber)
-            }PaymentTypeEnum.SAVEDCARD.name ->{
-            displayOtpCharge(phoneNumber, chargeResponse)
+            }
+            PaymentTypeEnum.SAVEDCARD.name -> {
+                displayOtpCharge(phoneNumber, chargeResponse)
             }
             else -> {
                 displayOtpCharge(phoneNumber, chargeResponse)
@@ -555,9 +558,9 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         // otpTypeString = PaymentTypeEnum.GOPAY //temporray
         removeViews(
             cardViewHolder11,
-            paymentInputViewHolder, saveCardSwitchHolder11,amountViewHolder1
+            paymentInputViewHolder, saveCardSwitchHolder11, amountViewHolder1
         )
-        addViews(amountViewHolder1,otpViewHolder)
+        addViews(amountViewHolder1, otpViewHolder)
 
         otpViewHolder.otpView.visibility = View.VISIBLE
         setOtpPhoneNumber(phoneNumber)
@@ -571,15 +574,15 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     private fun displayOtpCharge(phoneNumber: PhoneNumber?, chargeResponse: Charge?) {
 
         // otpTypeString = PaymentTypeEnum.GOPAY //temporray
-       println( "mmmmmmmm" +  amountViewHolder1.view.amount_section.itemCountButton.text)
+        println("mmmmmmmm" + amountViewHolder1.view.amount_section.itemCountButton.text)
 
         removeViews(
             cardViewHolder11,
-            paymentInputViewHolder, saveCardSwitchHolder11, otpViewHolder,amountViewHolder1
+            paymentInputViewHolder, saveCardSwitchHolder11, otpViewHolder, amountViewHolder1
         )
         bottomSheetDialog.dismissWithAnimation
 
-        addViews(amountViewHolder1,otpViewHolder)
+        addViews(amountViewHolder1, otpViewHolder)
         otpViewHolder.otpView.visibility = View.VISIBLE
         setOtpPhoneNumber(phoneNumber)
         otpViewHolder.otpView.changePhone.visibility = View.INVISIBLE
@@ -588,11 +591,12 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         }
         amountViewHolder1.changeGroupAction(false)
     }
-    private fun setOtpPhoneNumber(phoneNumber:PhoneNumber?){
+
+    private fun setOtpPhoneNumber(phoneNumber: PhoneNumber?) {
 
         var replaced = ""
         var countryCodeReplaced = ""
-        countryCodeReplaced = phoneNumber?.countryCode?.replace("0","").toString()
+        countryCodeReplaced = phoneNumber?.countryCode?.replace("0", "").toString()
         if (phoneNumber?.number?.length!! > 7)
             replaced = (phoneNumber.number?.toString()).replaceRange(1, 6, "••••")
         otpViewHolder.otpView.mobileNumberText.text = "+$countryCodeReplaced $replaced"
@@ -619,7 +623,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         }
     }
 
-    private fun displayOtpTelecoms(phoneNumber:  PhoneNumber?) {
+    private fun displayOtpTelecoms(phoneNumber: PhoneNumber?) {
         otpTypeString = PaymentTypeEnum.telecom
         removeViews(
             businessViewHolder,
@@ -664,10 +668,10 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         println("redirectURL>>>" + redirectURL)
         if (::redirectURL.isInitialized && ::fragmentManager.isInitialized) {
             setSlideAnimation()
-            if(otpViewHolder.otpView.isVisible){
+            if (otpViewHolder.otpView.isVisible) {
                 removeViews(businessViewHolder, amountViewHolder1, otpViewHolder)
             }
-          removeAllViews()
+            removeAllViews()
             fragmentManager.beginTransaction()
                 .replace(
                     R.id.webFrameLayout, WebFragment.newInstance(
@@ -676,7 +680,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                     )
                 ).commitNow()
         }
-        saveCardSwitchHolder11?.view?.visibility=View.GONE
+        saveCardSwitchHolder11?.view?.visibility = View.GONE
     }
 
     override fun displaySaveCardOptions() {
@@ -701,8 +705,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         if (::paymentInputViewHolder.isInitialized)
             paymentInputViewHolder.setCurrentBinData(binLookupResponse)
         //paymentInputViewHolder?.setTablayoutbasedOnApi(PaymentDataSource?.getBinLookupResponse())
-        }
-
+    }
 
 
     override fun getDatasfromAPIs(
@@ -730,9 +733,10 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         if (paymentOptionsResponse?.supportedCurrencies != null && ::amountViewHolder1.isInitialized) {
             currentCurrency = paymentOptionsResponse.currency
             for (i in paymentOptionsResponse?.supportedCurrencies.indices) {
-                if (paymentOptionsResponse?.supportedCurrencies[i].currency==currentCurrency) {
-                    println("current amount value>>"+paymentOptionsResponse?.supportedCurrencies[i].amount)
-                    currentAmount = CurrencyFormatter.currencyFormat(paymentOptionsResponse?.supportedCurrencies[i].amount.toString())
+                if (paymentOptionsResponse?.supportedCurrencies[i].currency == currentCurrency) {
+                    println("current amount value>>" + paymentOptionsResponse?.supportedCurrencies[i].amount)
+                    currentAmount =
+                        CurrencyFormatter.currencyFormat(paymentOptionsResponse?.supportedCurrencies[i].amount.toString())
 
                 }
             }
@@ -745,7 +749,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         /**
          * <<<<<<< This items list is going to come from API response later now for loading the view we are taking the List from
          * PaymentDatasource.getItems()  >>>>>>>> */
-        if(PaymentDataSource?.getItems()!=null){
+        if (PaymentDataSource?.getItems() != null) {
             itemList = PaymentDataSource?.getItems()!!
         }
 
@@ -789,10 +793,10 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         adapter = CardTypeAdapterUIKIT(this)
         goPayAdapter = GoPayCardAdapterUIKIT(this)
         //  goPayAdapter.updateAdapterData(goPayCardList.value as List<GoPaySavedCards>)
-     //   currencyAdapter = CurrencyTypeAdapter(this)
-      /*  if (allCurrencies.value?.isNotEmpty() == true) {
+        currencyAdapter = CurrencyTypeAdapter(this)
+        if (allCurrencies.value?.isNotEmpty() == true) {
             currencyAdapter.updateAdapterData(allCurrencies.value as List<SupportedCurrencies>)
-        }*/
+        }
         if (savedCardList.value?.isNotEmpty() == true) {
             println("getCardType" + PaymentDataSource?.getCardType())
             if (PaymentDataSource?.getCardType() != null && PaymentDataSource?.getCardType() != CardType.ALL) {
@@ -917,12 +921,12 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             deleteCard = false
 
         } else if (response == "OK") {
-            if(cardTypeDialog == true){
+            if (cardTypeDialog == true) {
                 paymentInputViewHolder.tapCardInputView.clear()
                 paymentInputViewHolder.tabLayout.resetBehaviour()
-            }else{
-                 bottomSheetDialog.dismissWithAnimation
-                 bottomSheetDialog.dismiss()
+            } else {
+                bottomSheetDialog.dismissWithAnimation
+                bottomSheetDialog.dismiss()
             }
         }
     }
@@ -940,55 +944,59 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     }
 
     override fun handleSuccessFailureResponseButton(response: String) {
-       when(response){
-           "success"->{
-               saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)
-               saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.getImageView(
-                   R.drawable.loader,
-                   1
-               ) {
-                   setSlideAnimation()
-                   removeViews(cardViewHolder11)
-                   removeViews(businessViewHolder)
-                   removeViews(amountViewHolder1)
-                   removeViews(saveCardSwitchHolder11)
-                   removeViews(paymentInputViewHolder)
+        when (response) {
+            "success" -> {
+                saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(
+                    ActionButtonState.SUCCESS
+                )
+                saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.getImageView(
+                    R.drawable.loader,
+                    1
+                ) {
+                    setSlideAnimation()
+                    removeViews(cardViewHolder11)
+                    removeViews(businessViewHolder)
+                    removeViews(amountViewHolder1)
+                    removeViews(saveCardSwitchHolder11)
+                    removeViews(paymentInputViewHolder)
 
 
-               }?.let {
-                   saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.addChildView(
-                       it
-                   )
-               }
+                }?.let {
+                    saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.addChildView(
+                        it
+                    )
+                }
 
-             //  saveCardSwitchHolder11?.view?.cardSwitch?.showOnlyPayButton()
-           }
-           else->{
-               if(::bottomSheetDialog.isInitialized)
-               bottomSheetDialog.dismiss()
+                //  saveCardSwitchHolder11?.view?.cardSwitch?.showOnlyPayButton()
+            }
+            else -> {
+                if (::bottomSheetDialog.isInitialized)
+                    bottomSheetDialog.dismiss()
 
-               saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.ERROR)
-               saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.getImageView(
-                   R.drawable.loader,
-                   1
-               ) {
-                   setSlideAnimation()
-                   removeViews(cardViewHolder11)
-                   removeViews(businessViewHolder)
-                   removeViews(amountViewHolder1)
-                   removeViews(saveCardSwitchHolder11)
-                   removeViews(paymentInputViewHolder)
+                saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(
+                    ActionButtonState.ERROR
+                )
+                saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.getImageView(
+                    R.drawable.loader,
+                    1
+                ) {
+                    setSlideAnimation()
+                    removeViews(cardViewHolder11)
+                    removeViews(businessViewHolder)
+                    removeViews(amountViewHolder1)
+                    removeViews(saveCardSwitchHolder11)
+                    removeViews(paymentInputViewHolder)
 
 
-               }?.let {
-                   saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.addChildView(
-                       it
-                   )
-               }
+                }?.let {
+                    saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.addChildView(
+                        it
+                    )
+                }
 
-              // saveCardSwitchHolder11?.view?.cardSwitch?.showOnlyPayButton()
-           }
-       }
+                // saveCardSwitchHolder11?.view?.cardSwitch?.showOnlyPayButton()
+            }
+        }
     }
 
 
@@ -1037,12 +1045,12 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                 setPayButtonAction(PaymentType.SavedCard, savedCardsModel)
             }
             else -> {
-                if(savedCardsModel!= null){
+                if (savedCardsModel != null) {
                     if ((savedCardsModel as PaymentOption).paymentType == PaymentType.WEB) {
                         activateActionButton()
                         setPayButtonAction(PaymentType.WEB, savedCardsModel)
                     }
-                }else
+                } else
                     displayGoPayLogin()
 
             }
@@ -1074,7 +1082,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             null,
             null
         )
-   /*     saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
+        /*     saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
         saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.getImageView(
             R.drawable.loader,
             1
@@ -1170,7 +1178,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             ),
             context,
             2,
-            this,null,null,false
+            this, null, null, false
         )
         selectedItemsDel = itemId
         deleteCard = true
@@ -1182,7 +1190,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             LocalizationManager.getValue("goPaySignOut", "GoPay"), LocalizationManager.getValue(
                 "goPaySaveCards",
                 "GoPay"
-            ), context, 2, this,null,null,false
+            ), context, 2, this, null, null, false
         )
     }
 
@@ -1281,17 +1289,17 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCurrencyClicked(currencySelected: String, currencyRate: BigDecimal) {
-        if(::itemList.isInitialized){
-        for (i in itemList?.indices) {
-            println("item per unit start >>"+itemList[i].amountPerUnit)
-            itemList[i].amountPerUnit= (itemList[i].getAmountPerUnit()?.times(currencyRate))
-           // itemList[i].currency = currencySelected
-           // selectedAmount = CurrencyFormatter.currencyFormat(currencyRate.toString())
-           // selectedCurrency = currencySelected
-            println("item per unit >>"+itemList[i].amountPerUnit)
+        if (::itemList.isInitialized) {
+            for (i in itemList?.indices) {
+                println("item per unit start >>" + itemList[i].amountPerUnit)
+                itemList[i].amountPerUnit = (itemList[i].getAmountPerUnit()?.times(currencyRate))
+                // itemList[i].currency = currencySelected
+                // selectedAmount = CurrencyFormatter.currencyFormat(currencyRate.toString())
+                // selectedCurrency = currencySelected
+                println("item per unit >>" + itemList[i].amountPerUnit)
 
-        }
-        itemsViewHolder1.setResetItemsRecylerView(itemList)
+            }
+            itemsViewHolder1.setResetItemsRecylerView(itemList)
 
         }
 
@@ -1305,8 +1313,10 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             selectedAmount, selectedCurrency,
             currentAmount, currentCurrency
         )
-        PaymentDataSource.setSelectedCurrency(selectedCurrency = selectedCurrency)
-        PaymentDataSource.setSelectedAmount(currencyRate)
+            PaymentDataSource.setSelectedCurrency(selectedCurrency = selectedCurrency)
+            PaymentDataSource.setSelectedAmount(currencyRate)
+
+
         filterViewModels(currencySelected)
     }
 
@@ -1315,7 +1325,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         if (done) {
             if (::webFrameLayout.isInitialized)
                 webFrameLayout.visibility = View.GONE
-         /*   removeAllViews()
+            /*   removeAllViews()
              addViews(saveCardSwitchHolder11)
                     saveCardSwitchHolder11?.view?.cardSwitch?.showOnlyPayButton()
                       saveCardSwitchHolder11?.view?.cardviewSwitch?.visibility = View.GONE
@@ -1356,27 +1366,41 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.setOnClickListener {
             when (paymentTypeEnum) {
                 PaymentType.SavedCard -> {
-                  /*  showExtraFees(
+                    if (::selectedAmount.isInitialized && ::selectedCurrency.isInitialized) {
+                        checkForExtraFees(
+                            selectedAmount,
+                            selectedCurrency,
+                            paymentTypeEnum,
+                            savedCardsModel
+                        )
+                    } else checkForExtraFees(
                         currentAmount,
                         currentCurrency,
-                        paymentTypeEnum, savedCardsModel
-                    )*/
-                    setDifferentPaymentsAction(paymentTypeEnum,savedCardsModel)
+                        paymentTypeEnum,
+                        savedCardsModel
+                    )
+
+                    // setDifferentPaymentsAction(paymentTypeEnum,savedCardsModel)
                 }
                 PaymentType.WEB -> {
                     if (savedCardsModel != null) {
-                        if(::selectedAmount.isInitialized && ::selectedCurrency.isInitialized) {
-                            showExtraFees(
+                        if (::selectedAmount.isInitialized && ::selectedCurrency.isInitialized) {
+                            checkForExtraFees(
                                 selectedAmount,
                                 selectedCurrency,
                                 paymentTypeEnum, savedCardsModel
                             )
-                        }
+                        } else checkForExtraFees(
+                            currentAmount,
+                            currentCurrency,
+                            paymentTypeEnum,
+                            savedCardsModel
+                        )
                     }
                 }
                 PaymentType.CARD -> {
                     activateActionButton()
-                    showExtraFees(
+                    checkForExtraFees(
                         currentAmount,
                         currentCurrency,
                         paymentTypeEnum, savedCardsModel
@@ -1384,7 +1408,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
                 }
                 PaymentType.telecom -> {
-                    showExtraFees(
+                    checkForExtraFees(
                         currentAmount,
                         currentCurrency,
                         paymentTypeEnum, savedCardsModel
@@ -1392,6 +1416,42 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                 }
             }
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun checkForExtraFees(
+        selectedAmount: String,
+        selectedCurrency: String,
+        paymentTypeEnum: PaymentType,
+        savedCardsModel: Any?
+    ) {
+        var extraFees: java.util.ArrayList<ExtraFee>? = null
+
+       if(paymentTypeEnum == PaymentType.WEB ){
+           savedCardsModel as PaymentOption
+           extraFees = savedCardsModel?.extraFees
+       } else{
+           for (i in paymentOptionsResponse.paymentOptions.indices) {
+               if (paymentOptionsResponse.paymentOptions[i].paymentType == paymentTypeEnum) {
+                   extraFees = paymentOptionsResponse.paymentOptions[i].extraFees
+               }
+           }
+       }
+
+        println("extraFees>>>>>>>>" + extraFees)
+        var fee = BigDecimal.ZERO
+        fee = calculateExtraFeesAmount(extraFees, paymentOptionsResponse.supportedCurrencies, PaymentDataProvider()?.getSelectedCurrency())
+        println("fee>>>>>>>>" + fee)
+        println("fee11>>>>>>>>" + PaymentDataProvider()?.getSelectedCurrency()?.amount)
+        val totalAmount = fee.add(PaymentDataProvider()?.getSelectedCurrency()?.amount)
+        if (calculateExtraFeesAmount(
+                extraFees,
+                paymentOptionsResponse.supportedCurrencies,
+                PaymentDataProvider().getSelectedCurrency()
+            )!! > BigDecimal.ZERO
+        ) {
+            showExtraFees(totalAmount.toString(), fee.toString(), paymentTypeEnum, savedCardsModel)
+        }else setDifferentPaymentsAction(paymentTypeEnum,savedCardsModel)
     }
 
 
@@ -1442,17 +1502,18 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 //    override fun onStateChanged(state: ActionButtonState) {}
 
     private fun removeAllViews() {
-        if(::businessViewHolder.isInitialized&&::amountViewHolder1.isInitialized&& ::cardViewHolder11.isInitialized&& ::paymentInputViewHolder.isInitialized&&
-                ::goPayViewsHolder.isInitialized  && ::otpViewHolder.isInitialized )
-        removeViews(
-            businessViewHolder,
-            amountViewHolder1,
-            cardViewHolder11,
-            paymentInputViewHolder,
-            saveCardSwitchHolder11,
-            goPayViewsHolder,
-            otpViewHolder
+        if (::businessViewHolder.isInitialized && ::amountViewHolder1.isInitialized && ::cardViewHolder11.isInitialized && ::paymentInputViewHolder.isInitialized &&
+            ::goPayViewsHolder.isInitialized && ::otpViewHolder.isInitialized
         )
+            removeViews(
+                businessViewHolder,
+                amountViewHolder1,
+                cardViewHolder11,
+                paymentInputViewHolder,
+                saveCardSwitchHolder11,
+                goPayViewsHolder,
+                otpViewHolder
+            )
     }
 
     private fun setAllSeparatorTheme() {
@@ -1527,18 +1588,17 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
         Handler().postDelayed({
             val binLookupResponse: BINLookupResponse? = PaymentDataSource?.getBinLookupResponse()
-            if(PaymentDataSource?.getCardType()!=null && PaymentDataSource?.getCardType()==CardType.ALL){
+            if (PaymentDataSource?.getCardType() != null && PaymentDataSource?.getCardType() == CardType.ALL) {
                 setScannedCardDetails(card)
 
-            }else{
-                if(binLookupResponse!=null){
+            } else {
+                if (binLookupResponse != null) {
                     paymentInputViewHolder?.checkAllowedCardTypes(binLookupResponse)
                     setScannedCardDetails(card)
                 }
 
             }
         }, 300)
-
 
 
         // paymentInputViewHolder.tapCardInputView.cardHolder.setText(card.cardHolderName)
@@ -1561,8 +1621,8 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     @RequiresApi(Build.VERSION_CODES.N)
     private fun callBinLookupApi(binLookUpStr: String?) {
         cardViewModel.processEvent(
-                CardViewEvent.RetreiveBinLookupEvent,
-                TapLayoutViewModel(), null, binLookUpStr, null, null
+            CardViewEvent.RetreiveBinLookupEvent,
+            TapLayoutViewModel(), null, binLookUpStr, null, null
         )
 
     }
@@ -1582,11 +1642,11 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
         Handler().postDelayed({
             val binLookupResponse: BINLookupResponse? = PaymentDataSource?.getBinLookupResponse()
-            if(PaymentDataSource?.getCardType()!=null && PaymentDataSource?.getCardType()==CardType.ALL){
+            if (PaymentDataSource?.getCardType() != null && PaymentDataSource?.getCardType() == CardType.ALL) {
                 setNfcCardDetails(emvCard)
 
-            }else{
-                if(binLookupResponse!=null){
+            } else {
+                if (binLookupResponse != null) {
                     paymentInputViewHolder?.checkAllowedCardTypes(binLookupResponse)
                     setNfcCardDetails(emvCard)
                 }
@@ -1653,9 +1713,11 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         //  val filtered: ArrayList<PaymentOption> = Utils.List.filter(list)
 
         var filtered: ArrayList<PaymentOption> =
-                list.filter { items -> items.paymentType == paymentType && items.getSupportedCurrencies()?.contains(
+            list.filter { items ->
+                items.paymentType == paymentType && items.getSupportedCurrencies()?.contains(
                     currencyFilter
-                ) == true } as ArrayList<PaymentOption>
+                ) == true
+            } as ArrayList<PaymentOption>
 
         return list.filter { items ->
             items.paymentType == paymentType && items.getSupportedCurrencies()?.contains(
@@ -1676,11 +1738,12 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun filterViewModels(currency: String) {
-        if(paymentOptionsResponse.paymentOptions!=null)
-        paymentOptionsWorker =
-            java.util.ArrayList<PaymentOption>(paymentOptionsResponse.paymentOptions)
-        if(paymentOptionsResponse.cards!=null){
-        val savedCardsWorker: java.util.ArrayList<SavedCard> = java.util.ArrayList<SavedCard>(paymentOptionsResponse.cards)
+        if (paymentOptionsResponse.paymentOptions != null)
+            paymentOptionsWorker =
+                java.util.ArrayList<PaymentOption>(paymentOptionsResponse.paymentOptions)
+        if (paymentOptionsResponse.cards != null) {
+            val savedCardsWorker: java.util.ArrayList<SavedCard> =
+                java.util.ArrayList<SavedCard>(paymentOptionsResponse.cards)
         }
         // val viewModelResult: java.util.ArrayList<PaymentOptionViewModel> = java.util.ArrayList<PaymentOptionViewModel>()
 
@@ -1688,6 +1751,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
             filteredByPaymentTypeAndCurrencyAndSortedList(
                 paymentOptionsWorker, PaymentType.WEB, currency
             )
+        println("webPaymentOptions>>>>" + webPaymentOptions)
         val cardPaymentOptions: java.util.ArrayList<PaymentOption> =
             filteredByPaymentTypeAndCurrencyAndSortedList(
                 paymentOptionsWorker, PaymentType.CARD, currency
@@ -1695,7 +1759,10 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         val hasWebPaymentOptions = webPaymentOptions.size > 0
         val hasCardPaymentOptions = cardPaymentOptions.size > 0
         val hasOtherPaymentOptions = hasWebPaymentOptions || hasCardPaymentOptions
+
         adapter.updateAdapterData(webPaymentOptions)
+
+
         paymentInputViewHolder.setDataFromAPI(cardPaymentOptions)
     }
 
@@ -1704,51 +1771,22 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun showExtraFees(
-        amount: String,
+        totalAmount: String,
         extraFeesAmount: String,
         paymentType: PaymentType, savedCardsModel: Any?
     ) {
 
-        for (i in paymentOptionsResponse.paymentOptions.indices) {
-            if (paymentOptionsResponse.paymentOptions[i].paymentType == paymentType) {
-                extraFees = paymentOptionsResponse.paymentOptions[i].extraFees
-                var fee = BigDecimal.ZERO
-                fee = calculateExtraFeesAmount(extraFees,  paymentOptionsResponse.supportedCurrencies, PaymentDataProvider()?.getSelectedCurrency())
-                val totalAmount = fee.add(PaymentDataSource?.getSelectedAmount())
-                if (calculateExtraFeesAmount(
-                        extraFees,
-                        paymentOptionsResponse.supportedCurrencies,
-                        PaymentDataProvider().getSelectedCurrency()
-                    )!! > BigDecimal.ZERO
-                ) {
-                    val localizedMessage =
-                        "You will be charged an additional fee of $fee for this type of payment, totaling an amount of $totalAmount"
-                    CustomUtils.showDialog(
-                        title,
-                        localizedMessage,
-                        context,
-                        3,
-                        this,
-                        paymentType,
-                        savedCardsModel,true
-                    )
-
-                }
-//                else setDifferentPaymentsAction(paymentType, savedCardsModel)
-            }
-        }
-//        println(paymentType.paymentType + "  --->>> extraFeeeeees--->>  "+ extraFeesAmount)
-//
-//        println(paymentType.paymentType + "  --->>> extraFeeeeees--->>  "+ (AmountCalculator.calculateExtraFeesAmount(
-//            extraFees,
-//            paymentOptionsResponse.supportedCurrencies,
-//            PaymentDataProvider().getSelectedCurrency()
-//        )).toString())
-//
-//        println(paymentType.paymentType + "  --->>> extraFeeeeees--->>  "+ extraFees + paymentOptionsResponse.supportedCurrencies +PaymentDataProvider().getSelectedCurrency())
-
-
-//            setDifferentPaymentsAction(paymentType, savedCardsModel)
+        val localizedMessage =
+            "You will be charged an additional fee of $extraFeesAmount for this type of payment, totaling an amount of $totalAmount"
+        CustomUtils.showDialog(
+            title,
+            localizedMessage,
+            context,
+            3,
+            this,
+            paymentType,
+            savedCardsModel, true
+        )
 
 
     }
@@ -1799,6 +1837,8 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     }
 
 }
+
+
 
 
 
