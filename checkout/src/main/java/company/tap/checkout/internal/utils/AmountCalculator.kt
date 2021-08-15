@@ -78,10 +78,10 @@ object AmountCalculator {
      * @return the big decimal
      */
     fun calculateExtraFeesAmount(fees: java.util.ArrayList<ExtraFee>?, supportedCurrencies: java.util.ArrayList<SupportedCurrencies>?, currency: AmountedCurrency?): BigDecimal? {
-        var result = BigDecimal.ZERO
+        var result:BigDecimal = BigDecimal.ZERO
         if (fees != null) {
             for (fee in fees) {
-                var increase = BigDecimal.ZERO
+                var increase:BigDecimal? = BigDecimal.ZERO
                 when (fee.getType()) {
                     AmountModificatorType.FIXED -> {
                         val amountedCurrency: SupportedCurrencies? = fee?.currency?.let { AmountCalculator.getAmountedCurrency(supportedCurrencies, it) }
