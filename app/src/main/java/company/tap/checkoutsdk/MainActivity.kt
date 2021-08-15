@@ -125,7 +125,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
         // set transaction currency associated to your account
 
-        sdkSession.setTransactionCurrency(TapCurrency("USD")) //** Required **
+        sdkSession.setTransactionCurrency(TapCurrency("KWD")) //** Required **
 
 
         // Using static CustomerBuilder method available inside TAP TapCustomer Class you can populate TAP TapCustomer object and pass it to SDK
@@ -144,7 +144,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
      //  sdkSession.setPaymentItems(getPaymentItems()) // ** Optional ** you can pass empty array list
 
 
-        sdkSession.setPaymentType("CARD")  //** Merchant can pass paymentType
+     //   sdkSession.setPaymentType("CARD")  //** Merchant can pass paymentType
 
         // Set Taxes array list
         sdkSession.setTaxes(ArrayList()) // ** Optional ** you can pass empty array list
