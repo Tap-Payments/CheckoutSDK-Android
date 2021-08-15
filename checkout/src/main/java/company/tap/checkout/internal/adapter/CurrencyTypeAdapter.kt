@@ -103,7 +103,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
       /*  Glide.with(holder.itemView.context)
             .load(adapterContentCurrencies[position].flag).into(
                 imageViewCard)*/
-        println("adapterContentCurrencies[position].amount" + adapterContentCurrencies[position].amount)
+       // println("adapterContentCurrencies[position].amount" + adapterContentCurrencies[position].amount)
         adapterContentCurrencies[position]?.flag?.let { imageViewCard.loadSvg(it) }
         val itemCurrencyText = holder.itemView.findViewById<TapTextView>(R.id.textView_currency)
         itemCurrencyText.text = adapterContentCurrencies[position].currency
@@ -111,7 +111,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
     }
 
     private fun onItemClickListener(holder: CurrencyHolders, position:   Int) {
-       // holder.itemView.setOnClickListener(null)
+      //  holder.itemView.setOnClickListener(null)
 
         holder.itemView.setOnClickListener {
             selectedPosition = position

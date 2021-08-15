@@ -12,8 +12,11 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
+import company.tap.checkout.internal.api.enums.AmountModificatorType
 import company.tap.checkout.internal.dummygener.Items1
 import company.tap.checkout.internal.utils.CurrencyFormatter
+import company.tap.checkout.open.data_managers.PaymentDataSource
+import company.tap.checkout.open.models.PaymentItem
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.R
 import company.tap.tapuilibrary.fontskit.enums.TapFont
@@ -38,7 +41,7 @@ class ItemAdapter :
     private lateinit var itemViewAdapter: TapListItemView
     private lateinit var context: Context
     private var arrayModifiedItem : ArrayList<Any> = ArrayList()
-    private var adapterContentItems: List<Items1> = java.util.ArrayList()
+    private var adapterContentItems: List<PaymentItem> = java.util.ArrayList()
     override fun onCreateViewHolder(@NonNull parent: ViewGroup, viewType: Int): ItemHolder {
 
 
@@ -52,8 +55,8 @@ class ItemAdapter :
         return ItemHolder(v)
     }
 
-    fun updateAdapterData(adapterContentItems: List<Items1>) {
-        println("adapterContentItems val"+adapterContentItems.size)
+    fun updateAdapterData(adapterContentItems: List<PaymentItem>) {
+        println("adapterContentItems val"+adapterContentItems)
         this.adapterContentItems = adapterContentItems
         notifyDataSetChanged()
 
@@ -84,10 +87,21 @@ class ItemAdapter :
                 descriptionTextView.text = adapterContentItems[position].description
                 descriptionTextView.visibility = if (isExpanded) View.VISIBLE else View.GONE
                 holder.itemView.isActivated = isExpanded
-                totalQuantity.text = adapterContentItems[position].quantity.toString()
-                itemViewAdapter.setItemViewDataSource(
-                    getItemViewDataSource(null, CurrencyFormatter.currencyFormat(adapterContentItems[position].amount.toString()),adapterContentItems[position].currency ,  CurrencyFormatter.currencyFormat(adapterContentItems[position].amount.toString()), adapterContentItems[position].currency, adapterContentItems[position].quantity.toString())
-                )
+                totalQuantity.text = adapterContentItems[position].quantity?.value.toString()
+              /*  itemViewAdapter.setItemViewDataSource(
+                    getItemViewDataSource(null, CurrencyFormatter.currencyFormat(adapterContentItems[position].totalAmount.toString()),adapterContentItems[position].currency ,  CurrencyFormatter.currencyFormat(adapterContentItems[position].totalAmount.toString()), adapterContentItems[position].currency, adapterContentItems[position].quantity.toString())
+                )*/
+                PaymentDataSource?.getSelectedCurrency()?.let {
+                    PaymentDataSource?.getSelectedCurrency()?.let { it1 ->
+                        getItemViewDataSource(adapterContentItems[position]?.name, CurrencyFormatter.currencyFormat(adapterContentItems[position].amountPerUnit.toString()),
+                            it,  CurrencyFormatter.currencyFormat(adapterContentItems[position].totalAmount.toString()),
+                            it1, adapterContentItems[position].quantity?.value.toString())
+                    }
+                }?.let {
+                    itemViewAdapter.setItemViewDataSource(
+                        it
+                    )
+                }
             }
         }else{
            // descriptionTextView.text = adapterContentItems[0].description
@@ -146,12 +160,12 @@ class ItemAdapter :
         }else
             for (i in adapterContentItems.indices) {
                 itemName?.text = adapterContentItems[position].name
-                if(adapterContentItems[position].discount1.type == "P"){
+                if(adapterContentItems[position].discount?.amnttype?.name == AmountModificatorType.PERCENTAGE.name){
                     discount?.visibility = View.VISIBLE
-                   // discount?.text = adapterContentItems[i].discount1.value.toString()
+                   discount?.text = adapterContentItems[i].discount.toString()
                     discount?.text = LocalizationManager.getValue("Discount", "ItemList")
                     totalAmount?.paintFlags = totalAmount?.paintFlags?.or(Paint.STRIKE_THRU_TEXT_FLAG)!!
-                    totalAmount.text = adapterContentItems[position].amount.toString()
+                    totalAmount.text = adapterContentItems[position].totalAmount.toString()
 
                 }else{
                     discount?.visibility = View.INVISIBLE
