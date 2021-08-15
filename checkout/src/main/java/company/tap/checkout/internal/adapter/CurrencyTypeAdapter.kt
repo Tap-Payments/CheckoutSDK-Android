@@ -32,7 +32,7 @@ All rights reserved.
  **/
 
 
-var selectedPosition = 0
+var selectedPosition = -1
 var _context: Context? = null
  var currencyRate: BigDecimal= BigDecimal.ZERO
 
@@ -111,21 +111,19 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
     }
 
     private fun onItemClickListener(holder: CurrencyHolders, position:   Int) {
-        holder.itemView.setOnClickListener(null)
+       // holder.itemView.setOnClickListener(null)
+
         holder.itemView.setOnClickListener {
             selectedPosition = position
                 onCurrencyChangedActionListener.onCurrencyClicked(
-                        //holder.itemView.textView_currency.text.toString(),
-                        adapterContentCurrencies[position].currency.toString(),
-                        // adapterContentCurrencies[position].conversionrate
-                        adapterContentCurrencies[position].amount)
+                    adapterContentCurrencies[position].currency.toString(),
+                    adapterContentCurrencies[position].amount)
              TapLayoutViewModel().selectedCurrencyPos = adapterContentCurrencies[position].currency.toString()
              TapLayoutViewModel().selectedAmountPos = adapterContentCurrencies[position].amount
              notifyDataSetChanged()
+
             }
 
-      //  if(holder.itemView.)
-     // notifyDataSetChanged()
 
 
     }
@@ -167,7 +165,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
         )
     }
 
-    fun ImageView.loadSvg(url: String) {
+    private fun ImageView.loadSvg(url: String) {
 
         val imageLoader = ImageLoader.Builder(this.context)
             .componentRegistry { add(SvgDecoder(this@loadSvg.context)) }
