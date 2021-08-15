@@ -6,6 +6,7 @@ Copyright (c) 2020    Tap Payments.
 All rights reserved.
  **/
 import android.annotation.SuppressLint
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -16,6 +17,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
+import android.webkit.WebView
 import android.widget.ProgressBar
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
@@ -48,10 +50,13 @@ class WebFragment(private val webViewContract: WebViewContract,private val cardV
         super.onViewCreated(view, savedInstanceState)
         setTopDraggerView()
         progressBar?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("merchantHeaderView.backgroundColor")))
-//        progressBar?.colo
+        progressBar?.progressDrawable?.setColorFilter(
+            Color.RED, android.graphics.PorterDuff.Mode.SRC_IN);
+        progressBar?.progressTintList = ColorStateList.valueOf(Color.RED);
+
         webViewUrl = arguments?.getString(KEY_URL)
-        progressBar?.max = 100;
-        progressBar?.progress = 1;
+        progressBar?.max = 100
+        progressBar?.progress = 20
         if (TextUtils.isEmpty(webViewUrl)) {
             throw IllegalArgumentException("Empty URL passed to WebViewFragment!")
         }
@@ -100,7 +105,6 @@ class WebFragment(private val webViewContract: WebViewContract,private val cardV
         }
         web_view.webViewClient = TapCustomWebViewClient(this,cardViewModel)
         web_view.settings.loadWithOverviewMode = true
-
         web_view.loadUrl(webViewUrl)
         web_view.setOnKeyListener { _, keyCode, event ->
             if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
@@ -112,11 +116,35 @@ class WebFragment(private val webViewContract: WebViewContract,private val cardV
             }
             false
         }
+
+
+
+        web_view.setWebChromeClient(object : WebChromeClient() {
+            /*
+                public void onProgressChanged (WebView view, int newProgress)
+                    Tell the host application the current progress of loading a page.
+
+                Parameters
+                    view : The WebView that initiated the callback.
+                    newProgress : Current page loading progress, represented by an integer
+                        between 0 and 100.
+            */
+            override fun onProgressChanged(view: WebView?, newProgress: Int) {
+                // Update the progress bar with page loading progress
+                progressBar?.setProgress(newProgress)
+                if (newProgress == 100) {
+                    // Hide the progressbar
+                    progressBar?.setVisibility(View.GONE)
+                }
+            }
+        })
     }
 
 
-    fun showLoading() {
+    override fun showLoading(showLoading: Boolean) {
         // show tap loading until we receive success or failed
+//        if(showLoading) progressBar?.progress = 100
+//        else progressBar?.visibility = View.GONE
     }
 
     /**
@@ -126,8 +154,6 @@ class WebFragment(private val webViewContract: WebViewContract,private val cardV
      */
     override fun submitResponseStatus(success: Boolean) {
         webViewContract.redirectLoadingFinished(success)
-        progressBar?.progress = 100
-
     }
 
     override fun getRedirectedURL(url: String) {

@@ -38,6 +38,7 @@
                 android:id="@+id/indicatorSeparator"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingBottom="5dp"
                 android:layout_gravity="center_horizontal"
                 android:background="@color/gray" />
 
@@ -49,7 +50,14 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:indeterminateTint="@color/blue"
+        android:progressTint="@color/blue"
+        android:foregroundTint="@color/blue"
+        android:progressBackgroundTint="@color/blue"
+        android:secondaryProgressTint="@color/blue"
+
         android:paddingTop="5dp"
+        android:progress="20"
         android:paddingBottom="5dp"
         android:indeterminate="true" />
 

@@ -99,7 +99,7 @@ class TapCustomWebViewClient constructor(private val customWebViewClientContract
             // here we will put the word of return in response url
             val token: String = urlQuerySanitizer.getQueryParameter("cko-payment-token").toString()
 //            if (token.isNotEmpty()) {
-//                customWebViewClientContract.showLoading()
+                customWebViewClientContract.showLoading(true)
 //                customWebViewClientContract.web_view.visibility = View.INVISIBLE
 //            }
         } catch (ex: UnsupportedOperationException) {
@@ -112,14 +112,18 @@ class TapCustomWebViewClient constructor(private val customWebViewClientContract
         return try {
             val urlQuerySanitizer: Uri = Uri.parse(url)
             println("urlQuerySanitizer on checkpayment" + urlQuerySanitizer)
-            if(url.contains("authorize")){
-                cardViewModel.processEvent(CardViewEvent.RetreiveAuthorizeEvent, TapLayoutViewModel(), null, null, null, null)
+            when {
+                url.contains("authorize") -> {
+                    cardViewModel.processEvent(CardViewEvent.RetreiveAuthorizeEvent, TapLayoutViewModel(), null, null, null, null)
 
-            }else if(url.contains("auth")){
-                cardViewModel.processEvent(CardViewEvent.RetreiveSaveCardEvent, TapLayoutViewModel(), null, null, null, null)
+                }
+                url.contains("auth") -> {
+                    cardViewModel.processEvent(CardViewEvent.RetreiveSaveCardEvent, TapLayoutViewModel(), null, null, null, null)
 
-            }else{
-            cardViewModel.processEvent(CardViewEvent.RetreiveChargeEvent, TapLayoutViewModel(), null, null, null, null)}
+                }
+                else -> {
+                    cardViewModel.processEvent(CardViewEvent.RetreiveChargeEvent, TapLayoutViewModel(), null, null, null, null)}
+            }
             val status: String = urlQuerySanitizer.getQueryParameter("tap_id").toString()
             println("status on checkpayment" + status)
             status.equals("CAPTURED", ignoreCase = true) || status.equals(
@@ -135,6 +139,7 @@ class TapCustomWebViewClient constructor(private val customWebViewClientContract
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
         super.onPageStarted(view, url, favicon)
         Log.d("url", url.toString())
+        customWebViewClientContract.showLoading(true)
 
      //   url?.let { customWebViewClientContract.getRedirectedURL(it) }
     }
@@ -142,6 +147,8 @@ class TapCustomWebViewClient constructor(private val customWebViewClientContract
     override fun onPageFinished(@NonNull view: WebView?, url: String?) {
         super.onPageFinished(view, url)
         Log.d("onPageFinished", url.toString())
+        customWebViewClientContract.showLoading(false)
+
         url?.let { customWebViewClientContract.getRedirectedURL(it) }
 
     }
