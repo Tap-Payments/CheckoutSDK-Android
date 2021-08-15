@@ -92,7 +92,7 @@ class CardViewModel : ViewModel() {
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun createChargeRequest(viewModel: TapLayoutViewModel, selectedPaymentOption: PaymentOption?,cardtoken:String?) {
-        repository.createChargeRequest(context, viewModel, selectedPaymentOption,cardtoken)
+        repository.createChargeRequest( viewModel, selectedPaymentOption,cardtoken)
 
     }
     @RequiresApi(Build.VERSION_CODES.N)

@@ -78,9 +78,14 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
     }
 
     private fun initializeSDK() {
-     TapCheckOutSDK().init(
+    /* TapCheckOutSDK().init(
              this,
              "sk_test_kovrMB0mupFJXfNZWx6Etg5y",
+             "company.tap.goSellSDKExample"
+     ) */
+        TapCheckOutSDK().init(
+             this,
+             "sk_live_QglH8V7Fw6NPAom4qRcynDK2",
              "company.tap.goSellSDKExample"
      )
 
@@ -120,7 +125,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
         // set transaction currency associated to your account
 
-        sdkSession.setTransactionCurrency(TapCurrency("KWD")) //** Required **
+        sdkSession.setTransactionCurrency(TapCurrency("USD")) //** Required **
 
 
         // Using static CustomerBuilder method available inside TAP TapCustomer Class you can populate TAP TapCustomer object and pass it to SDK
@@ -131,13 +136,12 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
         // Set Total Amount. The Total amount will be recalculated according to provided Taxes and Shipping
 
-        // Set Total Amount. The Total amount will be recalculated according to provided Taxes and Shipping
         sdkSession.setAmount(BigDecimal(22)) //** Required **
 
 
         // Set Payment Items array list
-       // sdkSession.setPaymentItems(ArrayList()) // ** Optional ** you can pass empty array list
-       sdkSession.setPaymentItems(getPaymentItems()) // ** Optional ** you can pass empty array list
+       sdkSession.setPaymentItems(ArrayList()) // ** Optional ** you can pass empty array list
+     //  sdkSession.setPaymentItems(getPaymentItems()) // ** Optional ** you can pass empty array list
 
 
         sdkSession.setPaymentType("CARD")  //** Merchant can pass paymentType
@@ -276,11 +280,11 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         modalBottomSheet.handleNFCResult(intent)
 
     }
-    fun setCustomer(): TapCustomer { // test customer id cus_Kh1b4220191939i1KP2506448
+    fun setCustomer(): TapCustomer { // test customer id cus_Kh1b4220191939i1KP2506448// cus_TS012520211349Za012907577 checkout
         val tapCustomer: TapCustomer? = null
         //if (customer != null) customer.phone else Phone(965, 69045932)
         return TapCustomer(
-                "cus_TS012520211349Za012907577", "ahlaam", "middlename",
+                null, "ahlaam", "middlename",
                 "lastname", "abcd@gmail.com",
                 PhoneNumber("00965", "69045932"), "description",
         )
@@ -291,6 +295,14 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         val items: ArrayList<PaymentItem> = ArrayList<PaymentItem>()
         items.add(PaymentItem("Items1",
                 "Description for test item #1",
+                Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(1)), BigDecimal.valueOf(1),
+                AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO), null))
+        items.add(PaymentItem("Items2",
+                "Description for test item #2",
+                Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(4)), BigDecimal.valueOf(4),
+                AmountModificator(AmountModificatorType.PERCENTAGE, BigDecimal.ZERO), null))
+        items.add(PaymentItem("Items3",
+                "Description for test item #3",
                 Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(1)), BigDecimal.valueOf(1),
                 AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO), null))
         println("item are<<<<" + items)
@@ -484,6 +496,8 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
     override fun backendUnknownError(message: String?) {
         println("backendUnknownError>>>>>" + message)
+        payButton?.changeButtonState(ActionButtonState.ERROR)
+
     }
 
     override fun invalidTransactionMode() {

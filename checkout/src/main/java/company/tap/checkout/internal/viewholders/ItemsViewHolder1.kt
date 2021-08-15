@@ -20,6 +20,7 @@ import company.tap.checkout.internal.api.models.SupportedCurrencies
 import company.tap.checkout.internal.dummygener.Items1
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener
+import company.tap.checkout.open.models.PaymentItem
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.atoms.TapChipGroup
 
@@ -41,7 +42,7 @@ class ItemsViewHolder1(private val context: Context, private val onCurrencyChang
     var itemsdisplayed: Boolean = false
     private lateinit var supportedCurrecnyList: ArrayList<SupportedCurrencies>
     //private lateinit var supportedItemList: List<Items1>
-    private  var supportedItemList: List<Items1>?=null
+    private  var supportedItemList: List<PaymentItem>?=null
      var mainCurrencyChip: TapChipGroup
      var itemsRecyclerView:RecyclerView
      var currencyRecyclerView:RecyclerView
@@ -60,6 +61,8 @@ class ItemsViewHolder1(private val context: Context, private val onCurrencyChang
         headerview.visibility = View.GONE
         itemsRecyclerViewAction(itemsRecyclerView)
         setRecyclerViewDivider(currencyRecyclerView)
+        currencyRecyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+        currencyRecyclerView.adapter = adapterCurrency
         mainCurrencyChip.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
         itemsRecyclerView.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
     }
@@ -98,20 +101,18 @@ class ItemsViewHolder1(private val context: Context, private val onCurrencyChang
      * */
     fun setDatafromAPI(
         supportedCurrencyApi: ArrayList<SupportedCurrencies>,
-        supportItemListApi: List<Items1>?
+        supportItemListApi: List<PaymentItem>?
     ) {
         supportedCurrecnyList = supportedCurrencyApi
         if (supportItemListApi != null) {
             supportedItemList = supportItemListApi
         }
-//        println("supportedItemList curr list:$supportedItemList")
+       println("supportedItemList curr list:$supportedItemList")
 
     }
 
 
     fun setCurrencyRecylerView(){
-        currencyRecyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-        currencyRecyclerView.adapter = adapterCurrency
         adapterCurrency.updateAdapterData(supportedCurrecnyList)
     }
     fun setItemsRecylerView(){
@@ -122,7 +123,7 @@ class ItemsViewHolder1(private val context: Context, private val onCurrencyChang
 
     }
 
-    fun setResetItemsRecylerView(itemsListUpdated:List<Items1>){
+    fun setResetItemsRecylerView(itemsListUpdated:List<PaymentItem>){
         itemsRecyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         itemsRecyclerView.adapter = adapterItems
         adapterItems.updateAdapterData(itemsListUpdated)

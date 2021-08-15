@@ -29,27 +29,27 @@ class PaymentItem(name: String,
 
     @SerializedName("description")
     @Expose
-    private var description: String? = null
+     var description: String? = null
 
     @SerializedName("quantity")
     @Expose
-    private var quantity: Quantity? = null
+     var quantity: Quantity? = null
 
     @SerializedName("amount_per_unit")
     @Expose
-    private var amountPerUnit: BigDecimal? = null
+     var amountPerUnit: BigDecimal? = null
 
     @SerializedName("discount")
     @Expose
-    private var discount: AmountModificator? = null
+     var discount: AmountModificator? = null
 
     @SerializedName("taxes")
     @Expose
-    private var taxes: ArrayList<Tax>? = null
+     var taxes: ArrayList<Tax>? = null
 
     @SerializedName("total_amount")
     @Expose
-    private var totalAmount: BigDecimal? = null
+     var totalAmount: BigDecimal? = null
 
 
     init {
@@ -69,6 +69,7 @@ class PaymentItem(name: String,
      *
      * @return the amount per unit
      */
+    @JvmName("getAmountPerUnit1")
     fun getAmountPerUnit(): BigDecimal? {
         return amountPerUnit
     }
@@ -78,6 +79,7 @@ class PaymentItem(name: String,
      *
      * @return the quantity
      */
+    @JvmName("getQuantity1")
     fun getQuantity(): Quantity? {
         return quantity
     }
@@ -87,6 +89,7 @@ class PaymentItem(name: String,
      *
      * @return the discount
      */
+    @JvmName("getDiscount1")
     fun getDiscount(): AmountModificator? {
         return discount
     }
