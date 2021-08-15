@@ -748,7 +748,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         if(PaymentDataSource?.getItems()!=null){
             itemList = PaymentDataSource?.getItems()!!
         }
-        println("itemslist is"+itemList)
+
 
         if (::itemsViewHolder1.isInitialized) {
             paymentOptionsResponse?.supportedCurrencies?.let {
