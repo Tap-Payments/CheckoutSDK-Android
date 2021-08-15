@@ -1426,10 +1426,13 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         savedCardsModel: Any?
     ) {
         var extraFees: java.util.ArrayList<ExtraFee>? = null
-
+        println("extraFees>>>>>>>>" + extraFees)
+        var fee : BigDecimal?= BigDecimal.ZERO
        if(paymentTypeEnum == PaymentType.WEB ){
            savedCardsModel as PaymentOption
            extraFees = savedCardsModel?.extraFees
+           fee = calculateExtraFeesAmount(extraFees, paymentOptionsResponse.supportedCurrencies, PaymentDataProvider()?.getSelectedCurrency())
+
        } else{
            for (i in paymentOptionsResponse.paymentOptions.indices) {
                if (paymentOptionsResponse.paymentOptions[i].paymentType == paymentTypeEnum) {
@@ -1438,12 +1441,10 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
            }
        }
 
-        println("extraFees>>>>>>>>" + extraFees)
-        var fee = BigDecimal.ZERO
-        fee = calculateExtraFeesAmount(extraFees, paymentOptionsResponse.supportedCurrencies, PaymentDataProvider()?.getSelectedCurrency())
+
         println("fee>>>>>>>>" + fee)
         println("fee11>>>>>>>>" + PaymentDataProvider()?.getSelectedCurrency()?.amount)
-        val totalAmount = fee.add(PaymentDataProvider()?.getSelectedCurrency()?.amount)
+        val totalAmount = fee?.add(PaymentDataProvider()?.getSelectedCurrency()?.amount)
         if (calculateExtraFeesAmount(
                 extraFees,
                 paymentOptionsResponse.supportedCurrencies,
