@@ -8,7 +8,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import company.tap.checkout.internal.api.models.*
-import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
+import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.*
@@ -43,7 +43,7 @@ class CardViewModel : ViewModel() {
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun getInitData(
-        viewModel: TapLayoutViewModel,
+        viewModel: CheckoutViewModel,
         cardViewModel: CardViewModel?,
         supportFragmentManagerdata: FragmentManager?,
         _context: Context?
@@ -66,7 +66,7 @@ class CardViewModel : ViewModel() {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun processEvent(event: CardViewEvent, viewModel: TapLayoutViewModel, selectedPaymentOption: PaymentOption?, binValue: String? = null, cardDataRequest: CreateTokenCard?, cardViewModel: CardViewModel? = null, customerId: String?=null, cardId: String?=null, createTokenWithExistingCardRequest: CreateTokenSavedCard?=null,otpString:String?=null,supportFragmentManager: FragmentManager?=null,context: Context?=null) {
+    fun processEvent(event: CardViewEvent, viewModel: CheckoutViewModel, selectedPaymentOption: PaymentOption?, binValue: String? = null, cardDataRequest: CreateTokenCard?, cardViewModel: CardViewModel? = null, customerId: String?=null, cardId: String?=null, createTokenWithExistingCardRequest: CreateTokenSavedCard?=null, otpString:String?=null, supportFragmentManager: FragmentManager?=null, context: Context?=null) {
         when (event) {
             CardViewEvent.InitEvent -> getInitData(viewModel,cardViewModel,supportFragmentManager,context)
             CardViewEvent.ChargeEvent -> createChargeRequest(viewModel,selectedPaymentOption,null)
@@ -85,45 +85,45 @@ class CardViewModel : ViewModel() {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun listAllCards(viewModel: TapLayoutViewModel, customerId: String?) {
+    private fun listAllCards(viewModel: CheckoutViewModel, customerId: String?) {
         repository?.listAllCards(viewModel,customerId)
     }
 
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun createChargeRequest(viewModel: TapLayoutViewModel, selectedPaymentOption: PaymentOption?,cardtoken:String?) {
+    private fun createChargeRequest(viewModel: CheckoutViewModel, selectedPaymentOption: PaymentOption?, cardtoken:String?) {
         repository.createChargeRequest( viewModel, selectedPaymentOption,cardtoken)
 
     }
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun retrieveChargeRequest(viewModel: TapLayoutViewModel) {
+    private fun retrieveChargeRequest(viewModel: CheckoutViewModel) {
         repository.retrieveChargeRequest(context,viewModel)
 
     }
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun retrieveBinlookup(viewModel: TapLayoutViewModel,binValue: String?) {
+    private fun retrieveBinlookup(viewModel: CheckoutViewModel, binValue: String?) {
         repository.retrieveBinLookup(context,viewModel,binValue)
 
     }
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun retrieveAuthorize(viewModel: TapLayoutViewModel) {
+    private fun retrieveAuthorize(viewModel: CheckoutViewModel) {
         repository.retrieveAuthorizeRequest(context,viewModel)
 
     }
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun retrieveSaveCard(viewModel: TapLayoutViewModel) {
+    private fun retrieveSaveCard(viewModel: CheckoutViewModel) {
         repository.retrieveSaveCard(context,viewModel)
 
     }
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun callDeleteCardAPI(viewModel: TapLayoutViewModel, deleteCardId: String?, customerId: String?) {
+    private fun callDeleteCardAPI(viewModel: CheckoutViewModel, deleteCardId: String?, customerId: String?) {
         println("<<customerId>>"+customerId+"<<<deleteCardId>>>"+deleteCardId)
         repository.callDeleteCardAPI(context,viewModel,deleteCardId,customerId)
 
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun createTokenWithEncryptedCard(viewModel: TapLayoutViewModel, createTokenWithEncryptedDataRequest: CreateTokenCard?) {
+    private fun createTokenWithEncryptedCard(viewModel: CheckoutViewModel, createTokenWithEncryptedDataRequest: CreateTokenCard?) {
         println("createTokenWithEncryptedDataRequest>>."+createTokenWithEncryptedDataRequest)
         if (createTokenWithEncryptedDataRequest != null) {
             repository.createTokenWithEncryptedCard(context,viewModel,createTokenWithEncryptedDataRequest)
@@ -132,7 +132,7 @@ class CardViewModel : ViewModel() {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun createTokenWithExistingCard(viewModel: TapLayoutViewModel, createTokenSavedCard: CreateTokenSavedCard?) {
+    private fun createTokenWithExistingCard(viewModel: CheckoutViewModel, createTokenSavedCard: CreateTokenSavedCard?) {
         println("createTokenSavedCard>>."+createTokenSavedCard)
         if (createTokenSavedCard != null) {
             repository.createTokenWithExistingCard(context,viewModel,createTokenSavedCard)
@@ -140,7 +140,7 @@ class CardViewModel : ViewModel() {
 
     }
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun authenticateChargeTransaction(viewModel: TapLayoutViewModel, otpString: String?) {
+    private fun authenticateChargeTransaction(viewModel: CheckoutViewModel, otpString: String?) {
         println("otpString>>."+otpString)
         if (otpString != null) {
                 repository.authenticate(context,viewModel,otpString)
@@ -148,7 +148,7 @@ class CardViewModel : ViewModel() {
 
     }
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun authenticateAuthorizeTransaction(viewModel: TapLayoutViewModel, otpString: String?) {
+    private fun authenticateAuthorizeTransaction(viewModel: CheckoutViewModel, otpString: String?) {
         println("authenticateAuthorizeTransaction>>."+otpString)
         if (otpString != null) {
                 repository.authenticateAuthorizeTransaction(context,viewModel,otpString)
@@ -156,7 +156,7 @@ class CardViewModel : ViewModel() {
 
     }
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun createAuthorizeCard(viewModel: TapLayoutViewModel,selectedPaymentOption: PaymentOption?) {
+    private fun createAuthorizeCard(viewModel: CheckoutViewModel, selectedPaymentOption: PaymentOption?) {
         println("createAuthorizeCard>>."+selectedPaymentOption)
         if (selectedPaymentOption != null) {
             repository.createAuthorizeRequest(context, viewModel, selectedPaymentOption, repository.tokenResponse.id)
@@ -164,7 +164,7 @@ class CardViewModel : ViewModel() {
 
     }
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun createSaveCard(viewModel: TapLayoutViewModel,selectedPaymentOption: PaymentOption?) {
+    private fun createSaveCard(viewModel: CheckoutViewModel, selectedPaymentOption: PaymentOption?) {
         println("createSaveCard>>."+selectedPaymentOption)
         if (selectedPaymentOption != null) {
             repository.createSaveCard(context, viewModel, null, repository.tokenResponse.id)
@@ -173,12 +173,12 @@ class CardViewModel : ViewModel() {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun requestAuthenticateForChargeTransaction(viewModel: TapLayoutViewModel, chargeResponse:Charge){
+    fun requestAuthenticateForChargeTransaction(viewModel: CheckoutViewModel, chargeResponse:Charge){
         repository.requestAuthenticateForChargeTransaction(viewModel,chargeResponse)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun requestAuthenticateForAuthorizeTransaction(viewModel: TapLayoutViewModel, authorize: Authorize?) {
+    fun requestAuthenticateForAuthorizeTransaction(viewModel: CheckoutViewModel, authorize: Authorize?) {
         repository.requestAuthenticateForAuthorizeTransaction(viewModel,authorize)
     }
 

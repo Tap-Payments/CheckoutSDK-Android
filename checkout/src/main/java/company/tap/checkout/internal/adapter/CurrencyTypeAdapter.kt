@@ -14,7 +14,7 @@ import coil.request.ImageRequest
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.models.SupportedCurrencies
 import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener
-import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
+import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.TextViewTheme
 import company.tap.tapuilibrary.uikit.atoms.TapImageView
@@ -118,8 +118,8 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
                 onCurrencyChangedActionListener.onCurrencyClicked(
                     adapterContentCurrencies[position].currency.toString(),
                     adapterContentCurrencies[position].amount)
-             TapLayoutViewModel().selectedCurrencyPos = adapterContentCurrencies[position].currency.toString()
-             TapLayoutViewModel().selectedAmountPos = adapterContentCurrencies[position].amount
+             CheckoutViewModel().selectedCurrencyPos = adapterContentCurrencies[position].currency.toString()
+             CheckoutViewModel().selectedAmountPos = adapterContentCurrencies[position].amount
              notifyDataSetChanged()
 
             }

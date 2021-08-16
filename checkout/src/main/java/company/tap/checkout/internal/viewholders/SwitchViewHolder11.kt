@@ -221,7 +221,7 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
         view.cardSwitch.payButton.isActivated
         view.cardSwitch.payButton.setButtonDataSource(
             true,
-            context?.let { LocalizationManager.getLocale(it).language },
+            context.let { LocalizationManager.getLocale(it).language },
             LocalizationManager.getValue("pay", "ActionButton"),
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))

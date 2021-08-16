@@ -14,7 +14,7 @@ import androidx.annotation.RequiresApi
 import company.tap.checkout.internal.apiresponse.ApiService
 import company.tap.checkout.internal.apiresponse.CardViewEvent
 import company.tap.checkout.internal.apiresponse.CardViewModel
-import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
+import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 
 /**
  * Created by OlaMonir on 7/27/20.
@@ -114,15 +114,15 @@ class TapCustomWebViewClient constructor(private val customWebViewClientContract
             println("urlQuerySanitizer on checkpayment" + urlQuerySanitizer)
             when {
                 url.contains("authorize") -> {
-                    cardViewModel.processEvent(CardViewEvent.RetreiveAuthorizeEvent, TapLayoutViewModel(), null, null, null, null)
+                    cardViewModel.processEvent(CardViewEvent.RetreiveAuthorizeEvent, CheckoutViewModel(), null, null, null, null)
 
                 }
                 url.contains("auth") -> {
-                    cardViewModel.processEvent(CardViewEvent.RetreiveSaveCardEvent, TapLayoutViewModel(), null, null, null, null)
+                    cardViewModel.processEvent(CardViewEvent.RetreiveSaveCardEvent, CheckoutViewModel(), null, null, null, null)
 
                 }
                 else -> {
-                    cardViewModel.processEvent(CardViewEvent.RetreiveChargeEvent, TapLayoutViewModel(), null, null, null, null)}
+                    cardViewModel.processEvent(CardViewEvent.RetreiveChargeEvent, CheckoutViewModel(), null, null, null, null)}
             }
             val status: String = urlQuerySanitizer.getQueryParameter("tap_id").toString()
             println("status on checkpayment" + status)

@@ -8,7 +8,7 @@ import company.tap.checkout.internal.api.models.PaymentOption
 Copyright (c) 2021    Tap Payments.
 All rights reserved.
  **/
-class WebPaymentViewModel constructor(/*parentDataManager: PaymentOptionsDataManager?,*/ _data: PaymentOption?) : TapLayoutViewModel(){
+class WebPaymentViewModel constructor(/*parentDataManager: PaymentOptionsDataManager?,*/ _data: PaymentOption?) : CheckoutViewModel(){
 
 
 

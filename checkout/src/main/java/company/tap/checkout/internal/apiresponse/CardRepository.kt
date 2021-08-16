@@ -16,11 +16,10 @@ import company.tap.checkout.internal.api.responses.*
 import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.interfaces.IPaymentDataProvider
 import company.tap.checkout.internal.utils.AmountCalculator
-import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
+import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession
-import company.tap.checkout.open.controller.SDKSession.contextSDK
 import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
 import company.tap.checkout.open.controller.SessionManager
 import company.tap.checkout.open.data_managers.PaymentDataSource
@@ -61,7 +60,7 @@ class CardRepository : APIRequestCallback {
     lateinit var tokenResponse: Token
     lateinit var supportFragmentManager: FragmentManager
     lateinit var cardRepositoryContext: Context
-    private lateinit var viewModel: TapLayoutViewModel
+    private lateinit var viewModel: CheckoutViewModel
     private lateinit var cardViewModel: CardViewModel
 
     private var sdkSession : SDKSession = SDKSession
@@ -71,7 +70,7 @@ class CardRepository : APIRequestCallback {
         return dataProvider
     }
     @RequiresApi(Build.VERSION_CODES.N)
-    fun getInitData(_context: Context, viewModel: TapLayoutViewModel, cardViewModel: CardViewModel?) {
+    fun getInitData(_context: Context, viewModel: CheckoutViewModel, cardViewModel: CardViewModel?) {
         this.viewModel = viewModel
         if (cardViewModel != null) {
             this.cardViewModel = cardViewModel
@@ -89,7 +88,7 @@ class CardRepository : APIRequestCallback {
     @RequiresApi(Build.VERSION_CODES.N)
     fun getPaymentOptions(
         _context: Context,
-        viewModel: TapLayoutViewModel,
+        viewModel: CheckoutViewModel,
         supportFragmentManagerdata: FragmentManager
     ) {
         this.viewModel = viewModel
@@ -114,7 +113,7 @@ class CardRepository : APIRequestCallback {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun createChargeRequest( viewModel: TapLayoutViewModel, selectedPaymentOption: PaymentOption?, identifier: String?) {
+    fun createChargeRequest(viewModel: CheckoutViewModel, selectedPaymentOption: PaymentOption?, identifier: String?) {
         this.viewModel = viewModel
         if(identifier!=null)callChargeOrAuthorizeOrSaveCardAPI(SourceRequest(identifier), selectedPaymentOption, null, null)
         else
@@ -123,7 +122,7 @@ class CardRepository : APIRequestCallback {
 
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun retrieveChargeRequest(context: Context, viewModel: TapLayoutViewModel) {
+    fun retrieveChargeRequest(context: Context, viewModel: CheckoutViewModel) {
         this.viewModel = viewModel
         NetworkController.getInstance().processRequest(TapMethodType.GET, ApiService.CHARGE_ID + chargeResponse?.id, null,
                 this, CHARGE_RETRIEVE_CODE
@@ -132,10 +131,10 @@ class CardRepository : APIRequestCallback {
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun createAuthorizeRequest(
-            _context: Context,
-            viewModel: TapLayoutViewModel,
-            selectedPaymentOption: PaymentOption?,
-            identifier: String?
+        _context: Context,
+        viewModel: CheckoutViewModel,
+        selectedPaymentOption: PaymentOption?,
+        identifier: String?
     ){
         this.viewModel = viewModel
 
@@ -145,7 +144,7 @@ class CardRepository : APIRequestCallback {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun retrieveAuthorizeRequest(context: Context, viewModel: TapLayoutViewModel) {
+    fun retrieveAuthorizeRequest(context: Context, viewModel: CheckoutViewModel) {
         this.viewModel = viewModel
         NetworkController.getInstance().processRequest(TapMethodType.GET, ApiService.AUTHORIZE_ID + authorizeActionResponse?.id, null,
                 this, RETRIEVE_AUTHORIZE_CODE
@@ -154,28 +153,28 @@ class CardRepository : APIRequestCallback {
 
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun retrieveBinLookup(context: Context, viewModel: TapLayoutViewModel, binValue: String?) {
+    fun retrieveBinLookup(context: Context, viewModel: CheckoutViewModel, binValue: String?) {
         this.viewModel = viewModel
         NetworkController.getInstance().processRequest(TapMethodType.GET, ApiService.BIN + binValue, null,
                 this, BIN_RETRIEVE_CODE
         )
     }
     @RequiresApi(Build.VERSION_CODES.N)
-    fun retrieveSaveCard(context: Context, viewModel: TapLayoutViewModel) {
+    fun retrieveSaveCard(context: Context, viewModel: CheckoutViewModel) {
         this.viewModel = viewModel
         NetworkController.getInstance().processRequest(TapMethodType.GET, ApiService.SAVE_CARD_ID + saveCardResponse.id, null, this,
                 RETRIEVE_SAVE_CARD_CODE
         )
     }
     @RequiresApi(Build.VERSION_CODES.N)
-    fun callDeleteCardAPI(context: Context, viewModel: TapLayoutViewModel, deleteCardId: String?, customerId: String?) {
+    fun callDeleteCardAPI(context: Context, viewModel: CheckoutViewModel, deleteCardId: String?, customerId: String?) {
         this.viewModel = viewModel
         NetworkController.getInstance().processRequest(TapMethodType.DELETE, ApiService.DELETE_CARD + "/" + customerId + "/" + deleteCardId, null, this,
                 DEL_SAVE_CARD_CODE
         )
     }
     @RequiresApi(Build.VERSION_CODES.N)
-    fun createTokenWithEncryptedCard(context: Context, viewModel: TapLayoutViewModel, createTokenWithCardDataRequest: CreateTokenCard?) {
+    fun createTokenWithEncryptedCard(context: Context, viewModel: CheckoutViewModel, createTokenWithCardDataRequest: CreateTokenCard?) {
         this.viewModel = viewModel
         val createTokenWithCardDataReq = createTokenWithCardDataRequest?.let { CreateTokenWithCardDataRequest(it) }
         val jsonString = Gson().toJson(createTokenWithCardDataReq)
@@ -185,10 +184,10 @@ class CardRepository : APIRequestCallback {
     }
     @RequiresApi(Build.VERSION_CODES.N)
     fun createSaveCard(
-            context: Context,
-            viewModel: TapLayoutViewModel,
-            selectedPaymentOption: PaymentOption?,
-            identifier: String?
+        context: Context,
+        viewModel: CheckoutViewModel,
+        selectedPaymentOption: PaymentOption?,
+        identifier: String?
     ) {
         this.viewModel = viewModel
 
@@ -198,7 +197,7 @@ class CardRepository : APIRequestCallback {
     }
     @RequiresApi(Build.VERSION_CODES.N)
     fun requestAuthenticateForChargeTransaction(
-        viewModel: TapLayoutViewModel,
+        viewModel: CheckoutViewModel,
         chargeResponse: Charge
     ) {
         NetworkController.getInstance().processRequest(TapMethodType.PUT, ApiService.CHARGES+"/"+ ApiService.AUTHENTICATE+ "/" + chargeResponse.id,null,
@@ -209,7 +208,7 @@ class CardRepository : APIRequestCallback {
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun createTokenWithExistingCard(
-            context: Context, viewModel: TapLayoutViewModel, createTokenSavedCard: CreateTokenSavedCard
+        context: Context, viewModel: CheckoutViewModel, createTokenSavedCard: CreateTokenSavedCard
     ) {
         this.viewModel = viewModel
         val createTokenSavedCardReq: CreateTokenWithExistingCardDataRequest = CreateTokenWithExistingCardDataRequest.Builder(createTokenSavedCard).build()
@@ -221,7 +220,7 @@ class CardRepository : APIRequestCallback {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun  authenticate(context: Context, viewModel: TapLayoutViewModel,otpCode:String) {
+    fun  authenticate(context: Context, viewModel: CheckoutViewModel, otpCode:String) {
         this.viewModel = viewModel
         val createOTPVerificationRequest: CreateOTPVerificationRequest = CreateOTPVerificationRequest.Builder(AuthenticationType.OTP, otpCode).build()
 
@@ -231,7 +230,7 @@ class CardRepository : APIRequestCallback {
         )
     }
     @RequiresApi(Build.VERSION_CODES.N)
-    fun  authenticateAuthorizeTransaction(context: Context, viewModel: TapLayoutViewModel,otpCode:String) {
+    fun  authenticateAuthorizeTransaction(context: Context, viewModel: CheckoutViewModel, otpCode:String) {
         this.viewModel = viewModel
         val createOTPVerificationRequest: CreateOTPVerificationRequest = CreateOTPVerificationRequest.Builder(AuthenticationType.OTP, otpCode).build()
 
@@ -242,14 +241,14 @@ class CardRepository : APIRequestCallback {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun requestAuthenticateForAuthorizeTransaction(viewModel: TapLayoutViewModel, authorize: Authorize?) {
+    fun requestAuthenticateForAuthorizeTransaction(viewModel: CheckoutViewModel, authorize: Authorize?) {
         NetworkController.getInstance().processRequest(TapMethodType.PUT, ApiService.AUTHORIZE+"/"+ ApiService.AUTHENTICATE+ "/" + authorize?.id,null,
             this, AUTHENTICATE_CODE
         )
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun listAllCards(viewModel: TapLayoutViewModel, customerId: String?) {
+    fun listAllCards(viewModel: CheckoutViewModel, customerId: String?) {
         NetworkController.getInstance().processRequest(TapMethodType.GET, ApiService.LIST_CARD+"/"+customerId,null,
             this, LIST_ALL_CARD_CODE
         )

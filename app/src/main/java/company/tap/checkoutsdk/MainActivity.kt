@@ -78,16 +78,16 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
     }
 
     private fun initializeSDK() {
-    /* TapCheckOutSDK().init(
+     TapCheckOutSDK().init(
              this,
              "sk_test_kovrMB0mupFJXfNZWx6Etg5y",
              "company.tap.goSellSDKExample"
-     ) */
-        TapCheckOutSDK().init(
-             this,
-             "sk_live_QglH8V7Fw6NPAom4qRcynDK2",
-             "company.tap.goSellSDKExample"
      )
+//        TapCheckOutSDK().init(
+//             this,
+//             "sk_live_QglH8V7Fw6NPAom4qRcynDK2",
+//             "company.tap.goSellSDKExample"
+//     )
 
 
     }
@@ -284,9 +284,9 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         val tapCustomer: TapCustomer? = null
         //if (customer != null) customer.phone else Phone(965, 69045932)
         return TapCustomer(
-                null, "ahlaam", "middlename",
+            "cus_TS012520211349Za012907577", "ahlaam", "middlename",
                 "lastname", "abcd@gmail.com",
-                PhoneNumber("00965", "69045932"), "description",
+                PhoneNumber("00965", "51693350"), "description",
         )
 
     }
@@ -374,10 +374,9 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         println("Payment Failed : " + charge?.description)
         println("Payment Failed : " + charge?.response?.message)
         Toast.makeText(this,"paymentFailed"+charge?.response?.message, Toast.LENGTH_SHORT).show()
-
-        modalBottomSheet.dismiss()
-        payButton?.changeButtonState(ActionButtonState.ERROR)
-
+//           modalBottomSheet.dismiss()
+        modalBottomSheet.dialog?.dismiss()
+           payButton?.changeButtonState(ActionButtonState.ERROR)
     }
 
     override fun authorizationSucceed(authorize: Authorize) {

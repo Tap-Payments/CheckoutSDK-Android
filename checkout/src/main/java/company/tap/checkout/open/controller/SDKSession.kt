@@ -2,22 +2,18 @@ package company.tap.checkout.open.controller
 
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.net.ConnectivityManager
-import android.net.NetworkInfo
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.viewModels
 import com.google.gson.JsonElement
 import company.tap.checkout.internal.PaymentDataProvider
 import company.tap.checkout.internal.api.models.Merchant
 import company.tap.checkout.internal.apiresponse.CardViewEvent
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.utils.CustomUtils.showDialog
-import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
-import company.tap.checkout.open.CheckoutFragment
+import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.CardType
 import company.tap.checkout.open.enums.TransactionMode
@@ -408,7 +404,7 @@ object  SDKSession : APIRequestCallback {
         persistPaymentDataSource()
         if (tabAnimatedActionButton != null) tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
         println(" this.paymentDataSource.getTransactionMode() : " + paymentDataSource?.getTransactionMode())
-        CardViewModel().processEvent(CardViewEvent.InitEvent, TapLayoutViewModel(),null,null,null,null,null,null,null,null,
+        CardViewModel().processEvent(CardViewEvent.InitEvent, CheckoutViewModel(),null,null,null,null,null,null,null,null,
             _supportFragmentManager,contextSDK)
 
 

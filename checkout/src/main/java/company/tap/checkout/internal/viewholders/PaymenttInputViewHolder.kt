@@ -32,7 +32,7 @@ import company.tap.checkout.internal.interfaces.BaseLayouttManager
 import company.tap.checkout.internal.interfaces.PaymentCardComplete
 import company.tap.checkout.internal.interfaces.onCardNFCCallListener
 import company.tap.checkout.internal.utils.CustomUtils
-import company.tap.checkout.internal.viewmodels.TapLayoutViewModel
+import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.CardType
 import company.tap.nfcreader.open.utils.TapNfcUtils
@@ -87,7 +87,6 @@ class PaymenttInputViewHolder(
     private var tabPosition: Int? = null
     private var tapAlertView: TapAlertView? = null
     private var imageURL: String = ""
-
     //  private  var paymentType: PaymentTypeEnum ?= null
     private var paymentType: PaymentType? = null
     private lateinit var cardBrandType: String
@@ -113,7 +112,8 @@ class PaymenttInputViewHolder(
 
         tabLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.backgroundColor")))
         tabLayout.changeTabItemAlphaValue(0.9f)
-
+        tabLayout.changeTabItemMarginBottomValue(35)
+        tabLayout.changeTabItemMarginTopValue(35)
         bindViewComponents()
     }
 
@@ -139,7 +139,7 @@ class PaymenttInputViewHolder(
                         println("is that called")
                         tabLayout.selectTab(CardBrand.ooredoo, true)
                     }
-                }
+                }else tabLayout.resetBehaviour()
 
             }
 
@@ -155,10 +155,8 @@ class PaymenttInputViewHolder(
     private fun initializeCardForm() {
         cardScannerBtn = view.findViewById(R.id.card_scanner_button)
         nfcButton = view.findViewById(R.id.nfc_button)
-
         cardScannerBtn?.visibility = View.VISIBLE
         linearLayoutPay = view.findViewById(R.id.linear_paylayout)
-//        tapCardInputView.clearFocus()
         clearView.visibility = View.GONE
         nfcButton?.setOnClickListener {
             onCardNFCCallListener.onClickNFC()
@@ -170,16 +168,13 @@ class PaymenttInputViewHolder(
 
     private fun initClearText() {
         clearView.setOnClickListener {
-            when (selectedType) {
-                PaymentTypeEnum.card -> {
-                    tapCardInputView.clear()
-                    switchViewHolder11?.setSwitchLocals(PaymentTypeEnum.card)
-                }
-                PaymentTypeEnum.telecom -> {
-                    tapMobileInputView.clearNumber()
-                    switchViewHolder11?.setSwitchLocals(PaymentTypeEnum.telecom)
-
-                }
+            if (selectedType == PaymentTypeEnum.card) {
+                tapCardInputView.clear()
+                switchViewHolder11?.setSwitchLocals(PaymentTypeEnum.card)
+            }
+            else if (selectedType == PaymentTypeEnum.telecom) {
+                tapMobileInputView.clearNumber()
+                switchViewHolder11?.setSwitchLocals(PaymentTypeEnum.telecom)
             }
             switchViewHolder11?.view?.cardSwitch?.switchesLayout?.visibility = View.GONE
             switchViewHolder11?.view?.mainSwitch?.switchSaveMobile?.visibility = View.GONE
@@ -226,20 +221,17 @@ class PaymenttInputViewHolder(
         cardNumberWatcher()
         expiryDateWatcher()
         cvcNumberWatcher()
-
     }
 
     private fun cardNumberWatcher() {
         tapCardInputView.setCardNumberTextWatcher(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                cardNumAfterTextChangeListener(s, this)
-
+//                cardNumAfterTextChangeListener(s, this)
             }
-
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 onCardTextChange(s)
-                //   cardNumAfterTextChangeListener(s)
+                   cardNumAfterTextChangeListener(s,this)
             }
         })
     }
@@ -250,15 +242,17 @@ class PaymenttInputViewHolder(
             tapAlertView?.visibility = View.GONE
         } else {
             clearView.visibility = View.VISIBLE
-
         }
     }
 
     private fun expiryDateWatcher() {
         tapCardInputView.setExpiryDateTextWatcher(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+           tabLayout.setUnselectedAlphaLevel(0.2f)
+            }
             override fun afterTextChanged(s: Editable?) {
+                tabLayout.setUnselectedAlphaLevel(0.2f)
                 afterTextChangeAction(s)
             }
         })
@@ -330,48 +324,45 @@ class PaymenttInputViewHolder(
         }
     }
 
-    fun cardNumAfterTextChangeListener(s: CharSequence?, textWatcher: TextWatcher) {
-        val card = CardValidator.validate(s.toString())
+    fun cardNumAfterTextChangeListener(charSequence: CharSequence?, textWatcher: TextWatcher) {
+        val card = CardValidator.validate(charSequence.toString())
 
-        if (s != null) {
-            if (s.length > 2) s?.let { callCardBinNumberApi(it, textWatcher) }
+        if (charSequence != null) {
+            if (charSequence.length > 2) callCardBinNumberApi(charSequence, textWatcher)
+            else tabLayout.resetBehaviour()
         }
-        s?.let {
-            if (s.isNullOrEmpty()) {
-                // tabLayout.resetBehaviour()
+        charSequence?.let {
+            if (charSequence.isNullOrEmpty()) {
                 tapAlertView?.visibility = View.GONE
+                tabLayout.setUnselectedAlphaLevel(0.2f)
             }
-
             if (card?.cardBrand != null) {
                 tabLayout.selectTab(
                     card.cardBrand,
                     card.validationState == CardValidationState.valid
                 )
+                tabLayout.setUnselectedAlphaLevel(0.5f)
                 val binLookupResponse: BINLookupResponse? =
-                    PaymentDataSource?.getBinLookupResponse()
-                if (PaymentDataSource?.getCardType() != null && PaymentDataSource?.getCardType() == CardType.ALL) {
+                    PaymentDataSource.getBinLookupResponse()
+                if (PaymentDataSource.getCardType() != null && PaymentDataSource.getCardType() == CardType.ALL) {
                     setTabLayoutBasedOnApiResponse(binLookupResponse)
+                    tabLayout.setUnselectedAlphaLevel(0.5f)
                 } else {
                     checkAllowedCardTypes(binLookupResponse)
-                    PaymentDataSource?.setBinLookupResponse(null)
+                    PaymentDataSource.setBinLookupResponse(null)
                     setTabLayoutBasedOnApiResponse(binLookupResponse)
                 }
-
-
             }
-
 
             /**
              * we will get the full card number
              */
-            cardNumber = s.toString()
+            cardNumber = charSequence.toString()
             lastCardInput = it.toString()
             shouldShowScannerOptions = it.isEmpty()
             controlScannerOptions()
-            cardBrandDetection(s.toString())
-            if (card != null) {
-                checkValidationState(card)
-            }
+            cardBrandDetection(charSequence.toString())
+            if (card != null)  checkValidationState(card)
         }
     }
 
@@ -384,23 +375,26 @@ class PaymenttInputViewHolder(
                     true
                 )
             }
+            tabLayout.setUnselectedAlphaLevel(0.5f)
         } else {
             //we will send scheme
-            binLookupResponse?.scheme?.cardBrand?.let { it1 -> tabLayout?.selectTab(it1, true) }
+            binLookupResponse?.scheme?.cardBrand?.let { it1 -> tabLayout.selectTab(it1, true) }
+            tabLayout.setUnselectedAlphaLevel(0.5f)
 
         }
     }
 
+    /*
+    This function for calling api to validate card number after 6 digit
+     */
     private fun callCardBinNumberApi(s: CharSequence, textWatcher: TextWatcher) {
-
         if (s.trim().toString().replace(" ", "").length == BIN_NUMBER_LENGTH) {
             cardViewModel.processEvent(
                 CardViewEvent.RetreiveBinLookupEvent,
-                TapLayoutViewModel(), null, s.trim().toString().replace(" ", ""), null, null
+                CheckoutViewModel(), null, s.trim().toString().replace(" ", ""), null, null
             )
-            tapCardInputView?.removeCardNumberTextWatcher(textWatcher)
-            tapCardInputView?.setCardNumberTextWatcher(textWatcher)
-
+            tapCardInputView.removeCardNumberTextWatcher(textWatcher)
+            tapCardInputView.setCardNumberTextWatcher(textWatcher)
         }
     }
 
@@ -430,17 +424,16 @@ class PaymenttInputViewHolder(
 
     // Logic to show the switches when card details are valid
     private fun cardBrandDetection(cardTyped: String) {
-        if (cardTyped.toString().isEmpty()) {
+        if (cardTyped.isEmpty()) {
             //tabLayout.resetBehaviour()
             tapAlertView?.visibility = View.GONE
         }
-        val card = CardValidator.validate(cardTyped.toString())
+        val card = CardValidator.validate(cardTyped)
         // checkValidationState(card.cardBrand)
         if (card.cardBrand != null && ::cardSchema.isInitialized) {
             println("card brand: ${card.validationState}")
             nfcButton?.visibility = View.GONE
             cardScannerBtn?.visibility = View.GONE
-
         }
     }
 
@@ -496,7 +489,7 @@ class PaymenttInputViewHolder(
         switchViewHolder11?.setSwitchLocals(PaymentTypeEnum.card)
         //It will be hidden until goPay is Logged in
         if (switchViewHolder11?.goPayisLoggedin == true) {
-            switchViewHolder11?.view?.cardSwitch?.switchGoPayCheckout?.visibility = View.VISIBLE
+            switchViewHolder11.view.cardSwitch?.switchGoPayCheckout?.visibility = View.VISIBLE
         } else switchViewHolder11?.view?.cardSwitch?.switchGoPayCheckout?.visibility = View.GONE
 
         nfcButton?.visibility = View.VISIBLE
@@ -532,18 +525,45 @@ class PaymenttInputViewHolder(
         val itemsMobilesList = ArrayList<SectionTabItem>()
         val itemsCardsList = ArrayList<SectionTabItem>()
         intertabLayout.removeAllTabs()
-        tabLayout.changeTabItemAlphaValue(1f)
-        tabLayout.setUnselectedAlphaLevel(1f)
-        //tabLayout.resetBehaviour()
+//        tabLayout.changeTabItemAlphaValue(1f)
+        decideTapSelection(imageURLApi, itemsMobilesList, itemsCardsList)
+        /**
+         * if there is only one payment method we will set visibility gone for tablayout
+         * and set the payment method icon for inline input card
+         * and set visibility  for separator after chips gone
+         */
+        hideTabLayoutWhenOnlyOnePayment(itemsCardsList, itemsMobilesList)
+        tabLayout.addSection(itemsCardsList)
 
-        println("iamage val  are" + imageURLApi.size)
+//        tabLayout.changeTabItemAlphaValue(0.9f)
+        tabLayout.addSection(itemsMobilesList)
+        tabLayout.setUnselectedAlphaLevel(0.5f)
+
+    }
+
+    private fun hideTabLayoutWhenOnlyOnePayment(
+        itemsCardsList: ArrayList<SectionTabItem>,
+        itemsMobilesList: ArrayList<SectionTabItem>
+    ) {
+        if (itemsCardsList.size == 1 || itemsMobilesList.size == 1) {
+            tabLayout.visibility = View.GONE
+            tapSeparatorViewLinear?.visibility = View.GONE
+            tapCardInputView.setSingleCardInput(CardBrandSingle.fromCode(cardBrandType))
+        } else
+            tabLayout.changeTabItemAlphaValue(0.9f)
+    }
+
+    private fun decideTapSelection(
+        imageURLApi: List<PaymentOption>,
+        itemsMobilesList: ArrayList<SectionTabItem>,
+        itemsCardsList: ArrayList<SectionTabItem>
+    ) {
         for (i in imageURLApi.indices) {
-            //tabLayout.resetBehaviour()
             imageURL = imageURLApi[i].image.toString()
             paymentType = imageURLApi[i].paymentType
             cardBrandType = imageURLApi[i].brand?.name.toString()
             println("paymentType" + paymentType)
-/// set payment option object for all payment types and send it to paymentcompletion action function and i will pass it to show extra fees
+    /// set payment option object for all payment types and send it to paymentcompletion action function and i will pass it to show extra fees
             if (paymentType == PaymentType.telecom) {
                 itemsMobilesList.add(
                     SectionTabItem(
@@ -562,25 +582,6 @@ class PaymenttInputViewHolder(
                 )
             }
         }
-        /**
-         * if there is only one payment method we will set visibility gone for tablayout
-         * and set the payment method icon for inline input card
-         * and set visibility  for separator after chips gone
-         */
-        if (itemsCardsList.size == 1 || itemsMobilesList.size == 1) {
-            tabLayout.visibility = View.GONE
-            tapSeparatorViewLinear?.visibility = View.GONE
-            println("CardBrandSingle" + CardBrandSingle.fromCode(cardBrandType))
-            tapCardInputView.setSingleCardInput(CardBrandSingle.fromCode(cardBrandType))
-
-        } else
-            tabLayout.changeTabItemAlphaValue(0.9f)
-        tabLayout.addSection(itemsCardsList)
-        tabLayout.changeTabItemMarginBottomValue(35)
-        tabLayout.changeTabItemMarginTopValue(35)
-        tabLayout.changeTabItemAlphaValue(0.9f)
-        tabLayout.addSection(itemsMobilesList)
-
     }
 
 
@@ -599,11 +600,11 @@ class PaymenttInputViewHolder(
         val cvc: String? = cvvNumber
         //temporrary    val cardholderName: String? = cardholderName
         val cardholderName: String = "cardholder"
-        return if (number == null || expiryDate == null || cvc == null || cardholderName == null) {
+        return if (number == null || expiryDate == null || cvc == null) {
             null
         } else {
-            val dateParts: List<String>? = expiryDate?.split("/")
-            return dateParts?.get(0)?.let {
+            val dateParts: List<String> = expiryDate.split("/")
+            return dateParts.get(0).let {
                 CreateTokenCard(
                     number.replace(" ", ""),
                     it,
