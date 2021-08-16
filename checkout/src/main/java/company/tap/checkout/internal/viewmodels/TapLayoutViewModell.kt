@@ -220,14 +220,9 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                         Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
                     )
                     saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.visibility = View.VISIBLE
+                    saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.IDLE)
                     paymentInputViewHolder.tapMobileInputView.clearNumber()
-                    /* CustomUtils.showDialog(
-                        "Payment Done",
-                        "Payment id 2e412321eqqweq32131",
-                        context,
-                        1,
-                        this
-                    )*/
+
                 }
             }
         }
@@ -439,6 +434,19 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                     currentAmount, currentCurrency
                 )
         }
+        if(otpViewHolder?.otpView.isVisible){
+            removeViews(otpViewHolder,saveCardSwitchHolder11)
+            addViews(saveCardSwitchHolder11)
+            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.stateListAnimator=null
+            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.setButtonDataSource(
+                true,
+                context.let { LocalizationManager.getLocale(it).language },
+                LocalizationManager.getValue("pay", "ActionButton"),
+                Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
+                Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
+            )
+            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.isActivated = false
+        }
         removeInlineScanner()
         removeNFCViewFragment()
     }
@@ -518,6 +526,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                 it
             )
         }
+        saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.IDLE)
         // itemsViewHolder1.resetView()
         itemsViewHolder1.setItemsRecylerView()
         itemsViewHolder1.setCurrencyRecylerView()
@@ -534,7 +543,8 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         setSlideAnimation()
 
         amountViewHolder1.changeGroupAction(false)
-        amountViewHolder1.view.amount_section.itemCountButton.text = "close"
+        amountViewHolder1.view.amount_section.itemCountButton.text =  LocalizationManager.getValue("close", "Common")
+
 
         displayOtpIsOpen = true
         displayItemsOpen = false
@@ -1229,6 +1239,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         expiryDate: String,
         cvvNumber: String
     ) {
+        activateActionButton()
         setPayButtonAction(paymentType, null)
 
 
@@ -1409,7 +1420,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                     }
                 }
                 PaymentType.CARD -> {
-                    activateActionButton()
+                    //activateActionButton()
                     if (::selectedAmount.isInitialized && ::selectedCurrency.isInitialized) {
                             checkForExtraFees(
                                 selectedAmount,
@@ -1815,10 +1826,13 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         if (response == "YES") {
             println("savedCardsModel>>>>"+savedCardsModel)
             if(savedCardsModel!=null) {
-                savedCardsModel as SavedCard
-                if (savedCardsModel.paymentOptionIdentifier.toInt() == 3 || savedCardsModel.paymentOptionIdentifier.toInt() == 4) {
-                    setDifferentPaymentsAction(PaymentType.SavedCard, savedCardsModel)
-                } else setDifferentPaymentsAction(paymentType, savedCardsModel)
+                if(paymentType == PaymentType.CARD){
+                    savedCardsModel as SavedCard
+                    if (savedCardsModel.paymentOptionIdentifier.toInt() == 3 || savedCardsModel.paymentOptionIdentifier.toInt() == 4) {
+                        setDifferentPaymentsAction(PaymentType.SavedCard, savedCardsModel)
+                    }
+                }
+                else setDifferentPaymentsAction(paymentType, savedCardsModel)
             }else setDifferentPaymentsAction(paymentType, savedCardsModel)
         } else {
             when {

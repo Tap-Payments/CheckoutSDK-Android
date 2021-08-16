@@ -105,12 +105,10 @@ class PaymenttInputViewHolder(
         tapMobileInputView.setTapPaymentShowHideClearImage(this)
         tapCardInputView = InlineCardInput(context, null)
         tapAlertView = view.findViewById(R.id.alertView)
-        tabLayout.setTabLayoutInterface(this)
         paymentInputContainer = view.findViewById(R.id.payment_input_layout)
         clearView = view.findViewById(R.id.clear_text)
         tapSeparatorViewLinear = view.findViewById(R.id.tapSeparatorViewLinear)
         tapSeparatorViewLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
-
         tabLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.backgroundColor")))
         tabLayout.changeTabItemAlphaValue(0.9f)
 
