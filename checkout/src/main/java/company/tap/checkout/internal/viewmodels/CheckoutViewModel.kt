@@ -426,7 +426,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         displayItemsOpen = !display
         amountViewHolder1.changeGroupAction(!display)
         // if (this::currentAmount.isInitialized)
-        if (currentAmount != null && this::selectedAmount.isInitialized && this::selectedCurrency.isInitialized) {
+        if (this::selectedAmount.isInitialized && this::selectedCurrency.isInitialized) {
             if (selectedAmount == currentAmount && selectedCurrency == currentCurrency) {
                 amountViewHolder1.view.amount_section.mainKDAmountValue.visibility = View.GONE
 
@@ -469,6 +469,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
             otpViewHolder,
             itemsViewHolder1
         )
+        removeAllViews()
         addViews(businessViewHolder, amountViewHolder1, itemsViewHolder1)
         /*itemsViewHolder1.setDatafromAPI(
             allCurrencies.value as ArrayList<SupportedCurrencies>,
@@ -1250,6 +1251,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
             businessViewHolder,
             amountViewHolder1,
             cardViewHolder11,
+
             saveCardSwitchHolder11,
             paymentInputViewHolder,
             otpViewHolder,
