@@ -1025,7 +1025,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     }
 
     private fun unActivateActionButton() {
-        saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)
+        saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.IDLE)
         saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.setButtonDataSource(
             false,
             context.let { LocalizationManager.getLocale(it).language },
@@ -1206,13 +1206,19 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     }
 
     override fun onPayCardSwitchAction(isCompleted: Boolean, paymentType: PaymentType) {
+        println("isCompleted???"+isCompleted)
         if (isCompleted) {
             saveCardSwitchHolder11?.view?.mainSwitch?.visibility = View.VISIBLE
             saveCardSwitchHolder11?.view?.mainSwitch?.switchSaveMobile?.visibility = View.VISIBLE
             saveCardSwitchHolder11?.setSwitchToggleData(paymentType)
             activateActionButton()
             paymentActionType = paymentType
-        } else unActivateActionButton()
+        } else {
+            saveCardSwitchHolder11?.view?.mainSwitch?.visibility = View.GONE
+            saveCardSwitchHolder11?.view?.mainSwitch?.switchSaveMobile?.visibility = View.GONE
+           saveCardSwitchHolder11?.setSwitchToggleData(paymentType)
+            unActivateActionButton()
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -1224,6 +1230,8 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         cvvNumber: String
     ) {
         setPayButtonAction(paymentType, null)
+
+
     }
 
     // Override function to open NFC fragment and scan the card via NFC.
@@ -1481,14 +1489,6 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         ) {
 
             startSavedCardPaymentProcess(savedCardsModel as SavedCard)
-
-            /*  CustomUtils.showDialog(
-                      "Payment Done",
-                      "Payment id 2e41232132131",
-                      context,
-                      1,
-                      this
-              )*/
         }?.let { it1 ->
             saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.addChildView(
                 it1
