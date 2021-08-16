@@ -104,12 +104,10 @@ class PaymenttInputViewHolder(
         tapMobileInputView.setTapPaymentShowHideClearImage(this)
         tapCardInputView = InlineCardInput(context, null)
         tapAlertView = view.findViewById(R.id.alertView)
-        tabLayout.setTabLayoutInterface(this)
         paymentInputContainer = view.findViewById(R.id.payment_input_layout)
         clearView = view.findViewById(R.id.clear_text)
         tapSeparatorViewLinear = view.findViewById(R.id.tapSeparatorViewLinear)
         tapSeparatorViewLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
-
         tabLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.backgroundColor")))
         tabLayout.changeTabItemAlphaValue(0.9f)
         tabLayout.changeTabItemMarginBottomValue(35)
@@ -290,6 +288,11 @@ class PaymenttInputViewHolder(
                         true, PaymentType.CARD
                     )
                     tapAlertView?.visibility = View.GONE
+                }else {
+                    onPaymentCardComplete.onPayCardSwitchAction(
+                        false, PaymentType.CARD
+                    )
+                    tapAlertView?.visibility = View.VISIBLE
                 }
             }
 
@@ -298,21 +301,23 @@ class PaymenttInputViewHolder(
                  * we will get cvv number
                  */
                 cvvNumber = s.toString()
-                cardNumber?.let {
-                    expiryDate?.let { it1 ->
-                        cvvNumber?.let { it2 ->
-                            onPaymentCardComplete.onPayCardCompleteAction(
-                                true, PaymentType.CARD,
-                                it, it1, it2
-                            )
+                if (s?.trim()?.length == 3 || s?.trim()?.length == 4) {
+                    cardNumber?.let {
+                        expiryDate?.let { it1 ->
+                            cvvNumber?.let { it2 ->
+                                onPaymentCardComplete.onPayCardCompleteAction(
+                                    true, PaymentType.CARD,
+                                    it, it1, it2
+                                )
+
+
+                            }
                         }
                     }
                 }
-
             }
         })
     }
-
     fun EditText.updateText(text: String) {
         val focussed = hasFocus()
         if (focussed) {

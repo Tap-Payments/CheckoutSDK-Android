@@ -13,12 +13,11 @@ All rights reserved.
  **/
 data class ExtraFee(
         @SerializedName("currency") @Expose
-    var currency: String? = null,
+    var currency: String,
         @SerializedName("minimum_fee")
     @Expose
-    val minimum_fee: Double? = null,
-
+    val minimum_fee: Double,
         @SerializedName("maximum_fee")
     @Expose
-    var maximum_fee: Double? = null,
+    var maximum_fee: Double,
 ) : AmountModificator(null,null)

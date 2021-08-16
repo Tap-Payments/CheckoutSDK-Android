@@ -82,13 +82,14 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
              this,
              "sk_test_kovrMB0mupFJXfNZWx6Etg5y",
              "company.tap.goSellSDKExample"
-     )
-//        TapCheckOutSDK().init(
-//             this,
-//             "sk_live_QglH8V7Fw6NPAom4qRcynDK2",
-//             "company.tap.goSellSDKExample"
-//     )
 
+     )
+      /*  TapCheckOutSDK().init(
+             this,
+             "sk_live_QglH8V7Fw6NPAom4qRcynDK2",
+             "company.tap.goSellSDKExample"
+     )
+*/
 
     }
 
@@ -125,7 +126,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
         // set transaction currency associated to your account
 
-        sdkSession.setTransactionCurrency(TapCurrency("USD")) //** Required **
+        sdkSession.setTransactionCurrency(TapCurrency("KWD")) //** Required **
 
 
         // Using static CustomerBuilder method available inside TAP TapCustomer Class you can populate TAP TapCustomer object and pass it to SDK
@@ -144,7 +145,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
      //  sdkSession.setPaymentItems(getPaymentItems()) // ** Optional ** you can pass empty array list
 
 
-        sdkSession.setPaymentType("CARD")  //** Merchant can pass paymentType
+     //   sdkSession.setPaymentType("CARD")  //** Merchant can pass paymentType
 
         // Set Taxes array list
         sdkSession.setTaxes(ArrayList()) // ** Optional ** you can pass empty array list
@@ -203,6 +204,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
          sdkSession.setCardType(CardType.ALL) // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
 
           sdkSession.setTransactionMode(TransactionMode.PURCHASE)
+
          sdkSession.setDefaultCardHolderName("TEST TAP"); // ** Optional ** you can pass default CardHolderName of the user .So you don't need to type it.
          sdkSession.isUserAllowedToEnableCardHolderName(false); // ** Optional ** you can enable/ disable  default CardHolderName .
 
@@ -284,7 +286,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         val tapCustomer: TapCustomer? = null
         //if (customer != null) customer.phone else Phone(965, 69045932)
         return TapCustomer(
-            "cus_TS012520211349Za012907577", "ahlaam", "middlename",
+                "cus_TS012520211349Za012907577", "ahlaam", "middlename",
                 "lastname", "abcd@gmail.com",
                 PhoneNumber("00965", "51693350"), "description",
         )

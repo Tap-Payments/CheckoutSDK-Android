@@ -167,7 +167,7 @@ class CardViewModel : ViewModel() {
     private fun createSaveCard(viewModel: CheckoutViewModel, selectedPaymentOption: PaymentOption?) {
         println("createSaveCard>>."+selectedPaymentOption)
         if (selectedPaymentOption != null) {
-            repository.createSaveCard(context, viewModel, null, repository.tokenResponse.id)
+            repository.createSaveCard( viewModel, null, repository.tokenResponse.id)
         }
 
     }
