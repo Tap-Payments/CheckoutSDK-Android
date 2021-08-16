@@ -73,7 +73,10 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         initializeSDK()
         configureSDKSession()
         initActionButton()
-        if (modalBottomSheet.isDetached )        payButton.changeButtonState(ActionButtonState.IDLE)
+        if (modalBottomSheet.isHidden ) {
+            println("paybutton")
+            payButton.changeButtonState(ActionButtonState.IDLE)
+        }
 
     }
 

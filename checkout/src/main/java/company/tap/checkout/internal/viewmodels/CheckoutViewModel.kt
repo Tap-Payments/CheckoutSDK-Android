@@ -63,8 +63,7 @@ import company.tap.tapuilibrary.themekit.theme.SeparatorViewTheme
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
-import kotlinx.android.synthetic.main.action_button_animation.view.*
-import kotlinx.android.synthetic.main.amountview_layout.view.*
+ import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.businessview_layout.view.*
 import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
 import kotlinx.android.synthetic.main.gopaysavedcard_layout.view.*
@@ -93,7 +92,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
     private var deleteCard: Boolean = false
     private var displayItemsOpen: Boolean = false
     private var displayOtpIsOpen: Boolean = false
-    private var saveCardSwitchHolder11: SwitchViewHolder11? = null
+    private  var saveCardSwitchHolder11: SwitchViewHolder11?=null
     private lateinit var paymentInputViewHolder: PaymenttInputViewHolder
     private lateinit var goPaySavedCardHolder: GoPaySavedCardHolder
     private lateinit var businessViewHolder: BusinessViewHolder
@@ -438,18 +437,21 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                     currentAmount, currentCurrency
                 )
         }
-        if(otpViewHolder?.otpView.isVisible){
+        if(otpViewHolder.otpView.isVisible){
             removeViews(otpViewHolder,saveCardSwitchHolder11)
             addViews(saveCardSwitchHolder11)
+
+
+            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.IDLE)
             saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.stateListAnimator=null
             saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.setButtonDataSource(
-                true,
+                false,
                 context.let { LocalizationManager.getLocale(it).language },
                 LocalizationManager.getValue("pay", "ActionButton"),
                 Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
                 Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
             )
-            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.isActivated = false
+//            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.isActivated = false
         }
         removeInlineScanner()
         removeNFCViewFragment()
@@ -1040,14 +1042,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
 
     private fun unActivateActionButton() {
         saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.IDLE)
-        saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.setButtonDataSource(
-            false,
-            context.let { LocalizationManager.getLocale(it).language },
-            LocalizationManager.getValue("pay", "ActionButton"),
-            Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
-            Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
-        )
-        //saveCardSwitchHolder11.view.cardSwitch.showOnlyPayButton()
         saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.isActivated = false
     }
 

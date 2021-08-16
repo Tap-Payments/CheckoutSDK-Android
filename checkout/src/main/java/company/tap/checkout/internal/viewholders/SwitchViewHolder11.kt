@@ -14,6 +14,7 @@ import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import company.tap.tapuilibrary.uikit.ktx.setBottomBorders
+import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
 import kotlinx.android.synthetic.main.switch_layout.view.*
 
 /**
@@ -34,6 +35,8 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
     private var savegoPayString: String? = null
     private var alertgoPaySignupString: String? = null
     lateinit var mobileString:String
+
+
     @JvmField
      var goPayisLoggedin:Boolean=false
      var mainTextSave:TapTextView
@@ -44,7 +47,6 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
 
     override fun bindViewComponents() {
         configureSwitch()
-
     }
     // Function / Logic is responsible for sett ing the data to switch based on user selection
     fun setSwitchLocals(payName:PaymentTypeEnum) {
