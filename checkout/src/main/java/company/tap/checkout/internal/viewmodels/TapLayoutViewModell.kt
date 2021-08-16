@@ -109,7 +109,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     private lateinit var bottomSheetLayout: FrameLayout
     private lateinit var selectedAmount: String
     private lateinit var selectedCurrency: String
-
+    private var fee : BigDecimal?= BigDecimal.ZERO
     @JvmField
     var currentCurrency: String = ""
 
@@ -1366,17 +1366,19 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.setOnClickListener {
             when (paymentTypeEnum) {
                 PaymentType.SavedCard -> {
+                    /**
+                     * Note PaymentType savedcard is changed to Card for saved card payments for extra fees and payment options*/
                     if (::selectedAmount.isInitialized && ::selectedCurrency.isInitialized) {
                         checkForExtraFees(
                             selectedAmount,
                             selectedCurrency,
-                            paymentTypeEnum,
+                            PaymentType.CARD,
                             savedCardsModel
                         )
                     } else checkForExtraFees(
                         currentAmount,
                         currentCurrency,
-                        paymentTypeEnum,
+                        PaymentType.CARD,
                         savedCardsModel
                     )
 
@@ -1400,11 +1402,19 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                 }
                 PaymentType.CARD -> {
                     activateActionButton()
-                    checkForExtraFees(
-                        currentAmount,
-                        currentCurrency,
-                        paymentTypeEnum, savedCardsModel
-                    )
+                    if (::selectedAmount.isInitialized && ::selectedCurrency.isInitialized) {
+                            checkForExtraFees(
+                                selectedAmount,
+                                selectedCurrency,
+                                paymentTypeEnum, savedCardsModel
+                            )
+                    } else checkForExtraFees(
+                            currentAmount,
+                            currentCurrency,
+                            paymentTypeEnum,
+                            savedCardsModel
+                        )
+
 
                 }
                 PaymentType.telecom -> {
@@ -1426,33 +1436,37 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         savedCardsModel: Any?
     ) {
         var extraFees: java.util.ArrayList<ExtraFee>? = null
-        println("extraFees>>>>>>>>" + extraFees)
-        var fee : BigDecimal?= BigDecimal.ZERO
-       if(paymentTypeEnum == PaymentType.WEB ){
+        var paymentOption:PaymentOption? = null
+
+        if(paymentTypeEnum == PaymentType.WEB ){
            savedCardsModel as PaymentOption
            extraFees = savedCardsModel?.extraFees
-           fee = calculateExtraFeesAmount(extraFees, paymentOptionsResponse.supportedCurrencies, PaymentDataProvider()?.getSelectedCurrency())
+            fee = calculateExtraFeesAmount(savedCardsModel as PaymentOption)
 
        } else{
            for (i in paymentOptionsResponse.paymentOptions.indices) {
                if (paymentOptionsResponse.paymentOptions[i].paymentType == paymentTypeEnum) {
                    extraFees = paymentOptionsResponse.paymentOptions[i].extraFees
+                   paymentOption = paymentOptionsResponse.paymentOptions[i]
                }
            }
+           fee = calculateExtraFeesAmount(paymentOption)
+
        }
-
-
-        println("fee>>>>>>>>" + fee)
-        println("fee11>>>>>>>>" + PaymentDataProvider()?.getSelectedCurrency()?.amount)
         val totalAmount = fee?.add(PaymentDataProvider()?.getSelectedCurrency()?.amount)
-        if (calculateExtraFeesAmount(
+       if (calculateExtraFeesAmount(
                 extraFees,
                 paymentOptionsResponse.supportedCurrencies,
                 PaymentDataProvider().getSelectedCurrency()
             )!! > BigDecimal.ZERO
         ) {
             showExtraFees(totalAmount.toString(), fee.toString(), paymentTypeEnum, savedCardsModel)
-        }else setDifferentPaymentsAction(paymentTypeEnum,savedCardsModel)
+        }else if(savedCardsModel!=null) {
+           savedCardsModel as SavedCard
+           if (savedCardsModel.paymentOptionIdentifier.toInt() == 3 || savedCardsModel.paymentOptionIdentifier.toInt() == 4) {
+               setDifferentPaymentsAction(PaymentType.SavedCard, savedCardsModel)
+           } else setDifferentPaymentsAction(paymentTypeEnum, savedCardsModel)
+       }else setDifferentPaymentsAction(paymentTypeEnum, savedCardsModel)
     }
 
 
@@ -1767,8 +1781,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         paymentInputViewHolder.setDataFromAPI(cardPaymentOptions)
     }
 
-    var title = "Confirm Extra charges"
-    var extraFees: java.util.ArrayList<ExtraFee>? = null
+    var title :String= LocalizationManager.getValue("extraFeesAlertTitle","ExtraFees")
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun showExtraFees(
@@ -1778,7 +1791,7 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
     ) {
 
         val localizedMessage =
-            "You will be charged an additional fee of $extraFeesAmount for this type of payment, totaling an amount of $totalAmount"
+            "You will be charged an additional fee of $extraFeesAmount${PaymentDataProvider().getSelectedCurrency()?.currency} for this type of payment, totaling an amount of $totalAmount${PaymentDataProvider().getSelectedCurrency()?.currency}"
         CustomUtils.showDialog(
             title,
             localizedMessage,
@@ -1800,7 +1813,13 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
         savedCardsModel: Any?
     ) {
         if (response == "YES") {
-            setDifferentPaymentsAction(paymentType, savedCardsModel)
+            println("savedCardsModel>>>>"+savedCardsModel)
+            if(savedCardsModel!=null) {
+                savedCardsModel as SavedCard
+                if (savedCardsModel.paymentOptionIdentifier.toInt() == 3 || savedCardsModel.paymentOptionIdentifier.toInt() == 4) {
+                    setDifferentPaymentsAction(PaymentType.SavedCard, savedCardsModel)
+                } else setDifferentPaymentsAction(paymentType, savedCardsModel)
+            }else setDifferentPaymentsAction(paymentType, savedCardsModel)
         } else {
             when {
                 paymentType === PaymentType.WEB -> {
@@ -1835,6 +1854,23 @@ open class TapLayoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedA
                 payActionSavedCard(savedCardsModel as SavedCard)
             }
         }
+    }
+
+    /**
+     * Calculate extra fees amount big decimal.
+     *
+     * @param paymentOption the payment option
+     * @return the big decimal
+     */
+    open fun calculateExtraFeesAmount(paymentOption: PaymentOption?): BigDecimal? {
+        return if (paymentOption != null) {
+
+            val amount = PaymentDataProvider().getSelectedCurrency()
+            var extraFees: java.util.ArrayList<ExtraFee>? = paymentOption.extraFees
+            if (extraFees == null) extraFees = java.util.ArrayList()
+            val supportedCurrencies: java.util.ArrayList<SupportedCurrencies>? = PaymentDataProvider().getSupportedCurrencies()
+            calculateExtraFeesAmount(extraFees, supportedCurrencies, amount)
+        } else BigDecimal.ZERO
     }
 
 }

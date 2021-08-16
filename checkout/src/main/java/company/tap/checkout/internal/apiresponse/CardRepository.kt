@@ -185,8 +185,7 @@ class CardRepository : APIRequestCallback {
     }
     @RequiresApi(Build.VERSION_CODES.N)
     fun createSaveCard(
-            context: Context,
-            viewModel: TapLayoutViewModel,
+        viewModel: TapLayoutViewModel,
             selectedPaymentOption: PaymentOption?,
             identifier: String?
     ) {
@@ -317,7 +316,7 @@ class CardRepository : APIRequestCallback {
 
                     }
                     else if(PaymentDataSource.getTransactionMode()==TransactionMode.SAVE_CARD){
-                        createSaveCard(cardRepositoryContext, viewModel, null, tokenResponse.id)
+                        createSaveCard( viewModel, null, tokenResponse.id)
                     }
                     else {
                       createChargeRequest(viewModel, null, tokenResponse.id)
@@ -394,7 +393,7 @@ class CardRepository : APIRequestCallback {
                         SDKSession?.tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
                     }
                     else if(PaymentDataSource.getTransactionMode()==TransactionMode.SAVE_CARD){
-                        createSaveCard(cardRepositoryContext, viewModel, null, tokenResponse.id)
+                        createSaveCard( viewModel, null, tokenResponse.id)
                     }
                     else {
                         createChargeRequest( viewModel, null, tokenResponse.id)

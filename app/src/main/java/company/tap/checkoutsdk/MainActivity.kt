@@ -203,6 +203,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
          sdkSession.setCardType(CardType.ALL) // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
 
           sdkSession.setTransactionMode(TransactionMode.PURCHASE)
+
          sdkSession.setDefaultCardHolderName("TEST TAP"); // ** Optional ** you can pass default CardHolderName of the user .So you don't need to type it.
          sdkSession.isUserAllowedToEnableCardHolderName(false); // ** Optional ** you can enable/ disable  default CardHolderName .
 
@@ -284,7 +285,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         val tapCustomer: TapCustomer? = null
         //if (customer != null) customer.phone else Phone(965, 69045932)
         return TapCustomer(
-                null, "ahlaam", "middlename",
+                "cus_TS012520211349Za012907577", "ahlaam", "middlename",
                 "lastname", "abcd@gmail.com",
                 PhoneNumber("00965", "69045932"), "description",
         )
