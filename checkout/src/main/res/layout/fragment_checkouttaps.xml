@@ -2,23 +2,28 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".open.CheckoutFragment">
 
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".open.CheckoutFragment"
         android:background="@color/black_27">
 
-
         <LinearLayout
             android:id="@+id/fragment_all"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:visibility="visible"
             android:orientation="vertical" />
 
@@ -44,7 +49,7 @@
             android:id="@+id/webFrameLayout"
             android:layout_width="match_parent"
             android:visibility="visible"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent" />
 
         <FrameLayout
             android:id="@+id/inline_container"
@@ -55,4 +60,14 @@
 
 
     </LinearLayout>
+
+    <company.tap.tapuilibrary.uikit.atoms.TapImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+
+        android:id="@+id/closeIcon"
+        android:src="@drawable/ic_close"
+        android:layout_gravity="end"/>
+
+</RelativeLayout>
 </androidx.core.widget.NestedScrollView>
