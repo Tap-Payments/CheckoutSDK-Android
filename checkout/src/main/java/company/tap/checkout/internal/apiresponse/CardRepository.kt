@@ -289,9 +289,9 @@ class CardRepository : APIRequestCallback {
                     fireWebPaymentCallBack(chargeResponse)
                   //  chargeResponse?.transaction?.url?.let { it1 -> viewModel?.displayRedirect(it1) }
                   //  viewModel?.redirectLoadingFinished(true)
-                }
+                }else handleChargeResponse(chargeResponse)
             }
-            handleChargeResponse(chargeResponse)
+
         }
         else if(requestCode == BIN_RETRIEVE_CODE){
             response?.body().let {
@@ -470,8 +470,8 @@ class CardRepository : APIRequestCallback {
                 }
             }
             ChargeStatus.CAPTURED -> {
-                SDKSession.getListener()?.paymentSucceed(chargeResponse)
                 viewModel?.handleSuccessFailureResponseButton("success")
+                SDKSession.getListener()?.paymentSucceed(chargeResponse)
 
             }
             ChargeStatus.AUTHORIZED -> {
@@ -774,9 +774,8 @@ class CardRepository : APIRequestCallback {
         when (charge?.status) {
             ChargeStatus.CAPTURED, ChargeStatus.AUTHORIZED -> try {
                 // closePaymentActivity()
-                    sdkSession.getListener()?.paymentSucceed(charge)
-                viewModel?.handleSuccessFailureResponseButton("success")
-
+                    viewModel?.handleSuccessFailureResponseButton("success")
+                sdkSession.getListener()?.paymentSucceed(charge)
 
                 //  SDKSession().getListener()?.paymentSucceed(charge)
             } catch (e: Exception) {
