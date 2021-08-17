@@ -439,7 +439,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         }
         if(otpViewHolder.otpView.isVisible){
             removeViews(otpViewHolder)
-           // addViews(saveCardSwitchHolder11)
             saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.IDLE)
             saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.isClickable = true
             saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.stateListAnimator=null
@@ -717,10 +716,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
             cardViewModel
         )
         paymentInputViewHolder.tabLayout.setUnselectedAlphaLevel(0.3f)
-//        paymentInputViewHolder.tapCardInputView.invalidate()
         if (::paymentInputViewHolder.isInitialized)
             paymentInputViewHolder.setCurrentBinData(binLookupResponse)
-        //paymentInputViewHolder?.setTablayoutbasedOnApi(PaymentDataSource?.getBinLookupResponse())
+
     }
 
 
@@ -1786,7 +1784,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         val hasOtherPaymentOptions = hasWebPaymentOptions || hasCardPaymentOptions
 
         adapter.updateAdapterData(webPaymentOptions)
-
 
         paymentInputViewHolder.setDataFromAPI(cardPaymentOptions)
     }

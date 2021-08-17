@@ -501,7 +501,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
     override fun backendUnknownError(message: String?) {
         println("backendUnknownError>>>>>" + message)
-        payButton?.changeButtonState(ActionButtonState.ERROR)
+        payButton?.changeButtonState(ActionButtonState.IDLE)
 
     }
 
