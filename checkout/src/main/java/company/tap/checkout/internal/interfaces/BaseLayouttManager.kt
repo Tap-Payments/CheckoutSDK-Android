@@ -21,7 +21,7 @@ interface BaseLayouttManager {
     fun displayGoPayLogin()
     fun displayGoPay()
     fun controlCurrency(display: Boolean)
-    fun displayOTPView(mobileNumber: PhoneNumber?, otpType:String, chargeResponse: Charge?=null)
+    fun displayOTPView(phoneNumber: PhoneNumber?, otpType:String, chargeResponse: Charge?=null)
     fun displayRedirect(url: String)
     fun displaySaveCardOptions()
     fun setBinLookupData(binLookupResponse: BINLookupResponse, context: Context,cardViewModel: CardViewModel)

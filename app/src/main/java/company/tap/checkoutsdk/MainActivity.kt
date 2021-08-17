@@ -372,7 +372,8 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         Toast.makeText(this,"paymentSucceed"+charge.id, Toast.LENGTH_SHORT).show()
        // modalBottomSheet.dismiss()
        // payButton?.changeButtonState(ActionButtonState.SUCCESS)
-       // payButton?.changeButtonState(ActionButtonState.IDLE)
+        modalBottomSheet.dialog?.dismiss()
+        payButton?.changeButtonState(ActionButtonState.IDLE)
     }
 
     override fun paymentFailed(charge: Charge?) {
@@ -381,7 +382,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         println("Payment Failed : " + charge?.response?.message)
         Toast.makeText(this,"paymentFailed"+charge?.response?.message, Toast.LENGTH_SHORT).show()
 //           modalBottomSheet.dismiss()
-           modalBottomSheet.dialog?.dismiss()
+        //   modalBottomSheet.dialog?.dismiss()
            payButton?.changeButtonState(ActionButtonState.ERROR)
     }
 

@@ -102,7 +102,7 @@ class CardViewModel : ViewModel() {
     }
     @RequiresApi(Build.VERSION_CODES.N)
     private fun retrieveBinlookup(viewModel: CheckoutViewModel, binValue: String?) {
-        repository.retrieveBinLookup(context,viewModel,binValue)
+        repository.retrieveBinLookup(viewModel,binValue)
 
     }
     @RequiresApi(Build.VERSION_CODES.N)
