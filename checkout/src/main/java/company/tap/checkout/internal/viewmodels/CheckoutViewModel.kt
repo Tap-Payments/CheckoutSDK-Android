@@ -1332,8 +1332,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
             PaymentDataSource.setSelectedCurrency(selectedCurrency = selectedCurrency)
             PaymentDataSource.setSelectedAmount(currencyRate)
 
+    if(::selectedCurrency.isInitialized){
+                filterViewModels(selectedCurrency)
+        }else   filterViewModels(currentCurrency)
 
-        filterViewModels(currencySelected)
     }
 
     @SuppressLint("ResourceType")
@@ -1784,7 +1786,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         val hasOtherPaymentOptions = hasWebPaymentOptions || hasCardPaymentOptions
 
         adapter.updateAdapterData(webPaymentOptions)
-
         paymentInputViewHolder.setDataFromAPI(cardPaymentOptions)
     }
 
