@@ -383,7 +383,7 @@ class PaymenttInputViewHolder(
             tabLayout.setUnselectedAlphaLevel(0.5f)
         } else {
             //we will send scheme
-            binLookupResponse?.scheme?.cardBrand?.let { it1 -> tabLayout.selectTab(it1, true) }
+            binLookupResponse?.scheme?.cardBrand?.let { it1 -> tabLayout.selectTab(it1, false) }
             tabLayout.setUnselectedAlphaLevel(0.5f)
 
         }

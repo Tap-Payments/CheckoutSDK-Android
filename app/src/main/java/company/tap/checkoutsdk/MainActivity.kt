@@ -291,7 +291,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         return TapCustomer(
                 "cus_TS012520211349Za012907577", "ahlaam", "middlename",
                 "lastname", "abcd@gmail.com",
-                PhoneNumber("00965", "51693350"), "description",
+                PhoneNumber("00965", "69045932"), "description",
         )
 
     }
@@ -372,6 +372,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         Toast.makeText(this,"paymentSucceed"+charge.id, Toast.LENGTH_SHORT).show()
        // modalBottomSheet.dismiss()
         payButton?.changeButtonState(ActionButtonState.SUCCESS)
+        payButton?.changeButtonState(ActionButtonState.IDLE)
     }
 
     override fun paymentFailed(charge: Charge?) {

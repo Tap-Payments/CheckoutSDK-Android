@@ -438,18 +438,17 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                 )
         }
         if(otpViewHolder.otpView.isVisible){
-            removeViews(otpViewHolder,saveCardSwitchHolder11)
-            addViews(saveCardSwitchHolder11)
-
-
+            removeViews(otpViewHolder)
+           // addViews(saveCardSwitchHolder11)
             saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.IDLE)
+            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.isClickable = true
             saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.stateListAnimator=null
             saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.setButtonDataSource(
                 false,
                 context.let { LocalizationManager.getLocale(it).language },
                 LocalizationManager.getValue("pay", "ActionButton"),
-                Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
-                Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
+                Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
+                Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
             )
 //            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.isActivated = false
         }
