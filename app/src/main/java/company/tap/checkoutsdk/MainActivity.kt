@@ -148,7 +148,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
      //  sdkSession.setPaymentItems(getPaymentItems()) // ** Optional ** you can pass empty array list
 
 
-     //   sdkSession.setPaymentType("CARD")  //** Merchant can pass paymentType
+        sdkSession.setPaymentType("ALL")  //** Merchant can pass paymentType
 
         // Set Taxes array list
         sdkSession.setTaxes(ArrayList()) // ** Optional ** you can pass empty array list
@@ -359,19 +359,19 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         }
         println("##############################################################################")
         if (charge.topup != null) {
-            System.out.println("Payment Succeeded : topupWalletId : " + charge.topup?.walletId)
-            System.out.println("Payment Succeeded : Id : " + charge.topup?.Id)
-            System.out.println("Payment Succeeded : TopUpApp : " + charge.topup?.application?.amount)
+            println("Payment Succeeded : topupWalletId : " + charge.topup?.walletId)
+            println("Payment Succeeded : Id : " + charge.topup?.Id)
+            println("Payment Succeeded : TopUpApp : " + charge.topup?.application?.amount)
         }
 
         println("##############################################################################")
         if (charge.expiry != null) {
-            System.out.println("Payment Succeeded : expiry type :" + charge.expiry?.type)
-            System.out.println("Payment Succeeded : expiry period :" + charge.expiry?.period)
+            println("Payment Succeeded : expiry type :" + charge.expiry?.type)
+            println("Payment Succeeded : expiry period :" + charge.expiry?.period)
         }
         Toast.makeText(this,"paymentSucceed"+charge.id, Toast.LENGTH_SHORT).show()
        // modalBottomSheet.dismiss()
-        payButton?.changeButtonState(ActionButtonState.SUCCESS)
+       // payButton?.changeButtonState(ActionButtonState.SUCCESS)
         payButton?.changeButtonState(ActionButtonState.IDLE)
     }
 
@@ -381,7 +381,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         println("Payment Failed : " + charge?.response?.message)
         Toast.makeText(this,"paymentFailed"+charge?.response?.message, Toast.LENGTH_SHORT).show()
 //           modalBottomSheet.dismiss()
-        modalBottomSheet.dialog?.dismiss()
+           modalBottomSheet.dialog?.dismiss()
            payButton?.changeButtonState(ActionButtonState.ERROR)
     }
 

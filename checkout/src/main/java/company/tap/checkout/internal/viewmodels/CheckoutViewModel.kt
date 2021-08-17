@@ -16,6 +16,7 @@ import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.annotation.RestrictTo
 import androidx.core.view.isVisible
+import androidx.core.view.size
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -237,6 +238,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         when(PaymentDataSource.getTransactionMode()){
             TransactionMode.PURCHASE-> sendChargeOTPCode(otpCode)
             TransactionMode.AUTHORIZE_CAPTURE-> sendAuthorizeOTPCode(otpCode)
+            else->sendChargeOTPCode(otpCode)
         }
     }
 
@@ -315,7 +317,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
 
     override fun displayStartupLayout(enabledSections: ArrayList<SectionType>) {
         //Todo based on api response logic for switch case
-        when (PaymentDataSource?.getTransactionMode()) {
+        when (PaymentDataSource.getTransactionMode()) {
 
             TransactionMode.TOKENIZE_CARD -> {
                 addViews(
@@ -333,6 +335,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                 )
             }
             else -> {
+
+                if(PaymentDataSource.getPaymentDataType()=="WEB"){
+                    addViews(
+                        businessViewHolder,
+                        amountViewHolder1,
+                        cardViewHolder11,
+                        saveCardSwitchHolder11
+                    )
+                }else
                 addViews(
                     businessViewHolder,
                     amountViewHolder1,
@@ -450,6 +461,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                 Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
             )
 //            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.isActivated = false
+        }
+       if(PaymentDataSource.getPaymentDataType()!=null && PaymentDataSource.getPaymentDataType() == "WEB"){
+            removeViews(paymentInputViewHolder)
         }
         removeInlineScanner()
         removeNFCViewFragment()
@@ -730,7 +744,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         if (paymentOptionsResponse != null) {
             this.paymentOptionsResponse = paymentOptionsResponse
         }
-        if (::businessViewHolder.isInitialized && PaymentDataSource?.getTransactionMode() != company.tap.checkout.open.enums.TransactionMode.TOKENIZE_CARD) {
+        if (::businessViewHolder.isInitialized && PaymentDataSource.getTransactionMode() != TransactionMode.TOKENIZE_CARD) {
             businessViewHolder.setDatafromAPI(
                 sdkSettings?.data?.merchant?.logo,
                 sdkSettings?.data?.merchant?.name
@@ -746,11 +760,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         println("paymentOptionsResponse?.supportedCurrencie on get" + paymentOptionsResponse?.supportedCurrencies)
         if (paymentOptionsResponse?.supportedCurrencies != null && ::amountViewHolder1.isInitialized) {
             currentCurrency = paymentOptionsResponse.currency
-            for (i in paymentOptionsResponse?.supportedCurrencies.indices) {
-                if (paymentOptionsResponse?.supportedCurrencies[i].currency == currentCurrency) {
-                    println("current amount value>>" + paymentOptionsResponse?.supportedCurrencies[i].amount)
+            for (i in paymentOptionsResponse.supportedCurrencies.indices) {
+                if (paymentOptionsResponse.supportedCurrencies[i].currency == currentCurrency) {
+                    println("current amount value>>" + paymentOptionsResponse.supportedCurrencies[i].amount)
                     currentAmount =
-                        CurrencyFormatter.currencyFormat(paymentOptionsResponse?.supportedCurrencies[i].amount.toString())
+                        CurrencyFormatter.currencyFormat(paymentOptionsResponse.supportedCurrencies[i].amount.toString())
 
                 }
             }
@@ -763,8 +777,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         /**
          * <<<<<<< This items list is going to come from API response later now for loading the view we are taking the List from
          * PaymentDatasource.getItems()  >>>>>>>> */
-        if (PaymentDataSource?.getItems() != null) {
-            itemList = PaymentDataSource?.getItems()!!
+        if (PaymentDataSource.getItems() != null) {
+            itemList = PaymentDataSource.getItems()!!
         }
 
 
@@ -772,7 +786,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
             paymentOptionsResponse?.supportedCurrencies?.let {
                 itemsViewHolder1.setDatafromAPI(
                     it,
-                    PaymentDataSource?.getItems()
+                    PaymentDataSource.getItems()
                 )
             }
             itemsViewHolder1.setItemsRecylerView()
@@ -812,8 +826,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
             currencyAdapter.updateAdapterData(allCurrencies.value as List<SupportedCurrencies>)
         }
         if (savedCardList.value?.isNotEmpty() == true) {
-            println("getCardType" + PaymentDataSource?.getCardType())
-            if (PaymentDataSource.getCardType() != null && PaymentDataSource?.getCardType() != CardType.ALL) {
+            println("getCardType" + PaymentDataSource.getCardType())
+            if (PaymentDataSource.getCardType() != null && PaymentDataSource.getCardType() != CardType.ALL) {
                 filterSavedCardTypes(savedCardList.value as List<SavedCard>)
             } else adapter.updateAdapterDataSavedCard(savedCardList.value as List<SavedCard>)
         }
@@ -1480,9 +1494,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         ) {
             showExtraFees(totalAmount.toString(), fee.toString(), paymentTypeEnum, savedCardsModel)
         }else if(savedCardsModel!=null) {
-           savedCardsModel as SavedCard
-           if (savedCardsModel.paymentOptionIdentifier.toInt() == 3 || savedCardsModel.paymentOptionIdentifier.toInt() == 4) {
-               setDifferentPaymentsAction(PaymentType.SavedCard, savedCardsModel)
+            if(paymentTypeEnum==PaymentType.CARD|| paymentTypeEnum==PaymentType.SavedCard){
+                savedCardsModel as SavedCard
+                if (savedCardsModel.paymentOptionIdentifier.toInt() == 3 || savedCardsModel.paymentOptionIdentifier.toInt() == 4) {
+                    setDifferentPaymentsAction(PaymentType.SavedCard, savedCardsModel)
+            }
+
            } else setDifferentPaymentsAction(paymentTypeEnum, savedCardsModel)
        }else setDifferentPaymentsAction(paymentTypeEnum, savedCardsModel)
     }
@@ -1666,8 +1683,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         callBinLookupApi(emvCard.cardNumber?.substring(0, 6))
 
         Handler().postDelayed({
-            val binLookupResponse: BINLookupResponse? = PaymentDataSource?.getBinLookupResponse()
-            if (PaymentDataSource?.getCardType() != null && PaymentDataSource?.getCardType() == CardType.ALL) {
+            val binLookupResponse: BINLookupResponse? = PaymentDataSource.getBinLookupResponse()
+            if (PaymentDataSource.getCardType() != null && PaymentDataSource.getCardType() == CardType.ALL) {
                 setNfcCardDetails(emvCard)
 
             } else {
@@ -1691,21 +1708,19 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
     private fun removeNFCViewFragment() {
         if (isNFCOpened)
             if (fragmentManager.findFragmentById(R.id.webFrameLayout) != null)
-                fragmentManager?.beginTransaction()
-                    .remove(fragmentManager?.findFragmentById(R.id.webFrameLayout)!!)
+                fragmentManager.beginTransaction()
+                    .remove(fragmentManager.findFragmentById(R.id.webFrameLayout)!!)
                     .commit()
         isNFCOpened = false
-        webFrameLayout?.visibility = View.GONE
+        webFrameLayout.visibility = View.GONE
     }
 
 
     private fun convertDateString(date: String) {
         val dateParts: List<String> = date.split(" ")
-        val month = dateParts?.get(2)?.toInt()
-        val year = dateParts?.get(5)?.toInt()
-        if (month != null) {
-            if (year != null) paymentInputViewHolder.tapCardInputView.setExpiryDate(month, year)
-        }
+        val month = dateParts[2].toInt()
+        val year = dateParts[5].toInt()
+        paymentInputViewHolder.tapCardInputView.setExpiryDate(month, year)
     }
 
     private fun filteredByPaymentTypeAndCurrencyAndSortedList(
@@ -1770,23 +1785,35 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
             val savedCardsWorker: java.util.ArrayList<SavedCard> =
                 java.util.ArrayList<SavedCard>(paymentOptionsResponse.cards)
         }
-        // val viewModelResult: java.util.ArrayList<PaymentOptionViewModel> = java.util.ArrayList<PaymentOptionViewModel>()
-
         val webPaymentOptions: java.util.ArrayList<PaymentOption> =
             filteredByPaymentTypeAndCurrencyAndSortedList(
                 paymentOptionsWorker, PaymentType.WEB, currency
             )
-        println("webPaymentOptions>>>>" + webPaymentOptions)
+        println("webPaymentOptions>>>>$webPaymentOptions")
         val cardPaymentOptions: java.util.ArrayList<PaymentOption> =
             filteredByPaymentTypeAndCurrencyAndSortedList(
                 paymentOptionsWorker, PaymentType.CARD, currency
             )
         val hasWebPaymentOptions = webPaymentOptions.size > 0
         val hasCardPaymentOptions = cardPaymentOptions.size > 0
-        val hasOtherPaymentOptions = hasWebPaymentOptions || hasCardPaymentOptions
+        logicToHandlePaymentDataType(webPaymentOptions,cardPaymentOptions)
 
-        adapter.updateAdapterData(webPaymentOptions)
-        paymentInputViewHolder.setDataFromAPI(cardPaymentOptions)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun logicToHandlePaymentDataType(webPaymentOptions: ArrayList<PaymentOption>, cardPaymentOptions: ArrayList<PaymentOption>) {
+        if(PaymentDataSource.getPaymentDataType()!=null && PaymentDataSource.getPaymentDataType() == "WEB"){
+            adapter.updateAdapterDataSavedCard(ArrayList())
+            adapter.updateAdapterData(webPaymentOptions)
+            saveCardSwitchHolder11?.view?.cardSwitch?.showOnlyPayButton()
+        }else if(PaymentDataSource.getPaymentDataType() !=null && PaymentDataSource.getPaymentDataType() == "CARD"){
+            adapter.updateAdapterData(ArrayList())
+            paymentInputViewHolder.setDataFromAPI(cardPaymentOptions)
+            saveCardSwitchHolder11?.view?.cardSwitch?.showOnlyPayButton()
+        }else{
+            adapter.updateAdapterData(webPaymentOptions)
+            paymentInputViewHolder.setDataFromAPI(cardPaymentOptions)
+        }
     }
 
     var title :String= LocalizationManager.getValue("extraFeesAlertTitle","ExtraFees")
