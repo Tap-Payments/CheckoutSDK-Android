@@ -437,22 +437,20 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                     currentAmount, currentCurrency
                 )
         }
-//        if(otpViewHolder.otpView.isVisible){
-//            removeViews(otpViewHolder,saveCardSwitchHolder11)
-//            addViews(saveCardSwitchHolder11)
-//
-//
-//            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.IDLE)
-//            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.stateListAnimator=null
-//            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.setButtonDataSource(
-//                false,
-//                context.let { LocalizationManager.getLocale(it).language },
-//                LocalizationManager.getValue("pay", "ActionButton"),
-//                Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
-//                Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
-//            )
-////            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.isActivated = false
-//        }
+        if(otpViewHolder.otpView.isVisible){
+            removeViews(otpViewHolder)
+            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.IDLE)
+            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.isClickable = true
+            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.stateListAnimator=null
+            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.setButtonDataSource(
+                false,
+                context.let { LocalizationManager.getLocale(it).language },
+                LocalizationManager.getValue("pay", "ActionButton"),
+                Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
+                Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
+            )
+//            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.isActivated = false
+        }
         removeInlineScanner()
         removeNFCViewFragment()
     }
@@ -596,7 +594,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
             cardViewHolder11,
             paymentInputViewHolder, saveCardSwitchHolder11, otpViewHolder, amountViewHolder1
         )
-        bottomSheetDialog.dismissWithAnimation
+       // bottomSheetDialog.dismissWithAnimation
 
         addViews(amountViewHolder1, otpViewHolder)
         otpViewHolder.otpView.visibility = View.VISIBLE
