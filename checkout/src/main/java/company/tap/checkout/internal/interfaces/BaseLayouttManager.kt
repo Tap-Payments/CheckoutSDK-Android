@@ -1,6 +1,7 @@
 package company.tap.checkout.internal.interfaces
 
 import android.content.Context
+import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.api.models.BINLookupResponse
 import company.tap.checkout.internal.api.models.Charge
@@ -22,7 +23,7 @@ interface BaseLayouttManager {
     fun displayGoPay()
     fun controlCurrency(display: Boolean)
     fun displayOTPView(phoneNumber: PhoneNumber?, otpType:String, chargeResponse: Charge?=null)
-    fun displayRedirect(url: String)
+    fun displayRedirect(url: String, status: ChargeStatus)
     fun displaySaveCardOptions()
     fun setBinLookupData(binLookupResponse: BINLookupResponse, context: Context,cardViewModel: CardViewModel)
     fun getDatasfromAPIs(sdkSettings: SDKSettings?,paymentOptionsResponse: PaymentOptionsResponse?)

@@ -11,9 +11,7 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
+import android.view.animation.*
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
@@ -39,6 +37,7 @@ import company.tap.checkout.internal.PaymentDataProvider
 import company.tap.checkout.internal.adapter.CardTypeAdapterUIKIT
 import company.tap.checkout.internal.adapter.CurrencyTypeAdapter
 import company.tap.checkout.internal.adapter.GoPayCardAdapterUIKIT
+import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.internal.api.responses.DeleteCardResponse
@@ -46,13 +45,18 @@ import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
 import company.tap.checkout.internal.api.responses.SDKSettings
 import company.tap.checkout.internal.apiresponse.CardViewEvent
 import company.tap.checkout.internal.apiresponse.CardViewModel
-import company.tap.checkout.internal.dummygener.*
+import company.tap.checkout.internal.dummygener.GoPaySavedCards
+import company.tap.checkout.internal.dummygener.Order1
+import company.tap.checkout.internal.dummygener.TapCardPhoneListDataSource
 import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.*
-import company.tap.checkout.internal.utils.*
 import company.tap.checkout.internal.utils.AmountCalculator.calculateExtraFeesAmount
+import company.tap.checkout.internal.utils.AnimationEngine
 import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
+import company.tap.checkout.internal.utils.CurrencyFormatter
+import company.tap.checkout.internal.utils.CustomUtils
+import company.tap.checkout.internal.utils.Utils
 import company.tap.checkout.internal.viewholders.*
 import company.tap.checkout.internal.webview.WebFragment
 import company.tap.checkout.internal.webview.WebViewContract
@@ -297,6 +301,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         )
         itemsViewHolder1 = ItemsViewHolder1(context, this)
         otpViewHolder = OTPViewHolder(context)
+        otpViewHolder.otpView.visibility=View.GONE
         goPayViewsHolder = GoPayViewsHolder(context, this, otpViewHolder)
         asynchronousPaymentViewHolder = AsynchronousPaymentViewHolder(context)
 
@@ -477,17 +482,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
 
 
     private fun caseDisplayControlCurrency() {
-        removeViews(
-            businessViewHolder,
-            amountViewHolder1,
-            cardViewHolder11,
-            paymentInputViewHolder,
-            saveCardSwitchHolder11,
-            goPayViewsHolder,
-            otpViewHolder,
-            itemsViewHolder1
-        )
-        removeAllViews()
+        removeViews(businessViewHolder)
+            removeViews(amountViewHolder1)
+           removeViews(cardViewHolder11)
+            removeViews(paymentInputViewHolder)
+        removeViews(saveCardSwitchHolder11)
+        removeViews ( goPayViewsHolder)
+         removeViews(otpViewHolder)
+           removeViews(itemsViewHolder1)
+
+      //  removeAllViews()
         addViews(businessViewHolder, amountViewHolder1, itemsViewHolder1)
         /*itemsViewHolder1.setDatafromAPI(
             allCurrencies.value as ArrayList<SupportedCurrencies>,
@@ -611,15 +615,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
     @RequiresApi(Build.VERSION_CODES.N)
     private fun displayOtpCharge(phoneNumber: PhoneNumber?, chargeResponse: Charge?) {
         // otpTypeString = PaymentTypeEnum.GOPAY //temporray
-        println("mmmmmmmm" + amountViewHolder1.view.amount_section.itemCountButton.text)
+        removeViews(businessViewHolder)
+        removeViews(cardViewHolder11)
+        removeViews(paymentInputViewHolder)
+        removeViews(saveCardSwitchHolder11)
+        removeViews(otpViewHolder)
 
-        removeViews(
-            cardViewHolder11,
-            paymentInputViewHolder, saveCardSwitchHolder11, otpViewHolder, amountViewHolder1
-        )
-        bottomSheetDialog.dismissWithAnimation
-
-        addViews(amountViewHolder1, otpViewHolder)
+        addViews(businessViewHolder)
+        addViews(amountViewHolder1)
+        addViews(otpViewHolder)
         otpViewHolder.otpView.visibility = View.VISIBLE
         setOtpPhoneNumber(phoneNumber)
         otpViewHolder.otpView.changePhone.visibility = View.INVISIBLE
@@ -700,7 +704,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
     }
 
 
-    override fun displayRedirect(url: String) {
+    override fun displayRedirect(url: String, status: ChargeStatus) {
         this.redirectURL = url
         if (::redirectURL.isInitialized && ::fragmentManager.isInitialized) {
             if (otpViewHolder.otpView.isVisible) {
@@ -711,21 +715,22 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                     paymentInputViewHolder,
                     otpViewHolder
                 )
+                println("is it cominb here")
             }
-           // setSlideAnimation()
+            println("frag here")
             Handler(Looper.getMainLooper()).postDelayed({
                 fragmentManager.beginTransaction()
                     .replace(
                         R.id.webFrameLayout, WebFragment.newInstance(
                             redirectURL,
-                            this, cardViewModel
+                            this, cardViewModel,status
                         )
                     ).commitNow()
 
-            }, 5000)
+            }, 200)
 
         }
-        saveCardSwitchHolder11?.view?.visibility = View.GONE
+
     }
 
     override fun displaySaveCardOptions() {
@@ -993,28 +998,33 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
     override fun handleSuccessFailureResponseButton(response: String) {
         when (response) {
             "success" -> {
-                setSlideAnimation()
+                println("call come")
                 if (::webFrameLayout.isInitialized)
-                    webFrameLayout.visibility = View.GONE
-                //  webFrameLayout.fadeVisibility(View.GONE)
+                    webFrameLayout.fadeVisibility(View.GONE)
+                 //   webFrameLayout.visibility=View.GONE
+              /*  if(::fragmentManager.isInitialized)
+                fragmentManager.beginTransaction().remove(WebFragment.newInstance(
+                    redirectURL,
+                    this, cardViewModel,
+               null )).commitNow()
+*/
                 setSlideAnimation()
-                saveCardSwitchHolder11?.view?.visibility = View.VISIBLE
-                saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(
-                    ActionButtonState.SUCCESS
-                )
+                saveCardSwitchHolder11?.view?.visibility=View.VISIBLE
+                saveCardSwitchHolder11?.view?.mainSwitch?.visibility=View.GONE
+                saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.visibility=View.VISIBLE
+                saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)
                 Handler().postDelayed({
-                    if (::bottomSheetDialog.isInitialized)
-                        bottomSheetDialog.dismiss()
+                    if(::bottomSheetDialog.isInitialized)
+                    bottomSheetDialog.dismiss()
                 }, 8000)
-
-
             }
             else -> {
                 if (::webFrameLayout.isInitialized)
-                    webFrameLayout.visibility = View.GONE
-                //  webFrameLayout.fadeVisibility(View.GONE)
+                    webFrameLayout.fadeVisibility(View.GONE)
                 setSlideAnimation()
                 saveCardSwitchHolder11?.view?.visibility=View.VISIBLE
+                saveCardSwitchHolder11?.view?.mainSwitch?.visibility=View.GONE
+                saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.visibility=View.VISIBLE
                 saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(
                     ActionButtonState.ERROR
                 )
@@ -1029,22 +1039,51 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
     }
 
     override fun displayAsynchronousPaymentView(chargeResponse: Charge) {
-      if(chargeResponse!=null){
-          removeViews(businessViewHolder,amountViewHolder1,cardViewHolder11,paymentInputViewHolder,saveCardSwitchHolder11)
-          addViews()
-      }
+        removeViews(
+            businessViewHolder,
+            amountViewHolder1,
+            cardViewHolder11,
+            paymentInputViewHolder,
+            saveCardSwitchHolder11
+        )
+        addViews()
     }
 
 
     private fun removeViews(vararg viewHolders: TapBaseViewHolder?) {
 
-        viewHolders.forEach {
+       /* viewHolders.forEach {
             Handler(Looper.getMainLooper()).postDelayed(Runnable {
                 sdkLayout.removeView(it?.view)
                 val animation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
                 it?.view?.startAnimation(animation)
 
-            }, 1000)
+            }, 4000)
+        }*/
+
+        viewHolders.forEach {
+            //Create fade out animation
+            val fadeOut = AlphaAnimation(1f, 0f)
+            fadeOut.duration = 1000
+            fadeOut.fillAfter = true
+            val animations = AnimationSet(false)
+            animations.addAnimation(fadeOut)
+
+            animations.duration = 1000
+            animations.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation) {}
+                override fun onAnimationEnd(animation: Animation) {
+                    //Hide the view after the animation is done to prevent it to show before it is removed from the parent view
+                    it?.view?.visibility = View.GONE
+                    //Create handler on the current thread (UI thread)
+                    val h = Handler()
+                    //Run a runnable after 100ms (after that time it is safe to remove the view)
+                    h.postDelayed({ sdkLayout?.removeView(it?.view) }, 200)
+                }
+
+                override fun onAnimationRepeat(animation: Animation) {}
+            })
+            it?.view?.startAnimation(animations)
         }
 
     }
@@ -1053,11 +1092,40 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         viewHolders.forEach {
             Handler(Looper.getMainLooper()).postDelayed(Runnable {
                 if (::sdkLayout.isInitialized)
+                    sdkLayout.removeView(it?.view)
                     sdkLayout.addView(it?.view)
                 val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
                 it?.view?.startAnimation(animation)
             }, 0)
         }
+
+
+
+      /*  viewHolders.forEach {
+           //Create fade out animation
+            val fadeIn = AlphaAnimation(0f, 1f)
+            fadeIn.duration = 100
+            fadeIn.fillAfter = true
+            val animations = AnimationSet(false)
+            animations.addAnimation(fadeIn)
+
+            animations.duration = 100
+            animations.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation) {}
+                override fun onAnimationEnd(animation: Animation) {
+                    //Hide the view after the animation is done to prevent it to show before it is removed from the parent view
+                    it?.view?.visibility = View.VISIBLE
+                    //Create handler on the current thread (UI thread)
+                    val h = Handler()
+                    //Run a runnable after 100ms (after that time it is safe to remove the view)
+                    h.postDelayed({ sdkLayout?.addView(it?.view) }, 100)
+                }
+
+                override fun onAnimationRepeat(animation: Animation) {}
+            })
+            it?.view?.startAnimation(animations)
+
+        }*/
     }
 
     private fun unActivateActionButton() {
@@ -1110,62 +1178,47 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
             null,
             null
         )
-             saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(
-                 ActionButtonState.LOADING
-             )
+        saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
 
         removeViews(businessViewHolder)
         removeViews(amountViewHolder1)
         removeViews(cardViewHolder11)
         removeViews(paymentInputViewHolder)
         setSlideAnimation()
-        saveCardSwitchHolder11?.view?.visibility = View.GONE
-        saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.getImageView(
-            R.drawable.loader,
-            1
-        ) {
-
-
-
-
+        saveCardSwitchHolder11?.view?.visibility=View.VISIBLE
+        saveCardSwitchHolder11?.view?.mainSwitch?.visibility=View.GONE
+        saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.visibility=View.INVISIBLE
+       /* saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.getImageView(R.drawable.loader, 1) {
 
         }?.let {
             saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.addChildView(
                 it
             )
-        }
+        }*/
 
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun onClickCardPayment() {
+
+        cardViewModel.processEvent(
+            CardViewEvent.CreateTokenEvent,
+            this,
+            null,
+            null,
+            paymentInputViewHolder.getCard(),
+            null
+        )
         saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
-        saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.getImageView(
-            R.drawable.loader,
-            1
-        ) {
-            setSlideAnimation()
-            removeViews(cardViewHolder11)
-            removeViews(businessViewHolder)
-            removeViews(amountViewHolder1)
-            removeViews(saveCardSwitchHolder11)
-            removeViews(paymentInputViewHolder)
 
-            cardViewModel.processEvent(
-                CardViewEvent.CreateTokenEvent,
-                this,
-                null,
-                null,
-                paymentInputViewHolder.getCard(),
-                null
-            )
-            // cardViewModel.processEvent(CardViewEvent.ChargeEvent, this, null,null,null,null)
-
-        }?.let {
-            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.addChildView(
-                it
-            )
-        }
+        removeViews(businessViewHolder)
+        removeViews(amountViewHolder1)
+        removeViews(cardViewHolder11)
+        removeViews(paymentInputViewHolder)
+        setSlideAnimation()
+        saveCardSwitchHolder11?.view?.visibility=View.VISIBLE
+        saveCardSwitchHolder11?.view?.mainSwitch?.visibility=View.GONE
+        saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.visibility=View.INVISIBLE
     }
 
     private fun changeBottomSheetTransition() {
@@ -1367,30 +1420,90 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
     }
 
     @SuppressLint("ResourceType")
-    override fun redirectLoadingFinished(done: Boolean) {
+    override fun redirectLoadingFinished(done: Boolean,chargeStatus: Any?) {
         println("redirectLoadingFinished>" + done)
-        if (done) {
-            setSlideAnimation()
+        println("chargeStatus>" +  chargeStatus)
+        if (done && chargeStatus==ChargeStatus.INITIATED) {
             if (::webFrameLayout.isInitialized)
                 webFrameLayout.fadeVisibility(View.GONE)
+          /*  if(::fragmentManager.isInitialized)
+                fragmentManager.beginTransaction().remove(WebFragment.newInstance(
+                    redirectURL,
+                    this, cardViewModel
+                )).commitNow()*/
+
+            setSlideAnimation()
             saveCardSwitchHolder11?.view?.visibility=View.VISIBLE
+            saveCardSwitchHolder11?.view?.mainSwitch?.visibility=View.GONE
+            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.visibility=View.VISIBLE
             saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)
             Handler().postDelayed({
-                bottomSheetDialog.dismiss()
+                if(::bottomSheetDialog.isInitialized)
+                    bottomSheetDialog.dismiss()
             }, 8000)
+        }else if (done && chargeStatus==ChargeStatus.FAILED) {
+            if (::webFrameLayout.isInitialized)
+                webFrameLayout.fadeVisibility(View.GONE)
+            //   webFrameLayout.visibility=View.GONE
+            /* if(::fragmentManager.isInitialized)
+                 fragmentManager.beginTransaction().remove(WebFragment.newInstance(
+                     redirectURL,
+                     this, cardViewModel
+                 )).commitNow()*/
 
+            setSlideAnimation()
+            saveCardSwitchHolder11?.view?.visibility=View.VISIBLE
+            saveCardSwitchHolder11?.view?.mainSwitch?.visibility=View.GONE
+            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.visibility=View.VISIBLE
+            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.ERROR)
+            Handler().postDelayed({
+                if(::bottomSheetDialog.isInitialized)
+                    bottomSheetDialog.dismiss()
+            }, 8000)
         }
     }
 
-    override fun directLoadingFinished(done: Boolean) {
+    override fun directLoadingFinished(done: Boolean,chargeStatus: Any?) {
         println("directLoadingFinished>" + done)
-        if (done) {
+        println("chargeStatus<<<<<>" +  chargeStatus)
+        if (done && chargeStatus==ChargeStatus.CAPTURED) {
             if (::webFrameLayout.isInitialized)
-                webFrameLayout.visibility = View.VISIBLE
-           // removeViews(businessViewHolder,amountViewHolder1,cardViewHolder11,paymentInputViewHolder)
-          //  saveCardSwitchHolder11?.view?.visibility = View.GONE
-           // addViews(saveCardSwitchHolder11)
-           // saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)
+                webFrameLayout.fadeVisibility(View.GONE)
+            //   webFrameLayout.visibility=View.GONE
+           /* if(::fragmentManager.isInitialized)
+                fragmentManager.beginTransaction().remove(WebFragment.newInstance(
+                    redirectURL,
+                    this, cardViewModel
+                )).commitNow()*/
+
+            setSlideAnimation()
+            saveCardSwitchHolder11?.view?.visibility=View.VISIBLE
+            saveCardSwitchHolder11?.view?.mainSwitch?.visibility=View.GONE
+            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.visibility=View.VISIBLE
+            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)
+            Handler().postDelayed({
+                if(::bottomSheetDialog.isInitialized)
+                    bottomSheetDialog.dismiss()
+            }, 8000)
+        }else if (done && chargeStatus==ChargeStatus.FAILED) {
+            if (::webFrameLayout.isInitialized)
+                webFrameLayout.fadeVisibility(View.GONE)
+            //   webFrameLayout.visibility=View.GONE
+            /* if(::fragmentManager.isInitialized)
+                 fragmentManager.beginTransaction().remove(WebFragment.newInstance(
+                     redirectURL,
+                     this, cardViewModel
+                 )).commitNow()*/
+
+            setSlideAnimation()
+            saveCardSwitchHolder11?.view?.visibility=View.VISIBLE
+            saveCardSwitchHolder11?.view?.mainSwitch?.visibility=View.GONE
+            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.visibility=View.VISIBLE
+            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.ERROR)
+            Handler().postDelayed({
+                if(::bottomSheetDialog.isInitialized)
+                    bottomSheetDialog.dismiss()
+            }, 8000)
         }
 
 
@@ -1919,7 +2032,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
             calculateExtraFeesAmount(extraFees, supportedCurrencies, amount)
         } else BigDecimal.ZERO
     }
-    fun View.fadeVisibility(visibility: Int, duration: Long = 3000) {
+    private fun View.fadeVisibility(visibility: Int, duration: Long = 200) {
         val transition: Transition = Fade()
         transition.duration = duration
         transition.addTarget(this)

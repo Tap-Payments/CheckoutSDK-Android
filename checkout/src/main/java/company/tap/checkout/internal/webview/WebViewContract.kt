@@ -1,5 +1,7 @@
 package company.tap.checkout.internal.webview
 
+import company.tap.checkout.internal.api.enums.ChargeStatus
+
 /**
  * Created by OlaMonir on 7/27/20.
 
@@ -8,6 +10,6 @@ All rights reserved.
  **/
 
 interface WebViewContract {
-    fun redirectLoadingFinished(done: Boolean)
-    fun directLoadingFinished(done: Boolean)
+    fun redirectLoadingFinished(done: Boolean,chargeStatus: Any?)
+    fun directLoadingFinished(done: Boolean,chargeStatus: Any?)
 }

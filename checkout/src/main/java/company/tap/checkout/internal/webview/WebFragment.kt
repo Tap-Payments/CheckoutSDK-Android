@@ -21,6 +21,7 @@ import android.webkit.WebView
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import company.tap.checkout.R
+import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
@@ -28,7 +29,11 @@ import company.tap.tapuilibrary.uikit.ktx.setTopBorders
 import kotlinx.android.synthetic.main.fragment_web.*
 
 
-class WebFragment(private val webViewContract: WebViewContract,private val cardViewModel: CardViewModel) : Fragment(),
+class WebFragment(
+    private val webViewContract: WebViewContract,
+    private val cardViewModel: CardViewModel,
+    private val chargeStatus: ChargeStatus
+) : Fragment(),
     CustomWebViewClientContract {
 
     private var webViewUrl: String? = null
@@ -99,7 +104,7 @@ class WebFragment(private val webViewContract: WebViewContract,private val cardV
         if (Build.VERSION.SDK_INT >= 21) {
             web_view.settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
         }
-        web_view.webViewClient = TapCustomWebViewClient(this,cardViewModel)
+        web_view.webViewClient = TapCustomWebViewClient(this,cardViewModel,chargeStatus)
         web_view.settings.loadWithOverviewMode = true
         web_view.loadUrl(webViewUrl)
         web_view.setOnKeyListener { _, keyCode, event ->
@@ -149,15 +154,17 @@ class WebFragment(private val webViewContract: WebViewContract,private val cardV
     if success == false show error gif of action button
      */
     override fun submitResponseStatus(success: Boolean) {
-        webViewContract.redirectLoadingFinished(success)
+        webViewContract.redirectLoadingFinished(success,chargeStatus)
     }
 
-    override fun getRedirectedURL(url: String) {
+    override fun getRedirectedURL(url: String, chargeStatus: Any?) {
        // webViewContract.redirectLoadingFinished(url.contains("https://www.google.com/search?"))
-        if(url.contains("gosellsdk://return_url")){
-        webViewContract.redirectLoadingFinished(url.contains("gosellsdk://return_url"))
+        if(url.contains("gosellsdk://return_url")&& chargeStatus==ChargeStatus.INITIATED){
+        webViewContract.redirectLoadingFinished(url.contains("gosellsdk://return_url"),chargeStatus)
+        }else if(chargeStatus ==ChargeStatus.FAILED){
+            webViewContract.directLoadingFinished(false,chargeStatus)
         }else{
-            webViewContract.directLoadingFinished(true)
+            webViewContract.directLoadingFinished(false,chargeStatus)
         }
     }
 
@@ -166,11 +173,16 @@ class WebFragment(private val webViewContract: WebViewContract,private val cardV
 
     companion object {
          const val KEY_URL = "key:url"
+         const val KEY_STATUS = "key:status"
 
-        fun newInstance(url: String, webViewContract: WebViewContract, cardViewModel: CardViewModel): WebFragment {
-            val fragment = WebFragment(webViewContract,cardViewModel)
+        fun newInstance(
+            url: String, webViewContract: WebViewContract, cardViewModel: CardViewModel,
+            chargeStatus: ChargeStatus
+        ): WebFragment {
+            val fragment = WebFragment(webViewContract,cardViewModel,chargeStatus)
             val args = Bundle()
             args.putString(KEY_URL, url)
+            args.putString(KEY_STATUS, chargeStatus.toString())
             fragment.arguments = args
             return fragment
         }

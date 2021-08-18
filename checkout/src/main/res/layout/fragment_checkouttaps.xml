@@ -19,6 +19,28 @@
         android:orientation="vertical"
         tools:context=".open.CheckoutFragment"
         android:background="@color/black_27">
+        <FrameLayout
+            android:id="@+id/webFrameLayout"
+            android:layout_width="match_parent"
+            android:visibility="visible"
+            android:layout_height="match_parent" />
+        <FrameLayout
+            android:id="@+id/fragment_container_nfc_lib"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="vertical"
+            android:visibility="visible"
+            android:gravity="bottom"/>
+
+
+
+        <FrameLayout
+            android:id="@+id/inline_container"
+            android:layout_width="match_parent"
+            android:visibility="visible"
+            android:layout_height="450dp"
+            android:layout_margin="20dp" />
 
         <LinearLayout
             android:id="@+id/fragment_all"
@@ -36,27 +58,7 @@
          </LinearLayout>-->
 
 
-        <FrameLayout
-            android:id="@+id/fragment_container_nfc_lib"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:orientation="vertical"
-            android:visibility="visible"
-            android:gravity="bottom"/>
 
-        <FrameLayout
-            android:id="@+id/webFrameLayout"
-            android:layout_width="match_parent"
-            android:visibility="visible"
-            android:layout_height="match_parent" />
-
-        <FrameLayout
-            android:id="@+id/inline_container"
-            android:layout_width="match_parent"
-            android:visibility="visible"
-            android:layout_height="450dp"
-            android:layout_margin="20dp" />
 
 
     </LinearLayout>

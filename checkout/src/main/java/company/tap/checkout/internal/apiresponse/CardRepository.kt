@@ -333,7 +333,10 @@ class CardRepository : APIRequestCallback {
                     if(authorizeActionResponse?.status?.name == ChargeStatus.INITIATED.name){
                        // fireWebPaymentCallBack(authorizeActionResponse)
                            if(authorizeActionResponse?.transaction.url != null){
-                               authorizeActionResponse?.transaction?.url?.let { it1 -> viewModel?.displayRedirect(it1) }
+                               authorizeActionResponse?.transaction?.url?.let { it1 -> viewModel?.displayRedirect(
+                                   it1,
+                                   chargeResponse?.status
+                               ) }
                            }else handleAuthorizeResponse(authorizeActionResponse)
 
                     }else  handleAuthorizeResponse(authorizeActionResponse)
@@ -353,7 +356,10 @@ class CardRepository : APIRequestCallback {
             response?.body().let {
                 saveCardResponse = Gson().fromJson(it, SaveCard::class.java)
                 if(saveCardResponse?.status?.name == ChargeStatus.INITIATED.name){
-                    saveCardResponse?.transaction?.url?.let { it1 -> viewModel?.displayRedirect(it1) }
+                    saveCardResponse?.transaction?.url?.let { it1 -> viewModel?.displayRedirect(
+                        it1,
+                        chargeResponse?.status
+                    ) }
 
                 }else {
                     handleSaveCardResponse(saveCardResponse)
@@ -436,7 +442,7 @@ class CardRepository : APIRequestCallback {
         }
         if( ::chargeResponse.isInitialized && chargeResponse!=null){
             if(::viewModel.isInitialized)
-                chargeResponse?.transaction?.url?.let { viewModel.displayRedirect(it) }
+                chargeResponse?.transaction?.url?.let { viewModel.displayRedirect(it,chargeResponse?.status) }
 
         }
 
@@ -568,14 +574,20 @@ class CardRepository : APIRequestCallback {
     override fun onFailure(requestCode: Int, errorDetails: GoSellError?) {
         println("response body CHARGE_REQ_CODE>>"+errorDetails)
         errorDetails?.let {
-            if (it.throwable != null) {
-                resultObservable.onError(it.throwable)
-                sdkSession.getListener()?.sdkError(errorDetails)
-            }else
-            // resultObservable.onError(Throwable(it.errorMessage))
-                RxJavaPlugins.setErrorHandler(Throwable::printStackTrace)
-            sdkSession.getListener()?.backendUnknownError(errorDetails.errorMessage)
-            viewModel?.handleSuccessFailureResponseButton("failure")
+            try {
+                if (it.throwable != null) {
+                    resultObservable.onError(it.throwable)
+                    sdkSession.getListener()?.sdkError(errorDetails)
+                }else
+                // resultObservable.onError(Throwable(it.errorMessage))
+                    RxJavaPlugins.setErrorHandler(Throwable::printStackTrace)
+
+                sdkSession.getListener()?.backendUnknownError(errorDetails.errorMessage)
+                viewModel?.handleSuccessFailureResponseButton("failure")
+            }catch (e:Exception){
+
+            }
+
 
 
         }
@@ -778,7 +790,7 @@ class CardRepository : APIRequestCallback {
             ChargeStatus.CAPTURED, ChargeStatus.AUTHORIZED -> try {
                 // closePaymentActivity()
                     viewModel?.handleSuccessFailureResponseButton("success")
-                sdkSession.getListener()?.paymentSucceed(charge)
+                     sdkSession.getListener()?.paymentSucceed(charge)
 
                 //  SDKSession().getListener()?.paymentSucceed(charge)
             } catch (e: Exception) {
