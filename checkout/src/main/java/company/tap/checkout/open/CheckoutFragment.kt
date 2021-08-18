@@ -74,9 +74,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         this.viewModel = viewModel
         _Context?.let { cardViewModel.getContext(it) }
         closeIcon?.setOnClickListener {
-            println("bottomSheetDialog"+bottomSheetDialog)
-            dialog?.dismiss()
-        }
+            bottomSheetDialog.hide()
+             }
 
         val view = inflater.inflate(R.layout.fragment_checkouttaps, container, false)
         backgroundColor = (Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.clear")))
