@@ -771,7 +771,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
             amountViewHolder1.setDatafromAPI(
                 currentAmount,
                 currentCurrency,
-                PaymentDataSource?.getItems()?.size.toString()
+                PaymentDataSource.getItems()?.size.toString()
             )
         }
         /**
@@ -868,7 +868,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                 items.funding == PaymentDataSource?.getCardType().toString()
             }
 
-        adapter?.updateAdapterDataSavedCard(filteredSavedCardList)
+        adapter.updateAdapterDataSavedCard(filteredSavedCardList)
     }
 
 
@@ -931,7 +931,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                     null,
                     null,
                     null,
-                    PaymentDataSource?.getCustomer().identifier,
+                    PaymentDataSource.getCustomer().identifier,
                     cardId
                 )
 
@@ -1320,7 +1320,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCurrencyClicked(currencySelected: String, currencyRate: BigDecimal) {
         if (::itemList.isInitialized) {
-            for (i in itemList?.indices) {
+            for (i in itemList.indices) {
                 println("item per unit start >>" + itemList[i].amountPerUnit)
                 itemList[i].amountPerUnit = (itemList[i].getAmountPerUnit()?.times(currencyRate))
                 // itemList[i].currency = currencySelected
@@ -1629,13 +1629,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         callBinLookupApi(card.cardNumber?.substring(0, 6))
 
         Handler().postDelayed({
-            val binLookupResponse: BINLookupResponse? = PaymentDataSource?.getBinLookupResponse()
-            if (PaymentDataSource?.getCardType() != null && PaymentDataSource?.getCardType() == CardType.ALL) {
+            val binLookupResponse: BINLookupResponse? = PaymentDataSource.getBinLookupResponse()
+            if (PaymentDataSource.getCardType() != null && PaymentDataSource.getCardType() == CardType.ALL) {
                 setScannedCardDetails(card)
 
             } else {
                 if (binLookupResponse != null) {
-                    paymentInputViewHolder?.checkAllowedCardTypes(binLookupResponse)
+                    paymentInputViewHolder.checkAllowedCardTypes(binLookupResponse)
                     setScannedCardDetails(card)
                 }
 
