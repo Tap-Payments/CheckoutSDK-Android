@@ -153,7 +153,7 @@ class CardRepository : APIRequestCallback {
 
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun retrieveBinLookup(context: Context, viewModel: CheckoutViewModel, binValue: String?) {
+    fun retrieveBinLookup( viewModel: CheckoutViewModel, binValue: String?) {
         this.viewModel = viewModel
         NetworkController.getInstance().processRequest(TapMethodType.GET, ApiService.BIN + binValue, null,
                 this, BIN_RETRIEVE_CODE
