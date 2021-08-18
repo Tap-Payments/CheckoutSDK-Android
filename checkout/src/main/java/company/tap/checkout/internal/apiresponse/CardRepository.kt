@@ -477,7 +477,10 @@ class CardRepository : APIRequestCallback {
             ChargeStatus.AUTHORIZED -> {
                 SDKSession.getListener()?.authorizationSucceed(chargeResponse as Authorize)
             }
-            ChargeStatus.FAILED -> SDKSession.getListener()?.paymentFailed(chargeResponse)
+            ChargeStatus.FAILED ->{
+                viewModel?.handleSuccessFailureResponseButton("failure")
+                SDKSession.getListener()?.paymentFailed(chargeResponse)
+            }
             ChargeStatus.ABANDONED -> SDKSession.getListener()?.paymentFailed(chargeResponse)
             ChargeStatus.CANCELLED -> SDKSession.getListener()?.paymentFailed(chargeResponse)
             ChargeStatus.DECLINED -> SDKSession.getListener()?.paymentFailed(chargeResponse)
@@ -486,7 +489,7 @@ class CardRepository : APIRequestCallback {
             ChargeStatus.TIMEDOUT -> SDKSession.getListener()?.paymentFailed(chargeResponse)
             ChargeStatus.IN_PROGRESS -> {
                 if (chargeResponse.transaction != null && chargeResponse.transaction.asynchronous) {
-                    println("open INPROGRESS")
+                   viewModel?.displayAsynchronousPaymentView(chargeResponse)
                 }
             }
         }
@@ -786,6 +789,7 @@ class CardRepository : APIRequestCallback {
             ChargeStatus.FAILED, ChargeStatus.ABANDONED, ChargeStatus.CANCELLED, ChargeStatus.DECLINED, ChargeStatus.RESTRICTED, ChargeStatus.UNKNOWN, ChargeStatus.TIMEDOUT -> try {
                 //closePaymentActivity()
                 SDKSession.getListener()?.paymentFailed(charge)
+                viewModel?.handleSuccessFailureResponseButton("failure")
 
             } catch (e: Exception) {
                 Log.d("cardrepo", " Error while calling fireWebPaymentCallBack >>> method paymentFailed(charge)")

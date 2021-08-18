@@ -30,5 +30,6 @@ interface BaseLayouttManager {
     fun dialogueExecuteExtraFees(response :String,paymentType: PaymentType, savedCardsModel: Any?)
     fun deleteSelectedCardListener(delSelectedCard:DeleteCardResponse)
      fun handleSuccessFailureResponseButton(response: String)
+     fun displayAsynchronousPaymentView(chargeResponse:Charge)
 
 }
