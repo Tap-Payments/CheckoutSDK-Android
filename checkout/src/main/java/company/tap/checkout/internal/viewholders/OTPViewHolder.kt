@@ -32,7 +32,6 @@ class OTPViewHolder(context: Context) : TapBaseViewHolder {
         otpView.otpSentConstraintGoPay.visibility = View.VISIBLE
         otpView.otpSentTextNormalPay.visibility = View.VISIBLE
         otpView.mobileNumberTextNormalPay.visibility = View.VISIBLE
-
     }
 
 }

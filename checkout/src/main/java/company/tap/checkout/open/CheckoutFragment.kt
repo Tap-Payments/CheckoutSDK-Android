@@ -73,9 +73,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         val cardViewModel: CardViewModel by viewModels()
         this.viewModel = viewModel
         _Context?.let { cardViewModel.getContext(it) }
-        closeIcon?.setOnClickListener {
-            bottomSheetDialog.hide()
-             }
+
 
         val view = inflater.inflate(R.layout.fragment_checkouttaps, container, false)
         backgroundColor = (Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.clear")))
@@ -85,8 +83,13 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         val frameLayout: FrameLayout? = view?.findViewById(R.id.fragment_container_nfc_lib)
         val webFrameLayout: FrameLayout? = view?.findViewById(R.id.webFrameLayout)
         val inLineCardLayout: FrameLayout? = view?.findViewById(R.id.inline_container)
+        val closeIcon: TapImageView? = view?.findViewById(R.id.closeIcon)
+        closeIcon?.visibility = View.VISIBLE
 
-
+        closeIcon?.setOnClickListener {
+            bottomSheetDialog.dismissWithAnimation
+            bottomSheetDialog.hide()
+        }
 
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
         tapNfcCardReader = TapNfcCardReader(requireActivity())
@@ -131,8 +134,9 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         enabledSections.add(SectionType.AMOUNT_ITEMS)
         enabledSections.add(SectionType.FRAGMENT)
        viewModel.displayStartupLayout(enabledSections)
-        viewModel.getDatasfromAPIs(PaymentDataSource?.getSDKSettings(),PaymentDataSource?.getPaymentOptionsResponse())
+        viewModel.getDatasfromAPIs(PaymentDataSource.getSDKSettings(),PaymentDataSource.getPaymentOptionsResponse())
         setBottomSheetInterface(this)
+
         return enabledSections
     }
 

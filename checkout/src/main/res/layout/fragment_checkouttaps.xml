@@ -10,7 +10,8 @@
 
 <RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#00FFFFFF"
     android:gravity="center">
 
     <LinearLayout
@@ -65,6 +66,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:id="@+id/closeIcon"
+        android:visibility="gone"
         android:layout_alignParentEnd="true"
         android:src="@drawable/ic_close"
         android:layout_gravity="end"/>
