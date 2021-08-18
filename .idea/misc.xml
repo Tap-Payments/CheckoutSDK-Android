@@ -7,6 +7,7 @@
         <entry key="checkout/src/main/res/layout/action_button_animation.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/amountview_layout.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/businessview_layout.xml" value="0.20416666666666666" />
+        <entry key="checkout/src/main/res/layout/fragment_checkouttaps.xml" value="0.16109422492401215" />
         <entry key="checkout/src/main/res/layout/fragment_web.xml" value="0.29867256637168144" />
         <entry key="checkout/src/main/res/layout/otpview_layout.xml" value="0.10280797101449275" />
         <entry key="checkout/src/main/res/layout/switch_layout.xml" value="0.16109422492401215" />
