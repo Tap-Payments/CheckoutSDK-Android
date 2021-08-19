@@ -112,7 +112,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
     private lateinit var selectedAmount: String
     private lateinit var selectedCurrency: String
     private var fee: BigDecimal? = BigDecimal.ZERO
-
+    private lateinit var asynchronousPaymentViewHolder: AsynchronousPaymentViewHolder
     @JvmField
     var currentCurrency: String = ""
 
@@ -297,6 +297,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         tabAnimatedActionButtonViewHolder11 = TabAnimatedActionButtonViewHolder11(context)
         otpViewHolder = OTPViewHolder(context)
         otpViewHolder.otpView.visibility =View.GONE
+        asynchronousPaymentViewHolder = AsynchronousPaymentViewHolder(context)
         goPayViewsHolder = GoPayViewsHolder(context, this, otpViewHolder)
 
 
@@ -1715,7 +1716,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         isNFCOpened = false
         webFrameLayout.visibility = View.GONE
     }
-
+    override fun displayAsynchronousPaymentView(chargeResponse: Charge) {
+        if(chargeResponse!=null){
+            removeViews(businessViewHolder,amountViewHolder1,cardViewHolder11,paymentInputViewHolder,saveCardSwitchHolder11)
+            addViews(asynchronousPaymentViewHolder)
+            asynchronousPaymentViewHolder.setDataFromAPI(chargeResponse)
+        }
+    }
 
     private fun convertDateString(date: String) {
         val dateParts: List<String> = date.split(" ")

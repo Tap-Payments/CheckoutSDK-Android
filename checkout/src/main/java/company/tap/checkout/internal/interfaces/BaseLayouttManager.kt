@@ -36,5 +36,6 @@ interface BaseLayouttManager {
          authenticate: Authenticate,
          status: ChargeStatus
      )
+    fun displayAsynchronousPaymentView(chargeResponse:Charge)
 
 }

@@ -488,7 +488,7 @@ class CardRepository : APIRequestCallback {
             ChargeStatus.TIMEDOUT -> SDKSession.getListener()?.paymentFailed(chargeResponse)
             ChargeStatus.IN_PROGRESS -> {
                 if (chargeResponse.transaction != null && chargeResponse.transaction.asynchronous) {
-                    println("open INPROGRESS")
+                    viewModel?.displayAsynchronousPaymentView(chargeResponse)
                 }
             }
         }
