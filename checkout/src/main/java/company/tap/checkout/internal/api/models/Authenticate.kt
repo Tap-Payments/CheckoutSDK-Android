@@ -27,7 +27,7 @@ data class Authenticate(
 
     @SerializedName("by")
     @Expose
-    private val by: AuthenticationRequirer,
+     val by: AuthenticationRequirer,
 
     @SerializedName("status")
     @Expose
@@ -35,7 +35,7 @@ data class Authenticate(
 
     @SerializedName("retry_attempt")
     @Expose
-    private val retryAttempt: Int = 0,
+     val retryAttempt: Int = 0,
 
     @SerializedName("url")
     @Expose
@@ -55,5 +55,8 @@ data class Authenticate(
 
     @SerializedName("value")
     @Expose
-    private var value: String? = null
+     var value: String? = null,
+    @SerializedName("message")
+    @Expose
+     var message: String? = null
 ) : Serializable

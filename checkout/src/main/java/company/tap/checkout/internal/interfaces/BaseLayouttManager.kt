@@ -1,7 +1,9 @@
 package company.tap.checkout.internal.interfaces
 
 import android.content.Context
+import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.enums.PaymentType
+import company.tap.checkout.internal.api.models.Authenticate
 import company.tap.checkout.internal.api.models.BINLookupResponse
 import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.api.models.PhoneNumber
@@ -29,6 +31,10 @@ interface BaseLayouttManager {
     fun didDialogueExecute(response: String, cardTypeDialog: Boolean?)
     fun dialogueExecuteExtraFees(response :String,paymentType: PaymentType, savedCardsModel: Any?)
     fun deleteSelectedCardListener(delSelectedCard:DeleteCardResponse)
-     fun handleSuccessFailureResponseButton(response: String)
+     fun handleSuccessFailureResponseButton(
+         response: String,
+         authenticate: Authenticate,
+         status: ChargeStatus
+     )
 
 }

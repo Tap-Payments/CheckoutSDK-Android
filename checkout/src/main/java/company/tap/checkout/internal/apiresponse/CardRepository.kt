@@ -470,8 +470,10 @@ class CardRepository : APIRequestCallback {
                 }
             }
             ChargeStatus.CAPTURED -> {
+                if(chargeResponse is Authorize)handleAuthorizeResponse(chargeResponse as Authorize)
                 SDKSession.getListener()?.paymentSucceed(chargeResponse)
-                viewModel?.handleSuccessFailureResponseButton("success")
+
+                viewModel?.handleSuccessFailureResponseButton("success",chargeResponse.authenticate,chargeResponse.status)
 
             }
             ChargeStatus.AUTHORIZED -> {
@@ -572,7 +574,11 @@ class CardRepository : APIRequestCallback {
             // resultObservable.onError(Throwable(it.errorMessage))
                 RxJavaPlugins.setErrorHandler(Throwable::printStackTrace)
             sdkSession.getListener()?.backendUnknownError(errorDetails.errorMessage)
-            viewModel?.handleSuccessFailureResponseButton("failure")
+            viewModel?.handleSuccessFailureResponseButton(
+                "failure",
+                chargeResponse.authenticate,
+                chargeResponse.status
+            )
 
 
         }
@@ -775,7 +781,11 @@ class CardRepository : APIRequestCallback {
             ChargeStatus.CAPTURED, ChargeStatus.AUTHORIZED -> try {
                 // closePaymentActivity()
                     sdkSession.getListener()?.paymentSucceed(charge)
-                viewModel?.handleSuccessFailureResponseButton("success")
+                viewModel?.handleSuccessFailureResponseButton(
+                    "success",
+                    chargeResponse.authenticate,
+                    chargeResponse.status
+                )
 
 
                 //  SDKSession().getListener()?.paymentSucceed(charge)

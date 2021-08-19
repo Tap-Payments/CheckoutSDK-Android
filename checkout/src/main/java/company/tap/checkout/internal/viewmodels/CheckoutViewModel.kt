@@ -34,6 +34,7 @@ import company.tap.checkout.internal.PaymentDataProvider
 import company.tap.checkout.internal.adapter.CardTypeAdapterUIKIT
 import company.tap.checkout.internal.adapter.CurrencyTypeAdapter
 import company.tap.checkout.internal.adapter.GoPayCardAdapterUIKIT
+import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.internal.api.responses.DeleteCardResponse
@@ -51,9 +52,7 @@ import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
 import company.tap.checkout.internal.viewholders.*
 import company.tap.checkout.internal.webview.WebFragment
 import company.tap.checkout.internal.webview.WebViewContract
-import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession
-import company.tap.checkout.open.controller.SDKSession.supportFragmentManager
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.CardType
 import company.tap.checkout.open.enums.TransactionMode
@@ -65,7 +64,6 @@ import company.tap.tapuilibrary.themekit.theme.SeparatorViewTheme
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
-import company.tap.tapuilibrary.uikit.organisms.FawryPaymentView
 import kotlinx.android.synthetic.main.action_button_animation.view.*
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.businessview_layout.view.*
@@ -296,7 +294,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
             cardViewModel
         )
         itemsViewHolder1 = ItemsViewHolder1(context, this)
+        tabAnimatedActionButtonViewHolder11 = TabAnimatedActionButtonViewHolder11(context)
         otpViewHolder = OTPViewHolder(context)
+        otpViewHolder.otpView.visibility =View.GONE
         goPayViewsHolder = GoPayViewsHolder(context, this, otpViewHolder)
 
 
@@ -971,7 +971,20 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         }
     }
 
-    override fun handleSuccessFailureResponseButton(response: String) {
+    override fun handleSuccessFailureResponseButton(
+        response: String,
+        authenticate: Authenticate,
+        status: ChargeStatus
+    ) {
+
+        /**
+         * Here you can check 2 things
+         * - charge status  - SUCCESS, FAILED by enum
+         * -authenticate- to identify type of payment
+         *
+         *  {authenticate.type - give OTP  && authenticate.message- gives Success/Failure}
+         * */
+
         when (response) {
             "success" -> {
                 saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(
@@ -1045,6 +1058,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         viewHolders.forEach {
             Handler(Looper.getMainLooper()).postDelayed(Runnable {
                 if (::sdkLayout.isInitialized)
+                    //check why it says remove view before adding
+                    sdkLayout.removeView(it?.view)
                     sdkLayout.addView(it?.view)
                 val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
                 it?.view?.startAnimation(animation)
