@@ -74,6 +74,7 @@ import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.businessview_layout.view.*
 import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
 import kotlinx.android.synthetic.main.gopaysavedcard_layout.view.*
+import kotlinx.android.synthetic.main.otpview_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 import java.math.BigDecimal
 import kotlin.properties.Delegates
@@ -243,19 +244,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun confirmOTPCode(otpCode: String) {
-<<<<<<< HEAD
-        otpViewHolder.otpView.otpViewActionButton.changeButtonState(ActionButtonState.LOADING)
-        when(PaymentDataSource.getTransactionMode()){
-=======
         otpViewHolder.view.otpView.otpViewActionButton.changeButtonState(ActionButtonState.LOADING)
-
-        when (PaymentDataSource.getTransactionMode()) {
->>>>>>> FT_050821_final
-            TransactionMode.PURCHASE -> sendChargeOTPCode(otpCode)
+        when(PaymentDataSource.getTransactionMode())
+        {TransactionMode.PURCHASE ->  sendChargeOTPCode(otpCode)
             TransactionMode.AUTHORIZE_CAPTURE -> sendAuthorizeOTPCode(otpCode)
             else->sendChargeOTPCode(otpCode)
         }
-    }
+
+        }
+
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun sendAuthorizeOTPCode(otpCode: String) {
@@ -1043,7 +1040,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         }
     }
 
-<<<<<<< HEAD
+
 
     override fun displayAsynchronousPaymentView(chargeResponse: Charge) {
         if(chargeResponse!=null){
@@ -1055,9 +1052,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         }
     }
 
-
-=======
->>>>>>> FT_050821_final
     private fun removeViews(vararg viewHolders: TapBaseViewHolder?) {
 
         viewHolders.forEach {
@@ -1400,11 +1394,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         else
             tabAnimatedActionButtonViewHolder11.view.actionButton.changeButtonState(ActionButtonState.ERROR)
         setSlideAnimation()
-<<<<<<< HEAD
-        removeAllViews()
-=======
 
->>>>>>> FT_050821_final
+       // removeAllViews()
+
+
     }
 
     override fun directLoadingFinished(done: Boolean) {
