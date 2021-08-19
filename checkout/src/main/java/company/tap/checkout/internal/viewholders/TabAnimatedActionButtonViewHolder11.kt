@@ -29,18 +29,21 @@ class TabAnimatedActionButtonViewHolder11(context: Context) : TapBaseViewHolder 
     }
 
     override fun bindViewComponents() {
-         // view.actionButton.setButtonDataSource(getSuccessDataSource(Color.GRAY, "Pay", Color.WHITE ))
-//        view.actionButton.setButtonDataSource(false,
-//            view.context?.let { LocalizationManager.getLocale(it).language },LocalizationManager.getValue("pay","ActionButton"),R. color.gray)
-
-        activateBlueConfirmButton(view.context)
+        activateButton(view.context)
     }
 
 
 
     fun activateButton(context: Context) {
-        view.actionButton.setButtonDataSource(true,
-            LocalizationManager.getLocale(context).language,LocalizationManager.getValue("pay","ActionButton"),R.color.gray)
+        view.actionButton.setButtonDataSource(
+            true,
+            context.let { LocalizationManager.getLocale(it).language },
+            LocalizationManager.getValue("pay", "ActionButton"),
+            Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
+            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
+        )
+//        view.actionButton.setButtonDataSource(true,
+//            LocalizationManager.getLocale(context).language,LocalizationManager.getValue("pay","ActionButton"),R.color.gray)
     }
 
     fun activateBlueConfirmButton(context: Context) {

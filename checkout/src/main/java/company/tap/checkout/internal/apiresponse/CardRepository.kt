@@ -285,7 +285,7 @@ class CardRepository : APIRequestCallback {
         else if(requestCode == CHARGE_RETRIEVE_CODE) {
             response?.body().let {
                 chargeResponse = Gson().fromJson(it, Charge::class.java)
-                if(chargeResponse?.status?.name == ChargeStatus.CAPTURED.name){
+                if(chargeResponse.status?.name == ChargeStatus.CAPTURED.name){
                     fireWebPaymentCallBack(chargeResponse)
                   //  chargeResponse?.transaction?.url?.let { it1 -> viewModel?.displayRedirect(it1) }
                   //  viewModel?.redirectLoadingFinished(true)
@@ -298,7 +298,7 @@ class CardRepository : APIRequestCallback {
                 binLookupResponse = Gson().fromJson(it, BINLookupResponse::class.java)
                 if(::binLookupResponse.isInitialized&&::cardRepositoryContext.isInitialized)
                 viewModel.setBinLookupData(binLookupResponse, cardRepositoryContext, cardViewModel)
-                PaymentDataSource?.setBinLookupResponse(binLookupResponse)
+                PaymentDataSource.setBinLookupResponse(binLookupResponse)
 
             }
         }
@@ -306,19 +306,21 @@ class CardRepository : APIRequestCallback {
             response?.body().let {
                 tokenResponse = Gson().fromJson(it, Token::class.java)
                 if(tokenResponse!=null ) {
-                    if (PaymentDataSource.getTransactionMode() == TransactionMode.AUTHORIZE_CAPTURE) {
-                        createAuthorizeRequest(cardRepositoryContext, viewModel, null, tokenResponse.id)
+                    when {
+                        PaymentDataSource.getTransactionMode() == TransactionMode.AUTHORIZE_CAPTURE -> {
+                            createAuthorizeRequest(cardRepositoryContext, viewModel, null, tokenResponse.id)
 
-                    }
-                    else if(PaymentDataSource.getTransactionMode()==TransactionMode.TOKENIZE_CARD){
-                        SDKSession?.getListener()?.cardTokenizedSuccessfully(tokenResponse)
+                        }
+                        PaymentDataSource.getTransactionMode()==TransactionMode.TOKENIZE_CARD -> {
+                            SDKSession.getListener()?.cardTokenizedSuccessfully(tokenResponse)
 
-                    }
-                    else if(PaymentDataSource.getTransactionMode()==TransactionMode.SAVE_CARD){
-                        createSaveCard( viewModel, null, tokenResponse.id)
-                    }
-                    else {
-                      createChargeRequest(viewModel, null, tokenResponse.id)
+                        }
+                        PaymentDataSource.getTransactionMode()==TransactionMode.SAVE_CARD -> {
+                            createSaveCard( viewModel, null, tokenResponse.id)
+                        }
+                        else -> {
+                            createChargeRequest(viewModel, null, tokenResponse.id)
+                        }
                     }
 
 
@@ -330,14 +332,12 @@ class CardRepository : APIRequestCallback {
                 authorizeActionResponse = Gson().fromJson(it, Authorize::class.java)
                println("authorizeActionResponse value is>>>>" + authorizeActionResponse.status.name)
 
-                    if(authorizeActionResponse?.status?.name == ChargeStatus.INITIATED.name){
+                    if(authorizeActionResponse.status?.name == ChargeStatus.INITIATED.name){
                        // fireWebPaymentCallBack(authorizeActionResponse)
-                           if(authorizeActionResponse?.transaction.url != null){
-                               authorizeActionResponse?.transaction?.url?.let { it1 -> viewModel?.displayRedirect(it1) }
+                           if(authorizeActionResponse.transaction.url != null){
+                               authorizeActionResponse.transaction?.url?.let { it1 -> viewModel.displayRedirect(it1, chargeResponse.authenticate) }
                            }else handleAuthorizeResponse(authorizeActionResponse)
-
                     }else  handleAuthorizeResponse(authorizeActionResponse)
-
 
             }
         }
@@ -345,15 +345,15 @@ class CardRepository : APIRequestCallback {
             response?.body().let {
                 deleteCardResponse = Gson().fromJson(it, DeleteCardResponse::class.java)
                 println("deleteCardResponse is" + deleteCardResponse)
-                viewModel?.deleteSelectedCardListener(deleteCardResponse)
+                viewModel.deleteSelectedCardListener(deleteCardResponse)
             }
         }
         else if(requestCode == CREATE_SAVE_CARD){
             println("data in resp body>>" + response?.body())
             response?.body().let {
                 saveCardResponse = Gson().fromJson(it, SaveCard::class.java)
-                if(saveCardResponse?.status?.name == ChargeStatus.INITIATED.name){
-                    saveCardResponse?.transaction?.url?.let { it1 -> viewModel?.displayRedirect(it1) }
+                if(saveCardResponse.status?.name == ChargeStatus.INITIATED.name){
+                    saveCardResponse.transaction?.url?.let { it1 -> viewModel.displayRedirect(it1,chargeResponse.authenticate) }
 
                 }else {
                     handleSaveCardResponse(saveCardResponse)
@@ -368,8 +368,6 @@ class CardRepository : APIRequestCallback {
                 println("saveCardResponse value is>>>>" + saveCardResponse.status.name)
                 sdkSession.getListener()?.cardSaved(saveCardResponse)
             }
-
-
         }
         else if(requestCode == RETRIEVE_AUTHORIZE_CODE){
             response?.body().let {
@@ -429,14 +427,14 @@ class CardRepository : APIRequestCallback {
             )
             val tapCheckoutFragment = CheckoutFragment()
             tapCheckoutFragment.show(supportFragmentManager, null)
-            sdkSession?.sessionDelegate?.sessionHasStarted()
+            sdkSession.sessionDelegate?.sessionHasStarted()
             SessionManager.setActiveSession(false)
             resultObservable.onNext(viewState)
             resultObservable.onComplete()
         }
         if( ::chargeResponse.isInitialized && chargeResponse!=null){
             if(::viewModel.isInitialized)
-                chargeResponse?.transaction?.url?.let { viewModel.displayRedirect(it) }
+                chargeResponse.transaction?.url?.let { viewModel.displayRedirect(it,chargeResponse.authenticate) }
 
         }
 

@@ -9,6 +9,9 @@
     android:layout_gravity="center"
     android:minHeight="80dp"
    >
+
+
+
 <company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
     android:id="@+id/actionButton"
     app:layout_constraintTop_toTopOf="parent"

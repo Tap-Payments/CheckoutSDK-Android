@@ -692,7 +692,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
     }
 
 
-    override fun displayRedirect(url: String) {
+    override fun displayRedirect(url: String , authenticate: Authenticate?) {
         this.redirectURL = url
         println("redirectURL>>>" + redirectURL)
         if (::redirectURL.isInitialized && ::fragmentManager.isInitialized) {
@@ -705,7 +705,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                 .replace(
                     R.id.webFrameLayout, WebFragment.newInstance(
                         redirectURL,
-                        this, cardViewModel
+                        this, cardViewModel, authenticate
+
                     )
                 ).commitNow()
         }
@@ -987,69 +988,68 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
          *  {authenticate.type - give OTP  && authenticate.message- gives Success/Failure}
          * */
 
-        if (authenticate?.type == AuthenticationType.OTP) {
-            when (response) {
-                "success" -> {
-                    tabAnimatedActionButtonViewHolder11?.view?.actionButton?.getImageView(
-                        R.drawable.success,
-                        1
-                    ) {
-                        setSlideAnimation()
-
-
-
-                    }
-
-
-                }
-                else -> {
-                    if (::bottomSheetDialog.isInitialized)
-                        bottomSheetDialog.dismiss()
-
-                    tabAnimatedActionButtonViewHolder11?.view?.actionButton?.getImageView(
-                        R.drawable.error_gif,
-                        1
-                    ) {
-                        setSlideAnimation()
-                        removeViews(tabAnimatedActionButtonViewHolder11)
-                    }
-                }
-            }
-        }else{
-            tabAnimatedActionButtonViewHolder11?.activateButton(context)
-            when (response) {
-                "success" -> {
-                    tabAnimatedActionButtonViewHolder11?.view?.actionButton?.getImageView(
-                        R.drawable.success,
-                        1
-                    ) {
-                        setSlideAnimation()
-                        removeViews(cardViewHolder11)
-                        removeViews(businessViewHolder)
-                        removeViews(amountViewHolder1)
-                        removeViews(saveCardSwitchHolder11)
-                        removeViews(paymentInputViewHolder)
-                        removeViews(tabAnimatedActionButtonViewHolder11)
-                    }
-                }
-                else -> {
-                    if (::bottomSheetDialog.isInitialized)
-                        bottomSheetDialog.dismiss()
-
-                    tabAnimatedActionButtonViewHolder11?.view?.actionButton?.getImageView(
-                        R.drawable.error_gif,
-                        1
-                    ) {
-                        if (::bottomSheetDialog.isInitialized) {
-                            bottomSheetDialog.dismissWithAnimation
-                            bottomSheetDialog.hide()
-                        }
-                        setSlideAnimation()
-                        removeViews(tabAnimatedActionButtonViewHolder11)
-                    }
-                }
-            }
-        }
+//        if (authenticate?.type == AuthenticationType.OTP) {
+//            tabAnimatedActionButtonViewHolder11?.activateBlueConfirmButton(context)
+//            when (response) {
+//                "success" -> {
+//                    tabAnimatedActionButtonViewHolder11?.view?.actionButton?.getImageView(
+//                        R.drawable.success,
+//                        1
+//                    ) {
+//                        setSlideAnimation()
+//
+//                    }
+//
+//
+//                }
+//                else -> {
+//                    if (::bottomSheetDialog.isInitialized)
+//                        bottomSheetDialog.dismiss()
+//
+//                    tabAnimatedActionButtonViewHolder11?.view?.actionButton?.getImageView(
+//                        R.drawable.error_gif,
+//                        1
+//                    ) {
+//                        setSlideAnimation()
+//                        removeViews(tabAnimatedActionButtonViewHolder11)
+//                    }
+//                }
+//            }
+//        }else{
+//            tabAnimatedActionButtonViewHolder11?.activateButton(context)
+//            when (response) {
+//                "success" -> {
+//                    tabAnimatedActionButtonViewHolder11?.view?.actionButton?.getImageView(
+//                        R.drawable.success,
+//                        1
+//                    ) {
+//                        setSlideAnimation()
+//                        removeViews(cardViewHolder11)
+//                        removeViews(businessViewHolder)
+//                        removeViews(amountViewHolder1)
+//                        removeViews(saveCardSwitchHolder11)
+//                        removeViews(paymentInputViewHolder)
+//                        removeViews(tabAnimatedActionButtonViewHolder11)
+//                    }
+//                }
+//                else -> {
+//                    if (::bottomSheetDialog.isInitialized)
+//                        bottomSheetDialog.dismiss()
+//
+//                    tabAnimatedActionButtonViewHolder11?.view?.actionButton?.getImageView(
+//                        R.drawable.error_gif,
+//                        1
+//                    ) {
+//                        if (::bottomSheetDialog.isInitialized) {
+//                            bottomSheetDialog.dismissWithAnimation
+//                            bottomSheetDialog.hide()
+//                        }
+//                        setSlideAnimation()
+//                        removeViews(tabAnimatedActionButtonViewHolder11)
+//                    }
+//                }
+//            }
+//        }
     }
 
     private fun removeViews(vararg viewHolders: TapBaseViewHolder?) {
@@ -1379,30 +1379,65 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
     }
 
     @SuppressLint("ResourceType")
-    override fun redirectLoadingFinished(done: Boolean) {
+    override fun redirectLoadingFinished(done: Boolean, authenticate: Authenticate?) {
 
+        if(authenticate?.type == AuthenticationType.OTP){
+            tabAnimatedActionButtonViewHolder11?.activateBlueConfirmButton(context)
+        }else
+            tabAnimatedActionButtonViewHolder11?.activateButton(context)
+
+
+        // check if comes from otp or normal redirect
         if (::webFrameLayout.isInitialized)
             webFrameLayout.visibility = View.GONE
         removeAllViews()
         addViews(tabAnimatedActionButtonViewHolder11)
         if (done){
-            tabAnimatedActionButtonViewHolder11?.view?.actionButton?.changeButtonState(
-                ActionButtonState.SUCCESS
-            )
-            Handler().postDelayed({
-                if(::bottomSheetDialog.isInitialized)
-                    bottomSheetDialog.dismiss()
-            }, 2000)
+
+            tabAnimatedActionButtonViewHolder11?.view?.actionButton?.getImageView(
+                R.drawable.success,
+                1
+            ) {
+                Handler().postDelayed({
+                    if (::bottomSheetDialog.isInitialized)
+                        bottomSheetDialog.dismiss()
+                }, 5000)
+
+            }?.let { it1 ->
+                tabAnimatedActionButtonViewHolder11?.view?.actionButton?.addChildView(
+                    it1
+                )
+            }
+
+
         }
         else {
-            tabAnimatedActionButtonViewHolder11?.view?.actionButton?.changeButtonState(
-                ActionButtonState.ERROR
-            )
-            Handler().postDelayed({
-                if (::bottomSheetDialog.isInitialized)
-                    bottomSheetDialog.dismiss()
-            }, 2000)
-            setSlideAnimation()
+
+            tabAnimatedActionButtonViewHolder11?.view?.actionButton?.getImageView(
+                R.drawable.error_gif,
+                1
+            ) {
+                Handler().postDelayed({
+                    if (::bottomSheetDialog.isInitialized)
+                        bottomSheetDialog.dismiss()
+                }, 5000)
+
+            }?.let { it1 ->
+                tabAnimatedActionButtonViewHolder11?.view?.actionButton?.addChildView(
+                    it1
+                )
+            }
+
+
+
+//            tabAnimatedActionButtonViewHolder11?.view?.actionButton?.changeButtonState(
+//                ActionButtonState.ERROR
+//            )
+//            Handler().postDelayed({
+//                if (::bottomSheetDialog.isInitialized)
+//                    bottomSheetDialog.dismiss()
+//            }, 6000)
+//            setSlideAnimation()
         }
     }
 
@@ -1865,6 +1900,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         savedCardsModel: Any?
     ) {
         if (response == "YES") {
+            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
             println("savedCardsModel>>>>" + savedCardsModel)
             if (savedCardsModel != null) {
                 if (paymentType == PaymentType.CARD) {

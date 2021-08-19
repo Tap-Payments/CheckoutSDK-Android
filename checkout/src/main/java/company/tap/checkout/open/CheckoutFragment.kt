@@ -8,6 +8,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -85,7 +86,12 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         val inLineCardLayout: FrameLayout? = view?.findViewById(R.id.inline_container)
         val closeText: TapTextView? = view?.findViewById(R.id.closeText)
         closeText?.text = LocalizationManager.getValue("close", "Common")
-        closeText?.visibility = View.VISIBLE
+
+
+        Handler().postDelayed({
+            closeText?.visibility = View.VISIBLE
+
+        }, 4000)
 
         closeText?.setOnClickListener {
             bottomSheetDialog.dismissWithAnimation
