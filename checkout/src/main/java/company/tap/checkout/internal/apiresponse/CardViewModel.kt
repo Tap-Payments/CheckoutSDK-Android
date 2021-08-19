@@ -102,7 +102,7 @@ class CardViewModel : ViewModel() {
     }
     @RequiresApi(Build.VERSION_CODES.N)
     private fun retrieveBinlookup(viewModel: CheckoutViewModel, binValue: String?) {
-        repository.retrieveBinLookup(context,viewModel,binValue)
+        repository.retrieveBinLookup(viewModel,binValue)
 
     }
     @RequiresApi(Build.VERSION_CODES.N)
@@ -117,14 +117,14 @@ class CardViewModel : ViewModel() {
     }
     @RequiresApi(Build.VERSION_CODES.N)
     private fun callDeleteCardAPI(viewModel: CheckoutViewModel, deleteCardId: String?, customerId: String?) {
-        println("<<customerId>>"+customerId+"<<<deleteCardId>>>"+deleteCardId)
+       // println("<<customerId>>"+customerId+"<<<deleteCardId>>>"+deleteCardId)
         repository.callDeleteCardAPI(context,viewModel,deleteCardId,customerId)
 
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun createTokenWithEncryptedCard(viewModel: CheckoutViewModel, createTokenWithEncryptedDataRequest: CreateTokenCard?) {
-        println("createTokenWithEncryptedDataRequest>>."+createTokenWithEncryptedDataRequest)
+      //  println("createTokenWithEncryptedDataRequest>>."+createTokenWithEncryptedDataRequest)
         if (createTokenWithEncryptedDataRequest != null) {
             repository.createTokenWithEncryptedCard(context,viewModel,createTokenWithEncryptedDataRequest)
         }

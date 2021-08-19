@@ -188,6 +188,10 @@ class PaymenttInputViewHolder(
                 Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
             )
             tabLayout.resetBehaviour()
+            if(PaymentDataSource?.getBinLookupResponse()!=null){
+                PaymentDataSource?.setBinLookupResponse(null)
+
+            }
         }
     }
 
@@ -228,7 +232,7 @@ class PaymenttInputViewHolder(
             }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                onCardTextChange(s)
+                    onCardTextChange(s)
                    cardNumAfterTextChangeListener(s,this)
             }
         })
@@ -334,7 +338,10 @@ class PaymenttInputViewHolder(
 
         if (charSequence != null) {
             if (charSequence.length > 2) callCardBinNumberApi(charSequence, textWatcher)
-            else tabLayout.resetBehaviour()
+            else {
+                tabLayout.resetBehaviour()
+                PaymentDataSource.setBinLookupResponse(null)
+            }
         }
         charSequence?.let {
             if (charSequence.isNullOrEmpty()) {
@@ -350,12 +357,11 @@ class PaymenttInputViewHolder(
                 val binLookupResponse: BINLookupResponse? =
                     PaymentDataSource.getBinLookupResponse()
                 if (PaymentDataSource.getCardType() != null && PaymentDataSource.getCardType() == CardType.ALL) {
-                    setTabLayoutBasedOnApiResponse(binLookupResponse)
+                    setTabLayoutBasedOnApiResponse(binLookupResponse,card)
                     tabLayout.setUnselectedAlphaLevel(0.5f)
                 } else {
                     checkAllowedCardTypes(binLookupResponse)
-                    PaymentDataSource.setBinLookupResponse(null)
-                    setTabLayoutBasedOnApiResponse(binLookupResponse)
+                    setTabLayoutBasedOnApiResponse(binLookupResponse,card)
                 }
             }
 
@@ -371,13 +377,16 @@ class PaymenttInputViewHolder(
         }
     }
 
-    private fun setTabLayoutBasedOnApiResponse(binLookupResponse: BINLookupResponse?) {
+    private fun setTabLayoutBasedOnApiResponse(
+        binLookupResponse: BINLookupResponse?,
+        cardBrand: DefinedCardBrand
+    ) {
         if (binLookupResponse?.cardBrand?.name == binLookupResponse?.scheme?.name) {
             // we will send card brand to validator
             binLookupResponse?.cardBrand?.let { it1 ->
                 tabLayout.selectTab(
                     it1,
-                    true
+                     true
                 )
             }
             tabLayout.setUnselectedAlphaLevel(0.5f)
@@ -387,6 +396,7 @@ class PaymenttInputViewHolder(
             tabLayout.setUnselectedAlphaLevel(0.5f)
 
         }
+       // PaymentDataSource.setBinLookupResponse(null)
     }
 
     /*
@@ -530,6 +540,7 @@ class PaymenttInputViewHolder(
         val itemsMobilesList = ArrayList<SectionTabItem>()
         val itemsCardsList = ArrayList<SectionTabItem>()
         intertabLayout.removeAllTabs()
+        PaymentDataSource?.setBinLookupResponse(null)
 //        tabLayout.changeTabItemAlphaValue(1f)
         decideTapSelection(imageURLApi, itemsMobilesList, itemsCardsList)
         /**
@@ -623,7 +634,7 @@ class PaymenttInputViewHolder(
     }
 
     fun setCurrentBinData(binLookupResponse: BINLookupResponse?) {
-        cardNumberWatcher()
+      //  cardNumberWatcher()
         cardSchema = binLookupResponse?.scheme.toString()
     }
 
