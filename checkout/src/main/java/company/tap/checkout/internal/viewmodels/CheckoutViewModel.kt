@@ -39,6 +39,7 @@ import company.tap.checkout.internal.PaymentDataProvider
 import company.tap.checkout.internal.adapter.CardTypeAdapterUIKIT
 import company.tap.checkout.internal.adapter.CurrencyTypeAdapter
 import company.tap.checkout.internal.adapter.GoPayCardAdapterUIKIT
+import company.tap.checkout.internal.adapter.ItemAdapter
 import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.api.models.*
@@ -74,6 +75,7 @@ import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.businessview_layout.view.*
 import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
 import kotlinx.android.synthetic.main.gopaysavedcard_layout.view.*
+import kotlinx.android.synthetic.main.itemviewholder_layout.view.*
 import kotlinx.android.synthetic.main.otpview_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 import java.math.BigDecimal
@@ -124,6 +126,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
     @JvmField
     var currentAmount: String = ""
     private lateinit var adapter: CardTypeAdapterUIKIT
+    private lateinit var itemAdapter: ItemAdapter
     private lateinit var otpViewHolder: OTPViewHolder
     private lateinit var webFrameLayout: FrameLayout
     private lateinit var frameLayout: FrameLayout
@@ -496,11 +499,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
             itemsViewHolder1
         )
         removeAllViews()
-        addViews(businessViewHolder, amountViewHolder1, itemsViewHolder1)
-        /*itemsViewHolder1.setDatafromAPI(
-            allCurrencies.value as ArrayList<SupportedCurrencies>,
-            itemList
-        )*/
+        addViews(businessViewHolder, amountViewHolder1,itemsViewHolder1)
+      //  itemsViewHolder1.view.mainCurrencyChip.chipsRecycler.adapter = currencyAdapter
+     //   itemsViewHolder1.view.itemRecylerView.adapter =itemAdapter
+
+        currencyAdapter.updateAdapterData(allCurrencies.value as List<SupportedCurrencies>)
+
 
 
         //  itemsViewHolder1.setItemsRecylerView()
@@ -534,8 +538,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
             saveCardSwitchHolder11
         )
         //itemsViewHolder1.resetView()
-        itemsViewHolder1.setItemsRecylerView()
-        //itemsViewHolder1.setCurrencyRecylerView()
+     //I comment   itemsViewHolder1.setItemsRecylerView()
+      //  itemsViewHolder1?.view?.itemRecylerView?.adapter = itemAdapter
         frameLayout.visibility = View.GONE
     }
 
@@ -561,8 +565,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         }
         saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.IDLE)
         // itemsViewHolder1.resetView()
-        itemsViewHolder1.setItemsRecylerView()
-        itemsViewHolder1.setCurrencyRecylerView()
+      //  itemsViewHolder1.setItemsRecylerView()
+     //   itemsViewHolder1.setCurrencyRecylerView()
+        itemsViewHolder1.view.mainCurrencyChip.chipsRecycler.adapter = currencyAdapter
+      //  itemsViewHolder1.view.itemRecylerView.adapter =itemAdapter
         frameLayout.visibility = View.GONE
     }
 
@@ -814,8 +820,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                     PaymentDataSource.getItems()
                 )
             }
-            itemsViewHolder1.setItemsRecylerView()
-            itemsViewHolder1.setCurrencyRecylerView()
+          //  itemsViewHolder1.setItemsRecylerView()
+          //  itemsViewHolder1.setCurrencyRecylerView()
+
+
         }
         sdkSettings?.data?.merchant?.name?.let {
             saveCardSwitchHolder11?.setDataFromAPI(
@@ -845,6 +853,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
     private fun initAdaptersAction() {
         adapter = CardTypeAdapterUIKIT(this)
         goPayAdapter = GoPayCardAdapterUIKIT(this)
+        itemAdapter = ItemAdapter()
+
         //  goPayAdapter.updateAdapterData(goPayCardList.value as List<GoPaySavedCards>)
         currencyAdapter = CurrencyTypeAdapter(this)
         if (allCurrencies.value?.isNotEmpty() == true) {
@@ -858,7 +868,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         } else {
             cardViewHolder11.view.mainChipgroup.groupAction?.visibility = View.GONE
         }
-
+      //  itemsViewHolder1.view.itemRecylerView.adapter = itemAdapter
+        itemsViewHolder1.view.mainCurrencyChip.chipsRecycler.adapter = currencyAdapter
+        if(PaymentDataSource?.getItems()!=null){
+    PaymentDataSource?.getItems()?.let { itemAdapter.updateAdapterData(it) }
+      }
         cardViewHolder11.view.mainChipgroup.chipsRecycler.adapter = adapter
         // goPaySavedCardHolder.view.goPayLoginView.chipsRecycler.adapter = goPayAdapter
         cardViewHolder11.view.mainChipgroup.groupAction?.visibility = View.VISIBLE
@@ -1360,7 +1374,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                 println("item per unit >>" + itemList[i].amountPerUnit)
 
             }
-            itemsViewHolder1.setResetItemsRecylerView(itemList)
+           // itemsViewHolder1.setResetItemsRecylerView(itemList)
+          //  itemsViewHolder1.itemsRecyclerView.adapter=itemAdapter
+            itemsViewHolder1.view.itemRecylerView.adapter = itemAdapter
+            itemAdapter.updateAdapterData(itemList)
 
         }
 

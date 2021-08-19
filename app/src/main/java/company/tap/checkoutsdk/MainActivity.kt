@@ -145,7 +145,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
         // Set Payment Items array list
        sdkSession.setPaymentItems(ArrayList()) // ** Optional ** you can pass empty array list
-     //  sdkSession.setPaymentItems(getPaymentItems()) // ** Optional ** you can pass empty array list
+    //   sdkSession.setPaymentItems(getPaymentItems()) // ** Optional ** you can pass empty array list
 
 
         sdkSession.setPaymentType("ALL")  //** Merchant can pass paymentType
