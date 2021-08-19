@@ -12,12 +12,12 @@ All rights reserved.
  **/
 data class Order(
     @SerializedName("id") @Expose
-    private var id: String? = null,
+     var id: String? = null,
     @SerializedName("reference")
 @Expose
-private val reference: String? = null,
+ val reference: String? = null,
 
 @SerializedName("store_url")
 @Expose
-private val store_url: String? = null
+ val store_url: String? = null
 ) : Serializable

@@ -302,7 +302,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         otpViewHolder = OTPViewHolder(context)
         otpViewHolder.otpView.visibility=View.GONE
         goPayViewsHolder = GoPayViewsHolder(context, this, otpViewHolder)
-        asynchronousPaymentViewHolder = AsynchronousPaymentViewHolder(context)
+        asynchronousPaymentViewHolder = AsynchronousPaymentViewHolder(context,this)
         tabAnimatedActionButtonViewHolder11 = TabAnimatedActionButtonViewHolder11(context)
         // nfcViewHolder = NFCViewHolder(context as Activity, context, this, fragmentManager)
     }
@@ -1039,8 +1039,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
 
     override fun displayAsynchronousPaymentView(chargeResponse: Charge) {
         if(chargeResponse!=null){
+            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
             removeViews(businessViewHolder,amountViewHolder1,cardViewHolder11,paymentInputViewHolder,saveCardSwitchHolder11)
-            addViews(asynchronousPaymentViewHolder)
+            businessViewHolder.setDatafromAPI(selectedPaymentOption.image,selectedPaymentOption.brand?.name)
+            addViews(businessViewHolder,asynchronousPaymentViewHolder,)
             asynchronousPaymentViewHolder.setDataFromAPI(chargeResponse)
         }
     }
@@ -1804,11 +1806,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
             filteredByPaymentTypeAndCurrencyAndSortedList(
                 paymentOptionsWorker, PaymentType.WEB, currency
             )
-        println("webPaymentOptions>>>>$webPaymentOptions")
+
         val cardPaymentOptions: java.util.ArrayList<PaymentOption> =
             filteredByPaymentTypeAndCurrencyAndSortedList(
                 paymentOptionsWorker, PaymentType.CARD, currency
             )
+
+        println("webPaymentOptions>>>>$webPaymentOptions")
+        println("cardPaymentOptions>>>>$cardPaymentOptions")
         val hasWebPaymentOptions = webPaymentOptions.size > 0
         val hasCardPaymentOptions = cardPaymentOptions.size > 0
         logicToHandlePaymentDataType(webPaymentOptions, cardPaymentOptions)
@@ -1820,6 +1825,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         webPaymentOptions: ArrayList<PaymentOption>,
         cardPaymentOptions: ArrayList<PaymentOption>
     ) {
+        println("webPaymentOptions in logic >>>>$webPaymentOptions")
+        println("cardPaymentOptions in logic >>>>$cardPaymentOptions")
+
         if(PaymentDataSource.getPaymentDataType()!=null && PaymentDataSource.getPaymentDataType() == "WEB"){
             adapter.updateAdapterDataSavedCard(ArrayList())
             adapter.updateAdapterData(webPaymentOptions)
@@ -1934,6 +1942,23 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         transition.addTarget(this)
         TransitionManager.beginDelayedTransition(this.parent as ViewGroup, transition)
         this.visibility = visibility
+    }
+    fun closeAsynchView(){
+        removeViews(businessViewHolder,asynchronousPaymentViewHolder)
+        businessViewHolder.setDatafromAPI(
+            PaymentDataSource.getSDKSettings()?.data?.merchant?.logo,
+            PaymentDataSource.getSDKSettings()?.data?.merchant?.name
+        )
+        addViews(businessViewHolder,amountViewHolder1,cardViewHolder11,paymentInputViewHolder,saveCardSwitchHolder11)
+        saveCardSwitchHolder11?.view?.visibility= View.VISIBLE
+        saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.IDLE)
+        saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.setButtonDataSource(
+            true,
+            context.let { LocalizationManager.getLocale(it).language },
+            LocalizationManager.getValue("pay", "ActionButton"),
+            Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
+            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
+        )
     }
 }
 

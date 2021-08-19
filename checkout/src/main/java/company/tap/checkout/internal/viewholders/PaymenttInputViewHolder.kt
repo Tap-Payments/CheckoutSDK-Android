@@ -577,9 +577,13 @@ class PaymenttInputViewHolder(
         for (i in imageURLApi.indices) {
             imageURL = imageURLApi[i].image.toString()
             paymentType = imageURLApi[i].paymentType
+            if(imageURLApi[i].brand?.name==null){
+                cardBrandType = "unknown"
+            }else{
             cardBrandType = imageURLApi[i].brand?.name.toString()
+            }
             println("paymentType" + paymentType)
-            println("cardBrandType" + cardBrandType)
+
     /// set payment option object for all payment types and send it to paymentcompletion action function and i will pass it to show extra fees
             if (paymentType == PaymentType.telecom) {
                 itemsMobilesList.add(
@@ -590,6 +594,8 @@ class PaymenttInputViewHolder(
                     )
                 )
             } else if (paymentType?.name == PaymentType.CARD.name) {
+                println("cardBrandType" + cardBrandType)
+
                 itemsCardsList.add(
                     SectionTabItem(
                         imageURL,
@@ -598,8 +604,11 @@ class PaymenttInputViewHolder(
                     )
                 )
             }
+
+
+            }
         }
-    }
+
 
 
     override fun showHideClearImage(show: Boolean) {
