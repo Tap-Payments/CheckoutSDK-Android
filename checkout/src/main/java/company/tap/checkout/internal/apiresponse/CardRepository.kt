@@ -446,12 +446,16 @@ class CardRepository : APIRequestCallback {
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun handleChargeResponse(chargeResponse: Charge) {
+        /**
+         * Charge response is a generic one whether you get response from ssaved card , otp or webpayments this is going to handle the cases**/
         if (chargeResponse == null) return
         Log.e("Charge status", (chargeResponse.status).name)
         if (chargeResponse is Authorize) {
             handleAuthorizeResponse(chargeResponse)
         }else
         when (chargeResponse.status) {
+            /**
+             * Charge response is Initiated is first call if it should be otp or not s**/
             ChargeStatus.INITIATED -> {
                 if (chargeResponse.authenticate != null) {
                     var authenicate: Authenticate = chargeResponse.authenticate
@@ -462,7 +466,9 @@ class CardRepository : APIRequestCallback {
                                 Log.d("cardRepose", " coming charge type is ...  caller setChargeOrAuthorize");
                                 PaymentDataSource?.setChargeOrAuthorize(chargeResponse)
                                 viewModel?.displayOTPView(chargeResponse?.customer?.getPhone(), PaymentTypeEnum.SAVEDCARD.toString(), chargeResponse)
-
+                                /**
+                                 * Charge response is Initiated and type is OTP we display OTP and after entering again from api
+                                 * handleChargeResponse is called  to check the status after entering OTP which can be any of the below cases*/
                             }
 
                         }
@@ -479,11 +485,20 @@ class CardRepository : APIRequestCallback {
             ChargeStatus.AUTHORIZED -> {
                 SDKSession.getListener()?.authorizationSucceed(chargeResponse as Authorize)
             }
-            ChargeStatus.FAILED -> SDKSession.getListener()?.paymentFailed(chargeResponse)
-            ChargeStatus.ABANDONED -> SDKSession.getListener()?.paymentFailed(chargeResponse)
+            ChargeStatus.FAILED -> {
+                SDKSession.getListener()?.paymentFailed(chargeResponse)
+                viewModel?.handleSuccessFailureResponseButton("failure",chargeResponse.authenticate,chargeResponse.status)
+            }
+            ChargeStatus.ABANDONED ->{    SDKSession.getListener()?.paymentFailed(chargeResponse)
+                viewModel?.handleSuccessFailureResponseButton("failure",chargeResponse.authenticate,chargeResponse.status)
+            }
             ChargeStatus.CANCELLED -> SDKSession.getListener()?.paymentFailed(chargeResponse)
-            ChargeStatus.DECLINED -> SDKSession.getListener()?.paymentFailed(chargeResponse)
-            ChargeStatus.RESTRICTED -> SDKSession.getListener()?.paymentFailed(chargeResponse)
+            ChargeStatus.DECLINED -> {
+                SDKSession.getListener()?.paymentFailed(chargeResponse)
+                viewModel?.handleSuccessFailureResponseButton("failure",chargeResponse.authenticate,chargeResponse.status)
+            }
+            ChargeStatus.RESTRICTED -> SDKSession.getListener()
+                ?.paymentFailed(chargeResponse)
             ChargeStatus.UNKNOWN -> SDKSession.getListener()?.paymentFailed(chargeResponse)
             ChargeStatus.TIMEDOUT -> SDKSession.getListener()?.paymentFailed(chargeResponse)
             ChargeStatus.IN_PROGRESS -> {
@@ -574,12 +589,19 @@ class CardRepository : APIRequestCallback {
             // resultObservable.onError(Throwable(it.errorMessage))
                 RxJavaPlugins.setErrorHandler(Throwable::printStackTrace)
             sdkSession.getListener()?.backendUnknownError(errorDetails.errorMessage)
-            if(chargeResponse !=null)
+            if(::chargeResponse.isInitialized){
             viewModel?.handleSuccessFailureResponseButton(
                 "failure",
                 chargeResponse.authenticate,
                 chargeResponse.status
             )
+            }else{
+                viewModel?.handleSuccessFailureResponseButton(
+                    "failure",
+                    null,null)
+
+
+            }
 
 
         }
@@ -798,6 +820,7 @@ class CardRepository : APIRequestCallback {
             ChargeStatus.FAILED, ChargeStatus.ABANDONED, ChargeStatus.CANCELLED, ChargeStatus.DECLINED, ChargeStatus.RESTRICTED, ChargeStatus.UNKNOWN, ChargeStatus.TIMEDOUT -> try {
                 //closePaymentActivity()
                 SDKSession.getListener()?.paymentFailed(charge)
+                viewModel?.handleSuccessFailureResponseButton("failure",chargeResponse.authenticate,chargeResponse.status)
 
             } catch (e: Exception) {
                 Log.d("cardrepo", " Error while calling fireWebPaymentCallBack >>> method paymentFailed(charge)")

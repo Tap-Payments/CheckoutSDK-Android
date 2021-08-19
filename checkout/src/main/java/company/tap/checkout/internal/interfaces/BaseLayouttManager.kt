@@ -33,8 +33,8 @@ interface BaseLayouttManager {
     fun deleteSelectedCardListener(delSelectedCard:DeleteCardResponse)
      fun handleSuccessFailureResponseButton(
          response: String,
-         authenticate: Authenticate,
-         status: ChargeStatus
+         authenticate: Authenticate?,
+         status: ChargeStatus?
      )
 
 }

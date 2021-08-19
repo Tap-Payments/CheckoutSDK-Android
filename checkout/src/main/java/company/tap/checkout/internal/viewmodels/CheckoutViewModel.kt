@@ -53,6 +53,7 @@ import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
 import company.tap.checkout.internal.viewholders.*
 import company.tap.checkout.internal.webview.WebFragment
 import company.tap.checkout.internal.webview.WebViewContract
+import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.CardType
@@ -125,6 +126,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
     private lateinit var frameLayout: FrameLayout
     private lateinit var inLineCardLayout: FrameLayout
     private lateinit var sdkLayout: LinearLayout
+    private lateinit var checkoutFragment: CheckoutFragment
     private lateinit var itemList: List<PaymentItem>
     private lateinit var selectedPaymentOption: PaymentOption
     private lateinit var orderList: Order1
@@ -973,8 +975,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
 
     override fun handleSuccessFailureResponseButton(
         response: String,
-        authenticate: Authenticate,
-        status: ChargeStatus
+        authenticate: Authenticate?,
+        status: ChargeStatus?
     ) {
 
         /**
@@ -985,7 +987,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
          *  {authenticate.type - give OTP  && authenticate.message- gives Success/Failure}
          * */
 
-        if (authenticate.type == AuthenticationType.OTP) {
+        if (authenticate?.type == AuthenticationType.OTP) {
             when (response) {
                 "success" -> {
                     tabAnimatedActionButtonViewHolder11?.view?.actionButton?.getImageView(
@@ -993,14 +995,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                         1
                     ) {
                         setSlideAnimation()
-                        removeViews(cardViewHolder11)
-                        removeViews(businessViewHolder)
-                        removeViews(amountViewHolder1)
-                        removeViews(saveCardSwitchHolder11)
-                        removeViews(paymentInputViewHolder)
-                        removeViews(tabAnimatedActionButtonViewHolder11)
+
+
 
                     }
+
+
                 }
                 else -> {
                     if (::bottomSheetDialog.isInitialized)
@@ -1129,6 +1129,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
             null,
             null
         )
+
         /*     saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
         saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.getImageView(
             R.drawable.loader,
@@ -1384,16 +1385,25 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
             webFrameLayout.visibility = View.GONE
         removeAllViews()
         addViews(tabAnimatedActionButtonViewHolder11)
-        if (done)
+        if (done){
             tabAnimatedActionButtonViewHolder11?.view?.actionButton?.changeButtonState(
                 ActionButtonState.SUCCESS
             )
-        else
+            Handler().postDelayed({
+                if(::bottomSheetDialog.isInitialized)
+                    bottomSheetDialog.dismiss()
+            }, 2000)
+        }
+        else {
             tabAnimatedActionButtonViewHolder11?.view?.actionButton?.changeButtonState(
                 ActionButtonState.ERROR
             )
-        setSlideAnimation()
-
+            Handler().postDelayed({
+                if (::bottomSheetDialog.isInitialized)
+                    bottomSheetDialog.dismiss()
+            }, 2000)
+            setSlideAnimation()
+        }
     }
 
     override fun directLoadingFinished(done: Boolean) {
