@@ -39,6 +39,7 @@ import company.tap.checkout.internal.PaymentDataProvider
 import company.tap.checkout.internal.adapter.CardTypeAdapterUIKIT
 import company.tap.checkout.internal.adapter.CurrencyTypeAdapter
 import company.tap.checkout.internal.adapter.GoPayCardAdapterUIKIT
+import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.internal.api.responses.DeleteCardResponse
@@ -68,6 +69,7 @@ import company.tap.tapuilibrary.themekit.theme.SeparatorViewTheme
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
+import kotlinx.android.synthetic.main.action_button_animation.view.*
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.businessview_layout.view.*
 import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
@@ -108,6 +110,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
     private lateinit var itemsViewHolder1: ItemsViewHolder1
     private lateinit var cardViewHolder11: CardViewHolder11
     private lateinit var asynchronousPaymentViewHolder: AsynchronousPaymentViewHolder
+    private lateinit var tabAnimatedActionButtonViewHolder11: TabAnimatedActionButtonViewHolder11
     private lateinit var bottomSheetDialog: BottomSheetDialog
     private lateinit var fragmentManager: FragmentManager
     private lateinit var bottomSheetLayout: FrameLayout
@@ -299,7 +302,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         otpViewHolder = OTPViewHolder(context)
         goPayViewsHolder = GoPayViewsHolder(context, this, otpViewHolder)
         asynchronousPaymentViewHolder = AsynchronousPaymentViewHolder(context)
-
+        tabAnimatedActionButtonViewHolder11 = TabAnimatedActionButtonViewHolder11(context)
         // nfcViewHolder = NFCViewHolder(context as Activity, context, this, fragmentManager)
     }
 
@@ -990,7 +993,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         }
     }
 
-    override fun handleSuccessFailureResponseButton(response: String) {
+    override fun handleSuccessFailureResponseButton(
+        response: String,
+        authenticate: Authenticate,
+        status: ChargeStatus
+    ) {
         when (response) {
             "success" -> {
                 setSlideAnimation()
@@ -1028,11 +1035,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         }
     }
 
+
     override fun displayAsynchronousPaymentView(chargeResponse: Charge) {
-      if(chargeResponse!=null){
-          removeViews(businessViewHolder,amountViewHolder1,cardViewHolder11,paymentInputViewHolder,saveCardSwitchHolder11)
-          addViews()
-      }
+        if(chargeResponse!=null){
+            removeViews(businessViewHolder,amountViewHolder1,cardViewHolder11,paymentInputViewHolder,saveCardSwitchHolder11)
+            addViews(asynchronousPaymentViewHolder)
+            asynchronousPaymentViewHolder.setDataFromAPI(chargeResponse)
+        }
     }
 
 
@@ -1368,18 +1377,17 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
 
     @SuppressLint("ResourceType")
     override fun redirectLoadingFinished(done: Boolean) {
-        println("redirectLoadingFinished>" + done)
-        if (done) {
-            setSlideAnimation()
-            if (::webFrameLayout.isInitialized)
-                webFrameLayout.fadeVisibility(View.GONE)
-            saveCardSwitchHolder11?.view?.visibility=View.VISIBLE
-            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)
-            Handler().postDelayed({
-                bottomSheetDialog.dismiss()
-            }, 8000)
+        if (::webFrameLayout.isInitialized)
+            webFrameLayout.visibility = View.GONE
+        removeAllViews()
+        addViews(tabAnimatedActionButtonViewHolder11)
+        if (done)
+            tabAnimatedActionButtonViewHolder11.view.actionButton.changeButtonState(ActionButtonState.SUCCESS)
+        else
+            tabAnimatedActionButtonViewHolder11.view.actionButton.changeButtonState(ActionButtonState.ERROR)
 
-        }
+        setSlideAnimation()
+        removeAllViews()
     }
 
     override fun directLoadingFinished(done: Boolean) {
