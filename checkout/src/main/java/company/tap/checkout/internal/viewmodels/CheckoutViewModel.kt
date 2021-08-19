@@ -300,6 +300,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         )
         itemsViewHolder1 = ItemsViewHolder1(context, this)
         otpViewHolder = OTPViewHolder(context)
+        otpViewHolder.otpView.visibility=View.GONE
         goPayViewsHolder = GoPayViewsHolder(context, this, otpViewHolder)
         asynchronousPaymentViewHolder = AsynchronousPaymentViewHolder(context)
         tabAnimatedActionButtonViewHolder11 = TabAnimatedActionButtonViewHolder11(context)
@@ -725,7 +726,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                         )
                     ).commitNow()
 
-            }, 5000)
+            }, 1000)
 
         }
         saveCardSwitchHolder11?.view?.visibility = View.GONE
@@ -995,8 +996,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
 
     override fun handleSuccessFailureResponseButton(
         response: String,
-        authenticate: Authenticate,
-        status: ChargeStatus
+        authenticate: Authenticate?,
+        status: ChargeStatus?
     ) {
         when (response) {
             "success" -> {
@@ -1053,7 +1054,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                 val animation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
                 it?.view?.startAnimation(animation)
 
-            }, 1000)
+            }, 0)
         }
 
     }
