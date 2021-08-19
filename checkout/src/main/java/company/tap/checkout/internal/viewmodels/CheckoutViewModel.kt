@@ -243,8 +243,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun confirmOTPCode(otpCode: String) {
+<<<<<<< HEAD
         otpViewHolder.otpView.otpViewActionButton.changeButtonState(ActionButtonState.LOADING)
         when(PaymentDataSource.getTransactionMode()){
+=======
+        otpViewHolder.view.otpView.otpViewActionButton.changeButtonState(ActionButtonState.LOADING)
+
+        when (PaymentDataSource.getTransactionMode()) {
+>>>>>>> FT_050821_final
             TransactionMode.PURCHASE -> sendChargeOTPCode(otpCode)
             TransactionMode.AUTHORIZE_CAPTURE -> sendAuthorizeOTPCode(otpCode)
             else->sendChargeOTPCode(otpCode)
@@ -287,6 +293,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
     fun initViewHolders() {
         businessViewHolder = BusinessViewHolder(context)
         amountViewHolder1 = AmountViewHolder1(context, this)
+        tabAnimatedActionButtonViewHolder11 = TabAnimatedActionButtonViewHolder11(context)
         cardViewHolder11 = CardViewHolder11(context, this)
         goPaySavedCardHolder = GoPaySavedCardHolder(context, this, this)
         saveCardSwitchHolder11 = SwitchViewHolder11(context)
@@ -1036,6 +1043,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         }
     }
 
+<<<<<<< HEAD
 
     override fun displayAsynchronousPaymentView(chargeResponse: Charge) {
         if(chargeResponse!=null){
@@ -1048,6 +1056,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
     }
 
 
+=======
+>>>>>>> FT_050821_final
     private fun removeViews(vararg viewHolders: TapBaseViewHolder?) {
 
         viewHolders.forEach {
@@ -1060,6 +1070,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         }
 
     }
+
 
     private fun addViews(vararg viewHolders: TapBaseViewHolder?) {
         viewHolders.forEach {
@@ -1388,9 +1399,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
             tabAnimatedActionButtonViewHolder11.view.actionButton.changeButtonState(ActionButtonState.SUCCESS)
         else
             tabAnimatedActionButtonViewHolder11.view.actionButton.changeButtonState(ActionButtonState.ERROR)
-
         setSlideAnimation()
+<<<<<<< HEAD
         removeAllViews()
+=======
+
+>>>>>>> FT_050821_final
     }
 
     override fun directLoadingFinished(done: Boolean) {

@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/layout_bg"
+
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".open.CheckoutFragment">
@@ -10,16 +12,18 @@
 
 <RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#00FFFFFF"
+    android:layout_height="match_parent"
+    android:background="@drawable/layout_bg"
     android:gravity="center">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:background="@drawable/layout_bg"
+
         tools:context=".open.CheckoutFragment"
-        android:background="@color/black_27">
+        >
 
         <LinearLayout
             android:id="@+id/fragment_all"
@@ -40,7 +44,7 @@
         <FrameLayout
             android:id="@+id/fragment_container_nfc_lib"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="bottom"
             android:orientation="vertical"
             android:visibility="visible"
@@ -56,19 +60,21 @@
             android:id="@+id/inline_container"
             android:layout_width="match_parent"
             android:visibility="visible"
-            android:layout_height="450dp"
+            android:layout_height="match_parent"
             android:layout_margin="20dp" />
 
 
     </LinearLayout>
 
-    <company.tap.tapuilibrary.uikit.atoms.TapImageView
+
+    <company.tap.tapuilibrary.uikit.atoms.TapTextView
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:id="@+id/closeIcon"
-        android:visibility="gone"
+        android:gravity="center"
+        android:text="close"
+        android:visibility="visible"
         android:layout_alignParentEnd="true"
-        android:src="@drawable/ic_close"
         android:layout_gravity="end"/>
 
 </RelativeLayout>

@@ -55,7 +55,6 @@
         android:foregroundTint="@color/blue"
         android:progressBackgroundTint="@color/blue"
         android:secondaryProgressTint="@color/blue"
-
         android:paddingTop="5dp"
         android:progress="20"
         android:paddingBottom="5dp"
