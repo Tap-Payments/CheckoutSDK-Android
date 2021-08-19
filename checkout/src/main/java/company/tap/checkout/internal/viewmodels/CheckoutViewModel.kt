@@ -238,7 +238,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun confirmOTPCode(otpCode: String) {
-        otpViewHolder.view.otpView.otpViewActionButton.changeButtonState(ActionButtonState.SUCCESS)
+        otpViewHolder.view.otpView.otpViewActionButton.changeButtonState(ActionButtonState.LOADING)
 
         when (PaymentDataSource.getTransactionMode()) {
             TransactionMode.PURCHASE -> sendChargeOTPCode(otpCode)
@@ -282,6 +282,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
     fun initViewHolders() {
         businessViewHolder = BusinessViewHolder(context)
         amountViewHolder1 = AmountViewHolder1(context, this)
+        tabAnimatedActionButtonViewHolder11 = TabAnimatedActionButtonViewHolder11(context)
         cardViewHolder11 = CardViewHolder11(context, this)
         goPaySavedCardHolder = GoPaySavedCardHolder(context, this, this)
         saveCardSwitchHolder11 = SwitchViewHolder11(context)
@@ -1040,7 +1041,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         }
     }
 
-
     private fun removeViews(vararg viewHolders: TapBaseViewHolder?) {
         viewHolders.forEach {
             //   sdkLayout.removeView(it.view)
@@ -1053,6 +1053,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         }
 
     }
+
 
     private fun addViews(vararg viewHolders: TapBaseViewHolder?) {
         viewHolders.forEach {
@@ -1376,9 +1377,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
             tabAnimatedActionButtonViewHolder11.view.actionButton.changeButtonState(ActionButtonState.SUCCESS)
         else
             tabAnimatedActionButtonViewHolder11.view.actionButton.changeButtonState(ActionButtonState.ERROR)
-
         setSlideAnimation()
-        removeAllViews()
 
     }
 

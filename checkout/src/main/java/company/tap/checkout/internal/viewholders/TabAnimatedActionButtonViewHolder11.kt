@@ -2,11 +2,13 @@ package company.tap.checkout.internal.viewholders
 
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import company.tap.checkout.R
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.taplocalizationkit.LocalizationManager
+import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.datasource.ActionButtonDataSource
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import kotlinx.android.synthetic.main.action_button_animation.view.*
@@ -28,10 +30,23 @@ class TabAnimatedActionButtonViewHolder11(context: Context) : TapBaseViewHolder 
             view.context?.let { LocalizationManager.getLocale(it).language },LocalizationManager.getValue("pay","ActionButton"),R. color.gray)
     }
 
+
+
     fun activateButton(context: Context) {
         view.actionButton.setButtonDataSource(true,
             LocalizationManager.getLocale(context).language,LocalizationManager.getValue("pay","ActionButton"),R.color.gray)
     }
+
+    fun activateBlueConfirmButton(context: Context) {
+        view.actionButton.setButtonDataSource(
+            true, context.let { LocalizationManager.getLocale(it).language },
+            LocalizationManager.getValue(
+                "confirm",
+                "ActionButton"
+            ),
+            Color.parseColor(ThemeManager.getValue("actionButton.Valid.goLoginBackgroundColor")),
+            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
+        )}
 
     fun getSuccessDataSource(
         backgroundColor: Int,
