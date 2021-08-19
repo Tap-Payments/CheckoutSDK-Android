@@ -32,6 +32,7 @@ import company.tap.nfcreader.open.reader.TapNfcCardReader
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.atoms.TapImageView
+import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -83,7 +84,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         val frameLayout: FrameLayout? = view?.findViewById(R.id.fragment_container_nfc_lib)
         val webFrameLayout: FrameLayout? = view?.findViewById(R.id.webFrameLayout)
         val inLineCardLayout: FrameLayout? = view?.findViewById(R.id.inline_container)
-        val closeIcon: TapImageView? = view?.findViewById(R.id.closeIcon)
+        val closeIcon: TapTextView? = view?.findViewById(R.id.closeIcon)
         closeIcon?.visibility = View.VISIBLE
 
         closeIcon?.setOnClickListener {
