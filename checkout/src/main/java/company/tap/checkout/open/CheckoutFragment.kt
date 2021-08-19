@@ -32,6 +32,7 @@ import company.tap.nfcreader.open.reader.TapNfcCardReader
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.atoms.TapImageView
+import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -52,7 +53,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     private lateinit var tapNfcCardReader: TapNfcCardReader
     private var cardReadDisposable: Disposable = Disposables.empty()
 
-    val closeIcon by lazy { view?.findViewById<TapImageView>( R.id.closeIcon) }
 
 
 
@@ -83,10 +83,11 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         val frameLayout: FrameLayout? = view?.findViewById(R.id.fragment_container_nfc_lib)
         val webFrameLayout: FrameLayout? = view?.findViewById(R.id.webFrameLayout)
         val inLineCardLayout: FrameLayout? = view?.findViewById(R.id.inline_container)
-        val closeIcon: TapImageView? = view?.findViewById(R.id.closeIcon)
-        closeIcon?.visibility = View.VISIBLE
+        val closeText: TapTextView? = view?.findViewById(R.id.closeText)
+        closeText?.text = LocalizationManager.getValue("close", "Common")
+        closeText?.visibility = View.VISIBLE
 
-        closeIcon?.setOnClickListener {
+        closeText?.setOnClickListener {
             bottomSheetDialog.dismissWithAnimation
             bottomSheetDialog.hide()
         }
@@ -133,7 +134,9 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         enabledSections.add(SectionType.BUSINESS)
         enabledSections.add(SectionType.AMOUNT_ITEMS)
         enabledSections.add(SectionType.FRAGMENT)
-       viewModel.displayStartupLayout(enabledSections)
+        enabledSections.add(SectionType.ActionButton)
+
+        viewModel.displayStartupLayout(enabledSections)
         viewModel.getDatasfromAPIs(PaymentDataSource.getSDKSettings(),PaymentDataSource.getPaymentOptionsResponse())
         setBottomSheetInterface(this)
 

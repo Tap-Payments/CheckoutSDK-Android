@@ -9,6 +9,7 @@ import company.tap.checkout.R
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.adapters.context
 import company.tap.tapuilibrary.uikit.datasource.ActionButtonDataSource
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import kotlinx.android.synthetic.main.action_button_animation.view.*
@@ -23,11 +24,16 @@ class TabAnimatedActionButtonViewHolder11(context: Context) : TapBaseViewHolder 
         LayoutInflater.from(context).inflate(R.layout.action_button_animation, null)
     override val type = SectionType.ActionButton
 
+    init {
+        bindViewComponents()
+    }
 
     override fun bindViewComponents() {
          // view.actionButton.setButtonDataSource(getSuccessDataSource(Color.GRAY, "Pay", Color.WHITE ))
-        view.actionButton.setButtonDataSource(false,
-            view.context?.let { LocalizationManager.getLocale(it).language },LocalizationManager.getValue("pay","ActionButton"),R. color.gray)
+//        view.actionButton.setButtonDataSource(false,
+//            view.context?.let { LocalizationManager.getLocale(it).language },LocalizationManager.getValue("pay","ActionButton"),R. color.gray)
+
+        activateBlueConfirmButton(view.context)
     }
 
 

@@ -34,6 +34,7 @@ import company.tap.checkout.internal.PaymentDataProvider
 import company.tap.checkout.internal.adapter.CardTypeAdapterUIKIT
 import company.tap.checkout.internal.adapter.CurrencyTypeAdapter
 import company.tap.checkout.internal.adapter.GoPayCardAdapterUIKIT
+import company.tap.checkout.internal.api.enums.AuthenticationType
 import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.api.models.*
@@ -105,7 +106,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
     private lateinit var goPayViewsHolder: GoPayViewsHolder
     private lateinit var itemsViewHolder1: ItemsViewHolder1
     private lateinit var cardViewHolder11: CardViewHolder11
-    private lateinit var tabAnimatedActionButtonViewHolder11: TabAnimatedActionButtonViewHolder11
+    private  var tabAnimatedActionButtonViewHolder11: TabAnimatedActionButtonViewHolder11?=null
     private lateinit var bottomSheetDialog: BottomSheetDialog
     private lateinit var fragmentManager: FragmentManager
     private lateinit var bottomSheetLayout: FrameLayout
@@ -295,9 +296,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
             cardViewModel
         )
         itemsViewHolder1 = ItemsViewHolder1(context, this)
-        tabAnimatedActionButtonViewHolder11 = TabAnimatedActionButtonViewHolder11(context)
         otpViewHolder = OTPViewHolder(context)
-        otpViewHolder.otpView.visibility =View.GONE
+        otpViewHolder.otpView.visibility = View.GONE
         goPayViewsHolder = GoPayViewsHolder(context, this, otpViewHolder)
 
 
@@ -631,8 +631,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         if (chargeResponse != null) {
             if (chargeResponse is Authorize) {
                 resendAuthorizeOTPCode(chargeResponse as Authorize?)
-            }
-            else {
+            } else {
                 resendChargeOTPCode(chargeResponse as Charge?)
             }
         }
@@ -986,57 +985,69 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
          *  {authenticate.type - give OTP  && authenticate.message- gives Success/Failure}
          * */
 
-        when (response) {
-            "success" -> {
-                saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(
-                    ActionButtonState.SUCCESS
-                )
-                saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.getImageView(
-                    R.drawable.loader,
-                    1
-                ) {
-                    setSlideAnimation()
-                    removeViews(cardViewHolder11)
-                    removeViews(businessViewHolder)
-                    removeViews(amountViewHolder1)
-                    removeViews(saveCardSwitchHolder11)
-                    removeViews(paymentInputViewHolder)
+        if (authenticate.type == AuthenticationType.OTP) {
+            when (response) {
+                "success" -> {
+                    tabAnimatedActionButtonViewHolder11?.view?.actionButton?.getImageView(
+                        R.drawable.success,
+                        1
+                    ) {
+                        setSlideAnimation()
+                        removeViews(cardViewHolder11)
+                        removeViews(businessViewHolder)
+                        removeViews(amountViewHolder1)
+                        removeViews(saveCardSwitchHolder11)
+                        removeViews(paymentInputViewHolder)
+                        removeViews(tabAnimatedActionButtonViewHolder11)
 
-
-                }?.let {
-                    saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.addChildView(
-                        it
-                    )
+                    }
                 }
+                else -> {
+                    if (::bottomSheetDialog.isInitialized)
+                        bottomSheetDialog.dismiss()
 
-                //  saveCardSwitchHolder11?.view?.cardSwitch?.showOnlyPayButton()
+                    tabAnimatedActionButtonViewHolder11?.view?.actionButton?.getImageView(
+                        R.drawable.error_gif,
+                        1
+                    ) {
+                        setSlideAnimation()
+                        removeViews(tabAnimatedActionButtonViewHolder11)
+                    }
+                }
             }
-            else -> {
-                if (::bottomSheetDialog.isInitialized)
-                    bottomSheetDialog.dismiss()
-
-                saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(
-                    ActionButtonState.ERROR
-                )
-                saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.getImageView(
-                    R.drawable.loader,
-                    1
-                ) {
-                    setSlideAnimation()
-                    removeViews(cardViewHolder11)
-                    removeViews(businessViewHolder)
-                    removeViews(amountViewHolder1)
-                    removeViews(saveCardSwitchHolder11)
-                    removeViews(paymentInputViewHolder)
-
-
-                }?.let {
-                    saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.addChildView(
-                        it
-                    )
+        }else{
+            tabAnimatedActionButtonViewHolder11?.activateButton(context)
+            when (response) {
+                "success" -> {
+                    tabAnimatedActionButtonViewHolder11?.view?.actionButton?.getImageView(
+                        R.drawable.success,
+                        1
+                    ) {
+                        setSlideAnimation()
+                        removeViews(cardViewHolder11)
+                        removeViews(businessViewHolder)
+                        removeViews(amountViewHolder1)
+                        removeViews(saveCardSwitchHolder11)
+                        removeViews(paymentInputViewHolder)
+                        removeViews(tabAnimatedActionButtonViewHolder11)
+                    }
                 }
+                else -> {
+                    if (::bottomSheetDialog.isInitialized)
+                        bottomSheetDialog.dismiss()
 
-                // saveCardSwitchHolder11?.view?.cardSwitch?.showOnlyPayButton()
+                    tabAnimatedActionButtonViewHolder11?.view?.actionButton?.getImageView(
+                        R.drawable.error_gif,
+                        1
+                    ) {
+                        if (::bottomSheetDialog.isInitialized) {
+                            bottomSheetDialog.dismissWithAnimation
+                            bottomSheetDialog.hide()
+                        }
+                        setSlideAnimation()
+                        removeViews(tabAnimatedActionButtonViewHolder11)
+                    }
+                }
             }
         }
     }
@@ -1059,9 +1070,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         viewHolders.forEach {
             Handler(Looper.getMainLooper()).postDelayed(Runnable {
                 if (::sdkLayout.isInitialized)
-                    //check why it says remove view before adding
+                //check why it says remove view before adding
                     sdkLayout.removeView(it?.view)
-                    sdkLayout.addView(it?.view)
+                sdkLayout.addView(it?.view)
                 val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
                 it?.view?.startAnimation(animation)
             }, 0)
@@ -1374,9 +1385,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         removeAllViews()
         addViews(tabAnimatedActionButtonViewHolder11)
         if (done)
-            tabAnimatedActionButtonViewHolder11.view.actionButton.changeButtonState(ActionButtonState.SUCCESS)
+            tabAnimatedActionButtonViewHolder11?.view?.actionButton?.changeButtonState(
+                ActionButtonState.SUCCESS
+            )
         else
-            tabAnimatedActionButtonViewHolder11.view.actionButton.changeButtonState(ActionButtonState.ERROR)
+            tabAnimatedActionButtonViewHolder11?.view?.actionButton?.changeButtonState(
+                ActionButtonState.ERROR
+            )
         setSlideAnimation()
 
     }
