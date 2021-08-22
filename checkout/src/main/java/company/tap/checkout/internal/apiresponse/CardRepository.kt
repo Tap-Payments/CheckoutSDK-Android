@@ -434,7 +434,7 @@ class CardRepository : APIRequestCallback {
         }
         if( ::chargeResponse.isInitialized && chargeResponse!=null){
             if(::viewModel.isInitialized && chargeResponse.status!=ChargeStatus.IN_PROGRESS) {
-                chargeResponse?.transaction?.url?.let { viewModel.displayRedirect(it,,chargeResponse.authenticate) }
+                chargeResponse?.transaction?.url?.let { viewModel.displayRedirect(it,chargeResponse.authenticate) }
             }
         }
 

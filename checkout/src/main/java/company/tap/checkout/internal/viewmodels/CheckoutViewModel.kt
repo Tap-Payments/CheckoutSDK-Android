@@ -313,7 +313,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         otpViewHolder.otpView.visibility=View.GONE
         goPayViewsHolder = GoPayViewsHolder(context, this, otpViewHolder)
         asynchronousPaymentViewHolder = AsynchronousPaymentViewHolder(context,this)
-        tabAnimatedActionButtonViewHolder11 = TabAnimatedActionButtonViewHolder11(context)
         // nfcViewHolder = NFCViewHolder(context as Activity, context, this, fragmentManager)
     }
 
@@ -1400,7 +1399,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
 
     @SuppressLint("ResourceType")
     override fun redirectLoadingFinished(done: Boolean, authenticate: Authenticate?) {
-
+        removeAllViews()
+        addViews(tabAnimatedActionButtonViewHolder11)
         if(authenticate?.type == AuthenticationType.OTP){
             tabAnimatedActionButtonViewHolder11?.activateBlueConfirmButton(context)
         }else
@@ -1410,43 +1410,53 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         // check if comes from otp or normal redirect
         if (::webFrameLayout.isInitialized)
             webFrameLayout.visibility = View.GONE
-        removeAllViews()
-        addViews(tabAnimatedActionButtonViewHolder11)
-        if (done){
 
-            tabAnimatedActionButtonViewHolder11?.view?.actionButton?.getImageView(
+        if (done){
+            tabAnimatedActionButtonViewHolder11?.view?.actionButton?.changeButtonState(ActionButtonState.SUCCESS)
+         Handler().postDelayed({
+                if (::bottomSheetDialog.isInitialized)
+                    bottomSheetDialog.dismiss()
+            }, 4000)
+
+           /* tabAnimatedActionButtonViewHolder11?.view?.actionButton?.getImageView(
                 R.drawable.success,
                 1
             ) {
+
                 Handler().postDelayed({
                     if (::bottomSheetDialog.isInitialized)
                         bottomSheetDialog.dismiss()
-                }, 5000)
+                }, 1000)
 
             }?.let { it1 ->
                 tabAnimatedActionButtonViewHolder11?.view?.actionButton?.addChildView(
                     it1
                 )
-            }
+            }*/
 
 
-        }
-        else {
+        } else {
 
-            tabAnimatedActionButtonViewHolder11?.view?.actionButton?.getImageView(
+            tabAnimatedActionButtonViewHolder11?.view?.actionButton?.changeButtonState(ActionButtonState.ERROR)
+            Handler().postDelayed({
+                if (::bottomSheetDialog.isInitialized)
+                    bottomSheetDialog.dismiss()
+            }, 4000)
+
+         /*   tabAnimatedActionButtonViewHolder11?.view?.actionButton?.getImageView(
                 R.drawable.error_gif,
                 1
             ) {
                 Handler().postDelayed({
                     if (::bottomSheetDialog.isInitialized)
                         bottomSheetDialog.dismiss()
-                }, 5000)
+                }, 1000)
 
             }?.let { it1 ->
                 tabAnimatedActionButtonViewHolder11?.view?.actionButton?.addChildView(
                     it1
                 )
-            }
+            }*/
 
 
 
@@ -1639,7 +1649,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                 paymentInputViewHolder,
                 saveCardSwitchHolder11,
                 goPayViewsHolder,
-                otpViewHolder
+                otpViewHolder,
+                tabAnimatedActionButtonViewHolder11
             )
     }
 

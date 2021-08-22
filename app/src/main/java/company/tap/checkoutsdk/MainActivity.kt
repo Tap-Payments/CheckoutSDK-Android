@@ -380,7 +380,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         println("Payment Failed : " + charge?.status)
         println("Payment Failed : " + charge?.description)
         println("Payment Failed : " + charge?.response?.message)
-        Toast.makeText(this,"paymentFailed"+charge?.response?.message, Toast.LENGTH_SHORT).show()
+      //  Toast.makeText(this,"paymentFailed"+charge?.response?.message, Toast.LENGTH_SHORT).show()
 //           modalBottomSheet.dismiss()
         //   modalBottomSheet.dialog?.dismiss()
            payButton?.changeButtonState(ActionButtonState.ERROR)
@@ -427,8 +427,8 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         println("Authorize Failed : " + authorize?.status)
         println("Authorize Failed : " + authorize?.description)
         println("Authorize Failed : " + authorize?.response?.message)
-        Toast.makeText(this, "authorizationFailed"+authorize?.response?.message, Toast.LENGTH_SHORT).show()
-        modalBottomSheet.dismiss()
+      //  Toast.makeText(this, "authorizationFailed"+authorize?.response?.message, Toast.LENGTH_SHORT).show()
+      //  modalBottomSheet.dismiss()
 
     }
 
