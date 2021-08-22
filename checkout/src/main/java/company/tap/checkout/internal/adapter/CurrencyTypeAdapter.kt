@@ -22,6 +22,7 @@ import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import kotlinx.android.synthetic.main.item_currency_rows.view.*
 import kotlinx.android.synthetic.main.item_frame_currencies.view.*
+import okhttp3.internal.notify
 import java.math.BigDecimal
 
 
@@ -87,6 +88,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
 
     override fun onBindViewHolder(holder: CurrencyHolders, position: Int) {
         holder.bindTheme()
+      //  holder.itemView.isSelected = selectedPosition == position
         for (i in adapterContentCurrencies.indices) {
             bindItemData(holder, position)
         }
@@ -111,16 +113,20 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
     }
 
     private fun onItemClickListener(holder: CurrencyHolders, position:   Int) {
-      //  holder.itemView.setOnClickListener(null)
+        holder.itemView.setOnClickListener(null)
 
         holder.itemView.setOnClickListener {
+            notifyItemChanged(selectedPosition)
             selectedPosition = position
+            notifyItemChanged(selectedPosition)
+           // selectedPosition = position
                 onCurrencyChangedActionListener.onCurrencyClicked(
                     adapterContentCurrencies[position].currency.toString(),
                     adapterContentCurrencies[position].amount)
              CheckoutViewModel().selectedCurrencyPos = adapterContentCurrencies[position].currency.toString()
              CheckoutViewModel().selectedAmountPos = adapterContentCurrencies[position].amount
-             notifyDataSetChanged()
+
+
 
             }
 

@@ -153,7 +153,7 @@ class CardRepository : APIRequestCallback {
 
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun retrieveBinLookup(context: Context, viewModel: CheckoutViewModel, binValue: String?) {
+    fun retrieveBinLookup( viewModel: CheckoutViewModel, binValue: String?) {
         this.viewModel = viewModel
         NetworkController.getInstance().processRequest(TapMethodType.GET, ApiService.BIN + binValue, null,
                 this, BIN_RETRIEVE_CODE
@@ -433,9 +433,9 @@ class CardRepository : APIRequestCallback {
             resultObservable.onComplete()
         }
         if( ::chargeResponse.isInitialized && chargeResponse!=null){
-            if(::viewModel.isInitialized)
-                chargeResponse.transaction?.url?.let { viewModel.displayRedirect(it,chargeResponse.authenticate) }
-
+            if(::viewModel.isInitialized && chargeResponse.status!=ChargeStatus.IN_PROGRESS) {
+                chargeResponse?.transaction?.url?.let { viewModel.displayRedirect(it,,chargeResponse.authenticate) }
+            }
         }
 
 
@@ -501,7 +501,7 @@ class CardRepository : APIRequestCallback {
             ChargeStatus.TIMEDOUT -> SDKSession.getListener()?.paymentFailed(chargeResponse)
             ChargeStatus.IN_PROGRESS -> {
                 if (chargeResponse.transaction != null && chargeResponse.transaction.asynchronous) {
-                    println("open INPROGRESS")
+                    viewModel?.displayAsynchronousPaymentView(chargeResponse)
                 }
             }
         }
@@ -584,22 +584,27 @@ class CardRepository : APIRequestCallback {
                 resultObservable.onError(it.throwable)
                 sdkSession.getListener()?.sdkError(errorDetails)
             }else
-            // resultObservable.onError(Throwable(it.errorMessage))
-                RxJavaPlugins.setErrorHandler(Throwable::printStackTrace)
-            sdkSession.getListener()?.backendUnknownError(errorDetails.errorMessage)
-            if(::chargeResponse.isInitialized){
-            viewModel?.handleSuccessFailureResponseButton(
-                "failure",
-                chargeResponse.authenticate,
-                chargeResponse.status
-            )
-            }else{
-                viewModel?.handleSuccessFailureResponseButton(
-                    "failure",
-                    null,null)
+                try {
+                    // resultObservable.onError(Throwable(it.errorMessage))
+                    RxJavaPlugins.setErrorHandler(Throwable::printStackTrace)
+                    sdkSession.getListener()?.backendUnknownError(errorDetails.errorMessage)
+                    if(::chargeResponse.isInitialized){
+                        viewModel?.handleSuccessFailureResponseButton(
+                            "failure",
+                            chargeResponse.authenticate,
+                            chargeResponse.status
+                        )
+                    }else{
+                        viewModel?.handleSuccessFailureResponseButton(
+                            "failure",
+                            null,
+                            null)
+                    }
 
+                }catch (e:Exception){
 
-            }
+                }
+
 
 
         }

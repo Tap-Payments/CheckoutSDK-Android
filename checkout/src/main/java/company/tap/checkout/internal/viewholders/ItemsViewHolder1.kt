@@ -62,7 +62,9 @@ class ItemsViewHolder1(private val context: Context, private val onCurrencyChang
         itemsRecyclerViewAction(itemsRecyclerView)
         setRecyclerViewDivider(currencyRecyclerView)
         currencyRecyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-        currencyRecyclerView.adapter = adapterCurrency
+        itemsRecyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+
+        // currencyRecyclerView.adapter = adapterCurrency
         mainCurrencyChip.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
         itemsRecyclerView.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
     }

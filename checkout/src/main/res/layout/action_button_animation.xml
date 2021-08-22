@@ -23,6 +23,5 @@
     android:layout_margin="@dimen/action_bar_default_height"
     android:elevation="0dp"
     style="?android:attr/borderlessButtonStyle"
-    android:stateListAnimator="@null"
     android:layout_gravity="center" />
 </androidx.constraintlayout.widget.ConstraintLayout>
