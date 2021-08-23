@@ -109,7 +109,7 @@ class PaymenttInputViewHolder(
         tapSeparatorViewLinear = view.findViewById(R.id.tapSeparatorViewLinear)
         tapSeparatorViewLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
         tabLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.backgroundColor")))
-        tabLayout.changeTabItemAlphaValue(0.9f)
+      //  tabLayout.changeTabItemAlphaValue(0.9f)
         tabLayout.changeTabItemMarginBottomValue(35)
         tabLayout.changeTabItemMarginTopValue(35)
         bindViewComponents()
@@ -346,7 +346,7 @@ class PaymenttInputViewHolder(
         charSequence?.let {
             if (charSequence.isNullOrEmpty()) {
                 tapAlertView?.visibility = View.GONE
-                tabLayout.setUnselectedAlphaLevel(0.2f)
+                //tabLayout.setUnselectedAlphaLevel(0.2f)
             }
             if (card?.cardBrand != null) {
                 tabLayout.selectTab(

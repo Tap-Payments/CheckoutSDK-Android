@@ -1,5 +1,6 @@
 package company.tap.checkout.internal.webview
 
+import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.models.Authenticate
 
 /**
@@ -10,6 +11,6 @@ All rights reserved.
  **/
 
 interface WebViewContract {
-    fun redirectLoadingFinished(done: Boolean, authenticate: Authenticate?)
+    fun redirectLoadingFinished(done: Boolean, authenticate: Authenticate?,chargeStatus: ChargeStatus?)
     fun directLoadingFinished(done: Boolean)
 }

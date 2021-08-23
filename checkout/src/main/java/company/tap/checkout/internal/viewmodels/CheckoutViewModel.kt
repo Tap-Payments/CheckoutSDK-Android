@@ -716,7 +716,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
     }
 
 
-    override fun displayRedirect(url: String , authenticate: Authenticate?) {
+    override fun displayRedirect(url: String , authenticate: Authenticate?,chargeStatus: ChargeStatus?) {
         this.redirectURL = url
         if (::redirectURL.isInitialized && ::fragmentManager.isInitialized) {
             if (otpViewHolder.otpView.isVisible) {
@@ -728,20 +728,21 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                     otpViewHolder
                 )
             }
-           // setSlideAnimation()
+            setSlideAnimation()
             Handler(Looper.getMainLooper()).postDelayed({
                 fragmentManager.beginTransaction()
                     .replace(
                         R.id.webFrameLayout, WebFragment.newInstance(
                             redirectURL,
-                            this, cardViewModel,authenticate
+                            this, cardViewModel,authenticate,chargeStatus
                         )
                     ).commitNow()
 
             }, 1000)
 
         }
-        saveCardSwitchHolder11?.view?.visibility = View.GONE
+      //  saveCardSwitchHolder11?.view?.visibility = View.GONE
+        tabAnimatedActionButtonViewHolder11?.view?.actionButton?.visibility = View.INVISIBLE
     }
 
     override fun displaySaveCardOptions() {
@@ -1144,17 +1145,17 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
             null
         )
 
-        /*     saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
-        saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.getImageView(
+          saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
+/*        saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.getImageView(
             R.drawable.loader,
             1
         ) {
             setSlideAnimation()
-            removeViews(cardViewHolder11)
-            removeViews(businessViewHolder)
-            removeViews(amountViewHolder1)
-            removeViews(saveCardSwitchHolder11)
-            removeViews(paymentInputViewHolder)
+          //  removeViews(cardViewHolder11)
+          //  removeViews(amountViewHolder1)
+         //   removeViews(saveCardSwitchHolder11)
+         //   removeViews(paymentInputViewHolder)
+
 
 
         }?.let {
@@ -1162,6 +1163,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                 it
             )
         }*/
+        removeViews(businessViewHolder,amountViewHolder1,cardViewHolder11,paymentInputViewHolder,saveCardSwitchHolder11,tabAnimatedActionButtonViewHolder11)
+        addViews(tabAnimatedActionButtonViewHolder11)
 
     }
 
@@ -1371,8 +1374,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                 println("item per unit >>" + itemList[i].amountPerUnit)
 
             }
-           // itemsViewHolder1.setResetItemsRecylerView(itemList)
-          //  itemsViewHolder1.itemsRecyclerView.adapter=itemAdapter
+
             itemsViewHolder1.view.itemRecylerView.adapter = itemAdapter
             itemAdapter.updateAdapterData(itemList)
 
@@ -1398,7 +1400,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
     }
 
     @SuppressLint("ResourceType")
-    override fun redirectLoadingFinished(done: Boolean, authenticate: Authenticate?) {
+    override fun redirectLoadingFinished(done: Boolean, authenticate: Authenticate?,chargeStatus: ChargeStatus?) {
+        println("redirectLoadingFinished>" + done)
         removeAllViews()
         addViews(tabAnimatedActionButtonViewHolder11)
         if(authenticate?.type == AuthenticationType.OTP){
@@ -1411,12 +1414,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         if (::webFrameLayout.isInitialized)
             webFrameLayout.visibility = View.GONE
 
-        if (done){
+        if (done && chargeStatus ==ChargeStatus.CAPTURED){
             tabAnimatedActionButtonViewHolder11?.view?.actionButton?.changeButtonState(ActionButtonState.SUCCESS)
          Handler().postDelayed({
                 if (::bottomSheetDialog.isInitialized)
                     bottomSheetDialog.dismiss()
-            }, 4000)
+            }, 9000)
 
            /* tabAnimatedActionButtonViewHolder11?.view?.actionButton?.getImageView(
                 R.drawable.success,
@@ -1435,13 +1438,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
             }*/
 
 
-        } else {
-
+        } else if(done && chargeStatus ==ChargeStatus.FAILED) {
+            tabAnimatedActionButtonViewHolder11?.view?.actionButton?.visibility = View.VISIBLE
             tabAnimatedActionButtonViewHolder11?.view?.actionButton?.changeButtonState(ActionButtonState.ERROR)
             Handler().postDelayed({
                 if (::bottomSheetDialog.isInitialized)
                     bottomSheetDialog.dismiss()
-            }, 4000)
+            }, 9000)
 
          /*   tabAnimatedActionButtonViewHolder11?.view?.actionButton?.getImageView(
                 R.drawable.error_gif,
