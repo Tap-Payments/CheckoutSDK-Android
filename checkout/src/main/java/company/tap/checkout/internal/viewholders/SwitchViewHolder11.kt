@@ -89,15 +89,13 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
         alertgoPaySignupString: String?
     ): TapSwitchDataSource {
         val saveForString :String =LocalizationManager.getValue("saveFor", "Common")
+        val saveForStringArabic :String =LocalizationManager.getValue("saveFor", "Common")
         val checkoutsString :String =LocalizationManager.getValue("checkouts", "Common")
         val switchSaveMerchantCheckout:String
-        val leftToRight = "\u200F"
-        if(LocalizationManager.getLocale(context).language=="en"){
-           switchSaveMerchantCheckout = saveForString +merchantName +checkoutsString
-
+        if(LocalizationManager.getLocale(context).language=="ar"){
+            switchSaveMerchantCheckout = "$saveForStringArabic $merchantName"
         }else{
-             switchSaveMerchantCheckout = "$saveForString$merchantName$leftToRight   $checkoutsString"
-
+           switchSaveMerchantCheckout = "$saveForString$merchantName  $checkoutsString"
         }
 
         return TapSwitchDataSource(
