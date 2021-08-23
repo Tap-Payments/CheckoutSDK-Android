@@ -20,6 +20,7 @@ import company.tap.cardinputwidget.CardBrandSingle
 import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardinputwidget.widget.inline.InlineCardInput
 import company.tap.checkout.R
+import company.tap.checkout.internal.api.enums.CardScheme
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.api.models.BINLookupResponse
 import company.tap.checkout.internal.api.models.CreateTokenCard
@@ -232,7 +233,7 @@ class PaymenttInputViewHolder(
             }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    onCardTextChange(s)
+                onCardTextChange(s)
                    cardNumAfterTextChangeListener(s,this)
             }
         })
@@ -392,12 +393,15 @@ class PaymenttInputViewHolder(
             tabLayout.setUnselectedAlphaLevel(0.5f)
         } else {
             //we will send scheme
-            binLookupResponse?.scheme?.cardBrand?.let { it1 -> tabLayout.selectTab(it1, true) }
+                schema = binLookupResponse?.scheme
+            binLookupResponse?.scheme?.cardBrand?.let { it1 -> tabLayout.selectTab(it1, false) }
             tabLayout.setUnselectedAlphaLevel(0.5f)
 
         }
        // PaymentDataSource.setBinLookupResponse(null)
     }
+
+     var schema: CardScheme?=null
 
     /*
     This function for calling api to validate card number after 6 digit
@@ -417,6 +421,7 @@ class PaymenttInputViewHolder(
     private fun checkValidationState(card: DefinedCardBrand) {
         when (card.validationState) {
             CardValidationState.invalid -> {
+                tabLayout.selectTab(card.cardBrand, false)
                 tapAlertView?.visibility = View.VISIBLE
                 tapAlertView?.alertMessage?.text =
                     (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
@@ -427,6 +432,10 @@ class PaymenttInputViewHolder(
                     (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
             }
             CardValidationState.valid -> {
+                if(schema != null )
+                    schema?.cardBrand?.let { tabLayout.selectTab(it, true) }
+                else tabLayout.selectTab(card.cardBrand, true)
+
                 tapAlertView?.visibility = View.GONE
             }
             else -> {
@@ -540,7 +549,7 @@ class PaymenttInputViewHolder(
         val itemsMobilesList = ArrayList<SectionTabItem>()
         val itemsCardsList = ArrayList<SectionTabItem>()
         intertabLayout.removeAllTabs()
-        PaymentDataSource?.setBinLookupResponse(null)
+        PaymentDataSource.setBinLookupResponse(null)
 //        tabLayout.changeTabItemAlphaValue(1f)
         decideTapSelection(imageURLApi, itemsMobilesList, itemsCardsList)
         /**
@@ -548,16 +557,17 @@ class PaymenttInputViewHolder(
          * and set the payment method icon for inline input card
          * and set visibility  for separator after chips gone
          */
+
         hideTabLayoutWhenOnlyOnePayment(itemsCardsList, itemsMobilesList)
         tabLayout.addSection(itemsCardsList)
-
 //        tabLayout.changeTabItemAlphaValue(0.9f)
+        tabLayout.addSection(itemsMobilesList)
+//        tabLayout.setUnselectedAlphaLevel(0.5f)
 
         if(itemsMobilesList.size!=0){
             tabLayout.addSection(itemsMobilesList)
 
         }
-        tabLayout.setUnselectedAlphaLevel(0.5f)
 
     }
 
@@ -565,11 +575,12 @@ class PaymenttInputViewHolder(
         itemsCardsList: ArrayList<SectionTabItem>,
         itemsMobilesList: ArrayList<SectionTabItem>
     ) {
-        if (itemsCardsList.size == 1 || itemsMobilesList.size == 1) {
+        if ((itemsCardsList.size == 1 &&  itemsMobilesList.size == 0) || (itemsCardsList.size == 0 &&  itemsMobilesList.size == 1) ) {
             tabLayout.visibility = View.GONE
             tapSeparatorViewLinear?.visibility = View.GONE
             tapCardInputView.setSingleCardInput(CardBrandSingle.fromCode(cardBrandType))
-        } else
+        }
+        else
             tabLayout.changeTabItemAlphaValue(0.9f)
     }
 
@@ -581,10 +592,10 @@ class PaymenttInputViewHolder(
         for (i in imageURLApi.indices) {
             imageURL = imageURLApi[i].image.toString()
             paymentType = imageURLApi[i].paymentType
-            if(imageURLApi[i].brand?.name==null){
-                cardBrandType = "unknown"
+            cardBrandType = if(imageURLApi[i].brand?.name==null){
+                "unknown"
             }else{
-            cardBrandType = imageURLApi[i].brand?.name.toString()
+                imageURLApi[i].brand?.name.toString()
             }
             println("paymentType" + paymentType)
 
@@ -654,7 +665,7 @@ class PaymenttInputViewHolder(
 
     fun checkAllowedCardTypes(binLookupResponse: BINLookupResponse?) {
         if (binLookupResponse != null && PaymentDataSource?.getCardType().toString() != null) {
-            if (PaymentDataSource?.getCardType().toString() != binLookupResponse.cardType) {
+            if (PaymentDataSource.getCardType().toString() != binLookupResponse.cardType) {
                 CustomUtils.showDialog(
                     LocalizationManager.getValue(
                         "alertUnsupportedCardTitle",
