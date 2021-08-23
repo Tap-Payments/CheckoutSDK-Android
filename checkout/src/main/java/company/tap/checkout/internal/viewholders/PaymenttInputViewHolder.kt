@@ -110,9 +110,8 @@ class PaymenttInputViewHolder(
         tapSeparatorViewLinear = view.findViewById(R.id.tapSeparatorViewLinear)
         tapSeparatorViewLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
         tabLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.backgroundColor")))
-      //  tabLayout.changeTabItemAlphaValue(0.9f)
-        tabLayout.changeTabItemMarginBottomValue(35)
-        tabLayout.changeTabItemMarginTopValue(35)
+//        tabLayout.changeTabItemMarginBottomValue(50)
+//        tabLayout.changeTabItemMarginTopValue(50)
         bindViewComponents()
     }
 
@@ -189,8 +188,8 @@ class PaymenttInputViewHolder(
                 Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
             )
             tabLayout.resetBehaviour()
-            if(PaymentDataSource?.getBinLookupResponse()!=null){
-                PaymentDataSource?.setBinLookupResponse(null)
+            if(PaymentDataSource.getBinLookupResponse()!=null){
+                PaymentDataSource.setBinLookupResponse(null)
 
             }
         }
@@ -252,10 +251,8 @@ class PaymenttInputViewHolder(
         tapCardInputView.setExpiryDateTextWatcher(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-           tabLayout.setUnselectedAlphaLevel(0.2f)
             }
             override fun afterTextChanged(s: Editable?) {
-                tabLayout.setUnselectedAlphaLevel(0.2f)
                 afterTextChangeAction(s)
             }
         })
@@ -347,19 +344,16 @@ class PaymenttInputViewHolder(
         charSequence?.let {
             if (charSequence.isNullOrEmpty()) {
                 tapAlertView?.visibility = View.GONE
-                //tabLayout.setUnselectedAlphaLevel(0.2f)
             }
             if (card?.cardBrand != null) {
                 tabLayout.selectTab(
                     card.cardBrand,
                     card.validationState == CardValidationState.valid
                 )
-                tabLayout.setUnselectedAlphaLevel(0.5f)
                 val binLookupResponse: BINLookupResponse? =
                     PaymentDataSource.getBinLookupResponse()
                 if (PaymentDataSource.getCardType() != null && PaymentDataSource.getCardType() == CardType.ALL) {
                     setTabLayoutBasedOnApiResponse(binLookupResponse,card)
-                    tabLayout.setUnselectedAlphaLevel(0.5f)
                 } else {
                     checkAllowedCardTypes(binLookupResponse)
                     setTabLayoutBasedOnApiResponse(binLookupResponse,card)
@@ -390,12 +384,12 @@ class PaymenttInputViewHolder(
                      true
                 )
             }
-            tabLayout.setUnselectedAlphaLevel(0.5f)
+//            tabLayout.setUnselectedAlphaLevel(0.5f)
         } else {
             //we will send scheme
                 schema = binLookupResponse?.scheme
             binLookupResponse?.scheme?.cardBrand?.let { it1 -> tabLayout.selectTab(it1, false) }
-            tabLayout.setUnselectedAlphaLevel(0.5f)
+//            tabLayout.setUnselectedAlphaLevel(0.5f)
 
         }
        // PaymentDataSource.setBinLookupResponse(null)
@@ -450,7 +444,6 @@ class PaymenttInputViewHolder(
     // Logic to show the switches when card details are valid
     private fun cardBrandDetection(cardTyped: String) {
         if (cardTyped.isEmpty()) {
-            //tabLayout.resetBehaviour()
             tapAlertView?.visibility = View.GONE
         }
         val card = CardValidator.validate(cardTyped)
@@ -547,6 +540,8 @@ class PaymenttInputViewHolder(
      * */
     @RequiresApi(Build.VERSION_CODES.N)
     fun setDataFromAPI(imageURLApi: List<PaymentOption>) {
+//        tabLayout.resetBehaviour()
+
         val itemsMobilesList = ArrayList<SectionTabItem>()
         val itemsCardsList = ArrayList<SectionTabItem>()
         intertabLayout.removeAllTabs()
@@ -561,14 +556,10 @@ class PaymenttInputViewHolder(
 
         hideTabLayoutWhenOnlyOnePayment(itemsCardsList, itemsMobilesList)
         tabLayout.addSection(itemsCardsList)
-//        tabLayout.changeTabItemAlphaValue(0.9f)
         tabLayout.addSection(itemsMobilesList)
-//        tabLayout.setUnselectedAlphaLevel(0.5f)
+//        tabLayout.
 
-        if(itemsMobilesList.size!=0){
-            tabLayout.addSection(itemsMobilesList)
-
-        }
+        if(itemsMobilesList.size!=0) tabLayout.addSection(itemsMobilesList)
 
     }
 
@@ -581,8 +572,8 @@ class PaymenttInputViewHolder(
             tapSeparatorViewLinear?.visibility = View.GONE
             tapCardInputView.setSingleCardInput(CardBrandSingle.fromCode(cardBrandType))
         }
-        else
-            tabLayout.changeTabItemAlphaValue(0.9f)
+//        else
+//            tabLayout.changeTabItemAlphaValue(1f)
     }
 
     private fun decideTapSelection(
@@ -595,10 +586,8 @@ class PaymenttInputViewHolder(
             paymentType = imageURLApi[i].paymentType
             cardBrandType = if(imageURLApi[i].brand?.name==null){
                 "unknown"
-            }else{
+            }else
                 imageURLApi[i].brand?.name.toString()
-            }
-            println("paymentType" + paymentType)
 
     /// set payment option object for all payment types and send it to paymentcompletion action function and i will pass it to show extra fees
             if (paymentType == PaymentType.telecom) {
@@ -610,8 +599,6 @@ class PaymenttInputViewHolder(
                     )
                 )
             } else if (paymentType?.name == PaymentType.CARD.name) {
-                println("cardBrandType" + cardBrandType)
-
                 itemsCardsList.add(
                     SectionTabItem(
                         imageURL,
