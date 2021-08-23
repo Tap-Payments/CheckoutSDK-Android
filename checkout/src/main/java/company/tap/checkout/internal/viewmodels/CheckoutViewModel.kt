@@ -18,6 +18,7 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.annotation.RestrictTo
+import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
@@ -1392,7 +1393,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         )
             PaymentDataSource.setSelectedCurrency(selectedCurrency = selectedCurrency)
             PaymentDataSource.setSelectedAmount(currencyRate)
-
+    if(paymentInputViewHolder?.tapCardInputView?.isNotEmpty()){
+        paymentInputViewHolder?.tapCardInputView.clear()
+        paymentInputViewHolder?.tapAlertView?.visibility = View.GONE
+        paymentInputViewHolder?.tabLayout?.resetBehaviour()
+    }
     if(::selectedCurrency.isInitialized){
                 filterViewModels(selectedCurrency)
         }else   filterViewModels(currentCurrency)
