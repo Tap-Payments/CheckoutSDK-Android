@@ -344,8 +344,8 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
         println("##############################################################################")
         if (charge.acquirer != null) {
-            println("Payment Succeeded : acquirer id : " + charge?.acquirer?.id)
-            println("Payment Succeeded : acquirer response code : " + charge?.acquirer?.response?.code)
+            println("Payment Succeeded : acquirer id : " + charge.acquirer?.id)
+            println("Payment Succeeded : acquirer response code : " + charge.acquirer?.response?.code)
             println("Payment Succeeded : acquirer response message: " + charge.acquirer?.response?.message)
         }
         println("##############################################################################")
@@ -398,9 +398,9 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
         println("##############################################################################")
         if (authorize.acquirer != null) {
-            println("Payment Authorized Succeeded : acquirer id : " + authorize?.acquirer?.id)
-            println("Payment Authorized Succeeded : acquirer response code : " + authorize?.acquirer?.response?.code)
-            println("Payment Authorized Succeeded : acquirer response message: " + authorize?.acquirer?.response?.message)
+            println("Payment Authorized Succeeded : acquirer id : " + authorize.acquirer?.id)
+            println("Payment Authorized Succeeded : acquirer response code : " + authorize.acquirer?.response?.code)
+            println("Payment Authorized Succeeded : acquirer response message: " + authorize.acquirer?.response?.message)
         }
         println("##############################################################################")
         if (authorize.source != null) {

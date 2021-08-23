@@ -1405,9 +1405,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         removeAllViews()
         addViews(tabAnimatedActionButtonViewHolder11)
         if(authenticate?.type == AuthenticationType.OTP){
-            tabAnimatedActionButtonViewHolder11?.activateBlueConfirmButton(context)
+            tabAnimatedActionButtonViewHolder11?.activateBlueConfirmButton()
         }else
-            tabAnimatedActionButtonViewHolder11?.activateButton(context)
+            tabAnimatedActionButtonViewHolder11?.activateButton()
 
 
         // check if comes from otp or normal redirect
