@@ -552,7 +552,11 @@ class PaymenttInputViewHolder(
         tabLayout.addSection(itemsCardsList)
 
 //        tabLayout.changeTabItemAlphaValue(0.9f)
-        tabLayout.addSection(itemsMobilesList)
+
+        if(itemsMobilesList.size!=0){
+            tabLayout.addSection(itemsMobilesList)
+
+        }
         tabLayout.setUnselectedAlphaLevel(0.5f)
 
     }
