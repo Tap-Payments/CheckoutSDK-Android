@@ -1929,9 +1929,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         extraFeesAmount: String,
         paymentType: PaymentType, savedCardsModel: Any?
     ) {
-
+        val extraFeesPart1:String = LocalizationManager.getValue("extraFeesAlertMessagePart1", "ExtraFees")
+        val extraFeesPart2:String = LocalizationManager.getValue("extraFeesAlertMessagePart2", "ExtraFees")
+       // val leftToRight = "\u200F"
         val localizedMessage =
-            "You will be charged an additional fee of $extraFeesAmount${PaymentDataProvider().getSelectedCurrency()?.currency} for this type of payment, totaling an amount of $totalAmount${PaymentDataProvider().getSelectedCurrency()?.currency}"
+            extraFeesPart1 +" "+extraFeesAmount+PaymentDataProvider().getSelectedCurrency()?.currency +extraFeesPart2+" "+ totalAmount+ PaymentDataProvider().getSelectedCurrency()?.currency
         CustomUtils.showDialog(
             title,
             localizedMessage,
