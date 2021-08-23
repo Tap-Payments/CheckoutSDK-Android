@@ -1399,24 +1399,26 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
 
     @SuppressLint("ResourceType")
     override fun redirectLoadingFinished(done: Boolean, authenticate: Authenticate?) {
-        removeAllViews()
-        addViews(tabAnimatedActionButtonViewHolder11)
-        if(authenticate?.type == AuthenticationType.OTP){
-            tabAnimatedActionButtonViewHolder11?.activateBlueConfirmButton(context)
-        }else
-            tabAnimatedActionButtonViewHolder11?.activateButton(context)
+
+//        if(authenticate?.type == AuthenticationType.OTP)
+//            tabAnimatedActionButtonViewHolder11?.activateBlueConfirmButton(context)
+//        else
+//            tabAnimatedActionButtonViewHolder11?.activateButton(context)
 
 
         // check if comes from otp or normal redirect
         if (::webFrameLayout.isInitialized)
             webFrameLayout.visibility = View.GONE
 
+        removeAllViews()
+        addViews(tabAnimatedActionButtonViewHolder11)
+
         if (done){
-            tabAnimatedActionButtonViewHolder11?.view?.actionButton?.changeButtonState(ActionButtonState.SUCCESS)
-         Handler().postDelayed({
-                if (::bottomSheetDialog.isInitialized)
-                    bottomSheetDialog.dismiss()
-            }, 4000)
+            tabAnimatedActionButtonViewHolder11?.otpViewActionButton?.changeButtonState(ActionButtonState.SUCCESS)
+//         Handler().postDelayed({
+//                if (::bottomSheetDialog.isInitialized)
+//                    bottomSheetDialog.dismiss()
+//            }, 4000)
 
            /* tabAnimatedActionButtonViewHolder11?.view?.actionButton?.getImageView(
                 R.drawable.success,
@@ -1437,11 +1439,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
 
         } else {
 
-            tabAnimatedActionButtonViewHolder11?.view?.actionButton?.changeButtonState(ActionButtonState.ERROR)
-            Handler().postDelayed({
-                if (::bottomSheetDialog.isInitialized)
-                    bottomSheetDialog.dismiss()
-            }, 4000)
+            tabAnimatedActionButtonViewHolder11?.otpViewActionButton?.changeButtonState(ActionButtonState.ERROR)
+//            Handler().postDelayed({
+//                if (::bottomSheetDialog.isInitialized)
+//                    bottomSheetDialog.dismiss()
+//            }, 4000)
 
          /*   tabAnimatedActionButtonViewHolder11?.view?.actionButton?.getImageView(
                 R.drawable.error_gif,

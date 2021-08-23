@@ -12,6 +12,7 @@ import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.adapters.context
 import company.tap.tapuilibrary.uikit.datasource.ActionButtonDataSource
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
+import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
 import kotlinx.android.synthetic.main.action_button_animation.view.*
 
 /**
@@ -24,20 +25,23 @@ class TabAnimatedActionButtonViewHolder11(context: Context) : TapBaseViewHolder 
         LayoutInflater.from(context).inflate(R.layout.action_button_animation, null)
     override val type = SectionType.ActionButton
 
+    val otpViewActionButton by lazy { view.findViewById<TabAnimatedActionButton>(R.id.actionButton) }
+
+
     init {
         bindViewComponents()
     }
 
     override fun bindViewComponents() {
-        activateButton(view.context)
+        activateButton()
     }
 
 
 
-    fun activateButton(context: Context) {
-        view.actionButton.setButtonDataSource(
+    fun activateButton() {
+        otpViewActionButton.setButtonDataSource(
             true,
-            context.let { LocalizationManager.getLocale(it).language },
+            view.context.let { it?.let { it1 -> LocalizationManager.getLocale(it1).language } },
             LocalizationManager.getValue("pay", "ActionButton"),
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
@@ -46,9 +50,9 @@ class TabAnimatedActionButtonViewHolder11(context: Context) : TapBaseViewHolder 
 //            LocalizationManager.getLocale(context).language,LocalizationManager.getValue("pay","ActionButton"),R.color.gray)
     }
 
-    fun activateBlueConfirmButton(context: Context) {
-        view.actionButton.setButtonDataSource(
-            true, context.let { LocalizationManager.getLocale(it).language },
+    fun activateBlueConfirmButton() {
+        otpViewActionButton.setButtonDataSource(
+            true, view.context.let { it?.let { it1 -> LocalizationManager.getLocale(it1).language } },
             LocalizationManager.getValue(
                 "confirm",
                 "ActionButton"
