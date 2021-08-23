@@ -564,6 +564,11 @@ class PaymenttInputViewHolder(
         tabLayout.addSection(itemsMobilesList)
 //        tabLayout.setUnselectedAlphaLevel(0.5f)
 
+        if(itemsMobilesList.size!=0){
+            tabLayout.addSection(itemsMobilesList)
+
+        }
+
     }
 
     private fun hideTabLayoutWhenOnlyOnePayment(
