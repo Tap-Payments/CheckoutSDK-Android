@@ -56,6 +56,10 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
         notifyDataSetChanged()
     }
 
+    fun updateSelectedPosition(selectedPos:Int){
+        selectedPosition = selectedPos
+    }
+
     class CurrencyHolders(v: View) : RecyclerView.ViewHolder(v) {
         private var view: View = v
 

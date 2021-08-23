@@ -791,6 +791,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         // println("PaymentOptionsResponse on get$paymentOptionsResponse")
         allCurrencies.value = paymentOptionsResponse?.supportedCurrencies
         savedCardList.value = paymentOptionsResponse?.cards
+        currencyAdapter = CurrencyTypeAdapter(this)
+
         println("savedCardList on get" + savedCardList.value)
         println("paymentOptionsResponse?.supportedCurrencie on get" + paymentOptionsResponse?.supportedCurrencies)
         if (paymentOptionsResponse?.supportedCurrencies != null && ::amountViewHolder1.isInitialized) {
@@ -801,7 +803,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                     currentAmount =
                         CurrencyFormatter.currencyFormat(paymentOptionsResponse.supportedCurrencies[i].amount.toString())
 
+                   currencyAdapter.updateSelectedPosition(i)
                 }
+
             }
             amountViewHolder1.setDatafromAPI(
                 currentAmount,
@@ -860,7 +864,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         itemAdapter = ItemAdapter()
 
         //  goPayAdapter.updateAdapterData(goPayCardList.value as List<GoPaySavedCards>)
-        currencyAdapter = CurrencyTypeAdapter(this)
         if (allCurrencies.value?.isNotEmpty() == true) {
             currencyAdapter.updateAdapterData(allCurrencies.value as List<SupportedCurrencies>)
         }
