@@ -25,7 +25,7 @@ class TabAnimatedActionButtonViewHolder11(context: Context) : TapBaseViewHolder 
         LayoutInflater.from(context).inflate(R.layout.action_button_animation, null)
     override val type = SectionType.ActionButton
 
-    val otpViewActionButton by lazy { view.findViewById<TabAnimatedActionButton>(R.id.actionButton) }
+    val actionButton by lazy { view.findViewById<TabAnimatedActionButton>(R.id.actionButton) }
 
 
     init {
@@ -39,7 +39,7 @@ class TabAnimatedActionButtonViewHolder11(context: Context) : TapBaseViewHolder 
 
 
     fun activateButton() {
-        otpViewActionButton.setButtonDataSource(
+        actionButton.setButtonDataSource(
             true,
             view.context.let { it?.let { it1 -> LocalizationManager.getLocale(it1).language } },
             LocalizationManager.getValue("pay", "ActionButton"),
@@ -51,7 +51,7 @@ class TabAnimatedActionButtonViewHolder11(context: Context) : TapBaseViewHolder 
     }
 
     fun activateBlueConfirmButton() {
-        otpViewActionButton.setButtonDataSource(
+        actionButton.setButtonDataSource(
             true, view.context.let { it?.let { it1 -> LocalizationManager.getLocale(it1).language } },
             LocalizationManager.getValue(
                 "confirm",
