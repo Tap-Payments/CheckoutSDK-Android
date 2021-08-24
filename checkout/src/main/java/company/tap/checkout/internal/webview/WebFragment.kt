@@ -18,6 +18,7 @@ import android.view.ViewGroup
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import company.tap.checkout.R
@@ -50,6 +51,7 @@ class WebFragment(private val webViewContract: WebViewContract,private val cardV
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTopDraggerView()
+
         progressBar?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("merchantHeaderView.backgroundColor")))
         progressBar?.progressDrawable?.setColorFilter(
             Color.RED, android.graphics.PorterDuff.Mode.SRC_IN);
