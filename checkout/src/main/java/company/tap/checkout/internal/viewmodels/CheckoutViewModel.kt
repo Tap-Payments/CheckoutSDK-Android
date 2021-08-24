@@ -1029,6 +1029,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
          * This function is  working fine as expected in case when 3ds is false
          * i.e.  sdkSession.isRequires3DSecure(false) as no loading of url occurs direct response
          * from the API is available.
+         * WRONG OTP scenario also handled here as similar to old sdk show user error button and
+         * close the sdk.
          * **/
 
         if (::webFrameLayout.isInitialized) {
@@ -1049,6 +1051,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                 otpViewHolder
             )
         }
+        removeViews(saveCardSwitchHolder11)
         addViews(saveCardSwitchHolder11)
         saveCardSwitchHolder11?.view?.visibility = View.VISIBLE
         saveCardSwitchHolder11?.view?.mainSwitch?.visibility = View.GONE
@@ -1060,6 +1063,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
             ChargeStatus.CANCELLED,ChargeStatus.TIMEDOUT,ChargeStatus.FAILED,ChargeStatus.DECLINED,ChargeStatus.UNKNOWN,
             ChargeStatus.RESTRICTED,ChargeStatus.ABANDONED,ChargeStatus.VOID,ChargeStatus.INVALID->{
                 saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.ERROR)
+            }else->{
+
+            if(response.equals("tokenized")){
+                saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)
+            }else{
+                saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.ERROR)}
             }
         }
         Handler().postDelayed({

@@ -159,7 +159,7 @@ class CardViewModel : ViewModel() {
     private fun createAuthorizeCard(viewModel: CheckoutViewModel, selectedPaymentOption: PaymentOption?) {
         println("createAuthorizeCard>>."+selectedPaymentOption)
         if (selectedPaymentOption != null) {
-            repository.createAuthorizeRequest(context, viewModel, selectedPaymentOption, repository.tokenResponse.id)
+            repository.createAuthorizeRequest( viewModel, selectedPaymentOption, repository.tokenResponse.id)
         }
 
     }

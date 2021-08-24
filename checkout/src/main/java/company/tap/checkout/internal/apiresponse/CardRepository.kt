@@ -132,7 +132,6 @@ class CardRepository : APIRequestCallback {
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun createAuthorizeRequest(
-        _context: Context,
         viewModel: CheckoutViewModel,
         selectedPaymentOption: PaymentOption?,
         identifier: String?
@@ -309,11 +308,12 @@ class CardRepository : APIRequestCallback {
                 if(tokenResponse!=null ) {
                     when {
                         PaymentDataSource.getTransactionMode() == TransactionMode.AUTHORIZE_CAPTURE -> {
-                            createAuthorizeRequest(cardRepositoryContext, viewModel, null, tokenResponse.id)
+                            createAuthorizeRequest( viewModel, null, tokenResponse.id)
 
                         }
                         PaymentDataSource.getTransactionMode()==TransactionMode.TOKENIZE_CARD -> {
                             SDKSession.getListener()?.cardTokenizedSuccessfully(tokenResponse)
+                            viewModel.handleSuccessFailureResponseButton("tokenized",null,null)
 
                         }
                         PaymentDataSource.getTransactionMode()==TransactionMode.SAVE_CARD -> {
@@ -383,7 +383,7 @@ class CardRepository : APIRequestCallback {
                 println("CREATE_SAVE_EXISTING_CODE tokenResponse >>>>" + tokenResponse)
                 if(tokenResponse!=null) {
                     if (PaymentDataSource.getTransactionMode() == TransactionMode.AUTHORIZE_CAPTURE) {
-                        createAuthorizeRequest(cardRepositoryContext, viewModel, null, tokenResponse.id)
+                        createAuthorizeRequest( viewModel, null, tokenResponse.id)
 
                     }
                     else if(PaymentDataSource.getTransactionMode()==TransactionMode.TOKENIZE_CARD){
@@ -536,17 +536,20 @@ class CardRepository : APIRequestCallback {
                 }
             }
             ChargeStatus.CAPTURED, ChargeStatus.AUTHORIZED -> try {
-
                 SDKSession.getListener()?.authorizationSucceed(authorize)
+                viewModel.handleSuccessFailureResponseButton("success",authorize.authenticate,authorize.status)
+
             } catch (e: java.lang.Exception) {
-                Log.d("cardRepository", " Error while calling delegate method authorizationSucceed(authorize)")
+                Log.d("cardRepository", " Error while calling delegate method authorizationSucceed(authorize)"+e)
                 // closePaymentActivity()
             }
-            ChargeStatus.FAILED, ChargeStatus.ABANDONED, ChargeStatus.CANCELLED, ChargeStatus.DECLINED, ChargeStatus.RESTRICTED -> try {
+            ChargeStatus.FAILED, ChargeStatus.ABANDONED, ChargeStatus.CANCELLED, ChargeStatus.DECLINED, ChargeStatus.RESTRICTED ->
+                try {
                 //    closePaymentActivity()
                 SDKSession.getListener()?.authorizationFailed(authorize)
+                viewModel.handleSuccessFailureResponseButton("failure",authorize.authenticate,authorize.status)
             } catch (e: java.lang.Exception) {
-                Log.d("cardRepository", " Error while calling delegate method authorizationFailed(authorize)")
+                Log.d("cardRepository", "Error while calling delegate method authorizationFailed(authorize)")
 
             }
         }
@@ -573,12 +576,24 @@ class CardRepository : APIRequestCallback {
             }
             ChargeStatus.CAPTURED, ChargeStatus.AUTHORIZED, ChargeStatus.VALID -> try {
                 SDKSession.getListener()?.cardSaved(saveCard)
+                viewModel?.handleSuccessFailureResponseButton(
+                    "failure",
+                    chargeResponse.authenticate,
+                    chargeResponse.status
+
+                )
             } catch (e: java.lang.Exception) {
                 Log.d("CardRepository", " Error while calling delegate method cardSaved(saveCard)")
 
             }
             ChargeStatus.INVALID, ChargeStatus.FAILED, ChargeStatus.ABANDONED, ChargeStatus.CANCELLED, ChargeStatus.DECLINED, ChargeStatus.RESTRICTED -> try {
                 SDKSession.getListener()?.cardSavingFailed(saveCard)
+                viewModel?.handleSuccessFailureResponseButton(
+                    "failure",
+                    chargeResponse.authenticate,
+                    chargeResponse.status
+
+                )
             } catch (e: java.lang.Exception) {
                 Log.d("CardRepository", " Error while calling delegate method cardSavingFailed(saveCard)")
 
