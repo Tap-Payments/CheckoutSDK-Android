@@ -481,8 +481,7 @@ class CardRepository : APIRequestCallback {
                 viewModel?.handleSuccessFailureResponseButton(
                     "success",
                     chargeResponse.authenticate,
-                    chargeResponse.status,
-                    contextSDK
+                    chargeResponse.status
                 )
 
             }
@@ -494,13 +493,11 @@ class CardRepository : APIRequestCallback {
                 viewModel?.handleSuccessFailureResponseButton(
                     "failure",
                     chargeResponse.authenticate,
-                    chargeResponse.status,
-                    contextSDK
+                    chargeResponse.status
                 )
             }
             ChargeStatus.ABANDONED , ChargeStatus.CANCELLED,ChargeStatus.DECLINED->{    SDKSession.getListener()?.paymentFailed(chargeResponse)
-                viewModel?.handleSuccessFailureResponseButton("failure",chargeResponse.authenticate,chargeResponse.status,
-                    contextSDK)
+                viewModel?.handleSuccessFailureResponseButton("failure",chargeResponse.authenticate,chargeResponse.status)
             }
 
             ChargeStatus.RESTRICTED -> SDKSession.getListener()
@@ -600,15 +597,14 @@ class CardRepository : APIRequestCallback {
                         viewModel?.handleSuccessFailureResponseButton(
                             "failure",
                             chargeResponse.authenticate,
-                            chargeResponse.status,
-                            contextSDK
+                            chargeResponse.status
+
                         )
                     }else{
                         viewModel?.handleSuccessFailureResponseButton(
                             "failure",
                             null,
-                            null,
-                            contextSDK
+                            null
                         )
                     }
 
