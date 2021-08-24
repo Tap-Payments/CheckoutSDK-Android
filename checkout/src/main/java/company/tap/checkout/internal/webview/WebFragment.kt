@@ -156,6 +156,7 @@ class WebFragment(private val webViewContract: WebViewContract,private val cardV
     if success == false show error gif of action button
      */
     override fun submitResponseStatus(success: Boolean) {
+
         webViewContract.redirectLoadingFinished(success, chargeResponse)
     }
 

@@ -369,7 +369,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
             println("Payment Succeeded : expiry type :" + charge.expiry?.type)
             println("Payment Succeeded : expiry period :" + charge.expiry?.period)
         }
-        Toast.makeText(this,"paymentSucceed"+charge.id, Toast.LENGTH_SHORT).show()
+     //   Toast.makeText(this,"paymentSucceed"+charge.id, Toast.LENGTH_SHORT).show()
        // modalBottomSheet.dismiss()
        // payButton?.changeButtonState(ActionButtonState.SUCCESS)
       //  modalBottomSheet.dialog?.dismiss()

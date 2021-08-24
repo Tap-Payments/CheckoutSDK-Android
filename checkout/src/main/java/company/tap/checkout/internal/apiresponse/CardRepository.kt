@@ -20,6 +20,7 @@ import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession
+import company.tap.checkout.open.controller.SDKSession.contextSDK
 import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
 import company.tap.checkout.open.controller.SessionManager
 import company.tap.checkout.open.data_managers.PaymentDataSource
@@ -477,7 +478,12 @@ class CardRepository : APIRequestCallback {
                 if(chargeResponse is Authorize)handleAuthorizeResponse(chargeResponse as Authorize)
                 SDKSession.getListener()?.paymentSucceed(chargeResponse)
 
-                viewModel?.handleSuccessFailureResponseButton("success",chargeResponse.authenticate,chargeResponse.status)
+                viewModel?.handleSuccessFailureResponseButton(
+                    "success",
+                    chargeResponse.authenticate,
+                    chargeResponse.status,
+                    contextSDK
+                )
 
             }
             ChargeStatus.AUTHORIZED -> {
@@ -485,16 +491,18 @@ class CardRepository : APIRequestCallback {
             }
             ChargeStatus.FAILED -> {
                 SDKSession.getListener()?.paymentFailed(chargeResponse)
-                viewModel?.handleSuccessFailureResponseButton("failure",chargeResponse.authenticate,chargeResponse.status)
+                viewModel?.handleSuccessFailureResponseButton(
+                    "failure",
+                    chargeResponse.authenticate,
+                    chargeResponse.status,
+                    contextSDK
+                )
             }
-            ChargeStatus.ABANDONED ->{    SDKSession.getListener()?.paymentFailed(chargeResponse)
-                viewModel?.handleSuccessFailureResponseButton("failure",chargeResponse.authenticate,chargeResponse.status)
+            ChargeStatus.ABANDONED , ChargeStatus.CANCELLED,ChargeStatus.DECLINED->{    SDKSession.getListener()?.paymentFailed(chargeResponse)
+                viewModel?.handleSuccessFailureResponseButton("failure",chargeResponse.authenticate,chargeResponse.status,
+                    contextSDK)
             }
-            ChargeStatus.CANCELLED -> SDKSession.getListener()?.paymentFailed(chargeResponse)
-            ChargeStatus.DECLINED -> {
-                SDKSession.getListener()?.paymentFailed(chargeResponse)
-                viewModel?.handleSuccessFailureResponseButton("failure",chargeResponse.authenticate,chargeResponse.status)
-            }
+
             ChargeStatus.RESTRICTED -> SDKSession.getListener()
                 ?.paymentFailed(chargeResponse)
             ChargeStatus.UNKNOWN -> SDKSession.getListener()?.paymentFailed(chargeResponse)
@@ -592,13 +600,16 @@ class CardRepository : APIRequestCallback {
                         viewModel?.handleSuccessFailureResponseButton(
                             "failure",
                             chargeResponse.authenticate,
-                            chargeResponse.status
+                            chargeResponse.status,
+                            contextSDK
                         )
                     }else{
                         viewModel?.handleSuccessFailureResponseButton(
                             "failure",
                             null,
-                            null)
+                            null,
+                            contextSDK
+                        )
                     }
 
                 }catch (e:Exception){

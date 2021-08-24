@@ -743,6 +743,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
 
         }
         saveCardSwitchHolder11?.view?.visibility = View.GONE
+        removeViews(saveCardSwitchHolder11)
        // tabAnimatedActionButtonViewHolder11?.view?.actionButton?.visibility = View.INVISIBLE
     }
 
@@ -1092,8 +1093,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
             Handler(Looper.getMainLooper()).postDelayed(Runnable {
                 if (::sdkLayout.isInitialized)
                     sdkLayout.addView(it?.view)
-                val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
-                it?.view?.startAnimation(animation)
+                if(::context.isInitialized){
+                    val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
+                    it?.view?.startAnimation(animation)
+                }
+
             }, 0)
         }
     }
@@ -1410,6 +1414,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
 
     @SuppressLint("ResourceType")
     override fun redirectLoadingFinished(done: Boolean, chargeResponse: Charge?) {
+        println("done val"+done+"chargeResponse status"+chargeResponse?.status)
+        println("saveCardSwitchHolder11 val"+saveCardSwitchHolder11)
 
 //        if(authenticate?.type == AuthenticationType.OTP)
 //            tabAnimatedActionButtonViewHolder11?.activateBlueConfirmButton(context)
@@ -1425,11 +1431,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                     .commit()
             webFrameLayout.visibility = View.GONE
         }
-                removeAllViews()
+               // removeAllViews()
         addViews(saveCardSwitchHolder11)
         saveCardSwitchHolder11?.view?.visibility = View.VISIBLE
 
-        saveCardSwitchHolder11?.view?.actionButton?.changeButtonState(ActionButtonState.SUCCESS)
+        saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)
 
 
 //        if(chargeResponse?.status == ChargeStatus.CANCELLED)
