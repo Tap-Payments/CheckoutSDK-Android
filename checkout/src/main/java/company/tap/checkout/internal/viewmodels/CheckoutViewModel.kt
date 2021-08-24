@@ -1065,7 +1065,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         Handler().postDelayed({
                     if (::bottomSheetDialog.isInitialized)
                         bottomSheetDialog.dismiss()
-                }, 6000)
+                },8000)
 
     }
 
