@@ -45,7 +45,7 @@ object  SDKSession : APIRequestCallback {
     @JvmField
     var tabAnimatedActionButton: TabAnimatedActionButton? = null
 
-    private var sessionActive = false
+     var sessionActive = false
 
     init {
         initPaymentDataSource()

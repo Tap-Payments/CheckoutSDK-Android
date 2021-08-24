@@ -477,7 +477,7 @@ class CardRepository : APIRequestCallback {
             ChargeStatus.CAPTURED -> {
                 if(chargeResponse is Authorize)handleAuthorizeResponse(chargeResponse as Authorize)
                 SDKSession.getListener()?.paymentSucceed(chargeResponse)
-
+                SDKSession.sessionActive = false
                 viewModel.handleSuccessFailureResponseButton(
                     "success",
                     chargeResponse.authenticate,
@@ -495,6 +495,7 @@ class CardRepository : APIRequestCallback {
                     chargeResponse.authenticate,
                     chargeResponse.status
                 )*/
+                SDKSession.sessionActive = false
                 viewModel.redirectLoadingFinished(true, chargeResponse, contextSDK)
             }
             ChargeStatus.ABANDONED , ChargeStatus.CANCELLED,ChargeStatus.DECLINED->{    SDKSession.getListener()?.paymentFailed(chargeResponse)
