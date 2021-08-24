@@ -261,7 +261,7 @@ class CardRepository : APIRequestCallback {
             }
         }else if (requestCode == PAYMENT_OPTIONS_CODE) {
             if (response?.body() != null) {
-                response?.body().let {
+                response.body().let {
                     paymentOptionsResponse = Gson().fromJson(it, PaymentOptionsResponse::class.java)
                     PaymentDataSource.setPaymentOptionsResponse(paymentOptionsResponse)
 
@@ -271,7 +271,7 @@ class CardRepository : APIRequestCallback {
                 }
 
             }else {
-                sdkSession?.sessionDelegate?.sessionFailedToStart()
+                sdkSession.sessionDelegate?.sessionFailedToStart()
             }
 
         }else if(requestCode == CHARGE_REQ_CODE) {
@@ -335,7 +335,7 @@ class CardRepository : APIRequestCallback {
                     if(authorizeActionResponse.status?.name == ChargeStatus.INITIATED.name){
                        // fireWebPaymentCallBack(authorizeActionResponse)
                            if(authorizeActionResponse.transaction.url != null){
-                               authorizeActionResponse.transaction?.url?.let { it1 -> viewModel.displayRedirect(it1, chargeResponse.authenticate) }
+                               authorizeActionResponse.transaction?.url?.let { it1 -> viewModel.displayRedirect(it1, chargeResponse) }
                            }else handleAuthorizeResponse(authorizeActionResponse)
                     }else  handleAuthorizeResponse(authorizeActionResponse)
 
@@ -353,7 +353,7 @@ class CardRepository : APIRequestCallback {
             response?.body().let {
                 saveCardResponse = Gson().fromJson(it, SaveCard::class.java)
                 if(saveCardResponse.status?.name == ChargeStatus.INITIATED.name){
-                    saveCardResponse.transaction?.url?.let { it1 -> viewModel.displayRedirect(it1,chargeResponse.authenticate) }
+                    saveCardResponse.transaction?.url?.let { it1 -> viewModel.displayRedirect(it1,chargeResponse) }
 
                 }else {
                     handleSaveCardResponse(saveCardResponse)
@@ -434,7 +434,7 @@ class CardRepository : APIRequestCallback {
         }
         if( ::chargeResponse.isInitialized && chargeResponse!=null){
             if(::viewModel.isInitialized && chargeResponse.status!=ChargeStatus.IN_PROGRESS) {
-                chargeResponse?.transaction?.url?.let { viewModel.displayRedirect(it,chargeResponse.authenticate) }
+                chargeResponse?.transaction?.url?.let { viewModel.displayRedirect(it,chargeResponse) }
             }
         }
 

@@ -22,6 +22,7 @@ import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.models.Authenticate
+import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
@@ -33,7 +34,7 @@ class WebFragment(private val webViewContract: WebViewContract,private val cardV
     CustomWebViewClientContract {
 
     private var webViewUrl: String? = null
-    private var authenticate: Authenticate? = null
+    private var chargeResponse: Charge? = null
     val progressBar by lazy { view?.findViewById<ProgressBar>(R.id.progressBar) }
 
 
@@ -53,7 +54,7 @@ class WebFragment(private val webViewContract: WebViewContract,private val cardV
         progressBar?.progressTintList = ColorStateList.valueOf(Color.RED);
 
         webViewUrl = arguments?.getString(KEY_URL)
-        authenticate = arguments?.getSerializable(AUTH) as Authenticate?
+        chargeResponse = arguments?.getSerializable(CHARGE) as Charge?
         progressBar?.max = 100
         progressBar?.progress = 20
         if (TextUtils.isEmpty(webViewUrl)) {
@@ -152,13 +153,13 @@ class WebFragment(private val webViewContract: WebViewContract,private val cardV
     if success == false show error gif of action button
      */
     override fun submitResponseStatus(success: Boolean) {
-        webViewContract.redirectLoadingFinished(success, authenticate)
+        webViewContract.redirectLoadingFinished(success, chargeResponse)
     }
 
     override fun getRedirectedURL(url: String) {
        // webViewContract.redirectLoadingFinished(url.contains("https://www.google.com/search?"))
         if(url.contains("gosellsdk://return_url")){
-        webViewContract.redirectLoadingFinished(url.contains("gosellsdk://return_url"), authenticate)
+        webViewContract.redirectLoadingFinished(url.contains("gosellsdk://return_url"), chargeResponse)
         }else{
             webViewContract.directLoadingFinished(true)
         }
@@ -169,13 +170,13 @@ class WebFragment(private val webViewContract: WebViewContract,private val cardV
 
     companion object {
          const val KEY_URL = "key:url"
-         const val AUTH = "authenticate"
+         const val CHARGE = "charge_response"
 
-        fun newInstance(url: String, webViewContract: WebViewContract, cardViewModel: CardViewModel, authenticate: Authenticate?): WebFragment {
+        fun newInstance(url: String, webViewContract: WebViewContract, cardViewModel: CardViewModel, chargeResponse: Charge?): WebFragment {
             val fragment = WebFragment(webViewContract,cardViewModel)
             val args = Bundle()
             args.putString(KEY_URL, url)
-            args.putSerializable(AUTH, authenticate)
+            args.putSerializable(CHARGE, chargeResponse)
             fragment.arguments = args
             return fragment
         }
