@@ -1145,10 +1145,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
 
 
     private fun activateActionButton() {
+        var payButtonText :String=LocalizationManager.getValue("pay", "ActionButton")
+        when(PaymentDataSource.getTransactionMode()){
+            TransactionMode.TOKENIZE_CARD->payButtonText =LocalizationManager.getValue("pay", "ActionButton")
+            TransactionMode.SAVE_CARD->payButtonText = LocalizationManager.getValue("savecard","ActionButton")
+            else->payButtonText =LocalizationManager.getValue("pay", "ActionButton")
+        }
         saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.setButtonDataSource(
             true,
             context.let { LocalizationManager.getLocale(it).language },
-            LocalizationManager.getValue("pay", "ActionButton"),
+           payButtonText,
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
         )

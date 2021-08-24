@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import company.tap.checkout.R
 import company.tap.checkout.internal.enums.SectionType
+import company.tap.checkout.open.data_managers.PaymentDataSource
+import company.tap.checkout.open.enums.TransactionMode
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.datasource.HeaderDataSource
@@ -36,18 +38,18 @@ class BusinessViewHolder(private val context: Context) : TapBaseViewHolder {
 
     override fun bindViewComponents() {
 
-        if (merchantName != null){
+        if(PaymentDataSource?.getTransactionMode() == TransactionMode.SAVE_CARD || PaymentDataSource.getTransactionMode()==TransactionMode.TOKENIZE_CARD){
+
+            view.headerView.setHeaderDataSource(HeaderDataSource("Enter Card Details",null,null))
+            view.headerView.businessIcon.visibility= View.GONE
+        }else
+            if (merchantName != null){
             view.headerView.setHeaderDataSource(getHeaderDataSourceFromAPI())
             view.headerView.businessIcon.visibility= View.VISIBLE
             view.headerView.showHideLoading(false)
             view.headerView.constraint.visibility= View.VISIBLE
 
-        }else {
-//            view.headerView.showHideLoading(true)
-            view.headerView.setHeaderDataSource(HeaderDataSource("Enter Card Details",null,null))
-            view.headerView.businessIcon.visibility= View.GONE
         }
-
         /**
          * set separator background
          */

@@ -179,7 +179,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
 
         // Enable or Disable 3DSecure
-        sdkSession.isRequires3DSecure(false)
+        sdkSession.isRequires3DSecure(true)
 
         //Set Receipt Settings [SMS - Email ]
 
@@ -206,7 +206,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
          sdkSession.setCardType(CardType.ALL) // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
 
-          sdkSession.setTransactionMode(TransactionMode.TOKENIZE_CARD)
+          sdkSession.setTransactionMode(TransactionMode.PURCHASE)
 
          sdkSession.setDefaultCardHolderName("TEST TAP"); // ** Optional ** you can pass default CardHolderName of the user .So you don't need to type it.
          sdkSession.isUserAllowedToEnableCardHolderName(false); // ** Optional ** you can enable/ disable  default CardHolderName .

@@ -578,20 +578,20 @@ class CardRepository : APIRequestCallback {
                 SDKSession.getListener()?.cardSaved(saveCard)
                 viewModel?.handleSuccessFailureResponseButton(
                     "failure",
-                    chargeResponse.authenticate,
-                    chargeResponse.status
+                    saveCard.authenticate,
+                    saveCard.status
 
                 )
             } catch (e: java.lang.Exception) {
-                Log.d("CardRepository", " Error while calling delegate method cardSaved(saveCard)")
+                Log.d("CardRepository", " Error while calling delegate method cardSaved(saveCard)"+e)
 
             }
             ChargeStatus.INVALID, ChargeStatus.FAILED, ChargeStatus.ABANDONED, ChargeStatus.CANCELLED, ChargeStatus.DECLINED, ChargeStatus.RESTRICTED -> try {
                 SDKSession.getListener()?.cardSavingFailed(saveCard)
                 viewModel?.handleSuccessFailureResponseButton(
                     "failure",
-                    chargeResponse.authenticate,
-                    chargeResponse.status
+                    saveCard.authenticate,
+                    saveCard.status
 
                 )
             } catch (e: java.lang.Exception) {
