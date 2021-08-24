@@ -1025,6 +1025,21 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         authenticate: Authenticate?,
         status: ChargeStatus?
     ) {
+
+        if (::webFrameLayout.isInitialized) {
+            if (fragmentManager.findFragmentById(R.id.webFrameLayout) != null)
+                fragmentManager.beginTransaction()
+                    .remove(fragmentManager.findFragmentById(R.id.webFrameLayout)!!)
+                    .commit()
+            webFrameLayout.visibility = View.GONE
+        }
+        // removeAllViews()
+        println("saveCardSwitchHolder11 is "+saveCardSwitchHolder11)
+        addViews(saveCardSwitchHolder11)
+        saveCardSwitchHolder11?.view?.visibility = View.VISIBLE
+
+        saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)
+
 //        when (response) {
 //            "success" -> {
 //                setSlideAnimation()
@@ -1413,9 +1428,27 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
     }
 
     @SuppressLint("ResourceType")
-    override fun redirectLoadingFinished(done: Boolean, chargeResponse: Charge?) {
-        println("done val"+done+"chargeResponse status"+chargeResponse?.status)
+    override fun redirectLoadingFinished(
+        done: Boolean,
+        chargeResponse: Charge?,
+        contextSDK: Context?
+    ) {
+        println("done val"+done+"chargeResponse status"+ chargeResponse?.status)
         println("saveCardSwitchHolder11 val"+saveCardSwitchHolder11)
+        if (::webFrameLayout.isInitialized) {
+            if (fragmentManager.findFragmentById(R.id.webFrameLayout) != null)
+                fragmentManager.beginTransaction()
+                    .remove(fragmentManager.findFragmentById(R.id.webFrameLayout)!!)
+                    .commit()
+            webFrameLayout.visibility = View.GONE
+        }
+
+        if(saveCardSwitchHolder11 ==null){
+            saveCardSwitchHolder11 = contextSDK?.let { SwitchViewHolder11(it) }
+            addViews(saveCardSwitchHolder11)
+            saveCardSwitchHolder11?.view?.visibility = View.VISIBLE
+            saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)
+        }
 
 //        if(authenticate?.type == AuthenticationType.OTP)
 //            tabAnimatedActionButtonViewHolder11?.activateBlueConfirmButton(context)
@@ -1424,7 +1457,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
 
 
         // check if comes from otp or normal redirect
-        if (::webFrameLayout.isInitialized) {
+     /*   if (::webFrameLayout.isInitialized) {
             if (fragmentManager.findFragmentById(R.id.webFrameLayout) != null)
                 fragmentManager.beginTransaction()
                     .remove(fragmentManager.findFragmentById(R.id.webFrameLayout)!!)
@@ -1435,7 +1468,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         addViews(saveCardSwitchHolder11)
         saveCardSwitchHolder11?.view?.visibility = View.VISIBLE
 
-        saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)
+        saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)*/
 
 
 //        if(chargeResponse?.status == ChargeStatus.CANCELLED)

@@ -25,6 +25,7 @@ import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.models.Authenticate
 import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.apiresponse.CardViewModel
+import company.tap.checkout.open.controller.SDKSession.contextSDK
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import company.tap.tapuilibrary.uikit.ktx.setTopBorders
@@ -157,7 +158,7 @@ class WebFragment(private val webViewContract: WebViewContract,private val cardV
      */
     override fun submitResponseStatus(success: Boolean) {
 
-        webViewContract.redirectLoadingFinished(success, chargeResponse)
+        webViewContract.redirectLoadingFinished(success, chargeResponse, contextSDK)
     }
 
     override fun getRedirectedURL(url: String) {

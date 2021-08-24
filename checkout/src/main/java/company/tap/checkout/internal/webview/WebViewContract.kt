@@ -1,5 +1,6 @@
 package company.tap.checkout.internal.webview
 
+import android.content.Context
 import company.tap.checkout.internal.api.models.Charge
 
 /**
@@ -10,6 +11,6 @@ All rights reserved.
  **/
 
 interface WebViewContract {
-    fun redirectLoadingFinished(done: Boolean, authenticate: Charge?)
+    fun redirectLoadingFinished(done: Boolean, authenticate: Charge?, contextSDK: Context?)
     fun directLoadingFinished(done: Boolean)
 }

@@ -434,7 +434,7 @@ class CardRepository : APIRequestCallback {
             resultObservable.onComplete()
         }
         if( ::chargeResponse.isInitialized && chargeResponse!=null){
-            if(::viewModel.isInitialized && chargeResponse.status!=ChargeStatus.IN_PROGRESS) {
+            if(::viewModel.isInitialized && chargeResponse.status!=ChargeStatus.IN_PROGRESS && chargeResponse.status!= ChargeStatus.CANCELLED) {
                 chargeResponse?.transaction?.url?.let { viewModel.displayRedirect(it,chargeResponse) }
             }
         }
@@ -478,7 +478,7 @@ class CardRepository : APIRequestCallback {
                 if(chargeResponse is Authorize)handleAuthorizeResponse(chargeResponse as Authorize)
                 SDKSession.getListener()?.paymentSucceed(chargeResponse)
 
-                viewModel?.handleSuccessFailureResponseButton(
+                viewModel.handleSuccessFailureResponseButton(
                     "success",
                     chargeResponse.authenticate,
                     chargeResponse.status
@@ -490,14 +490,17 @@ class CardRepository : APIRequestCallback {
             }
             ChargeStatus.FAILED -> {
                 SDKSession.getListener()?.paymentFailed(chargeResponse)
-                viewModel?.handleSuccessFailureResponseButton(
+                /*viewModel?.handleSuccessFailureResponseButton(
                     "failure",
                     chargeResponse.authenticate,
                     chargeResponse.status
-                )
+                )*/
+                viewModel.redirectLoadingFinished(true, chargeResponse, contextSDK)
             }
             ChargeStatus.ABANDONED , ChargeStatus.CANCELLED,ChargeStatus.DECLINED->{    SDKSession.getListener()?.paymentFailed(chargeResponse)
                 viewModel?.handleSuccessFailureResponseButton("failure",chargeResponse.authenticate,chargeResponse.status)
+                viewModel.redirectLoadingFinished(true,chargeResponse, contextSDK)
+
             }
 
             ChargeStatus.RESTRICTED -> SDKSession.getListener()
@@ -813,7 +816,8 @@ class CardRepository : APIRequestCallback {
         when (charge?.status) {
             ChargeStatus.CAPTURED, ChargeStatus.AUTHORIZED -> try {
                 // closePaymentActivity()
-                    sdkSession.getListener()?.paymentSucceed(charge)
+                println("fireWebPaymentCallBack>>"+charge?.status)
+                sdkSession.getListener()?.paymentSucceed(charge)
                 viewModel?.handleSuccessFailureResponseButton(
                     "success",
                     chargeResponse.authenticate,
@@ -824,7 +828,10 @@ class CardRepository : APIRequestCallback {
                 //  SDKSession().getListener()?.paymentSucceed(charge)
             } catch (e: Exception) {
                 Log.e(TAG, "fireWebPaymentCallBack: ", e)
-                Log.d("cardrepo", " Error while calling fireWebPaymentCallBack >>> method paymentSucceed(charge)")
+                Log.d(
+                    "cardrepo",
+                    " Error while calling fireWebPaymentCallBack >>> method paymentSucceed(charge)"
+                )
                 //closePaymentActivity()
             }
             ChargeStatus.FAILED, ChargeStatus.ABANDONED, ChargeStatus.CANCELLED, ChargeStatus.DECLINED, ChargeStatus.RESTRICTED, ChargeStatus.UNKNOWN, ChargeStatus.TIMEDOUT -> try {
