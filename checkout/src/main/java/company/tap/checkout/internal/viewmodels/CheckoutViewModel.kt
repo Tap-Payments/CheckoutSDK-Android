@@ -742,8 +742,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
             }, 1000)
 
         }
-      //  saveCardSwitchHolder11?.view?.visibility = View.GONE
-        tabAnimatedActionButtonViewHolder11?.view?.actionButton?.visibility = View.INVISIBLE
+        saveCardSwitchHolder11?.view?.visibility = View.GONE
+       // tabAnimatedActionButtonViewHolder11?.view?.actionButton?.visibility = View.INVISIBLE
     }
 
     override fun displaySaveCardOptions() {
@@ -1150,6 +1150,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         )
 
           saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
+        saveCardSwitchHolder11?.view?.mainSwitch?.visibility = View.GONE
 /*        saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.getImageView(
             R.drawable.loader,
             1
@@ -1167,8 +1168,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                 it
             )
         }*/
-        removeViews(businessViewHolder,amountViewHolder1,cardViewHolder11,paymentInputViewHolder,saveCardSwitchHolder11,tabAnimatedActionButtonViewHolder11)
-        addViews(tabAnimatedActionButtonViewHolder11)
+        removeViews(businessViewHolder,amountViewHolder1,cardViewHolder11,paymentInputViewHolder,tabAnimatedActionButtonViewHolder11)
+    //    addViews(tabAnimatedActionButtonViewHolder11)
 
     }
 
