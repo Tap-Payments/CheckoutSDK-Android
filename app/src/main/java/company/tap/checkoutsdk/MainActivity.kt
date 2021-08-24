@@ -179,7 +179,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
 
         // Enable or Disable 3DSecure
-        sdkSession.isRequires3DSecure(true)
+        sdkSession.isRequires3DSecure(false)
 
         //Set Receipt Settings [SMS - Email ]
 

@@ -1025,6 +1025,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         authenticate: Authenticate?,
         status: ChargeStatus?
     ) {
+        /***
+         * This function is  working fine as expected in case when 3ds is false
+         * i.e.  sdkSession.isRequires3DSecure(false) as no loading of url occurs direct response
+         * from the API is available.
+         * **/
 
         if (::webFrameLayout.isInitialized) {
             if (fragmentManager.findFragmentById(R.id.webFrameLayout) != null)
@@ -1033,48 +1038,35 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                     .commit()
             webFrameLayout.visibility = View.GONE
         }
-        // removeAllViews()
-        println("saveCardSwitchHolder11 is "+saveCardSwitchHolder11)
+
+        if(::otpViewHolder.isInitialized)
+        if (otpViewHolder.otpView.isVisible) {
+            removeViews(
+                businessViewHolder,
+                amountViewHolder1,
+                cardViewHolder11,
+                paymentInputViewHolder,
+                otpViewHolder
+            )
+        }
         addViews(saveCardSwitchHolder11)
         saveCardSwitchHolder11?.view?.visibility = View.VISIBLE
+        saveCardSwitchHolder11?.view?.mainSwitch?.visibility = View.GONE
 
-        saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)
+        when(status){
+            ChargeStatus.CAPTURED,ChargeStatus.AUTHORIZED,ChargeStatus.VALID,ChargeStatus.IN_PROGRESS->{
+                saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)
+            }
+            ChargeStatus.CANCELLED,ChargeStatus.TIMEDOUT,ChargeStatus.FAILED,ChargeStatus.DECLINED,ChargeStatus.UNKNOWN,
+            ChargeStatus.RESTRICTED,ChargeStatus.ABANDONED,ChargeStatus.VOID,ChargeStatus.INVALID->{
+                saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.ERROR)
+            }
+        }
+        Handler().postDelayed({
+                    if (::bottomSheetDialog.isInitialized)
+                        bottomSheetDialog.dismiss()
+                }, 6000)
 
-//        when (response) {
-//            "success" -> {
-//                setSlideAnimation()
-//                if (::webFrameLayout.isInitialized)
-//                    webFrameLayout.visibility = View.GONE
-//                //  webFrameLayout.fadeVisibility(View.GONE)
-//                setSlideAnimation()
-//                saveCardSwitchHolder11?.view?.visibility = View.VISIBLE
-//                saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(
-//                    ActionButtonState.SUCCESS
-//                )
-//                Handler().postDelayed({
-//                    if (::bottomSheetDialog.isInitialized)
-//                        bottomSheetDialog.dismiss()
-//                }, 8000)
-//
-//
-//            }
-//            else -> {
-//                if (::webFrameLayout.isInitialized)
-//                    webFrameLayout.visibility = View.GONE
-//                //  webFrameLayout.fadeVisibility(View.GONE)
-//                setSlideAnimation()
-//                saveCardSwitchHolder11?.view?.visibility=View.VISIBLE
-//                saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(
-//                    ActionButtonState.ERROR
-//                )
-//                Handler().postDelayed({
-//                    if (::bottomSheetDialog.isInitialized)
-//                        bottomSheetDialog.dismiss()
-//                }, 8000)
-//
-//                // saveCardSwitchHolder11?.view?.cardSwitch?.showOnlyPayButton()
-//            }
-//        }
     }
 
 

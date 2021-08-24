@@ -387,8 +387,8 @@ class CardRepository : APIRequestCallback {
 
                     }
                     else if(PaymentDataSource.getTransactionMode()==TransactionMode.TOKENIZE_CARD){
-                        SDKSession?.getListener()?.cardTokenizedSuccessfully(tokenResponse)
-                        SDKSession?.tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
+                        SDKSession.getListener()?.cardTokenizedSuccessfully(tokenResponse)
+                        SDKSession.tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
                     }
                     else if(PaymentDataSource.getTransactionMode()==TransactionMode.SAVE_CARD){
                         createSaveCard( viewModel, null, tokenResponse.id)
