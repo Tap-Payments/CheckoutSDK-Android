@@ -1,6 +1,5 @@
 package company.tap.checkout.internal.webview
 
-import company.tap.checkout.internal.api.models.Authenticate
 import company.tap.checkout.internal.api.models.Charge
 
 /**

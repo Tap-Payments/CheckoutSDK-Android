@@ -18,6 +18,7 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.annotation.RestrictTo
+import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
@@ -728,7 +729,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                     otpViewHolder
                 )
             }
-           // setSlideAnimation()
+            setSlideAnimation()
             Handler(Looper.getMainLooper()).postDelayed({
                 fragmentManager.beginTransaction()
                     .add(
@@ -741,7 +742,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
             }, 1000)
 
         }
-        saveCardSwitchHolder11?.view?.visibility = View.GONE
+      //  saveCardSwitchHolder11?.view?.visibility = View.GONE
+        tabAnimatedActionButtonViewHolder11?.view?.actionButton?.visibility = View.INVISIBLE
     }
 
     override fun displaySaveCardOptions() {
@@ -789,6 +791,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         // println("PaymentOptionsResponse on get$paymentOptionsResponse")
         allCurrencies.value = paymentOptionsResponse?.supportedCurrencies
         savedCardList.value = paymentOptionsResponse?.cards
+        currencyAdapter = CurrencyTypeAdapter(this)
+
         println("savedCardList on get" + savedCardList.value)
         println("paymentOptionsResponse?.supportedCurrencie on get" + paymentOptionsResponse?.supportedCurrencies)
         if (paymentOptionsResponse?.supportedCurrencies != null && ::amountViewHolder1.isInitialized) {
@@ -799,7 +803,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                     currentAmount =
                         CurrencyFormatter.currencyFormat(paymentOptionsResponse.supportedCurrencies[i].amount.toString())
 
+                   currencyAdapter.updateSelectedPosition(i)
                 }
+
             }
             amountViewHolder1.setDatafromAPI(
                 currentAmount,
@@ -858,7 +864,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         itemAdapter = ItemAdapter()
 
         //  goPayAdapter.updateAdapterData(goPayCardList.value as List<GoPaySavedCards>)
-        currencyAdapter = CurrencyTypeAdapter(this)
         if (allCurrencies.value?.isNotEmpty() == true) {
             currencyAdapter.updateAdapterData(allCurrencies.value as List<SupportedCurrencies>)
         }
@@ -1144,17 +1149,17 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
             null
         )
 
-        /*     saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
-        saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.getImageView(
+          saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
+/*        saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.getImageView(
             R.drawable.loader,
             1
         ) {
             setSlideAnimation()
-            removeViews(cardViewHolder11)
-            removeViews(businessViewHolder)
-            removeViews(amountViewHolder1)
-            removeViews(saveCardSwitchHolder11)
-            removeViews(paymentInputViewHolder)
+          //  removeViews(cardViewHolder11)
+          //  removeViews(amountViewHolder1)
+         //   removeViews(saveCardSwitchHolder11)
+         //   removeViews(paymentInputViewHolder)
+
 
 
         }?.let {
@@ -1162,6 +1167,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                 it
             )
         }*/
+        removeViews(businessViewHolder,amountViewHolder1,cardViewHolder11,paymentInputViewHolder,saveCardSwitchHolder11,tabAnimatedActionButtonViewHolder11)
+        addViews(tabAnimatedActionButtonViewHolder11)
 
     }
 
@@ -1371,8 +1378,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                 println("item per unit >>" + itemList[i].amountPerUnit)
 
             }
-           // itemsViewHolder1.setResetItemsRecylerView(itemList)
-          //  itemsViewHolder1.itemsRecyclerView.adapter=itemAdapter
+
             itemsViewHolder1.view.itemRecylerView.adapter = itemAdapter
             itemAdapter.updateAdapterData(itemList)
 
@@ -1390,7 +1396,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         )
             PaymentDataSource.setSelectedCurrency(selectedCurrency = selectedCurrency)
             PaymentDataSource.setSelectedAmount(currencyRate)
-
+    if(paymentInputViewHolder?.tapCardInputView?.isNotEmpty()){
+        paymentInputViewHolder?.tapCardInputView.clear()
+        paymentInputViewHolder?.tapAlertView?.visibility = View.GONE
+        paymentInputViewHolder?.tabLayout?.resetBehaviour()
+    }
     if(::selectedCurrency.isInitialized){
                 filterViewModels(selectedCurrency)
         }else   filterViewModels(currentCurrency)
@@ -1946,9 +1956,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         extraFeesAmount: String,
         paymentType: PaymentType, savedCardsModel: Any?
     ) {
-
+        val extraFeesPart1:String = LocalizationManager.getValue("extraFeesAlertMessagePart1", "ExtraFees")
+        val extraFeesPart2:String = LocalizationManager.getValue("extraFeesAlertMessagePart2", "ExtraFees")
+       // val leftToRight = "\u200F"
         val localizedMessage =
-            "You will be charged an additional fee of $extraFeesAmount${PaymentDataProvider().getSelectedCurrency()?.currency} for this type of payment, totaling an amount of $totalAmount${PaymentDataProvider().getSelectedCurrency()?.currency}"
+            extraFeesPart1 +" "+extraFeesAmount+PaymentDataProvider().getSelectedCurrency()?.currency +extraFeesPart2+" "+ totalAmount+ PaymentDataProvider().getSelectedCurrency()?.currency
         CustomUtils.showDialog(
             title,
             localizedMessage,

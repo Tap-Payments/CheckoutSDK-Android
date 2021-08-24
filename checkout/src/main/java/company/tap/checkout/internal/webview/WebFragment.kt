@@ -21,6 +21,7 @@ import android.webkit.WebView
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import company.tap.checkout.R
+import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.models.Authenticate
 import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.apiresponse.CardViewModel
@@ -110,6 +111,8 @@ class WebFragment(private val webViewContract: WebViewContract,private val cardV
             if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                 if (web_view.canGoBack()) {
                     web_view.goBack()
+                    /**
+                     * put here listener or delegate thT process cancelled **/
                     return@setOnKeyListener true
                 }
                 return@setOnKeyListener false
@@ -159,9 +162,9 @@ class WebFragment(private val webViewContract: WebViewContract,private val cardV
     override fun getRedirectedURL(url: String) {
        // webViewContract.redirectLoadingFinished(url.contains("https://www.google.com/search?"))
         if(url.contains("gosellsdk://return_url")){
-        webViewContract.redirectLoadingFinished(url.contains("gosellsdk://return_url"), chargeResponse)
+//        webViewContract.redirectLoadingFinished(url.contains("gosellsdk://return_url"), chargeResponse)
         }else{
-            webViewContract.directLoadingFinished(true)
+//            webViewContract.directLoadingFinished(true)
         }
     }
 

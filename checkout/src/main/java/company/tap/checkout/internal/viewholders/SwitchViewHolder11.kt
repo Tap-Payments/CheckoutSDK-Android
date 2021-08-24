@@ -14,7 +14,6 @@ import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import company.tap.tapuilibrary.uikit.ktx.setBottomBorders
-import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
 import kotlinx.android.synthetic.main.switch_layout.view.*
 
 /**
@@ -49,30 +48,59 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
         configureSwitch()
     }
     // Function / Logic is responsible for sett ing the data to switch based on user selection
-    fun setSwitchLocals(payName:PaymentTypeEnum) {
+    fun setSwitchLocals(payName: PaymentTypeEnum) {
 
-        goPayString = LocalizationManager.getValue("goPayTextLabel","GoPay")
-        savegoPayString = LocalizationManager.getValue("savegoPayLabel","GoPay")
-        alertgoPaySignupString = LocalizationManager.getValue("goPaySignupLabel","GoPay")
-        println("payname in switch"+payName.name)
+        goPayString = LocalizationManager.getValue("goPayTextLabel", "GoPay")
+        savegoPayString = LocalizationManager.getValue("savegoPayLabel", "GoPay")
+        alertgoPaySignupString = LocalizationManager.getValue("goPaySignupLabel", "GoPay")
+        println("payname in switch" + payName.name)
         if(payName.name == "card"){
-            switchString =LocalizationManager.getValue("cardUseNFCLabel","TapCardInputKit")
+            switchString =LocalizationManager.getValue("cardUseNFCLabel", "TapCardInputKit")
             switchString?.let { getMainSwitchDataSource(it) }?.let {
                 view.mainSwitch.setSwitchDataSource(it) }
-            view.cardSwitch.setSwitchDataSource(getTapSwitchDataSourceFromAPI(switchString, goPayString, savegoPayString, alertgoPaySignupString))
+            view.cardSwitch.setSwitchDataSource(
+                getTapSwitchDataSourceFromAPI(
+                    switchString,
+                    goPayString,
+                    savegoPayString,
+                    alertgoPaySignupString
+                )
+            )
 
         }else if( payName.name == "telecom") {
-            mobileString = LocalizationManager.getValue("mobileUseLabel","TapMobileInput")
+            mobileString = LocalizationManager.getValue("mobileUseLabel", "TapMobileInput")
             view.mainSwitch.setSwitchDataSource(getMainSwitchDataSource(mobileString))
-            view.cardSwitch.setSwitchDataSource(getTapSwitchDataSourceFromAPI(mobileString, goPayString, savegoPayString, alertgoPaySignupString))
+            view.cardSwitch.setSwitchDataSource(
+                getTapSwitchDataSourceFromAPI(
+                    mobileString,
+                    goPayString,
+                    savegoPayString,
+                    alertgoPaySignupString
+                )
+            )
 
         }
     }
 
-    private fun getTapSwitchDataSourceFromAPI(switchString2: String?, goPayString: String?, savegoPayString: String?, alertgoPaySignupString: String?): TapSwitchDataSource {
+    private fun getTapSwitchDataSourceFromAPI(
+        switchString2: String?,
+        goPayString: String?,
+        savegoPayString: String?,
+        alertgoPaySignupString: String?
+    ): TapSwitchDataSource {
+        val saveForString :String =LocalizationManager.getValue("saveFor", "Common")
+        val saveForStringArabic :String =LocalizationManager.getValue("saveFor", "Common")
+        val checkoutsString :String =LocalizationManager.getValue("checkouts", "Common")
+        val switchSaveMerchantCheckout:String
+        if(LocalizationManager.getLocale(context).language=="ar"){
+            switchSaveMerchantCheckout = "$saveForStringArabic $merchantName"
+        }else{
+           switchSaveMerchantCheckout = "$saveForString$merchantName  $checkoutsString"
+        }
+
         return TapSwitchDataSource(
             switchSave = switchString2,
-            switchSaveMerchantCheckout = "Save for   $merchantName   Checkouts",
+            switchSaveMerchantCheckout = switchSaveMerchantCheckout,
             switchSavegoPayCheckout = goPayString,
             savegoPayText = savegoPayString,
             alertgoPaySignup = alertgoPaySignupString
@@ -124,7 +152,12 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
         view.mainSwitch.switchSaveMobile?.setOnCheckedChangeListener { buttonView, isChecked ->
             if(isChecked){
                 view.cardSwitch.payButton.isActivated
-                view.cardSwitch.payButton.setButtonDataSource(true, context.let { LocalizationManager.getLocale(it).language },
+                view.cardSwitch.payButton.setButtonDataSource(
+                    true, context.let {
+                        LocalizationManager.getLocale(
+                            it
+                        ).language
+                    },
                     LocalizationManager.getValue("pay", "ActionButton"),
                     Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
                     Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
@@ -166,9 +199,23 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
 
     fun setSwitchToggleData(paymentType: PaymentType){
         if(paymentType== PaymentType.CARD) {
-            view.mainSwitch.setSwitchDataSource(getMainSwitchDataSource(LocalizationManager.getValue("cardSaveLabel", "TapCardInputKit")))
+            view.mainSwitch.setSwitchDataSource(
+                getMainSwitchDataSource(
+                    LocalizationManager.getValue(
+                        "cardSaveLabel",
+                        "TapCardInputKit"
+                    )
+                )
+            )
         }else{
-            view.mainSwitch.setSwitchDataSource(getMainSwitchDataSource(LocalizationManager.getValue("mobileSaveLabel","TapMobileInput")))
+            view.mainSwitch.setSwitchDataSource(
+                getMainSwitchDataSource(
+                    LocalizationManager.getValue(
+                        "mobileSaveLabel",
+                        "TapMobileInput"
+                    )
+                )
+            )
 
         }
 
@@ -176,7 +223,7 @@ class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
 
     private fun mainSwitchUncheckedAction() {
         setBorderedView(
-          view.mainSwitch.card,
+            view.mainSwitch.card,
             0f,// corner raduis
             0.0f,
             Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor")),// stroke color

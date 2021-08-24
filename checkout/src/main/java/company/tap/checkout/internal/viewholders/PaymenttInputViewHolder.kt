@@ -86,7 +86,7 @@ class PaymenttInputViewHolder(
     private var linearLayoutPay: LinearLayout? = null
     private var tapSeparatorViewLinear: LinearLayout? = null
     private var tabPosition: Int? = null
-    private var tapAlertView: TapAlertView? = null
+    var tapAlertView: TapAlertView? = null
     private var imageURL: String = ""
     //  private  var paymentType: PaymentTypeEnum ?= null
     private var paymentType: PaymentType? = null
@@ -415,6 +415,7 @@ class PaymenttInputViewHolder(
     private fun checkValidationState(card: DefinedCardBrand) {
         when (card.validationState) {
             CardValidationState.invalid -> {
+                if(card.cardBrand!=null)
                 tabLayout.selectTab(card.cardBrand, false)
                 tapAlertView?.visibility = View.VISIBLE
                 tapAlertView?.alertMessage?.text =
