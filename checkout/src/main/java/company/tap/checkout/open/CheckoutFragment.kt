@@ -54,6 +54,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     private lateinit var tapNfcCardReader: TapNfcCardReader
     private var cardReadDisposable: Disposable = Disposables.empty()
 
+//    var view: View? = null
 
 
 
@@ -65,26 +66,45 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
+    override fun onDestroyView() {
+        if (view?.parent != null) {
+            (view?.parent as ViewGroup).removeView(view)
+        }
+        super.onDestroyView()
+    }
+
+
+
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//    }
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        return inflater.inflate(R.layout.fragment_checkouttaps, container, false)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         val viewModel: CheckoutViewModel by viewModels()
         val cardViewModel: CardViewModel by viewModels()
         this.viewModel = viewModel
         _Context?.let { cardViewModel.getContext(it) }
 
 
-        val view = inflater.inflate(R.layout.fragment_checkouttaps, container, false)
         backgroundColor = (Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.clear")))
 
 
-        val checkoutLayout: LinearLayout? = view?.findViewById(R.id.fragment_all)
-        val frameLayout: FrameLayout? = view?.findViewById(R.id.fragment_container_nfc_lib)
-        val webFrameLayout: FrameLayout? = view?.findViewById(R.id.webFrameLayout)
-        val inLineCardLayout: FrameLayout? = view?.findViewById(R.id.inline_container)
-        val closeText: TapTextView? = view?.findViewById(R.id.closeText)
+        val checkoutLayout: LinearLayout? = view.findViewById(R.id.fragment_all)
+        val frameLayout: FrameLayout? = view.findViewById(R.id.fragment_container_nfc_lib)
+        val webFrameLayout: FrameLayout? = view.findViewById(R.id.webFrameLayout)
+        val inLineCardLayout: FrameLayout? = view.findViewById(R.id.inline_container)
+        val closeText: TapTextView? = view.findViewById(R.id.closeText)
         closeText?.text = LocalizationManager.getValue("close", "Common")
 
 
@@ -133,7 +153,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         }
         sessionDelegate?.sessionIsStarting()
          enableSections()
-        return view
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -177,6 +196,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
         }
     }
+
 
     fun handleNFCResult(intent: Intent?) {
         if (tapNfcCardReader.isSuitableIntent(intent)) {

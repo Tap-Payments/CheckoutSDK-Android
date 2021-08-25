@@ -643,6 +643,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         otpViewHolder.otpView.changePhone.visibility = View.INVISIBLE
         otpViewHolder.otpView.timerText.setOnClickListener {
             resendOTPCode(chargeResponse)
+            otpViewHolder.otpView.restartTimer()
         }
         amountViewHolder1.changeGroupAction(false)
     }
@@ -720,6 +721,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
 
     override fun displayRedirect(url: String, authenticate: Charge?) {
         this.redirectURL = url
+
+        var trans = fragmentManager.beginTransaction()
+        trans.hide(checkoutFragment)
+        trans.addToBackStack("A")
+        trans.commit()
+
+
         if (::redirectURL.isInitialized && ::fragmentManager.isInitialized) {
             if (otpViewHolder.otpView.isVisible) {
                 removeViews(
@@ -1043,7 +1051,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         if (::webFrameLayout.isInitialized) {
             if (fragmentManager.findFragmentById(R.id.webFrameLayout) != null)
                 fragmentManager.beginTransaction()
-                    .remove(fragmentManager.findFragmentById(R.id.webFrameLayout)!!)
+                    .hide(fragmentManager.findFragmentById(R.id.webFrameLayout)!!)
                     .commit()
             webFrameLayout.visibility = View.GONE
         }
@@ -1118,6 +1126,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
 
         viewHolders.forEach {
             Handler(Looper.getMainLooper()).postDelayed(Runnable {
+                if (::sdkLayout.isInitialized)
                 sdkLayout.removeView(it?.view)
                 val animation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
                 it?.view?.startAnimation(animation)
@@ -1485,10 +1494,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         if (::webFrameLayout.isInitialized) {
             if (fragmentManager.findFragmentById(R.id.webFrameLayout) != null)
                 fragmentManager.beginTransaction()
-                    .remove(fragmentManager.findFragmentById(R.id.webFrameLayout)!!)
+                    .hide(fragmentManager.findFragmentById(R.id.webFrameLayout)!!)
                     .commit()
             webFrameLayout.visibility = View.GONE
         }
+
+        fragmentManager
+            .popBackStack()
+
 
         if(saveCardSwitchHolder11 ==null){
             saveCardSwitchHolder11 = contextSDK?.let { SwitchViewHolder11(it) }

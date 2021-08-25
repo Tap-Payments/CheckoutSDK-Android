@@ -18,6 +18,7 @@ import android.view.ViewGroup
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import company.tap.checkout.R
@@ -30,6 +31,8 @@ import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import company.tap.tapuilibrary.uikit.ktx.setTopBorders
 import kotlinx.android.synthetic.main.fragment_web.*
+import android.content.Intent
+import company.tap.checkout.open.CheckoutFragment
 
 
 class WebFragment(private val webViewContract: WebViewContract,private val cardViewModel: CardViewModel) : Fragment(),
@@ -50,6 +53,7 @@ class WebFragment(private val webViewContract: WebViewContract,private val cardV
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTopDraggerView()
+
         progressBar?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("merchantHeaderView.backgroundColor")))
         progressBar?.progressDrawable?.setColorFilter(
             Color.RED, android.graphics.PorterDuff.Mode.SRC_IN);
@@ -157,13 +161,15 @@ class WebFragment(private val webViewContract: WebViewContract,private val cardV
     if success == false show error gif of action button
      */
     override fun submitResponseStatus(success: Boolean) {
-
+        val intent = Intent(activity, CheckoutFragment::class.java)
+        startActivity(intent)
         webViewContract.redirectLoadingFinished(success, chargeResponse, contextSDK)
     }
 
     override fun getRedirectedURL(url: String) {
        // webViewContract.redirectLoadingFinished(url.contains("https://www.google.com/search?"))
         if(url.contains("gosellsdk://return_url")){
+
 //        webViewContract.redirectLoadingFinished(url.contains("gosellsdk://return_url"), chargeResponse)
         }else{
 //            webViewContract.directLoadingFinished(true)
