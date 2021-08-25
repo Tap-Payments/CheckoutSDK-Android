@@ -401,7 +401,7 @@ object  SDKSession : APIRequestCallback {
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun startPayment(_supportFragmentManager:FragmentManager) {
-        persistPaymentDataSource()
+       // persistPaymentDataSource()
         if (tabAnimatedActionButton != null) tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
         println(" this.paymentDataSource.getTransactionMode() : " + paymentDataSource?.getTransactionMode())
         CardViewModel().processEvent(CardViewEvent.InitEvent, CheckoutViewModel(),null,null,null,null,null,null,null,null,

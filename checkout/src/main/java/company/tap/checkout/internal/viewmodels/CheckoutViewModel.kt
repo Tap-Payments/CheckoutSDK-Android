@@ -16,6 +16,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
 import androidx.annotation.RestrictTo
 import androidx.core.view.isNotEmpty
@@ -120,7 +121,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
     private lateinit var bottomSheetDialog: BottomSheetDialog
     private lateinit var fragmentManager: FragmentManager
     private lateinit var bottomSheetLayout: FrameLayout
+    @Nullable
     private lateinit var selectedAmount: String
+    @Nullable
     private lateinit var selectedCurrency: String
     private var fee : BigDecimal?= BigDecimal.ZERO
     @JvmField
@@ -1642,6 +1645,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         var extraFees: java.util.ArrayList<ExtraFee>? = null
         var paymentOption:PaymentOption? = null
 
+
         if(paymentTypeEnum == PaymentType.WEB ){
            savedCardsModel as PaymentOption
            extraFees = savedCardsModel?.extraFees
@@ -1981,7 +1985,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         println("webPaymentOptions in logic >>>>$webPaymentOptions")
         println("cardPaymentOptions in logic >>>>$cardPaymentOptions")
 
-        if(PaymentDataSource.getPaymentDataType()!=null && PaymentDataSource.getPaymentDataType() == "WEB"){
+         if(PaymentDataSource.getPaymentDataType()!=null && PaymentDataSource.getPaymentDataType() == "WEB" && PaymentDataSource.getTransactionMode() !=TransactionMode.AUTHORIZE_CAPTURE ){
             adapter.updateAdapterDataSavedCard(ArrayList())
             adapter.updateAdapterData(webPaymentOptions)
             saveCardSwitchHolder11?.view?.cardSwitch?.showOnlyPayButton()
@@ -1990,8 +1994,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
             paymentInputViewHolder.setDataFromAPI(cardPaymentOptions)
             saveCardSwitchHolder11?.view?.cardSwitch?.showOnlyPayButton()
         }else{
-            adapter.updateAdapterData(webPaymentOptions)
-            paymentInputViewHolder.setDataFromAPI(cardPaymentOptions)
+            /**
+             * If TransactionMode is AUTHORIZE_CAPTURE then don't show webpayment options
+             * **/
+             if(PaymentDataSource.getTransactionMode() ==TransactionMode.AUTHORIZE_CAPTURE){
+                 adapter.updateAdapterData(ArrayList())
+                 paymentInputViewHolder.setDataFromAPI(cardPaymentOptions)
+             }else{
+                adapter.updateAdapterData(webPaymentOptions)
+                paymentInputViewHolder.setDataFromAPI(cardPaymentOptions)
+             }
         }
     }
 
@@ -2041,14 +2053,23 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                 else setDifferentPaymentsAction(paymentType, savedCardsModel)
             }else setDifferentPaymentsAction(paymentType, savedCardsModel)
         } else {
+
+
             when {
                 paymentType === PaymentType.WEB -> {
                     // fireWebPaymentExtraFeesUserDecision(ExtraFeesStatus.REFUSE_EXTRA_FEES)
+                    selectedCurrencyPos = null
+                    selectedAmountPos = null
+
                 }
                 paymentType === PaymentType.CARD -> {
+                    selectedCurrencyPos = null
+                    selectedAmountPos = null
 //                    fireCardPaymentExtraFeesUserDecision(ExtraFeesStatus.REFUSE_EXTRA_FEES)
                 }
                 paymentType === PaymentType.SavedCard -> {
+                    selectedCurrencyPos = null
+                    selectedAmountPos = null
                     //  fireSavedCardPaymentExtraFeesUserDecision(ExtraFeesStatus.REFUSE_EXTRA_FEES)
                 }
             }

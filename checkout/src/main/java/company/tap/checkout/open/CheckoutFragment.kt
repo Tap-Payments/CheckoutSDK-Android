@@ -96,6 +96,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         closeText?.setOnClickListener {
             bottomSheetDialog.dismissWithAnimation
             bottomSheetDialog.hide()
+
+
         }
 
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
