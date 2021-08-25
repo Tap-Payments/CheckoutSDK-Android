@@ -100,11 +100,11 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         backgroundColor = (Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.clear")))
 
 
-        val checkoutLayout: LinearLayout? = view?.findViewById(R.id.fragment_all)
-        val frameLayout: FrameLayout? = view?.findViewById(R.id.fragment_container_nfc_lib)
-        val webFrameLayout: FrameLayout? = view?.findViewById(R.id.webFrameLayout)
-        val inLineCardLayout: FrameLayout? = view?.findViewById(R.id.inline_container)
-        val closeText: TapTextView? = view?.findViewById(R.id.closeText)
+        val checkoutLayout: LinearLayout? = view.findViewById(R.id.fragment_all)
+        val frameLayout: FrameLayout? = view.findViewById(R.id.fragment_container_nfc_lib)
+        val webFrameLayout: FrameLayout? = view.findViewById(R.id.webFrameLayout)
+        val inLineCardLayout: FrameLayout? = view.findViewById(R.id.inline_container)
+        val closeText: TapTextView? = view.findViewById(R.id.closeText)
         closeText?.text = LocalizationManager.getValue("close", "Common")
 
 
