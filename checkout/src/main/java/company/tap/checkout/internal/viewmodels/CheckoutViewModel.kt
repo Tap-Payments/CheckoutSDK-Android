@@ -11,8 +11,6 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.LinearLayout
@@ -42,7 +40,6 @@ import company.tap.checkout.internal.adapter.CardTypeAdapterUIKIT
 import company.tap.checkout.internal.adapter.CurrencyTypeAdapter
 import company.tap.checkout.internal.adapter.GoPayCardAdapterUIKIT
 import company.tap.checkout.internal.adapter.ItemAdapter
-import company.tap.checkout.internal.api.enums.AuthenticationType
 import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.api.models.*
@@ -74,7 +71,6 @@ import company.tap.tapuilibrary.themekit.theme.SeparatorViewTheme
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
-import kotlinx.android.synthetic.main.action_button_animation.view.*
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.businessview_layout.view.*
 import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
@@ -859,6 +855,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                 initAdaptersAction()
 
             }
+
+        PaymentDataSource.setSelectedCurrency(currentCurrency)
+        PaymentDataSource.setSelectedAmount(currentAmount.toBigDecimal())
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -1577,16 +1576,19 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                      * Note PaymentType savedcard is changed to Card for saved card payments for extra fees and payment options*/
                     if (::selectedAmount.isInitialized && ::selectedCurrency.isInitialized) {
                         checkForExtraFees(
-                            selectedAmount,
-                            selectedCurrency,
-                            PaymentType.CARD,
-                            savedCardsModel
-                        )
+                                selectedAmount,
+                                selectedCurrency,
+                                PaymentType.CARD,
+                                savedCardsModel,
+                                PaymentDataProvider().getSelectedCurrency()
+                            )
+
                     } else checkForExtraFees(
                         currentAmount,
                         currentCurrency,
                         PaymentType.CARD,
-                        savedCardsModel
+                        savedCardsModel,
+                        PaymentDataProvider().getSelectedCurrency()
                     )
 
                     // setDifferentPaymentsAction(paymentTypeEnum,savedCardsModel)
@@ -1597,13 +1599,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                             checkForExtraFees(
                                 selectedAmount,
                                 selectedCurrency,
-                                paymentTypeEnum, savedCardsModel
+                                paymentTypeEnum, savedCardsModel, PaymentDataProvider().getSelectedCurrency()
                             )
                         } else checkForExtraFees(
                             currentAmount,
                             currentCurrency,
                             paymentTypeEnum,
-                            savedCardsModel
+                            savedCardsModel,
+                            PaymentDataProvider().getSelectedCurrency()
                         )
                     }
                 }
@@ -1613,13 +1616,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                         checkForExtraFees(
                             selectedAmount,
                             selectedCurrency,
-                            paymentTypeEnum, savedCardsModel
+                            paymentTypeEnum, savedCardsModel, PaymentDataProvider().getSelectedCurrency()
                         )
                     } else checkForExtraFees(
                         currentAmount,
                         currentCurrency,
                         paymentTypeEnum,
-                        savedCardsModel
+                        savedCardsModel,
+                        PaymentDataProvider().getSelectedCurrency()
                     )
 
 
@@ -1628,7 +1632,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                     checkForExtraFees(
                         currentAmount,
                         currentCurrency,
-                        paymentTypeEnum, savedCardsModel
+                        paymentTypeEnum, savedCardsModel, PaymentDataProvider().getSelectedCurrency()
                     )
                 }
             }
@@ -1640,7 +1644,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         selectedAmount: String,
         selectedCurrency: String,
         paymentTypeEnum: PaymentType,
-        savedCardsModel: Any?
+        savedCardsModel: Any?,
+        amountedCurrency: AmountedCurrency?
     ) {
         var extraFees: java.util.ArrayList<ExtraFee>? = null
         var paymentOption:PaymentOption? = null
@@ -1649,7 +1654,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         if(paymentTypeEnum == PaymentType.WEB ){
            savedCardsModel as PaymentOption
            extraFees = savedCardsModel?.extraFees
-            fee = calculateExtraFeesAmount(savedCardsModel as PaymentOption)
+            fee = calculateExtraFeesAmount(savedCardsModel as PaymentOption,amountedCurrency)
 
        } else{
            for (i in paymentOptionsResponse.paymentOptions.indices) {
@@ -1658,17 +1663,18 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                    paymentOption = paymentOptionsResponse.paymentOptions[i]
                }
            }
-           fee = calculateExtraFeesAmount(paymentOption)
+           fee = calculateExtraFeesAmount(paymentOption,amountedCurrency)
 
        }
-        val totalAmount = fee?.add(PaymentDataProvider()?.getSelectedCurrency()?.amount)
+
+        var totalAmount = fee?.add(amountedCurrency?.amount?.toDouble()?.let { BigDecimal.valueOf(it) })
        if (calculateExtraFeesAmount(
                extraFees,
                paymentOptionsResponse.supportedCurrencies,
                PaymentDataProvider().getSelectedCurrency()
            )!! > BigDecimal.ZERO
         ) {
-            showExtraFees(totalAmount.toString(), fee.toString(), paymentTypeEnum, savedCardsModel)
+            showExtraFees(totalAmount.toString(), fee.toString(), paymentTypeEnum, savedCardsModel,selectedCurrency)
         }else if(savedCardsModel!=null) {
             if(paymentTypeEnum==PaymentType.CARD|| paymentTypeEnum==PaymentType.SavedCard){
                 savedCardsModel as SavedCard
@@ -2013,13 +2019,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
     private fun showExtraFees(
         totalAmount: String,
         extraFeesAmount: String,
-        paymentType: PaymentType, savedCardsModel: Any?
+        paymentType: PaymentType, savedCardsModel: Any?, selectedCurrency: String
     ) {
         val extraFeesPart1:String = LocalizationManager.getValue("extraFeesAlertMessagePart1", "ExtraFees")
         val extraFeesPart2:String = LocalizationManager.getValue("extraFeesAlertMessagePart2", "ExtraFees")
        // val leftToRight = "\u200F"
         val localizedMessage =
-            extraFeesPart1 +" "+extraFeesAmount+PaymentDataProvider().getSelectedCurrency()?.currency +extraFeesPart2+" "+ totalAmount+ PaymentDataProvider().getSelectedCurrency()?.currency
+           // extraFeesPart1 +" "+extraFeesAmount+PaymentDataProvider().getSelectedCurrency()?.currency +extraFeesPart2+" "+ totalAmount+ PaymentDataProvider().getSelectedCurrency()?.currency
+            "$extraFeesPart1 $extraFeesAmount$selectedCurrency$extraFeesPart2 $totalAmount$selectedCurrency"
         CustomUtils.showDialog(
             title,
             localizedMessage,
@@ -2053,13 +2060,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                 else setDifferentPaymentsAction(paymentType, savedCardsModel)
             }else setDifferentPaymentsAction(paymentType, savedCardsModel)
         } else {
-
+            fee = BigDecimal.ZERO
 
             when {
                 paymentType === PaymentType.WEB -> {
                     // fireWebPaymentExtraFeesUserDecision(ExtraFeesStatus.REFUSE_EXTRA_FEES)
                     selectedCurrencyPos = null
                     selectedAmountPos = null
+
 
                 }
                 paymentType === PaymentType.CARD -> {
@@ -2103,14 +2111,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
      * @param paymentOption the payment option
      * @return the big decimal
      */
-    open fun calculateExtraFeesAmount(paymentOption: PaymentOption?): BigDecimal? {
+    open fun calculateExtraFeesAmount(paymentOption: PaymentOption?,amountedCurrency:AmountedCurrency?): BigDecimal? {
         return if (paymentOption != null) {
 
-            val amount = PaymentDataProvider().getSelectedCurrency()
+            // val amount = PaymentDataProvider().getSelectedCurrency()
             var extraFees: java.util.ArrayList<ExtraFee>? = paymentOption.extraFees
             if (extraFees == null) extraFees = java.util.ArrayList()
             val supportedCurrencies: java.util.ArrayList<SupportedCurrencies>? = PaymentDataProvider().getSupportedCurrencies()
-            calculateExtraFeesAmount(extraFees, supportedCurrencies, amount)
+            calculateExtraFeesAmount(extraFees, supportedCurrencies, amountedCurrency)
         } else BigDecimal.ZERO
     }
     fun View.fadeVisibility(visibility: Int, duration: Long = 3000) {
