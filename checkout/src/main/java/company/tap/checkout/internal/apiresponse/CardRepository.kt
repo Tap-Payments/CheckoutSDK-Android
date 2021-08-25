@@ -427,6 +427,7 @@ class CardRepository : APIRequestCallback {
                     paymentOptionsResponse = paymentOptionsResponse
             )
             val tapCheckoutFragment = CheckoutFragment()
+          //  supportFragmentManager.beginTransaction().add(tapCheckoutFragment,"CheckOutFragment").show(tapCheckoutFragment)
             tapCheckoutFragment.show(supportFragmentManager, null)
             sdkSession.sessionDelegate?.sessionHasStarted()
             SessionManager.setActiveSession(false)
