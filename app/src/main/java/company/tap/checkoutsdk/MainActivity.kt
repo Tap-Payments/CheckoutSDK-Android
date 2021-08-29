@@ -21,6 +21,7 @@ import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.controller.SDKSession.openBottomSheetForButton
+import company.tap.checkout.open.controller.SDKSession.resetBottomSheetForButton
 import company.tap.checkout.open.enums.CardType
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.interfaces.SessionDelegate
@@ -519,7 +520,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
     }
 
     override fun handleSDKStatus() {
-       resetBottomSheetForButton(supportFragmentManager,this)
+        resetBottomSheetForButton(supportFragmentManager,this)
     }
 
 }
