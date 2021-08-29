@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class CardViewHolder11(private val context: Context, private val onCardSelectedActionListener: OnCardSelectedActionListener) : TapBaseViewHolder {
+class CardViewHolder(private val context: Context, private val onCardSelectedActionListener: OnCardSelectedActionListener) : TapBaseViewHolder {
 
     override val view: View = LayoutInflater.from(context).inflate(R.layout.cardviewholder_layout1, null)
     override val type = SectionType.CARD
