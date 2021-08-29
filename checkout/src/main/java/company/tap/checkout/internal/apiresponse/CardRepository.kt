@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentManager
 import com.google.gson.Gson
 import com.google.gson.JsonElement
+import company.tap.checkout.R
 import company.tap.checkout.internal.PaymentDataProvider
 import company.tap.checkout.internal.api.enums.*
 import company.tap.checkout.internal.api.models.*
@@ -17,9 +18,12 @@ import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.interfaces.IPaymentDataProvider
 import company.tap.checkout.internal.utils.AmountCalculator
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
+import company.tap.checkout.internal.webview.WebFragment
 
 import company.tap.checkout.open.CheckoutFragment
+import company.tap.checkout.open.ParentCheckoutFragment
 import company.tap.checkout.open.controller.SDKSession
+import company.tap.checkout.open.controller.SDKSession.activity
 import company.tap.checkout.open.controller.SDKSession.contextSDK
 import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
 import company.tap.checkout.open.controller.SessionManager
@@ -37,6 +41,7 @@ import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog.Companion.TAG
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.android.synthetic.main.fragment_checkouttaps.view.*
 import retrofit2.Response
 import java.math.BigDecimal
 import java.util.*
@@ -289,9 +294,9 @@ class CardRepository : APIRequestCallback {
                     fireWebPaymentCallBack(chargeResponse)
                   //  chargeResponse?.transaction?.url?.let { it1 -> viewModel?.displayRedirect(it1) }
                   //  viewModel?.redirectLoadingFinished(true)
-                }
+                }else handleChargeResponse(chargeResponse)
             }
-            handleChargeResponse(chargeResponse)
+
         }
         else if(requestCode == BIN_RETRIEVE_CODE){
             response?.body().let {
@@ -428,11 +433,15 @@ class CardRepository : APIRequestCallback {
             )
             val tapCheckoutFragment = CheckoutFragment()
           //  supportFragmentManager.beginTransaction().add(tapCheckoutFragment,"CheckOutFragment").show(tapCheckoutFragment)
-            tapCheckoutFragment.show(supportFragmentManager, null)
+          //  contextSDK?.let { CheckoutFragment.newInstance(it, activity).show(supportFragmentManager,"CheckOutFragment") }
+         //   ParentCheckoutFragment.newInstance().childFragmentManager.beginTransaction().add(ParentCheckoutFragment(),"C").show(ParentCheckoutFragment())
+            tapCheckoutFragment.show(supportFragmentManager.beginTransaction().addToBackStack(null), "CheckOutFragment")
+        //   supportFragmentManager.beginTransaction().add(CheckoutFragment(),"A").hide(WebFragment(null,null)).show(ParentCheckoutFragment()).commitNow()
+            println("fragments"+supportFragmentManager.fragments)
             sdkSession.sessionDelegate?.sessionHasStarted()
             SessionManager.setActiveSession(false)
             resultObservable.onNext(viewState)
-            resultObservable.onComplete()
+           // resultObservable.onComplete()
         }
         if( ::chargeResponse.isInitialized && chargeResponse!=null){
             if(::viewModel.isInitialized && chargeResponse.status!=ChargeStatus.IN_PROGRESS && chargeResponse.status!= ChargeStatus.CANCELLED) {
@@ -497,11 +506,11 @@ class CardRepository : APIRequestCallback {
                     chargeResponse.status
                 )*/
                 SDKSession.sessionActive = false
-                viewModel.redirectLoadingFinished(true, chargeResponse, contextSDK)
+              //  viewModel.redirectLoadingFinished(true, chargeResponse, contextSDK)
             }
             ChargeStatus.ABANDONED , ChargeStatus.CANCELLED,ChargeStatus.DECLINED->{    SDKSession.getListener()?.paymentFailed(chargeResponse)
                 viewModel?.handleSuccessFailureResponseButton("failure",chargeResponse.authenticate,chargeResponse.status)
-                viewModel.redirectLoadingFinished(true,chargeResponse, contextSDK)
+              //  viewModel.redirectLoadingFinished(true,chargeResponse, contextSDK)
 
             }
 

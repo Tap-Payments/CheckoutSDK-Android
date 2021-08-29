@@ -14,10 +14,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.get
 import cards.pay.paycardsrecognizer.sdk.Card
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import company.tap.checkout.R
@@ -32,13 +36,13 @@ import company.tap.nfcreader.open.reader.TapEmvCard
 import company.tap.nfcreader.open.reader.TapNfcCardReader
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.uikit.atoms.TapImageView
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
+import kotlinx.android.synthetic.main.fragment_checkouttaps.*
 
 
 /**
@@ -46,14 +50,15 @@ import io.reactivex.disposables.Disposables
 // * Use the [CheckoutFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, InlineViewCallback {
+class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, InlineViewCallback {
 
     private var _Context: Context? = null
-    private lateinit var viewModel: CheckoutViewModel
+    private lateinit var _viewModel: CheckoutViewModel
+    private lateinit var cardViewModel: CardViewModel
     var _Activity: Activity? = null
     private lateinit var tapNfcCardReader: TapNfcCardReader
     private var cardReadDisposable: Disposable = Disposables.empty()
-
+    var hideAllView =false
 //    var view: View? = null
 
 
@@ -74,29 +79,22 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     }
 
 
-
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//    }
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+
         return inflater.inflate(R.layout.fragment_checkouttaps, container, false)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val viewModel: CheckoutViewModel by viewModels()
         val cardViewModel: CardViewModel by viewModels()
-        this.viewModel = viewModel
+        this._viewModel = viewModel
         _Context?.let { cardViewModel.getContext(it) }
-
-
         backgroundColor = (Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.clear")))
 
 
@@ -142,7 +140,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                                     inLineCardLayout,
                                     this,
                                     it2,
-                                    cardViewModel
+                                    cardViewModel,this,
                                 )
                             }
 
@@ -153,7 +151,11 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         }
         sessionDelegate?.sessionIsStarting()
          enableSections()
+
+
     }
+
+
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun enableSections(): ArrayList<SectionType> {
@@ -162,9 +164,11 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         enabledSections.add(SectionType.AMOUNT_ITEMS)
         enabledSections.add(SectionType.FRAGMENT)
         enabledSections.add(SectionType.ActionButton)
+       if(!hideAllView) {
+           _viewModel.displayStartupLayout(enabledSections)
+           _viewModel.getDatasfromAPIs(PaymentDataSource.getSDKSettings(),PaymentDataSource.getPaymentOptionsResponse())
+       }else _viewModel.showOnlyButtonView()
 
-        viewModel.displayStartupLayout(enabledSections)
-        viewModel.getDatasfromAPIs(PaymentDataSource.getSDKSettings(),PaymentDataSource.getPaymentOptionsResponse())
         setBottomSheetInterface(this)
 
         return enabledSections
@@ -173,10 +177,11 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
 
 
+
     companion object {
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(context: Context, activity: Activity, intent: Intent) =
+        fun newInstance(context: Context, activity: Activity?) =
             CheckoutFragment().apply {
                 arguments = Bundle().apply {}
                 _Context = context
@@ -186,13 +191,13 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     override fun onScanCardFailed(e: Exception?) {
         println("onScanCardFailed")
-        viewModel.handleScanFailedResult()
+        _viewModel.handleScanFailedResult()
     }
 
     override fun onScanCardFinished(card: Card?, cardImage: ByteArray?) {
         if (card != null) {
             println("scanned card is$card")
-            viewModel.handleScanSuccessResult(card)
+            _viewModel.handleScanSuccessResult(card)
 
         }
     }
@@ -205,7 +210,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ emvCard: TapEmvCard? ->
                     if (emvCard != null) {
-                        viewModel.handleNFCScannedResult(emvCard)
+                        _viewModel.handleNFCScannedResult(emvCard)
                         println("emvCard$emvCard")
                     }
                 },
@@ -239,6 +244,12 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         println("newText respoonse$newText")
 
     }
+
+
+
+
+
+
 
 
 }

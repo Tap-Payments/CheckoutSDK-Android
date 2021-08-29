@@ -35,7 +35,7 @@ import android.content.Intent
 import company.tap.checkout.open.CheckoutFragment
 
 
-class WebFragment(private val webViewContract: WebViewContract,private val cardViewModel: CardViewModel) : Fragment(),
+class WebFragment(private val webViewContract: WebViewContract?,private val cardViewModel: CardViewModel?) : Fragment(),
     CustomWebViewClientContract {
 
     private var webViewUrl: String? = null
@@ -109,7 +109,7 @@ class WebFragment(private val webViewContract: WebViewContract,private val cardV
         if (Build.VERSION.SDK_INT >= 21) {
             web_view.settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
         }
-        web_view.webViewClient = TapCustomWebViewClient(this,cardViewModel)
+        web_view.webViewClient = cardViewModel?.let { TapCustomWebViewClient(this, it) }
         web_view.settings.loadWithOverviewMode = true
         web_view.loadUrl(webViewUrl)
         web_view.setOnKeyListener { _, keyCode, event ->
@@ -161,9 +161,9 @@ class WebFragment(private val webViewContract: WebViewContract,private val cardV
     if success == false show error gif of action button
      */
     override fun submitResponseStatus(success: Boolean) {
-        val intent = Intent(activity, CheckoutFragment::class.java)
-        startActivity(intent)
-        webViewContract.redirectLoadingFinished(success, chargeResponse, contextSDK)
+      /*  val intent = Intent(activity, CheckoutFragment::class.java)
+        startActivity(intent)*/
+        webViewContract?.redirectLoadingFinished(success, chargeResponse, contextSDK)
     }
 
     override fun getRedirectedURL(url: String) {

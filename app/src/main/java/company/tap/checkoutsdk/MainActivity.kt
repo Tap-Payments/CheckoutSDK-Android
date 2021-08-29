@@ -18,9 +18,9 @@ import company.tap.checkout.TapCheckOutSDK
 import company.tap.checkout.internal.api.enums.AmountModificatorType
 import company.tap.checkout.internal.api.enums.Measurement
 import company.tap.checkout.internal.api.models.*
-import company.tap.checkout.internal.apiresponse.testmodels.Discount
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession
+import company.tap.checkout.open.controller.SDKSession.openBottomSheetForButton
 import company.tap.checkout.open.enums.CardType
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.interfaces.SessionDelegate
@@ -32,7 +32,6 @@ import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.models.DialogConfigurations
 import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
-import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog.Companion.TAG
 import java.math.BigDecimal
 import java.util.*
 
@@ -216,7 +215,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
     fun openBottomSheet(view: View) {
         /// Configures the bottom sheet by creating one and assigning the correct delegates and datasources
         modalBottomSheet.arguments = getArguments()
-        sdkSession.startSDK(supportFragmentManager,this)
+        sdkSession.startSDK(supportFragmentManager,this,this)
        // modalBottomSheet.show(supportFragmentManager, TAG)
     }
     private fun getArguments(): Bundle {
@@ -324,7 +323,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
                 Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
         )
 
-       sdkSession.setButtonView(payButton,this,supportFragmentManager)
+       sdkSession.setButtonView(payButton,this,supportFragmentManager,this)
 
 
     }
@@ -517,6 +516,10 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
     override fun userEnabledSaveCardOption(saveCardEnabled: Boolean) {
        println("userEnabledSaveCardOption>>>>>" + saveCardEnabled)
+    }
+
+    override fun handleSDKStatus() {
+       resetBottomSheetForButton(supportFragmentManager,this)
     }
 
 }

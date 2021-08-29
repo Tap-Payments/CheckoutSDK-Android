@@ -2,11 +2,13 @@ package company.tap.checkout.open.controller
 
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.ViewModelProviders
 import com.google.gson.JsonElement
 import company.tap.checkout.internal.PaymentDataProvider
 import company.tap.checkout.internal.api.models.Merchant
@@ -14,6 +16,7 @@ import company.tap.checkout.internal.apiresponse.CardViewEvent
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.utils.CustomUtils.showDialog
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
+import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.CardType
 import company.tap.checkout.open.enums.TransactionMode
@@ -38,6 +41,7 @@ All rights reserved.
 object  SDKSession : APIRequestCallback {
     private var paymentDataSource: PaymentDataSource? = null
     var contextSDK: Context? = null
+    var activity: Activity? = null
    var supportFragmentManager: FragmentManager ?=null
     @JvmField
     var sessionDelegate: SessionDelegate? = null
@@ -46,6 +50,8 @@ object  SDKSession : APIRequestCallback {
     var tabAnimatedActionButton: TabAnimatedActionButton? = null
 
      var sessionActive = false
+
+  //  var fragopnedfrombutton =false
 
     init {
         initPaymentDataSource()
@@ -92,13 +98,14 @@ object  SDKSession : APIRequestCallback {
         paymentDataSource = PaymentDataSource
     }
 
-    fun startSDK(supportFragmentManager: FragmentManager, context: Context) {
+    fun startSDK(supportFragmentManager: FragmentManager, context: Context,activity:Activity) {
         println("is session enabled ${SessionManager.isSessionEnabled()}")
         if (SessionManager.isSessionEnabled()) {
             println("Session already active!!!")
             return
         }
         this.contextSDK = context
+        this.activity =activity
 
         getPaymentOptions(supportFragmentManager)
         /*val tapCheckoutFragment = CheckoutFragment()
@@ -328,7 +335,8 @@ object  SDKSession : APIRequestCallback {
     fun setButtonView(
         payButtonView: TabAnimatedActionButton,
         context: Context,
-        supportFragmentManager: FragmentManager
+        supportFragmentManager: FragmentManager,
+        activity: Activity
     ) {
         payButtonView.setOnClickListener {
             if (sessionActive) return@setOnClickListener
@@ -338,7 +346,7 @@ object  SDKSession : APIRequestCallback {
                 return@setOnClickListener
             } else {
                 sessionActive = true
-                startSDK(supportFragmentManager, context)
+                startSDK(supportFragmentManager, context,activity)
                 this.tabAnimatedActionButton = payButtonView
                 if (tabAnimatedActionButton != null) {
                     tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
@@ -406,6 +414,15 @@ object  SDKSession : APIRequestCallback {
         println(" this.paymentDataSource.getTransactionMode() : " + paymentDataSource?.getTransactionMode())
         CardViewModel().processEvent(CardViewEvent.InitEvent, CheckoutViewModel(),null,null,null,null,null,null,null,null,
             _supportFragmentManager,contextSDK)
+
+
+    }
+
+    fun resetBottomSheetForButton(__supportFragmentManager: FragmentManager,context: Context) {
+        val checkoutFragment =CheckoutFragment()
+        __supportFragmentManager.let { checkoutFragment.show(it,"T") }
+        checkoutFragment.hideAllView = true
+
 
 
     }

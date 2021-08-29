@@ -44,4 +44,6 @@ interface SessionDelegate {
     fun invalidCustomerID()
 
     fun userEnabledSaveCardOption(saveCardEnabled: Boolean)
+
+    fun handleSDKStatus()
 }
