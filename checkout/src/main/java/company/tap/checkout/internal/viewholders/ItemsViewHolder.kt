@@ -29,7 +29,7 @@ import company.tap.tapuilibrary.uikit.atoms.TapChipGroup
  *
  */
 @SuppressLint("ClickableViewAccessibility")
-class ItemsViewHolder1(private val context: Context, private val onCurrencyChangedActionListener: OnCurrencyChangedActionListener) :
+class ItemsViewHolder(private val context: Context, private val onCurrencyChangedActionListener: OnCurrencyChangedActionListener) :
     TapBaseViewHolder {
     override val view = LayoutInflater.from(context).inflate(
         R.layout.itemviewholder_layout,
@@ -40,7 +40,6 @@ class ItemsViewHolder1(private val context: Context, private val onCurrencyChang
 
     var itemsdisplayed: Boolean = false
     private lateinit var supportedCurrecnyList: ArrayList<SupportedCurrencies>
-    //private lateinit var supportedItemList: List<Items1>
     private  var supportedItemList: List<PaymentItem>?=null
      var mainCurrencyChip: TapChipGroup
      var itemsRecyclerView:RecyclerView
@@ -108,27 +107,9 @@ class ItemsViewHolder1(private val context: Context, private val onCurrencyChang
         if (supportItemListApi != null) {
             supportedItemList = supportItemListApi
         }
-       println("supportedItemList curr list:$supportedItemList")
+   //    println("supportedItemList curr list:$supportedItemList")
 
     }
 
-
-    fun setCurrencyRecylerView(){
-        adapterCurrency.updateAdapterData(supportedCurrecnyList)
-    }
-    fun setItemsRecylerView(){
-        itemsRecyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        itemsRecyclerView.adapter = adapterItems
-       // if(supportedItemList!=null)
-       // adapterItems.updateAdapterData(supportedItemList)
-
-    }
-
-    fun setResetItemsRecylerView(itemsListUpdated:List<PaymentItem>){
-        itemsRecyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        itemsRecyclerView.adapter = adapterItems
-        adapterItems.updateAdapterData(itemsListUpdated)
-
-    }
 
 }

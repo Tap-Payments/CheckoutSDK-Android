@@ -63,7 +63,7 @@ class PaymenttInputViewHolder(
     private val context: Context,
     private val onPaymentCardComplete: PaymentCardComplete,
     private val onCardNFCCallListener: onCardNFCCallListener,
-    private val switchViewHolder11: SwitchViewHolder11?,
+    private val switchViewHolder: SwitchViewHolder?,
     private val baseLayoutManager: BaseLayoutManager,
     private val cardViewModel: CardViewModel
 ) : TapBaseViewHolder,
@@ -168,19 +168,19 @@ class PaymenttInputViewHolder(
         clearView.setOnClickListener {
             if (selectedType == PaymentTypeEnum.card) {
                 tapCardInputView.clear()
-                switchViewHolder11?.setSwitchLocals(PaymentTypeEnum.card)
+                switchViewHolder?.setSwitchLocals(PaymentTypeEnum.card)
             }
             else if (selectedType == PaymentTypeEnum.telecom) {
                 tapMobileInputView.clearNumber()
-                switchViewHolder11?.setSwitchLocals(PaymentTypeEnum.telecom)
+                switchViewHolder?.setSwitchLocals(PaymentTypeEnum.telecom)
             }
-            switchViewHolder11?.view?.cardSwitch?.switchesLayout?.visibility = View.GONE
-            switchViewHolder11?.view?.mainSwitch?.switchSaveMobile?.visibility = View.GONE
+            switchViewHolder?.view?.cardSwitch?.switchesLayout?.visibility = View.GONE
+            switchViewHolder?.view?.mainSwitch?.switchSaveMobile?.visibility = View.GONE
             tapAlertView?.visibility = View.GONE
-            switchViewHolder11?.view?.cardSwitch?.payButton?.isActivated = false
-            switchViewHolder11?.view?.cardSwitch?.showOnlyPayButton()
-            switchViewHolder11?.bindViewComponents()
-            switchViewHolder11?.view?.cardSwitch?.payButton?.setButtonDataSource(
+            switchViewHolder?.view?.cardSwitch?.payButton?.isActivated = false
+            switchViewHolder?.view?.cardSwitch?.showOnlyPayButton()
+            switchViewHolder?.bindViewComponents()
+            switchViewHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
                 false,
                 context.let { LocalizationManager.getLocale(it).language },
                 LocalizationManager.getValue("pay", "ActionButton"),
@@ -491,7 +491,7 @@ class PaymenttInputViewHolder(
     private fun swapInputViewsPositionNot0() {
         selectedType = PaymentTypeEnum.telecom
         println("call 2")
-        switchViewHolder11?.setSwitchLocals(PaymentTypeEnum.telecom)
+        switchViewHolder?.setSwitchLocals(PaymentTypeEnum.telecom)
         nfcButton?.visibility = View.GONE
         cardScannerBtn?.visibility = View.GONE
         if (tapMobileInputView.mobileNumber.text.isEmpty())
@@ -504,11 +504,11 @@ class PaymenttInputViewHolder(
 
     private fun swapInputViewsPosition0() {
         selectedType = PaymentTypeEnum.card
-        switchViewHolder11?.setSwitchLocals(PaymentTypeEnum.card)
+        switchViewHolder?.setSwitchLocals(PaymentTypeEnum.card)
         //It will be hidden until goPay is Logged in
-        if (switchViewHolder11?.goPayisLoggedin == true) {
-            switchViewHolder11.view.cardSwitch?.switchGoPayCheckout?.visibility = View.VISIBLE
-        } else switchViewHolder11?.view?.cardSwitch?.switchGoPayCheckout?.visibility = View.GONE
+        if (switchViewHolder?.goPayisLoggedin == true) {
+            switchViewHolder.view.cardSwitch?.switchGoPayCheckout?.visibility = View.VISIBLE
+        } else switchViewHolder?.view?.cardSwitch?.switchGoPayCheckout?.visibility = View.GONE
 
         nfcButton?.visibility = View.VISIBLE
         cardScannerBtn?.visibility = View.VISIBLE

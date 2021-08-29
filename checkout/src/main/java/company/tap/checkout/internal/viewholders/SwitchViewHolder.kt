@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.switch_layout.view.*
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class SwitchViewHolder11(private val context: Context) : TapBaseViewHolder  {
+class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
 
     override val view: View = LayoutInflater.from(context).inflate(R.layout.switch_layout, null)
 
