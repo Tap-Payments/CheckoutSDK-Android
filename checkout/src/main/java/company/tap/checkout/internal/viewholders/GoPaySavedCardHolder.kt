@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.R
 import company.tap.checkout.internal.adapter.GoPayCardAdapterUIKIT
-import company.tap.checkout.internal.dummygener.GoPaySavedCards
+import company.tap.checkout.internal.apiresponse.testmodels.GoPaySavedCards
 import company.tap.checkout.internal.enums.SectionType
-import company.tap.checkout.internal.interfaces.BaseLayouttManager
+import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
@@ -25,7 +25,7 @@ import kotlinx.android.synthetic.main.gopayloginview_layout.view.*
 class GoPaySavedCardHolder(
     private val context: Context,
     private val onCardSelectedActionListener: OnCardSelectedActionListener,
-    private val baseLayouttManager: BaseLayouttManager? = null
+    private val baseLayoutManager: BaseLayoutManager? = null
 ) : TapBaseViewHolder {
 
 

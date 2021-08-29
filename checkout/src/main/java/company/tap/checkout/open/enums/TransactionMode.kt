@@ -16,16 +16,6 @@ enum class TransactionMode {
     PURCHASE,
     AUTHORIZE_CAPTURE,
     SAVE_CARD,
-    TOKENIZE_CARD,
+    TOKENIZE_CARD
 
-    /////////////////////////////////////  APIs exposer without UI ////////////////////////////
-    /**
-     * Tokenize card mode no UI.
-     */
-     TOKENIZE_CARD_NO_UI,
-
-    /**
-     * Save card transaction mode no UI.
-     */
-    SAVE_CARD_NO_UI
 }

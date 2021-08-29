@@ -6,12 +6,14 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import company.tap.checkout.TapCheckOutSDK
@@ -20,7 +22,6 @@ import company.tap.checkout.internal.api.enums.Measurement
 import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession
-import company.tap.checkout.open.controller.SDKSession.openBottomSheetForButton
 import company.tap.checkout.open.controller.SDKSession.resetBottomSheetForButton
 import company.tap.checkout.open.enums.CardType
 import company.tap.checkout.open.enums.TransactionMode
@@ -279,6 +280,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         config.setLocale(locale)
         resources.updateConfiguration(config, resources.displayMetrics)
     }
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
@@ -391,9 +393,9 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         println("Authorize Succeeded : " + authorize.response.message)
 
         if (authorize.card != null) {
-            println("Payment Authorized Succeeded : first six : " + authorize?.card?.firstSix)
-            println("Payment Authorized Succeeded : last four: " + authorize?.card?.lastFour)
-            println("Payment Authorized Succeeded : card object : " + authorize?.card?.`object`)
+            println("Payment Authorized Succeeded : first six : " + authorize.card?.firstSix)
+            println("Payment Authorized Succeeded : last four: " + authorize.card?.lastFour)
+            println("Payment Authorized Succeeded : card object : " + authorize.card?.`object`)
         }
 
         println("##############################################################################")
@@ -414,8 +416,8 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
         println("##############################################################################")
         if (authorize.expiry != null) {
-            println("Payment Authorized Succeeded : expiry type :" + authorize?.expiry?.type)
-            println("Payment Authorized Succeeded : expiry period :" + authorize?.expiry?.period)
+            println("Payment Authorized Succeeded : expiry type :" + authorize.expiry?.type)
+            println("Payment Authorized Succeeded : expiry period :" + authorize.expiry?.period)
         }
         Toast.makeText(this, "authorizationSucceed"+authorize.id, Toast.LENGTH_SHORT).show()
 
@@ -441,9 +443,9 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         println("Card Saved Succeeded : " + charge.card?.brand)
         println("Card Saved Succeeded : " + charge.description)
         println("Card Saved Succeeded : " + charge.response?.message)
-        println("Card Saved Succeeded : " + (charge as SaveCard)?.card_issuer?.name)
+        println("Card Saved Succeeded : " + (charge as SaveCard).card_issuer?.name)
         println("Card Saved Succeeded : " + charge.card_issuer?.id)
-        Toast.makeText(this, "cardSaved"+charge?.id, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "cardSaved"+charge.id, Toast.LENGTH_SHORT).show()
 
     }
 
@@ -460,7 +462,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         println("Token card : " + token.card?.id.toString() + " ****** " + token.card?.name)
         println("Token card : " + token.card?.address.toString() + " ****** " + token.card?.`object`)
         println("Token card : " + token.card?.expirationMonth.toString() + " ****** " + token.card?.expirationYear)
-        Toast.makeText(this,"cardTokenizedSuccessfully"+token?.id, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this,"cardTokenizedSuccessfully"+token.id, Toast.LENGTH_SHORT).show()
 
     }
 

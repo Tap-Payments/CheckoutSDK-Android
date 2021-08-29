@@ -7,12 +7,9 @@ import android.view.View
 import company.tap.checkout.R
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.AmountInterface
-import company.tap.checkout.internal.interfaces.BaseLayouttManager
+import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.checkout.internal.utils.CurrencyFormatter
-import company.tap.checkout.internal.utils.CurrentTheme
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibrary.uikit.atoms.TapButton
-import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.datasource.AmountViewDataSource
 import kotlinx.android.synthetic.main.action_button_animation.view.*
 import kotlinx.android.synthetic.main.amountview_layout.view.*
@@ -23,7 +20,7 @@ import kotlinx.android.synthetic.main.amountview_layout.view.*
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class AmountViewHolder1(context: Context,private val baseLayouttManager: BaseLayouttManager?=null) : TapBaseViewHolder,
+class AmountViewHolder1(context: Context,private val baseLayoutManager: BaseLayoutManager?=null) : TapBaseViewHolder,
     AmountInterface {
 
 
@@ -83,7 +80,7 @@ class AmountViewHolder1(context: Context,private val baseLayouttManager: BaseLay
     fun setOnItemsClickListener(onItemsClickListener: () -> Unit) {
         view.amount_section.itemCountButton.setOnClickListener {
             onItemsClickListener()
-            baseLayouttManager?.controlCurrency(isOpenedList)
+            baseLayoutManager?.controlCurrency(isOpenedList)
         }
     }
 

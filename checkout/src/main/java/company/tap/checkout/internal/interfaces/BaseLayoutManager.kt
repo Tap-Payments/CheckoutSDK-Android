@@ -18,7 +18,7 @@ import company.tap.checkout.internal.enums.SectionType
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-interface BaseLayouttManager {
+interface BaseLayoutManager {
     fun displayStartupLayout(enabledSections: ArrayList<SectionType>)
     fun displayGoPayLogin()
     fun displayGoPay()

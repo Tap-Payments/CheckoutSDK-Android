@@ -7,7 +7,7 @@ import android.view.View
 import company.tap.checkout.R
 import company.tap.checkout.internal.enums.PaymentTypeEnum.*
 import company.tap.checkout.internal.enums.SectionType
-import company.tap.checkout.internal.interfaces.BaseLayouttManager
+import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.taplocalizationkit.LocalizationManager
@@ -25,7 +25,7 @@ import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class GoPayViewsHolder(private val context: Context, private val baseLayouttManager: BaseLayouttManager?=null,private val otpViewHolder: OTPViewHolder) : TapBaseViewHolder,GoPayLoginInterface,OtpButtonConfirmationInterface,
+class GoPayViewsHolder(private val context: Context, private val baseLayoutManager: BaseLayoutManager?=null, private val otpViewHolder: OTPViewHolder) : TapBaseViewHolder,GoPayLoginInterface,OtpButtonConfirmationInterface,
     OpenOTPInterface {
 
     override val view: View = LayoutInflater.from(context).inflate(R.layout.gopay_layout, null)
@@ -54,7 +54,7 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
         goPayPasswordInput.setLoginInterface(this, goPayLoginInput.textInput.text.toString())
         signInButton.setOnClickListener {
             if(goPayPasswordInput.passwordTextInput.text.toString()=="12345678"){
-                baseLayouttManager?.displayGoPay()
+                baseLayoutManager?.displayGoPay()
             }else{
                 goPayPasswordInput.textInputLayout.error= LocalizationManager.getValue("GoPayLogin","Hints","password")
             }
@@ -70,7 +70,7 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
     override fun onEmailValidated() {
         //to be replace dummy check when validating via api
         if(goPayLoginInput.textInput.text.toString()=="a.k@g.com"){
-            CustomUtils.showDialog(LocalizationManager.getValue("GoPayAlert", "Hints", "goPayTitle"),LocalizationManager.getValue("GoPayAlert", "Hints", "goPayemailalert"),context,null,baseLayouttManager,null,null,false)
+            CustomUtils.showDialog(LocalizationManager.getValue("GoPayAlert", "Hints", "goPayTitle"),LocalizationManager.getValue("GoPayAlert", "Hints", "goPayemailalert"),context,null,baseLayoutManager,null,null,false)
         return
         }else {
             goPayLoginInput.visibility = View.GONE
@@ -86,11 +86,11 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
         goPayLoginInput.visibility = View.GONE
         //to be replace dummy check when validating via api
         if(goPayLoginInput.textInput.text.toString()=="69045932"){
-            CustomUtils.showDialog(LocalizationManager.getValue("GoPayAlert", "Hints", "goPayTitle"),LocalizationManager.getValue("GoPayAlert", "Hints", "goPayphonealert"),context,null,baseLayouttManager,null,null,false)
+            CustomUtils.showDialog(LocalizationManager.getValue("GoPayAlert", "Hints", "goPayTitle"),LocalizationManager.getValue("GoPayAlert", "Hints", "goPayphonealert"),context,null,baseLayoutManager,null,null,false)
             return
         }else{
             println(" you clicked to display otp!!!")
-            baseLayouttManager?.displayOTPView(PaymentDataSource.getCustomer().getPhone(), GOPAY.name)
+            baseLayoutManager?.displayOTPView(PaymentDataSource.getCustomer().getPhone(), GOPAY.name)
         }
 
     }
@@ -102,7 +102,7 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
     }
 
     override fun onChangePhoneClicked() {
-        baseLayouttManager?.displayGoPayLogin()
+        baseLayoutManager?.displayGoPayLogin()
         goPayopened = true
 
     }
@@ -111,7 +111,7 @@ class GoPayViewsHolder(private val context: Context, private val baseLayouttMana
         otpViewHolder.otpView.otpHintText.visibility= View.GONE
         Log.d("isValidOTPValid", (otpNumber == "111111").toString())
         return if(otpNumber=="111111"){
-            baseLayouttManager?.displayGoPay()
+            baseLayoutManager?.displayGoPay()
             true
         } else {
             otpViewHolder.otpView.otpHintText.text= (LocalizationManager.getValue("Message", "TapOtpView", "Invalid"))

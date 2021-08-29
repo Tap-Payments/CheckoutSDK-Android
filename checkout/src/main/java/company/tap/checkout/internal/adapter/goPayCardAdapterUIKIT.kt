@@ -16,10 +16,10 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import company.tap.checkout.R
-import company.tap.checkout.internal.dummygener.Chip1
-import company.tap.checkout.internal.dummygener.GoPaySavedCards
+import company.tap.checkout.internal.apiresponse.testmodels.Chip1
+import company.tap.checkout.internal.apiresponse.testmodels.GoPaySavedCards
+
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
-import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
@@ -55,7 +55,7 @@ class GoPayCardAdapterUIKIT(
         this.adapterContent = adapterContent
         notifyDataSetChanged()
     }
-    fun updateSignOut(adapterContent: List<GoPaySavedCards>,isLogout:Boolean) {
+    fun updateSignOut(adapterContent: List<GoPaySavedCards>, isLogout:Boolean) {
         this.adapterContent = adapterContent
         this.isLogout = isLogout
         notifyDataSetChanged()

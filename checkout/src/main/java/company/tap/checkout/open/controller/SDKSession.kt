@@ -94,7 +94,7 @@ object  SDKSession : APIRequestCallback {
     /**
      * Instantiate payment data source.
      */
-    open fun instantiatePaymentDataSource() {
+    fun instantiatePaymentDataSource() {
         paymentDataSource = PaymentDataSource
     }
 
@@ -118,7 +118,7 @@ object  SDKSession : APIRequestCallback {
     /**
      * set amount
      */
-    open fun setAmount(amount: BigDecimal) {
+    fun setAmount(amount: BigDecimal) {
         println("amount ... $amount")
         paymentDataSource?.setAmount(amount)
     }
@@ -127,7 +127,7 @@ object  SDKSession : APIRequestCallback {
     /**
      * set setPaymentType
      */
-    open fun setPaymentType(paymentType: String) {
+    fun setPaymentType(paymentType: String) {
         println("paymentType ... $paymentType")
         paymentDataSource?.setPaymentType(paymentType)
     }
@@ -137,7 +137,7 @@ object  SDKSession : APIRequestCallback {
      *
      * @param tapCurrency the tap currency
      */
-    open fun setTransactionCurrency(tapCurrency: TapCurrency) {
+    fun setTransactionCurrency(tapCurrency: TapCurrency) {
         paymentDataSource?.setTransactionCurrency(tapCurrency)
     }
 
@@ -147,7 +147,7 @@ object  SDKSession : APIRequestCallback {
      *
      * @param transactionMode the transaction mode
      */
-    open fun setTransactionMode(transactionMode: TransactionMode) {
+    fun setTransactionMode(transactionMode: TransactionMode) {
         paymentDataSource?.setTransactionMode(transactionMode)
     }
 
@@ -156,7 +156,7 @@ object  SDKSession : APIRequestCallback {
      *
      * @param tapCustomer the tapCustomer
      */
-    open fun setCustomer(tapCustomer: TapCustomer) {
+    fun setCustomer(tapCustomer: TapCustomer) {
         paymentDataSource?.setCustomer(tapCustomer)
     }
 
@@ -165,7 +165,7 @@ object  SDKSession : APIRequestCallback {
      *
      * @param paymentItems the payment items
      */
-    open fun setPaymentItems(paymentItems: ArrayList<PaymentItem>?) {
+    fun setPaymentItems(paymentItems: ArrayList<PaymentItem>?) {
         paymentDataSource?.setPaymentItems(paymentItems)
     }
 
@@ -174,7 +174,7 @@ object  SDKSession : APIRequestCallback {
      *
      * @param taxes the taxes
      */
-    open fun setTaxes(taxes: ArrayList<Tax>?) {
+    fun setTaxes(taxes: ArrayList<Tax>?) {
         paymentDataSource?.setTaxes(taxes)
     }
 
@@ -183,7 +183,7 @@ object  SDKSession : APIRequestCallback {
      *
      * @param shipping the shipping
      */
-    open fun setShipping(shipping: ArrayList<Shipping>?) {
+    fun setShipping(shipping: ArrayList<Shipping>?) {
         paymentDataSource?.setShipping(shipping)
     }
 
@@ -192,7 +192,7 @@ object  SDKSession : APIRequestCallback {
      *
      * @param postURL the post url
      */
-    open fun setPostURL(postURL: String?) {
+    fun setPostURL(postURL: String?) {
         paymentDataSource?.setPostURL(postURL)
     }
 
@@ -201,7 +201,7 @@ object  SDKSession : APIRequestCallback {
      *
      * @param paymentDescription the payment description
      */
-    open fun setPaymentDescription(paymentDescription: String?) {
+    fun setPaymentDescription(paymentDescription: String?) {
         paymentDataSource?.setPaymentDescription(paymentDescription)
     }
 
@@ -219,7 +219,7 @@ object  SDKSession : APIRequestCallback {
      *
      * @param paymentReference the payment reference
      */
-    open fun setPaymentReference(paymentReference: Reference?) {
+    fun setPaymentReference(paymentReference: Reference?) {
         paymentDataSource?.setPaymentReference(paymentReference)
     }
 
@@ -228,7 +228,7 @@ object  SDKSession : APIRequestCallback {
      *
      * @param setPaymentStatementDescriptor the set payment statement descriptor
      */
-    open fun setPaymentStatementDescriptor(setPaymentStatementDescriptor: String?) {
+    fun setPaymentStatementDescriptor(setPaymentStatementDescriptor: String?) {
         paymentDataSource?.setPaymentStatementDescriptor(setPaymentStatementDescriptor)
     }
 
@@ -247,7 +247,7 @@ object  SDKSession : APIRequestCallback {
      *
      * @param is3DSecure the is 3 d secure
      */
-    open fun isRequires3DSecure(is3DSecure: Boolean) {
+    fun isRequires3DSecure(is3DSecure: Boolean) {
         println("isRequires3DSecure >>> $is3DSecure")
         paymentDataSource?.isRequires3DSecure(is3DSecure)
     }
@@ -257,7 +257,7 @@ object  SDKSession : APIRequestCallback {
      *
      * @param receipt the receipt
      */
-    open fun setReceiptSettings(receipt: Receipt?) {
+    fun setReceiptSettings(receipt: Receipt?) {
         paymentDataSource?.setReceiptSettings(receipt)
     }
 
@@ -267,14 +267,14 @@ object  SDKSession : APIRequestCallback {
      *
      * @param authorizeAction the authorize action
      */
-    open fun setAuthorizeAction(authorizeAction: AuthorizeAction?) {
+    fun setAuthorizeAction(authorizeAction: AuthorizeAction?) {
         paymentDataSource?.setAuthorizeAction(authorizeAction)
     }
 
     /**
      * set Destination
      */
-    open fun setDestination(destination: Destinations?) {
+    fun setDestination(destination: Destinations?) {
         paymentDataSource?.setDestination(destination)
     }
 
@@ -282,7 +282,7 @@ object  SDKSession : APIRequestCallback {
      * set Merchant ID
      * @param merchantId
      */
-    open fun setMerchantID(merchantId: String?) {
+    fun setMerchantID(merchantId: String?) {
         if (merchantId != null && merchantId.trim { it <= ' ' }
                 .isNotEmpty()) paymentDataSource?.setMerchant(
             Merchant(merchantId)
@@ -293,7 +293,7 @@ object  SDKSession : APIRequestCallback {
      * set setCardType
      * @param cardType the cardType
      */
-    open fun setCardType(cardType: CardType) {
+    fun setCardType(cardType: CardType) {
         println("cardType ... $cardType")
         paymentDataSource?.setcardType(cardType)
     }
@@ -303,7 +303,7 @@ object  SDKSession : APIRequestCallback {
      *
      * @param defaultCardHolderName the default cardholderName
      */
-    open fun setDefaultCardHolderName(defaultCardHolderName: String?) {
+    fun setDefaultCardHolderName(defaultCardHolderName: String?) {
         paymentDataSource?.setDefaultCardHolderName(defaultCardHolderName)
     }
 
@@ -311,7 +311,7 @@ object  SDKSession : APIRequestCallback {
      * enable or disable edit cardholdername.
      * @param enableCardHolderName
      */
-    open fun isUserAllowedToEnableCardHolderName(enableCardHolderName: Boolean) {
+    fun isUserAllowedToEnableCardHolderName(enableCardHolderName: Boolean) {
         println("isUserAllowedToEnableCardHolderName >>> $enableCardHolderName")
         paymentDataSource?.isUserAllowedToEditCardHolderName(enableCardHolderName)
     }

@@ -49,7 +49,8 @@ import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
 import company.tap.checkout.internal.api.responses.SDKSettings
 import company.tap.checkout.internal.apiresponse.CardViewEvent
 import company.tap.checkout.internal.apiresponse.CardViewModel
-import company.tap.checkout.internal.dummygener.*
+import company.tap.checkout.internal.apiresponse.testmodels.GoPaySavedCards
+import company.tap.checkout.internal.apiresponse.testmodels.TapCardPhoneListDataSource
 import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.*
@@ -89,7 +90,7 @@ import kotlin.properties.Delegates
  *
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
-open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedActionListener,
+open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedActionListener,
     PaymentCardComplete, onCardNFCCallListener, OnCurrencyChangedActionListener, WebViewContract,
     TapTextRecognitionCallBack {
     private var savedCardList = MutableLiveData<List<SavedCard>>()
@@ -139,7 +140,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
     private lateinit var checkoutFragment: CheckoutFragment
     private lateinit var itemList: List<PaymentItem>
     private lateinit var selectedPaymentOption: PaymentOption
-    private lateinit var orderList: Order1
 
     @SuppressLint("StaticFieldLeak")
     private lateinit var context: Context

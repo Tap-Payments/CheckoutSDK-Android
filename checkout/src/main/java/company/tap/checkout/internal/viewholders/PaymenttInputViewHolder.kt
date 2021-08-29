@@ -29,7 +29,7 @@ import company.tap.checkout.internal.apiresponse.CardViewEvent
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.SectionType
-import company.tap.checkout.internal.interfaces.BaseLayouttManager
+import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.checkout.internal.interfaces.PaymentCardComplete
 import company.tap.checkout.internal.interfaces.onCardNFCCallListener
 import company.tap.checkout.internal.utils.CustomUtils
@@ -60,12 +60,12 @@ import kotlin.collections.ArrayList
  */
 @RequiresApi(Build.VERSION_CODES.N)
 class PaymenttInputViewHolder(
-        private val context: Context,
-        private val onPaymentCardComplete: PaymentCardComplete,
-        private val onCardNFCCallListener: onCardNFCCallListener,
-        private val switchViewHolder11: SwitchViewHolder11?,
-        private val baseLayouttManager: BaseLayouttManager,
-        private val cardViewModel: CardViewModel
+    private val context: Context,
+    private val onPaymentCardComplete: PaymentCardComplete,
+    private val onCardNFCCallListener: onCardNFCCallListener,
+    private val switchViewHolder11: SwitchViewHolder11?,
+    private val baseLayoutManager: BaseLayoutManager,
+    private val cardViewModel: CardViewModel
 ) : TapBaseViewHolder,
     TapSelectionTabLayoutInterface, CardInputListener, TapPaymentShowHideClearImage {
     override val view: View =
@@ -207,7 +207,7 @@ class PaymenttInputViewHolder(
                 //check if editable start with number of oridoo or zain etc
                 // onPaymentCardComplete.onPaycardSwitchAction(true, PaymentType.MOBILE)
                 if (tapMobileInputView.mobileNumber.text.length > 7)
-                    baseLayouttManager.displayOTPView(
+                    baseLayoutManager.displayOTPView(
                             PaymentDataSource.getCustomer().getPhone(),
                             PaymentTypeEnum.telecom.name
                     )
@@ -662,7 +662,7 @@ class PaymenttInputViewHolder(
                     LocalizationManager.getValue("alertUnsupportedCardMessage", "AlertBox"),
                     context,
                     1,
-                    baseLayouttManager,
+                    baseLayoutManager,
                     null,
                     null,
                     true

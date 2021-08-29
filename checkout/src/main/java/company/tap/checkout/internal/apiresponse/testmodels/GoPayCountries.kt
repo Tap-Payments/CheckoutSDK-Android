@@ -1,4 +1,4 @@
-package company.tap.checkout.internal.dummygener
+package company.tap.checkout.internal.apiresponse.testmodels
 import com.google.gson.annotations.SerializedName
 
 

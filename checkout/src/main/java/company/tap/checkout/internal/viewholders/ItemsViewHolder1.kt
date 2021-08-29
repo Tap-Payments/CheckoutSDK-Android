@@ -17,7 +17,6 @@ import company.tap.checkout.internal.adapter.ItemAdapter
 import company.tap.checkout.internal.api.models.AmountedCurrency
 import company.tap.checkout.internal.api.models.SupportedCurrencies
 
-import company.tap.checkout.internal.dummygener.Items1
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener
 import company.tap.checkout.open.models.PaymentItem

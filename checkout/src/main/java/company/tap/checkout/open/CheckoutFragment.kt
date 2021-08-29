@@ -55,17 +55,17 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
     private var _Context: Context? = null
     private lateinit var _viewModel: CheckoutViewModel
     private lateinit var cardViewModel: CardViewModel
-    var _Activity: Activity? = null
+    var _activity: Activity? = null
     private lateinit var tapNfcCardReader: TapNfcCardReader
     private var cardReadDisposable: Disposable = Disposables.empty()
     var hideAllView =false
-//    var view: View? = null
+
 
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _Activity = activity?.parent
+        _activity = activity?.parent
         this._Context = context
         setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
 
@@ -185,7 +185,7 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
             CheckoutFragment().apply {
                 arguments = Bundle().apply {}
                 _Context = context
-                _Activity = activity
+                _activity = activity
             }
     }
 
@@ -194,6 +194,7 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
         _viewModel.handleScanFailedResult()
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onScanCardFinished(card: Card?, cardImage: ByteArray?) {
         if (card != null) {
             println("scanned card is$card")
@@ -203,6 +204,7 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.N)
     fun handleNFCResult(intent: Intent?) {
         if (tapNfcCardReader.isSuitableIntent(intent)) {
             cardReadDisposable = tapNfcCardReader

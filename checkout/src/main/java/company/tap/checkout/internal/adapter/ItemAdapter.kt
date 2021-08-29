@@ -13,7 +13,6 @@ import android.widget.RelativeLayout
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.internal.api.enums.AmountModificatorType
-import company.tap.checkout.internal.dummygener.Items1
 import company.tap.checkout.internal.utils.CurrencyFormatter
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.models.PaymentItem
