@@ -74,8 +74,8 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         initializeSDK()
         configureSDKSession()
         initActionButton()
-        if (modalBottomSheet.isHidden ) {
-            println("paybutton")
+        if (modalBottomSheet.isHidden || modalBottomSheet.isDetached ) {
+            println("paybutton hidden")
             payButton.changeButtonState(ActionButtonState.IDLE)
         }
 
@@ -385,7 +385,8 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
       //  Toast.makeText(this,"paymentFailed"+charge?.response?.message, Toast.LENGTH_SHORT).show()
 //           modalBottomSheet.dismiss()
         //   modalBottomSheet.dialog?.dismiss()
-           payButton?.changeButtonState(ActionButtonState.ERROR)
+
+
     }
 
     override fun authorizationSucceed(authorize: Authorize) {
@@ -472,13 +473,13 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
     override fun sdkError(goSellError: GoSellError?) {
         println("sdkError>>>>>" + goSellError)
-        payButton.changeButtonState(ActionButtonState.IDLE)
+
 
     }
 
     override fun sessionIsStarting() {
         println("sessionIsStarting>>>>>")
-        payButton?.changeButtonState(ActionButtonState.LOADING)
+
     }
 
     override fun sessionHasStarted() {
@@ -489,13 +490,13 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
     override fun sessionCancelled() {
         println("sessionCancelled>>>>>")
         //CLose the bottomsheet and keep buttonto old state
-        payButton.changeButtonState(ActionButtonState.IDLE)
+
 
     }
 
     override fun sessionFailedToStart() {
         println("invalidCardDetails>>>>>")
-        payButton?.changeButtonState(ActionButtonState.ERROR)
+
     }
 
     override fun invalidCardDetails() {
@@ -521,8 +522,9 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
        println("userEnabledSaveCardOption>>>>>" + saveCardEnabled)
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun handleSDKStatus() {
-        resetBottomSheetForButton(supportFragmentManager,this)
+        resetBottomSheetForButton(supportFragmentManager,this,payButton,this)
     }
 
 }

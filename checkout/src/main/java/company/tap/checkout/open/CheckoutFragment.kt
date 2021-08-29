@@ -14,35 +14,33 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.get
 import cards.pay.paycardsrecognizer.sdk.Card
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import company.tap.checkout.R
+import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.apiresponse.CardViewState
 import company.tap.checkout.internal.apiresponse.Resource
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.controller.SDKSession.sessionDelegate
+import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.nfcreader.open.reader.TapEmvCard
 import company.tap.nfcreader.open.reader.TapNfcCardReader
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
+import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
-import kotlinx.android.synthetic.main.fragment_checkouttaps.*
 
 
 /**
@@ -114,6 +112,8 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
         closeText?.setOnClickListener {
             bottomSheetDialog.dismissWithAnimation
             bottomSheetDialog.hide()
+            bottomSheetDialog.dismiss()
+            tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
 
 
         }
@@ -149,9 +149,8 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
                 }
             }
         }
-        sessionDelegate?.sessionIsStarting()
          enableSections()
-
+        sessionDelegate?.sessionIsStarting()
 
     }
 

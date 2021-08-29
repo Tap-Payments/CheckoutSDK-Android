@@ -170,6 +170,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     var binLookupResponse1: BINLookupResponse? = null
     lateinit var paymentOptionsWorker: java.util.ArrayList<PaymentOption>
 
+
+
     @RequiresApi(Build.VERSION_CODES.N)
     fun initLayoutManager(
         bottomSheetDialog: BottomSheetDialog,
@@ -1104,7 +1106,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             if (::bottomSheetDialog.isInitialized)
                 bottomSheetDialog.dismiss()
         }, 8000)
-
+        println("is it here"+status)
     }
 
 
@@ -1225,23 +1227,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
           saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
         saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
-/*        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.getImageView(
-            R.drawable.loader,
-            1
-        ) {
-            setSlideAnimation()
-          //  removeViews(cardViewHolder)
-          //  removeViews(amountViewHolder)
-         //   removeViews(saveCardSwitchHolder)
-         //   removeViews(paymentInputViewHolder)
 
-
-
-        }?.let {
-            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.addChildView(
-                it
-            )
-        }*/
         removeViews(
             businessViewHolder,
             amountViewHolder,
@@ -1249,39 +1235,34 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             paymentInputViewHolder,
             tabAnimatedActionButtonViewHolder11
         )
-    //    addViews(tabAnimatedActionButtonViewHolder11)
+
 
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun onClickCardPayment() {
+        cardViewModel.processEvent(
+            CardViewEvent.CreateTokenEvent,
+            this,
+            null,
+            null,
+            paymentInputViewHolder.getCard(),
+            null
+        )
+        setSlideAnimation()
+
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.getImageView(
-            R.drawable.loader,
-            1
-        ) {
-            setSlideAnimation()
-            removeViews(cardViewHolder)
-            removeViews(businessViewHolder)
-            removeViews(amountViewHolder)
-            removeViews(saveCardSwitchHolder)
-            removeViews(paymentInputViewHolder)
+        saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
 
-            cardViewModel.processEvent(
-                CardViewEvent.CreateTokenEvent,
-                this,
-                null,
-                null,
-                paymentInputViewHolder.getCard(),
-                null
-            )
-            // cardViewModel.processEvent(CardViewEvent.ChargeEvent, this, null,null,null,null)
+        removeViews(
+            businessViewHolder,
+            amountViewHolder,
+            cardViewHolder,
+            paymentInputViewHolder,
+            tabAnimatedActionButtonViewHolder11
+        )
 
-        }?.let {
-            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.addChildView(
-                it
-            )
-        }
+
     }
 
     private fun changeBottomSheetTransition() {
@@ -1509,112 +1490,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         }
 
-       /*if(::fragmentManager.isInitialized)
-        fragmentManager
-            .popBackStack()*/
         SDKSession.getListener()?.handleSDKStatus()
 
         if (::bottomSheetDialog.isInitialized)
                     bottomSheetDialog.dismiss()
 
-    /*    if(saveCardSwitchHolder ==null){
-
-            // SDKSession.supportFragmentManager?.beginTransaction()?.add(CheckoutFragment(),"A")?.show(CheckoutFragment())
-            saveCardSwitchHolder = contextSDK?.let { SwitchViewHolder(it) }
-            addViews(saveCardSwitchHolder)
-            saveCardSwitchHolder?.view?.visibility = View.VISIBLE
-            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)
-        }*/
-
-//        if(authenticate?.type == AuthenticationType.OTP)
-//            tabAnimatedActionButtonViewHolder11?.activateBlueConfirmButton(context)
-//        else
-//            tabAnimatedActionButtonViewHolder11?.activateButton(context)
-
-
-        // check if comes from otp or normal redirect
-     /*   if (::webFrameLayout.isInitialized) {
-            if (fragmentManager.findFragmentById(R.id.webFrameLayout) != null)
-                fragmentManager.beginTransaction()
-                    .remove(fragmentManager.findFragmentById(R.id.webFrameLayout)!!)
-                    .commit()
-            webFrameLayout.visibility = View.GONE
-        }
-               // removeAllViews()
-        addViews(saveCardSwitchHolder)
-        saveCardSwitchHolder?.view?.visibility = View.VISIBLE
-
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)*/
-
-
-//        if(chargeResponse?.status == ChargeStatus.CANCELLED)
-//            saveCardSwitchHolder?.view?.actionButton?.changeButtonState(ActionButtonState.ERROR)
-//
-//
-//        if (done){
-//            saveCardSwitchHolder?.view?.actionButton?.changeButtonState(ActionButtonState.SUCCESS)
-////            tabAnimatedActionButtonViewHolder11?.otpViewActionButton?.changeButtonState(ActionButtonState.SUCCESS)
-////         Handler().postDelayed({
-////                if (::bottomSheetDialog.isInitialized)
-////                    bottomSheetDialog.dismiss()
-////            }, 4000)
-//
-//           /* tabAnimatedActionButtonViewHolder11?.view?.actionButton?.getImageView(
-//                R.drawable.success,
-//                1
-//            ) {
-//
-//                Handler().postDelayed({
-//                    if (::bottomSheetDialog.isInitialized)
-//                        bottomSheetDialog.dismiss()
-//                }, 1000)
-//
-//            }?.let { it1 ->
-//                tabAnimatedActionButtonViewHolder11?.view?.actionButton?.addChildView(
-//                    it1
-//                )
-//            }*/
-//
-//
-//        } else {
-//
-////            tabAnimatedActionButtonViewHolder11?.otpViewActionButton?.changeButtonState(ActionButtonState.ERROR)
-//            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.getImageView(
-//                R.drawable.loader,
-//                1
-//            ){}
-//
-////            Handler().postDelayed({
-////                if (::bottomSheetDialog.isInitialized)
-////                    bottomSheetDialog.dismiss()
-////            }, 4000)
-//
-//         /*   tabAnimatedActionButtonViewHolder11?.view?.actionButton?.getImageView(
-//                R.drawable.error_gif,
-//                1
-//            ) {
-//                Handler().postDelayed({
-//                    if (::bottomSheetDialog.isInitialized)
-//                        bottomSheetDialog.dismiss()
-//                }, 1000)
-//
-//            }?.let { it1 ->
-//                tabAnimatedActionButtonViewHolder11?.view?.actionButton?.addChildView(
-//                    it1
-//                )
-//            }*/
-//
-//
-//
-////            tabAnimatedActionButtonViewHolder11?.view?.actionButton?.changeButtonState(
-////                ActionButtonState.ERROR
-////            )
-////            Handler().postDelayed({
-////                if (::bottomSheetDialog.isInitialized)
-////                    bottomSheetDialog.dismiss()
-////            }, 6000)
-////            setSlideAnimation()
-//        }
     }
 
 
@@ -2229,7 +2109,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
     }
 
-    fun showOnlyButtonView(){
+    fun showOnlyButtonView() {
         removeAllViews()
         addViews(saveCardSwitchHolder)
 
@@ -2240,11 +2120,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
         )
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)
-       /* Handler().postDelayed({
+
+      saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)
+       Handler().postDelayed({
             if (::bottomSheetDialog.isInitialized)
                 bottomSheetDialog.dismiss()
-        }, 8000)*/
+        }, 8000)
     }
 
 }

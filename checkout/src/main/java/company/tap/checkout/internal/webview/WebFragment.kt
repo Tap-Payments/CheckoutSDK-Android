@@ -32,6 +32,8 @@ import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import company.tap.tapuilibrary.uikit.ktx.setTopBorders
 import kotlinx.android.synthetic.main.fragment_web.*
 import android.content.Intent
+import android.util.Log
+import android.webkit.ValueCallback
 import company.tap.checkout.open.CheckoutFragment
 
 

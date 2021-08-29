@@ -9,6 +9,7 @@
     android:background="@drawable/backgr">
 
 
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/launchSDK"
         android:layout_width="200dp"
@@ -26,15 +27,25 @@
         android:text="@string/launch_sdk"
         android:textColor="@color/white" />
 
-    <company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
-        android:id="@+id/payButton"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/launchSDK"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginEnd="@dimen/margin_basic_20dp"
-        android:layout_marginBottom="@dimen/margin_basic_20dp"
-        android:visibility="visible" />
+        android:orientation="vertical"
+        android:gravity="bottom">
+        <company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
+            android:id="@+id/payButton"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginEnd="@dimen/margin_basic_20dp"
+            android:layout_marginStart="@dimen/margin_basic_20dp"
+            android:layout_marginBottom="@dimen/margin_basic_20dp"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
 
 
 </RelativeLayout>

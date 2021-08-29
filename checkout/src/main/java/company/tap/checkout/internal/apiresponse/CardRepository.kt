@@ -2,11 +2,14 @@ package company.tap.checkout.internal.apiresponse
 
 import android.content.Context
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentManager
 import com.google.gson.Gson
 import com.google.gson.JsonElement
+import company.tap.checkout.R
 import company.tap.checkout.internal.PaymentDataProvider
 import company.tap.checkout.internal.api.enums.AuthenticationStatus
 import company.tap.checkout.internal.api.enums.AuthenticationType
@@ -22,6 +25,7 @@ import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.interfaces.IPaymentDataProvider
 import company.tap.checkout.internal.utils.AmountCalculator
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
+import company.tap.checkout.internal.webview.WebFragment
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
@@ -269,7 +273,7 @@ class CardRepository : APIRequestCallback {
                     PaymentDataSource.setPaymentOptionsResponse(paymentOptionsResponse)
 
                     if (tabAnimatedActionButton != null) {
-                        tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
+                        tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
                     }
                 }
 
@@ -507,7 +511,12 @@ class CardRepository : APIRequestCallback {
               //  viewModel.redirectLoadingFinished(true, chargeResponse, contextSDK)
             }
             ChargeStatus.ABANDONED , ChargeStatus.CANCELLED,ChargeStatus.DECLINED->{    SDKSession.getListener()?.paymentFailed(chargeResponse)
-                viewModel?.handleSuccessFailureResponseButton("failure",chargeResponse.authenticate,chargeResponse.status)
+              //  viewModel?.handleSuccessFailureResponseButton("failure",chargeResponse.authenticate,chargeResponse.status)
+                Handler(Looper.getMainLooper()).postDelayed({
+                    viewModel?.handleSuccessFailureResponseButton("failure",chargeResponse.authenticate,chargeResponse.status)
+
+
+                }, 5000)
               //  viewModel.redirectLoadingFinished(true,chargeResponse, contextSDK)
 
             }
@@ -841,12 +850,13 @@ class CardRepository : APIRequestCallback {
             ChargeStatus.CAPTURED, ChargeStatus.AUTHORIZED -> try {
                 // closePaymentActivity()
                 println("fireWebPaymentCallBack>>"+charge?.status)
+                viewModel?.handleSuccessFailureResponseButton("success",
+                        chargeResponse.authenticate,
+                        chargeResponse.status
+                    )
+
                 sdkSession.getListener()?.paymentSucceed(charge)
-                viewModel?.handleSuccessFailureResponseButton(
-                    "success",
-                    chargeResponse.authenticate,
-                    chargeResponse.status
-                )
+
 
 
                 //  SDKSession().getListener()?.paymentSucceed(charge)
@@ -860,9 +870,12 @@ class CardRepository : APIRequestCallback {
             }
             ChargeStatus.FAILED, ChargeStatus.ABANDONED, ChargeStatus.CANCELLED, ChargeStatus.DECLINED, ChargeStatus.RESTRICTED, ChargeStatus.UNKNOWN, ChargeStatus.TIMEDOUT -> try {
                 //closePaymentActivity()
-                SDKSession.getListener()?.paymentFailed(charge)
-                viewModel?.handleSuccessFailureResponseButton("failure",chargeResponse.authenticate,chargeResponse.status)
+                    Handler(Looper.getMainLooper()).postDelayed({
+                    viewModel?.handleSuccessFailureResponseButton("failure",chargeResponse.authenticate,chargeResponse.status)
 
+
+                }, 5000)
+                SDKSession.getListener()?.paymentFailed(charge)
             } catch (e: Exception) {
                 Log.d("cardrepo", " Error while calling fireWebPaymentCallBack >>> method paymentFailed(charge)")
                 // closePaymentActivity()
