@@ -1132,8 +1132,18 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         saveCardSwitchHolder11?.view?.cardSwitch?.payButton?.isActivated = false
     }
 
+
+    fun resetCardSelection(){
+        adapter.resetSelection()
+    }
+
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCardSelectedAction(isSelected: Boolean, savedCardsModel: Any?) {
+
+        /**
+         * Clear card input text
+         */
+        paymentInputViewHolder.clearCardInputAction()
         when (savedCardsModel) {
             is SavedCard -> {
                 activateActionButton()
@@ -1147,7 +1157,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
                     }
                 } else
                     displayGoPayLogin()
-
             }
         }
     }
@@ -1432,10 +1441,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
         )
             PaymentDataSource.setSelectedCurrency(selectedCurrency = selectedCurrency)
             PaymentDataSource.setSelectedAmount(currencyRate)
-    if(paymentInputViewHolder?.tapCardInputView?.isNotEmpty()){
-        paymentInputViewHolder?.tapCardInputView.clear()
-        paymentInputViewHolder?.tapAlertView?.visibility = View.GONE
-        paymentInputViewHolder?.tabLayout?.resetBehaviour()
+    if(paymentInputViewHolder.tapCardInputView.isNotEmpty()){
+        paymentInputViewHolder.tapCardInputView.clear()
+        paymentInputViewHolder.tapAlertView?.visibility = View.GONE
+        paymentInputViewHolder.tabLayout?.resetBehaviour()
     }
     if(::selectedCurrency.isInitialized){
                 filterViewModels(selectedCurrency)
@@ -1473,6 +1482,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
 //        if(authenticate?.type == AuthenticationType.OTP)
 //            tabAnimatedActionButtonViewHolder11?.activateBlueConfirmButton(context)
 //        else
+
 //            tabAnimatedActionButtonViewHolder11?.activateButton(context)
 
 

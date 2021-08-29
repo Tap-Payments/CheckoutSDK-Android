@@ -166,32 +166,35 @@ class PaymenttInputViewHolder(
 
     private fun initClearText() {
         clearView.setOnClickListener {
-            if (selectedType == PaymentTypeEnum.card) {
-                tapCardInputView.clear()
-                switchViewHolder11?.setSwitchLocals(PaymentTypeEnum.card)
-            }
-            else if (selectedType == PaymentTypeEnum.telecom) {
-                tapMobileInputView.clearNumber()
-                switchViewHolder11?.setSwitchLocals(PaymentTypeEnum.telecom)
-            }
-            switchViewHolder11?.view?.cardSwitch?.switchesLayout?.visibility = View.GONE
-            switchViewHolder11?.view?.mainSwitch?.switchSaveMobile?.visibility = View.GONE
-            tapAlertView?.visibility = View.GONE
-            switchViewHolder11?.view?.cardSwitch?.payButton?.isActivated = false
-            switchViewHolder11?.view?.cardSwitch?.showOnlyPayButton()
-            switchViewHolder11?.bindViewComponents()
-            switchViewHolder11?.view?.cardSwitch?.payButton?.setButtonDataSource(
-                false,
-                context.let { LocalizationManager.getLocale(it).language },
-                LocalizationManager.getValue("pay", "ActionButton"),
-                Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
-                Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
-            )
-            tabLayout.resetBehaviour()
-            if(PaymentDataSource.getBinLookupResponse()!=null){
-                PaymentDataSource.setBinLookupResponse(null)
+            clearCardInputAction()
+        }
+    }
 
-            }
+    fun clearCardInputAction() {
+        if (selectedType == PaymentTypeEnum.card) {
+            tapCardInputView.clear()
+            switchViewHolder11?.setSwitchLocals(PaymentTypeEnum.card)
+        } else if (selectedType == PaymentTypeEnum.telecom) {
+            tapMobileInputView.clearNumber()
+            switchViewHolder11?.setSwitchLocals(PaymentTypeEnum.telecom)
+        }
+        switchViewHolder11?.view?.cardSwitch?.switchesLayout?.visibility = View.GONE
+        switchViewHolder11?.view?.mainSwitch?.switchSaveMobile?.visibility = View.GONE
+        tapAlertView?.visibility = View.GONE
+        switchViewHolder11?.view?.cardSwitch?.payButton?.isActivated = false
+        switchViewHolder11?.view?.cardSwitch?.showOnlyPayButton()
+        switchViewHolder11?.bindViewComponents()
+        switchViewHolder11?.view?.cardSwitch?.payButton?.setButtonDataSource(
+            false,
+            context.let { LocalizationManager.getLocale(it).language },
+            LocalizationManager.getValue("pay", "ActionButton"),
+            Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
+            Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
+        )
+        tabLayout.resetBehaviour()
+        if (PaymentDataSource.getBinLookupResponse() != null) {
+            PaymentDataSource.setBinLookupResponse(null)
+
         }
     }
 
@@ -401,6 +404,7 @@ class PaymenttInputViewHolder(
     This function for calling api to validate card number after 6 digit
      */
     private fun callCardBinNumberApi(s: CharSequence, textWatcher: TextWatcher) {
+
         if (s.trim().toString().replace(" ", "").length == BIN_NUMBER_LENGTH) {
             cardViewModel.processEvent(
                 CardViewEvent.RetreiveBinLookupEvent,
