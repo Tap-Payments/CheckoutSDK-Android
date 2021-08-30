@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import company.tap.checkout.TapCheckOutSDK
 import company.tap.checkout.internal.api.enums.AmountModificatorType
+import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.enums.Measurement
 import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.open.CheckoutFragment
@@ -82,18 +83,18 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
     }
 
     private fun initializeSDK() {
-     TapCheckOutSDK().init(
+     /*TapCheckOutSDK().init(
              this,
              "sk_test_kovrMB0mupFJXfNZWx6Etg5y",
              "company.tap.goSellSDKExample"
 
-     )
-      /*  TapCheckOutSDK().init(
+     )*/
+       TapCheckOutSDK().init(
              this,
              "sk_live_QglH8V7Fw6NPAom4qRcynDK2",
              "company.tap.goSellSDKExample"
      )
-*/
+
 
     }
 
@@ -291,7 +292,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         val tapCustomer: TapCustomer? = null
         //if (customer != null) customer.phone else Phone(965, 69045932)
         return TapCustomer(
-                "cus_TS012520211349Za012907577", "ahlaam", "middlename",
+                null, "ahlaam", "middlename",
                 "lastname", "abcd@gmail.com",
                 PhoneNumber("00965", "69045932"), "description",
         )
@@ -523,8 +524,8 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    override fun handleSDKStatus() {
-        resetBottomSheetForButton(supportFragmentManager,this,payButton,this)
+    override fun getStatusSDK(status: ChargeStatus?) {
+        resetBottomSheetForButton(supportFragmentManager,this,payButton,this,status)
     }
 
 }

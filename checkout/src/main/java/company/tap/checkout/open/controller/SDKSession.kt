@@ -9,7 +9,6 @@ import android.net.ConnectivityManager
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.ViewModelProviders
 import com.google.gson.JsonElement
 import company.tap.checkout.internal.PaymentDataProvider
 import company.tap.checkout.internal.api.enums.ChargeStatus
@@ -213,7 +212,7 @@ object  SDKSession : APIRequestCallback {
      *
      * @param paymentMetadata the payment metadata
      */
-    open fun setPaymentMetadata(paymentMetadata: HashMap<String, String>) {
+     fun setPaymentMetadata(paymentMetadata: HashMap<String, String>) {
         paymentDataSource?.setPaymentMetadata(paymentMetadata)
     }
 
@@ -422,11 +421,19 @@ object  SDKSession : APIRequestCallback {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun resetBottomSheetForButton(__supportFragmentManager: FragmentManager, context: Context, payButtonView: TabAnimatedActionButton, activity: Activity) {
+    fun resetBottomSheetForButton(
+        __supportFragmentManager: FragmentManager,
+        context: Context,
+        payButtonView: TabAnimatedActionButton,
+        activity: Activity,
+        status: ChargeStatus?
+    ) {
         val checkoutFragment =CheckoutFragment()
         __supportFragmentManager.let { checkoutFragment.show(it,"CheckOutFragment") }
         checkoutFragment.hideAllView = true
-
+        if (status != null) {
+            checkoutFragment.status =status
+        }
         sessionActive =false
         payButtonView.changeButtonState(ActionButtonState.IDLE)
         payButtonView.setButtonDataSource(

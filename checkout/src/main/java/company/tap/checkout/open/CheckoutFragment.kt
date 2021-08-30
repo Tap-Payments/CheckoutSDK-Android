@@ -57,6 +57,7 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
     private lateinit var tapNfcCardReader: TapNfcCardReader
     private var cardReadDisposable: Disposable = Disposables.empty()
     var hideAllView =false
+    lateinit var status :ChargeStatus
 
 
 
@@ -140,7 +141,7 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
                                     inLineCardLayout,
                                     this,
                                     it2,
-                                    cardViewModel,this,
+                                    cardViewModel,this
                                 )
                             }
 
@@ -166,7 +167,11 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
        if(!hideAllView) {
            _viewModel.displayStartupLayout(enabledSections)
            _viewModel.getDatasfromAPIs(PaymentDataSource.getSDKSettings(),PaymentDataSource.getPaymentOptionsResponse())
-       }else _viewModel.showOnlyButtonView()
+       }else{
+           if(::status.isInitialized)
+               _viewModel.showOnlyButtonView(status)
+
+       }
 
         setBottomSheetInterface(this)
 
@@ -245,6 +250,8 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
         println("newText respoonse$newText")
 
     }
+
+
 
 
 

@@ -54,9 +54,12 @@ import company.tap.checkout.internal.apiresponse.testmodels.TapCardPhoneListData
 import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.*
-import company.tap.checkout.internal.utils.*
 import company.tap.checkout.internal.utils.AmountCalculator.calculateExtraFeesAmount
+import company.tap.checkout.internal.utils.AnimationEngine
 import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
+import company.tap.checkout.internal.utils.CurrencyFormatter
+import company.tap.checkout.internal.utils.CustomUtils
+import company.tap.checkout.internal.utils.Utils
 import company.tap.checkout.internal.viewholders.*
 import company.tap.checkout.internal.webview.WebFragment
 import company.tap.checkout.internal.webview.WebViewContract
@@ -70,12 +73,14 @@ import company.tap.nfcreader.open.reader.TapEmvCard
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.SeparatorViewTheme
+import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.businessview_layout.view.*
 import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
+import kotlinx.android.synthetic.main.fragment_checkouttaps.*
 import kotlinx.android.synthetic.main.gopaysavedcard_layout.view.*
 import kotlinx.android.synthetic.main.itemviewholder_layout.view.*
 import kotlinx.android.synthetic.main.otpview_layout.view.*
@@ -118,7 +123,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private  var tabAnimatedActionButtonViewHolder11: TabAnimatedActionButtonViewHolder11?=null
     private lateinit var bottomSheetDialog: BottomSheetDialog
     private lateinit var fragmentManager: FragmentManager
-    private lateinit var fragmentManagersupp: FragmentManager
     private lateinit var bottomSheetLayout: FrameLayout
     @Nullable
     private lateinit var selectedAmount: String
@@ -197,6 +201,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         this.intent = intent
         this.cardViewModel = cardViewModel
         this.checkoutFragment = checkoutFragment
+
 
 
         textRecognitionML = TapTextRecognitionML(this)
@@ -1074,10 +1079,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 otpViewHolder
             )
         }
-        removeViews(saveCardSwitchHolder)
-        addViews(saveCardSwitchHolder)
-        saveCardSwitchHolder?.view?.visibility = View.VISIBLE
-        saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
+        if(saveCardSwitchHolder!=null){
+            removeViews(saveCardSwitchHolder)
+            addViews(saveCardSwitchHolder)
+            saveCardSwitchHolder?.view?.visibility = View.VISIBLE
+            saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
+        }
+
 
         when(status){
             ChargeStatus.CAPTURED, ChargeStatus.AUTHORIZED, ChargeStatus.VALID, ChargeStatus.IN_PROGRESS -> {
@@ -1106,7 +1114,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             if (::bottomSheetDialog.isInitialized)
                 bottomSheetDialog.dismiss()
         }, 8000)
-        println("is it here"+status)
+
+        SDKSession.getListener()?.getStatusSDK(status)
     }
 
 
@@ -1347,7 +1356,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         } else {
             saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
             saveCardSwitchHolder?.view?.mainSwitch?.switchSaveMobile?.visibility = View.GONE
-           saveCardSwitchHolder?.setSwitchToggleData(paymentType)
+            saveCardSwitchHolder?.setSwitchToggleData(paymentType)
             unActivateActionButton()
         }
     }
@@ -1462,10 +1471,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
             PaymentDataSource.setSelectedCurrency(selectedCurrency = selectedCurrency)
             PaymentDataSource.setSelectedAmount(currencyRate)
-    if(paymentInputViewHolder?.tapCardInputView?.isNotEmpty()){
-        paymentInputViewHolder?.tapCardInputView.clear()
-        paymentInputViewHolder?.tapAlertView?.visibility = View.GONE
-        paymentInputViewHolder?.tabLayout?.resetBehaviour()
+    if(paymentInputViewHolder.tapCardInputView.isNotEmpty()){
+        paymentInputViewHolder.tapCardInputView.clear()
+        paymentInputViewHolder.tapAlertView?.visibility = View.GONE
+        paymentInputViewHolder.tabLayout.resetBehaviour()
     }
     if(::selectedCurrency.isInitialized){
                 filterViewModels(selectedCurrency)
@@ -1490,9 +1499,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         }
 
-        SDKSession.getListener()?.handleSDKStatus()
-
-        if (::bottomSheetDialog.isInitialized)
+       if (::bottomSheetDialog.isInitialized)
                     bottomSheetDialog.dismiss()
 
     }
@@ -2109,19 +2116,56 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
     }
 
-    fun showOnlyButtonView() {
+    fun showOnlyButtonView(status: ChargeStatus) {
         removeAllViews()
-        addViews(saveCardSwitchHolder)
+       // addViews(saveCardSwitchHolder)
+        addViews(tabAnimatedActionButtonViewHolder11)
+        println("status in show button>>"+status)
 
+       /* saveCardSwitchHolder?.view?.cardSwitch?.showOnlyPayButton()
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
             true,
             context.let { LocalizationManager.getLocale(it).language },
             LocalizationManager.getValue("pay", "ActionButton"),
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
-        )
+        )*/
 
-      saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)
+
+
+        when(status){
+            ChargeStatus.CAPTURED, ChargeStatus.AUTHORIZED, ChargeStatus.VALID, ChargeStatus.IN_PROGRESS -> {
+               /* saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
+                    ActionButtonState.SUCCESS
+                )*/
+                tabAnimatedActionButtonViewHolder11?.actionButton?.changeButtonState( ActionButtonState.SUCCESS)
+            }
+            ChargeStatus.CANCELLED, ChargeStatus.TIMEDOUT, ChargeStatus.FAILED, ChargeStatus.DECLINED, ChargeStatus.UNKNOWN,
+            ChargeStatus.RESTRICTED, ChargeStatus.ABANDONED, ChargeStatus.VOID, ChargeStatus.INVALID -> {
+                /*saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
+                    ActionButtonState.ERROR
+                )*/
+
+                tabAnimatedActionButtonViewHolder11?.actionButton?.changeButtonState(ActionButtonState.ERROR)
+
+            }else->{
+
+            if(status.equals("tokenized")){
+              /*  saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
+                    ActionButtonState.SUCCESS
+                )*/
+                tabAnimatedActionButtonViewHolder11?.actionButton?.changeButtonState(ActionButtonState.SUCCESS)
+
+            }else{
+              /*  saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
+                    ActionButtonState.ERROR
+                )*/
+                tabAnimatedActionButtonViewHolder11?.actionButton?.changeButtonState(ActionButtonState.ERROR)
+
+            }
+        }
+        }
+      //saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)
        Handler().postDelayed({
             if (::bottomSheetDialog.isInitialized)
                 bottomSheetDialog.dismiss()

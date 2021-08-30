@@ -1,6 +1,7 @@
 package company.tap.checkout.open.interfaces
 
 
+import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.models.Authorize
 import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.api.models.Token
@@ -45,5 +46,6 @@ interface SessionDelegate {
 
     fun userEnabledSaveCardOption(saveCardEnabled: Boolean)
 
-    fun handleSDKStatus()
+    fun getStatusSDK(status: ChargeStatus?)
+
 }
