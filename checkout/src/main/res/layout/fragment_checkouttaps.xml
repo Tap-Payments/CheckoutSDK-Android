@@ -11,9 +11,9 @@
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/layout_bg"
-    android:gravity="center">
 
+    android:gravity="center">
+  <!--  android:background="@drawable/layout_bg"-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
         <LinearLayout
             android:id="@+id/fragment_all"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@drawable/layout_bg"
             android:visibility="visible"
             android:orientation="vertical" />
@@ -44,19 +44,19 @@
             android:layout_height="match_parent"
             android:layout_gravity="bottom"
             android:orientation="vertical"
-            android:visibility="visible"
+            android:visibility="gone"
             android:gravity="bottom"/>
 
         <FrameLayout
             android:id="@+id/webFrameLayout"
             android:layout_width="match_parent"
-            android:visibility="visible"
+            android:visibility="gone"
             android:layout_height="match_parent" />
 
         <FrameLayout
             android:id="@+id/inline_container"
             android:layout_width="match_parent"
-            android:visibility="visible"
+            android:visibility="gone"
             android:layout_height="match_parent"
             android:layout_margin="20dp" />
 

@@ -292,7 +292,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         val tapCustomer: TapCustomer? = null
         //if (customer != null) customer.phone else Phone(965, 69045932)
         return TapCustomer(
-                null, "ahlaam", "middlename",
+                "cus_TS012520211349Za012907577", "ahlaam", "middlename",
                 "lastname", "abcd@gmail.com",
                 PhoneNumber("00965", "69045932"), "description",
         )
@@ -525,8 +525,12 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun getStatusSDK(status: ChargeStatus?) {
+        println("status in MainActv>>$status")
         resetBottomSheetForButton(supportFragmentManager,this,payButton,this,status)
+        payButton.visibility =View.VISIBLE
     }
+
+
 
 }
 

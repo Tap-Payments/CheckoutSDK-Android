@@ -7,6 +7,7 @@ import android.content.Context
 import android.graphics.Color
 import android.net.ConnectivityManager
 import android.os.Build
+import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentManager
 import com.google.gson.JsonElement
@@ -436,6 +437,7 @@ object  SDKSession : APIRequestCallback {
         }
         sessionActive =false
         payButtonView.changeButtonState(ActionButtonState.IDLE)
+        payButtonView.visibility=View.GONE
         payButtonView.setButtonDataSource(
             true,
             context.let { LocalizationManager.getLocale(it).language },

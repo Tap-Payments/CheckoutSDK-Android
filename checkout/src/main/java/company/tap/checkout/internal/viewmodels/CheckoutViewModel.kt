@@ -731,11 +731,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     override fun displayRedirect(url: String, authenticate: Charge?) {
         this.redirectURL = url
 
-      /*  var trans = fragmentManager.beginTransaction()
-        trans.hide(checkoutFragment)
-        trans.addToBackStack("A")
-        trans.commit()
-*/
 
         if (::redirectURL.isInitialized && ::fragmentManager.isInitialized) {
             if (otpViewHolder.otpView.isVisible) {
@@ -763,7 +758,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }, 1000)
 
         }
-        println("fragmentManager>>"+fragmentManager.fragments)
         saveCardSwitchHolder?.view?.visibility = View.GONE
         webFrameLayout.visibility =View.VISIBLE
         removeViews(saveCardSwitchHolder)
@@ -1051,6 +1045,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         authenticate: Authenticate?,
         status: ChargeStatus?
     ) {
+        SDKSession.getListener()?.getStatusSDK(status)
         /***
          * This function is  working fine as expected in case when 3ds is false
          * i.e.  sdkSession.isRequires3DSecure(false) as no loading of url occurs direct response
@@ -1098,7 +1093,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 )
             }else->{
 
-            if(response.equals("tokenized")){
+            if(response == "tokenized"){
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                     ActionButtonState.SUCCESS
                 )
@@ -1113,7 +1108,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 bottomSheetDialog.dismiss()
         }, 8000)
 
-        SDKSession.getListener()?.getStatusSDK(status)
+
     }
 
 
@@ -1242,7 +1237,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
 
           saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
-        saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
+        saveCardSwitchHolder?.view?.mainSwitch?.mainTextSave?.visibility = View.INVISIBLE
 
         removeViews(
             businessViewHolder,
@@ -1483,6 +1478,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         paymentInputViewHolder.tapAlertView?.visibility = View.GONE
         paymentInputViewHolder.tabLayout.resetBehaviour()
     }
+        adapter.resetSelection()
+
     if(::selectedCurrency.isInitialized){
                 filterViewModels(selectedCurrency)
         }else   filterViewModels(currentCurrency)
@@ -2125,55 +2122,51 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     fun showOnlyButtonView(status: ChargeStatus) {
         removeAllViews()
-       // addViews(saveCardSwitchHolder)
-        addViews(tabAnimatedActionButtonViewHolder11)
-        println("status in show button>>"+status)
-
-       /* saveCardSwitchHolder?.view?.cardSwitch?.showOnlyPayButton()
+        addViews(saveCardSwitchHolder)
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
             true,
             context.let { LocalizationManager.getLocale(it).language },
             LocalizationManager.getValue("pay", "ActionButton"),
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
-        )*/
-
+        )
 
 
         when(status){
             ChargeStatus.CAPTURED, ChargeStatus.AUTHORIZED, ChargeStatus.VALID, ChargeStatus.IN_PROGRESS -> {
-               /* saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
-                    ActionButtonState.SUCCESS
-                )*/
-                tabAnimatedActionButtonViewHolder11?.actionButton?.changeButtonState( ActionButtonState.SUCCESS)
+                Handler().postDelayed({
+                    saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
+                        ActionButtonState.SUCCESS
+                    )
+                }, 500)
             }
             ChargeStatus.CANCELLED, ChargeStatus.TIMEDOUT, ChargeStatus.FAILED, ChargeStatus.DECLINED, ChargeStatus.UNKNOWN,
             ChargeStatus.RESTRICTED, ChargeStatus.ABANDONED, ChargeStatus.VOID, ChargeStatus.INVALID -> {
-                /*saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
-                    ActionButtonState.ERROR
-                )*/
-
-                tabAnimatedActionButtonViewHolder11?.actionButton?.changeButtonState(ActionButtonState.ERROR)
-
+                Handler().postDelayed({
+                    saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
+                        ActionButtonState.ERROR
+                    )
+                }, 500)
             }else->{
 
             if(status.equals("tokenized")){
-              /*  saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
-                    ActionButtonState.SUCCESS
-                )*/
-                tabAnimatedActionButtonViewHolder11?.actionButton?.changeButtonState(ActionButtonState.SUCCESS)
+                Handler().postDelayed({
+                    saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
+                        ActionButtonState.SUCCESS
+                    )
+                }, 500)
 
             }else{
-              /*  saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
-                    ActionButtonState.ERROR
-                )*/
-                tabAnimatedActionButtonViewHolder11?.actionButton?.changeButtonState(ActionButtonState.ERROR)
+                Handler().postDelayed({
+                    saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
+                        ActionButtonState.ERROR
+                    )
+                }, 500)
 
             }
         }
         }
-      //saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)
-       Handler().postDelayed({
+      Handler().postDelayed({
             if (::bottomSheetDialog.isInitialized)
                 bottomSheetDialog.dismiss()
         }, 8000)

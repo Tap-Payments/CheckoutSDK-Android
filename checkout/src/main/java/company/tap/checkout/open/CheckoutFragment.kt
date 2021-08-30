@@ -27,6 +27,7 @@ import company.tap.checkout.internal.apiresponse.CardViewState
 import company.tap.checkout.internal.apiresponse.Resource
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
+import company.tap.checkout.internal.webview.WebFragment
 import company.tap.checkout.open.controller.SDKSession.sessionDelegate
 import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
 import company.tap.checkout.open.data_managers.PaymentDataSource
@@ -41,6 +42,7 @@ import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
+import kotlinx.android.synthetic.main.fragment_checkouttaps.*
 
 
 /**
@@ -58,8 +60,7 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
     private var cardReadDisposable: Disposable = Disposables.empty()
     var hideAllView =false
     lateinit var status :ChargeStatus
-
-
+    private  var _resetFragment :Boolean = true
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -104,11 +105,12 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
         val closeText: TapTextView? = view.findViewById(R.id.closeText)
         closeText?.text = LocalizationManager.getValue("close", "Common")
 
-
+        if(!hideAllView) {
         Handler().postDelayed({
             closeText?.visibility = View.VISIBLE
 
         }, 4000)
+        }
 
         closeText?.setOnClickListener {
             bottomSheetDialog.dismissWithAnimation
@@ -164,14 +166,25 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
         enabledSections.add(SectionType.AMOUNT_ITEMS)
         enabledSections.add(SectionType.FRAGMENT)
         enabledSections.add(SectionType.ActionButton)
-       if(!hideAllView) {
-           _viewModel.displayStartupLayout(enabledSections)
-           _viewModel.getDatasfromAPIs(PaymentDataSource.getSDKSettings(),PaymentDataSource.getPaymentOptionsResponse())
-       }else{
-           if(::status.isInitialized)
-               _viewModel.showOnlyButtonView(status)
 
-       }
+        println("_resetFragment>>"+_resetFragment)
+if(_resetFragment) {
+    if (hideAllView) {
+        if (::status.isInitialized)
+            _viewModel.showOnlyButtonView(status)
+
+    } else {
+        _viewModel.displayStartupLayout(enabledSections)
+        _viewModel.getDatasfromAPIs(
+            PaymentDataSource.getSDKSettings(),
+            PaymentDataSource.getPaymentOptionsResponse()
+        )
+
+    }
+}else{
+    if (::status.isInitialized)
+        _viewModel.showOnlyButtonView(status)
+}
 
         setBottomSheetInterface(this)
 
@@ -184,12 +197,15 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
 
     companion object {
         // TODO: Rename and change types and number of parameters
+        const val RESET_FRAG = "resetFragment"
         @JvmStatic
-        fun newInstance(context: Context, activity: Activity?) =
+        fun newInstance(context: Context, activity: Activity?,resetFragment: Boolean) =
             CheckoutFragment().apply {
                 arguments = Bundle().apply {}
                 _Context = context
                 _activity = activity
+                _resetFragment =resetFragment
+requireArguments().putBoolean( RESET_FRAG,resetFragment)
             }
     }
 

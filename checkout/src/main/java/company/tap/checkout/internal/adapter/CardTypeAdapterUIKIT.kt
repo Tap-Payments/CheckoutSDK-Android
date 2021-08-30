@@ -182,7 +182,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
     fun resetSelection (){
         selectedPosition = -1
-        onCardSelectedActionListener.onCardSelectedAction(false, null)
+       //onCardSelectedActionListener.onCardSelectedAction(false, null)
 //        goPayOpenedfromMain(goPayOpened)
         notifyDataSetChanged()
     }
