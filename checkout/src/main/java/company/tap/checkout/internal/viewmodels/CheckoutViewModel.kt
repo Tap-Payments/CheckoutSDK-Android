@@ -1132,6 +1132,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
     }
 
+    override fun resetViewHolder() {
+        adapter.resetSelection()
+        unActivateActionButton()
+    }
+
     private fun removeViews(vararg viewHolders: TapBaseViewHolder?) {
 
         viewHolders.forEach {
@@ -1165,7 +1170,28 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     private fun unActivateActionButton() {
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.IDLE)
+        val payButtonText: String
+
+        when(PaymentDataSource.getTransactionMode()){
+            TransactionMode.TOKENIZE_CARD -> payButtonText = LocalizationManager.getValue(
+                "pay",
+                "ActionButton"
+            )
+            TransactionMode.SAVE_CARD -> payButtonText = LocalizationManager.getValue(
+                "savecard",
+                "ActionButton"
+            )
+            else->payButtonText =LocalizationManager.getValue("pay", "ActionButton")
+        }
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
+            false,
+            context.let { LocalizationManager.getLocale(it).language },
+            payButtonText,
+            Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
+            Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
+        )
+    
+       // saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.IDLE)
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated = false
     }
 
@@ -1200,7 +1226,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
     private fun activateActionButton() {
-        var payButtonText :String=LocalizationManager.getValue("pay", "ActionButton")
+        var payButtonText: String
         when(PaymentDataSource.getTransactionMode()){
             TransactionMode.TOKENIZE_CARD -> payButtonText = LocalizationManager.getValue(
                 "pay",

@@ -38,4 +38,6 @@ interface BaseLayoutManager {
      )
     fun displayAsynchronousPaymentView(chargeResponse:Charge)
 
+    fun resetViewHolder()
+
 }

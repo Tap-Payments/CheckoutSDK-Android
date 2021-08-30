@@ -337,7 +337,7 @@ class PaymentInputViewHolder(
         val card = CardValidator.validate(charSequence.toString())
 
         if (charSequence != null) {
-
+            baseLayoutManager.resetViewHolder()
             if (charSequence.length > 2) callCardBinNumberApi(charSequence, textWatcher)
             else {
                 tabLayout.resetBehaviour()
