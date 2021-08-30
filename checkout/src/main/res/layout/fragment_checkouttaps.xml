@@ -47,11 +47,7 @@
             android:visibility="gone"
             android:gravity="bottom"/>
 
-        <FrameLayout
-            android:id="@+id/webFrameLayout"
-            android:layout_width="match_parent"
-            android:visibility="gone"
-            android:layout_height="match_parent" />
+
 
         <FrameLayout
             android:id="@+id/inline_container"
@@ -62,7 +58,12 @@
 
 
     </LinearLayout>
-
+    <!--Kept webframelayout outside so that it takes full screen-->
+    <FrameLayout
+        android:id="@+id/webFrameLayout"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="match_parent" />
 
     <company.tap.tapuilibrary.uikit.atoms.TapTextView
         android:layout_width="40dp"
@@ -76,4 +77,5 @@
         android:layout_gravity="end"/>
 
 </RelativeLayout>
+
 </LinearLayout>
