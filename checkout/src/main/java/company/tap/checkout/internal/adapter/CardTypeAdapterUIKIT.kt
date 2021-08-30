@@ -180,6 +180,15 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         }
     }
 
+    fun resetSelection (){
+        selectedPosition = -1
+        onCardSelectedActionListener.onCardSelectedAction(false, null)
+//        goPayOpenedfromMain(goPayOpened)
+        notifyDataSetChanged()
+    }
+
+
+
     fun removeItems() {
         if(goPayOpened) arrayModified = ArrayList(adapterContent)
         arrayModified.removeAt(0)

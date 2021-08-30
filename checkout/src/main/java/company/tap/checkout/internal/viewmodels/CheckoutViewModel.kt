@@ -73,14 +73,12 @@ import company.tap.nfcreader.open.reader.TapEmvCard
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.SeparatorViewTheme
-import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.businessview_layout.view.*
 import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
-import kotlinx.android.synthetic.main.fragment_checkouttaps.*
 import kotlinx.android.synthetic.main.gopaysavedcard_layout.view.*
 import kotlinx.android.synthetic.main.itemviewholder_layout.view.*
 import kotlinx.android.synthetic.main.otpview_layout.view.*
@@ -110,7 +108,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private var displayItemsOpen: Boolean = false
     private var displayOtpIsOpen: Boolean = false
     private  var saveCardSwitchHolder: SwitchViewHolder?=null
-    private lateinit var paymentInputViewHolder: PaymenttInputViewHolder
+    private lateinit var paymentInputViewHolder: PaymentInputViewHolder
     private lateinit var goPaySavedCardHolder: GoPaySavedCardHolder
     private lateinit var businessViewHolder: BusinessViewHolder
     private lateinit var amountViewHolder: AmountViewHolder
@@ -313,7 +311,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         cardViewHolder = CardViewHolder(context, this)
         goPaySavedCardHolder = GoPaySavedCardHolder(context, this, this)
         saveCardSwitchHolder = SwitchViewHolder(context)
-        paymentInputViewHolder = PaymenttInputViewHolder(
+        paymentInputViewHolder = PaymentInputViewHolder(
             context,
             this,
             this,
@@ -782,7 +780,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         context: Context,
         cardViewModel: CardViewModel
     ) {
-        paymentInputViewHolder = PaymenttInputViewHolder(
+        paymentInputViewHolder = PaymentInputViewHolder(
             context,
             this,
             this,
@@ -1176,8 +1174,18 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated = false
     }
 
+
+    fun resetCardSelection(){
+        adapter.resetSelection()
+    }
+
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCardSelectedAction(isSelected: Boolean, savedCardsModel: Any?) {
+
+        /**
+         * Clear card input text
+         */
+        paymentInputViewHolder.clearCardInputAction()
         when (savedCardsModel) {
             is SavedCard -> {
                 activateActionButton()
@@ -1191,7 +1199,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     }
                 } else
                     displayGoPayLogin()
-
             }
         }
     }
@@ -1354,9 +1361,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             activateActionButton()
             paymentActionType = paymentType
         } else {
-            saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
+//            saveCardSwitchHolder11?.view?.mainSwitch?.visibility = View.GONE
             saveCardSwitchHolder?.view?.mainSwitch?.switchSaveMobile?.visibility = View.GONE
-            saveCardSwitchHolder?.setSwitchToggleData(paymentType)
+           saveCardSwitchHolder?.setSwitchToggleData(paymentType)
             unActivateActionButton()
         }
     }
