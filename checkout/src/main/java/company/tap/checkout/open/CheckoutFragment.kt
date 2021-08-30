@@ -117,7 +117,18 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
             bottomSheetDialog.hide()
             bottomSheetDialog.dismiss()
             tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-
+            tabAnimatedActionButton?.setButtonDataSource(
+                true,
+                context.let {
+                    if (it != null) {
+                        LocalizationManager.getLocale(it).language
+                    }
+                }.toString(),
+                LocalizationManager.getValue("pay", "ActionButton"),
+                Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
+                Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
+            )
+            tabAnimatedActionButton?.isClickable=true
 
         }
 
