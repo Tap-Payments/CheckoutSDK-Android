@@ -178,11 +178,11 @@ class PaymenttInputViewHolder(
             tapMobileInputView.clearNumber()
             switchViewHolder11?.setSwitchLocals(PaymentTypeEnum.telecom)
         }
-        switchViewHolder11?.view?.cardSwitch?.switchesLayout?.visibility = View.GONE
-        switchViewHolder11?.view?.mainSwitch?.switchSaveMobile?.visibility = View.GONE
+//        switchViewHolder11?.view?.cardSwitch?.switchesLayout?.visibility = View.VISIBLE
+        switchViewHolder11?.view?.mainSwitch?.mainSwitchLinear?.visibility = View.VISIBLE
         tapAlertView?.visibility = View.GONE
         switchViewHolder11?.view?.cardSwitch?.payButton?.isActivated = false
-        switchViewHolder11?.view?.cardSwitch?.showOnlyPayButton()
+//        switchViewHolder11?.view?.cardSwitch?.showOnlyPayButton()
         switchViewHolder11?.bindViewComponents()
         switchViewHolder11?.view?.cardSwitch?.payButton?.setButtonDataSource(
             false,
@@ -194,7 +194,6 @@ class PaymenttInputViewHolder(
         tabLayout.resetBehaviour()
         if (PaymentDataSource.getBinLookupResponse() != null) {
             PaymentDataSource.setBinLookupResponse(null)
-
         }
     }
 

@@ -1328,7 +1328,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayouttManager, OnCardSelectedAc
             activateActionButton()
             paymentActionType = paymentType
         } else {
-            saveCardSwitchHolder11?.view?.mainSwitch?.visibility = View.GONE
+//            saveCardSwitchHolder11?.view?.mainSwitch?.visibility = View.GONE
             saveCardSwitchHolder11?.view?.mainSwitch?.switchSaveMobile?.visibility = View.GONE
            saveCardSwitchHolder11?.setSwitchToggleData(paymentType)
             unActivateActionButton()
