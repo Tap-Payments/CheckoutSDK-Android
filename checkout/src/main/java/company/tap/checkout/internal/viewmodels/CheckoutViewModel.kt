@@ -1,6 +1,7 @@
 package company.tap.checkout.internal.viewmodels
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -19,6 +20,7 @@ import androidx.annotation.RequiresApi
 import androidx.annotation.RestrictTo
 import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -63,6 +65,7 @@ import company.tap.checkout.internal.utils.Utils
 import company.tap.checkout.internal.viewholders.*
 import company.tap.checkout.internal.webview.WebFragment
 import company.tap.checkout.internal.webview.WebViewContract
+import company.tap.checkout.open.CheckOutActivity
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.data_managers.PaymentDataSource
@@ -2152,7 +2155,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
     }
 
-    fun showOnlyButtonView(status: ChargeStatus) {
+    fun showOnlyButtonView(status: ChargeStatus, checkOutActivity: Activity?) {
+        println("checkOutActivity>>>."+checkOutActivity)
         removeAllViews()
         addViews(saveCardSwitchHolder)
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
@@ -2199,8 +2203,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
         }
       Handler().postDelayed({
+
             if (::bottomSheetDialog.isInitialized)
                 bottomSheetDialog.dismiss()
+
+
+
         }, 8000)
     }
 

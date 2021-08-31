@@ -4,6 +4,7 @@ package company.tap.checkout.open.controller
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.net.ConnectivityManager
 import android.os.Build
@@ -18,6 +19,7 @@ import company.tap.checkout.internal.apiresponse.CardViewEvent
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.utils.CustomUtils.showDialog
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
+import company.tap.checkout.open.CheckOutActivity
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.CardType
@@ -429,12 +431,17 @@ object  SDKSession : APIRequestCallback {
         activity: Activity,
         status: ChargeStatus?
     ) {
-        val checkoutFragment =CheckoutFragment()
+        val intent = Intent(SDKSession.activity, CheckOutActivity::class.java)
+        intent.putExtra("hideAllViews",true)
+        intent.putExtra("status",status)
+        contextSDK?.startActivity(intent)
+       /* val checkoutFragment =CheckoutFragment()
         __supportFragmentManager.let { checkoutFragment.show(it,"CheckOutFragment") }
-        checkoutFragment.hideAllView = true
+        CheckoutFragment().hideAllView = true
         if (status != null) {
-            checkoutFragment.status =status
-        }
+            CheckoutFragment().status =status
+        }*/
+
         sessionActive =false
         payButtonView.changeButtonState(ActionButtonState.IDLE)
         payButtonView.visibility=View.GONE

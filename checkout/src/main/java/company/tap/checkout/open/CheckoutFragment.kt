@@ -27,7 +27,6 @@ import company.tap.checkout.internal.apiresponse.CardViewState
 import company.tap.checkout.internal.apiresponse.Resource
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
-import company.tap.checkout.internal.webview.WebFragment
 import company.tap.checkout.open.controller.SDKSession.sessionDelegate
 import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
 import company.tap.checkout.open.data_managers.PaymentDataSource
@@ -56,6 +55,7 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
     private lateinit var _viewModel: CheckoutViewModel
     private lateinit var cardViewModel: CardViewModel
     var _activity: Activity? = null
+    var checkOutActivity: CheckOutActivity? = null
     private lateinit var tapNfcCardReader: TapNfcCardReader
     private var cardReadDisposable: Disposable = Disposables.empty()
     var hideAllView =false
@@ -117,6 +117,7 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
             bottomSheetDialog.hide()
             bottomSheetDialog.dismiss()
             tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+            activity?.finish()
             tabAnimatedActionButton?.setButtonDataSource(
                 true,
                 context.let {
@@ -182,7 +183,7 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
 if(_resetFragment) {
     if (hideAllView) {
         if (::status.isInitialized)
-            _viewModel.showOnlyButtonView(status)
+            _viewModel.showOnlyButtonView(status,checkOutActivity)
 
     } else {
         _viewModel.displayStartupLayout(enabledSections)
@@ -194,7 +195,7 @@ if(_resetFragment) {
     }
 }else{
     if (::status.isInitialized)
-        _viewModel.showOnlyButtonView(status)
+        _viewModel.showOnlyButtonView(status, checkOutActivity)
 }
 
         setBottomSheetInterface(this)

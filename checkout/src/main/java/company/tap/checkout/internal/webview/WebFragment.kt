@@ -34,7 +34,10 @@ import kotlinx.android.synthetic.main.fragment_web.*
 import android.content.Intent
 import android.util.Log
 import android.webkit.ValueCallback
+import androidx.fragment.app.DialogFragment
 import company.tap.checkout.open.CheckoutFragment
+import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
+import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
 
 
 class WebFragment(private val webViewContract: WebViewContract?,private val cardViewModel: CardViewModel?) : Fragment(),

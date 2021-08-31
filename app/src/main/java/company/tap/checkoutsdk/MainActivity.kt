@@ -281,13 +281,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         config.setLocale(locale)
         resources.updateConfiguration(config, resources.displayMetrics)
     }
-    @RequiresApi(Build.VERSION_CODES.N)
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        setIntent(intent)
-        modalBottomSheet.handleNFCResult(intent)
 
-    }
     fun setCustomer(): TapCustomer { // test customer id cus_Kh1b4220191939i1KP2506448// cus_TS012520211349Za012907577 checkout
         val tapCustomer: TapCustomer? = null
         //if (customer != null) customer.phone else Phone(965, 69045932)
