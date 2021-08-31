@@ -1418,11 +1418,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             goPayViewsHolder
         )
         addViews(businessViewHolder, amountViewHolder)
-        fragmentManager.beginTransaction().remove(InlineViewFragment()).replace(
-            R.id.webFrameLayout,
+        frameLayout.visibility = View.VISIBLE
+        fragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container_nfc_lib, nfcFragment)
+            .commit()
+       /* fragmentManager.beginTransaction().remove(InlineViewFragment()).replace(
+            R.id.fragment_container_nfc_lib,
             nfcFragment
-        ).commit()
-        webFrameLayout.visibility = View.VISIBLE
+        ).commit()*/
         isNFCOpened = true
         amountViewHolder.changeGroupAction(false)
         val bottomSheet: FrameLayout? = bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet)
@@ -1839,6 +1843,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun handleNFCScannedResult(emvCard: TapEmvCard) {
+        println("emvCard>>"+emvCard)
         removeViews(amountViewHolder, businessViewHolder)
         addViews(
             businessViewHolder,
@@ -1875,12 +1880,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun removeNFCViewFragment() {
         if (isNFCOpened)
-            if (fragmentManager.findFragmentById(R.id.webFrameLayout) != null)
+            if (fragmentManager.findFragmentById(R.id.fragment_container_nfc_lib) != null)
                 fragmentManager.beginTransaction()
-                    .remove(fragmentManager.findFragmentById(R.id.webFrameLayout)!!)
+                    .remove(fragmentManager.findFragmentById(R.id.fragment_container_nfc_lib)!!)
                     .commit()
         isNFCOpened = false
-        webFrameLayout.visibility = View.GONE
+      //  webFrameLayout.visibility = View.GONE
+        frameLayout.visibility = View.GONE
     }
 
 
