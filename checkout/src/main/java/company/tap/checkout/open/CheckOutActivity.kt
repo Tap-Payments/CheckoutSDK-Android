@@ -1,6 +1,7 @@
 package company.tap.checkout.open
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
@@ -18,6 +19,7 @@ import company.tap.nfcreader.open.reader.TapEmvCard
 import company.tap.nfcreader.open.reader.TapNfcCardReader
 import company.tap.tapnetworkkit.exception.GoSellError
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
+import company.tap.tapuilibrary.uikit.models.DialogConfigurations
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
@@ -47,8 +49,18 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
             supportFragmentManager.beginTransaction().addToBackStack(null),
             "CheckOutFragment"
         )
+        tapCheckoutFragment.arguments=getArguments()
         tapNfcCardReader = TapNfcCardReader(this)
 
+    }
+
+    private fun getArguments(): Bundle {
+        val arguments = Bundle()
+        arguments.putFloatArray(DialogConfigurations.Corners, floatArrayOf(25f, 25f, 0f, 0f))
+        arguments.putInt(DialogConfigurations.Color, Color.TRANSPARENT)
+        arguments.putBoolean(DialogConfigurations.Cancelable, false)
+        arguments.putFloat(DialogConfigurations.Dim, 0.75f)
+        return arguments
     }
 
 
