@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,7 +42,6 @@ import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
-import kotlinx.android.synthetic.main.fragment_checkouttaps.*
 
 
 /**
@@ -61,8 +61,8 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
     var hideAllView =false
     lateinit var status :ChargeStatus
     private  var _resetFragment :Boolean = true
-
-
+    @JvmField
+    var isNfcOpened:Boolean=false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _activity = activity?.parent
@@ -155,7 +155,7 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
                                     inLineCardLayout,
                                     this,
                                     it2,
-                                    cardViewModel,this
+                                    cardViewModel, this
                                 )
                             }
 
@@ -179,11 +179,11 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
         enabledSections.add(SectionType.FRAGMENT)
         enabledSections.add(SectionType.ActionButton)
 
-        println("_resetFragment>>"+_resetFragment)
+        println("_resetFragment>>" + _resetFragment)
 if(_resetFragment) {
     if (hideAllView) {
         if (::status.isInitialized)
-            _viewModel.showOnlyButtonView(status,checkOutActivity)
+            _viewModel.showOnlyButtonView(status, checkOutActivity as CheckOutActivity?, this)
 
     } else {
         _viewModel.displayStartupLayout(enabledSections)
@@ -195,7 +195,7 @@ if(_resetFragment) {
     }
 }else{
     if (::status.isInitialized)
-        _viewModel.showOnlyButtonView(status, checkOutActivity)
+        _viewModel.showOnlyButtonView(status, checkOutActivity as CheckOutActivity?, this)
 }
 
         setBottomSheetInterface(this)
@@ -211,13 +211,13 @@ if(_resetFragment) {
         // TODO: Rename and change types and number of parameters
         const val RESET_FRAG = "resetFragment"
         @JvmStatic
-        fun newInstance(context: Context, activity: Activity?,resetFragment: Boolean) =
+        fun newInstance(context: Context, activity: Activity?, resetFragment: Boolean) =
             CheckoutFragment().apply {
                 arguments = Bundle().apply {}
                 _Context = context
                 _activity = activity
                 _resetFragment =resetFragment
-requireArguments().putBoolean( RESET_FRAG,resetFragment)
+requireArguments().putBoolean(RESET_FRAG, resetFragment)
             }
     }
 
@@ -253,10 +253,12 @@ requireArguments().putBoolean( RESET_FRAG,resetFragment)
 
     }
 
-    override fun onPause() {
-        cardReadDisposable.dispose()
-        tapNfcCardReader.disableDispatch()
-        super.onPause()
+ override fun onPause() {
+     super.onPause()
+
+     cardReadDisposable.dispose()
+     tapNfcCardReader.disableDispatch()
+
     }
 
     private fun consumeResponse(response: Resource<CardViewState>) {
@@ -281,11 +283,21 @@ requireArguments().putBoolean( RESET_FRAG,resetFragment)
 
 
 
+    override fun onDetach() {
+        super.onDetach()
+     //   println("isNFCOpened called??>>"+isNfcOpened)
+     if (view == null) {
+            return
+        }
+        if(isNfcOpened){
+
+        }else {
+            checkOutActivity?.onBackPressed()
+
+        }
 
 
-
-
-
+    }
 
 
 }

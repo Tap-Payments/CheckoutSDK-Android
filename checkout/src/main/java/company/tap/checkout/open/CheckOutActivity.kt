@@ -8,6 +8,7 @@ import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.models.Authorize
 import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.api.models.Token
+import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
 import company.tap.checkout.open.interfaces.SessionDelegate
 import company.tap.checkout.open.models.CardsList
@@ -141,8 +142,18 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
         tabAnimatedActionButton?.visibility = View.VISIBLE*/
     }
 
-    override fun onStop() {
-        super.onStop()
-        this.finish()
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
     }
+
+ override fun onPause() {
+ super.onPause()
+    finish()
+
+    }
+
+
+
+
 }

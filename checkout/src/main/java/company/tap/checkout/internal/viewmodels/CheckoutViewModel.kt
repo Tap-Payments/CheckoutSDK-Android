@@ -20,7 +20,6 @@ import androidx.annotation.RequiresApi
 import androidx.annotation.RestrictTo
 import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -154,7 +153,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private val nfcFragment = NFCFragment()
     private val inlineViewFragment = InlineViewFragment()
     private var isInlineOpened = false
-    private var isNFCOpened = false
+    @JvmField
+    var isNFCOpened = false
     private var textRecognitionML: TapTextRecognitionML? = null
     private lateinit var intent: Intent
     private lateinit var inlineViewCallback: InlineViewCallback
@@ -1431,6 +1431,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             nfcFragment
         ).commit()*/
         isNFCOpened = true
+        checkoutFragment.isNfcOpened = true
         amountViewHolder.changeGroupAction(false)
         val bottomSheet: FrameLayout? = bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet)
         BottomSheetBehavior.from(bottomSheet as View).state = BottomSheetBehavior.STATE_EXPANDED
@@ -1888,6 +1889,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     .remove(fragmentManager.findFragmentById(R.id.fragment_container_nfc_lib)!!)
                     .commit()
         isNFCOpened = false
+        checkoutFragment.isNfcOpened = false
       //  webFrameLayout.visibility = View.GONE
         frameLayout.visibility = View.GONE
     }
@@ -2155,7 +2157,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
     }
 
-    fun showOnlyButtonView(status: ChargeStatus, checkOutActivity: Activity?) {
+    fun showOnlyButtonView(
+        status: ChargeStatus,
+        checkOutActivity: CheckOutActivity?,
+        _checkoutFragment: CheckoutFragment
+    ) {
+        println("checkoutFragment>>>."+_checkoutFragment)
         println("checkOutActivity>>>."+checkOutActivity)
         removeAllViews()
         addViews(saveCardSwitchHolder)
@@ -2203,11 +2210,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
         }
       Handler().postDelayed({
-
+          checkOutActivity?.onBackPressed()
             if (::bottomSheetDialog.isInitialized)
                 bottomSheetDialog.dismiss()
-
-
+          _checkoutFragment.activity?.onBackPressed()
 
         }, 8000)
     }
