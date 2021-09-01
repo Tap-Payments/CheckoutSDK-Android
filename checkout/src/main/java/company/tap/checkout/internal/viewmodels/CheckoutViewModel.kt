@@ -2211,6 +2211,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
       Handler().postDelayed({
           checkOutActivity?.onBackPressed()
+
             if (::bottomSheetDialog.isInitialized)
                 bottomSheetDialog.dismiss()
           _checkoutFragment.activity?.onBackPressed()

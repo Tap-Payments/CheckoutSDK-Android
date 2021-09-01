@@ -52,12 +52,12 @@ import io.reactivex.disposables.Disposables
 class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, InlineViewCallback {
 
     private var _Context: Context? = null
-    private lateinit var _viewModel: CheckoutViewModel
+    @JvmField
+     var _viewModel: CheckoutViewModel?=null
     private lateinit var cardViewModel: CardViewModel
     var _activity: Activity? = null
     var checkOutActivity: CheckOutActivity? = null
-    private lateinit var tapNfcCardReader: TapNfcCardReader
-    private var cardReadDisposable: Disposable = Disposables.empty()
+
     var hideAllView =false
     lateinit var status :ChargeStatus
     private  var _resetFragment :Boolean = true
@@ -134,7 +134,6 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
         }
 
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
-        tapNfcCardReader = TapNfcCardReader(requireActivity())
 
         bottomSheetLayout?.let {
             viewModel.setBottomSheetLayout(it)
@@ -183,11 +182,11 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
 if(_resetFragment) {
     if (hideAllView) {
         if (::status.isInitialized)
-            _viewModel.showOnlyButtonView(status, checkOutActivity as CheckOutActivity?, this)
+            _viewModel?.showOnlyButtonView(status, checkOutActivity as CheckOutActivity?, this)
 
     } else {
-        _viewModel.displayStartupLayout(enabledSections)
-        _viewModel.getDatasfromAPIs(
+        _viewModel?.displayStartupLayout(enabledSections)
+        _viewModel?.getDatasfromAPIs(
             PaymentDataSource.getSDKSettings(),
             PaymentDataSource.getPaymentOptionsResponse()
         )
@@ -195,7 +194,7 @@ if(_resetFragment) {
     }
 }else{
     if (::status.isInitialized)
-        _viewModel.showOnlyButtonView(status, checkOutActivity as CheckOutActivity?, this)
+        _viewModel?.showOnlyButtonView(status, checkOutActivity as CheckOutActivity?, this)
 }
 
         setBottomSheetInterface(this)
@@ -223,43 +222,20 @@ requireArguments().putBoolean(RESET_FRAG, resetFragment)
 
     override fun onScanCardFailed(e: Exception?) {
         println("onScanCardFailed")
-        _viewModel.handleScanFailedResult()
+        _viewModel?.handleScanFailedResult()
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onScanCardFinished(card: Card?, cardImage: ByteArray?) {
         if (card != null) {
             println("scanned card is$card")
-            _viewModel.handleScanSuccessResult(card)
+            _viewModel?.handleScanSuccessResult(card)
 
         }
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.N)
-    fun handleNFCResult(intent: Intent?) {
-        if (tapNfcCardReader.isSuitableIntent(intent)) {
-            cardReadDisposable = tapNfcCardReader
-                .readCardRx2(intent)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ emvCard: TapEmvCard? ->
-                    if (emvCard != null) {
-                        _viewModel.handleNFCScannedResult(emvCard)
-                        println("emvCard$emvCard")
-                    }
-                },
-                    { throwable -> throwable.message?.let { println("error is nfc" + throwable.printStackTrace()) } })
-        }
 
-    }
-
- override fun onPause() {
-     super.onPause()
-
-     cardReadDisposable.dispose()
-     tapNfcCardReader.disableDispatch()
-
-    }
 
     private fun consumeResponse(response: Resource<CardViewState>) {
         println("response value is" + response.data?.initResponse)
