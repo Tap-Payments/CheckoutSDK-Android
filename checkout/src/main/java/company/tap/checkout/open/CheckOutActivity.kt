@@ -64,6 +64,7 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         handleNFCResult(intent)
@@ -72,7 +73,6 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
 
     override fun paymentSucceed(charge: Charge) {
      //  tapCheckoutFragment.dialog?.dismiss()
-
         tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
         this.finish()
     }
