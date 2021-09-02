@@ -165,7 +165,7 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
         }
          enableSections()
         sessionDelegate?.sessionIsStarting()
-
+        dialog?.window?.attributes?.windowAnimations = R.style.DialogAnimation
     }
 
 
