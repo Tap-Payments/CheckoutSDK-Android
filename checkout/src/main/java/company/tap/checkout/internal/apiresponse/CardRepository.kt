@@ -293,6 +293,7 @@ class CardRepository : APIRequestCallback {
         ).build()
 
         val jsonString = Gson().toJson(createOTPVerificationRequest)
+        if(::chargeResponse.isInitialized)
         NetworkController.getInstance().processRequest(
             TapMethodType.POST,
             ApiService.CHARGES + "/" + ApiService.AUTHENTICATE + "/" + chargeResponse.id,
