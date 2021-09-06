@@ -108,7 +108,8 @@ class CardRepository : APIRequestCallback {
             PaymentDataSource.getCurrency()?.isoCode,
             PaymentDataSource.getCustomer()?.identifier,
             PaymentDataSource.getMerchant()?.id,
-            PaymentDataSource.getPaymentDataType().toString()
+            PaymentDataSource.getPaymentDataType().toString(),
+            PaymentDataSource.getTopup()
         )
         val jsonString = Gson().toJson(requestBody)
         NetworkController.getInstance().processRequest(

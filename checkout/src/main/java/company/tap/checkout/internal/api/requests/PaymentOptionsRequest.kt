@@ -9,6 +9,7 @@ import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.models.PaymentItem
 import company.tap.checkout.open.models.Shipping
 import company.tap.checkout.open.models.Tax
+import company.tap.checkout.open.models.TopUp
 import java.math.BigDecimal
 import java.util.*
 
@@ -28,7 +29,8 @@ open class PaymentOptionsRequest(
     currency: String?,
     customer: String?,
     merchant_id: String?,
-    payment_type: String
+    payment_type: String,
+    topup :TopUp?
 
 ) {
     @SerializedName("transaction_mode")
@@ -67,7 +69,9 @@ open class PaymentOptionsRequest(
     @Expose
     private val payment_type: String = payment_type
 
-
+    @SerializedName("topup")
+    @Expose
+    private val topup: TopUp? = null
     /**
      * Gets transaction mode.
      *
@@ -90,7 +94,8 @@ open class PaymentOptionsRequest(
                 "customer : " + customer + " /n " +
                 "total_amout : " + totalAmount + " /n " +
                 "merchant_id : " + merchant_id + " /n " +
-                "payment_type : " + payment_type + " /n "
+                "payment_type : " + payment_type + " /n "+
+                "topup : " + topup + " /n "
     }
 
     /**

@@ -18,8 +18,7 @@ import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.models.*
 import company.tap.checkoutsdk.CustomerViewModel
 import java.math.BigDecimal
-import java.util.ArrayList
-import java.util.HashMap
+import java.util.*
 
 /**
  * Created by AhlaamK on 9/6/21.
@@ -142,11 +141,15 @@ object SettingsManager {
         // check if customer id is in pref.
         customer = if (customersList != null) {
             System.out.println("preparing data source with customer ref :" + customersList[0].getRef())
-            return TapCustomer(customersList[0].getRef(),customersList[0].getName()
-                , customersList[0].getMiddleName()
-                ,customersList[0].getLastName(), customersList[0].getEmail()
-                , PhoneNumber(customersList[0].getSdn(), customersList[0].getMobile())
-                ,"meta")
+            return TapCustomer(
+                customersList[0].getRef(),
+                customersList[0].getName(),
+                customersList[0].getMiddleName(),
+                customersList[0].getLastName(),
+                customersList[0].getEmail(),
+                PhoneNumber(customersList[0].getSdn(), customersList[0].getMobile()),
+                "meta"
+            )
         } else {
             println(" paymentResultDataManager.getCustomerRef(context) null")
             //65562630
@@ -274,7 +277,7 @@ object SettingsManager {
      */
     fun getTransactionsMode(key: String): TransactionMode {
         val trx_mode = pref?.getString(key, TransactionMode.PURCHASE.name)
-        println("trx_mode value"+trx_mode)
+        println("trx_mode value" + trx_mode)
         if (trx_mode.equals(
                 TransactionMode.PURCHASE.name,
                 ignoreCase = true
@@ -286,9 +289,9 @@ object SettingsManager {
             )
         ) return TransactionMode.AUTHORIZE_CAPTURE
          if (trx_mode.equals(
-                TransactionMode.TOKENIZE_CARD.name,
-                ignoreCase = true
-            )
+                 TransactionMode.TOKENIZE_CARD.name,
+                 ignoreCase = true
+             )
         ) TransactionMode.TOKENIZE_CARD
         return if (trx_mode.equals(
                 TransactionMode.SAVE_CARD.name,
@@ -350,5 +353,25 @@ object SettingsManager {
         return pref?.getInt(key, defaultValue)
     }
 
+
+    //Set topup object
+
+      fun getTopUp(): TopUp? {
+        return TopUp(
+            null,
+            "wal_7nTwK44211030uxtI115c6T710",
+            null,
+            null,
+            BigDecimal.valueOf(30),
+            "kwd",
+            null,
+            null,
+            null,
+            TopUpApplication(BigDecimal.valueOf(40), "kwd"),
+            null,
+            TopupPost("wwww.google.com"),
+            null
+        )
+    }
 
 }

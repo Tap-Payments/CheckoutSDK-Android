@@ -41,9 +41,9 @@ import java.math.BigDecimal
 import java.util.*
 
 
-class MainActivity : AppCompatActivity() , SessionDelegate{
+class MainActivity : AppCompatActivity(), SessionDelegate {
     private var settingsManager: SettingsManager? = null
-   var sdkSession:SDKSession= SDKSession
+    var sdkSession: SDKSession = SDKSession
     private val payButton by lazy { findViewById<TabAnimatedActionButton>(R.id.payButton) }
 
     private val modalBottomSheet = CheckoutFragment()
@@ -57,14 +57,13 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         settingsManager = SettingsManager
 
 
-
         /** Configures the theme manager by setting the provided custom theme file names
         - Parameter customTheme: Please pass the tap checkout theme object with the names of your custom theme files if needed. If not set, the normal and default TAP theme will be used
          */
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))
-         ThemeManager.loadTapTheme(resources, R.raw.defaultdarktheme, "darktheme")
-        else if(ThemeManager.currentTheme.isNotEmpty() && !ThemeManager.currentTheme.contains("dark"))
-        ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "lighttheme")
+            ThemeManager.loadTapTheme(resources, R.raw.defaultdarktheme, "darktheme")
+        else if (ThemeManager.currentTheme.isNotEmpty() && !ThemeManager.currentTheme.contains("dark"))
+            ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "lighttheme")
         else ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "lighttheme")
 
 
@@ -74,12 +73,12 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
          */
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         setLocale(this, LocalizationManager.getLocale(this).language)
-       // setLocale(this,"ar")
+        // setLocale(this,"ar")
         setContentView(R.layout.activity_main)
         initializeSDK()
         configureSDKSession()
         initActionButton()
-        if (modalBottomSheet.isHidden || modalBottomSheet.isDetached ) {
+        if (modalBottomSheet.isHidden || modalBottomSheet.isDetached) {
             println("paybutton hidden")
             payButton.changeButtonState(ActionButtonState.IDLE)
         }
@@ -87,18 +86,18 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
     }
 
     private fun initializeSDK() {
-     TapCheckOutSDK().init(
-             this,
-             "sk_test_kovrMB0mupFJXfNZWx6Etg5y",
-             "company.tap.goSellSDKExample"
+        TapCheckOutSDK().init(
+            this,
+            "sk_test_kovrMB0mupFJXfNZWx6Etg5y",
+            "company.tap.goSellSDKExample"
 
-     )
-       /*TapCheckOutSDK().init(
-             this,
-             "sk_live_QglH8V7Fw6NPAom4qRcynDK2",
-             "company.tap.goSellSDKExample"
-     )
-*/
+        )
+        /*TapCheckOutSDK().init(
+              this,
+              "sk_live_QglH8V7Fw6NPAom4qRcynDK2",
+              "company.tap.goSellSDKExample"
+      )
+ */
 
     }
 
@@ -130,7 +129,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         // initiate PaymentDataSource
 
         // initiate PaymentDataSource
-       sdkSession.instantiatePaymentDataSource() //** Required **
+        sdkSession.instantiatePaymentDataSource() //** Required **
 
 
         // set transaction currency associated to your account
@@ -148,20 +147,20 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
 
         // Set Payment Items array list
-       sdkSession.setPaymentItems(ArrayList()) // ** Optional ** you can pass empty array list
-    //   sdkSession.setPaymentItems(getPaymentItems()) // ** Optional ** you can pass empty array list
+        sdkSession.setPaymentItems(ArrayList()) // ** Optional ** you can pass empty array list
+        //   sdkSession.setPaymentItems(getPaymentItems()) // ** Optional ** you can pass empty array list
 
 
         sdkSession.setPaymentType("ALL")  //** Merchant can pass paymentType
 
         // Set Taxes array list
         sdkSession.setTaxes(ArrayList()) // ** Optional ** you can pass empty array list
-      //  sdkSession.setTaxes(settingsManager?.getTaxes()) // ** Optional ** you can pass empty array list
+        //  sdkSession.setTaxes(settingsManager?.getTaxes()) // ** Optional ** you can pass empty array list
 
 
         // Set Shipping array list
         sdkSession.setShipping(ArrayList()) // ** Optional ** you can pass empty array list
-      //  sdkSession.setShipping(settingsManager?.getShippingList()) // ** Optional ** you can pass empty array list
+        //  sdkSession.setShipping(settingsManager?.getShippingList()) // ** Optional ** you can pass empty array list
 
         // Post URL
         sdkSession.setPostURL("") // ** Optional **
@@ -191,12 +190,11 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
         //Set Receipt Settings [SMS - Email ]
         sdkSession.setReceiptSettings(
-                Receipt(
-                        false,
-                        false
-                )
+            Receipt(
+                false,
+                false
+            )
         ) // ** Optional ** you can pass Receipt object or null
-
 
 
         // Set Authorize Action
@@ -209,26 +207,27 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         sdkSession.setMerchantID(null) // ** Optional ** you can pass merchant id or null
 
 
-         sdkSession.setCardType(CardType.ALL) // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
+        sdkSession.setCardType(CardType.ALL) // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
 
-     /*   settingsManager?.getTransactionsMode("key_sdk_transaction_mode")?.let {
+         settingsManager?.getTransactionsMode("key_sdk_transaction_mode")?.let {
             sdkSession.setTransactionMode(
                 it
             )
-        }*/
-        sdkSession.setTransactionMode(TransactionMode.PURCHASE)
+        }
+       // sdkSession.setTransactionMode(TransactionMode.PURCHASE)
 
-         sdkSession.setDefaultCardHolderName("TEST TAP"); // ** Optional ** you can pass default CardHolderName of the user .So you don't need to type it.
-         sdkSession.isUserAllowedToEnableCardHolderName(false); // ** Optional ** you can enable/ disable  default CardHolderName .
-            settingsManager?.setPref(this)
+        sdkSession.setDefaultCardHolderName("TEST TAP"); // ** Optional ** you can pass default CardHolderName of the user .So you don't need to type it.
+        sdkSession.isUserAllowedToEnableCardHolderName(false) // ** Optional ** you can enable/ disable  default CardHolderName .
+        settingsManager?.setPref(this)
     }
 
     fun openBottomSheet(view: View) {
         /// Configures the bottom sheet by creating one and assigning the correct delegates and datasources
         modalBottomSheet.arguments = getArguments()
-        sdkSession.startSDK(supportFragmentManager,this,this)
-       // modalBottomSheet.show(supportFragmentManager, TAG)
+        sdkSession.startSDK(supportFragmentManager, this, this)
+        // modalBottomSheet.show(supportFragmentManager, TAG)
     }
+
     private fun getArguments(): Bundle {
         val arguments = Bundle()
         arguments.putFloatArray(DialogConfigurations.Corners, floatArrayOf(25f, 25f, 0f, 0f))
@@ -272,7 +271,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
             true
         }
 
-        R.id.action_settings->{
+        R.id.action_settings -> {
             val intent = Intent(this, SettingsActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
@@ -303,42 +302,60 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         val tapCustomer: TapCustomer? = null
         //if (customer != null) customer.phone else Phone(965, 69045932)
         return TapCustomer(
-                "cus_TS012520211349Za012907577", "ahlaam", "middlename",
-                "lastname", "abcd@gmail.com",
-                PhoneNumber("00965", "69045932"), "description",
+            "cus_TS012520211349Za012907577", "ahlaam", "middlename",
+            "lastname", "abcd@gmail.com",
+            PhoneNumber("00965", "69045932"), "description",
         )
 
     }
 
     private fun getPaymentItems(): ArrayList<PaymentItem>? {
         val items: ArrayList<PaymentItem> = ArrayList<PaymentItem>()
-        items.add(PaymentItem("Items1",
+        items.add(
+            PaymentItem(
+                "Items1",
                 "Description for test item #1",
-                Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(1)), BigDecimal.valueOf(1),
-                AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO), null))
-        items.add(PaymentItem("Items2",
+                Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(1)),
+                BigDecimal.valueOf(1),
+                AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO),
+                null
+            )
+        )
+        items.add(
+            PaymentItem(
+                "Items2",
                 "Description for test item #2",
-                Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(4)), BigDecimal.valueOf(4),
-                AmountModificator(AmountModificatorType.PERCENTAGE, BigDecimal.ZERO), null))
-        items.add(PaymentItem("Items3",
+                Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(4)),
+                BigDecimal.valueOf(4),
+                AmountModificator(AmountModificatorType.PERCENTAGE, BigDecimal.ZERO),
+                null
+            )
+        )
+        items.add(
+            PaymentItem(
+                "Items3",
                 "Description for test item #3",
-                Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(1)), BigDecimal.valueOf(1),
-                AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO), null))
+                Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(1)),
+                BigDecimal.valueOf(1),
+                AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO),
+                null
+            )
+        )
         println("item are<<<<" + items)
 
         return items
     }
 
     private fun initActionButton() {
-       payButton.setButtonDataSource(
-                true,
-                this.let { LocalizationManager.getLocale(it).language },
-                LocalizationManager.getValue("pay", "ActionButton"),
-                Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-                Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
+        payButton.setButtonDataSource(
+            true,
+            this.let { LocalizationManager.getLocale(it).language },
+            LocalizationManager.getValue("pay", "ActionButton"),
+            Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
+            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
         )
 
-       sdkSession.setButtonView(payButton,this,supportFragmentManager,this)
+        sdkSession.setButtonView(payButton, this, supportFragmentManager, this)
 
 
     }
@@ -383,19 +400,19 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
             println("Payment Succeeded : expiry type :" + charge.expiry?.type)
             println("Payment Succeeded : expiry period :" + charge.expiry?.period)
         }
-     //   Toast.makeText(this,"paymentSucceed"+charge.id, Toast.LENGTH_SHORT).show()
-       // modalBottomSheet.dismiss()
-       // payButton?.changeButtonState(ActionButtonState.SUCCESS)
-      //  modalBottomSheet.dialog?.dismiss()
-      //  payButton?.changeButtonState(ActionButtonState.IDLE)
+        // Toast.makeText(this,"paymentSucceed"+charge.id, Toast.LENGTH_SHORT).show()
+        // modalBottomSheet.dismiss()
+        // payButton?.changeButtonState(ActionButtonState.SUCCESS)
+        //  modalBottomSheet.dialog?.dismiss()
+        //  payButton?.changeButtonState(ActionButtonState.IDLE)
     }
 
     override fun paymentFailed(charge: Charge?) {
         println("Payment Failed : " + charge?.status)
         println("Payment Failed : " + charge?.description)
         println("Payment Failed : " + charge?.response?.message)
-      //  Toast.makeText(this,"paymentFailed"+charge?.response?.message, Toast.LENGTH_SHORT).show()
-//           modalBottomSheet.dismiss()
+        //  Toast.makeText(this,"paymentFailed"+charge?.response?.message, Toast.LENGTH_SHORT).show()
+        //  modalBottomSheet.dismiss()
         //   modalBottomSheet.dialog?.dismiss()
 
 
@@ -432,8 +449,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
             println("Payment Authorized Succeeded : expiry type :" + authorize.expiry?.type)
             println("Payment Authorized Succeeded : expiry period :" + authorize.expiry?.period)
         }
-        Toast.makeText(this, "authorizationSucceed"+authorize.id, Toast.LENGTH_SHORT).show()
-
+        Toast.makeText(this, "authorizationSucceed" + authorize.id, Toast.LENGTH_SHORT).show()
 
 
     }
@@ -442,7 +458,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         println("Authorize Failed : " + authorize?.status)
         println("Authorize Failed : " + authorize?.description)
         println("Authorize Failed : " + authorize?.response?.message)
-      //  Toast.makeText(this, "authorizationFailed"+authorize?.response?.message, Toast.LENGTH_SHORT).show()
+        //  Toast.makeText(this, "authorizationFailed"+authorize?.response?.message, Toast.LENGTH_SHORT).show()
 
 
     }
@@ -458,7 +474,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         println("Card Saved Succeeded : " + charge.response?.message)
         println("Card Saved Succeeded : " + (charge as SaveCard).card_issuer?.name)
         println("Card Saved Succeeded : " + charge.card_issuer?.id)
-        Toast.makeText(this, "cardSaved"+charge.id, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "cardSaved" + charge.id, Toast.LENGTH_SHORT).show()
 
     }
 
@@ -475,7 +491,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         println("Token card : " + token.card?.id.toString() + " ****** " + token.card?.name)
         println("Token card : " + token.card?.address.toString() + " ****** " + token.card?.`object`)
         println("Token card : " + token.card?.expirationMonth.toString() + " ****** " + token.card?.expirationYear)
-        Toast.makeText(this,"cardTokenizedSuccessfully"+token.id, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "cardTokenizedSuccessfully" + token.id, Toast.LENGTH_SHORT).show()
 
     }
 
@@ -517,7 +533,7 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
     override fun backendUnknownError(message: String?) {
         println("backendUnknownError>>>>>" + message)
-      //  payButton?.changeButtonState(ActionButtonState.ERROR)
+        //  payButton?.changeButtonState(ActionButtonState.ERROR)
 
     }
 
@@ -531,17 +547,17 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
     }
 
     override fun userEnabledSaveCardOption(saveCardEnabled: Boolean) {
-       println("userEnabledSaveCardOption>>>>>" + saveCardEnabled)
+        println("userEnabledSaveCardOption>>>>>" + saveCardEnabled)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun getStatusSDK(status: ChargeStatus?) {
         println("status in MainActv>>$status")
-        resetBottomSheetForButton(supportFragmentManager,this,payButton,this,status)
-        payButton.visibility =View.VISIBLE
+        resetBottomSheetForButton(supportFragmentManager, this, payButton, this, status)
+        payButton.visibility = View.VISIBLE
     }
 
-   override fun onResume() {
+    override fun onResume() {
         super.onResume()
         if (settingsManager == null) {
             settingsManager?.setPref(this)
