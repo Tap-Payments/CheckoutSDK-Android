@@ -102,7 +102,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private var paymentOptionsList = MutableLiveData<List<PaymentOption>>()
     private var goPayCardList = MutableLiveData<List<GoPaySavedCards>>()
 
-    //private var allCurrencies = MutableLiveData<List<Currencies1>>()
     private var allCurrencies = MutableLiveData<List<SupportedCurrencies>>()
     private var selectedItemsDel by Delegates.notNull<Int>()
     private val isShaking = MutableLiveData<Boolean>()
@@ -123,6 +122,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private  var tabAnimatedActionButtonViewHolder11: TabAnimatedActionButtonViewHolder11?=null
     private lateinit var bottomSheetDialog: BottomSheetDialog
     private lateinit var fragmentManager: FragmentManager
+    @SuppressLint("StaticFieldLeak")
     private lateinit var bottomSheetLayout: FrameLayout
     @Nullable
     private lateinit var selectedAmount: String
@@ -137,6 +137,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private lateinit var adapter: CardTypeAdapterUIKIT
     private lateinit var itemAdapter: ItemAdapter
     private lateinit var otpViewHolder: OTPViewHolder
+    @SuppressLint("StaticFieldLeak")
     private lateinit var webFrameLayout: FrameLayout
     private lateinit var frameLayout: FrameLayout
     private lateinit var inLineCardLayout: FrameLayout
@@ -144,8 +145,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private lateinit var checkoutFragment: CheckoutFragment
     private lateinit var itemList: List<PaymentItem>
     private lateinit var selectedPaymentOption: PaymentOption
-
-    @SuppressLint("StaticFieldLeak")
     private lateinit var context: Context
     private lateinit var cardViewModel: CardViewModel
     private var otpTypeString: PaymentTypeEnum = PaymentTypeEnum.SAVEDCARD
@@ -162,7 +161,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     lateinit var paymentOptionsResponse: PaymentOptionsResponse
     lateinit var redirectURL: String
     lateinit var cardId: String
-    private var sdkSession: SDKSession = SDKSession
 
 
     @JvmField
@@ -763,7 +761,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
         saveCardSwitchHolder?.view?.visibility = View.GONE
         webFrameLayout.visibility =View.VISIBLE
-        removeViews(saveCardSwitchHolder)
+       removeViews(saveCardSwitchHolder)
        // tabAnimatedActionButtonViewHolder11?.view?.actionButton?.visibility = View.INVISIBLE
     }
 

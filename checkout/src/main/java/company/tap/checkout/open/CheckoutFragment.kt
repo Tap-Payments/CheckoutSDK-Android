@@ -72,9 +72,12 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
     }
 
     override fun onDestroyView() {
+        println("onDestroyView>>>")
         if (view?.parent != null) {
             (view?.parent as ViewGroup).removeView(view)
         }
+       resetTabAnimatedButton()
+
         super.onDestroyView()
     }
 
@@ -116,20 +119,7 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
             bottomSheetDialog.dismissWithAnimation
             bottomSheetDialog.hide()
             bottomSheetDialog.dismiss()
-            tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-            activity?.finish()
-            tabAnimatedActionButton?.setButtonDataSource(
-                true,
-                context.let {
-                    if (it != null) {
-                        LocalizationManager.getLocale(it).language
-                    }
-                }.toString(),
-                LocalizationManager.getValue("pay", "ActionButton"),
-                Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-                Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
-            )
-            tabAnimatedActionButton?.isClickable=true
+            resetTabAnimatedButton()
 
         }
 
@@ -261,7 +251,6 @@ requireArguments().putBoolean(RESET_FRAG, resetFragment)
 
     override fun onDetach() {
         super.onDetach()
-     //   println("isNFCOpened called??>>"+isNfcOpened)
      if (view == null) {
             return
         }
@@ -273,6 +262,23 @@ requireArguments().putBoolean(RESET_FRAG, resetFragment)
         }
 
 
+    }
+
+    private fun resetTabAnimatedButton(){
+        tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+        activity?.finish()
+        tabAnimatedActionButton?.setButtonDataSource(
+            true,
+            context.let {
+                if (it != null) {
+                    LocalizationManager.getLocale(it).language
+                }
+            }.toString(),
+            LocalizationManager.getValue("pay", "ActionButton"),
+            Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
+            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
+        )
+        tabAnimatedActionButton?.isClickable=true
     }
 
 
