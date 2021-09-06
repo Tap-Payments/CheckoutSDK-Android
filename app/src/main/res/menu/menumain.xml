@@ -13,4 +13,10 @@
         android:id="@+id/change_language"
         android:title="Change Language" />
 
+    <item
+        android:id="@+id/action_settings"
+        android:title="Settings"
+        app:showAsAction="always"
+        android:orderInCategory="0"/>
+
 </menu>

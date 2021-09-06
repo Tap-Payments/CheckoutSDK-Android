@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory android:title="General">
+
+        <ListPreference
+            android:defaultValue="0"
+            android:dialogTitle="Select SDK Language"
+            android:entries="@array/pref_array_sdk_language_entries"
+            android:entryValues="@array/pref_array_sdk_language_entries"
+            android:key="sdk_language"
+            android:summary="Choose your preferred language"
+            android:title="SDK Language"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Session data source">
+
+        <ListPreference
+            android:defaultValue="0"
+            android:dialogTitle="Select sdk mode"
+            android:entries="@array/pref_array_sdk_mode_entries"
+            android:entryValues="@array/pref_array_sdk_mode_values"
+            android:key="key_sdkmode"
+            android:summary="Select SDK Mode"
+            android:title="Operation Mode" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:dialogTitle="Transaction Mode"
+            android:entries="@array/pref_array_sdk_transactions_mode_entries"
+            android:entryValues="@array/pref_array_sdk_transaction_mode_values"
+            android:key="key_sdk_transaction_mode"
+            android:summary="Select Transaction Mode"
+            android:title="Transaction Mode" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="threeDSecureKey"
+            android:title="3D Secure" />
+
+        <ListPreference
+            android:defaultValue="kwd"
+            android:dialogTitle="Transaction currency"
+            android:entries="@array/pref_array_sdk_transactions_currency_entries"
+            android:entryValues="@array/pref_array_sdk_transaction_currency_values"
+            android:key="key_sdk_transaction_currency"
+            android:summary="Select transaction currency"
+            android:title="Transaction currency" />
+
+
+        <Preference android:title="Select Customer">
+            <intent
+                android:action="SETTING_START_CUSTOMER_ACTIVITY"
+                android:targetClass="company.tap.checkoutdemo.activity.CustomerActivity"
+                android:targetPackage="company.tap.checkoutdemo" />
+        </Preference>
+
+        <EditTextPreference
+            android:defaultValue="1"
+            android:key="key_amount_name"
+            android:summary="key_amount_value"
+            android:title="Enter the amount" />
+        <ListPreference
+            android:defaultValue="0"
+            android:dialogTitle="Select PaymentType"
+            android:entries="@array/pref_array_sdk_paymentTypes"
+            android:entryValues="@array/pref_array_sdk_paymentTypes_values"
+            android:key="key_sdk_payment_type"
+            android:summary="Select Payment Type"
+            android:title="Payment Type" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:dialogTitle="Select Card Type"
+            android:entries="@array/pref_array_sdk_cardTypes"
+            android:entryValues="@array/pref_array_sdk_cardType_values"
+            android:key="key_sdk_card_type"
+            android:summary="Select Card Type"
+            android:title="Card Type" />
+
+        <SwitchPreferenceCompat
+            android:key="switch"
+            android:title="Switch Preference"
+            android:summary="Click to switch on or off"
+            android:defaultValue="true"/>
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -1,4 +1,4 @@
-package company.tap.checkoutsdk
+package company.tap.checkoutsdk.activities
 
 
 import android.app.Activity
@@ -29,6 +29,7 @@ import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.interfaces.SessionDelegate
 import company.tap.checkout.open.models.*
 import company.tap.checkout.open.models.Receipt
+import company.tap.checkoutsdk.R
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapnetworkkit.exception.GoSellError
 import company.tap.tapuilibrary.themekit.ThemeManager
@@ -262,6 +263,15 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
             }
             recreate()
             true
+        }
+
+        R.id.action_settings->{
+            val intent = Intent(this, SettingsActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+
+            true
+
         }
 
         else -> {

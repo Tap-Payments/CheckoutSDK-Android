@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar.Bridge">
@@ -11,5 +11,21 @@
         <item name="android:windowIsFloating">false</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+
+    <style name="EditText">
+        <item name="android:textCursorDrawable">@null</item>
+        <item name="android:textColor">@color/greyish_brown</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily" tools:targetApi="jelly_bean">sans-serif-light</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+    <!--Floating label text style-->
+    <style name="TextInputLayout.Hint" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily" tools:targetApi="jelly_bean">sans-serif</item>
+        <item name="android:textSize">@dimen/font_size_11sp</item>
+        <item name="android:textStyle">normal</item>
+
     </style>
 </resources>
