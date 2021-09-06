@@ -274,6 +274,7 @@ object SettingsManager {
      */
     fun getTransactionsMode(key: String): TransactionMode {
         val trx_mode = pref?.getString(key, TransactionMode.PURCHASE.name)
+        println("trx_mode value"+trx_mode)
         if (trx_mode.equals(
                 TransactionMode.PURCHASE.name,
                 ignoreCase = true
@@ -284,11 +285,17 @@ object SettingsManager {
                 ignoreCase = true
             )
         ) return TransactionMode.AUTHORIZE_CAPTURE
-        return if (trx_mode.equals(
+         if (trx_mode.equals(
                 TransactionMode.TOKENIZE_CARD.name,
                 ignoreCase = true
             )
-        ) TransactionMode.TOKENIZE_CARD else TransactionMode.SAVE_CARD
+        ) TransactionMode.TOKENIZE_CARD
+        return if (trx_mode.equals(
+                TransactionMode.SAVE_CARD.name,
+                ignoreCase = true
+            )
+        ) TransactionMode.SAVE_CARD
+        else TransactionMode.PURCHASE
     }
 
     /**
