@@ -30,6 +30,7 @@ import company.tap.checkout.open.interfaces.SessionDelegate
 import company.tap.checkout.open.models.*
 import company.tap.checkout.open.models.Receipt
 import company.tap.checkoutsdk.R
+import company.tap.checkoutsdk.manager.SettingsManager
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapnetworkkit.exception.GoSellError
 import company.tap.tapuilibrary.themekit.ThemeManager
@@ -41,7 +42,7 @@ import java.util.*
 
 
 class MainActivity : AppCompatActivity() , SessionDelegate{
-
+    private var settingsManager: SettingsManager? = null
    var sdkSession:SDKSession= SDKSession
     private val payButton by lazy { findViewById<TabAnimatedActionButton>(R.id.payButton) }
 
@@ -53,6 +54,8 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         - Parameter custom language json: Please pass the tap checkout theme object with the names of your custom theme files if needed. If not set, the normal and default TAP theme will be used
          */
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
+        settingsManager = SettingsManager
+
 
 
         /** Configures the theme manager by setting the provided custom theme file names
@@ -136,8 +139,6 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
 
         // Using static CustomerBuilder method available inside TAP TapCustomer Class you can populate TAP TapCustomer object and pass it to SDK
-
-        // Using static CustomerBuilder method available inside TAP TapCustomer Class you can populate TAP TapCustomer object and pass it to SDK
         sdkSession.setCustomer(setCustomer()) //** Required **
 
 
@@ -155,10 +156,12 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
         // Set Taxes array list
         sdkSession.setTaxes(ArrayList()) // ** Optional ** you can pass empty array list
+      //  sdkSession.setTaxes(settingsManager?.getTaxes()) // ** Optional ** you can pass empty array list
 
 
         // Set Shipping array list
         sdkSession.setShipping(ArrayList()) // ** Optional ** you can pass empty array list
+      //  sdkSession.setShipping(settingsManager?.getShippingList()) // ** Optional ** you can pass empty array list
 
         // Post URL
         sdkSession.setPostURL("") // ** Optional **
@@ -195,7 +198,6 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         ) // ** Optional ** you can pass Receipt object or null
 
 
-        // Set Authorize Action
 
         // Set Authorize Action
         sdkSession.setAuthorizeAction(null) // ** Optional ** you can pass AuthorizeAction object or null
@@ -209,11 +211,16 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
 
          sdkSession.setCardType(CardType.ALL) // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
 
-          sdkSession.setTransactionMode(TransactionMode.PURCHASE)
+     /*   settingsManager?.getTransactionsMode("key_sdk_transaction_mode")?.let {
+            sdkSession.setTransactionMode(
+                it
+            )
+        }*/
+        sdkSession.setTransactionMode(TransactionMode.PURCHASE)
 
          sdkSession.setDefaultCardHolderName("TEST TAP"); // ** Optional ** you can pass default CardHolderName of the user .So you don't need to type it.
          sdkSession.isUserAllowedToEnableCardHolderName(false); // ** Optional ** you can enable/ disable  default CardHolderName .
-
+            settingsManager?.setPref(this)
     }
 
     fun openBottomSheet(view: View) {
@@ -534,7 +541,12 @@ class MainActivity : AppCompatActivity() , SessionDelegate{
         payButton.visibility =View.VISIBLE
     }
 
-
+   override fun onResume() {
+        super.onResume()
+        if (settingsManager == null) {
+            settingsManager?.setPref(this)
+        }
+    }
 
 }
 

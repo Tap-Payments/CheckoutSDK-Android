@@ -100,15 +100,15 @@ class CardRepository : APIRequestCallback {
         this.viewModel = viewModel
 
         val requestBody = PaymentOptionsRequest(
-            TransactionMode.PURCHASE,
+            PaymentDataSource.getTransactionMode(),
             PaymentDataSource.getAmount(),
             PaymentDataSource.getItems(),
             PaymentDataSource.getShipping(),
-            null,
+            PaymentDataSource.getTaxes(),
             PaymentDataSource.getCurrency()?.isoCode,
             PaymentDataSource.getCustomer()?.identifier,
-            null,
-            "ALL"
+            PaymentDataSource.getMerchant()?.id,
+            PaymentDataSource.getPaymentDataType().toString()
         )
         val jsonString = Gson().toJson(requestBody)
         NetworkController.getInstance().processRequest(

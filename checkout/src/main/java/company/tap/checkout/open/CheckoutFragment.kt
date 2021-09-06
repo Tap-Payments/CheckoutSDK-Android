@@ -76,7 +76,10 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
         if (view?.parent != null) {
             (view?.parent as ViewGroup).removeView(view)
         }
-       resetTabAnimatedButton()
+        if(!this.isRemoving){
+            resetTabAnimatedButton()
+
+        }
 
         super.onDestroyView()
     }
@@ -98,7 +101,7 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
         val cardViewModel: CardViewModel by viewModels()
         this._viewModel = viewModel
         _Context?.let { cardViewModel.getContext(it) }
-        backgroundColor = (Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.clear")))
+      //  backgroundColor = (Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.clear")))
 
 
         val checkoutLayout: LinearLayout? = view.findViewById(R.id.fragment_all)
