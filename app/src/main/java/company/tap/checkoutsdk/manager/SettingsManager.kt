@@ -345,7 +345,7 @@ object SettingsManager {
      */
     @SuppressLint("StaticFieldLeak")
     fun getString(key: String?, defaultValue: String?): String? {
-        return pref!!.getString(key, defaultValue)
+        return pref?.getString(key, defaultValue)
     }
 
     fun getInt(key: String?, defaultValue: Int): Int? {

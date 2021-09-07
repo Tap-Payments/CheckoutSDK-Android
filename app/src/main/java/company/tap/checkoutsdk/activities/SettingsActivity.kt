@@ -25,9 +25,6 @@ class SettingsActivity : AppCompatActivity() {
                 .commit()
         }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.customView?.setOnClickListener {
-            onBackPressed()
-        }
 
     }
 
