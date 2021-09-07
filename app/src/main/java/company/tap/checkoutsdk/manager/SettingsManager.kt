@@ -277,7 +277,6 @@ object SettingsManager {
      */
     fun getTransactionsMode(key: String): TransactionMode {
         val trx_mode = pref?.getString(key, TransactionMode.PURCHASE.name)
-        println("trx_mode value" + trx_mode)
         if (trx_mode.equals(
                 TransactionMode.PURCHASE.name,
                 ignoreCase = true
