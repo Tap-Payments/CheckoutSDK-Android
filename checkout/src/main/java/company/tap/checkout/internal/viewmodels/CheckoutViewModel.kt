@@ -1,7 +1,6 @@
 package company.tap.checkout.internal.viewmodels
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -119,7 +118,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private lateinit var itemsViewHolder: ItemsViewHolder
     private lateinit var cardViewHolder: CardViewHolder
     private lateinit var asynchronousPaymentViewHolder: AsynchronousPaymentViewHolder
-    private  var tabAnimatedActionButtonViewHolder11: TabAnimatedActionButtonViewHolder11?=null
+    private  var tabAnimatedActionButtonViewHolder: TabAnimatedActionButtonViewHolder?=null
     private lateinit var bottomSheetDialog: BottomSheetDialog
     private lateinit var fragmentManager: FragmentManager
     @SuppressLint("StaticFieldLeak")
@@ -308,7 +307,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     fun initViewHolders() {
         businessViewHolder = BusinessViewHolder(context)
         amountViewHolder = AmountViewHolder(context, this)
-        tabAnimatedActionButtonViewHolder11 = TabAnimatedActionButtonViewHolder11(context)
+        tabAnimatedActionButtonViewHolder = TabAnimatedActionButtonViewHolder(context)
         cardViewHolder = CardViewHolder(context, this)
         goPaySavedCardHolder = GoPaySavedCardHolder(context, this, this)
         saveCardSwitchHolder = SwitchViewHolder(context)
@@ -762,7 +761,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         saveCardSwitchHolder?.view?.visibility = View.GONE
         webFrameLayout.visibility =View.VISIBLE
        removeViews(saveCardSwitchHolder)
-       // tabAnimatedActionButtonViewHolder11?.view?.actionButton?.visibility = View.INVISIBLE
+       // tabAnimatedActionButtonViewHolder?.view?.actionButton?.visibility = View.INVISIBLE
     }
 
     override fun displaySaveCardOptions() {
@@ -799,7 +798,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             this.paymentOptionsResponse = paymentOptionsResponse
         }
         if (::businessViewHolder.isInitialized && PaymentDataSource.getTransactionMode() != TransactionMode.TOKENIZE_CARD) {
-            businessViewHolder.setDatafromAPI(
+            businessViewHolder.setDataFromAPI(
                 sdkSettings?.data?.merchant?.logo,
                 sdkSettings?.data?.merchant?.name
             )
@@ -826,7 +825,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 }
 
             }
-            amountViewHolder.setDatafromAPI(
+            amountViewHolder.setDataFromAPI(
                 currentAmount,
                 currentCurrency,
                 PaymentDataSource.getItems()?.size.toString()
@@ -842,7 +841,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         if (::itemsViewHolder.isInitialized) {
             paymentOptionsResponse?.supportedCurrencies?.let {
-                itemsViewHolder.setDatafromAPI(
+                itemsViewHolder.setDataFromAPI(
                     it,
                     PaymentDataSource.getItems()
                 )
@@ -1124,7 +1123,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 paymentInputViewHolder,
                 saveCardSwitchHolder
             )
-            businessViewHolder.setDatafromAPI(
+            businessViewHolder.setDataFromAPI(
                 selectedPaymentOption.image,
                 selectedPaymentOption.brand?.name
             )
@@ -1271,7 +1270,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             amountViewHolder,
             cardViewHolder,
             paymentInputViewHolder,
-            tabAnimatedActionButtonViewHolder11
+            tabAnimatedActionButtonViewHolder
         )
 
 
@@ -1297,7 +1296,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             amountViewHolder,
             cardViewHolder,
             paymentInputViewHolder,
-            tabAnimatedActionButtonViewHolder11
+            tabAnimatedActionButtonViewHolder
         )
 
 
@@ -1728,7 +1727,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 saveCardSwitchHolder,
                 goPayViewsHolder,
                 otpViewHolder,
-                tabAnimatedActionButtonViewHolder11
+                tabAnimatedActionButtonViewHolder
             )
     }
 
@@ -2133,7 +2132,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
     fun closeAsynchView(){
         removeViews(businessViewHolder, asynchronousPaymentViewHolder)
-        businessViewHolder.setDatafromAPI(
+        businessViewHolder.setDataFromAPI(
             PaymentDataSource.getSDKSettings()?.data?.merchant?.logo,
             PaymentDataSource.getSDKSettings()?.data?.merchant?.name
         )

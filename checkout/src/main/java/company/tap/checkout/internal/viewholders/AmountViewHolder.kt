@@ -113,12 +113,11 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
 
     /**
      * Sets data from API through LayoutManager
-     * @param selectedCurrencyApi represents the currency set by the Merchant.
      * @param transactionCurrencyApi represents the currency which by default.
      * @param itemCountApi represents the itemsCount for the Merchant.
      * @param originalAmountApi represents the default amount from API.
      * */
-    fun setDatafromAPI(originalAmountApi:String,transactionCurrencyApi :String, itemCountApi:String){
+    fun setDataFromAPI(originalAmountApi:String,transactionCurrencyApi :String, itemCountApi:String){
         itemCountt  = itemCountApi
         originalAmount =CurrencyFormatter.currencyFormat(originalAmountApi)
         transactionCurrency= transactionCurrencyApi

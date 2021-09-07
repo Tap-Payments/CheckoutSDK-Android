@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.action_button_animation.view.*
 Copyright (c) 2020    Tap Payments.
 All rights reserved.
  **/
-class TabAnimatedActionButtonViewHolder11(context: Context) : TapBaseViewHolder {
+class TabAnimatedActionButtonViewHolder(context: Context) : TapBaseViewHolder {
 
     override val view: View =
         LayoutInflater.from(context).inflate(R.layout.action_button_animation, null)

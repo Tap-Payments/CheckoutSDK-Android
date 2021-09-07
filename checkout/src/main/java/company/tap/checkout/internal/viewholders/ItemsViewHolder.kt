@@ -99,7 +99,7 @@ class ItemsViewHolder(private val context: Context, private val onCurrencyChange
      * @param supportedCurrencyApi represents the supported currency for the Merchant.
      * @param supportItemListApi represents the supported currency for the Merchant.
      * */
-    fun setDatafromAPI(
+    fun setDataFromAPI(
         supportedCurrencyApi: ArrayList<SupportedCurrencies>,
         supportItemListApi: List<PaymentItem>?
     ) {

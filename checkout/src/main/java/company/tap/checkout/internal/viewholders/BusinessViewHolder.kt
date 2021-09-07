@@ -38,7 +38,7 @@ class BusinessViewHolder(private val context: Context) : TapBaseViewHolder {
 
     override fun bindViewComponents() {
 
-        if(PaymentDataSource?.getTransactionMode() == TransactionMode.SAVE_CARD || PaymentDataSource.getTransactionMode()==TransactionMode.TOKENIZE_CARD){
+        if(PaymentDataSource.getTransactionMode() == TransactionMode.SAVE_CARD || PaymentDataSource.getTransactionMode()==TransactionMode.TOKENIZE_CARD){
 
             view.headerView.setHeaderDataSource(HeaderDataSource("Enter Card Details",null,null))
             view.headerView.businessIcon.visibility= View.GONE
@@ -70,7 +70,7 @@ class BusinessViewHolder(private val context: Context) : TapBaseViewHolder {
      * @param merchantLogoApi represents the merchant Logo from the Url
      * @param merchantNameApi represents the merchant business name
      * */
-    fun setDatafromAPI(merchantLogoApi: String?, merchantNameApi: String?) {
+    fun setDataFromAPI(merchantLogoApi: String?, merchantNameApi: String?) {
         merchantLogo = merchantLogoApi
         merchantName = merchantNameApi
         bindViewComponents()
