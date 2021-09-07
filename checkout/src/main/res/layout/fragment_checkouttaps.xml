@@ -64,13 +64,7 @@
         android:layout_width="match_parent"
         android:visibility="gone"
         android:layout_height="match_parent" />
-    <LinearLayout
-        android:id="@+id/fragment_all"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/layout_bg"
-        android:visibility="visible"
-        android:orientation="vertical" />
+
 
     <company.tap.tapuilibrary.uikit.atoms.TapTextView
         android:layout_width="40dp"
