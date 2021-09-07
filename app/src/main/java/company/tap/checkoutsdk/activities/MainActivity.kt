@@ -551,12 +551,12 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
     }
 
     override fun userEnabledSaveCardOption(saveCardEnabled: Boolean) {
-        println("userEnabledSaveCardOption>>>>>" + saveCardEnabled)
+        println("userEnabledSaveCardOption>>>>>$saveCardEnabled")
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun getStatusSDK(status: ChargeStatus?) {
-        println("status in MainActv>>$status")
+        println("status in MainActivity>>$status")
         resetBottomSheetForButton(supportFragmentManager, this, payButton, this, status)
         payButton.visibility = View.VISIBLE
     }

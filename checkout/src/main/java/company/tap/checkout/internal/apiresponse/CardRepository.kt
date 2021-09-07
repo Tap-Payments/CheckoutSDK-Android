@@ -756,6 +756,12 @@ class CardRepository : APIRequestCallback {
             if (it.throwable != null) {
                 resultObservable.onError(it.throwable)
                 sdkSession.getListener()?.sdkError(errorDetails)
+                viewModel.handleSuccessFailureResponseButton(
+                    "failure",
+                    null,
+                   null
+
+                )
             }else
                 try {
                     // resultObservable.onError(Throwable(it.errorMessage))
