@@ -41,8 +41,13 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
         val bundle = intent.extras
 
         if (bundle != null) {
-            hideAllViews = bundle["hideAllViews"] as Boolean? == true
+            if(bundle["hideAllViews"]!=null){
+                hideAllViews = bundle["hideAllViews"] as Boolean? == true
+
+            }
+            if( bundle["status"]!=null){
            chargeStatus = bundle["status"] as ChargeStatus
+            }
         }
         tapCheckoutFragment.hideAllView =hideAllViews
         tapCheckoutFragment.checkOutActivity = this
@@ -75,7 +80,7 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
     }
 
     override fun paymentSucceed(charge: Charge) {
-     //  tapCheckoutFragment.dialog?.dismiss()
+        //tapCheckoutFragment.dialog?.dismiss()
         tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
         this.finish()
     }
