@@ -406,10 +406,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
             println("Payment Succeeded : expiry period :" + charge.expiry?.period)
         }
         // Toast.makeText(this,"paymentSucceed"+charge.id, Toast.LENGTH_SHORT).show()
-        // modalBottomSheet.dismiss()
-        // payButton?.changeButtonState(ActionButtonState.SUCCESS)
-        //  modalBottomSheet.dialog?.dismiss()
-        //  payButton?.changeButtonState(ActionButtonState.IDLE)
+
     }
 
     override fun paymentFailed(charge: Charge?) {
@@ -417,8 +414,6 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         println("Payment Failed : " + charge?.description)
         println("Payment Failed : " + charge?.response?.message)
         //  Toast.makeText(this,"paymentFailed"+charge?.response?.message, Toast.LENGTH_SHORT).show()
-        //  modalBottomSheet.dismiss()
-        //   modalBottomSheet.dialog?.dismiss()
 
 
     }
@@ -557,9 +552,6 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun getStatusSDK(status: ChargeStatus?) {
-        println("status in MainActivity>>$status")
-        resetBottomSheetForButton(supportFragmentManager, this, payButton, this, status)
-        payButton.visibility = View.VISIBLE
     }
 
     override fun onResume() {

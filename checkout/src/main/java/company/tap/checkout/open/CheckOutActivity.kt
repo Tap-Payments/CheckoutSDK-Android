@@ -2,10 +2,10 @@ package company.tap.checkout.open
 
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
-import android.view.Window
+import android.os.Handler
+import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import company.tap.checkout.R
@@ -13,7 +13,7 @@ import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.models.Authorize
 import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.api.models.Token
-import company.tap.checkout.internal.viewmodels.CheckoutViewModel
+import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
 import company.tap.checkout.open.interfaces.SessionDelegate
 import company.tap.checkout.open.models.CardsList
@@ -29,14 +29,14 @@ import io.reactivex.disposables.Disposables
 class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
     private val tapCheckoutFragment = CheckoutFragment()
     var hideAllViews:Boolean = false
-   lateinit var chargeStatus:ChargeStatus
-
+    lateinit var chargeStatus:ChargeStatus
+    var sdkSession: SDKSession = SDKSession
     private lateinit var tapNfcCardReader: TapNfcCardReader
     private var cardReadDisposable: Disposable = Disposables.empty()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-       setContentView(R.layout.activity_check_out)
+        setContentView(R.layout.activity_check_out)
         val intent = intent
         val bundle = intent.extras
 
@@ -46,13 +46,14 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
 
             }
             if( bundle["status"]!=null){
-           chargeStatus = bundle["status"] as ChargeStatus
+                chargeStatus = bundle["status"] as ChargeStatus
             }
         }
+        sdkSession.addSessionDelegate(this)
         tapCheckoutFragment.hideAllView =hideAllViews
         tapCheckoutFragment.checkOutActivity = this
         if(::chargeStatus.isInitialized)
-        tapCheckoutFragment.status =chargeStatus
+            tapCheckoutFragment.status =chargeStatus
         tapCheckoutFragment.show(
             supportFragmentManager.beginTransaction().addToBackStack(null),
             "CheckOutFragment"
@@ -80,31 +81,52 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
     }
 
     override fun paymentSucceed(charge: Charge) {
-        //tapCheckoutFragment.dialog?.dismiss()
         tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
+        Handler().postDelayed({
+            tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+        }, 1000)
+
         this.finish()
     }
 
     override fun paymentFailed(charge: Charge?) {
         println("paymentFailed called here")
         tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
+        Handler().postDelayed({
+            tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+        }, 1000)
+
         this.finish()
 
     }
 
     override fun authorizationSucceed(authorize: Authorize) {
         tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
+        Handler().postDelayed({
+            tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+        }, 1000)
+
         this.finish()
 
     }
 
     override fun authorizationFailed(authorize: Authorize?) {
         tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
+        Handler().postDelayed({
+            tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+        }, 1000)
+
+        this.finish()
 
     }
 
     override fun cardSaved(charge: Charge) {
         tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
+        Handler().postDelayed({
+            tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+        }, 1000)
+
+        this.finish()
 
     }
 
@@ -120,11 +142,21 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
 
     override fun savedCardsList(cardsList: CardsList) {
         tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
+        Handler().postDelayed({
+            tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+        }, 1000)
+
+        this.finish()
 
     }
 
     override fun sdkError(goSellError: GoSellError?) {
         tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
+        Handler().postDelayed({
+            tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+        }, 1000)
+
+        this.finish()
 
     }
 
@@ -142,36 +174,61 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
 
     override fun invalidCardDetails() {
         tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
+        Handler().postDelayed({
+            tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+        }, 1000)
+
+        this.finish()
 
 
     }
 
     override fun backendUnknownError(message: String?) {
         tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
+        Handler().postDelayed({
+            tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+        }, 1000)
+
+        this.finish()
 
     }
 
     override fun invalidTransactionMode() {
         tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
+        Handler().postDelayed({
+            tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+        }, 1000)
+
+        this.finish()
 
     }
 
     override fun invalidCustomerID() {
         tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
+        Handler().postDelayed({
+            tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+        }, 1000)
+
+        this.finish()
 
     }
 
     override fun userEnabledSaveCardOption(saveCardEnabled: Boolean) {
         tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
+        Handler().postDelayed({
+            tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+        }, 1000)
 
+        this.finish()
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun getStatusSDK(status: ChargeStatus?) {
-       /* tabAnimatedActionButton?.let {
+        tabAnimatedActionButton?.let {
             SDKSession.resetBottomSheetForButton(supportFragmentManager, this,
                 it, this, status)
         }
-        tabAnimatedActionButton?.visibility = View.VISIBLE*/
+        tabAnimatedActionButton?.visibility = View.VISIBLE
     }
 
     override fun onBackPressed() {
@@ -179,13 +236,13 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
         finish()
     }
 
- override fun onPause() {
- super.onPause()
-     if(tapCheckoutFragment.isNfcOpened){
-         cardReadDisposable.dispose()
-         tapNfcCardReader.disableDispatch()
-     }else
-    finish()
+    override fun onPause() {
+        super.onPause()
+        if(tapCheckoutFragment.isNfcOpened){
+            cardReadDisposable.dispose()
+            tapNfcCardReader.disableDispatch()
+        }else
+            finish()
 
     }
 
@@ -205,8 +262,6 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
         }
 
     }
-
-
 
 
 

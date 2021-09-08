@@ -1046,6 +1046,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         status: ChargeStatus?
     ) {
         SDKSession.getListener()?.getStatusSDK(status)
+
         /***
          * This function is  working fine as expected in case when 3ds is false
          * i.e.  sdkSession.isRequires3DSecure(false) as no loading of url occurs direct response

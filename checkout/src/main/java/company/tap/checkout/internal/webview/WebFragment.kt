@@ -110,7 +110,7 @@ class WebFragment(private val webViewContract: WebViewContract?,private val card
     @SuppressLint("SetJavaScriptEnabled")
     private fun setUpWebView(mUrl: String) {
         web_view.settings.javaScriptEnabled = true
-        web_view.webChromeClient = WebChromeClient();
+        web_view.webChromeClient = WebChromeClient()
         if (Build.VERSION.SDK_INT >= 21) {
             web_view.settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
         }
