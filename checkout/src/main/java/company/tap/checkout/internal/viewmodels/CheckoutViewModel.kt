@@ -1049,7 +1049,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         authenticate: Authenticate?,
         status: ChargeStatus?
     ) {
-        SDKSession.getListener()?.getStatusSDK(status)
+        if(status == null && response == "tokenized"){
+            SDKSession.getListener()?.getStatusSDK(ChargeStatus.AUTHORIZED)
+        }else{
+            SDKSession.getListener()?.getStatusSDK(status)
+
+        }
 
         /***
          * This function is  working fine as expected in case when 3ds is false

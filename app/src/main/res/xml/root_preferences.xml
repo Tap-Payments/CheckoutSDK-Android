@@ -25,7 +25,7 @@
             android:title="Operation Mode" />
 
         <ListPreference
-            android:defaultValue="0"
+            android:defaultValue="PURCHASE"
             android:dialogTitle="Transaction Mode"
             android:entries="@array/pref_array_sdk_transactions_mode_entries"
             android:entryValues="@array/pref_array_sdk_transaction_mode_values"
@@ -55,13 +55,13 @@
         </Preference>
 
         <EditTextPreference
-            android:defaultValue="1"
+            android:defaultValue="1.00"
             android:inputType="numberDecimal"
             android:key="key_amount_name"
             android:summary="key_amount_value"
             android:title="Enter the amount" />
         <ListPreference
-            android:defaultValue="0"
+            android:defaultValue="ALL"
             android:dialogTitle="Select PaymentType"
             android:entries="@array/pref_array_sdk_paymentTypes"
             android:entryValues="@array/pref_array_sdk_paymentTypes_values"
@@ -70,7 +70,7 @@
             android:title="Payment Type" />
 
         <ListPreference
-            android:defaultValue="0"
+            android:defaultValue="ALL"
             android:dialogTitle="Select Card Type"
             android:entries="@array/pref_array_sdk_cardTypes"
             android:entryValues="@array/pref_array_sdk_cardType_values"

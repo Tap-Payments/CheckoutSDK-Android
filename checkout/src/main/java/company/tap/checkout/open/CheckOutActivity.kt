@@ -132,11 +132,21 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
 
     override fun cardSavingFailed(charge: Charge) {
         tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
+        Handler().postDelayed({
+            tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+        }, 1000)
+
+        this.finish()
 
     }
 
     override fun cardTokenizedSuccessfully(token: Token) {
         tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
+        Handler().postDelayed({
+            tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+        }, 1000)
+
+        this.finish()
 
     }
 

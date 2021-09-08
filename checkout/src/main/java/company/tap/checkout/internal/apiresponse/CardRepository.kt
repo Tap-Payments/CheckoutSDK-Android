@@ -111,6 +111,8 @@ class CardRepository : APIRequestCallback {
             PaymentDataSource.getPaymentDataType().toString(),
             PaymentDataSource.getTopup()
         )
+        println("getTransactionMode"+PaymentDataSource.getTransactionMode())
+
         val jsonString = Gson().toJson(requestBody)
         NetworkController.getInstance().processRequest(
             TapMethodType.POST, ApiService.PAYMENT_TYPES, jsonString, this, PAYMENT_OPTIONS_CODE
@@ -436,7 +438,7 @@ class CardRepository : APIRequestCallback {
                     if(authorizeActionResponse.transaction.url != null){
                         authorizeActionResponse.transaction?.url?.let { it1 -> viewModel.displayRedirect(
                             it1,
-                            chargeResponse
+                            authorizeActionResponse
                         ) }
                     }else handleAuthorizeResponse(authorizeActionResponse)
                 }else  handleAuthorizeResponse(authorizeActionResponse)
@@ -457,7 +459,7 @@ class CardRepository : APIRequestCallback {
                 if(saveCardResponse.status?.name == ChargeStatus.INITIATED.name){
                     saveCardResponse.transaction?.url?.let { it1 -> viewModel.displayRedirect(
                         it1,
-                        chargeResponse
+                        saveCardResponse
                     ) }
 
                 }else {
@@ -472,13 +474,16 @@ class CardRepository : APIRequestCallback {
                 saveCardResponse = Gson().fromJson(it, SaveCard::class.java)
                 println("saveCardResponse value is>>>>" + saveCardResponse.status.name)
                 sdkSession.getListener()?.cardSaved(saveCardResponse)
+                handleSaveCardResponse(saveCardResponse)
+
             }
         }
         else if(requestCode == RETRIEVE_AUTHORIZE_CODE){
             response?.body().let {
                 authorizeActionResponse = Gson().fromJson(it, Authorize::class.java)
-                println("authorizeActionResponse value is>>>>" + authorizeActionResponse.status.name)
+                println("authorizeActionResponse ret value is>>>>" + authorizeActionResponse.status.name)
                 sdkSession.getListener()?.authorizationSucceed(authorizeActionResponse)
+                handleAuthorizeResponse(authorizeActionResponse)
             }
         }
         else if(requestCode == CREATE_SAVE_EXISTING_CODE){
