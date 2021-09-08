@@ -138,12 +138,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private lateinit var otpViewHolder: OTPViewHolder
     @SuppressLint("StaticFieldLeak")
     private lateinit var webFrameLayout: FrameLayout
+    @SuppressLint("StaticFieldLeak")
     private lateinit var frameLayout: FrameLayout
+    @SuppressLint("StaticFieldLeak")
     private lateinit var inLineCardLayout: FrameLayout
+    @SuppressLint("StaticFieldLeak")
     private lateinit var sdkLayout: LinearLayout
     private lateinit var checkoutFragment: CheckoutFragment
     private lateinit var itemList: List<PaymentItem>
     private lateinit var selectedPaymentOption: PaymentOption
+    @SuppressLint("StaticFieldLeak")
     private lateinit var context: Context
     private lateinit var cardViewModel: CardViewModel
     private var otpTypeString: PaymentTypeEnum = PaymentTypeEnum.SAVEDCARD

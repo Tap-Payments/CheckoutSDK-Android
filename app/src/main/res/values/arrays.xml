@@ -37,16 +37,16 @@
 
 
     <string-array name="pref_array_sdk_transactions_currency_entries">
-        <item>aed</item>
-        <item>bhd</item>
-        <item>egp</item>
-        <item>eur</item>
-        <item>gbp</item>
-        <item>kwd</item>
-        <item>omr</item>
-        <item>qr</item>
-        <item>sr</item>
-        <item>usd</item>
+        <item>AED</item>
+        <item>BHD</item>
+        <item>EGP</item>
+        <item>EUR</item>
+        <item>GBP</item>
+        <item>KWD</item>
+        <item>OMR</item>
+        <item>QR</item>
+        <item>SR</item>
+        <item>USD</item>
     </string-array>
 
     <string-array name="pref_array_sdk_transaction_currency_values">

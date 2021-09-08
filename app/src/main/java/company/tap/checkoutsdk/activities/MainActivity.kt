@@ -142,13 +142,12 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
 
         // Set Total Amount. The Total amount will be recalculated according to provided Taxes and Shipping
-        sdkSession.setAmount(BigDecimal(22)) //** Required **
-/*
-  settingsManager?.getString("key_amount_name","1")?.let { BigDecimal(it) }?.let {
+
+        settingsManager?.getString("key_amount_name","1")?.let { BigDecimal(it) }?.let {
             sdkSession.setAmount(
                 it
             )
-        }*/ //** Required **
+        }//** Required **
 
 
         // Set Payment Items array list

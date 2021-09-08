@@ -308,7 +308,9 @@ object PaymentDataSource :PaymentDataSource {
     }
 
     override fun getAmount(): BigDecimal? {
-       return amount
+        if(amount==null){
+            return BigDecimal.ONE
+        }else return amount
     }
 
     override fun getItems(): ArrayList<PaymentItem>? {
