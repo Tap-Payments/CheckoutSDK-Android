@@ -97,7 +97,7 @@ class PaymentInputViewHolder(
     private var cardHolderName: String? = null
     private val BIN_NUMBER_LENGTH = 6
     private lateinit var cardSchema: String
-
+    var schema: CardScheme?=null
 
     init {
         tabLayout.setTabLayoutInterface(this)
@@ -355,6 +355,7 @@ class PaymentInputViewHolder(
                 )
                 val binLookupResponse: BINLookupResponse? =
                     PaymentDataSource.getBinLookupResponse()
+                println("binLookupResponse"+binLookupResponse)
                 if (PaymentDataSource.getCardType() != null && PaymentDataSource.getCardType() == CardType.ALL) {
                     setTabLayoutBasedOnApiResponse(binLookupResponse,card)
                 } else {
@@ -391,6 +392,8 @@ class PaymentInputViewHolder(
         } else {
             //we will send scheme
                 schema = binLookupResponse?.scheme
+
+
             binLookupResponse?.scheme?.cardBrand?.let { it1 -> tabLayout.selectTab(it1, false) }
 //            tabLayout.setUnselectedAlphaLevel(0.5f)
 
@@ -398,7 +401,7 @@ class PaymentInputViewHolder(
        // PaymentDataSource.setBinLookupResponse(null)
     }
 
-     var schema: CardScheme?=null
+
 
     /*
     This function for calling api to validate card number after 6 digit

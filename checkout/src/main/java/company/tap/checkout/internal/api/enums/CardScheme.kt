@@ -71,7 +71,13 @@ enum class CardScheme {
      * Oman net card scheme.
      */
     @SerializedName("OMAN_NET")
-    OMAN_NET;
+    OMAN_NET,
+
+    /**
+     * Oman net card scheme.
+     */
+    @SerializedName("MEEZA")
+    MEEZA;
 
     /**
      * Gets card brand.
@@ -90,6 +96,7 @@ enum class CardScheme {
             FAWRY -> CardBrand.fawry
             NAPS -> CardBrand.naps
             OMAN_NET -> CardBrand.omanNet
+            MEEZA -> CardBrand.meeza
             else -> CardBrand.unknown
         }
 }
