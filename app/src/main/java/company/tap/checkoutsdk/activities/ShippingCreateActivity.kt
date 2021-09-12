@@ -1,5 +1,6 @@
 package company.tap.checkoutsdk.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -54,8 +55,8 @@ class ShippingCreateActivity : AppCompatActivity() {
     }
 
     fun save(view: View?) {
-       /* if (Validator.isValidName(Objects.requireNonNull(shippingName!!.text).toString().trim { it <= ' ' })
-        ) {*/
+        if (Validator.isValidName(Objects.requireNonNull(shippingName!!.text).toString().trim { it <= ' ' })
+        ) {
             if (operation.equals(
                     OPERATION_ADD,
                     ignoreCase = true
@@ -79,10 +80,11 @@ class ShippingCreateActivity : AppCompatActivity() {
                     ShippingViewModel(
                         shippingName?.text.toString().trim { it <= ' ' },
                         shippingDescription?.text.toString().trim { it <= ' ' },
-                        shippingAmount?.text.toString().trim { it <= ' ' }),this
+                        shippingAmount?.text.toString().trim { it <= ' ' }), this
                 )
                 back(null)
             }
+        }
         /*} else {
            *//* if (!NAME_IS_VALID) name_l!!.error =
                 "getString(R.string.name_invalid_msg)" else name_l?.error = null
@@ -105,5 +107,11 @@ class ShippingCreateActivity : AppCompatActivity() {
 
     fun back(view: View?) {
         onBackPressed()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        startActivity(Intent(this, ShippingsActivity::class.java))
+        finish()
     }
 }
