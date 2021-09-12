@@ -16,7 +16,8 @@ import company.tap.checkout.internal.api.models.Quantity
 import company.tap.checkout.open.enums.SdkMode
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.models.*
-import company.tap.checkoutsdk.CustomerViewModel
+import company.tap.checkoutsdk.viewmodels.CustomerViewModel
+import company.tap.checkoutsdk.viewmodels.ShippingViewModel
 import java.math.BigDecimal
 import java.util.*
 
@@ -61,6 +62,25 @@ object SettingsManager {
         writeCustomersToPreferences(data, preferences)
     }
 
+
+    fun saveShipping(
+        name: String,
+        description: String,
+        amount: String,
+        ctx: Context
+    ) {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(ctx)
+        val gson = Gson()
+        val response = preferences.getString("shipping", "")
+        var shippingList: ArrayList<ShippingViewModel?>? = gson.fromJson(
+            response,
+            object : TypeToken<List<ShippingViewModel?>?>() {}.getType()
+        )
+        if (shippingList == null) shippingList = ArrayList<ShippingViewModel?>()
+        shippingList.add(ShippingViewModel(name, description, amount))
+        val data: String = gson.toJson(shippingList)
+        writeShippingToPreferences(data, preferences)
+    }
     fun editCustomer(
         oldCustomer: CustomerViewModel?,
         newCustomer: CustomerViewModel,
@@ -109,9 +129,56 @@ object SettingsManager {
         }
     }
 
+
+    fun editShipping(
+        oldShipping: ShippingViewModel?,
+        newShipping: ShippingViewModel,
+        ctx: Context?
+    ) {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(ctx)
+        val gson = Gson()
+        val response = preferences.getString("shipping", "")
+        val shipingList: ArrayList<ShippingViewModel> = gson.fromJson(
+            response,
+            object : TypeToken<List<CustomerViewModel?>?>() {}.type
+        )
+        if (shipingList != null) {
+
+            shipingList.clear()
+            newShipping.getshippingAmount()?.let {
+                ShippingViewModel(
+                    newShipping.getshippingName(),
+                    newShipping.getshippingDecsription()!!,
+                    it)
+            }?.let {
+                shipingList.add(
+                    it
+                )
+            }
+            val data: String = gson.toJson(shipingList)
+            writeShippingToPreferences(data, preferences)
+        } else {
+            if (ctx != null) {
+                saveShipping(
+                        newShipping.getshippingName(),
+                        newShipping.getshippingDecsription()!!,
+                        newShipping.getshippingAmount()!!, ctx
+                    )
+
+            }
+        }
+    }
+
+
     private fun writeCustomersToPreferences(data: String, preferences: SharedPreferences) {
         val editor = preferences.edit()
         editor.putString("customer", data)
+        editor.commit()
+    }
+
+    private fun writeShippingToPreferences(data: String, preferences: SharedPreferences) {
+        val editor = preferences.edit()
+        editor.putString("shipping", data)
         editor.commit()
     }
 
@@ -121,9 +188,20 @@ object SettingsManager {
         val response = preferences.getString("customer", "")
         val customersList: ArrayList<CustomerViewModel>? = gson.fromJson(
             response,
-            object : TypeToken<List<CustomerViewModel?>?>() {}.getType()
+            object : TypeToken<List<CustomerViewModel?>?>() {}.type
         )
         return customersList ?: ArrayList<CustomerViewModel>()
+    }
+
+    fun getAddedShippings(ctx: Context?): List<ShippingViewModel> {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(ctx)
+        val gson = Gson()
+        val response = preferences.getString("shipping", "")
+        val shippingList: ArrayList<ShippingViewModel>? = gson.fromJson(
+            response,
+            object : TypeToken<List<ShippingViewModel?>?>() {}.type
+        )
+        return shippingList ?: ArrayList<ShippingViewModel>()
     }
 
 

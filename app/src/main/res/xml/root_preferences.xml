@@ -50,8 +50,8 @@
         <Preference android:title="Select Customer">
             <intent
                 android:action="SETTING_START_CUSTOMER_ACTIVITY"
-                android:targetClass="company.tap.checkoutdemo.activity.CustomerActivity"
-                android:targetPackage="company.tap.checkoutdemo" />
+                android:targetClass="company.tap.checkoutsdk.activities.CustomerActivity"
+                android:targetPackage="company.tap.checkoutsdk" />
         </Preference>
 
         <EditTextPreference
@@ -78,6 +78,12 @@
             android:summary="Select Card Type"
             android:title="Card Type" />
 
+        <Preference android:title="Select Shipping">
+            <intent
+                android:action="SETTING_START_SHIPING_ACTIVITY"
+                android:targetClass="company.tap.checkoutsdk.activities.ShippingsActivity"
+                android:targetPackage="company.tap.checkoutsdk" />
+        </Preference>
         <SwitchPreferenceCompat
             android:key="switch"
             android:title="Switch Preference"

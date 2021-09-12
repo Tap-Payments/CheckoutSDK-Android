@@ -124,6 +124,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
             selectedPosition = position
             notifyItemChanged(selectedPosition)
            // selectedPosition = position
+            println("position of adapter"+ adapterContentCurrencies[position].amount)
                 onCurrencyChangedActionListener.onCurrencyClicked(
                     adapterContentCurrencies[position].currency.toString(),
                     adapterContentCurrencies[position].amount)

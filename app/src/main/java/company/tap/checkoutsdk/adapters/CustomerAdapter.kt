@@ -3,6 +3,7 @@ package company.tap.checkoutsdk
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import company.tap.checkoutsdk.viewmodels.CustomerViewModel
 
 /**
  * Created by AhlaamK on 9/6/21.

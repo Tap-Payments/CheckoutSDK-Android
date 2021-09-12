@@ -1,4 +1,4 @@
-package company.tap.checkoutsdk
+package company.tap.checkoutsdk.viewmodels
 
 import java.io.Serializable
 

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activities.ShippingCreateActivity">
+
+    <include layout="@layout/crud_toolbar"/>
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_margin="8dp"
+        android:id="@+id/name_shipping_il"
+        android:hint="Enter Shipping Name"
+        app:errorEnabled="true"
+        android:textColorHint="@color/black"
+        app:hintTextAppearance="@style/TextInputLayout.Hint">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/edit_shipping_name"
+            style="@style/EditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="start"
+            android:inputType="textPersonName"
+            app:backgroundTint="@color/mercury" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_margin="8dp"
+        android:id="@+id/shipping_description_il"
+        android:hint="Enter shipping description"
+        app:errorEnabled="true"
+        android:textColorHint="@color/black"
+        app:hintTextAppearance="@style/TextInputLayout.Hint">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/edit_shipping_description"
+            style="@style/EditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="start"
+            android:inputType="textPersonName"
+            app:backgroundTint="@color/mercury" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_margin="8dp"
+        android:id="@+id/shipping_amount_il"
+        android:hint="Enter shipping amount"
+        app:errorEnabled="true"
+        android:textColorHint="@color/black"
+        app:hintTextAppearance="@style/TextInputLayout.Hint">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/edit_shipping_amount"
+            style="@style/EditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="start"
+            android:inputType="textPhonetic"
+            app:backgroundTint="@color/mercury" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+</LinearLayout>

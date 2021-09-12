@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center_vertical|center_horizontal"
-            android:text="goSell SDK Example"
+            android:text="CheckOut SDK Demo"
             android:textColor="#000000"
             android:textSize="18sp"
             android:textStyle="normal" />
