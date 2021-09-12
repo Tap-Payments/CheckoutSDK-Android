@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.AppCompatEditText
 import com.google.android.material.textfield.TextInputLayout
-import company.tap.checkoutsdk.CustomerViewModel
+import company.tap.checkoutsdk.viewmodels.CustomerViewModel
 import company.tap.checkoutsdk.R
 import company.tap.checkoutsdk.manager.SettingsManager
 import company.tap.checkoutsdk.utils.Validator
@@ -44,19 +44,7 @@ open class CustomerCreateActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_customer_create)
-        name = findViewById(R.id.customer_name)
-        middleName = findViewById(R.id.middlename)
-        lastName = findViewById(R.id.lastname)
-        email = findViewById(R.id.customer_email)
-        sdn = findViewById(R.id.sdn)
-        mobile = findViewById(R.id.customer_mobile)
-
-        name_l = findViewById(R.id.name_il)
-        middlename_l = findViewById(R.id.middlename_il)
-        lastname_l = findViewById(R.id.lastname_il)
-        email_l = findViewById(R.id.email_il)
-        mobile_l = findViewById(R.id.mobile_il)
-        sdn_l = findViewById(R.id.sdn_il)
+        bindViews()
 
         operation = intent.getStringExtra("operation")!!
 
@@ -70,6 +58,22 @@ open class CustomerCreateActivity : AppCompatActivity() {
             populateCustomerFields(customer)
         }
 
+    }
+
+    private fun bindViews() {
+        name = findViewById(R.id.customer_name)
+        middleName = findViewById(R.id.middlename)
+        lastName = findViewById(R.id.lastname)
+        email = findViewById(R.id.customer_email)
+        sdn = findViewById(R.id.sdn)
+        mobile = findViewById(R.id.customer_mobile)
+
+        name_l = findViewById(R.id.name_il)
+        middlename_l = findViewById(R.id.middlename_il)
+        lastname_l = findViewById(R.id.lastname_il)
+        email_l = findViewById(R.id.email_il)
+        mobile_l = findViewById(R.id.mobile_il)
+        sdn_l = findViewById(R.id.sdn_il)
     }
 
     private fun populateCustomerFields(customer: CustomerViewModel?) {

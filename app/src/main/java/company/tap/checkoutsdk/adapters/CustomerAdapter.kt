@@ -1,8 +1,10 @@
-package company.tap.checkoutsdk
+package company.tap.checkoutsdk.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import company.tap.checkoutsdk.viewholders.CustomerViewHolder
+import company.tap.checkoutsdk.R
 import company.tap.checkoutsdk.viewmodels.CustomerViewModel
 
 /**

@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.CustomerCreateActivity"></activity>
+        <activity android:name=".activities.ShippingsActivity" />
+        <activity android:name=".activities.ShippingCreateActivity" />
+        <activity android:name=".activities.CustomerCreateActivity" />
         <activity android:name=".activities.CustomerActivity" />
         <activity android:name=".activities.SettingsActivity" />
         <activity

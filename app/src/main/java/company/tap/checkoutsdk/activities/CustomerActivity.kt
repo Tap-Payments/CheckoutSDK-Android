@@ -8,8 +8,8 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import company.tap.checkoutsdk.CustomerAdapter
-import company.tap.checkoutsdk.CustomerViewModel
+import company.tap.checkoutsdk.adapters.CustomerAdapter
+import company.tap.checkoutsdk.viewmodels.CustomerViewModel
 import company.tap.checkoutsdk.R
 
 import company.tap.checkoutsdk.manager.SettingsManager

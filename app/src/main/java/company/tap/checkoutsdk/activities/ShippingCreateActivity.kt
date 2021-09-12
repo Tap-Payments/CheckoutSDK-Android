@@ -12,7 +12,7 @@ import company.tap.checkoutsdk.utils.Validator
 import company.tap.checkoutsdk.viewmodels.ShippingViewModel
 import java.util.*
 
-class ShippingActivity : AppCompatActivity() {
+class ShippingCreateActivity : AppCompatActivity() {
 
     private var shippingName: AppCompatEditText? = null
     private var shippingDescription: AppCompatEditText? = null
@@ -33,17 +33,29 @@ class ShippingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_shipping)
         bindViews()
 
+        operation = intent.getStringExtra("operation")!!
 
+        if (operation.equals(
+                OPERATION_EDIT,
+                ignoreCase = true
+            )
+        ) {
+            shippingViewModel = intent.getSerializableExtra("shipping") as ShippingViewModel?
+            println("shippingViewModel : " + shippingViewModel?.getshippingName())
+            populateShippingFields(shippingViewModel)
+        }
 
     }
 
+    private fun populateShippingFields(shippingViewModel: ShippingViewModel?) {
+        shippingName?.setText(shippingViewModel?.getshippingName())
+        shippingDescription?.setText(shippingViewModel?.getshippingDecsription())
+        shippingAmount?.setText(shippingViewModel?.getshippingAmount())
+    }
+
     fun save(view: View?) {
-        if (Validator.isValidName(Objects.requireNonNull(shippingName!!.text).toString().trim { it <= ' ' }) &&
-            Validator
-                .isValidEmail(Objects.requireNonNull(shippingDescription!!.text).toString().trim { it <= ' ' }) &&
-            Validator.isValidPhoneNumber(
-                Objects.requireNonNull(shippingAmount!!.text).toString().trim { it <= ' ' })
-        ) {
+       /* if (Validator.isValidName(Objects.requireNonNull(shippingName!!.text).toString().trim { it <= ' ' })
+        ) {*/
             if (operation.equals(
                     OPERATION_ADD,
                     ignoreCase = true
@@ -51,9 +63,9 @@ class ShippingActivity : AppCompatActivity() {
             ) {
                 println("inside: $operation")
                 SettingsManager.saveShipping(
-                    shippingName!!.text.toString().trim { it <= ' ' },
-                    shippingDescription!!.text.toString().trim { it <= ' ' },
-                    shippingAmount!!.text.toString().trim { it <= ' ' },
+                    shippingName?.text.toString().trim { it <= ' ' },
+                    shippingDescription?.text.toString().trim { it <= ' ' },
+                    shippingAmount?.text.toString().trim { it <= ' ' },
                     this
                 )
                 back(null)
@@ -65,20 +77,20 @@ class ShippingActivity : AppCompatActivity() {
                 SettingsManager.editShipping(
                     shippingViewModel,
                     ShippingViewModel(
-                        shippingName!!.text.toString().trim { it <= ' ' },
-                        shippingDescription!!.text.toString().trim { it <= ' ' },
-                        shippingAmount!!.text.toString().trim { it <= ' ' }),this
+                        shippingName?.text.toString().trim { it <= ' ' },
+                        shippingDescription?.text.toString().trim { it <= ' ' },
+                        shippingAmount?.text.toString().trim { it <= ' ' }),this
                 )
                 back(null)
             }
-        } else {
-           /* if (!NAME_IS_VALID) name_l!!.error =
+        /*} else {
+           *//* if (!NAME_IS_VALID) name_l!!.error =
                 "getString(R.string.name_invalid_msg)" else name_l?.error = null
             if (!EMAIL_IS_VALID) email_l!!.error =
                 "getString(R.string.email_invalid_msg)" else email_l?.error = null
             if (!MOBILE_IS_VALID) mobile_l!!.error =
-                "getString(R.string.mobile_invalid_msg)" else mobile_l?.error = null*/
-        }
+                "getString(R.string.mobile_invalid_msg)" else mobile_l?.error = null*//*
+        }*/
     }
 
     private fun bindViews() {
