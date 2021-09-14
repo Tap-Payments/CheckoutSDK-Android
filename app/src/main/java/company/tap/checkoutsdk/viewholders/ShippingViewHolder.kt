@@ -30,6 +30,8 @@ class ShippingViewHolder(itemView: View, listener: ShippingAdapter.OnClickListen
         shippingName.text = viewModel.getshippingName()
         shippingDescription.text = viewModel.getshippingDecsription()
         shippingAmount.text = viewModel.getshippingAmount()
+
+
     }
 
     init {
@@ -37,5 +39,6 @@ class ShippingViewHolder(itemView: View, listener: ShippingAdapter.OnClickListen
         customer_container.setOnClickListener { v: View? ->
             listenerInterface?.onClick(viewModel)
         }
+
     }
 }

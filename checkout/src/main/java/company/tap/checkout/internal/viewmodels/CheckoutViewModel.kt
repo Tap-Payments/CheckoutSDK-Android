@@ -517,15 +517,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
         removeAllViews()
         addViews(businessViewHolder, amountViewHolder, itemsViewHolder)
-      //  itemsViewHolder.view.mainCurrencyChip.chipsRecycler.adapter = currencyAdapter
-     //   itemsViewHolder.view.itemRecylerView.adapter =itemAdapter
 
+        /**
+         * will be replaced by itemList coming from the API**/
+        if(PaymentDataSource.getItems()!=null){
+            itemsViewHolder.view.itemRecylerView.adapter = itemAdapter
+            itemAdapter.updateAdapterData(itemList)
+        }
         currencyAdapter.updateAdapterData(allCurrencies.value as List<SupportedCurrencies>)
-
-
-
-        //  itemsViewHolder.setItemsRecylerView()
-
 
         frameLayout.visibility = View.VISIBLE
         itemsViewHolder.itemsdisplayed = true
@@ -667,7 +666,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         var countryCodeReplaced = ""
         countryCodeReplaced = phoneNumber?.countryCode?.replace("0", "").toString()
         if (phoneNumber?.number?.length!! > 7)
-            replaced = (phoneNumber.number?.toString()).replaceRange(1, 6, "••••")
+            replaced = (phoneNumber.number.toString()).replaceRange(1, 6, "••••")
         otpViewHolder.otpView.mobileNumberText.text = "+$countryCodeReplaced $replaced"
     }
 
@@ -902,8 +901,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
       //  itemsViewHolder.view.itemRecylerView.adapter = itemAdapter
         itemsViewHolder.view.mainCurrencyChip.chipsRecycler.adapter = currencyAdapter
-        if(PaymentDataSource?.getItems()!=null){
-    PaymentDataSource?.getItems()?.let { itemAdapter.updateAdapterData(it) }
+        if(PaymentDataSource.getItems()!=null){
+    PaymentDataSource.getItems()?.let { itemAdapter.updateAdapterData(it) }
       }
         cardViewHolder.view.mainChipgroup.chipsRecycler.adapter = adapter
         // goPaySavedCardHolder.view.goPayLoginView.chipsRecycler.adapter = goPayAdapter
@@ -1053,7 +1052,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             SDKSession.getListener()?.getStatusSDK(ChargeStatus.AUTHORIZED)
         }else{
             SDKSession.getListener()?.getStatusSDK(status)
-
         }
 
         /***
@@ -1646,7 +1644,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         if(paymentTypeEnum == PaymentType.WEB ){
            savedCardsModel as PaymentOption
-           extraFees = savedCardsModel?.extraFees
+           extraFees = savedCardsModel.extraFees
             fee = calculateExtraFeesAmount(savedCardsModel as PaymentOption, amountedCurrency)
 
        } else{
