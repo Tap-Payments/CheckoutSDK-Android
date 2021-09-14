@@ -20,6 +20,7 @@ import company.tap.checkoutsdk.viewmodels.CustomerViewModel
 import company.tap.checkoutsdk.viewmodels.ShippingViewModel
 import java.math.BigDecimal
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by AhlaamK on 9/6/21.
@@ -81,6 +82,7 @@ object SettingsManager {
         val data: String = gson.toJson(shippingList)
         writeShippingToPreferences(data, preferences)
     }
+
     fun editCustomer(
         oldCustomer: CustomerViewModel?,
         newCustomer: CustomerViewModel,
@@ -149,7 +151,8 @@ object SettingsManager {
                 ShippingViewModel(
                     newShipping.getshippingName(),
                     newShipping.getshippingDecsription()!!,
-                    it)
+                    it
+                )
             }?.let {
                 shipingList.add(
                     it
@@ -160,10 +163,10 @@ object SettingsManager {
         } else {
             if (ctx != null) {
                 saveShipping(
-                        newShipping.getshippingName(),
-                        newShipping.getshippingDecsription()!!,
-                        newShipping.getshippingAmount()!!, ctx
-                    )
+                    newShipping.getshippingName(),
+                    newShipping.getshippingDecsription()!!,
+                    newShipping.getshippingAmount()!!, ctx
+                )
 
             }
         }
@@ -209,7 +212,7 @@ object SettingsManager {
     fun getCustomer(): TapCustomer? {
         val customer: TapCustomer
         val gson = Gson()
-        val response = pref!!.getString("customer", "")
+        val response = pref?.getString("customer", "")
         println(" get customer: $response")
         val customersList = gson.fromJson<ArrayList<CustomerViewModel>>(
             response,
@@ -218,7 +221,7 @@ object SettingsManager {
 
         // check if customer id is in pref.
         customer = if (customersList != null) {
-            System.out.println("preparing data source with customer ref :" + customersList[0].getRef())
+            println("preparing data source with customer ref :" + customersList[0].getRef())
             return TapCustomer(
                 customersList[0].getRef(),
                 customersList[0].getName(),
@@ -257,6 +260,7 @@ object SettingsManager {
         )
         return items
     }
+
     fun getTaxes(): ArrayList<Tax> {
         val taxes: ArrayList<Tax> = ArrayList<Tax>()
         taxes.add(
@@ -355,7 +359,7 @@ object SettingsManager {
      */
     fun getTransactionsMode(key: String): TransactionMode {
         val trx_mode = pref?.getString(key, TransactionMode.PURCHASE.name)
-        println("trx_mode are"+trx_mode)
+        println("trx_mode are" + trx_mode)
         if (trx_mode.equals(
                 TransactionMode.PURCHASE.name,
                 ignoreCase = true
@@ -366,10 +370,10 @@ object SettingsManager {
                 ignoreCase = true
             )
         ) return TransactionMode.AUTHORIZE_CAPTURE
-         if (trx_mode.equals(
-                 TransactionMode.TOKENIZE_CARD.name,
-                 ignoreCase = true
-             )
+        if (trx_mode.equals(
+                TransactionMode.TOKENIZE_CARD.name,
+                ignoreCase = true
+            )
         ) return TransactionMode.TOKENIZE_CARD
         return if (trx_mode.equals(
                 TransactionMode.SAVE_CARD.name,
@@ -434,7 +438,7 @@ object SettingsManager {
 
     //Set topup object
 
-      fun getTopUp(): TopUp? {
+    fun getTopUp(): TopUp? {
         return TopUp(
             null,
             "wal_7nTwK44211030uxtI115c6T710",
@@ -452,4 +456,49 @@ object SettingsManager {
         )
     }
 
+    fun getDynamicShipping(): ArrayList<Shipping>? {
+        val shipping: Shipping
+        val gson = Gson()
+        val response = pref?.getString("shipping", "")
+        // println(" get shipping: $response")
+        val shippingLists = gson.fromJson<ArrayList<ShippingViewModel>>(
+            response,
+            object : TypeToken<List<ShippingViewModel?>?>() {}.type
+        )
+        val shippingList: ArrayList<Shipping> = ArrayList<Shipping>()
+        // println(" get shippingLists: $shippingLists")
+        if (shippingLists != null)
+            println("preparing data source with shipping ref :" + shippingLists[0].getshippingName())
+        if (shippingLists != null) {
+
+            shippingLists[0].getshippingDecsription()?.let {
+                shippingLists[0].getshippingAmount()?.toBigDecimal()?.let { it1 ->
+                    Shipping(
+                        shippingLists[0].getshippingName(),
+                        it,
+                        it1
+                    )
+                }
+            }?.let {
+                shippingList.add(
+                    it
+                )
+            }
+
+            return shippingList
+
+
+        } else {
+
+            shippingList.add(
+                Shipping(
+                    "Test shipping #1",
+                    "Test shipping description #1",
+                    BigDecimal.ONE
+                )
+            )
+        }
+        return shippingList
+
+    }
 }

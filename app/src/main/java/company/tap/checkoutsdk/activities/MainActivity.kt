@@ -29,6 +29,7 @@ import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.interfaces.SessionDelegate
 import company.tap.checkout.open.models.*
 import company.tap.checkout.open.models.Receipt
+import company.tap.checkout.open.models.Shipping
 import company.tap.checkoutsdk.R
 import company.tap.checkoutsdk.manager.SettingsManager
 import company.tap.taplocalizationkit.LocalizationManager
@@ -138,7 +139,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
 
         // Using static CustomerBuilder method available inside TAP TapCustomer Class you can populate TAP TapCustomer object and pass it to SDK
-        sdkSession.setCustomer(setCustomer()) //** Required **
+      //  sdkSession.setCustomer(setCustomer()) //** Required **
+        settingsManager?.getCustomer()?.let { sdkSession.setCustomer(it) } //** Required **
 
 
         // Set Total Amount. The Total amount will be recalculated according to provided Taxes and Shipping
@@ -151,8 +153,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
 
         // Set Payment Items array list
-        sdkSession.setPaymentItems(ArrayList()) // ** Optional ** you can pass empty array list
-        //   sdkSession.setPaymentItems(getPaymentItems()) // ** Optional ** you can pass empty array list
+         sdkSession.setPaymentItems(ArrayList()) // ** Optional ** you can pass empty array list
+       // sdkSession.setPaymentItems(getPaymentItems()) // ** Optional ** you can pass empty array list
 
 
         sdkSession.setPaymentType("ALL")  //** Merchant can pass paymentType
@@ -163,8 +165,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
 
         // Set Shipping array list
-        sdkSession.setShipping(ArrayList()) // ** Optional ** you can pass empty array list
-        //  sdkSession.setShipping(settingsManager?.getShippingList()) // ** Optional ** you can pass empty array list
+      //  sdkSession.setShipping(ArrayList()) // ** Optional ** you can pass empty array list
+          sdkSession.setShipping(settingsManager?.getDynamicShipping()) // ** Optional ** you can pass empty array list
 
         // Post URL
         sdkSession.setPostURL("") // ** Optional **
@@ -189,8 +191,6 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
         // Enable or Disable 3DSecure
         sdkSession.isRequires3DSecure(true)
-
-        //Set Receipt Settings [SMS - Email ]
 
         //Set Receipt Settings [SMS - Email ]
         sdkSession.setReceiptSettings(
@@ -225,6 +225,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         settingsManager?.setPref(this)
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     fun openBottomSheet(view: View) {
         /// Configures the bottom sheet by creating one and assigning the correct delegates and datasources
         modalBottomSheet.arguments = getArguments()
@@ -329,8 +330,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
             PaymentItem(
                 "Items2",
                 "Description for test item #2",
-                Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(4)),
-                BigDecimal.valueOf(4),
+                Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(1)),
+                BigDecimal.valueOf(1),
                 AmountModificator(AmountModificatorType.PERCENTAGE, BigDecimal.ZERO),
                 null
             )
