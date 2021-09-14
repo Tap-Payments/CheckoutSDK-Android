@@ -165,8 +165,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
 
         // Set Shipping array list
-      //  sdkSession.setShipping(ArrayList()) // ** Optional ** you can pass empty array list
-          sdkSession.setShipping(settingsManager?.getDynamicShipping()) // ** Optional ** you can pass empty array list
+        sdkSession.setShipping(ArrayList()) // ** Optional ** you can pass empty array list
+       //   sdkSession.setShipping(settingsManager?.getDynamicShipping()) // ** Optional ** you can pass empty array list
 
         // Post URL
         sdkSession.setPostURL("") // ** Optional **
