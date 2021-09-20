@@ -50,7 +50,6 @@ import company.tap.tapuilibrary.uikit.views.TapAlertView
 import company.tap.tapuilibrary.uikit.views.TapMobilePaymentView
 import company.tap.tapuilibrary.uikit.views.TapSelectionTabLayout
 import kotlinx.android.synthetic.main.switch_layout.view.*
-import kotlin.collections.ArrayList
 
 
 /**
@@ -98,7 +97,7 @@ class PaymentInputViewHolder(
     private val BIN_NUMBER_LENGTH = 6
     private lateinit var cardSchema: String
     var schema: CardScheme?=null
-
+    var itemsCardsList = ArrayList<SectionTabItem>()
     init {
         tabLayout.setTabLayoutInterface(this)
         tapMobileInputView = TapMobilePaymentView(context, null)
@@ -137,7 +136,7 @@ class PaymentInputViewHolder(
                         println("is that called")
                         tabLayout.selectTab(CardBrand.ooredoo, true)
                     }
-                }else tabLayout.resetBehaviour()
+                } else tabLayout.resetBehaviour()
 
             }
 
@@ -210,8 +209,8 @@ class PaymentInputViewHolder(
                 // onPaymentCardComplete.onPaycardSwitchAction(true, PaymentType.MOBILE)
                 if (tapMobileInputView.mobileNumber.text.length > 7)
                     baseLayoutManager.displayOTPView(
-                            PaymentDataSource.getCustomer().getPhone(),
-                            PaymentTypeEnum.telecom.name
+                        PaymentDataSource.getCustomer().getPhone(),
+                        PaymentTypeEnum.telecom.name
                     )
 
             }
@@ -231,11 +230,13 @@ class PaymentInputViewHolder(
         tapCardInputView.setCardNumberTextWatcher(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
 //                cardNumAfterTextChangeListener(s, this)
+
             }
+
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 onCardTextChange(s)
-                   cardNumAfterTextChangeListener(s,this)
+                cardNumAfterTextChangeListener(s, this)
             }
         })
     }
@@ -254,6 +255,7 @@ class PaymentInputViewHolder(
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             }
+
             override fun afterTextChanged(s: Editable?) {
                 afterTextChangeAction(s)
             }
@@ -292,7 +294,7 @@ class PaymentInputViewHolder(
                         true, PaymentType.CARD
                     )
                     tapAlertView?.visibility = View.GONE
-                }else {
+                } else {
                     onPaymentCardComplete.onPayCardSwitchAction(
                         false, PaymentType.CARD
                     )
@@ -338,8 +340,8 @@ class PaymentInputViewHolder(
 
         if (charSequence != null) {
             baseLayoutManager.resetViewHolder()
-            if (charSequence.length > 2) callCardBinNumberApi(charSequence, textWatcher)
-            else {
+
+            if (charSequence.length > 2) callCardBinNumberApi(charSequence, textWatcher) else {
                 tabLayout.resetBehaviour()
                 PaymentDataSource.setBinLookupResponse(null)
             }
@@ -353,14 +355,18 @@ class PaymentInputViewHolder(
                     card.cardBrand,
                     card.validationState == CardValidationState.valid
                 )
+
+
                 val binLookupResponse: BINLookupResponse? =
                     PaymentDataSource.getBinLookupResponse()
-                println("binLookupResponse"+binLookupResponse)
+                println("binLookupResponse" + binLookupResponse)
+                checkIfCardTypeExistInList(binLookupResponse)
                 if (PaymentDataSource.getCardType() != null && PaymentDataSource.getCardType() == CardType.ALL) {
-                    setTabLayoutBasedOnApiResponse(binLookupResponse,card)
+
+                    setTabLayoutBasedOnApiResponse(binLookupResponse, card)
                 } else {
                     checkAllowedCardTypes(binLookupResponse)
-                    setTabLayoutBasedOnApiResponse(binLookupResponse,card)
+                    setTabLayoutBasedOnApiResponse(binLookupResponse, card)
                 }
             }
 
@@ -385,7 +391,7 @@ class PaymentInputViewHolder(
             binLookupResponse?.cardBrand?.let { it1 ->
                 tabLayout.selectTab(
                     it1,
-                     true
+                    true
                 )
             }
 //            tabLayout.setUnselectedAlphaLevel(0.5f)
@@ -422,8 +428,8 @@ class PaymentInputViewHolder(
     private fun checkValidationState(card: DefinedCardBrand) {
         when (card.validationState) {
             CardValidationState.invalid -> {
-                if(card.cardBrand!=null)
-                tabLayout.selectTab(card.cardBrand, false)
+                if (card.cardBrand != null)
+                    tabLayout.selectTab(card.cardBrand, false)
                 tapAlertView?.visibility = View.VISIBLE
                 tapAlertView?.alertMessage?.text =
                     (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
@@ -434,7 +440,7 @@ class PaymentInputViewHolder(
                     (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
             }
             CardValidationState.valid -> {
-                if(schema != null )
+                if (schema != null)
                     schema?.cardBrand?.let { tabLayout.selectTab(it, true) }
                 else tabLayout.selectTab(card.cardBrand, true)
 
@@ -550,7 +556,7 @@ class PaymentInputViewHolder(
 //        tabLayout.resetBehaviour()
 
         val itemsMobilesList = ArrayList<SectionTabItem>()
-        val itemsCardsList = ArrayList<SectionTabItem>()
+         itemsCardsList = ArrayList<SectionTabItem>()
         intertabLayout.removeAllTabs()
         PaymentDataSource.setBinLookupResponse(null)
 //        tabLayout.changeTabItemAlphaValue(1f)
@@ -614,7 +620,7 @@ class PaymentInputViewHolder(
                     )
                 )
             }
-
+            println("itemsCardsList are" + itemsCardsList)
 
             }
         }
@@ -680,9 +686,45 @@ class PaymentInputViewHolder(
 
     }
 
+    fun checkIfCardTypeExistInList(binLookupResponse: BINLookupResponse?){
+        val cardBrandArrayList = ArrayList<String>()
+
+        for (i in 0 until itemsCardsList.size){
+            cardBrandArrayList.add(itemsCardsList[i].type.name)
+           /* if(cardBrandArrayList.contains(binLookupResponse?.cardBrand?.name)){
+                //break
+            }*/
+        }
+
+        if(binLookupResponse != null  && !cardBrandArrayList.contains(binLookupResponse.cardBrand.name)){
+            CustomUtils.showDialog(
+                    LocalizationManager.getValue(
+                        "alertUnsupportedCardTitle",
+                        "AlertBox"
+                    ),
+                    LocalizationManager.getValue("alertUnsupportedCardMessage", "AlertBox"),
+                    context,
+                    1,
+                    baseLayoutManager,
+                    null,
+                    null,
+                    true
+                )
+
+        }
+    }
 
 
-}
+
+
+
+    }
+
+
+
+
+
+
 
 
 
