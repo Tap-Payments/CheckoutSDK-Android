@@ -642,7 +642,13 @@ class PaymentInputViewHolder(
         val expiryDate: String? = expiryDate
         val cvc: String? = cvvNumber
         //temporrary    val cardholderName: String? = cardholderName
-        val cardholderName: String = "cardholder"
+        var cardholderName: String? =null
+        if(PaymentDataSource.getDefaultCardHolderName()!=null) {
+            cardholderName = PaymentDataSource.getDefaultCardHolderName()
+        }else {
+            cardholderName = "cardholderName"
+        }
+       // val cardholderName: String = "cardholder"
         return if (number == null || expiryDate == null || cvc == null) {
             null
         } else {
