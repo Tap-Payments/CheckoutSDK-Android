@@ -356,11 +356,12 @@ class PaymentInputViewHolder(
                     card.validationState == CardValidationState.valid
                 )
 
+                println("card brand value is>>>"+card.cardBrand)
 
                 val binLookupResponse: BINLookupResponse? =
                     PaymentDataSource.getBinLookupResponse()
-                println("binLookupResponse" + binLookupResponse)
-                checkIfCardTypeExistInList(binLookupResponse)
+               // println("binLookupResponse" + binLookupResponse)
+                if(charSequence.length>4) checkIfCardTypeExistInList(card.cardBrand)
                 if (PaymentDataSource.getCardType() != null && PaymentDataSource.getCardType() == CardType.ALL) {
 
                     setTabLayoutBasedOnApiResponse(binLookupResponse, card)
@@ -686,17 +687,16 @@ class PaymentInputViewHolder(
 
     }
 
-    fun checkIfCardTypeExistInList(binLookupResponse: BINLookupResponse?){
+   private fun checkIfCardTypeExistInList(cardBrand: CardBrand?){
         val cardBrandArrayList = ArrayList<String>()
 
         for (i in 0 until itemsCardsList.size){
             cardBrandArrayList.add(itemsCardsList[i].type.name)
-           /* if(cardBrandArrayList.contains(binLookupResponse?.cardBrand?.name)){
-                //break
-            }*/
         }
+       // println("cardBrand is>>"+cardBrand?.name)
+       // println("cardBrandArrayList is>>"+cardBrandArrayList)
 
-        if(binLookupResponse != null  && !cardBrandArrayList.contains(binLookupResponse.cardBrand.name)){
+        if(cardBrand != null  && !cardBrandArrayList.contains(cardBrand.name)){
             CustomUtils.showDialog(
                     LocalizationManager.getValue(
                         "alertUnsupportedCardTitle",
