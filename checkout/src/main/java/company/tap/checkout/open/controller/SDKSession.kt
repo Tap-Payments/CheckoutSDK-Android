@@ -242,7 +242,7 @@ object  SDKSession : APIRequestCallback {
      * enable or disable saving card.
      * @param saveCardStatus
      */
-    open fun isUserAllowedToSaveCard(saveCardStatus: Boolean) {
+    fun isUserAllowedToSaveCard(saveCardStatus: Boolean) {
         println("isUserAllowedToSaveCard >>> $saveCardStatus")
         paymentDataSource?.isUserAllowedToSaveCard(saveCardStatus)
     }

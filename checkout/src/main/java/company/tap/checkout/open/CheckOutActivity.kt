@@ -193,12 +193,11 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
 
     }
 
-    override fun backendUnknownError(message: String?) {
+    override fun backendUnknownError(message: GoSellError?) {
         tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
         Handler().postDelayed({
             tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
         }, 1000)
-
         this.finish()
 
     }

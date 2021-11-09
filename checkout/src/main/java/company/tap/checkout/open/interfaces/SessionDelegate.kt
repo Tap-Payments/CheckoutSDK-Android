@@ -38,7 +38,7 @@ interface SessionDelegate {
 
     fun invalidCardDetails()
 
-    fun backendUnknownError(message: String?)
+    fun backendUnknownError(message: GoSellError?)
 
     fun invalidTransactionMode()
 

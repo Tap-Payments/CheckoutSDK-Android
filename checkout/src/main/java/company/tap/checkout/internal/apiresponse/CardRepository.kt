@@ -771,7 +771,7 @@ class CardRepository : APIRequestCallback {
                 try {
                     // resultObservable.onError(Throwable(it.errorMessage))
                     RxJavaPlugins.setErrorHandler(Throwable::printStackTrace)
-                    sdkSession.getListener()?.backendUnknownError(errorDetails.errorMessage)
+                    sdkSession.getListener()?.backendUnknownError(errorDetails)
 
                     if(::chargeResponse.isInitialized){
                         viewModel?.handleSuccessFailureResponseButton(

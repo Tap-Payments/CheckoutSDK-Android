@@ -33,8 +33,8 @@ internal class PaymentDataProvider:IPaymentDataProvider {
 
      //   return AmountedCurrency("kwd","kwd",BigDecimal.valueOf(222))
         return if(getExternalDataSource().getSelectedCurrency()!=null){
-            PaymentDataSource?.getSelectedAmount()?.let {
-                AmountedCurrency(PaymentDataSource?.getSelectedCurrency().toString(),PaymentDataSource?.getSelectedCurrency().toString(),
+            PaymentDataSource.getSelectedAmount()?.let {
+                AmountedCurrency(PaymentDataSource.getSelectedCurrency().toString(),PaymentDataSource.getSelectedCurrency().toString(),
                     it
                 )
             }
