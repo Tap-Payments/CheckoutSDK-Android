@@ -153,8 +153,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
 
         // Set Payment Items array list
-         sdkSession.setPaymentItems(ArrayList()) // ** Optional ** you can pass empty array list
-       // sdkSession.setPaymentItems(getPaymentItems()) // ** Optional ** you can pass empty array list
+       //  sdkSession.setPaymentItems(ArrayList()) // ** Optional ** you can pass empty array list
+        sdkSession.setPaymentItems(getPaymentItems()) // ** Optional ** you can pass empty array list
 
 
         sdkSession.setPaymentType("ALL")  //** Merchant can pass paymentType
@@ -531,7 +531,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         println("invalidCardDetails>>>>>")
     }
 
-    override fun backendUnknownError(message: String?) {
+    override fun backendUnknownError(message: GoSellError?) {
         println("backendUnknownError>>>>>" + message)
         //  payButton?.changeButtonState(ActionButtonState.ERROR)
 
