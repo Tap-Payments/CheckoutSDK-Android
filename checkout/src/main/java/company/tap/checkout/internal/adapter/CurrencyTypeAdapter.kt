@@ -36,6 +36,7 @@ All rights reserved.
 var selectedPosition = -1
 var _context: Context? = null
  var currencyRate: BigDecimal= BigDecimal.ZERO
+var previousIndex = 0
 
 class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrencyChangedActionListener) :
     RecyclerView.Adapter<CurrencyTypeAdapter.CurrencyHolders>() {
@@ -58,6 +59,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
 
     fun updateSelectedPosition(selectedPos:Int){
         selectedPosition = selectedPos
+        previousIndex = selectedPos
     }
 
     class CurrencyHolders(v: View) : RecyclerView.ViewHolder(v) {
@@ -123,11 +125,16 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
             notifyItemChanged(selectedPosition)
             selectedPosition = position
             notifyItemChanged(selectedPosition)
+            previousIndex = selectedPosition
            // selectedPosition = position
             println("position of adapter"+ adapterContentCurrencies[position].amount)
+            println("previous position of adapter"+ position)
+            adapterContentCurrencies[position].rate?.let { it1 ->
                 onCurrencyChangedActionListener.onCurrencyClicked(
-                    adapterContentCurrencies[position].currency.toString(),
-                    adapterContentCurrencies[position].amount)
+                        adapterContentCurrencies[position].currency.toString(),
+                        it1.toBigDecimal(),
+                adapterContentCurrencies[position].amount,adapterContentCurrencies[previousIndex].currency.toString())
+            }
              CheckoutViewModel().selectedCurrencyPos = adapterContentCurrencies[position].currency.toString()
              CheckoutViewModel().selectedAmountPos = adapterContentCurrencies[position].amount
 

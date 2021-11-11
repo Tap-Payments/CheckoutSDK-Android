@@ -146,6 +146,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private lateinit var sdkLayout: LinearLayout
     private lateinit var checkoutFragment: CheckoutFragment
     private lateinit var itemList: List<PaymentItem>
+    private lateinit var unModifiedItemList: List<PaymentItem>
     private lateinit var selectedPaymentOption: PaymentOption
     @SuppressLint("StaticFieldLeak")
     private lateinit var context: Context
@@ -164,7 +165,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     lateinit var paymentOptionsResponse: PaymentOptionsResponse
     lateinit var redirectURL: String
     lateinit var cardId: String
-
+    var currencyOldRate:BigDecimal?=null
+    var currentCalculatedAmount:BigDecimal?=null
+    var lastSelectedCurrency:String?=null
 
     @JvmField
     var selectedAmountPos: BigDecimal? = null
@@ -839,7 +842,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
          * PaymentDatasource.getItems()  >>>>>>>> */
         if (PaymentDataSource.getItems() != null) {
             itemList = PaymentDataSource.getItems()!!
+            unModifiedItemList = itemList
         }
+
+
 
 
         if (::itemsViewHolder.isInitialized) {
@@ -1483,14 +1489,22 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
     @RequiresApi(Build.VERSION_CODES.N)
-    override fun onCurrencyClicked(currencySelected: String, currencyRate: BigDecimal) {
+    override fun onCurrencyClicked(currencySelected: String, currencyRate: BigDecimal , totalSelectedAmount:BigDecimal, previousSelectedCurrency:String) {
+        currencyOldRate = currencyRate
+        lastSelectedCurrency = previousSelectedCurrency
         if (::itemList.isInitialized) {
             for (i in itemList.indices) {
-                println("item per unit start >>" + itemList[i].amountPerUnit)
-                itemList[i].amountPerUnit = (itemList[i].getAmountPerUnit()?.times(currencyRate))
-                // itemList[i].currency = currencySelected
-                // selectedAmount = CurrencyFormatter.currencyFormat(currencyRate.toString())
-                // selectedCurrency = currencySelected
+
+               if( currencySelected !="KWD" && lastSelectedCurrency !="KWD"){
+                    itemList[i].amountPerUnit = currencyOldRate?.div(currencyRate)
+                    itemList[i].amountPerUnit =  itemList[i].amountPerUnit?.times(currencyRate)
+
+
+                }  else if(currencySelected == "KWD"){
+                    currentCalculatedAmount = itemList[i].amountPerUnit
+                    itemList[i].amountPerUnit = (currencyOldRate?.div(currencyRate))
+
+                }
                 println("item per unit >>" + itemList[i].amountPerUnit)
 
             }
@@ -1502,9 +1516,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         //  itemList[i].amount = (list[i].amount.toLong())
         //  itemList[i].currency = currencySelected
-        selectedAmount = CurrencyFormatter.currencyFormat(currencyRate.toString())
-        selectedCurrency = currencySelected
 
+        selectedAmount = CurrencyFormatter.currencyFormat(totalSelectedAmount.toString())
+        selectedCurrency = currencySelected
+        println("selectedAmount final>>"+selectedAmount)
+        println("selectedCurrency final>>"+selectedCurrency)
+        println("currentAmount final>>"+currentAmount)
+        println("currentCurrency final>>"+currentCurrency)
         amountViewHolder.updateSelectedCurrency(
             displayItemsOpen,
             selectedAmount, selectedCurrency,
@@ -2223,6 +2241,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         }, 8000)
     }
+
+
 
 }
 

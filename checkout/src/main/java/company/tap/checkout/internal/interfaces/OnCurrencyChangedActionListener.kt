@@ -10,5 +10,5 @@ Copyright (c) 2020    Tap Payments.
 All rights reserved.
  **/
 interface OnCurrencyChangedActionListener {
-    fun onCurrencyClicked(currencySelected: String, currencyRate: BigDecimal)
+    fun onCurrencyClicked(currencySelected: String, currencyRate: BigDecimal, totalSelectedAmount:BigDecimal, previousSelectedCurrency:String)
 }
