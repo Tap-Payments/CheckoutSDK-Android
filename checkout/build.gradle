@@ -82,7 +82,7 @@ dependencies {
     implementation 'com.gdacciaro:iosdialog:1.0.3'
     implementation 'com.github.Tap-Payments:LocalisationManager-Android:0.0.1.26'
 
-    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.332'
-    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.332'
+    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.333'
+    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.333'
 
 }
