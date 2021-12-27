@@ -309,7 +309,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         return TapCustomer(
             "cus_TS012520211349Za012907577", "ahlaam", "middlename",
             "lastname", "abcd@gmail.com",
-            PhoneNumber("00965", "69045932"), "description",
+            PhoneNumber("00965", "66175090"), "description",
         )
 
     }
