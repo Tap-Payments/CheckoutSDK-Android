@@ -1676,8 +1676,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
        }
 
-        var totalAmount = fee?.add(
-            amountedCurrency?.amount?.toDouble()?.let { BigDecimal.valueOf(it) })
+        var totalAmount = CurrencyFormatter.currencyFormat(fee?.add(
+            amountedCurrency?.amount?.toDouble()?.let { BigDecimal.valueOf(it) }).toString())
        if (calculateExtraFeesAmount(
                extraFees,
                paymentOptionsResponse.supportedCurrencies,
