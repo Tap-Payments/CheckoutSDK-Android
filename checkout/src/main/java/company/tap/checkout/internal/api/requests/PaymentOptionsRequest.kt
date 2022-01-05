@@ -117,8 +117,7 @@ open class PaymentOptionsRequest(
         } else {
             this.items = null
             val plainAmount = amount ?: BigDecimal.ZERO
-            totalAmount = AmountCalculator.calculateTotalAmountOf(ArrayList(), taxes, shipping)!!
-                .add(plainAmount)
+            totalAmount = AmountCalculator.calculateTotalAmountOf(ArrayList(), taxes, shipping)?.add(plainAmount)
         }
     }
 }
