@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -28,7 +29,9 @@ import company.tap.checkout.internal.apiresponse.CardViewState
 import company.tap.checkout.internal.apiresponse.Resource
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
+import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.controller.SDKSession.sessionDelegate
+import company.tap.checkout.open.controller.SDKSession.supportFragmentManager
 import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.nfcreader.open.reader.TapEmvCard
@@ -42,6 +45,7 @@ import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
+import kotlinx.android.synthetic.main.itemviewholder_layout.*
 
 
 /**
@@ -70,17 +74,13 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
         setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
 
     }
-
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onDestroyView() {
         println("onDestroyView>>>")
         if (view?.parent != null) {
             (view?.parent as ViewGroup).removeView(view)
         }
-
-            resetTabAnimatedButton()
-
-
-
+        resetTabAnimatedButton()
         super.onDestroyView()
     }
 
@@ -267,8 +267,10 @@ requireArguments().putBoolean(RESET_FRAG, resetFragment)
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun resetTabAnimatedButton(){
         tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+
         activity?.finish()
         tabAnimatedActionButton?.setButtonDataSource(
             true,
@@ -281,6 +283,7 @@ requireArguments().putBoolean(RESET_FRAG, resetFragment)
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
         )
+
         tabAnimatedActionButton?.isClickable=true
     }
 
