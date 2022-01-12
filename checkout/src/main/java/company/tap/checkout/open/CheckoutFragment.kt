@@ -271,7 +271,6 @@ requireArguments().putBoolean(RESET_FRAG, resetFragment)
     private fun resetTabAnimatedButton(){
         SDKSession.sessionActive = false
         tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-        activity?.let { context?.let { it1 -> tabAnimatedActionButton?.let { it2 -> SDKSession.setButtonView(it2, it1,this.parentFragmentManager, it) } } }
 
         checkOutActivity?.finish()
         tabAnimatedActionButton?.setButtonDataSource(
