@@ -32,7 +32,7 @@ class TapCustomWebViewClient constructor(private val customWebViewClientContract
         checkCreditCardToken(request.url.toString().toLowerCase())
         showLoadingToCheckCreditCardToken(request.url.toString().toLowerCase())
         Log.d("urlincustom",request.url.toString())
-        view.loadUrl(request.url.toString(), getCustomHeaders())
+        getCustomHeaders()?.let { view.loadUrl(request.url.toString(), it) }
         return true
     }
 
@@ -45,7 +45,7 @@ class TapCustomWebViewClient constructor(private val customWebViewClientContract
         checkCreditCardToken(url.toLowerCase())
         showLoadingToCheckCreditCardToken(url.toLowerCase())
         Log.d("url", url)
-        view.loadUrl(url, getCustomHeaders())
+        getCustomHeaders()?.let { view.loadUrl(url, it) }
         return true
     }
 

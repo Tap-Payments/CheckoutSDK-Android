@@ -114,9 +114,9 @@ class WebFragment(private val webViewContract: WebViewContract?,private val card
         if (Build.VERSION.SDK_INT >= 21) {
             web_view.settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
         }
-        web_view.webViewClient = cardViewModel?.let { TapCustomWebViewClient(this, it) }
+        web_view.webViewClient = cardViewModel?.let { TapCustomWebViewClient(this, it) }!!
         web_view.settings.loadWithOverviewMode = true
-        web_view.loadUrl(webViewUrl)
+        webViewUrl?.let { web_view.loadUrl(it) }
         web_view.setOnKeyListener { _, keyCode, event ->
             if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                 if (web_view.canGoBack()) {
