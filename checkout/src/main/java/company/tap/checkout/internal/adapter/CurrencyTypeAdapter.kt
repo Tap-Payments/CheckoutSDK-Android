@@ -161,7 +161,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
                 25.0f,// corner raduis
                 0.0f,
                 Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.selected.shadow.color")),
-                Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.selected.backgroundColor")),
+                Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.backgroundColor")),
                 Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.selected.shadow.color"))
         )
     }
