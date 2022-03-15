@@ -23,13 +23,10 @@ import company.tap.checkout.internal.api.enums.Measurement
 import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession
-import company.tap.checkout.open.controller.SDKSession.resetBottomSheetForButton
 import company.tap.checkout.open.enums.CardType
-import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.interfaces.SessionDelegate
 import company.tap.checkout.open.models.*
 import company.tap.checkout.open.models.Receipt
-import company.tap.checkout.open.models.Shipping
 import company.tap.checkoutsdk.R
 import company.tap.checkoutsdk.manager.SettingsManager
 import company.tap.taplocalizationkit.LocalizationManager
@@ -61,12 +58,16 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         /** Configures the theme manager by setting the provided custom theme file names
         - Parameter customTheme: Please pass the tap checkout theme object with the names of your custom theme files if needed. If not set, the normal and default TAP theme will be used
          */
-        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))
+       /* if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))
             ThemeManager.loadTapTheme(resources, R.raw.defaultdarktheme, "darktheme")
         else if (ThemeManager.currentTheme.isNotEmpty() && !ThemeManager.currentTheme.contains("dark"))
             ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "lighttheme")
         else ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "lighttheme")
+*/
 
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))
+            ThemeManager.loadTapTheme(this,"https://gist.github.com/AhlaamK-tap/2ca0cbeaf430c6d40baa4d0700024848")
+        else   ThemeManager.loadTapTheme(this,"https://gist.githubusercontent.com/AhlaamK-tap/9862436dff3b3ca222243dad3705ec6a/raw/76f9bd9d4e12e7d9dccf5f4969baf09c15a1ea47/lighttheme")
 
         //  setTheme(R.style.AppThemeBlack)
         /** Configures the localisation manager by setting the locale, adjusting the flipping and the localisation custom file if any
@@ -88,9 +89,9 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
     private fun initializeSDK() {
         TapCheckOutSDK().init(
-            this,
-            "sk_test_kovrMB0mupFJXfNZWx6Etg5y",
-            "company.tap.goSellSDKExample"
+                this,
+                "sk_test_kovrMB0mupFJXfNZWx6Etg5y",
+                "company.tap.goSellSDKExample"
 
         )
         /*TapCheckOutSDK().init(
@@ -145,9 +146,9 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
         // Set Total Amount. The Total amount will be recalculated according to provided Taxes and Shipping
 
-        settingsManager?.getString("key_amount_name","1")?.let { BigDecimal(it) }?.let {
+        settingsManager?.getString("key_amount_name", "1")?.let { BigDecimal(it) }?.let {
             sdkSession.setAmount(
-                it
+                    it
             )
         }//** Required **
 
@@ -194,10 +195,10 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
         //Set Receipt Settings [SMS - Email ]
         sdkSession.setReceiptSettings(
-            Receipt(
-                false,
-                false
-            )
+                Receipt(
+                        false,
+                        false
+                )
         ) // ** Optional ** you can pass Receipt object or null
 
 
@@ -215,7 +216,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
          settingsManager?.getTransactionsMode("key_sdk_transaction_mode")?.let {
             sdkSession.setTransactionMode(
-                it
+                    it
             )
         }
        // sdkSession.setTransactionMode(TransactionMode.PURCHASE)
@@ -307,9 +308,9 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         val tapCustomer: TapCustomer? = null
         //if (customer != null) customer.phone else Phone(965, 69045932)
         return TapCustomer(
-            "cus_TS012520211349Za012907577", "ahlaam", "middlename",
-            "lastname", "abcd@gmail.com",
-            PhoneNumber("00965", "66175090"), "description",
+                "cus_TS012520211349Za012907577", "ahlaam", "middlename",
+                "lastname", "abcd@gmail.com",
+                PhoneNumber("00965", "66175090"), "description",
         )
 
     }
@@ -317,34 +318,34 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
     private fun getPaymentItems(): ArrayList<PaymentItem>? {
         val items: ArrayList<PaymentItem> = ArrayList<PaymentItem>()
         items.add(
-            PaymentItem(
-                "Items1",
-                "Description for test item #1",
-                Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(1)),
-                BigDecimal.valueOf(1),
-                AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO),
-                null
-            )
+                PaymentItem(
+                        "Items1",
+                        "Description for test item #1",
+                        Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(1)),
+                        BigDecimal.valueOf(1),
+                        AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO),
+                        null
+                )
         )
         items.add(
-            PaymentItem(
-                "Items2",
-                "Description for test item #2",
-                Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(1)),
-                BigDecimal.valueOf(1),
-                AmountModificator(AmountModificatorType.PERCENTAGE, BigDecimal.ZERO),
-                null
-            )
+                PaymentItem(
+                        "Items2",
+                        "Description for test item #2",
+                        Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(1)),
+                        BigDecimal.valueOf(1),
+                        AmountModificator(AmountModificatorType.PERCENTAGE, BigDecimal.ZERO),
+                        null
+                )
         )
         items.add(
-            PaymentItem(
-                "Items3",
-                "Description for test item #3",
-                Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(1)),
-                BigDecimal.valueOf(1),
-                AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO),
-                null
-            )
+                PaymentItem(
+                        "Items3",
+                        "Description for test item #3",
+                        Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(1)),
+                        BigDecimal.valueOf(1),
+                        AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO),
+                        null
+                )
         )
         println("item are<<<<" + items)
 
@@ -353,11 +354,11 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
     private fun initActionButton() {
         payButton.setButtonDataSource(
-            true,
-            this.let { LocalizationManager.getLocale(it).language },
-            LocalizationManager.getValue("pay", "ActionButton"),
-            Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
+                true,
+                this.let { LocalizationManager.getLocale(it).language },
+                LocalizationManager.getValue("pay", "ActionButton"),
+                Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
+                Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
         )
 
         sdkSession.setButtonView(payButton, this, supportFragmentManager, this)
@@ -560,6 +561,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
             settingsManager?.setPref(this)
         }
     }
+
 
 }
 
