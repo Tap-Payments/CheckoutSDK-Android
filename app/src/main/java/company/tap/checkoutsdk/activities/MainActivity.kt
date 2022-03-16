@@ -8,6 +8,7 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -35,6 +36,9 @@ import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.models.DialogConfigurations
 import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.util.*
 
@@ -45,6 +49,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
     private val payButton by lazy { findViewById<TabAnimatedActionButton>(R.id.payButton) }
 
     private val modalBottomSheet = CheckoutFragment()
+    var urlStrDark :String="https://gist.githubusercontent.com/AhlaamK-tap/2ca0cbeaf430c6d40baa4d0700024848/raw/2e23f76a6d323c9e154b63083e5a5a84f73a1994/darktheme.json"
+    var urlStrLight :String="https://gist.githubusercontent.com/AhlaamK-tap/9862436dff3b3ca222243dad3705ec6a/raw/1f553408e0f1f7e0a1e15987f987b6033d64a90d/lighttheme.json"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //Loading the theme and localization files prior to loading the view to avoid crashes
@@ -55,19 +61,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         settingsManager = SettingsManager
 
 
-        /** Configures the theme manager by setting the provided custom theme file names
-        - Parameter customTheme: Please pass the tap checkout theme object with the names of your custom theme files if needed. If not set, the normal and default TAP theme will be used
-         */
-       /* if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))
-            ThemeManager.loadTapTheme(resources, R.raw.defaultdarktheme, "darktheme")
-        else if (ThemeManager.currentTheme.isNotEmpty() && !ThemeManager.currentTheme.contains("dark"))
-            ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "lighttheme")
-        else ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "lighttheme")
-*/
-
-        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))
-            ThemeManager.loadTapTheme(this,"https://gist.github.com/AhlaamK-tap/2ca0cbeaf430c6d40baa4d0700024848")
-        else   ThemeManager.loadTapTheme(this,"https://gist.githubusercontent.com/AhlaamK-tap/9862436dff3b3ca222243dad3705ec6a/raw/76f9bd9d4e12e7d9dccf5f4969baf09c15a1ea47/lighttheme")
+        initializeTheme()
 
         //  setTheme(R.style.AppThemeBlack)
         /** Configures the localisation manager by setting the locale, adjusting the flipping and the localisation custom file if any
@@ -76,15 +70,48 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         setLocale(this, LocalizationManager.getLocale(this).language)
         // setLocale(this,"ar")
-        setContentView(R.layout.activity_main)
-        initializeSDK()
-        configureSDKSession()
-        initActionButton()
-        if (modalBottomSheet.isHidden || modalBottomSheet.isDetached) {
-            println("paybutton hidden")
-            payButton.changeButtonState(ActionButtonState.IDLE)
-        }
 
+       Handler().postDelayed({
+            //doSomethingHere()
+            setContentView(R.layout.activity_main)
+            initializeSDK()
+            configureSDKSession()
+            initActionButton()
+
+            if (modalBottomSheet.isHidden || modalBottomSheet.isDetached) {
+                println("paybutton hidden")
+                payButton.changeButtonState(ActionButtonState.IDLE)
+            }
+
+        }, 4000)
+
+
+    }
+
+    private fun initializeTheme() {
+        /**
+         * Merchant select his choice if it needs Theme from Local Assets or Load it through a URL as below
+         * */
+
+        /** Configures the theme manager by setting the provided custom theme file names
+        - Parameter customTheme: Please pass the tap checkout theme object with the names of your custom theme files if needed. If not set, the normal and default TAP theme will be used
+         */
+        /* if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))
+             ThemeManager.loadTapTheme(resources, R.raw.defaultdarktheme, "darktheme")
+         else if (ThemeManager.currentTheme.isNotEmpty() && !ThemeManager.currentTheme.contains("dark"))
+             ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "lighttheme")
+         else ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "lighttheme")
+        */
+
+        /** Configures the theme manager by passing the provided custom theme url
+        - Parameter urlString: Please pass the themeUrL
+         */
+
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))
+            ThemeManager.loadTapTheme(this, urlStrDark)
+        else if (ThemeManager.currentTheme.isNotEmpty() && !ThemeManager.currentTheme.contains("dark"))
+            ThemeManager.loadTapTheme(this, urlStrLight)
+        else ThemeManager.loadTapTheme(this, urlStrLight)
     }
 
     private fun initializeSDK() {
@@ -100,6 +127,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
               "company.tap.goSellSDKExample"
       )
  */
+
 
     }
 
@@ -547,6 +575,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
     }
 
+
     override fun userEnabledSaveCardOption(saveCardEnabled: Boolean) {
         println("userEnabledSaveCardOption>>>>>$saveCardEnabled")
     }
@@ -561,6 +590,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
             settingsManager?.setPref(this)
         }
     }
+
+
 
 
 }
