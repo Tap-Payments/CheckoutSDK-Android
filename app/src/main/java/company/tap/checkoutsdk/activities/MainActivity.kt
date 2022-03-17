@@ -56,24 +56,18 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //Loading the theme and localization files prior to loading the view to avoid crashes
-        /** Configures the LocalizationManager by setting the provided language  file names
-        - Parameter custom language json: Please pass the tap checkout theme object with the names of your custom theme files if needed. If not set, the normal and default TAP theme will be used
-         */
-        LocalizationManager.loadTapLocale(resources, R.raw.lang)
+
+        initializeLanguage()
         settingsManager = SettingsManager
 
 
         initializeTheme()
-
-        //  setTheme(R.style.AppThemeBlack)
-        /** Configures the localisation manager by setting the locale, adjusting the flipping and the localisation custom file if any
-        - Parameter localiseFile: Please pass the name of the custom localisation file if needed. If not set, the normal and default TAP localisations will be used
-         */
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+
         setLocale(this, LocalizationManager.getLocale(this).language)
         // setLocale(this,"ar")
-
-       Handler().postDelayed({
+        println("LocalizationManager.getLocale(this).language is "+LocalizationManager.getLocale(this).language)
+      /* Handler().postDelayed({
             //doSomethingHere()
             setContentView(R.layout.activity_main)
             initializeSDK()
@@ -85,19 +79,30 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
                 payButton.changeButtonState(ActionButtonState.IDLE)
             }
 
-        }, 4000)
+        }, 4000)*/
 
-  /*      if (ThemeManager.currentTheme.isNotEmpty() && (ThemeManager.currentTheme.contains("dark") || ThemeManager.currentTheme.contains("light"))){
-            setContentView(R.layout.activity_main)
-            initializeSDK()
-            configureSDKSession()
-            initActionButton()
+        setContentView(R.layout.activity_main)
+        initializeSDK()
+        configureSDKSession()
+        initActionButton()
 
-            if (modalBottomSheet.isHidden || modalBottomSheet.isDetached) {
-                println("paybutton hidden")
-                payButton.changeButtonState(ActionButtonState.IDLE)
-            }
-        }*/
+        if (modalBottomSheet.isHidden || modalBottomSheet.isDetached) {
+            println("paybutton hidden")
+            payButton.changeButtonState(ActionButtonState.IDLE)
+        }
+
+
+        /* if (ThemeManager.currentTheme.isNotEmpty() && (ThemeManager.currentTheme.contains("dark") || ThemeManager.currentTheme.contains("light"))){
+                  setContentView(R.layout.activity_main)
+                  initializeSDK()
+                  configureSDKSession()
+                  initActionButton()
+
+                  if (modalBottomSheet.isHidden || modalBottomSheet.isDetached) {
+                      println("paybutton hidden")
+                      payButton.changeButtonState(ActionButtonState.IDLE)
+                  }
+              }*/
 
 
     }
@@ -110,22 +115,36 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         /** Configures the theme manager by setting the provided custom theme file names
         - Parameter customTheme: Please pass the tap checkout theme object with the names of your custom theme files if needed. If not set, the normal and default TAP theme will be used
          */
-        /* if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))
+         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))
              ThemeManager.loadTapTheme(resources, R.raw.defaultdarktheme, "darktheme")
          else if (ThemeManager.currentTheme.isNotEmpty() && !ThemeManager.currentTheme.contains("dark"))
              ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "lighttheme")
          else ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "lighttheme")
-        */
+
 
         /** Configures the theme manager by passing the provided custom theme url
         - Parameter urlString: Please pass the themeUrL
          */
 
-        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))
+      /*  if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))
             ThemeManager.loadTapTheme(this, urlStrDark)
         else if (ThemeManager.currentTheme.isNotEmpty() && !ThemeManager.currentTheme.contains("dark"))
             ThemeManager.loadTapTheme(this, urlStrLight)
-        else ThemeManager.loadTapTheme(this, urlStrLight)
+        else ThemeManager.loadTapTheme(this, urlStrLight)*/
+    }
+
+    private fun initializeLanguage(){
+        /** Configures the LocalizationManager by setting the provided language  url
+        - Parameter  languageUrl json: Please pass the taplanguage to be loaded dynamically  if needed. If not set, the normal and default language will be used
+         */
+
+       // LocalizationManager.loadTapLocale(this, urlLocalisation)
+
+        /** Configures the localisation manager by setting the locale, adjusting the flipping and the localisation custom file if any
+        - Parameter localiseFile: Please pass the name of the custom localisation file if needed. If not set, the normal and default TAP localisations will be used
+         */
+
+        LocalizationManager.loadTapLocale(resources, R.raw.lang)
     }
 
     private fun initializeSDK() {
