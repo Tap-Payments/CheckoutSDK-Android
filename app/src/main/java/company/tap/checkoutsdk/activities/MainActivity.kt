@@ -85,6 +85,18 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
         }, 4000)
 
+  /*      if (ThemeManager.currentTheme.isNotEmpty() && (ThemeManager.currentTheme.contains("dark") || ThemeManager.currentTheme.contains("light"))){
+            setContentView(R.layout.activity_main)
+            initializeSDK()
+            configureSDKSession()
+            initActionButton()
+
+            if (modalBottomSheet.isHidden || modalBottomSheet.isDetached) {
+                println("paybutton hidden")
+                payButton.changeButtonState(ActionButtonState.IDLE)
+            }
+        }*/
+
 
     }
 
