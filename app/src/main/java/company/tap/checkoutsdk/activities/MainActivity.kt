@@ -25,6 +25,7 @@ import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.enums.CardType
+import company.tap.checkout.open.enums.SdkMode
 import company.tap.checkout.open.interfaces.SessionDelegate
 import company.tap.checkout.open.models.*
 import company.tap.checkout.open.models.Receipt
@@ -284,6 +285,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
         sdkSession.setDefaultCardHolderName("TEST TAP"); // ** Optional ** you can pass default CardHolderName of the user .So you don't need to type it.
         sdkSession.isUserAllowedToEnableCardHolderName(false) // ** Optional ** you can enable/ disable  default CardHolderName .
+        sdkSession.setSdkMode(SdkMode.SAND_BOX)// ** Optional ** But for using GooglePay mandatory to pass.
         settingsManager?.setPref(this)
     }
 

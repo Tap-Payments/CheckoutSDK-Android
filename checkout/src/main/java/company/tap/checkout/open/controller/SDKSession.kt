@@ -23,6 +23,7 @@ import company.tap.checkout.open.CheckOutActivity
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.CardType
+import company.tap.checkout.open.enums.SdkMode
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.interfaces.SessionDelegate
 import company.tap.checkout.open.models.*
@@ -319,6 +320,15 @@ object  SDKSession : APIRequestCallback {
     fun isUserAllowedToEnableCardHolderName(enableCardHolderName: Boolean) {
         println("isUserAllowedToEnableCardHolderName >>> $enableCardHolderName")
         paymentDataSource?.isUserAllowedToEditCardHolderName(enableCardHolderName)
+    }
+
+    /**
+     * set default sdkMode
+     *
+     * @param defaultCardHolderName the default cardholderName
+     */
+    fun setSdkMode(sdkMode: SdkMode) {
+        paymentDataSource?.setSDKMode(sdkMode)
     }
 
     override fun onSuccess(responseCode: Int, requestCode: Int, response: Response<JsonElement>?) {

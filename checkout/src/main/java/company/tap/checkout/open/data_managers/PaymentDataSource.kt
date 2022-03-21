@@ -1,16 +1,19 @@
 package company.tap.checkout.open.data_managers
 
 import android.content.Context
-import company.tap.checkout.internal.api.models.BINLookupResponse
-import company.tap.checkout.internal.api.models.CardIssuer
-import company.tap.checkout.internal.api.models.Charge
-import company.tap.checkout.internal.api.models.Merchant
+import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
 import company.tap.checkout.internal.api.responses.SDKSettings
 import company.tap.checkout.open.enums.CardType
+import company.tap.checkout.open.enums.SdkMode
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.interfaces.PaymentDataSource
 import company.tap.checkout.open.models.*
+import company.tap.checkout.open.models.AuthorizeAction
+import company.tap.checkout.open.models.Receipt
+import company.tap.checkout.open.models.Reference
+import company.tap.checkout.open.models.Shipping
+import company.tap.checkout.open.models.Tax
 import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList
@@ -63,6 +66,8 @@ object PaymentDataSource :PaymentDataSource {
     private var paymentOptionsResponse: PaymentOptionsResponse? = null
     private var binLookupResponse: BINLookupResponse? = null
     private var chargeOrAuthorize: Charge? = null
+    private var sdkMode: SdkMode = SdkMode.SAND_BOX
+    private var cardPaymentOption: ArrayList<PaymentOption> ?= null
 
 
     //////////////////////// Setter's Area  ///////////////////////////////////////
@@ -296,6 +301,13 @@ object PaymentDataSource :PaymentDataSource {
     fun setBinLookupResponse(binLookupResponse: BINLookupResponse?){
         this.binLookupResponse = binLookupResponse
     }
+
+    fun setSDKMode(sdkMode: SdkMode){
+        this.sdkMode = sdkMode
+    }
+    fun setAvailableCardPaymentOptions(cardPaymentOptions:ArrayList<PaymentOption>){
+        this.cardPaymentOption = cardPaymentOptions
+    }
 /////<<<<<<<<<<<<<<<<<<<<<<<<<,Getters Area >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>/////////////////
 
 
@@ -416,5 +428,13 @@ object PaymentDataSource :PaymentDataSource {
 
     override fun getBinLookupResponse(): BINLookupResponse? {
        return binLookupResponse
+    }
+
+    override fun getSDKMode(): SdkMode {
+       return sdkMode
+    }
+
+    override fun getAvailablePaymentOptionsCardBrands(): ArrayList<PaymentOption>? {
+    return cardPaymentOption
     }
 }

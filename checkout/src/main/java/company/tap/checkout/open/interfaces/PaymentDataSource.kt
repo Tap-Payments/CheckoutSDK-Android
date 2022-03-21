@@ -4,13 +4,16 @@ import androidx.annotation.RestrictTo
 import company.tap.checkout.internal.api.models.BINLookupResponse
 import company.tap.checkout.internal.api.models.CardIssuer
 import company.tap.checkout.internal.api.models.Merchant
+import company.tap.checkout.internal.api.models.PaymentOption
 import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
 import company.tap.checkout.internal.api.responses.SDKSettings
 import company.tap.checkout.open.enums.CardType
+import company.tap.checkout.open.enums.SdkMode
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.models.*
 import java.math.BigDecimal
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by AhlaamK on 6/13/21.
@@ -145,5 +148,14 @@ interface PaymentDataSource {
     fun getSDKSettings(): SDKSettings?
 
     fun getBinLookupResponse() : BINLookupResponse?
+
+    /**
+     * Defines the SDK mode . Optional. @return the default Sandbox
+     */
+    fun getSDKMode(): SdkMode?
+     /**
+     * Defines the Payment options. Optional.
+     */
+    fun getAvailablePaymentOptionsCardBrands(): ArrayList<PaymentOption>?
 
 }

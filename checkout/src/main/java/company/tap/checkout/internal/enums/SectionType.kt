@@ -15,7 +15,8 @@ enum class SectionType {
     GOPAY_SIGN_IN,
     FRAGMENT,
     ActionButton,
-    OTP_VIEW
+    OTP_VIEW,
+    GOOGLE_PAY
 
 
 }

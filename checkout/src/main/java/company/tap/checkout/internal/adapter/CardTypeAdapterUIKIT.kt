@@ -51,6 +51,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         private const val TYPE_SAVED_CARD = 5
         private const val TYPE_REDIRECT = 2
         private const val TYPE_GO_PAY = 3
+        private const val TYPE_GOOGLE_PAY = 4
     }
 
     fun updateAdapterData(adapterContent: List<PaymentOption>) {

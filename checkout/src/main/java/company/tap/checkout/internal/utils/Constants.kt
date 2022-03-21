@@ -1,6 +1,7 @@
 package company.tap.checkout.internal.utils
 
 import com.google.android.gms.wallet.WalletConstants
+import company.tap.checkout.open.data_managers.PaymentDataSource
 import java.util.*
 
 /**
@@ -9,7 +10,7 @@ import java.util.*
 Copyright (c) 2022    Tap Payments.
 All rights reserved.
  **/
- class Constant {
+ object Constants {
     /**
      * Changing this to ENVIRONMENT_PRODUCTION will make the API return chargeable card information.
      * Please refer to the documentation to read about the required steps needed to enable
@@ -58,7 +59,7 @@ All rights reserved.
      * @value #CURRENCY_CODE Your local currency
      */
     val CURRENCY_CODE: String =
-        PaymentDataSource.getInstance().getCurrency().getIsoCode().toUpperCase()
+        PaymentDataSource.getSelectedCurrency()?.toUpperCase() ?: "KWD"
 
     /**
      * Supported countries for shipping (use ISO 3166-1 alpha-2 country codes). Relevant only when
@@ -85,7 +86,7 @@ All rights reserved.
      * @value #PAYMENT_GATEWAY_TOKENIZATION_PARAMETERS
      */
     val PAYMENT_GATEWAY_TOKENIZATION_PARAMETERS: HashMap<String, String> =
-        object : HashMap<String?, String?>() {
+        object : HashMap<String, String>() {
             init {
                 put("gateway", PAYMENT_GATEWAY_TOKENIZATION_NAME)
                 put("gatewayMerchantId", "exampleGatewayMerchantId")
@@ -109,7 +110,7 @@ All rights reserved.
      * @value #DIRECT_TOKENIZATION_PARAMETERS
      */
     val DIRECT_TOKENIZATION_PARAMETERS: HashMap<String, String> =
-        object : HashMap<String?, String?>() {
+        object : HashMap<String, String>() {
             init {
                 put("protocolVersion", "ECv2")
                 put("publicKey", DIRECT_TOKENIZATION_PUBLIC_KEY)
