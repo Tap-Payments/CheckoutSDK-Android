@@ -118,13 +118,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private lateinit var itemsViewHolder: ItemsViewHolder
     private lateinit var cardViewHolder: CardViewHolder
     private lateinit var asynchronousPaymentViewHolder: AsynchronousPaymentViewHolder
+
     private  var tabAnimatedActionButtonViewHolder: TabAnimatedActionButtonViewHolder?=null
     private lateinit var bottomSheetDialog: BottomSheetDialog
     private lateinit var fragmentManager: FragmentManager
     @SuppressLint("StaticFieldLeak")
     private lateinit var bottomSheetLayout: FrameLayout
     @Nullable
-    private lateinit var selectedAmount: String
+    internal lateinit var selectedAmount: String
     @Nullable
     private lateinit var selectedCurrency: String
     private var fee : BigDecimal?= BigDecimal.ZERO
@@ -168,6 +169,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     var currencyOldRate:BigDecimal?=null
     var currentCalculatedAmount:BigDecimal?=null
     var lastSelectedCurrency:String?=null
+
+    @JvmField
+    var selectedTotalAmount : String? = null
 
     @JvmField
     var selectedAmountPos: BigDecimal? = null
@@ -478,12 +482,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             if (selectedAmount == currentAmount && selectedCurrency == currentCurrency) {
                 amountViewHolder.view.amount_section.mainKDAmountValue.visibility = View.GONE
 
-            } else
+            } else{
                 amountViewHolder.updateSelectedCurrency(
                     displayItemsOpen,
                     selectedAmount, selectedCurrency,
                     currentAmount, currentCurrency
                 )
+
+            }
         }
         if(otpViewHolder.otpView.isVisible){
             removeViews(otpViewHolder)
@@ -1519,6 +1525,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         selectedAmount = CurrencyFormatter.currencyFormat(totalSelectedAmount.toString())
         selectedCurrency = currencySelected
+        selectedTotalAmount = selectedAmount
         println("selectedAmount final>>"+selectedAmount)
         println("selectedCurrency final>>"+selectedCurrency)
         println("currentAmount final>>"+currentAmount)
@@ -1675,9 +1682,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
            fee = calculateExtraFeesAmount(paymentOption, amountedCurrency)
 
        }
+        val totalAmount :String
+        if(selectedTotalAmount!=null){
+           totalAmount  = CurrencyFormatter.currencyFormat(fee?.add(
+                  selectedTotalAmount?.toDouble()?.let { BigDecimal.valueOf(it) }).toString())
+        }else {
+            totalAmount  = CurrencyFormatter.currencyFormat(fee?.add(
+                    amountedCurrency?.amount?.toDouble()?.let { BigDecimal.valueOf(it) }).toString())
+        }
 
-        var totalAmount = CurrencyFormatter.currencyFormat(fee?.add(
-            amountedCurrency?.amount?.toDouble()?.let { BigDecimal.valueOf(it) }).toString())
        if (calculateExtraFeesAmount(
                extraFees,
                paymentOptionsResponse.supportedCurrencies,

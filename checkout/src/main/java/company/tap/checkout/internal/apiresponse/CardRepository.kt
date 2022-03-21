@@ -42,6 +42,7 @@ import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog.Companion.TAG
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.subjects.BehaviorSubject
+import org.json.JSONObject
 import retrofit2.Response
 import java.math.BigDecimal
 import java.util.*
@@ -72,6 +73,7 @@ class CardRepository : APIRequestCallback {
 
     private var sdkSession : SDKSession = SDKSession
     private var dataProvider: IPaymentDataProvider= PaymentDataProvider()
+     lateinit var  jsonString :String
 
     fun getDataProvider(): IPaymentDataProvider {
         return dataProvider
@@ -875,38 +877,46 @@ class CardRepository : APIRequestCallback {
                 require3DSecure = provider?.getRequires3DSecure()
             }
         }
+
+        var selectedTotalAmount :String
+        if(viewModel.selectedTotalAmount?.isNotBlank() == true  &&  viewModel.selectedTotalAmount?.isNotEmpty() == true){
+            selectedTotalAmount = viewModel?.selectedTotalAmount!!
+        }else {
+            selectedTotalAmount = amountedCurrency?.amount.toString()
+        }
+
         when (transactionMode) {
             TransactionMode.PURCHASE -> {
                 val chargeRequest = transactionCurrency?.amount?.let {
-                    amountedCurrency?.currency?.let { it1 ->
-                        CreateChargeRequest(
-                            merchant,
-                            it,
-                            transactionCurrency?.currency,
-                            amountedCurrency?.amount,
-                            it1,
-                            customer,
-                            fee,
-                            order,
-                            redirect,
-                            post,
-                            source,
-                            paymentDescription,
-                            paymentMetadata,
-                            reference,
-                            shouldSaveCard,
-                            statementDescriptor,
-                            require3DSecure,
-                            receipt,
-                            destinations,
-                            topUp
-                        )
+                        amountedCurrency?.currency?.let { it1 ->
+                            CreateChargeRequest(
+                                    merchant,
+                                    it,
+                                    transactionCurrency?.currency,
+                                     BigDecimal(selectedTotalAmount),
+                                    it1,
+                                    customer,
+                                    fee,
+                                    order,
+                                    redirect,
+                                    post,
+                                    source,
+                                    paymentDescription,
+                                    paymentMetadata,
+                                    reference,
+                                    shouldSaveCard,
+                                    statementDescriptor,
+                                    require3DSecure,
+                                    receipt,
+                                    destinations,
+                                    topUp
+                            )
 
 
+                        }
                     }
-                }
-                println("chargere" + chargeRequest)
-                val jsonString = Gson().toJson(chargeRequest)
+                    println("chargere" + chargeRequest)
+                     jsonString = Gson().toJson(chargeRequest)
                 NetworkController.getInstance().processRequest(
                     TapMethodType.POST, ApiService.CHARGES, jsonString, this, CHARGE_REQ_CODE
                 )
@@ -915,13 +925,12 @@ class CardRepository : APIRequestCallback {
                 val authorizeAction: AuthorizeAction? = provider.getAuthorizeAction()
                 val authorizeRequest = authorizeAction?.let {
                     transactionCurrency?.amount?.let { it1 ->
-                        amountedCurrency?.amount?.let { it2 ->
-                            CreateAuthorizeRequest(
+                        CreateAuthorizeRequest(
                                 merchant,
                                 it1,
                                 transactionCurrency?.currency,
-                                it2,
-                                amountedCurrency?.currency,
+                                BigDecimal(selectedTotalAmount),
+                                    amountedCurrency?.currency.toString(),
                                 customer,
                                 fee,
                                 order,
@@ -939,7 +948,7 @@ class CardRepository : APIRequestCallback {
                                 destinations,
                                 topUp
                             )
-                        }
+
                     }
 
                 }

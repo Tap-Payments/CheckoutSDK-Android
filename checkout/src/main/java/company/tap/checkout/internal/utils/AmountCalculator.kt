@@ -122,7 +122,7 @@ object AmountCalculator {
                                     currency?.amount,
                                     MathContext.DECIMAL64
                                 )
-                                fee.getValue()?.multiply(rate)
+                             return  fee.getValue()?.multiply(rate)
                             }
                         break
                     }
