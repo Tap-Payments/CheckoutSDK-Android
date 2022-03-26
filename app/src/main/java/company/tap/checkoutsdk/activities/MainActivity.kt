@@ -62,7 +62,10 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         settingsManager = SettingsManager
 
 
-        initializeTheme()
+        if(ThemeManger.currentTheme.isNotEmpty()){
+            initializeTheme()
+        }
+
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
         setLocale(this, LocalizationManager.getLocale(this).language)
@@ -127,11 +130,13 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         - Parameter urlString: Please pass the themeUrL
          */
 
-      /*  if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))
+     if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))
             ThemeManager.loadTapTheme(this, urlStrDark)
         else if (ThemeManager.currentTheme.isNotEmpty() && !ThemeManager.currentTheme.contains("dark"))
             ThemeManager.loadTapTheme(this, urlStrLight)
-        else ThemeManager.loadTapTheme(this, urlStrLight)*/
+        else ThemeManager.loadTapTheme(this, urlStrLight)
+
+
     }
 
     private fun initializeLanguage(){
