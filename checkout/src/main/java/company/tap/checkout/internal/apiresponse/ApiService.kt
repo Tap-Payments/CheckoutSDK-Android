@@ -24,17 +24,17 @@ object ApiService {
     /**
      * The Authorize.
      */
-    const val AUTHORIZE = "authorize"
+    const val AUTHORIZE = "checkout/authorize"
 
     /**
      * The Tokens.
      */
-    const val TOKENS = "tokens"
+    const val TOKENS = "checkout/tokens"
 
     /**
      * The Token.
      */
-    const val TOKEN = "tokens"
+    const val TOKEN = "/api/token"
     /**
      * The Save card.
      */

@@ -36,7 +36,7 @@ data class Token(
     @Expose
      val client_ip: String? = null,
 
-    @SerializedName("livemode")
+    @SerializedName("live_mode")
     @Expose
      val livemode: Boolean = false,
 

@@ -205,7 +205,7 @@ class CardRepository : APIRequestCallback {
     @RequiresApi(Build.VERSION_CODES.N)
     fun retrieveBinLookup(viewModel: CheckoutViewModel, binValue: String?) {
         this.viewModel = viewModel
-       val reqBody =EmptyBody()
+       val reqBody =BinLookUpRequestModel(binValue)
         jsonString =Gson().toJson(reqBody)
         NetworkController.getInstance().processRequest(
             TapMethodType.POST, ApiService.BIN, jsonString,

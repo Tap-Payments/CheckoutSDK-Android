@@ -59,5 +59,9 @@ data class BINLookupResponse(
 
     @SerializedName("country")
     @Expose
-      val country: String
+      val country: String,
+
+    @SerializedName("country_name")
+    @Expose
+    val countryName: String
 ) : Serializable

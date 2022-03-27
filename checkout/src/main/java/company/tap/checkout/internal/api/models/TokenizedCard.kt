@@ -34,7 +34,8 @@ data class TokenizedCard(
     @SerializedName("brand")
      val brand: CardBrand? = null,
 
-
+    @SerializedName("scheme")
+    val scheme: String? = null,
     @SerializedName("exp_month")
     @Expose
      val expirationMonth: Int = 0,
