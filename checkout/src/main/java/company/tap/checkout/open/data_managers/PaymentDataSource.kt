@@ -2,6 +2,7 @@ package company.tap.checkout.open.data_managers
 
 import android.content.Context
 import company.tap.checkout.internal.api.models.*
+import company.tap.checkout.internal.api.responses.InitResponseModel
 import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
 import company.tap.checkout.internal.api.responses.SDKSettings
 import company.tap.checkout.open.enums.CardType
@@ -64,11 +65,13 @@ object PaymentDataSource :PaymentDataSource {
     private var selectedAmount: BigDecimal? = null
     private var sdkSettings: SDKSettings? = null
     private var paymentOptionsResponse: PaymentOptionsResponse? = null
+    private var initResponseModel: InitResponseModel? = null
     private var binLookupResponse: BINLookupResponse? = null
     private var chargeOrAuthorize: Charge? = null
     private var sdkMode: SdkMode = SdkMode.SAND_BOX
     private var cardPaymentOption: ArrayList<PaymentOption> ?= null
-
+    private var tokenConfig: String? = null
+    private var authKeys: String? = null
 
     //////////////////////// Setter's Area  ///////////////////////////////////////
     /**
@@ -79,7 +82,14 @@ object PaymentDataSource :PaymentDataSource {
     fun setTransactionCurrency(tapCurrency: TapCurrency) {
         currency = tapCurrency
     }
-
+    /**
+     * Set Initilaize keys currency.
+     *
+     * @param authKeys the tap currency
+     */
+    fun setInitializeKeys(authKeys: String?) {
+        this.authKeys = authKeys
+    }
     /**
      * Set tapCustomer.
      *
@@ -271,6 +281,14 @@ object PaymentDataSource :PaymentDataSource {
     fun setSelectedAmount(selectedAmount: BigDecimal){
         this.selectedAmount =selectedAmount
     }
+    /**
+     * Set tokenConfig
+     *
+     * @param _tokenConfig the  tokenConfig
+     */
+    fun setTokenConfig(_tokenConfig: String?) {
+        this.tokenConfig = _tokenConfig
+    }
 
     /**
      * Set sdkSettings.
@@ -296,6 +314,15 @@ object PaymentDataSource :PaymentDataSource {
      */
     fun setPaymentOptionsResponse(paymentOptionsResponse:PaymentOptionsResponse?) {
         this.paymentOptionsResponse = paymentOptionsResponse
+    }
+
+    /**
+     * Set initResponseModel.
+     *
+     * @param initResponseModel the sdkSettings
+     */
+    fun setInitResponse(initResponseModel: InitResponseModel?) {
+        this.initResponseModel = initResponseModel
     }
 
     fun setBinLookupResponse(binLookupResponse: BINLookupResponse?){
@@ -436,5 +463,13 @@ object PaymentDataSource :PaymentDataSource {
 
     override fun getAvailablePaymentOptionsCardBrands(): ArrayList<PaymentOption>? {
     return cardPaymentOption
+    }
+
+    override fun getTokenConfig(): String? {
+       return  tokenConfig
+    }
+
+    override fun getAuthKeys(): String? {
+       return authKeys
     }
 }

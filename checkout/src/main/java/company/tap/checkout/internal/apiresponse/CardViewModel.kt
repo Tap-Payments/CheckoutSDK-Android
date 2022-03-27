@@ -8,11 +8,10 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import company.tap.checkout.internal.api.models.*
+import company.tap.checkout.internal.api.requests.TapConfigRequestModel
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.coroutines.*
-import kotlin.random.Random
 
 /**
  * Created by AhlaamK on 11/15/20.
@@ -41,34 +40,37 @@ class CardViewModel : ViewModel() {
 
     }
 
+
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun getInitData(
+    private fun getConfigData(
         viewModel: CheckoutViewModel,
         cardViewModel: CardViewModel?,
         supportFragmentManagerdata: FragmentManager?,
-        _context: Context?
+        _context: Context?,
+        tapConfigRequestModel: TapConfigRequestModel?
     ) {
         if (_context != null) {
             this.context =_context
-            repository.getInitData(_context,viewModel,cardViewModel)
+            repository.getConfigData(_context,viewModel,cardViewModel,tapConfigRequestModel)
         }
 
 
-        GlobalScope.launch(Dispatchers.Main) { // launch coroutine in the main thread
-            val apiResponseTime = Random.nextInt(1000, 8000)
+     /*   GlobalScope.launch(Dispatchers.Main) { // launch coroutine in the main thread
+            val apiResponseTime = Random.nextInt(1000, 10000)
             delay(apiResponseTime.toLong())
             if (_context != null) {
                 if (supportFragmentManagerdata != null) {
-                    repository.getPaymentOptions(_context,viewModel,supportFragmentManagerdata)
+                    NetworkApp.initNetworkToken(PaymentDataSource.getTokenConfig())
+                    repository.getInitData(_context,viewModel,supportFragmentManagerdata)
                 }
             }
-        }
+        }*/
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun processEvent(event: CardViewEvent, viewModel: CheckoutViewModel, selectedPaymentOption: PaymentOption?, binValue: String? = null, cardDataRequest: CreateTokenCard?, cardViewModel: CardViewModel? = null, customerId: String?=null, cardId: String?=null, createTokenWithExistingCardRequest: CreateTokenSavedCard?=null, otpString:String?=null, supportFragmentManager: FragmentManager?=null, context: Context?=null) {
+    fun processEvent(event: CardViewEvent, viewModel: CheckoutViewModel,tapConfigRequestModel: TapConfigRequestModel?=null, selectedPaymentOption: PaymentOption?, binValue: String? = null, cardDataRequest: CreateTokenCard?, cardViewModel: CardViewModel? = null, customerId: String?=null, cardId: String?=null, createTokenWithExistingCardRequest: CreateTokenSavedCard?=null, otpString:String?=null, supportFragmentManager: FragmentManager?=null, context: Context?=null) {
         when (event) {
-            CardViewEvent.InitEvent -> getInitData(viewModel,cardViewModel,supportFragmentManager,context)
+            CardViewEvent.ConfigEvent -> getConfigData(viewModel,cardViewModel,supportFragmentManager,context,tapConfigRequestModel)
             CardViewEvent.ChargeEvent -> createChargeRequest(viewModel,selectedPaymentOption,null)
             CardViewEvent.RetreiveChargeEvent -> retrieveChargeRequest(viewModel)
             CardViewEvent.RetreiveBinLookupEvent -> retrieveBinlookup(viewModel,binValue)
@@ -81,12 +83,17 @@ class CardViewModel : ViewModel() {
             CardViewEvent.AuthenticateChargeTransaction -> authenticateChargeTransaction(viewModel,otpString)
             CardViewEvent.AuthenticateAuthorizeTransaction -> authenticateAuthorizeTransaction(viewModel,otpString)
             CardViewEvent.ListAllCards -> listAllCards(viewModel,customerId)
+            CardViewEvent.InitEvent -> getInitData(viewModel,context)
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun listAllCards(viewModel: CheckoutViewModel, customerId: String?) {
         repository?.listAllCards(viewModel,customerId)
+    }
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun getInitData(viewModel: CheckoutViewModel, context: Context?) {
+        repository?.getInitData(viewModel,context)
     }
 
 

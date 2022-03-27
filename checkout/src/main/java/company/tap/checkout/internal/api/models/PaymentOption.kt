@@ -57,7 +57,10 @@ data class PaymentOption(
 
     @SerializedName("asynchronous")
     @Expose
-     val asynchronous: Boolean = false
+     val asynchronous: Boolean = false ,
+    @SerializedName("cc_markup")
+    @Expose
+     val cc_markup: Int = 0
 ):Comparable<PaymentOption>, CurrenciesSupport, Serializable {
     override fun getSupportedCurrencies(): ArrayList<String>? {
        return supportedCurrencies

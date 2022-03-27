@@ -61,17 +61,21 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         initializeLanguage()
         settingsManager = SettingsManager
 
+        initializeTheme()
 
-        if(ThemeManger.currentTheme.isNotEmpty()){
-            initializeTheme()
-        }
+        if(ThemeManager.currentTheme.isNotEmpty()) {
 
-        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
-        setLocale(this, LocalizationManager.getLocale(this).language)
-        // setLocale(this,"ar")
-        println("LocalizationManager.getLocale(this).language is "+LocalizationManager.getLocale(this).language)
-      /* Handler().postDelayed({
+            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+
+            setLocale(this, LocalizationManager.getLocale(this).language)
+            // setLocale(this,"ar")
+            println(
+                "LocalizationManager.getLocale(this).language is " + LocalizationManager.getLocale(
+                    this
+                ).language
+            )
+            /* Handler().postDelayed({
             //doSomethingHere()
             setContentView(R.layout.activity_main)
             initializeSDK()
@@ -84,19 +88,18 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
             }
 
         }, 4000)*/
+            setContentView(R.layout.activity_main)
+            initializeSDK()
+            configureSDKSession()
+            initActionButton()
 
-        setContentView(R.layout.activity_main)
-        initializeSDK()
-        configureSDKSession()
-        initActionButton()
-
-        if (modalBottomSheet.isHidden || modalBottomSheet.isDetached) {
-            println("paybutton hidden")
-            payButton.changeButtonState(ActionButtonState.IDLE)
-        }
+            if (modalBottomSheet.isHidden || modalBottomSheet.isDetached) {
+                println("paybutton hidden")
+                payButton.changeButtonState(ActionButtonState.IDLE)
+            }
 
 
-        /* if (ThemeManager.currentTheme.isNotEmpty() && (ThemeManager.currentTheme.contains("dark") || ThemeManager.currentTheme.contains("light"))){
+            /* if (ThemeManager.currentTheme.isNotEmpty() && (ThemeManager.currentTheme.contains("dark") || ThemeManager.currentTheme.contains("light"))){
                   setContentView(R.layout.activity_main)
                   initializeSDK()
                   configureSDKSession()
@@ -108,7 +111,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
                   }
               }*/
 
-
+        }
     }
 
     private fun initializeTheme() {
@@ -130,12 +133,12 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         - Parameter urlString: Please pass the themeUrL
          */
 
-     if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))
+   /*  if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))
             ThemeManager.loadTapTheme(this, urlStrDark)
         else if (ThemeManager.currentTheme.isNotEmpty() && !ThemeManager.currentTheme.contains("dark"))
             ThemeManager.loadTapTheme(this, urlStrLight)
         else ThemeManager.loadTapTheme(this, urlStrLight)
-
+*/
 
     }
 
@@ -160,6 +163,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
                 "company.tap.goSellSDKExample"
 
         )
+        sdkSession.setInitilaizeKeys("sk_test_kovrMB0mupFJXfNZWx6Etg5y")
         /*TapCheckOutSDK().init(
               this,
               "sk_live_QglH8V7Fw6NPAom4qRcynDK2",
@@ -276,7 +280,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         sdkSession.setDestination(null) // ** Optional ** you can pass Destinations object or null
 
 
-        sdkSession.setMerchantID(null) // ** Optional ** you can pass merchant id or null
+        sdkSession.setMerchantID("1124340") // ** Optional ** you can pass merchant id or null
 
 
         sdkSession.setCardType(CardType.ALL) // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.

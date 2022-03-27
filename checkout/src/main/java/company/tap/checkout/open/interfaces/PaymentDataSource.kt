@@ -157,5 +157,14 @@ interface PaymentDataSource {
      * Defines the Payment options. Optional.
      */
     fun getAvailablePaymentOptionsCardBrands(): ArrayList<PaymentOption>?
+    /**
+     * Defines the TokenConfig for header
+     */
+    fun getTokenConfig(): String?
+
+    /**
+     * Defines the AuthKeys.
+     */
+    fun getAuthKeys(): String?
 
 }

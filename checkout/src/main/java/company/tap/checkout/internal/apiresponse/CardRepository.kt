@@ -6,6 +6,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentManager
+import com.google.android.gms.common.api.Api
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import company.tap.checkout.internal.PaymentDataProvider
@@ -14,11 +15,9 @@ import company.tap.checkout.internal.api.enums.AuthenticationType
 import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.enums.URLStatus
 import company.tap.checkout.internal.api.models.*
+import company.tap.checkout.internal.api.models.Merchant
 import company.tap.checkout.internal.api.requests.*
-import company.tap.checkout.internal.api.responses.DeleteCardResponse
-import company.tap.checkout.internal.api.responses.ListCardsResponse
-import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
-import company.tap.checkout.internal.api.responses.SDKSettings
+import company.tap.checkout.internal.api.responses.*
 import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.interfaces.IPaymentDataProvider
 import company.tap.checkout.internal.utils.AmountCalculator
@@ -34,6 +33,7 @@ import company.tap.checkout.open.models.*
 import company.tap.checkout.open.models.AuthorizeAction
 import company.tap.checkout.open.models.Receipt
 import company.tap.checkout.open.models.Reference
+import company.tap.tapnetworkkit.connection.NetworkApp
 import company.tap.tapnetworkkit.controller.NetworkController
 import company.tap.tapnetworkkit.enums.TapMethodType
 import company.tap.tapnetworkkit.exception.GoSellError
@@ -42,7 +42,6 @@ import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog.Companion.TAG
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.subjects.BehaviorSubject
-import org.json.JSONObject
 import retrofit2.Response
 import java.math.BigDecimal
 import java.util.*
@@ -74,22 +73,26 @@ class CardRepository : APIRequestCallback {
     private var sdkSession : SDKSession = SDKSession
     private var dataProvider: IPaymentDataProvider= PaymentDataProvider()
      lateinit var  jsonString :String
-
+    private var configResponse:TapConfigResponseModel?=null
+    @JvmField
+    var initResponseModel :InitResponseModel?= null
     fun getDataProvider(): IPaymentDataProvider {
         return dataProvider
     }
+
     @RequiresApi(Build.VERSION_CODES.N)
-    fun getInitData(_context: Context, viewModel: CheckoutViewModel, cardViewModel: CardViewModel?) {
+    fun getConfigData(_context: Context, viewModel: CheckoutViewModel, cardViewModel: CardViewModel?,tapConfigRequestModel:TapConfigRequestModel?) {
         this.viewModel = viewModel
         if (cardViewModel != null) {
             this.cardViewModel = cardViewModel
         }
+      jsonString = Gson().toJson(tapConfigRequestModel)
         NetworkController.getInstance().processRequest(
-            TapMethodType.GET,
-            ApiService.INIT,
-            null,
+            TapMethodType.POST,
+            ApiService.CONFIG,
+            jsonString,
             this,
-            INIT_CODE
+            CONFIG_CODE
         )
         this.cardRepositoryContext = _context
     }
@@ -117,9 +120,20 @@ class CardRepository : APIRequestCallback {
 
         val jsonString = Gson().toJson(requestBody)
         NetworkController.getInstance().processRequest(
-            TapMethodType.POST, ApiService.PAYMENT_TYPES, jsonString, this, PAYMENT_OPTIONS_CODE
+            TapMethodType.POST, ApiService.INIT, jsonString, this, INIT_CODE
         )
         this.supportFragmentManager = supportFragmentManagerdata
+        // this.cardRepositoryContext = _context
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun getInitData(viewModel: CheckoutViewModel, context: Context?) {
+       NetworkApp.initNetworkToken(PaymentDataSource?.getTokenConfig(),context,ApiService.BASE_URL)
+
+        NetworkController.getInstance().processRequest(
+            TapMethodType.POST, ApiService.INIT, null, this, INIT_CODE
+        )
+
         // this.cardRepositoryContext = _context
     }
 
@@ -352,12 +366,50 @@ class CardRepository : APIRequestCallback {
     }
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onSuccess(responseCode: Int, requestCode: Int, response: Response<JsonElement>?) {
-        if (requestCode == INIT_CODE) {
+        if (requestCode == CONFIG_CODE) {
             response?.body().let {
-                initResponse = Gson().fromJson(it, SDKSettings::class.java)
-                PaymentDataSource.setSDKSettings(initResponse)
+                configResponse = Gson().fromJson(it, TapConfigResponseModel::class.java)
+                println("configResponse>>"+configResponse?.token)
+                PaymentDataSource.setTokenConfig(configResponse?.token)
+                NetworkApp.initNetworkToken(configResponse?.token, contextSDK,ApiService.BASE_URL)
+               /* cardViewModel.processEvent(
+                    CardViewEvent.InitEvent,
+                    viewModel,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                )*/
+                val reqBody = EmptyBody()
+                jsonString =Gson().toJson(reqBody)
+                NetworkController.getInstance().processRequest(
+                    TapMethodType.POST, ApiService.INIT,  jsonString,
+                    this, INIT_CODE
+                )
             }
-        }else if (requestCode == PAYMENT_OPTIONS_CODE) {
+        }else if (requestCode == INIT_CODE) {
+            if (response?.body() != null) {
+                response.body().let {
+                    println("INIT REsponse>>>>"+response.body())
+                    initResponseModel = Gson().fromJson(it, InitResponseModel::class.java)
+                    PaymentDataSource.setInitResponse(initResponseModel)
+
+                    if (tabAnimatedActionButton != null) {
+                        tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
+                    }
+                }
+
+            }else {
+                sdkSession.sessionDelegate?.sessionFailedToStart()
+            }
+
+        }
+        else if (requestCode == PAYMENT_OPTIONS_CODE) {
             if (response?.body() != null) {
                 response.body().let {
                     paymentOptionsResponse = Gson().fromJson(it, PaymentOptionsResponse::class.java)
@@ -532,11 +584,12 @@ class CardRepository : APIRequestCallback {
             CardViewState.ChargeViewState(charge = chargeResponse)
         if(::binLookupResponse.isInitialized)
             CardViewState.BinLookupViewState(binLookupResponse = binLookupResponse)
-        if(initResponse!=null && paymentOptionsResponse!=null){
+        if(configResponse!=null && paymentOptionsResponse!=null){
             val viewState = CardViewState(
-                initResponse = initResponse,
+                configResponseModel = configResponse,
                 paymentOptionsResponse = paymentOptionsResponse
             )
+
            /* val tapCheckoutFragment = CheckoutFragment()
             tapCheckoutFragment.show(supportFragmentManager.beginTransaction().addToBackStack(null), "CheckOutFragment")*/
             val intent = Intent(SDKSession.activity, CheckOutActivity::class.java)
@@ -800,20 +853,21 @@ class CardRepository : APIRequestCallback {
     }
 
     companion object {
-        private const val INIT_CODE = 1
-        private const val PAYMENT_OPTIONS_CODE = 2
-        private const val CHARGE_REQ_CODE = 3
-        private const val CHARGE_RETRIEVE_CODE = 4
-        private const val BIN_RETRIEVE_CODE = 5
-        private const val CREATE_TOKEN_CODE = 6
-        private const val CREATE_AUTHORIZE_CODE = 7
-        private const val RETRIEVE_AUTHORIZE_CODE = 8
-        private const val CREATE_SAVE_CARD = 9
-        private const val RETRIEVE_SAVE_CARD_CODE = 10
-        private const val DEL_SAVE_CARD_CODE = 11
-        private const val CREATE_SAVE_EXISTING_CODE = 12
-        private const val AUTHENTICATE_CODE = 13
-        private const val LIST_ALL_CARD_CODE = 14
+        private const val CONFIG_CODE = 1
+        private const val INIT_CODE = 2
+        private const val PAYMENT_OPTIONS_CODE = 3
+        private const val CHARGE_REQ_CODE = 4
+        private const val CHARGE_RETRIEVE_CODE = 5
+        private const val BIN_RETRIEVE_CODE = 6
+        private const val CREATE_TOKEN_CODE = 7
+        private const val CREATE_AUTHORIZE_CODE = 8
+        private const val RETRIEVE_AUTHORIZE_CODE = 9
+        private const val CREATE_SAVE_CARD = 10
+        private const val RETRIEVE_SAVE_CARD_CODE = 11
+        private const val DEL_SAVE_CARD_CODE = 12
+        private const val CREATE_SAVE_EXISTING_CODE = 13
+        private const val AUTHENTICATE_CODE = 14
+        private const val LIST_ALL_CARD_CODE = 15
 
 
     }

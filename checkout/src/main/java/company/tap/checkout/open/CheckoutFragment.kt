@@ -231,7 +231,7 @@ requireArguments().putBoolean(RESET_FRAG, resetFragment)
 
 
     private fun consumeResponse(response: Resource<CardViewState>) {
-        println("response value is" + response.data?.initResponse)
+        println("response value is" + response.data?.configResponseModel)
         when (response) {
             is Resource.Loading -> concatText("Loading")
             is Resource.Finished -> renderView(response.data)

@@ -12,9 +12,13 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentManager
 import com.google.gson.JsonElement
+import company.tap.checkout.TapCheckOutSDK
 import company.tap.checkout.internal.PaymentDataProvider
 import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.models.Merchant
+import company.tap.checkout.internal.api.requests.Config
+import company.tap.checkout.internal.api.requests.Gateway
+import company.tap.checkout.internal.api.requests.TapConfigRequestModel
 import company.tap.checkout.internal.apiresponse.CardViewEvent
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.utils.CustomUtils.showDialog
@@ -28,6 +32,7 @@ import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.interfaces.SessionDelegate
 import company.tap.checkout.open.models.*
 import company.tap.taplocalizationkit.LocalizationManager
+import company.tap.tapnetworkkit.connection.NetworkApp
 import company.tap.tapnetworkkit.exception.GoSellError
 import company.tap.tapnetworkkit.interfaces.APIRequestCallback
 import company.tap.tapuilibrary.themekit.ThemeManager
@@ -323,6 +328,16 @@ object  SDKSession : APIRequestCallback {
     }
 
     /**
+     * set transaction currency
+     *
+     * @param tapCurrency the tap currency
+     */
+    fun setInitilaizeKeys(authKeys: String) {
+        paymentDataSource?.setInitializeKeys(authKeys)
+    }
+
+
+    /**
      * set default sdkMode
      *
      * @param defaultCardHolderName the default cardholderName
@@ -347,6 +362,7 @@ object  SDKSession : APIRequestCallback {
      * @param SDK_REQUEST_CODE the sdk request code
      */
 
+    @RequiresApi(Build.VERSION_CODES.N)
     fun setButtonView(
         payButtonView: TabAnimatedActionButton,
         context: Context,
@@ -426,8 +442,12 @@ object  SDKSession : APIRequestCallback {
     fun startPayment(_supportFragmentManager:FragmentManager) {
        // persistPaymentDataSource()
       //  if (tabAnimatedActionButton != null) tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
-        println(" this.paymentDataSource.getTransactionMode() : " + paymentDataSource?.getTransactionMode())
-        CardViewModel().processEvent(CardViewEvent.InitEvent, CheckoutViewModel(),null,null,null,null,null,null,null,null,
+        val requestModel =TapConfigRequestModel(PaymentDataSource?.getAuthKeys()?.let { PaymentDataSource?.getMerchant()?.id?.let { it1 ->
+            Gateway(it,
+                it1,Config(NetworkApp.getApplicationInfo()))
+        } })
+        println("tapConfigRequestModel : " + requestModel)
+        CardViewModel().processEvent(CardViewEvent.ConfigEvent, CheckoutViewModel(),requestModel,null,null,null,null,null,null,null,null,
             _supportFragmentManager,contextSDK)
 
 

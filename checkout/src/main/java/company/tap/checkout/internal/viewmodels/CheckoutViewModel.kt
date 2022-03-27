@@ -294,6 +294,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             null,
             null,
             null,
+            null,
             otpCode
         )
     }
@@ -303,6 +304,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         cardViewModel.processEvent(
             CardViewEvent.AuthenticateChargeTransaction,
             this,
+            null,
             null,
             null,
             null,
@@ -1015,6 +1017,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     null,
                     null,
                     null,
+                    null,
                     PaymentDataSource.getCustomer().identifier,
                     cardId
                 )
@@ -1276,6 +1279,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         cardViewModel.processEvent(
             CardViewEvent.ChargeEvent,
             this,
+            null,
             selectedPaymentOption,
             null,
             null,
@@ -1301,6 +1305,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         cardViewModel.processEvent(
             CardViewEvent.CreateTokenEvent,
             this,
+            null,
             null,
             null,
             paymentInputViewHolder.getCard(),
@@ -1747,6 +1752,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             null,
             null,
             null,
+            null,
             createTokenSavedCard
         )
     }
@@ -1876,7 +1882,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private fun callBinLookupApi(binLookUpStr: String?) {
         cardViewModel.processEvent(
             CardViewEvent.RetreiveBinLookupEvent,
-            CheckoutViewModel(), null, binLookUpStr, null, null
+            CheckoutViewModel(), null,null, binLookUpStr, null, null
         )
 
     }

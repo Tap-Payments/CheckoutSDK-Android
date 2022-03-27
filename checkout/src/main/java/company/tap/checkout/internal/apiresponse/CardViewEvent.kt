@@ -10,6 +10,7 @@ All rights reserved.
  **/
 sealed class CardViewEvent {
     object InitEvent : CardViewEvent()
+    object ConfigEvent : CardViewEvent()
     object ChargeEvent :CardViewEvent()
     object RetreiveChargeEvent :CardViewEvent()
     object RetreiveBinLookupEvent :CardViewEvent()

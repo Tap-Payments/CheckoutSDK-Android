@@ -418,7 +418,7 @@ class PaymentInputViewHolder(
         if (s.trim().toString().replace(" ", "").length == BIN_NUMBER_LENGTH) {
             cardViewModel.processEvent(
                 CardViewEvent.RetreiveBinLookupEvent,
-                CheckoutViewModel(), null, s.trim().toString().replace(" ", ""), null, null
+                CheckoutViewModel(), null,null, s.trim().toString().replace(" ", ""), null, null
             )
             tapCardInputView.removeCardNumberTextWatcher(textWatcher)
             tapCardInputView.setCardNumberTextWatcher(textWatcher)
