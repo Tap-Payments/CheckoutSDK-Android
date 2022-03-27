@@ -5,6 +5,8 @@ import company.tap.checkout.internal.api.models.BINLookupResponse
 import company.tap.checkout.internal.api.models.CardIssuer
 import company.tap.checkout.internal.api.models.Merchant
 import company.tap.checkout.internal.api.models.PaymentOption
+import company.tap.checkout.internal.api.responses.InitResponseModel
+import company.tap.checkout.internal.api.responses.MerchantData
 import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
 import company.tap.checkout.internal.api.responses.SDKSettings
 import company.tap.checkout.open.enums.CardType
@@ -145,7 +147,7 @@ interface PaymentDataSource {
 
     fun getPaymentOptionsResponse():PaymentOptionsResponse?
 
-    fun getSDKSettings(): SDKSettings?
+    fun getMerchantData(): MerchantData?
 
     fun getBinLookupResponse() : BINLookupResponse?
 
@@ -167,4 +169,5 @@ interface PaymentDataSource {
      */
     fun getAuthKeys(): String?
 
+    fun getInitOptionsResponse():InitResponseModel?
 }

@@ -46,7 +46,7 @@ All rights reserved.
         val _sensitiveCardData =
                 SensitiveCardData(cardNumber, expirationYear, expirationMonth, cvc, cardholderName)
         val cryptedDataJson = Gson().toJson(_sensitiveCardData)
-        this.sensitiveCardData = PaymentDataSource.getSDKSettings()?.data?.encryptionKey?.let {
+        this.sensitiveCardData = PaymentDataSource.getMerchantData()?.encryptionKey?.let {
             CryptoUtil.encryptJsonString(
                     cryptedDataJson,
                     it

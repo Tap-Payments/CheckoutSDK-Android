@@ -3,6 +3,7 @@ package company.tap.checkout.open.data_managers
 import android.content.Context
 import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.internal.api.responses.InitResponseModel
+import company.tap.checkout.internal.api.responses.MerchantData
 import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
 import company.tap.checkout.internal.api.responses.SDKSettings
 import company.tap.checkout.open.enums.CardType
@@ -48,6 +49,7 @@ object PaymentDataSource :PaymentDataSource {
     private var destination: Destinations? = null
     private var merchant: Merchant? = null
 
+
     private var cardType: CardType? = null
     private val context: Context? = null
 
@@ -72,6 +74,7 @@ object PaymentDataSource :PaymentDataSource {
     private var cardPaymentOption: ArrayList<PaymentOption> ?= null
     private var tokenConfig: String? = null
     private var authKeys: String? = null
+    private var merchantData: MerchantData? = null
 
     //////////////////////// Setter's Area  ///////////////////////////////////////
     /**
@@ -291,12 +294,12 @@ object PaymentDataSource :PaymentDataSource {
     }
 
     /**
-     * Set sdkSettings.
+     * Set merchantData.
      *
-     * @param sdkSettings the sdkSettings
+     * @param merchantData the merchantData
      */
-    fun setSDKSettings(sdkSettings: SDKSettings?) {
-        this.sdkSettings = sdkSettings
+    fun setMerchantData(merchantData: MerchantData?) {
+        this.merchantData = merchantData
     }
 
     /**
@@ -449,9 +452,11 @@ object PaymentDataSource :PaymentDataSource {
         return paymentOptionsResponse
     }
 
-    override fun getSDKSettings(): SDKSettings? {
-        return sdkSettings
+    override fun getMerchantData(): MerchantData? {
+        return merchantData
     }
+
+
 
     override fun getBinLookupResponse(): BINLookupResponse? {
        return binLookupResponse
@@ -471,5 +476,9 @@ object PaymentDataSource :PaymentDataSource {
 
     override fun getAuthKeys(): String? {
        return authKeys
+    }
+
+    override fun getInitOptionsResponse(): InitResponseModel? {
+        return initResponseModel
     }
 }

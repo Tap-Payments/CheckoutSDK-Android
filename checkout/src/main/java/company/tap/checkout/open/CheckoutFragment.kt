@@ -180,7 +180,7 @@ if(_resetFragment) {
     } else {
         _viewModel?.displayStartupLayout(enabledSections)
         _viewModel?.getDatasfromAPIs(
-            PaymentDataSource.getSDKSettings(),
+            PaymentDataSource.getMerchantData(),
             PaymentDataSource.getPaymentOptionsResponse()
         )
 

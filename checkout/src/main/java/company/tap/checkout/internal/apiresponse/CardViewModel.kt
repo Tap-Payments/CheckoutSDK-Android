@@ -10,8 +10,16 @@ import androidx.lifecycle.ViewModel
 import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.internal.api.requests.TapConfigRequestModel
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
+import company.tap.checkout.open.data_managers.PaymentDataSource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.random.Random
+
 
 /**
  * Created by AhlaamK on 11/15/20.
@@ -55,16 +63,18 @@ class CardViewModel : ViewModel() {
         }
 
 
-     /*   GlobalScope.launch(Dispatchers.Main) { // launch coroutine in the main thread
-            val apiResponseTime = Random.nextInt(1000, 10000)
+     GlobalScope.launch(Dispatchers.Main) { // launch coroutine in the main thread
+            val apiResponseTime = Random.nextInt(1000,10000)
             delay(apiResponseTime.toLong())
             if (_context != null) {
                 if (supportFragmentManagerdata != null) {
-                    NetworkApp.initNetworkToken(PaymentDataSource.getTokenConfig())
-                    repository.getInitData(_context,viewModel,supportFragmentManagerdata)
+                    if(PaymentDataSource.getTokenConfig()!=null){
+                        repository.getPaymentOptions(_context,viewModel,supportFragmentManagerdata)
+
+                    }
                 }
             }
-        }*/
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.N)

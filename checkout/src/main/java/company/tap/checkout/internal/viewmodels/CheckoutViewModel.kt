@@ -44,9 +44,7 @@ import company.tap.checkout.internal.adapter.ItemAdapter
 import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.api.models.*
-import company.tap.checkout.internal.api.responses.DeleteCardResponse
-import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
-import company.tap.checkout.internal.api.responses.SDKSettings
+import company.tap.checkout.internal.api.responses.*
 import company.tap.checkout.internal.apiresponse.CardViewEvent
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.apiresponse.testmodels.GoPaySavedCards
@@ -164,6 +162,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private lateinit var inlineViewCallback: InlineViewCallback
     lateinit var tapCardPhoneListDataSource: ArrayList<TapCardPhoneListDataSource>
     lateinit var paymentOptionsResponse: PaymentOptionsResponse
+    lateinit var initResponseModel: InitResponseModel
     lateinit var redirectURL: String
     lateinit var cardId: String
     var currencyOldRate:BigDecimal?=null
@@ -802,21 +801,22 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     }
 
-
     override fun getDatasfromAPIs(
-        sdkSettings: SDKSettings?,
+        merchantData: MerchantData?,
         paymentOptionsResponse: PaymentOptionsResponse?
     ) {
         println("if(::businessViewHolder.isInitialized getpay" + ::businessViewHolder.isInitialized)
+        println("merchantData name>>" + merchantData?.name)
+        println("merchantData logo>>" + merchantData?.logo)
         if (paymentOptionsResponse != null) {
             this.paymentOptionsResponse = paymentOptionsResponse
         }
         if (::businessViewHolder.isInitialized && PaymentDataSource.getTransactionMode() != TransactionMode.TOKENIZE_CARD) {
             businessViewHolder.setDataFromAPI(
-                sdkSettings?.data?.merchant?.logo,
-                sdkSettings?.data?.merchant?.name
+                merchantData?.logo,
+                merchantData?.name
             )
-            if (sdkSettings?.data?.verified_application == true) {
+            if (merchantData?.verifiedApplication == true) {
 
             }
         }
@@ -830,8 +830,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         if (paymentOptionsResponse?.supportedCurrencies != null && ::amountViewHolder.isInitialized) {
             currentCurrency = paymentOptionsResponse.currency
             for (i in paymentOptionsResponse.supportedCurrencies.indices) {
-                if (paymentOptionsResponse.supportedCurrencies[i].currency == currentCurrency) {
-                    println("current amount value>>" + paymentOptionsResponse.supportedCurrencies[i].amount)
+                if (paymentOptionsResponse?.supportedCurrencies[i].currency == currentCurrency) {
+                    println("current amount value>>" + paymentOptionsResponse?.supportedCurrencies[i].amount)
                     currentAmount =
                         CurrencyFormatter.currencyFormat(paymentOptionsResponse.supportedCurrencies[i].amount.toString())
 
@@ -868,7 +868,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
         }
-        sdkSettings?.data?.merchant?.name?.let {
+        merchantData?.name?.let {
             saveCardSwitchHolder?.setDataFromAPI(
                 it,
                 paymentInputViewHolder.selectedType
@@ -2178,8 +2178,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     fun closeAsynchView(){
         removeViews(businessViewHolder, asynchronousPaymentViewHolder)
         businessViewHolder.setDataFromAPI(
-            PaymentDataSource.getSDKSettings()?.data?.merchant?.logo,
-            PaymentDataSource.getSDKSettings()?.data?.merchant?.name
+            PaymentDataSource.getMerchantData()?.logo,
+            PaymentDataSource.getMerchantData()?.name
         )
         addViews(
             businessViewHolder,

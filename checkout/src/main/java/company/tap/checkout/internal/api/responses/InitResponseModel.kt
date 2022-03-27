@@ -34,10 +34,10 @@ data class MerchantData(
 
     @SerializedName("logo")
     @Expose
-    val logo: String? = null,
+    val logo: String,
     @SerializedName("name")
     @Expose
-    val name: String? = null,
+    val name: String,
     @SerializedName("sdk_settings")
     @Expose
     val sdkSettings: SDKSettingsData? = null,

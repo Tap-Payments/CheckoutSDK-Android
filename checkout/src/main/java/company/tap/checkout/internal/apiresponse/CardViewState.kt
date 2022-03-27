@@ -2,6 +2,7 @@ package company.tap.checkout.internal.apiresponse
 
 import company.tap.checkout.internal.api.models.BINLookupResponse
 import company.tap.checkout.internal.api.models.Charge
+import company.tap.checkout.internal.api.responses.InitResponseModel
 import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
 import company.tap.checkout.internal.api.responses.SDKSettings
 import company.tap.checkout.internal.api.responses.TapConfigResponseModel

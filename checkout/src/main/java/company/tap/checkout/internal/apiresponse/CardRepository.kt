@@ -57,7 +57,7 @@ class CardRepository : APIRequestCallback {
     val resultObservable = BehaviorSubject.create<CardViewState>()
     @JvmField
     var paymentOptionsResponse :PaymentOptionsResponse?= null
-    private var initResponse:SDKSettings?=null
+
     lateinit var chargeResponse:Charge
     lateinit var listCardsResponse: ListCardsResponse
     lateinit var binLookupResponse: BINLookupResponse
@@ -120,7 +120,7 @@ class CardRepository : APIRequestCallback {
 
         val jsonString = Gson().toJson(requestBody)
         NetworkController.getInstance().processRequest(
-            TapMethodType.POST, ApiService.INIT, jsonString, this, INIT_CODE
+            TapMethodType.POST, ApiService.PAYMENT_TYPES, jsonString, this, PAYMENT_OPTIONS_CODE
         )
         this.supportFragmentManager = supportFragmentManagerdata
         // this.cardRepositoryContext = _context
@@ -128,7 +128,7 @@ class CardRepository : APIRequestCallback {
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun getInitData(viewModel: CheckoutViewModel, context: Context?) {
-       NetworkApp.initNetworkToken(PaymentDataSource?.getTokenConfig(),context,ApiService.BASE_URL)
+
 
         NetworkController.getInstance().processRequest(
             TapMethodType.POST, ApiService.INIT, null, this, INIT_CODE
@@ -205,8 +205,10 @@ class CardRepository : APIRequestCallback {
     @RequiresApi(Build.VERSION_CODES.N)
     fun retrieveBinLookup(viewModel: CheckoutViewModel, binValue: String?) {
         this.viewModel = viewModel
+       val reqBody =EmptyBody()
+        jsonString =Gson().toJson(reqBody)
         NetworkController.getInstance().processRequest(
-            TapMethodType.GET, ApiService.BIN + binValue, null,
+            TapMethodType.POST, ApiService.BIN, jsonString,
             this, BIN_RETRIEVE_CODE
         )
     }
@@ -214,7 +216,7 @@ class CardRepository : APIRequestCallback {
     fun retrieveSaveCard(context: Context, viewModel: CheckoutViewModel) {
         this.viewModel = viewModel
         NetworkController.getInstance().processRequest(
-            TapMethodType.GET, ApiService.SAVE_CARD_ID + saveCardResponse.id, null, this,
+            TapMethodType.POST, ApiService.SAVE_CARD_ID + saveCardResponse.id, null, this,
             RETRIEVE_SAVE_CARD_CODE
         )
     }
@@ -372,19 +374,6 @@ class CardRepository : APIRequestCallback {
                 println("configResponse>>"+configResponse?.token)
                 PaymentDataSource.setTokenConfig(configResponse?.token)
                 NetworkApp.initNetworkToken(configResponse?.token, contextSDK,ApiService.BASE_URL)
-               /* cardViewModel.processEvent(
-                    CardViewEvent.InitEvent,
-                    viewModel,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null
-                )*/
                 val reqBody = EmptyBody()
                 jsonString =Gson().toJson(reqBody)
                 NetworkController.getInstance().processRequest(
@@ -395,10 +384,10 @@ class CardRepository : APIRequestCallback {
         }else if (requestCode == INIT_CODE) {
             if (response?.body() != null) {
                 response.body().let {
-                    println("INIT REsponse>>>>"+response.body())
+                    //println("INIT REsponse>>>>"+response.body())
                     initResponseModel = Gson().fromJson(it, InitResponseModel::class.java)
                     PaymentDataSource.setInitResponse(initResponseModel)
-
+                    PaymentDataSource.setMerchantData(initResponseModel?.merchant)
                     if (tabAnimatedActionButton != null) {
                         tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
                     }
@@ -587,14 +576,14 @@ class CardRepository : APIRequestCallback {
         if(configResponse!=null && paymentOptionsResponse!=null){
             val viewState = CardViewState(
                 configResponseModel = configResponse,
-                paymentOptionsResponse = paymentOptionsResponse
+                    paymentOptionsResponse = paymentOptionsResponse
             )
 
            /* val tapCheckoutFragment = CheckoutFragment()
             tapCheckoutFragment.show(supportFragmentManager.beginTransaction().addToBackStack(null), "CheckOutFragment")*/
             val intent = Intent(SDKSession.activity, CheckOutActivity::class.java)
            contextSDK?.startActivity(intent)
-            println("fragments" + supportFragmentManager.fragments)
+         //   println("fragments" + supportFragmentManager.fragments)
             sdkSession.sessionDelegate?.sessionHasStarted()
             SessionManager.setActiveSession(false)
             resultObservable.onNext(viewState)
