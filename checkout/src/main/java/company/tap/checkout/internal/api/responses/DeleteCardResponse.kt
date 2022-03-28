@@ -12,7 +12,10 @@ Copyright (c) 2021    Tap Payments.
 All rights reserved.
  **/
 @RestrictTo(RestrictTo.Scope.LIBRARY)
-class DeleteCardResponse( @SerializedName("id") @Expose
-                          var id: String? = null,
+class DeleteCardResponse(
                           @SerializedName("deleted") @Expose
-                          var deleted:Boolean) : BaseResponse
+                          var deleted:Boolean,
+                          @SerializedName("id") @Expose
+                          var id: String? = null,
+                          @SerializedName("delete") @Expose
+                          var delete: Boolean) : BaseResponse

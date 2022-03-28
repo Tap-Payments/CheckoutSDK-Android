@@ -875,7 +875,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             )
         }
         paymentOptionsList.value = paymentOptionsResponse?.paymentOptions
-        println("paymentOptions value" + paymentOptionsResponse?.paymentOptions)
+        //println("paymentOptions value" + paymentOptionsResponse?.paymentOptions)
         if (::context.isInitialized)
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 val divider = DividerItemDecoration(
@@ -1049,8 +1049,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     override fun deleteSelectedCardListener(delSelectedCard: DeleteCardResponse) {
         println("delSelectedCard value is" + delSelectedCard.deleted)
-        //todo check why delSelectedCard.deleted is changing to false while its true from the API
-        if (!delSelectedCard.deleted) {
+        if (delSelectedCard.deleted) {
             adapter.deleteSelectedCard(selectedItemsDel)
             adapter.updateShaking(false)
             deleteCard = false

@@ -32,5 +32,9 @@ data class Reference(
 
     @SerializedName("order")
     @Expose
-    private val order: String? = null
+    private val order: String? = null,
+
+        @SerializedName("gosell_id")
+    @Expose
+    private val gosellId: String? = null
 ): Serializable

@@ -81,11 +81,12 @@ class CardRepository : APIRequestCallback {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun getConfigData(_context: Context, viewModel: CheckoutViewModel, cardViewModel: CardViewModel?,tapConfigRequestModel:TapConfigRequestModel?) {
+    fun getConfigData(_context: Context, viewModel: CheckoutViewModel, cardViewModel: CardViewModel?,tapConfigRequestModel:TapConfigRequestModel?,supportFragmentManagerdata: FragmentManager) {
         this.viewModel = viewModel
         if (cardViewModel != null) {
             this.cardViewModel = cardViewModel
         }
+        this.supportFragmentManager =supportFragmentManagerdata
       jsonString = Gson().toJson(tapConfigRequestModel)
         NetworkController.getInstance().processRequest(
             TapMethodType.POST,
@@ -388,6 +389,9 @@ class CardRepository : APIRequestCallback {
                     initResponseModel = Gson().fromJson(it, InitResponseModel::class.java)
                     PaymentDataSource.setInitResponse(initResponseModel)
                     PaymentDataSource.setMerchantData(initResponseModel?.merchant)
+                    println("supportFragmentManager val>>>>"+supportFragmentManager)
+                    CardViewModel().processEvent(CardViewEvent.PaymentEvent, CheckoutViewModel(),null,null,null,null,null,null,null,null,null,
+                            supportFragmentManager,contextSDK)
                     if (tabAnimatedActionButton != null) {
                         tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
                     }

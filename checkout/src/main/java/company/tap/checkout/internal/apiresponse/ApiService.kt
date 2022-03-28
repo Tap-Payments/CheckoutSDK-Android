@@ -15,7 +15,7 @@ object ApiService {
     const val BASE_URL = "https://checkout-mw.dev.tap.company/api/"
     const val INIT = "checkout/init"
     const val PAYMENT_TYPES = "checkout/payment/types"
-    const val CHARGES ="charges"
+    const val CHARGES ="checkout/charge"
     const val RETURN_URL ="gosellsdk://return_url"
     const val TAP_ID ="tap_id"
     const val BIN ="card/bin"
@@ -34,7 +34,7 @@ object ApiService {
     /**
      * The Token.
      */
-    const val TOKEN = "/api/token"
+    const val TOKEN = "token"
     /**
      * The Save card.
      */
@@ -58,8 +58,8 @@ object ApiService {
      * Delete Card API
      */
     const val DELETE_CARD = "card"
-    const val CHARGE_ID = "charges/"
-    const val AUTHORIZE_ID = "authorize/"
+    const val CHARGE_ID = "checkout/charge/"
+    const val AUTHORIZE_ID = "checkout/authorize/"
     const val SAVE_CARD_ID = "card/verify/"
     const val INIT_AR = "https://run.mocky.io/v3/491462af-994e-4d99-9218-041289a1ae5d"
 }

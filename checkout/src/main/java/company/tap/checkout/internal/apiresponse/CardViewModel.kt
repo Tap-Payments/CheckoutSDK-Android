@@ -59,12 +59,14 @@ class CardViewModel : ViewModel() {
     ) {
         if (_context != null) {
             this.context =_context
-            repository.getConfigData(_context,viewModel,cardViewModel,tapConfigRequestModel)
+            if (supportFragmentManagerdata != null) {
+                repository.getConfigData(_context,viewModel,cardViewModel,tapConfigRequestModel,supportFragmentManagerdata)
+            }
         }
 
 
      GlobalScope.launch(Dispatchers.Main) { // launch coroutine in the main thread
-            val apiResponseTime = Random.nextInt(1000,10000)
+            val apiResponseTime = Random.nextInt(1000,17000)
             delay(apiResponseTime.toLong())
             if (_context != null) {
                 if (supportFragmentManagerdata != null) {
@@ -77,10 +79,26 @@ class CardViewModel : ViewModel() {
         }
     }
 
+/*
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun getPaymentOptionsData(_context: Context?, viewModel: CheckoutViewModel,
+                              supportFragmentManagerdata: FragmentManager?){
+        if (_context != null) {
+            if (supportFragmentManagerdata != null) {
+                if(PaymentDataSource.getTokenConfig()!=null){
+                    repository.getPaymentOptions(_context,viewModel,supportFragmentManagerdata)
+
+                }
+            }
+        }
+    }
+*/
+
     @RequiresApi(Build.VERSION_CODES.N)
     fun processEvent(event: CardViewEvent, viewModel: CheckoutViewModel,tapConfigRequestModel: TapConfigRequestModel?=null, selectedPaymentOption: PaymentOption?, binValue: String? = null, cardDataRequest: CreateTokenCard?, cardViewModel: CardViewModel? = null, customerId: String?=null, cardId: String?=null, createTokenWithExistingCardRequest: CreateTokenSavedCard?=null, otpString:String?=null, supportFragmentManager: FragmentManager?=null, context: Context?=null) {
         when (event) {
             CardViewEvent.ConfigEvent -> getConfigData(viewModel,cardViewModel,supportFragmentManager,context,tapConfigRequestModel)
+           // CardViewEvent.PaymentEvent -> getPaymentOptionsData(context,viewModel,supportFragmentManager)
             CardViewEvent.ChargeEvent -> createChargeRequest(viewModel,selectedPaymentOption,null)
             CardViewEvent.RetreiveChargeEvent -> retrieveChargeRequest(viewModel)
             CardViewEvent.RetreiveBinLookupEvent -> retrieveBinlookup(viewModel,binValue)

@@ -52,7 +52,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
     override fun getItemCount() = adapterContentCurrencies.size
 
     fun updateAdapterData(adapterContentCurrencies: List<SupportedCurrencies>) {
-        println("list of currencies$adapterContentCurrencies")
+        //println("list of currencies$adapterContentCurrencies")
         this.adapterContentCurrencies = adapterContentCurrencies
         notifyDataSetChanged()
     }

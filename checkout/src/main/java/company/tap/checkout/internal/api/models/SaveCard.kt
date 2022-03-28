@@ -10,8 +10,7 @@ Copyright (c) 2021    Tap Payments.
 All rights reserved.
  **/
 data class SaveCard(
-    @SerializedName("save_card") @Expose
-     var save_card: Boolean = false,
+
 
 
     @SerializedName("risk")

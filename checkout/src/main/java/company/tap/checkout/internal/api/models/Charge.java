@@ -6,9 +6,11 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import company.tap.checkout.internal.api.enums.ChargeStatus;
+import company.tap.checkout.internal.api.requests.Gateway;
 import company.tap.checkout.internal.interfaces.BaseResponse;
 import company.tap.checkout.open.models.Destinations;
 
@@ -129,6 +131,41 @@ public class Charge implements BaseResponse, Serializable {
     @SerializedName("topup")
     @Expose
     @Nullable private TopUp topUp;
+
+    @SerializedName("api_version")
+    @Expose
+    @Nullable private String apiVersion;
+
+    @SerializedName("card_threeDSecure")
+    @Expose
+    private boolean cardThreeDSecure;
+
+
+    @SerializedName("save_card")
+    @Expose
+    private boolean saveCard;
+
+    @SerializedName("merchant_id")
+    @Expose
+    @Nullable private String merchantId;
+
+    @SerializedName("product")
+    @Expose
+    @Nullable private String product;
+
+    @SerializedName("gateway")
+    @Expose
+    @Nullable private GatewayResponse gatewayResponse;
+
+    @SerializedName("activities")
+    @Expose
+    @Nullable private ArrayList<Activities>  activities;
+
+    @SerializedName("auto_reversed")
+    @Expose
+    @Nullable private String autoReversed;
+
+
 
 
     @Nullable
@@ -355,5 +392,50 @@ public class Charge implements BaseResponse, Serializable {
     @Nullable
     public Destinations getDestinations() {
         return destinations;
+    }
+
+
+    @Nullable
+    public TopUp getTopUp() {
+        return topUp;
+    }
+
+    @Nullable
+    public String getApiVersion() {
+        return apiVersion;
+    }
+
+    public boolean isCardThreeDSecure() {
+        return cardThreeDSecure;
+    }
+
+    public boolean isSaveCard() {
+        return saveCard;
+    }
+
+    @Nullable
+    public String getMerchantId() {
+        return merchantId;
+    }
+
+    @Nullable
+    public String getProduct() {
+        return product;
+    }
+
+    @Nullable
+    public GatewayResponse getGatewayResponse() {
+        return gatewayResponse;
+    }
+
+    @Nullable
+    public ArrayList<Activities> getActivities() {
+        return activities;
+    }
+
+
+    @Nullable
+    public String getAutoReversed() {
+        return autoReversed;
     }
 }

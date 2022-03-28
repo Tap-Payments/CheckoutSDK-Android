@@ -12,6 +12,7 @@ sealed class CardViewEvent {
     object InitEvent : CardViewEvent()
     object ConfigEvent : CardViewEvent()
     object ChargeEvent :CardViewEvent()
+    object PaymentEvent :CardViewEvent()
     object RetreiveChargeEvent :CardViewEvent()
     object RetreiveBinLookupEvent :CardViewEvent()
     object CreateTokenEvent :CardViewEvent()
