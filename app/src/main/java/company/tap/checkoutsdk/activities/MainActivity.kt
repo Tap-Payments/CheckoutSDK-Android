@@ -277,7 +277,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         sdkSession.setAuthorizeAction(null) // ** Optional ** you can pass AuthorizeAction object or null
 
 
-        sdkSession.setDestination(settingsManager?.getDestination()) // ** Optional ** you can pass Destinations object or null
+      //  sdkSession.setDestination(settingsManager?.getDestination()) // ** Optional ** you can pass Destinations object or null
+       sdkSession.setDestination(null) // ** Optional ** you can pass Destinations object or null
 
 
         sdkSession.setMerchantID("1124340") // ** Optional ** you can pass merchant id or null

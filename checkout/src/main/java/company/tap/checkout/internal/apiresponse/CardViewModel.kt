@@ -65,7 +65,7 @@ class CardViewModel : ViewModel() {
         }
 
 
-     GlobalScope.launch(Dispatchers.Main) { // launch coroutine in the main thread
+    /* GlobalScope.launch(Dispatchers.Main) { // launch coroutine in the main thread
             val apiResponseTime = Random.nextInt(1000,17000)
             delay(apiResponseTime.toLong())
             if (_context != null) {
@@ -76,10 +76,10 @@ class CardViewModel : ViewModel() {
                     }
                 }
             }
-        }
+        }*/
     }
 
-/*
+
     @RequiresApi(Build.VERSION_CODES.N)
     fun getPaymentOptionsData(_context: Context?, viewModel: CheckoutViewModel,
                               supportFragmentManagerdata: FragmentManager?){
@@ -92,13 +92,13 @@ class CardViewModel : ViewModel() {
             }
         }
     }
-*/
+
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun processEvent(event: CardViewEvent, viewModel: CheckoutViewModel,tapConfigRequestModel: TapConfigRequestModel?=null, selectedPaymentOption: PaymentOption?, binValue: String? = null, cardDataRequest: CreateTokenCard?, cardViewModel: CardViewModel? = null, customerId: String?=null, cardId: String?=null, createTokenWithExistingCardRequest: CreateTokenSavedCard?=null, otpString:String?=null, supportFragmentManager: FragmentManager?=null, context: Context?=null) {
         when (event) {
             CardViewEvent.ConfigEvent -> getConfigData(viewModel,cardViewModel,supportFragmentManager,context,tapConfigRequestModel)
-           // CardViewEvent.PaymentEvent -> getPaymentOptionsData(context,viewModel,supportFragmentManager)
+           CardViewEvent.PaymentEvent -> getPaymentOptionsData(context,viewModel,supportFragmentManager)
             CardViewEvent.ChargeEvent -> createChargeRequest(viewModel,selectedPaymentOption,null)
             CardViewEvent.RetreiveChargeEvent -> retrieveChargeRequest(viewModel)
             CardViewEvent.RetreiveBinLookupEvent -> retrieveBinlookup(viewModel,binValue)
