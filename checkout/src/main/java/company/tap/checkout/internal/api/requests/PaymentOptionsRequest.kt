@@ -6,12 +6,10 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import company.tap.checkout.internal.utils.AmountCalculator
 import company.tap.checkout.open.enums.TransactionMode
-import company.tap.checkout.open.models.PaymentItem
-import company.tap.checkout.open.models.Shipping
-import company.tap.checkout.open.models.Tax
-import company.tap.checkout.open.models.TopUp
+import company.tap.checkout.open.models.*
 import java.math.BigDecimal
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by AhlaamK on 6/15/21.
@@ -26,6 +24,7 @@ open class PaymentOptionsRequest(
     items: ArrayList<PaymentItem>?,
     shipping: ArrayList<Shipping>?,
     taxes: ArrayList<Tax>?,
+    destinations:Destinations?,
     currency: String?,
     customer: String?,
     merchant_id: String?,
@@ -48,6 +47,11 @@ open class PaymentOptionsRequest(
     @SerializedName("taxes")
     @Expose
     private val taxes: ArrayList<Tax>? = taxes
+
+
+    @SerializedName("destinations")
+    @Expose
+    private val destinations: Destinations? = destinations
 
     @SerializedName("customer")
     @Expose

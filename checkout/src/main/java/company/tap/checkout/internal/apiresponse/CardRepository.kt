@@ -111,6 +111,7 @@ class CardRepository : APIRequestCallback {
             PaymentDataSource.getItems(),
             PaymentDataSource.getShipping(),
             PaymentDataSource.getTaxes(),
+            PaymentDataSource.getDestination(),
             PaymentDataSource.getCurrency()?.isoCode,
             PaymentDataSource.getCustomer()?.identifier,
             PaymentDataSource.getMerchant()?.id,
