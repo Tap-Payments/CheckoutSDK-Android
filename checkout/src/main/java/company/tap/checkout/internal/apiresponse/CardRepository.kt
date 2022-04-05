@@ -391,8 +391,8 @@ class CardRepository : APIRequestCallback {
                     PaymentDataSource.setInitResponse(initResponseModel)
                     PaymentDataSource.setMerchantData(initResponseModel?.merchant)
                     println("supportFragmentManager val>>>>"+supportFragmentManager)
-                    CardViewModel().processEvent(CardViewEvent.PaymentEvent, CheckoutViewModel(),null,null,null,null,null,null,null,null,null,
-                            supportFragmentManager,contextSDK)
+                   // CardViewModel().processEvent(CardViewEvent.PaymentEvent, CheckoutViewModel(),null,null,null,null,null,null,null,null,null,
+                     //       supportFragmentManager,contextSDK)
                     if (tabAnimatedActionButton != null) {
                         tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
                     }

@@ -327,9 +327,8 @@ object SettingsManager {
         val destinations: ArrayList<Destination> = ArrayList<Destination>()
         destinations.add(
             Destination(
-                "1014",  /// destination unique identifier
+                "",  /// destination unique identifier
                 BigDecimal(10),  // Amount to be transferred to the destination account
-                //  TapCurrency("kwd"),  //currency code (three digit ISO format)
                 "kwd",  //currency code (three digit ISO format)
                 "please deduct 10 kd for this account",  //Description about the transfer
                 "" //Merchant reference number to the destination

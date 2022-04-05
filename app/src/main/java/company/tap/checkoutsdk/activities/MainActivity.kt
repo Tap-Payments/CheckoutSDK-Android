@@ -225,7 +225,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
 
         // Set Payment Items array list
-       //  sdkSession.setPaymentItems(ArrayList()) // ** Optional ** you can pass empty array list
+        // sdkSession.setPaymentItems(ArrayList()) // ** Optional ** you can pass empty array list
         sdkSession.setPaymentItems(getPaymentItems()) // ** Optional ** you can pass empty array list
 
 
@@ -233,12 +233,12 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
         // Set Taxes array list
         sdkSession.setTaxes(ArrayList()) // ** Optional ** you can pass empty array list
-        //  sdkSession.setTaxes(settingsManager?.getTaxes()) // ** Optional ** you can pass empty array list
+          sdkSession.setTaxes(settingsManager?.getTaxes()) // ** Optional ** you can pass empty array list
 
 
         // Set Shipping array list
-        sdkSession.setShipping(ArrayList()) // ** Optional ** you can pass empty array list
-       //   sdkSession.setShipping(settingsManager?.getDynamicShipping()) // ** Optional ** you can pass empty array list
+       // sdkSession.setShipping(ArrayList()) // ** Optional ** you can pass empty array list
+          sdkSession.setShipping(settingsManager?.getDynamicShipping()) // ** Optional ** you can pass empty array list
 
         // Post URL
         sdkSession.setPostURL("") // ** Optional **
@@ -277,7 +277,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         sdkSession.setAuthorizeAction(null) // ** Optional ** you can pass AuthorizeAction object or null
 
 
-        sdkSession.setDestination(null) // ** Optional ** you can pass Destinations object or null
+        sdkSession.setDestination(settingsManager?.getDestination()) // ** Optional ** you can pass Destinations object or null
 
 
         sdkSession.setMerchantID("1124340") // ** Optional ** you can pass merchant id or null
@@ -394,7 +394,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
                         "Items1",
                         "Description for test item #1",
                         Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(1)),
-                        BigDecimal.valueOf(1),
+                        BigDecimal.valueOf(10),
                         AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO),
                         null
                 )
@@ -404,7 +404,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
                         "Items2",
                         "Description for test item #2",
                         Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(1)),
-                        BigDecimal.valueOf(1),
+                        BigDecimal.valueOf(10),
                         AmountModificator(AmountModificatorType.PERCENTAGE, BigDecimal.ZERO),
                         null
                 )
@@ -414,7 +414,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
                         "Items3",
                         "Description for test item #3",
                         Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(1)),
-                        BigDecimal.valueOf(1),
+                        BigDecimal.valueOf(10),
                         AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO),
                         null
                 )
