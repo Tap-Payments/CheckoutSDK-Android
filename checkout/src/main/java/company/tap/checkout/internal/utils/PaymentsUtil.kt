@@ -162,8 +162,8 @@ class PaymentsUtil {
                 listWithoutDuplicates = ArrayList(hashSet)
             }
 
-            //  return new JSONArray(Constants.SUPPORTED_NETWORKS);
-            return JSONArray(listWithoutDuplicates)
+              return  JSONArray(Constants.SUPPORTED_NETWORKS)
+          //  return JSONArray(listWithoutDuplicates)
         }
 
     /**

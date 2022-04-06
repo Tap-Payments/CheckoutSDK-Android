@@ -331,6 +331,15 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         if (selectedPosition == position) setSelectedCardTypeRedirectShadowAndBackground(holder)
        // else setUnSelectedCardTypeRedirectShadowAndBackground(holder)
         (holder as GooglePayViewHolder)
+        holder.itemView.setOnClickListener {
+            if (!isShaking) {
+                selectedPosition = position
+                println("typeGooglePay is clicked")
+                onCardSelectedActionListener.onGooglePayClicked(true)
+              //  goPayOpenedfromMain(goPayOpened)
+                notifyDataSetChanged()
+            }
+        }
       //  holder.itemView.setOnClickListener {if (!isShaking) { setOnRedirectCardOnClickAction(holder, position) }}
       //  bindRedirectCardImage(holder)
     }
