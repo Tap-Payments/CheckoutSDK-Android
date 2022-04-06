@@ -2,6 +2,7 @@ package company.tap.checkout.internal.adapter
 
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Color.parseColor
@@ -13,18 +14,28 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.wallet.IsReadyToPayRequest
+import com.google.android.gms.wallet.PaymentsClient
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.api.models.PaymentOption
 import company.tap.checkout.internal.api.models.SavedCard
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
+import company.tap.checkout.internal.utils.PaymentsUtil
+import company.tap.checkout.open.controller.SDKSession.activity
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import kotlinx.android.synthetic.main.item_knet.view.*
 import kotlinx.android.synthetic.main.item_save_cards.view.*
+import org.json.JSONObject
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 /**
@@ -40,13 +51,15 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     private var arrayListCards:List<SavedCard> = java.util.ArrayList()
     private var arrayListSaveCard:ArrayList<List<SavedCard>> = ArrayList()
     private var adapterContent: List<PaymentOption> = java.util.ArrayList()
+    private var adapterString: List<String> = java.util.ArrayList()
     private var isShaking: Boolean = false
     private var goPayOpened: Boolean = false
     private var arrayModified : ArrayList<Any> = ArrayList()
     private var __context: Context? = null
     private var totalArraySize: Int =0
 
-
+    // A client for interacting with the Google Pay API.
+    private var paymentsClient: PaymentsClient? = null
     companion object {
         private const val TYPE_SAVED_CARD = 5
         private const val TYPE_REDIRECT = 2
@@ -57,6 +70,11 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     fun updateAdapterData(adapterContent: List<PaymentOption>) {
         this.adapterContent = adapterContent
         notifyDataSetChanged()
+    }
+    fun updateAdapterGooglePay(adapterString:List<String>){
+        this.adapterString =adapterString
+        notifyDataSetChanged()
+
     }
     fun updateAdapterDataSavedCard(adapterSavedCard: List<SavedCard>) {
         arrayListCards=java.util.ArrayList()
@@ -87,7 +105,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
             TYPE_GOOGLE_PAY -> {
                 view =
                         LayoutInflater.from(parent.context).inflate(R.layout.item_googlepay, parent, false)
-    GooglePayViewHolder(view)
+                GooglePayViewHolder(view)
             }
             else -> {
                 view =
@@ -98,7 +116,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     }
 
     override fun getItemViewType(position: Int): Int {
-        println("position value are>>>"+position)
+        println("position value are>>>" + position)
         if(position < adapterContent.size){
             if(adapterContent[position].paymentType==PaymentType.WEB){
                 (adapterContent[position]).image?.let { arrayListRedirect.add(it) }
@@ -113,6 +131,10 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                 arrayListSaveCard.add(arrayListCards)
                 return  TYPE_SAVED_CARD
             }
+        } else if(position.minus(adapterContent.size.plus(arrayListCards.size)) < adapterString.size){
+
+                return  TYPE_GOOGLE_PAY
+
         }
 
         return -1
@@ -124,20 +146,20 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
 
     override fun getItemCount(): Int {
-           totalArraySize = adapterContent.size.plus(arrayListCards.size)
+           totalArraySize = adapterContent.size.plus(arrayListCards.size).plus(adapterString.size)
            return totalArraySize.plus(1)
 
     }
 
 
-    private fun setOnClickActions(holder: RecyclerView.ViewHolder,position: Int) {
+    private fun setOnClickActions(holder: RecyclerView.ViewHolder, position: Int) {
         if (isShaking) {
             holder.itemView.deleteImageViewSaved?.visibility = View.VISIBLE
             setUnSelectedCardTypeSavedShadowAndBackground(holder)
         }else{holder.itemView.deleteImageViewSaved?.visibility = View.GONE}
 
         holder.itemView.deleteImageViewSaved?.setOnClickListener {
-            onCardSelectedActionListener.onDeleteIconClicked(true, position.minus(adapterContent.size), arrayListCards[position.minus(adapterContent.size)].id,maskCardNumber(arrayListCards[position.minus(adapterContent.size)].firstSix+arrayListCards[position.minus(adapterContent.size)].lastFour))
+            onCardSelectedActionListener.onDeleteIconClicked(true, position.minus(adapterContent.size), arrayListCards[position.minus(adapterContent.size)].id, maskCardNumber(arrayListCards[position.minus(adapterContent.size)].firstSix + arrayListCards[position.minus(adapterContent.size)].lastFour))
           //TODO  COMMENTED arrayListCards.removeAt(holder.itemView.id)
             holder.itemView.clearAnimation()
             it.animate().cancel()
@@ -168,7 +190,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
              * GooglePay Type
              */
             getItemViewType(position) == TYPE_GOOGLE_PAY -> {
-                setAlphaWhenShaking(isShaking, holder)
+             //   setAlphaWhenShaking(isShaking, holder)
                 typeGooglePay(holder, position)
             }
             /**
@@ -184,7 +206,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                     holder.itemView.setOnClickListener {
                         if (!isShaking) {
                         selectedPosition = position
-                        println("goPay is clicked"+selectedPosition)
+                        println("goPay is clicked" + selectedPosition)
                         onCardSelectedActionListener.onCardSelectedAction(true, null)
                         goPayOpenedfromMain(goPayOpened)
                         notifyDataSetChanged()
@@ -232,7 +254,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         bindSavedCardData(holder, position)
         setOnSavedCardOnClickAction(holder, position)
       //  deleteSelectedCard(holder, position)
-        setOnClickActions(holder,position)
+        setOnClickActions(holder, position)
     }
 
 
@@ -254,7 +276,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     }
     private fun deleteSelectedCard(holder: RecyclerView.ViewHolder, position: Int){
         holder.itemView.deleteImageViewSaved?.setOnClickListener {
-            onCardSelectedActionListener.onDeleteIconClicked(true, position.minus(adapterContent.size), arrayListCards[position.minus(adapterContent.size)].id,maskCardNumber(arrayListCards[position.minus(adapterContent.size)].firstSix+arrayListCards[position.minus(adapterContent.size)].lastFour))
+            onCardSelectedActionListener.onDeleteIconClicked(true, position.minus(adapterContent.size), arrayListCards[position.minus(adapterContent.size)].id, maskCardNumber(arrayListCards[position.minus(adapterContent.size)].firstSix + arrayListCards[position.minus(adapterContent.size)].lastFour))
            // arrayListSaveCard.removeAt(position.minus(adapterContent.size))
             holder.itemView.clearAnimation()
             it.animate().cancel()
@@ -271,7 +293,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
             Glide.with(holder.itemView.context)
                 .load(arrayListCards[position.minus(adapterContent.size)].image)
                 .into(holder.itemView.imageView_amex)
-            holder.itemView.textViewCardDetails.text = maskCardNumber(arrayListCards[position.minus(adapterContent.size)].firstSix+arrayListCards[position.minus(adapterContent.size)].lastFour)
+            holder.itemView.textViewCardDetails.text = maskCardNumber(arrayListCards[position.minus(adapterContent.size)].firstSix + arrayListCards[position.minus(adapterContent.size)].lastFour)
            //holder.itemView.textViewCardDetails.text = adapterContent[holder.adapterPosition].chip1.title
         }
     }
@@ -331,14 +353,18 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         if (selectedPosition == position) setSelectedCardTypeRedirectShadowAndBackground(holder)
        // else setUnSelectedCardTypeRedirectShadowAndBackground(holder)
         (holder as GooglePayViewHolder)
+        // Initialize a Google Pay API client for an environment suitable for testing.
+        // It's recommended to create the PaymentsClient object inside of the onCreate method.
+        paymentsClient = PaymentsUtil().createPaymentsClient(holder.itemView.context as Activity)
+       // possiblyShowGooglePayButton()
         holder.itemView.setOnClickListener {
-            if (!isShaking) {
+           // if (!isShaking) {
                 selectedPosition = position
                 println("typeGooglePay is clicked")
                 onCardSelectedActionListener.onGooglePayClicked(true)
               //  goPayOpenedfromMain(goPayOpened)
                 notifyDataSetChanged()
-            }
+           // }
         }
       //  holder.itemView.setOnClickListener {if (!isShaking) { setOnRedirectCardOnClickAction(holder, position) }}
       //  bindRedirectCardImage(holder)
@@ -403,6 +429,49 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         if (maskLen <= 0) return cardInput // Nothing to mask
         return (cardInput).replaceRange(0, 6, "••••")
     }
+    /**
+     * Determine the viewer's ability to pay with a payment method supported by your app and display a
+     * Google Pay payment button.
+     *
+     * @see [](https://developers.google.com/android/reference/com/google/android/gms/wallet/
+    PaymentsClient.html.isReadyToPay
+    ) */
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    open fun possiblyShowGooglePayButton() {
+        val isReadyToPayJson: Optional<JSONObject> = PaymentsUtil().isReadyToPayRequest
+        if (!isReadyToPayJson.isPresent) {
+            return
+        }
 
+        // The call to isReadyToPay is asynchronous and returns a Task. We need to provide an
+        // OnCompleteListener to be triggered when the result of the call is known.
+        val request = IsReadyToPayRequest.fromJson(isReadyToPayJson.get().toString())
+        val task: Task<Boolean> = paymentsClient?.isReadyToPay(request) as Task<Boolean>
+        activity?.let {
+            task.addOnCompleteListener(it, OnCompleteListener<Boolean?> { task ->
+                if (task.isSuccessful) {
+                    setGooglePayAvailable(task.result)
+                } else {
+                    Log.w("isReadyToPay failed", task.exception)
+                }
+            })
+        }
+    }
+
+    /**
+     * If isReadyToPay returned `true`, show the button and hide the "checking" text. Otherwise,
+     * notify the user that Google Pay is not available. Please adjust to fit in with your current
+     * user flow. You are not required to explicitly let the user know if isReadyToPay returns `false`.
+     *
+     * @param available isReadyToPay API response.
+     */
+    private fun setGooglePayAvailable(available: Boolean) {
+        println("available$available")
+        if (available) {
+           // googlePayButton.setVisibility(View.VISIBLE)
+        } else {
+           // Toast.makeText(holder.itemView.getContext(), R.string.googlepay_button_not_supported, Toast.LENGTH_LONG).show()
+        }
+    }
 }
 

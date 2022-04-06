@@ -347,6 +347,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         goPayViewsHolder = GoPayViewsHolder(context, this, otpViewHolder)
         asynchronousPaymentViewHolder = AsynchronousPaymentViewHolder(context, this)
         // nfcViewHolder = NFCViewHolder(context as Activity, context, this, fragmentManager)
+
     }
 
     private fun initSwitchAction() {
@@ -910,7 +911,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         adapter = CardTypeAdapterUIKIT(this)
         goPayAdapter = GoPayCardAdapterUIKIT(this)
         itemAdapter = ItemAdapter()
+       // adapter?.possiblyShowGooglePayButton()
+        val arrayList = ArrayList<String>()//Creating an empty arraylist
+        arrayList.add("Google Pay")//Adding object in arraylist
 
+
+        adapter.updateAdapterGooglePay(arrayList)
         //  goPayAdapter.updateAdapterData(goPayCardList.value as List<GoPaySavedCards>)
         if (allCurrencies.value?.isNotEmpty() == true) {
             currencyAdapter.updateAdapterData(allCurrencies.value as List<SupportedCurrencies>)

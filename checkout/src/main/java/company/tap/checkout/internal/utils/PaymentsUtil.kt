@@ -63,7 +63,7 @@ class PaymentsUtil {
             } else walletOptions =
                 WalletOptions.Builder().setEnvironment(WalletConstants.ENVIRONMENT_TEST).build()
         }
-        return Wallet.getPaymentsClient((activity), (walletOptions)!!)
+        return Wallet.getPaymentsClient((activity), (walletOptions!!))
     }
 
     /**
@@ -162,7 +162,7 @@ class PaymentsUtil {
                 listWithoutDuplicates = ArrayList(hashSet)
             }
 
-              return  JSONArray(Constants.SUPPORTED_NETWORKS)
+              return  JSONArray(Constants.SUPPORTED_NETWORKS);
           //  return JSONArray(listWithoutDuplicates)
         }
 
@@ -201,7 +201,7 @@ class PaymentsUtil {
     @get:Throws(JSONException::class)
     @get:RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private val baseCardPaymentMethod: JSONObject
-        private get() {
+         get() {
             val cardPaymentMethod: JSONObject = JSONObject()
             cardPaymentMethod.put("type", "CARD")
             val parameters: JSONObject = JSONObject()
@@ -227,7 +227,7 @@ class PaymentsUtil {
      */
     @get:Throws(JSONException::class)
     private val cardPaymentMethod: JSONObject
-        private get() {
+         get() {
             val cardPaymentMethod: JSONObject = baseCardPaymentMethod
             cardPaymentMethod.put("tokenizationSpecification", gatewayTokenizationSpecification)
             return cardPaymentMethod

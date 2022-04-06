@@ -373,6 +373,7 @@ class CardRepository : APIRequestCallback {
         if (requestCode == CONFIG_CODE) {
             response?.body().let {
                 configResponse = Gson().fromJson(it, TapConfigResponseModel::class.java)
+
                 println("configResponse>>"+configResponse?.token)
                 PaymentDataSource.setTokenConfig(configResponse?.token)
                 NetworkApp.initNetworkToken(configResponse?.token, contextSDK,ApiService.BASE_URL)
