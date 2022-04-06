@@ -1415,6 +1415,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     override fun onGooglePayClicked(isClicked: Boolean) {
         println("onGooglePayClicked>>>"+isClicked)
+        
     }
 
     override fun onPayCardSwitchAction(isCompleted: Boolean, paymentType: PaymentType) {

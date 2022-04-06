@@ -31,6 +31,7 @@ import company.tap.checkout.internal.utils.PaymentsUtil
 import company.tap.checkout.open.controller.SDKSession.activity
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
+import kotlinx.android.synthetic.main.item_googlepay.view.*
 import kotlinx.android.synthetic.main.item_knet.view.*
 import kotlinx.android.synthetic.main.item_save_cards.view.*
 import org.json.JSONObject
@@ -350,16 +351,17 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     }
 
     private fun typeGooglePay(holder: RecyclerView.ViewHolder, position: Int) {
-        if (selectedPosition == position) setSelectedCardTypeRedirectShadowAndBackground(holder)
+       // if (selectedPosition == position) setSelectedCardTypeRedirectShadowAndBackground(holder)
        // else setUnSelectedCardTypeRedirectShadowAndBackground(holder)
         (holder as GooglePayViewHolder)
         // Initialize a Google Pay API client for an environment suitable for testing.
         // It's recommended to create the PaymentsClient object inside of the onCreate method.
         paymentsClient = PaymentsUtil().createPaymentsClient(holder.itemView.context as Activity)
        // possiblyShowGooglePayButton()
-        holder.itemView.setOnClickListener {
+
+        holder.itemView.googlePayButton.setOnClickListener {
            // if (!isShaking) {
-                selectedPosition = position
+              //  selectedPosition = position
                 println("typeGooglePay is clicked")
                 onCardSelectedActionListener.onGooglePayClicked(true)
               //  goPayOpenedfromMain(goPayOpened)
