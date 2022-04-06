@@ -84,6 +84,11 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                         LayoutInflater.from(parent.context).inflate(R.layout.item_knet, parent, false)
                 SingleViewHolder(view)
             }
+            TYPE_GOOGLE_PAY -> {
+                view =
+                        LayoutInflater.from(parent.context).inflate(R.layout.item_googlepay, parent, false)
+    GooglePayViewHolder(view)
+            }
             else -> {
                 view =
                     LayoutInflater.from(parent.context).inflate(R.layout.item_gopay, parent, false)
@@ -93,6 +98,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     }
 
     override fun getItemViewType(position: Int): Int {
+        println("position value are>>>"+position)
         if(position < adapterContent.size){
             if(adapterContent[position].paymentType==PaymentType.WEB){
                 (adapterContent[position]).image?.let { arrayListRedirect.add(it) }
@@ -157,6 +163,13 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
             getItemViewType(position) == TYPE_REDIRECT -> {
                 setAlphaWhenShaking(isShaking, holder)
                 typeRedirect(holder, position)
+            }
+            /**
+             * GooglePay Type
+             */
+            getItemViewType(position) == TYPE_GOOGLE_PAY -> {
+                setAlphaWhenShaking(isShaking, holder)
+                typeGooglePay(holder, position)
             }
             /**
              * GoPay Type
@@ -314,6 +327,13 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         bindRedirectCardImage(holder)
     }
 
+    private fun typeGooglePay(holder: RecyclerView.ViewHolder, position: Int) {
+        if (selectedPosition == position) setSelectedCardTypeRedirectShadowAndBackground(holder)
+       // else setUnSelectedCardTypeRedirectShadowAndBackground(holder)
+        (holder as GooglePayViewHolder)
+      //  holder.itemView.setOnClickListener {if (!isShaking) { setOnRedirectCardOnClickAction(holder, position) }}
+      //  bindRedirectCardImage(holder)
+    }
     private fun setOnRedirectCardOnClickAction(holder: RecyclerView.ViewHolder, position: Int) {
         onCardSelectedActionListener.onCardSelectedAction(true, adapterContent[holder.adapterPosition])
         selectedPosition = position
@@ -366,6 +386,8 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     internal class SingleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     internal class GoPayViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+
+    internal class GooglePayViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     private fun maskCardNumber(cardInput: String): String {
         val maskLen: Int = cardInput.length - 4
