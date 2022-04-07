@@ -1,5 +1,6 @@
 package company.tap.checkout.open
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -8,11 +9,14 @@ import android.os.Handler
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.wallet.AutoResolveHelper
+import com.google.android.gms.wallet.PaymentData
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.models.Authorize
 import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.api.models.Token
+import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
 import company.tap.checkout.open.interfaces.SessionDelegate
@@ -234,14 +238,17 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun getStatusSDK(status: ChargeStatus?) {
         tabAnimatedActionButton?.let {
-            SDKSession.resetBottomSheetForButton(supportFragmentManager, this,
-                it, this, status)
+            SDKSession.resetBottomSheetForButton(
+                supportFragmentManager, this,
+                it, this, status
+            )
         }
         tabAnimatedActionButton?.visibility = View.VISIBLE
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
+        println("yah call aa rah ah!!")
         finish()
     }
 
@@ -273,6 +280,29 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
     }
 
 
+    override fun onActivityResult(requestCode:Int, resultCode:Int, data:Intent?){
+        super.onActivityResult(requestCode, resultCode, data)
+        println("onActivityResult"+requestCode)
+            when (requestCode) {
+                CheckoutViewModel().LOAD_PAYMENT_DATA_REQUEST_CODE -> {
+                    when (resultCode) {
+                        RESULT_OK -> {
+                            val paymentData = data?.let { PaymentData.getFromIntent(it) }
+                            //  handlePaymentSuccess(paymentData)
+                            println("<<<<paymentData>>>"+paymentData)
+                        }
+                        RESULT_CANCELED -> {
+                        }
+                        AutoResolveHelper.RESULT_ERROR -> {
+                            val status = AutoResolveHelper.getStatusFromIntent(data)
+                            if (status != null) println(if ("status values are>>$status" != null) status.statusMessage else status.toString() + " >> code " + status.statusCode)
+                            // handleError(status?.statusCode ?: 400)
+                        }
+                    }
+                }
+
+            }
+        }
 
 
-}
+    }

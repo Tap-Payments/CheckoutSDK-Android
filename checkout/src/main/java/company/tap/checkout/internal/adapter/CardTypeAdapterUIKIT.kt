@@ -14,7 +14,6 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -363,7 +362,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
            // if (!isShaking) {
               //  selectedPosition = position
                 println("typeGooglePay is clicked")
-                onCardSelectedActionListener.onGooglePayClicked(true)
+            onCardSelectedActionListener.onGooglePayClicked(true,holder.itemView,paymentsClient)
               //  goPayOpenedfromMain(goPayOpened)
                 notifyDataSetChanged()
            // }

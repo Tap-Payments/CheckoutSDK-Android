@@ -1,6 +1,7 @@
 package company.tap.checkout.internal.viewmodels
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -30,6 +31,8 @@ import cards.pay.paycardsrecognizer.sdk.Card
 import cards.pay.paycardsrecognizer.sdk.FrameManager
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewFragment
+import com.google.android.gms.wallet.AutoResolveHelper
+import com.google.android.gms.wallet.PaymentDataRequest
 import com.google.android.gms.wallet.PaymentsClient
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -56,12 +59,9 @@ import company.tap.checkout.internal.apiresponse.testmodels.TapCardPhoneListData
 import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.*
+import company.tap.checkout.internal.utils.*
 import company.tap.checkout.internal.utils.AmountCalculator.calculateExtraFeesAmount
-import company.tap.checkout.internal.utils.AnimationEngine
 import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
-import company.tap.checkout.internal.utils.CurrencyFormatter
-import company.tap.checkout.internal.utils.CustomUtils
-import company.tap.checkout.internal.utils.Utils
 import company.tap.checkout.internal.viewholders.*
 import company.tap.checkout.internal.webview.WebFragment
 import company.tap.checkout.internal.webview.WebViewContract
@@ -86,7 +86,10 @@ import kotlinx.android.synthetic.main.gopaysavedcard_layout.view.*
 import kotlinx.android.synthetic.main.itemviewholder_layout.view.*
 import kotlinx.android.synthetic.main.otpview_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
+import org.json.JSONObject
 import java.math.BigDecimal
+import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
 
 
@@ -188,11 +191,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private val googlePayButton: View? = null
 
-    // A client for interacting with the Google Pay API.
-    private val paymentsClient: PaymentsClient? = null
 
     // Arbitrarily-picked constant integer you define to track a request for payment data activity.
-    private val LOAD_PAYMENT_DATA_REQUEST_CODE = 991
+     val LOAD_PAYMENT_DATA_REQUEST_CODE = 991
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun initLayoutManager(
@@ -1413,9 +1414,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     }
 
-    override fun onGooglePayClicked(isClicked: Boolean) {
-        println("onGooglePayClicked>>>"+isClicked)
-        
+    @RequiresApi(Build.VERSION_CODES.N)
+    override fun onGooglePayClicked(isClicked: Boolean, view: View, paymentsClient: PaymentsClient?) {
+        println("onGooglePayClicked>>>" + isClicked)
+        requestPayment(view, paymentsClient)
+
     }
 
     override fun onPayCardSwitchAction(isCompleted: Boolean, paymentType: PaymentType) {
@@ -2279,6 +2282,31 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
           _checkoutFragment.activity?.onBackPressed()
 
       }, 8000)
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    fun requestPayment(view: View, paymentsClient: PaymentsClient?) {
+        // Disables the button to prevent multiple clicks.
+      //  googlePayButton!!.isClickable = false
+       // assert(PaymentDataSource.getInstance().getAmount() != null)
+        val paymentDataRequestJson: Optional<JSONObject> = PaymentsUtil().getPaymentDataRequest(22)
+        if (!paymentDataRequestJson.isPresent) {
+            return
+        }
+        val request = PaymentDataRequest.fromJson(paymentDataRequestJson.get().toString())
+        println("request value is>>>" + request.toJson())
+        println("Activity is>>>" + view.context)
+
+        // Since loadPaymentData may show the UI asking the user to select a payment method, we use
+        // AutoResolveHelper to wait for the user interacting with it. Once completed,
+        // onActivityResult will be called with the result.
+        if (request != null) {
+            AutoResolveHelper.resolveTask(
+                    paymentsClient!!.loadPaymentData(request),
+                (view.context as Activity), LOAD_PAYMENT_DATA_REQUEST_CODE)
+        }
+
+
     }
 
 
