@@ -17,6 +17,7 @@ import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.wallet.IsReadyToPayRequest
@@ -27,6 +28,7 @@ import company.tap.checkout.internal.api.models.PaymentOption
 import company.tap.checkout.internal.api.models.SavedCard
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
 import company.tap.checkout.internal.utils.PaymentsUtil
+import company.tap.checkout.internal.utils.PaymentsUtil1
 import company.tap.checkout.open.controller.SDKSession.activity
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
@@ -116,7 +118,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     }
 
     override fun getItemViewType(position: Int): Int {
-        println("position value are>>>" + position)
+       // println("position value are>>>" + position)
         if(position < adapterContent.size){
             if(adapterContent[position].paymentType==PaymentType.WEB){
                 (adapterContent[position]).image?.let { arrayListRedirect.add(it) }
@@ -367,8 +369,6 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                 notifyDataSetChanged()
            // }
         }
-      //  holder.itemView.setOnClickListener {if (!isShaking) { setOnRedirectCardOnClickAction(holder, position) }}
-      //  bindRedirectCardImage(holder)
     }
     private fun setOnRedirectCardOnClickAction(holder: RecyclerView.ViewHolder, position: Int) {
         onCardSelectedActionListener.onCardSelectedAction(true, adapterContent[holder.adapterPosition])
