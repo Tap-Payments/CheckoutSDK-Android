@@ -32,6 +32,7 @@ import cards.pay.paycardsrecognizer.sdk.FrameManager
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewFragment
 import com.google.android.gms.wallet.AutoResolveHelper
+import com.google.android.gms.wallet.PaymentData
 import com.google.android.gms.wallet.PaymentDataRequest
 import com.google.android.gms.wallet.PaymentsClient
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -86,6 +87,7 @@ import kotlinx.android.synthetic.main.gopaysavedcard_layout.view.*
 import kotlinx.android.synthetic.main.itemviewholder_layout.view.*
 import kotlinx.android.synthetic.main.otpview_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
+import org.json.JSONException
 import org.json.JSONObject
 import java.math.BigDecimal
 import java.util.*
@@ -1415,7 +1417,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onGooglePayClicked(isClicked: Boolean, view: View, paymentsClient: PaymentsClient?) {
         println("onGooglePayClicked>>>" + isClicked)
-        checkoutFragment?.handleGooglePayApiCall(view,paymentsClient)
+        checkoutFragment.checkOutActivity?.handleGooglePayApiCall(view,paymentsClient)
 
     }
 
@@ -2283,7 +2285,33 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
 
+    /**
+     * handlePaymentSuccess handles the payment token obtained from GooglePay API
+     * **/
+     fun handlePaymentSuccess(paymentData: PaymentData) {
+        val paymentInformation = paymentData.toJson() ?: return
 
+        try {
+            // Token will be null if PaymentDataRequest was not constructed using fromJson(String).
+            val paymentMethodData = JSONObject(paymentInformation).getJSONObject("paymentMethodData")
+
+
+            // Logging token string.
+            Log.d("GooglePaymentToken", paymentMethodData
+                    .getJSONObject("tokenizationData")
+                    .getString("token"))
+
+        } catch (e: JSONException) {
+            Log.e("handlePaymentSuccess", "Error: " + e.toString())
+        }
+
+    }
+    /**
+     * handleError handles the payment response obtained from GooglePay API
+     * **/
+     fun handleError(statusCode: Int) {
+        Log.w("loadPaymentData failed", String.format("Error code: %d", statusCode))
+    }
 
 }
 
