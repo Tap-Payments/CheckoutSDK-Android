@@ -61,7 +61,7 @@ class ShippingsActivity : AppCompatActivity(), ShippingAdapter.OnClickListenerIn
         finish()
     }
 
- 
+
 
     override fun onClick(shippingViewModel: ShippingViewModel?) {
         val intent = Intent(this, ShippingCreateActivity::class.java)
