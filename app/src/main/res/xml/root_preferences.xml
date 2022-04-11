@@ -84,6 +84,13 @@
                 android:targetClass="company.tap.checkoutsdk.activities.ShippingsActivity"
                 android:targetPackage="company.tap.checkoutsdk" />
         </Preference>
+
+        <Preference android:title="Set Taxes">
+            <intent
+                android:action="SETTING_START_TAXES_ACTIVITY"
+                android:targetClass="company.tap.checkoutsdk.activities.TaxesActivity"
+                android:targetPackage="company.tap.checkoutsdk" />
+        </Preference>
         <SwitchPreferenceCompat
             android:key="switch"
             android:title="Switch Preference"
