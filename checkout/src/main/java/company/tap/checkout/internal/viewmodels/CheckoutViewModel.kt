@@ -192,8 +192,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private val googlePayButton: View? = null
 
 
-    // Arbitrarily-picked constant integer you define to track a request for payment data activity.
-     val LOAD_PAYMENT_DATA_REQUEST_CODE = 991
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun initLayoutManager(
@@ -1417,7 +1415,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onGooglePayClicked(isClicked: Boolean, view: View, paymentsClient: PaymentsClient?) {
         println("onGooglePayClicked>>>" + isClicked)
-        requestPayment(view, paymentsClient)
+        checkoutFragment?.handleGooglePayApiCall(view,paymentsClient)
 
     }
 
@@ -2284,30 +2282,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
       }, 8000)
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    fun requestPayment(view: View, paymentsClient: PaymentsClient?) {
-        // Disables the button to prevent multiple clicks.
-      //  googlePayButton!!.isClickable = false
-       // assert(PaymentDataSource.getInstance().getAmount() != null)
-        val paymentDataRequestJson: Optional<JSONObject> = PaymentsUtil().getPaymentDataRequest(22)
-        if (!paymentDataRequestJson.isPresent) {
-            return
-        }
-        val request = PaymentDataRequest.fromJson(paymentDataRequestJson.get().toString())
-        println("request value is>>>" + request.toJson())
-        println("Activity is>>>" + view.context)
-
-        // Since loadPaymentData may show the UI asking the user to select a payment method, we use
-        // AutoResolveHelper to wait for the user interacting with it. Once completed,
-        // onActivityResult will be called with the result.
-        if (request != null) {
-            AutoResolveHelper.resolveTask(
-                    paymentsClient!!.loadPaymentData(request),
-                (view.context as Activity), LOAD_PAYMENT_DATA_REQUEST_CODE)
-        }
-
-
-    }
 
 
 

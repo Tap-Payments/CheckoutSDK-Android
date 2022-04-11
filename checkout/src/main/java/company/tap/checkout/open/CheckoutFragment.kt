@@ -17,17 +17,23 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import cards.pay.paycardsrecognizer.sdk.Card
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
+import com.google.android.gms.wallet.AutoResolveHelper
+import com.google.android.gms.wallet.PaymentData
+import com.google.android.gms.wallet.PaymentDataRequest
+import com.google.android.gms.wallet.PaymentsClient
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.apiresponse.CardViewState
 import company.tap.checkout.internal.apiresponse.Resource
 import company.tap.checkout.internal.enums.SectionType
+import company.tap.checkout.internal.utils.PaymentsUtil
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.controller.SDKSession.sessionDelegate
@@ -46,6 +52,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
 import kotlinx.android.synthetic.main.itemviewholder_layout.*
+import org.json.JSONObject
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 /**
@@ -67,6 +76,10 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
     private  var _resetFragment :Boolean = true
     @JvmField
     var isNfcOpened:Boolean=false
+
+    // Arbitrarily-picked constant integer you define to track a request for payment data activity.
+    val LOAD_PAYMENT_DATA_REQUEST_CODE = 991
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _activity = activity?.parent
@@ -286,6 +299,52 @@ requireArguments().putBoolean(RESET_FRAG, resetFragment)
         )
 
         tabAnimatedActionButton?.isClickable=true
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun handleGooglePayApiCall(view: View, paymentsClient: PaymentsClient?){
+        // Disables the button to prevent multiple clicks.
+        //  googlePayButton!!.isClickable = false
+        // assert(PaymentDataSource.getInstance().getAmount() != null)
+        val paymentDataRequestJson: Optional<JSONObject> = PaymentsUtil().getPaymentDataRequest(22)
+        if (!paymentDataRequestJson.isPresent) {
+            return
+        }
+        val request = PaymentDataRequest.fromJson(paymentDataRequestJson.get().toString())
+        println("request value is>>>" + request.toJson())
+        println("Activity is>>>" + view.context)
+
+        // Since loadPaymentData may show the UI asking the user to select a payment method, we use
+        // AutoResolveHelper to wait for the user interacting with it. Once completed,
+        // onActivityResult will be called with the result.
+        if (request != null) {
+            AutoResolveHelper.resolveTask(
+                    paymentsClient!!.loadPaymentData(request),
+                    (view.context as Activity), LOAD_PAYMENT_DATA_REQUEST_CODE)
+        }
+    }
+    override fun onActivityResult(requestCode:Int, resultCode:Int, data:Intent?){
+        super.onActivityResult(requestCode, resultCode, data)
+        println("onActivityResult"+requestCode)
+        when (requestCode) {
+            LOAD_PAYMENT_DATA_REQUEST_CODE -> {
+                when (resultCode) {
+                    AppCompatActivity.RESULT_OK -> {
+                        val paymentData = data?.let { PaymentData.getFromIntent(it) }
+                        //  handlePaymentSuccess(paymentData)
+                        println("<<<<paymentData>>>"+paymentData)
+                    }
+                    AppCompatActivity.RESULT_CANCELED -> {
+                    }
+                    AutoResolveHelper.RESULT_ERROR -> {
+                        val status = AutoResolveHelper.getStatusFromIntent(data)
+                        if (status != null) println(if ("status values are>>$status" != null) status.statusMessage else status.toString() + " >> code " + status.statusCode)
+                        // handleError(status?.statusCode ?: 400)
+                    }
+                }
+            }
+
+        }
     }
 
 
