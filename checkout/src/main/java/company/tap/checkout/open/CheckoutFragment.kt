@@ -4,27 +4,22 @@ package company.tap.checkout.open
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import cards.pay.paycardsrecognizer.sdk.Card
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import com.google.android.gms.wallet.AutoResolveHelper
-import com.google.android.gms.wallet.PaymentData
 import com.google.android.gms.wallet.PaymentDataRequest
 import com.google.android.gms.wallet.PaymentsClient
 import company.tap.checkout.R
@@ -34,27 +29,18 @@ import company.tap.checkout.internal.apiresponse.CardViewState
 import company.tap.checkout.internal.apiresponse.Resource
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.utils.PaymentsUtil
-import company.tap.checkout.internal.utils.PaymentsUtil1
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.controller.SDKSession.sessionDelegate
-import company.tap.checkout.open.controller.SDKSession.supportFragmentManager
 import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
 import company.tap.checkout.open.data_managers.PaymentDataSource
-import company.tap.nfcreader.open.reader.TapEmvCard
-import company.tap.nfcreader.open.reader.TapNfcCardReader
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.disposables.Disposables
-import kotlinx.android.synthetic.main.itemviewholder_layout.*
 import org.json.JSONObject
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -311,12 +297,12 @@ requireArguments().putBoolean(RESET_FRAG, resetFragment)
         // Disables the button to prevent multiple clicks.
         //  googlePayButton!!.isClickable = false
         // assert(PaymentDataSource.getInstance().getAmount() != null)
-        _paymentsClient = PaymentsUtil1.createPaymentsClient(context as Activity)
-        val paymentDataRequestJson: JSONObject ? = PaymentsUtil1.getPaymentDataRequest(22)
+        _paymentsClient = PaymentsUtil.createPaymentsClient(context as Activity)
+        val paymentDataRequestJson: JSONObject ? = PaymentsUtil.getPaymentDataRequest(22)
         /*if (!paymentDataRequestJson?.isPresent) {
             return
         }*/
-     
+
         val request = PaymentDataRequest.fromJson(paymentDataRequestJson.toString())
         println("request value is>>>" + request.toJson())
         println("Activity is>>>" + view.context)

@@ -2,7 +2,6 @@ package company.tap.checkout.internal.adapter
 
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Color.parseColor
@@ -18,8 +17,6 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
 import com.google.android.gms.wallet.IsReadyToPayRequest
 import com.google.android.gms.wallet.PaymentsClient
 import company.tap.checkout.R
@@ -28,15 +25,11 @@ import company.tap.checkout.internal.api.models.PaymentOption
 import company.tap.checkout.internal.api.models.SavedCard
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
 import company.tap.checkout.internal.utils.PaymentsUtil
-import company.tap.checkout.internal.utils.PaymentsUtil1
-import company.tap.checkout.open.controller.SDKSession.activity
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import kotlinx.android.synthetic.main.item_googlepay.view.*
 import kotlinx.android.synthetic.main.item_knet.view.*
 import kotlinx.android.synthetic.main.item_save_cards.view.*
-import org.json.JSONObject
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -440,7 +433,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     @RequiresApi(api = Build.VERSION_CODES.N)
     private fun possiblyShowGooglePayButton() {
 
-        val isReadyToPayJson = PaymentsUtil1.isReadyToPayRequest() ?: return
+        val isReadyToPayJson = PaymentsUtil.isReadyToPayRequest() ?: return
         val request = IsReadyToPayRequest.fromJson(isReadyToPayJson.toString()) ?: return
 
         // The call to isReadyToPay is asynchronous and returns a Task. We need to provide an
