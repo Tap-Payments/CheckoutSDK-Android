@@ -18,6 +18,7 @@ import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.models.*
 import company.tap.checkoutsdk.viewmodels.CustomerViewModel
 import company.tap.checkoutsdk.viewmodels.ShippingViewModel
+import company.tap.checkoutsdk.viewmodels.TaxesViewModel
 import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList
@@ -166,6 +167,46 @@ object SettingsManager {
                     newShipping.getshippingName(),
                     newShipping.getshippingDecsription()!!,
                     newShipping.getshippingAmount()!!, ctx
+                )
+
+            }
+        }
+    }
+
+    fun editTaxes(
+        oldTaxes: TaxesViewModel?,
+        newTaxes: TaxesViewModel,
+        ctx: Context?
+    ) {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(ctx)
+        val gson = Gson()
+        val response = preferences.getString("shipping", "")
+        val shipingList: ArrayList<ShippingViewModel> = gson.fromJson(
+            response,
+            object : TypeToken<List<CustomerViewModel?>?>() {}.type
+        )
+        if (shipingList != null) {
+
+            shipingList.clear()
+            newTaxes.getTaxesAmount()?.let {
+                ShippingViewModel(
+                    newTaxes.getTaxesName(),
+                    newTaxes.getTaxesDecsription()!!,
+                    it
+                )
+            }?.let {
+                shipingList.add(
+                    it
+                )
+            }
+            val data: String = gson.toJson(shipingList)
+            writeShippingToPreferences(data, preferences)
+        } else {
+            if (ctx != null) {
+                saveShipping(
+                    newTaxes.getTaxesName(),
+                    newTaxes.getTaxesDecsription()!!,
+                    newTaxes.getTaxesAmount()!!, ctx
                 )
 
             }
@@ -499,5 +540,16 @@ object SettingsManager {
         }
         return shippingList
 
+    }
+
+    fun getAddedTaxes(ctx: Context?): List<TaxesViewModel> {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(ctx)
+        val gson = Gson()
+        val response = preferences.getString("taxes", "")
+        val taxesList: ArrayList<TaxesViewModel>? = gson.fromJson(
+            response,
+            object : TypeToken<List<TaxesViewModel?>?>() {}.type
+        )
+        return taxesList ?: ArrayList<TaxesViewModel>()
     }
 }

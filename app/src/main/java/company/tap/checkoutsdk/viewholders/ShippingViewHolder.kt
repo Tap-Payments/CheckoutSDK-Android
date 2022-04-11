@@ -6,9 +6,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkoutsdk.R
-import company.tap.checkoutsdk.adapters.CustomerAdapter
 import company.tap.checkoutsdk.adapters.ShippingAdapter
-import company.tap.checkoutsdk.viewmodels.CustomerViewModel
 import company.tap.checkoutsdk.viewmodels.ShippingViewModel
 
 /**
