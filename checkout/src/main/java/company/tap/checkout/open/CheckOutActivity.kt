@@ -6,16 +6,20 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.wallet.AutoResolveHelper
 import com.google.android.gms.wallet.PaymentData
+import com.google.android.gms.wallet.PaymentDataRequest
+import com.google.android.gms.wallet.PaymentsClient
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.models.Authorize
 import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.api.models.Token
+import company.tap.checkout.internal.utils.PaymentsUtil
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
@@ -29,6 +33,7 @@ import company.tap.tapuilibrary.uikit.models.DialogConfigurations
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
+import org.json.JSONObject
 
 class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
     private val tapCheckoutFragment = CheckoutFragment()
@@ -37,6 +42,13 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
     var sdkSession: SDKSession = SDKSession
     private lateinit var tapNfcCardReader: TapNfcCardReader
     private var cardReadDisposable: Disposable = Disposables.empty()
+    @JvmField
+    // Arbitrarily-picked constant integer you define to track a request for payment data activity.
+    val LOAD_PAYMENT_DATA_REQUEST_CODE = 991
+
+    lateinit var _paymentsClient: PaymentsClient
+    @JvmField
+    var isGooglePayClicked:Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -256,8 +268,11 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
         if(tapCheckoutFragment.isNfcOpened){
             cardReadDisposable.dispose()
             tapNfcCardReader.disableDispatch()
-        }else
-            finish()
+        }
+        else if(!isGooglePayClicked){
+             finish()
+        }
+//changed above condition ELSE of simply finish to check gpay and finish , otherwise it ws not calling onactivity result
 
     }
 
@@ -280,28 +295,61 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
 
     override fun onActivityResult(requestCode:Int, resultCode:Int, data:Intent?){
         super.onActivityResult(requestCode, resultCode, data)
-        println("onActivityResult"+requestCode)
+        println("<<<<onActivityResult>>>"+resultCode)
         when (requestCode) {
-            tapCheckoutFragment.LOAD_PAYMENT_DATA_REQUEST_CODE -> {
+            LOAD_PAYMENT_DATA_REQUEST_CODE -> {
                 when (resultCode) {
-                    AppCompatActivity.RESULT_OK -> {
+                    RESULT_OK -> {
                         val paymentData = data?.let { PaymentData.getFromIntent(it) }
-                        //  handlePaymentSuccess(paymentData)
-                        println("<<<<paymentData>>>"+paymentData)
+                        if (paymentData != null) {
+                            tapCheckoutFragment._viewModel?.handlePaymentSuccess(paymentData)
+                        }else {
+                            AutoResolveHelper.getStatusFromIntent(data)?.statusCode?.let { tapCheckoutFragment._viewModel?.handleError(it) }
+                        }
+
+                        isGooglePayClicked = false
+
                     }
-                    AppCompatActivity.RESULT_CANCELED -> {
+                    RESULT_CANCELED -> {
+                        isGooglePayClicked = false
+
                     }
                     AutoResolveHelper.RESULT_ERROR -> {
                         val status = AutoResolveHelper.getStatusFromIntent(data)
                         if (status != null) println(if ("status values are>>$status" != null) status.statusMessage else status.toString() + " >> code " + status.statusCode)
-                        // handleError(status?.statusCode ?: 400)
+                        tapCheckoutFragment._viewModel?.handleError(status?.statusCode ?: 400)
+                        isGooglePayClicked = false
+
                     }
+
                 }
             }
-
         }
     }
 
+    fun handleGooglePayApiCall(view: View, paymentsClient: PaymentsClient?){
+        // Disables the button to prevent multiple clicks.
+        //  googlePayButton!!.isClickable = false
+        // assert(PaymentDataSource.getInstance().getAmount() != null)
+        _paymentsClient = PaymentsUtil.createPaymentsClient(this)
+        isGooglePayClicked = true
+        val paymentDataRequestJson: JSONObject? = PaymentsUtil.getPaymentDataRequest(22)
+        if (paymentDataRequestJson == null) {
+            Log.e("RequestPayment", "Can't fetch payment data request")
+            return
+        }
 
+        val request = PaymentDataRequest.fromJson(paymentDataRequestJson.toString())
+        println("request value is>>>" + request.toJson())
+        println("Activity is>>>" + this as Activity)
+
+        // Since loadPaymentData may show the UI asking the user to select a payment method, we use
+        // AutoResolveHelper to wait for the user interacting with it. Once completed,
+        // onActivityResult will be called with the result.
+        if (request != null) {
+            AutoResolveHelper.resolveTask(
+                    _paymentsClient.loadPaymentData(request), this, LOAD_PAYMENT_DATA_REQUEST_CODE)
+        }
+    }
 
     }
