@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -64,11 +65,7 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
     @JvmField
     var isNfcOpened:Boolean=false
 
-    @JvmField
-    // Arbitrarily-picked constant integer you define to track a request for payment data activity.
-    val LOAD_PAYMENT_DATA_REQUEST_CODE = 991
 
-    lateinit var _paymentsClient: PaymentsClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,6 +74,7 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
         setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
 
     }
+
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onDestroyView() {
         println("onDestroyView>>>")
@@ -86,6 +84,7 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
         resetTabAnimatedButton()
         super.onDestroyView()
     }
+
 
 
     override fun onCreateView(
@@ -262,10 +261,8 @@ requireArguments().putBoolean(RESET_FRAG, resetFragment)
             return
         }
         if(isNfcOpened){
-
         }else {
             checkOutActivity?.onBackPressed()
-
         }
 
 
@@ -275,8 +272,10 @@ requireArguments().putBoolean(RESET_FRAG, resetFragment)
     private fun resetTabAnimatedButton(){
         SDKSession.sessionActive = false
         tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-
-        checkOutActivity?.finish()
+if(checkOutActivity?.isGooglePayClicked == false){
+    checkOutActivity?.finish()
+}
+      //  checkOutActivity?.finish()
         tabAnimatedActionButton?.setButtonDataSource(
             true,
             context.let {
@@ -292,29 +291,8 @@ requireArguments().putBoolean(RESET_FRAG, resetFragment)
         tabAnimatedActionButton?.isClickable=true
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
-    fun handleGooglePayApiCall(view: View, paymentsClient: PaymentsClient?){
-        // Disables the button to prevent multiple clicks.
-        //  googlePayButton!!.isClickable = false
-        // assert(PaymentDataSource.getInstance().getAmount() != null)
-        _paymentsClient = PaymentsUtil.createPaymentsClient(context as Activity)
-        val paymentDataRequestJson: JSONObject ? = PaymentsUtil.getPaymentDataRequest(22)
-        /*if (!paymentDataRequestJson?.isPresent) {
-            return
-        }*/
 
-        val request = PaymentDataRequest.fromJson(paymentDataRequestJson.toString())
-        println("request value is>>>" + request.toJson())
-        println("Activity is>>>" + view.context)
 
-        // Since loadPaymentData may show the UI asking the user to select a payment method, we use
-        // AutoResolveHelper to wait for the user interacting with it. Once completed,
-        // onActivityResult will be called with the result.
-        if (request != null) {
-            AutoResolveHelper.resolveTask(
-                    _paymentsClient.loadPaymentData(request), context as Activity, LOAD_PAYMENT_DATA_REQUEST_CODE)
-        }
-    }
 
 
 }
