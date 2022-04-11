@@ -2297,7 +2297,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
             // Logging token string.
-            Log.d("GooglePaymentToken", paymentMethodData
+            Log.e("GooglePaymentToken", paymentMethodData
                     .getJSONObject("tokenizationData")
                     .getString("token"))
 
@@ -2310,7 +2310,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
      * handleError handles the payment response obtained from GooglePay API
      * **/
      fun handleError(statusCode: Int) {
-        Log.w("loadPaymentData failed", String.format("Error code: %d", statusCode))
+        Log.e("loadPaymentData failed", String.format("Error code: %d", statusCode))
     }
 
 }
