@@ -61,7 +61,9 @@ class ShippingsActivity : AppCompatActivity(), ShippingAdapter.OnClickListenerIn
         finish()
     }
 
-    override fun onClick(shippingViewModel: TaxesViewModel?) {
+ 
+
+    override fun onClick(shippingViewModel: ShippingViewModel?) {
         val intent = Intent(this, ShippingCreateActivity::class.java)
         intent.putExtra("shipping", shippingViewModel)
         intent.putExtra("operation", ShippingCreateActivity().OPERATION_EDIT)
