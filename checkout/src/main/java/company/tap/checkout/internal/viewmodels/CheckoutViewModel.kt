@@ -1415,9 +1415,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    override fun onGooglePayClicked(isClicked: Boolean, view: View, paymentsClient: PaymentsClient?) {
+    override fun onGooglePayClicked(isClicked: Boolean) {
         println("onGooglePayClicked>>>" + isClicked)
-        checkoutFragment.checkOutActivity?.handleGooglePayApiCall(view,paymentsClient)
+        checkoutFragment.checkOutActivity?.handleGooglePayApiCall()
 
     }
 

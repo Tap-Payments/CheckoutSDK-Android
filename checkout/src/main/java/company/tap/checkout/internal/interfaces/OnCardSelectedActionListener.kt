@@ -15,5 +15,5 @@ interface OnCardSelectedActionListener {
     fun onDeleteIconClicked(stopAnimation:Boolean, itemId : Int,cardId : String, maskedCardNumber:String)
     fun onGoPayLogoutClicked(isClicked:Boolean)
     fun onEditClicked(isClicked:Boolean)
-    fun onGooglePayClicked(isClicked: Boolean, view: View, paymentsClient: PaymentsClient?)
+    fun onGooglePayClicked(isClicked: Boolean)
 }

@@ -327,7 +327,7 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
         }
     }
 
-    fun handleGooglePayApiCall(view: View, paymentsClient: PaymentsClient?){
+    fun handleGooglePayApiCall(){
         // Disables the button to prevent multiple clicks.
         //  googlePayButton!!.isClickable = false
         // assert(PaymentDataSource.getInstance().getAmount() != null)
