@@ -23,6 +23,7 @@ import company.tap.checkout.internal.utils.PaymentsUtil
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
+import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.interfaces.SessionDelegate
 import company.tap.checkout.open.models.CardsList
 import company.tap.nfcreader.open.reader.TapEmvCard
@@ -33,6 +34,7 @@ import company.tap.tapuilibrary.uikit.models.DialogConfigurations
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
+import kotlinx.android.synthetic.main.item_googlepay.*
 import org.json.JSONObject
 
 class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
@@ -329,11 +331,11 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
 
     fun handleGooglePayApiCall(){
         // Disables the button to prevent multiple clicks.
-        //  googlePayButton!!.isClickable = false
+          googlePayButton?.isClickable = false
         // assert(PaymentDataSource.getInstance().getAmount() != null)
         _paymentsClient = PaymentsUtil.createPaymentsClient(this)
         isGooglePayClicked = true
-        val paymentDataRequestJson: JSONObject? = PaymentsUtil.getPaymentDataRequest(22)
+        val paymentDataRequestJson: JSONObject? = PaymentDataSource.getSelectedAmount()?.toLong()?.let { PaymentsUtil.getPaymentDataRequest(it) }
         if (paymentDataRequestJson == null) {
             Log.e("RequestPayment", "Can't fetch payment data request")
             return
