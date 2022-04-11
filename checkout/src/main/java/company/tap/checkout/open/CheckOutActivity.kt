@@ -248,7 +248,6 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        println("yah call aa rah ah!!")
         finish()
     }
 
@@ -279,7 +278,29 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
 
     }
 
+    override fun onActivityResult(requestCode:Int, resultCode:Int, data:Intent?){
+        super.onActivityResult(requestCode, resultCode, data)
+        println("onActivityResult"+requestCode)
+        when (requestCode) {
+            tapCheckoutFragment.LOAD_PAYMENT_DATA_REQUEST_CODE -> {
+                when (resultCode) {
+                    AppCompatActivity.RESULT_OK -> {
+                        val paymentData = data?.let { PaymentData.getFromIntent(it) }
+                        //  handlePaymentSuccess(paymentData)
+                        println("<<<<paymentData>>>"+paymentData)
+                    }
+                    AppCompatActivity.RESULT_CANCELED -> {
+                    }
+                    AutoResolveHelper.RESULT_ERROR -> {
+                        val status = AutoResolveHelper.getStatusFromIntent(data)
+                        if (status != null) println(if ("status values are>>$status" != null) status.statusMessage else status.toString() + " >> code " + status.statusCode)
+                        // handleError(status?.statusCode ?: 400)
+                    }
+                }
+            }
 
+        }
+    }
 
 
 

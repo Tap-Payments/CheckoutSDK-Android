@@ -357,7 +357,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         (holder as GooglePayViewHolder)
         // Initialize a Google Pay API client for an environment suitable for testing.
         // It's recommended to create the PaymentsClient object inside of the onCreate method.
-        paymentsClient = PaymentsUtil().createPaymentsClient(holder.itemView.context as Activity)
+      //  paymentsClient = PaymentsUtil().createPaymentsClient(holder.itemView.context as Activity)
        // possiblyShowGooglePayButton()
 
         holder.itemView.googlePayButton.setOnClickListener {
@@ -438,24 +438,21 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     PaymentsClient.html.isReadyToPay
     ) */
     @RequiresApi(api = Build.VERSION_CODES.N)
-    open fun possiblyShowGooglePayButton() {
-        val isReadyToPayJson: Optional<JSONObject> = PaymentsUtil().isReadyToPayRequest
-        if (!isReadyToPayJson.isPresent) {
-            return
-        }
+    private fun possiblyShowGooglePayButton() {
+
+        val isReadyToPayJson = PaymentsUtil1.isReadyToPayRequest() ?: return
+        val request = IsReadyToPayRequest.fromJson(isReadyToPayJson.toString()) ?: return
 
         // The call to isReadyToPay is asynchronous and returns a Task. We need to provide an
         // OnCompleteListener to be triggered when the result of the call is known.
-        val request = IsReadyToPayRequest.fromJson(isReadyToPayJson.get().toString())
-        val task: Task<Boolean> = paymentsClient?.isReadyToPay(request) as Task<Boolean>
-        activity?.let {
-            task.addOnCompleteListener(it, OnCompleteListener<Boolean?> { task ->
-                if (task.isSuccessful) {
-                    setGooglePayAvailable(task.result)
-                } else {
-                    Log.w("isReadyToPay failed", task.exception)
-                }
-            })
+        val task = paymentsClient?.isReadyToPay(request)
+        task?.addOnCompleteListener { completedTask ->
+            try {
+                completedTask.getResult(ApiException::class.java)?.let(::setGooglePayAvailable)
+            } catch (exception: ApiException) {
+                // Process error
+                Log.w("isReadyToPay failed", exception)
+            }
         }
     }
 

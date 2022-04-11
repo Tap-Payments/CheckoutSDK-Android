@@ -34,6 +34,7 @@ import company.tap.checkout.internal.apiresponse.CardViewState
 import company.tap.checkout.internal.apiresponse.Resource
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.utils.PaymentsUtil
+import company.tap.checkout.internal.utils.PaymentsUtil1
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.controller.SDKSession.sessionDelegate
@@ -77,8 +78,11 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
     @JvmField
     var isNfcOpened:Boolean=false
 
+    @JvmField
     // Arbitrarily-picked constant integer you define to track a request for payment data activity.
     val LOAD_PAYMENT_DATA_REQUEST_CODE = 991
+
+    lateinit var _paymentsClient: PaymentsClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -185,6 +189,7 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
         enabledSections.add(SectionType.ActionButton)
 
         println("_resetFragment>>" + _resetFragment)
+        println("hideAllView>>" + hideAllView)
 if(_resetFragment) {
     if (hideAllView) {
         if (::status.isInitialized)
@@ -306,11 +311,13 @@ requireArguments().putBoolean(RESET_FRAG, resetFragment)
         // Disables the button to prevent multiple clicks.
         //  googlePayButton!!.isClickable = false
         // assert(PaymentDataSource.getInstance().getAmount() != null)
-        val paymentDataRequestJson: Optional<JSONObject> = PaymentsUtil().getPaymentDataRequest(22)
-        if (!paymentDataRequestJson.isPresent) {
+        _paymentsClient = PaymentsUtil1.createPaymentsClient(context as Activity)
+        val paymentDataRequestJson: JSONObject ? = PaymentsUtil1.getPaymentDataRequest(22)
+        /*if (!paymentDataRequestJson?.isPresent) {
             return
-        }
-        val request = PaymentDataRequest.fromJson(paymentDataRequestJson.get().toString())
+        }*/
+     
+        val request = PaymentDataRequest.fromJson(paymentDataRequestJson.toString())
         println("request value is>>>" + request.toJson())
         println("Activity is>>>" + view.context)
 
@@ -319,31 +326,7 @@ requireArguments().putBoolean(RESET_FRAG, resetFragment)
         // onActivityResult will be called with the result.
         if (request != null) {
             AutoResolveHelper.resolveTask(
-                    paymentsClient!!.loadPaymentData(request),
-                    (view.context as Activity), LOAD_PAYMENT_DATA_REQUEST_CODE)
-        }
-    }
-    override fun onActivityResult(requestCode:Int, resultCode:Int, data:Intent?){
-        super.onActivityResult(requestCode, resultCode, data)
-        println("onActivityResult"+requestCode)
-        when (requestCode) {
-            LOAD_PAYMENT_DATA_REQUEST_CODE -> {
-                when (resultCode) {
-                    AppCompatActivity.RESULT_OK -> {
-                        val paymentData = data?.let { PaymentData.getFromIntent(it) }
-                        //  handlePaymentSuccess(paymentData)
-                        println("<<<<paymentData>>>"+paymentData)
-                    }
-                    AppCompatActivity.RESULT_CANCELED -> {
-                    }
-                    AutoResolveHelper.RESULT_ERROR -> {
-                        val status = AutoResolveHelper.getStatusFromIntent(data)
-                        if (status != null) println(if ("status values are>>$status" != null) status.statusMessage else status.toString() + " >> code " + status.statusCode)
-                        // handleError(status?.statusCode ?: 400)
-                    }
-                }
-            }
-
+                    _paymentsClient.loadPaymentData(request), context as Activity, LOAD_PAYMENT_DATA_REQUEST_CODE)
         }
     }
 
