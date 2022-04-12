@@ -113,11 +113,11 @@ class TapCustomWebViewClient constructor(private val customWebViewClientContract
             val urlQuerySanitizer: Uri = Uri.parse(url)
             println("urlQuerySanitizer on checkpayment" + urlQuerySanitizer)
             when {
-                url.contains("auth_TS") -> {
+                url.contains("auth_ts") -> {
                     cardViewModel.processEvent(CardViewEvent.RetreiveAuthorizeEvent, CheckoutViewModel(), null, null, null, null)
 
                 }
-                url.contains("auth_ts") -> {
+                url.contains("auth_TS") -> {
                     cardViewModel.processEvent(CardViewEvent.RetreiveSaveCardEvent, CheckoutViewModel(), null, null, null, null)
 
                 }

@@ -37,9 +37,7 @@ import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.models.DialogConfigurations
 import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.math.BigDecimal
 import java.util.*
 
@@ -239,7 +237,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
         // Set Shipping array list
        // sdkSession.setShipping(ArrayList()) // ** Optional ** you can pass empty array list
-          sdkSession.setShipping(settingsManager?.getDynamicShipping()) // ** Optional ** you can pass empty array list
+          sdkSession.setShipping(settingsManager?.getShippingList()) // ** Optional ** you can pass empty array list
 
         // Post URL
         sdkSession.setPostURL("") // ** Optional **

@@ -552,4 +552,50 @@ object SettingsManager {
         )
         return taxesList ?: ArrayList<TaxesViewModel>()
     }
+
+    fun getDynamicTaxes(): ArrayList<Tax>? {
+        val tax: Tax
+        val gson = Gson()
+        val response = pref?.getString("taxes", "")
+        // println(" get shipping: $response")
+        val taxesLists = gson.fromJson<ArrayList<TaxesViewModel>>(
+                response,
+                object : TypeToken<List<TaxesViewModel?>?>() {}.type
+        )
+        val taxList: ArrayList<Tax> = ArrayList<Tax>()
+        // println(" get taxesLists: $taxesLists")
+        if (taxesLists != null)
+            println("preparing data source with taxesLists ref :" + taxesLists[0].getTaxesName())
+        if (taxesLists != null) {
+
+            taxesLists[0].getTaxesDecsription()?.let {
+                taxesLists[0].getTaxesAmount()?.toBigDecimal()?.let { it1 ->
+                    Tax(
+                            taxesLists[0].getTaxesName(),
+                            it,
+                            AmountModificator(AmountModificatorType.FIXED,it1)
+                    )
+                }
+            }?.let {
+                taxList.add(
+                        it
+                )
+            }
+
+            return taxList
+
+
+        } else {
+
+            taxList.add(
+                    Tax(
+                            "Test Taxes #1",
+                            "TestTaxes #1",
+                            AmountModificator(AmountModificatorType.FIXED, BigDecimal.ONE)
+                    )
+            )
+        }
+        return taxList
+
+    }
 }
