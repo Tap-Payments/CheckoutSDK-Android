@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Color
+import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -29,6 +30,7 @@ import company.tap.checkout.open.enums.SdkMode
 import company.tap.checkout.open.interfaces.SessionDelegate
 import company.tap.checkout.open.models.*
 import company.tap.checkout.open.models.Receipt
+import company.tap.checkoutsdk.BuildConfig
 import company.tap.checkoutsdk.R
 import company.tap.checkoutsdk.manager.SettingsManager
 import company.tap.taplocalizationkit.LocalizationManager
@@ -62,7 +64,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
         initializeTheme()
 
-        if(ThemeManager.currentTheme.isNotEmpty()) {
+
+        if(ThemeManager.currentTheme.isNotEmpty() && LocalizationManager.currentLocalized.toString().isNotEmpty()) {
 
 
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
@@ -141,10 +144,12 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
     }
 
+
     private fun initializeLanguage(){
         /** Configures the LocalizationManager by setting the provided language  url
         - Parameter  languageUrl json: Please pass the taplanguage to be loaded dynamically  if needed. If not set, the normal and default language will be used
          */
+
 
        // LocalizationManager.loadTapLocale(this, urlLocalisation)
 
@@ -159,16 +164,11 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         TapCheckOutSDK().init(
                 this,
                 "sk_test_kovrMB0mupFJXfNZWx6Etg5y",
-                "company.tap.goSellSDKExample"
+                "sk_live_QglH8V7Fw6NPAom4qRcynDK2",
+               "company.tap.goSellSDKExample"
 
         )
-        sdkSession.setInitilaizeKeys("sk_test_kovrMB0mupFJXfNZWx6Etg5y")
-        /*TapCheckOutSDK().init(
-              this,
-              "sk_live_QglH8V7Fw6NPAom4qRcynDK2",
-              "company.tap.goSellSDKExample"
-      )
- */
+
 
 
     }
@@ -294,7 +294,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
         sdkSession.setDefaultCardHolderName("TEST TAP"); // ** Optional ** you can pass default CardHolderName of the user .So you don't need to type it.
         sdkSession.isUserAllowedToEnableCardHolderName(false) // ** Optional ** you can enable/ disable  default CardHolderName .
-        sdkSession.setSdkMode(SdkMode.SAND_BOX)// ** Optional ** But for using GooglePay mandatory to pass.
+        sdkSession.setSdkMode(SdkMode.SAND_BOX) //** Pass your SDK MODE
         settingsManager?.setPref(this)
     }
 

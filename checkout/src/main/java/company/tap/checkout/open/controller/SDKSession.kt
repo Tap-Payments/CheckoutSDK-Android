@@ -326,17 +326,7 @@ object  SDKSession : APIRequestCallback {
         println("isUserAllowedToEnableCardHolderName >>> $enableCardHolderName")
         paymentDataSource?.isUserAllowedToEditCardHolderName(enableCardHolderName)
     }
-
-    /**
-     * set transaction currency
-     *
-     * @param tapCurrency the tap currency
-     */
-    fun setInitilaizeKeys(authKeys: String) {
-        paymentDataSource?.setInitializeKeys(authKeys)
-    }
-
-
+    
     /**
      * set default sdkMode
      *
