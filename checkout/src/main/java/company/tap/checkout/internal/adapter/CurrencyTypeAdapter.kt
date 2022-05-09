@@ -7,10 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
+import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.models.SupportedCurrencies
 import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener
@@ -22,6 +24,7 @@ import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import kotlinx.android.synthetic.main.item_currency_rows.view.*
 import kotlinx.android.synthetic.main.item_frame_currencies.view.*
+import kotlinx.android.synthetic.main.item_save_cards.view.*
 import okhttp3.internal.notify
 import java.math.BigDecimal
 
@@ -112,7 +115,11 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
             .load(adapterContentCurrencies[position].flag).into(
                 imageViewCard)*/
        // println("adapterContentCurrencies[position].amount" + adapterContentCurrencies[position].amount)
-        adapterContentCurrencies[position]?.flag?.let { imageViewCard.loadSvg(it) }
+       // adapterContentCurrencies[position]?.flag?.let { imageViewCard.loadSvg(it) }
+        GlideToVectorYou
+            .init()
+            .with(holder.itemView.context)
+            .load( adapterContentCurrencies[position]?.flag?.toUri(), imageViewCard)
         val itemCurrencyText = holder.itemView.findViewById<TapTextView>(R.id.textView_currency)
         itemCurrencyText.text = adapterContentCurrencies[position].currency
         currencyRate = adapterContentCurrencies[position].amount
