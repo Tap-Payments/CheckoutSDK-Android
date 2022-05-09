@@ -14,11 +14,13 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import com.bumptech.glide.Glide
+import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.wallet.IsReadyToPayRequest
 import com.google.android.gms.wallet.PaymentsClient
@@ -289,10 +291,12 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
     private fun bindSavedCardData(holder: RecyclerView.ViewHolder, position: Int) {
         for (i in arrayListCards.indices) {
-          /*  Glide.with(holder.itemView.context)
-                .load(arrayListCards[position.minus(adapterContent.size)].image)
-                .into(holder.itemView.imageView_amex)*/
-            arrayListCards [position.minus(adapterContent.size)].image.let { holder.itemView.imageView_amex.loadSvg(it) }
+
+           // arrayListCards [position.minus(adapterContent.size)].image.let { holder.itemView.imageView_amex.loadSvg(it) }
+               GlideToVectorYou
+                .init()
+                .with(holder.itemView.context)
+                .load(arrayListCards[position.minus(adapterContent.size)].image.toUri(), holder.itemView.imageView_amex)
             holder.itemView.textViewCardDetails.text = maskCardNumber(arrayListCards[position.minus(adapterContent.size)].firstSix + arrayListCards[position.minus(adapterContent.size)].lastFour)
            //holder.itemView.textViewCardDetails.text = adapterContent[holder.adapterPosition].chip1.title
         }
@@ -377,10 +381,11 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     private fun bindRedirectCardImage(holder: RecyclerView.ViewHolder) {
         for (i in 0 until arrayListRedirect.size) {
             val imageViewCard = holder.itemView.findViewById<ImageView>(R.id.imageView_knet)
-           /* Glide.with(holder.itemView.context)
-                .load(arrayListRedirect[i])
-                .into(imageViewCard)*/
-            arrayListRedirect[i].let { imageViewCard.loadSvg(it) }
+          //  arrayListRedirect[i].let { imageViewCard.loadSvg(it) }
+            GlideToVectorYou
+                .init()
+                .with(holder.itemView.context)
+                .load(arrayListRedirect[i].toUri(), imageViewCard)
         }
     }
 
@@ -471,21 +476,6 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         }
     }
 
-    /**
-     * Generic function to load image url which are in SVG format
-     * **/
-    fun ImageView.loadSvg(url: String) {
 
-        val imageLoader = ImageLoader.Builder(this.context)
-            .componentRegistry { add(SvgDecoder(this@loadSvg.context)) }
-            .build()
-
-        val request = ImageRequest.Builder(this.context)
-            .data(url)
-            .target(this)
-            .build()
-
-        imageLoader.enqueue(request)
-    }
 }
 

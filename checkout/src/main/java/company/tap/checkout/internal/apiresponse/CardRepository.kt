@@ -807,7 +807,7 @@ class CardRepository : APIRequestCallback {
     }
 
     override fun onFailure(requestCode: Int, errorDetails: GoSellError?) {
-        println("response body CHARGE_REQ_CODE>>" + errorDetails)
+        println("response body CHARGE_REQ_CODE>>" + errorDetails?.errorBody)
         errorDetails?.let {
             if (it.throwable != null) {
                 resultObservable.onError(it.throwable)
