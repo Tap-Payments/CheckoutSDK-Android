@@ -218,7 +218,7 @@ class CardRepository : APIRequestCallback {
     fun retrieveSaveCard(context: Context, viewModel: CheckoutViewModel) {
         this.viewModel = viewModel
         NetworkController.getInstance().processRequest(
-            TapMethodType.POST, ApiService.SAVE_CARD_ID + saveCardResponse.id, null, this,
+            TapMethodType.GET, ApiService.SAVE_CARD_ID + saveCardResponse.id, null, this,
             RETRIEVE_SAVE_CARD_CODE
         )
     }
