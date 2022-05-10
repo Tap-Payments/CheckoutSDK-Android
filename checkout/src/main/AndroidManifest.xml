@@ -3,13 +3,14 @@
     package="company.tap.checkout">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-  
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission
         android:name="android.permission.ACCESS_WIFI_STATE"
         android:windowSoftInputMode="stateHidden|adjustResize" />
 
     <application>
+        tools:replace="android:allowBackup
         <activity android:name=".open.CheckOutActivity"
             android:theme="@style/Theme.AppCompat.Translucent"/>
         <!-- Enabling this flag is required in order to use the PaymentsClient -->
