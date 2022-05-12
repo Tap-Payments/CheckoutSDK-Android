@@ -39,11 +39,12 @@ class CardViewModel : ViewModel() {
     init {
         compositeDisposable.add(repository.resultObservable
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe { liveData.value = Resource.Loading() }
-            .doOnTerminate { liveData.value = Resource.Finished() }
+            .doOnSubscribe { liveData.postValue(Resource.Loading()) }
+            .doOnTerminate { liveData.postValue(Resource.Finished()) }
             .subscribe(
-                { data -> liveData.value = Resource.Success(data)},
-                { error -> liveData.value = error.message?.let { Resource.Error(it) } }
+                { data -> liveData.postValue(Resource.Success(data))},
+                { error -> liveData.postValue(error.message?.let { Resource.Error(it) }) }
+
             ))
 
     }
