@@ -588,6 +588,7 @@ class CardRepository : APIRequestCallback {
            /* val tapCheckoutFragment = CheckoutFragment()
             tapCheckoutFragment.show(supportFragmentManager.beginTransaction().addToBackStack(null), "CheckOutFragment")*/
             val intent = Intent(SDKSession.activity, CheckOutActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
            contextSDK?.startActivity(intent)
          //   println("fragments" + supportFragmentManager.fragments)
             sdkSession.sessionDelegate?.sessionHasStarted()

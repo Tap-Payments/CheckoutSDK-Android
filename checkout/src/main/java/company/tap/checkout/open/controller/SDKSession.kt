@@ -464,7 +464,6 @@ object  SDKSession : APIRequestCallback {
         val intent = Intent(SDKSession.activity, CheckOutActivity::class.java)
         intent.putExtra("hideAllViews",true)
         intent.putExtra("status",status)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         contextSDK?.startActivity(intent)
        /* val checkoutFragment =CheckoutFragment()
         __supportFragmentManager.let { checkoutFragment.show(it,"CheckOutFragment") }
