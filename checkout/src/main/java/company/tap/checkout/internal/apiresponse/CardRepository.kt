@@ -655,7 +655,7 @@ class CardRepository : APIRequestCallback {
                     viewModel.handleSuccessFailureResponseButton(
                         "success",
                         chargeResponse.authenticate,
-                        chargeResponse.status
+                        chargeResponse
                     )
 
                 }
@@ -680,7 +680,7 @@ class CardRepository : APIRequestCallback {
                     viewModel?.handleSuccessFailureResponseButton(
                         "failure",
                         chargeResponse.authenticate,
-                        chargeResponse.status
+                        chargeResponse
                     )
                     //  viewModel.redirectLoadingFinished(true,chargeResponse, contextSDK)
 
@@ -726,7 +726,7 @@ class CardRepository : APIRequestCallback {
                 viewModel.handleSuccessFailureResponseButton(
                     "success",
                     authorize.authenticate,
-                    authorize.status
+                    authorize
                 )
 
             } catch (e: java.lang.Exception) {
@@ -743,7 +743,7 @@ class CardRepository : APIRequestCallback {
                     viewModel.handleSuccessFailureResponseButton(
                         "failure",
                         authorize.authenticate,
-                        authorize.status
+                        authorize
                     )
                 } catch (e: java.lang.Exception) {
                     Log.d(
@@ -779,7 +779,7 @@ class CardRepository : APIRequestCallback {
                 viewModel?.handleSuccessFailureResponseButton(
                     "failure",
                     saveCard.authenticate,
-                    saveCard.status
+                    saveCard
 
                 )
             } catch (e: java.lang.Exception) {
@@ -794,7 +794,7 @@ class CardRepository : APIRequestCallback {
                 viewModel?.handleSuccessFailureResponseButton(
                     "failure",
                     saveCard.authenticate,
-                    saveCard.status
+                    saveCard
 
                 )
             } catch (e: java.lang.Exception) {
@@ -829,7 +829,7 @@ class CardRepository : APIRequestCallback {
                         viewModel?.handleSuccessFailureResponseButton(
                             "failure",
                             chargeResponse.authenticate,
-                            chargeResponse.status
+                            chargeResponse
 
                         )
                     }else{
@@ -1058,7 +1058,7 @@ class CardRepository : APIRequestCallback {
                 viewModel?.handleSuccessFailureResponseButton(
                     "success",
                     chargeResponse.authenticate,
-                    chargeResponse.status
+                    chargeResponse
                 )
 
                 sdkSession.getListener()?.paymentSucceed(charge)
@@ -1078,7 +1078,7 @@ class CardRepository : APIRequestCallback {
                 viewModel?.handleSuccessFailureResponseButton(
                     "failure",
                     chargeResponse.authenticate,
-                    chargeResponse.status
+                    chargeResponse
                 )
 
                 SDKSession.getListener()?.paymentFailed(charge)

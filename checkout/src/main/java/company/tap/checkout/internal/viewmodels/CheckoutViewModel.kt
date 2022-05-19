@@ -813,6 +813,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun getDatasfromAPIs(
             merchantData: MerchantData?,
             paymentOptionsResponse: PaymentOptionsResponse?
@@ -880,6 +881,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
         }
+
         merchantData?.name?.let {
             saveCardSwitchHolder?.setDataFromAPI(
                     it,
@@ -1077,12 +1079,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     override fun handleSuccessFailureResponseButton(
             response: String,
             authenticate: Authenticate?,
-            status: ChargeStatus?
+            chargeResponse: Charge?
     ) {
-        if(status == null && response == "tokenized"){
+        if(chargeResponse?.status == null && response == "tokenized"){
             SDKSession.getListener()?.getStatusSDK(ChargeStatus.AUTHORIZED)
         }else{
-            SDKSession.getListener()?.getStatusSDK(status)
+            SDKSession.getListener()?.getStatusSDK(chargeResponse?.status)
         }
 
         /***
@@ -1119,7 +1121,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
 
 
-        when(status){
+        when(chargeResponse?.status){
             ChargeStatus.CAPTURED, ChargeStatus.AUTHORIZED, ChargeStatus.VALID, ChargeStatus.IN_PROGRESS -> {
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                         ActionButtonState.SUCCESS
@@ -1889,6 +1891,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun setScannedCardDetails(card: Card) {
         paymentInputViewHolder.tapCardInputView.setCardNumber(card.cardNumber)
         val dateParts: List<String>? = card.expirationDate?.split("/")

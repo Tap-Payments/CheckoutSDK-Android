@@ -32,7 +32,7 @@ interface BaseLayoutManager {
      fun handleSuccessFailureResponseButton(
          response: String,
          authenticate: Authenticate?,
-         status: ChargeStatus?
+         chargeResponse: Charge?
      )
     fun displayAsynchronousPaymentView(chargeResponse:Charge)
 
