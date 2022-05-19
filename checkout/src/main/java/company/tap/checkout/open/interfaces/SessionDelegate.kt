@@ -46,6 +46,6 @@ interface SessionDelegate {
 
     fun userEnabledSaveCardOption(saveCardEnabled: Boolean)
 
-    fun getStatusSDK(status: ChargeStatus?)
+    fun getStatusSDK(response :String ? ,charge: Charge?)
 
 }

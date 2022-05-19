@@ -250,11 +250,11 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    override fun getStatusSDK(status: ChargeStatus?) {
+    override fun getStatusSDK(response:String? ,charge: Charge?) {
         tabAnimatedActionButton?.let {
             SDKSession.resetBottomSheetForButton(
                 supportFragmentManager, this,
-                it, this, status
+                it, this, charge?.status
             )
         }
         tabAnimatedActionButton?.visibility = View.VISIBLE

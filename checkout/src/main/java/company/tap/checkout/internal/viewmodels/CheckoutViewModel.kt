@@ -1082,9 +1082,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             chargeResponse: Charge?
     ) {
         if(chargeResponse?.status == null && response == "tokenized"){
-            SDKSession.getListener()?.getStatusSDK(ChargeStatus.AUTHORIZED)
+            //todo replaced authorized with chargeresponse
+            SDKSession.getListener()?.getStatusSDK(response,chargeResponse)
         }else{
-            SDKSession.getListener()?.getStatusSDK(chargeResponse?.status)
+            SDKSession.getListener()?.getStatusSDK(response,chargeResponse)
         }
 
         /***

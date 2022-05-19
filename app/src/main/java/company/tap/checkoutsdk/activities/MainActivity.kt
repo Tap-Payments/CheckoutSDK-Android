@@ -626,7 +626,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    override fun getStatusSDK(status: ChargeStatus?) {
+    override fun getStatusSDK(response :String ? ,charge: Charge?) {
     }
 
     override fun onResume() {
