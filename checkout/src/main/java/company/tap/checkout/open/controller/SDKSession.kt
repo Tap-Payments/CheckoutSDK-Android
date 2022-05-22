@@ -447,7 +447,7 @@ object  SDKSession : APIRequestCallback {
     fun resetBottomSheetForButton(
         __supportFragmentManager: FragmentManager,
         context: Context,
-        payButtonView: TabAnimatedActionButton,
+        payButtonView: TabAnimatedActionButton?,
         activity: Activity,
         status: ChargeStatus?
     ) {
@@ -463,16 +463,16 @@ object  SDKSession : APIRequestCallback {
         }*/
 
         sessionActive =false
-        payButtonView.changeButtonState(ActionButtonState.IDLE)
-        payButtonView.visibility=View.GONE
-        payButtonView.setButtonDataSource(
+        payButtonView?.changeButtonState(ActionButtonState.IDLE)
+        payButtonView?.visibility=View.GONE
+        payButtonView?.setButtonDataSource(
             true,
             context.let { LocalizationManager.getLocale(it).language },
             LocalizationManager.getValue("pay", "ActionButton"),
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
         )
-        payButtonView.setOnClickListener {
+        payButtonView?.setOnClickListener {
             payButtonView.changeButtonState(ActionButtonState.LOADING)
             startSDK(__supportFragmentManager,context, activity)
         }
