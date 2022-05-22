@@ -131,6 +131,7 @@ object  SDKSession : APIRequestCallback {
         }
         this.contextSDK = context
         this.activity =activity
+        this.sdkIdentifier =sdkIdentifier
 
         getPaymentOptions(supportFragmentManager)
 
@@ -460,7 +461,7 @@ object  SDKSession : APIRequestCallback {
     fun resetBottomSheetForButton(
         __supportFragmentManager: FragmentManager,
         context: Context,
-        payButtonView: TabAnimatedActionButton?,
+        payButtonView: TabAnimatedActionButton,
         activity: Activity,
         status: ChargeStatus?
     ) {
