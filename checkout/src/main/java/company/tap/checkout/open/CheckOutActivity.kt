@@ -109,14 +109,18 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
     }
 
     override fun paymentFailed(charge: Charge?) {
-        println("paymentFailed called here")
-        tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
-        Handler().postDelayed({
-            tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-        }, 1000)
+        if(sdkSession.sdkIdentifier!=null && SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name){
+            SDKSession.getPluginListener()?.paymentFailed(charge)
+            this.finish()
+        }else {
+            println("paymentFailed called here")
+            tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
+            Handler().postDelayed({
+                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+            }, 1000)
 
-        this.finish()
-
+            this.finish()
+        }
     }
 
     override fun authorizationSucceed(authorize: Authorize) {
@@ -253,20 +257,12 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun getStatusSDK(response:String? ,charge: Charge?) {
         println("tabAnimatedActionButton is"+tabAnimatedActionButton)
-        if(SDKSession.sdkIdentifier!=null && SDKSession.sdkIdentifier == SdkIdentifier.FLUTTER.name){
-            if (charge != null) {
-                this.finish()
-                SDKSession.getListener()?.paymentFailed(charge)
-            }
-
-        }
-     tabAnimatedActionButton?.let {
+        tabAnimatedActionButton?.let {
             SDKSession.resetBottomSheetForButton(
                 supportFragmentManager, this,
-                it, this, charge
+                it, this, charge?.status
             )
         }
-
         tabAnimatedActionButton?.visibility = View.VISIBLE
     }
 

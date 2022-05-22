@@ -15,7 +15,6 @@ import com.google.gson.JsonElement
 import company.tap.checkout.TapCheckOutSDK
 import company.tap.checkout.internal.PaymentDataProvider
 import company.tap.checkout.internal.api.enums.ChargeStatus
-import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.api.models.Merchant
 import company.tap.checkout.internal.api.requests.Config
 import company.tap.checkout.internal.api.requests.Gateway
@@ -31,6 +30,7 @@ import company.tap.checkout.open.enums.CardType
 import company.tap.checkout.open.enums.SdkIdentifier
 import company.tap.checkout.open.enums.SdkMode
 import company.tap.checkout.open.enums.TransactionMode
+import company.tap.checkout.open.interfaces.PluginSessionDelegate
 import company.tap.checkout.open.interfaces.SessionDelegate
 import company.tap.checkout.open.models.*
 import company.tap.taplocalizationkit.LocalizationManager
@@ -67,6 +67,8 @@ object  SDKSession : APIRequestCallback {
     @JvmField
     var sdkIdentifier: String? = SdkIdentifier.FLUTTER.name
 
+    @JvmField
+    var pluginSessionDelegate: PluginSessionDelegate? = null
     init {
         initPaymentDataSource()
 
@@ -99,12 +101,20 @@ object  SDKSession : APIRequestCallback {
 
 
     }
+    fun addPluginSessionDelegate(_pluginSessionDelegate: PluginSessionDelegate) {
+        println("addPluginSessionDelegate sdk ${_pluginSessionDelegate}")
+        this.pluginSessionDelegate = _pluginSessionDelegate
 
+
+    }
 
     fun getListener(): SessionDelegate? {
         return sessionDelegate
     }
 
+    fun getPluginListener(): PluginSessionDelegate? {
+        return pluginSessionDelegate
+    }
     /**
      * Instantiate payment data source.
      */
@@ -452,21 +462,13 @@ object  SDKSession : APIRequestCallback {
         context: Context,
         payButtonView: TabAnimatedActionButton?,
         activity: Activity,
-        charge: Charge?
+        status: ChargeStatus?
     ) {
-
-        if(sdkIdentifier!=null && sdkIdentifier ==SdkIdentifier.FLUTTER.name){
-            if (charge != null) {
-                getListener()?.paymentSucceed(charge)
-            }
-
-        }else {
-            val intent = Intent(SDKSession.activity, CheckOutActivity::class.java)
-            intent.putExtra("hideAllViews", true)
-            intent.putExtra("status", charge?.status)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            contextSDK?.startActivity(intent)
-        }
+        val intent = Intent(SDKSession.activity, CheckOutActivity::class.java)
+        intent.putExtra("hideAllViews",true)
+        intent.putExtra("status",status)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        contextSDK?.startActivity(intent)
        /* val checkoutFragment =CheckoutFragment()
         __supportFragmentManager.let { checkoutFragment.show(it,"CheckOutFragment") }
         CheckoutFragment().hideAllView = true
