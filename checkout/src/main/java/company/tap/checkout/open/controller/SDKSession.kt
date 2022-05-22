@@ -27,6 +27,7 @@ import company.tap.checkout.open.CheckOutActivity
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.CardType
+import company.tap.checkout.open.enums.SdkIdentifier
 import company.tap.checkout.open.enums.SdkMode
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.interfaces.SessionDelegate
@@ -63,7 +64,7 @@ object  SDKSession : APIRequestCallback {
 
      var sessionActive = false
     @JvmField
-    var sdkIdentifier: String? = null
+    var sdkIdentifier: String? = SdkIdentifier.FLUTTER.name
 
     init {
         initPaymentDataSource()
