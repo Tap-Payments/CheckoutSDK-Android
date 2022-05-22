@@ -255,8 +255,10 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
         println("tabAnimatedActionButton is"+tabAnimatedActionButton)
         if(SDKSession.sdkIdentifier!=null && SDKSession.sdkIdentifier == SdkIdentifier.FLUTTER.name){
             if (charge != null) {
-                SDKSession.getListener()?.paymentSucceed(charge)
+                this.finish()
+                SDKSession.getListener()?.paymentFailed(charge)
             }
+
         }
      tabAnimatedActionButton?.let {
             SDKSession.resetBottomSheetForButton(
