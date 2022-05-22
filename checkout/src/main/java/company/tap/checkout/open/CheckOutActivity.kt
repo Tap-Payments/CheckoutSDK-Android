@@ -110,15 +110,6 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
 
     override fun paymentFailed(charge: Charge?) {
         println("paymentFailed called here")
-        if(SDKSession.sdkIdentifier!=null && SDKSession.sdkIdentifier==SdkIdentifier.FLUTTER.name){
-           /* tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
-            Handler().postDelayed({
-                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-            }, 1000)*/
-            if (charge != null) {
-                SDKSession.getListener()?.paymentSucceed(charge)
-            }
-        }
         tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
         Handler().postDelayed({
             tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
