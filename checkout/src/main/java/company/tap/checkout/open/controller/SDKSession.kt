@@ -15,6 +15,7 @@ import com.google.gson.JsonElement
 import company.tap.checkout.TapCheckOutSDK
 import company.tap.checkout.internal.PaymentDataProvider
 import company.tap.checkout.internal.api.enums.ChargeStatus
+import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.api.models.Merchant
 import company.tap.checkout.internal.api.requests.Config
 import company.tap.checkout.internal.api.requests.Gateway
@@ -451,13 +452,21 @@ object  SDKSession : APIRequestCallback {
         context: Context,
         payButtonView: TabAnimatedActionButton?,
         activity: Activity,
-        status: ChargeStatus?
+        charge: Charge?
     ) {
-        val intent = Intent(SDKSession.activity, CheckOutActivity::class.java)
-        intent.putExtra("hideAllViews",true)
-        intent.putExtra("status",status)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        contextSDK?.startActivity(intent)
+
+        if(sdkIdentifier!=null && sdkIdentifier ==SdkIdentifier.FLUTTER.name){
+            if (charge != null) {
+                getListener()?.paymentSucceed(charge)
+            }
+
+        }else {
+            val intent = Intent(SDKSession.activity, CheckOutActivity::class.java)
+            intent.putExtra("hideAllViews", true)
+            intent.putExtra("status", charge?.status)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            contextSDK?.startActivity(intent)
+        }
        /* val checkoutFragment =CheckoutFragment()
         __supportFragmentManager.let { checkoutFragment.show(it,"CheckOutFragment") }
         CheckoutFragment().hideAllView = true

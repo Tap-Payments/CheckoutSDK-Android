@@ -265,7 +265,7 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
      tabAnimatedActionButton?.let {
             SDKSession.resetBottomSheetForButton(
                 supportFragmentManager, this,
-                it, this, charge?.status
+                it, this, charge
             )
         }
 
