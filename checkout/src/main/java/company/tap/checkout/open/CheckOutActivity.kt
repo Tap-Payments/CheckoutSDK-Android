@@ -24,6 +24,7 @@ import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
 import company.tap.checkout.open.data_managers.PaymentDataSource
+import company.tap.checkout.open.enums.SdkIdentifier
 import company.tap.checkout.open.interfaces.SessionDelegate
 import company.tap.checkout.open.models.CardsList
 import company.tap.nfcreader.open.reader.TapEmvCard
@@ -109,6 +110,15 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
 
     override fun paymentFailed(charge: Charge?) {
         println("paymentFailed called here")
+        if(SDKSession.sdkIdentifier!=null && SDKSession.sdkIdentifier==SdkIdentifier.FLUTTER.name){
+           /* tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
+            Handler().postDelayed({
+                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+            }, 1000)*/
+            if (charge != null) {
+                SDKSession.getListener()?.paymentSucceed(charge)
+            }
+        }
         tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
         Handler().postDelayed({
             tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
@@ -252,16 +262,13 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun getStatusSDK(response:String? ,charge: Charge?) {
         println("tabAnimatedActionButton is"+tabAnimatedActionButton)
-        /*tabAnimatedActionButton?.let {
+     tabAnimatedActionButton?.let {
             SDKSession.resetBottomSheetForButton(
                 supportFragmentManager, this,
                 it, this, charge?.status
             )
-        }*/
-        SDKSession.resetBottomSheetForButton(
-            supportFragmentManager, this,
-            null, this, charge?.status
-        )
+        }
+
         tabAnimatedActionButton?.visibility = View.VISIBLE
     }
 

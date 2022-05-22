@@ -62,7 +62,8 @@ object  SDKSession : APIRequestCallback {
     var tabAnimatedActionButton: TabAnimatedActionButton? = null
 
      var sessionActive = false
-
+    @JvmField
+    var sdkIdentifier: String? = null
 
     init {
         initPaymentDataSource()
@@ -110,7 +111,7 @@ object  SDKSession : APIRequestCallback {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun startSDK(supportFragmentManager: FragmentManager, context: Context, activity:Activity) {
+    fun startSDK(supportFragmentManager: FragmentManager, context: Context, activity:Activity , sdkIdentifier :String?) {
         println("is session enabled ${SessionManager.isSessionEnabled()}")
         if (SessionManager.isSessionEnabled()) {
             println("Session already active!!!")
@@ -367,7 +368,7 @@ object  SDKSession : APIRequestCallback {
                 return@setOnClickListener
             } else {
                 sessionActive = true
-                startSDK(supportFragmentManager, context,activity)
+                startSDK(supportFragmentManager, context,activity, sdkIdentifier)
                 this.tabAnimatedActionButton = payButtonView
                 if (tabAnimatedActionButton != null) {
                     tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
@@ -475,7 +476,7 @@ object  SDKSession : APIRequestCallback {
         )
         payButtonView?.setOnClickListener {
             payButtonView.changeButtonState(ActionButtonState.LOADING)
-            startSDK(__supportFragmentManager,context, activity)
+            startSDK(__supportFragmentManager,context, activity, sdkIdentifier)
         }
 
 

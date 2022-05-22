@@ -26,6 +26,7 @@ import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.enums.CardType
+import company.tap.checkout.open.enums.SdkIdentifier
 import company.tap.checkout.open.enums.SdkMode
 import company.tap.checkout.open.interfaces.SessionDelegate
 import company.tap.checkout.open.models.*
@@ -302,7 +303,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
     fun openBottomSheet(view: View) {
         /// Configures the bottom sheet by creating one and assigning the correct delegates and datasources
         modalBottomSheet.arguments = getArguments()
-        sdkSession.startSDK(supportFragmentManager, this, this)
+        sdkSession.startSDK(supportFragmentManager, this, this,null)
         // modalBottomSheet.show(supportFragmentManager, TAG)
     }
 
