@@ -100,16 +100,21 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
     }
 
     override fun paymentSucceed(charge: Charge) {
-        tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
-        Handler().postDelayed({
-            tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-        }, 1000)
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+            SDKSession.getPluginListener()?.paymentSucceed(charge)
+            this.finish()
+        }else {
+            tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
+            Handler().postDelayed({
+                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+            }, 1000)
 
-        this.finish()
+            this.finish()
+        }
     }
 
     override fun paymentFailed(charge: Charge?) {
-        if(sdkSession.sdkIdentifier!=null && SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name){
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
             SDKSession.getPluginListener()?.paymentFailed(charge)
             this.finish()
         }else {
@@ -124,134 +129,201 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
     }
 
     override fun authorizationSucceed(authorize: Authorize) {
-        tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
-        Handler().postDelayed({
-            tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-        }, 1000)
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+            SDKSession.getPluginListener()?.authorizationSucceed(authorize)
+            this.finish()
+        }else {
+            tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
+            Handler().postDelayed({
+                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+            }, 1000)
 
-        this.finish()
-
+            this.finish()
+        }
     }
 
     override fun authorizationFailed(authorize: Authorize?) {
-        tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
-        Handler().postDelayed({
-            tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-        }, 1000)
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+            SDKSession.getPluginListener()?.authorizationFailed(authorize)
+            this.finish()
+        }else {
+            tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
+            Handler().postDelayed({
+                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+            }, 1000)
 
-        this.finish()
+            this.finish()
+        }
 
     }
 
     override fun cardSaved(charge: Charge) {
-        tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
-        Handler().postDelayed({
-            tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-        }, 1000)
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+            SDKSession.getPluginListener()?.cardSaved(charge)
+            this.finish()
+        }else {
+            tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
+            Handler().postDelayed({
+                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+            }, 1000)
 
-        this.finish()
-
+            this.finish()
+        }
     }
 
     override fun cardSavingFailed(charge: Charge) {
-        tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
-        Handler().postDelayed({
-            tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-        }, 1000)
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+            SDKSession.getPluginListener()?.cardSavingFailed(charge)
+            this.finish()
+        }else {
+            tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
+            Handler().postDelayed({
+                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+            }, 1000)
 
-        this.finish()
-
+            this.finish()
+        }
     }
 
     override fun cardTokenizedSuccessfully(token: Token) {
-        tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
-        Handler().postDelayed({
-            tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-        }, 1000)
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+            SDKSession.getPluginListener()?.cardTokenizedSuccessfully(token)
+            this.finish()
+        }else {
+            tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
+            Handler().postDelayed({
+                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+            }, 1000)
 
-        this.finish()
-
+            this.finish()
+        }
     }
 
     override fun savedCardsList(cardsList: CardsList) {
-        tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
-        Handler().postDelayed({
-            tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-        }, 1000)
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+            SDKSession.getPluginListener()?.savedCardsList(cardsList)
+            this.finish()
+        }else {
+            tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
+            Handler().postDelayed({
+                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+            }, 1000)
 
-        this.finish()
+            this.finish()
+        }
 
     }
 
     override fun sdkError(goSellError: GoSellError?) {
-        tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
-        Handler().postDelayed({
-            tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-        }, 1000)
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+            SDKSession.getPluginListener()?.sdkError(goSellError)
+            this.finish()
+        }else {
+            tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
+            Handler().postDelayed({
+                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+            }, 1000)
 
-        this.finish()
+            this.finish()
+        }
 
     }
 
     override fun sessionIsStarting() {
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+            SDKSession.getPluginListener()?.sessionIsStarting()
+        }
     }
 
     override fun sessionHasStarted() {
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+            SDKSession.getPluginListener()?.sessionHasStarted()
+        }
     }
 
     override fun sessionCancelled() {
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+            SDKSession.getPluginListener()?.sessionCancelled()
+        }
     }
 
     override fun sessionFailedToStart() {
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+            SDKSession.getPluginListener()?.sessionFailedToStart()
+        }
     }
 
     override fun invalidCardDetails() {
-        tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
-        Handler().postDelayed({
-            tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-        }, 1000)
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+            SDKSession.getPluginListener()?.invalidCardDetails()
+            this.finish()
+        }else {
+            tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
+            Handler().postDelayed({
+                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+            }, 1000)
 
-        this.finish()
-
+            this.finish()
+        }
 
     }
 
     override fun backendUnknownError(message: GoSellError?) {
-        tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
-        Handler().postDelayed({
-            tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-        }, 1000)
-        this.finish()
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+            SDKSession.getPluginListener()?.backendUnknownError(message)
+            this.finish()
+        }else {
+            tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
+            Handler().postDelayed({
+                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+            }, 1000)
+            this.finish()
+        }
 
     }
 
     override fun invalidTransactionMode() {
-        tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
-        Handler().postDelayed({
-            tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-        }, 1000)
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+            SDKSession.getPluginListener()?.invalidTransactionMode()
+            this.finish()
+        }else {
+            tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
+            Handler().postDelayed({
+                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+            }, 1000)
 
-        this.finish()
+            this.finish()
+        }
 
     }
 
     override fun invalidCustomerID() {
-        tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
-        Handler().postDelayed({
-            tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-        }, 1000)
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+            SDKSession.getPluginListener()?.invalidCustomerID()
+            this.finish()
+        }else {
+            tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
+            Handler().postDelayed({
+                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+            }, 1000)
 
-        this.finish()
+            this.finish()
+        }
 
     }
 
     override fun userEnabledSaveCardOption(saveCardEnabled: Boolean) {
-        tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
-        Handler().postDelayed({
-            tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-        }, 1000)
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+            SDKSession.getPluginListener()?.userEnabledSaveCardOption(saveCardEnabled)
+            this.finish()
+        }else {
+            tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
+            Handler().postDelayed({
+                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+            }, 1000)
 
-        this.finish()
+            this.finish()
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
