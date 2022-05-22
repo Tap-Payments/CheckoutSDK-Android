@@ -253,6 +253,11 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun getStatusSDK(response:String? ,charge: Charge?) {
         println("tabAnimatedActionButton is"+tabAnimatedActionButton)
+        if(SDKSession.sdkIdentifier!=null && SDKSession.sdkIdentifier == SdkIdentifier.FLUTTER.name){
+            if (charge != null) {
+                SDKSession.getListener()?.paymentSucceed(charge)
+            }
+        }
      tabAnimatedActionButton?.let {
             SDKSession.resetBottomSheetForButton(
                 supportFragmentManager, this,
