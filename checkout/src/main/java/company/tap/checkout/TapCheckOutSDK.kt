@@ -2,7 +2,9 @@ package company.tap.checkout
 
 import android.content.Context
 import company.tap.checkout.internal.apiresponse.ApiService
+import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.data_managers.PaymentDataSource
+import company.tap.checkout.open.enums.SdkIdentifier
 import company.tap.checkout.open.enums.SdkMode
 import company.tap.checkout.open.exceptions.ErrorReport
 import company.tap.tapnetworkkit.connection.NetworkApp
@@ -28,15 +30,26 @@ class TapCheckOutSDK {
 
             when (PaymentDataSource.getSDKMode()) {
                 SdkMode.SAND_BOX -> {
-                    initNetworkCall(context, secretKeyTest, packageId)
+                    SDKSession.sdkIdentifier = SdkIdentifier.ReactNative.name
+                    initNetworkCall(context, secretKeyTest, packageId ,SDKSession.sdkIdentifier)
                     PaymentDataSource.setInitializeKeys(secretKeyTest)
                 }
                 SdkMode.PRODUCTION -> {
-                    initNetworkCall(context, secretKeyLive, packageId)
+                    initNetworkCall(
+                        context,
+                        secretKeyLive,
+                        packageId,
+                        SDKSession.sdkIdentifier
+                    )
                     PaymentDataSource.setInitializeKeys(secretKeyLive)
                 }
                 else -> {
-                    initNetworkCall(context, secretKeyTest, packageId)
+                    initNetworkCall(
+                        context,
+                        secretKeyTest,
+                        packageId,
+                        SDKSession.sdkIdentifier
+                    )
                     PaymentDataSource.setInitializeKeys(secretKeyTest)
                 }
 
@@ -45,13 +58,18 @@ class TapCheckOutSDK {
 
     }
 
-    private fun initNetworkCall( context: Context ,secretKey :String? ,packageId: String?){
+    private fun initNetworkCall(
+        context: Context,
+        secretKey: String?,
+        packageId: String?,
+        sdkIdentifier: String?
+    ){
         NetworkApp.initNetwork(
             context,
             secretKey,
             packageId,
-            ApiService.BASE_URL
-        )
+            ApiService.BASE_URL,
+            sdkIdentifier)
     }
 
 }

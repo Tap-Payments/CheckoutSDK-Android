@@ -6,17 +6,17 @@ enum class SdkIdentifier {
    /* react-native
     */
     @SerializedName("react-native")
-    REACT_NATIVE,
+    ReactNative,
     /**
      * Flutter
      */
     @SerializedName("Flutter")
-    FLUTTER,
+    Flutter,
 
     /**
      * Native
      */
     @SerializedName("Native")
-    NATIVE
+    Native
 
 }

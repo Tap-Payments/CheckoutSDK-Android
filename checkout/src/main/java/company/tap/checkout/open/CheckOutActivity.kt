@@ -100,7 +100,7 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
     }
 
     override fun paymentSucceed(charge: Charge) {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
             SDKSession.getPluginListener()?.paymentSucceed(charge)
             this.finish()
         }else {
@@ -114,7 +114,7 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
     }
 
     override fun paymentFailed(charge: Charge?) {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
             SDKSession.getPluginListener()?.paymentFailed(charge)
             this.finish()
         }else {
@@ -129,7 +129,7 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
     }
 
     override fun authorizationSucceed(authorize: Authorize) {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
             SDKSession.getPluginListener()?.authorizationSucceed(authorize)
             this.finish()
         }else {
@@ -143,7 +143,7 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
     }
 
     override fun authorizationFailed(authorize: Authorize?) {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
             SDKSession.getPluginListener()?.authorizationFailed(authorize)
             this.finish()
         }else {
@@ -158,7 +158,7 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
     }
 
     override fun cardSaved(charge: Charge) {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
             SDKSession.getPluginListener()?.cardSaved(charge)
             this.finish()
         }else {
@@ -172,7 +172,7 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
     }
 
     override fun cardSavingFailed(charge: Charge) {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
             SDKSession.getPluginListener()?.cardSavingFailed(charge)
             this.finish()
         }else {
@@ -186,7 +186,7 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
     }
 
     override fun cardTokenizedSuccessfully(token: Token) {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
             SDKSession.getPluginListener()?.cardTokenizedSuccessfully(token)
             this.finish()
         }else {
@@ -200,7 +200,7 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
     }
 
     override fun savedCardsList(cardsList: CardsList) {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
             SDKSession.getPluginListener()?.savedCardsList(cardsList)
             this.finish()
         }else {
@@ -215,7 +215,7 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
     }
 
     override fun sdkError(goSellError: GoSellError?) {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
             SDKSession.getPluginListener()?.sdkError(goSellError)
             this.finish()
         }else {
@@ -230,31 +230,31 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
     }
 
     override fun sessionIsStarting() {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
             SDKSession.getPluginListener()?.sessionIsStarting()
         }
     }
 
     override fun sessionHasStarted() {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
             SDKSession.getPluginListener()?.sessionHasStarted()
         }
     }
 
     override fun sessionCancelled() {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
             SDKSession.getPluginListener()?.sessionCancelled()
         }
     }
 
     override fun sessionFailedToStart() {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
             SDKSession.getPluginListener()?.sessionFailedToStart()
         }
     }
 
     override fun invalidCardDetails() {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
             SDKSession.getPluginListener()?.invalidCardDetails()
             this.finish()
         }else {
@@ -269,7 +269,7 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
     }
 
     override fun backendUnknownError(message: GoSellError?) {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
             SDKSession.getPluginListener()?.backendUnknownError(message)
             this.finish()
         }else {
@@ -283,7 +283,7 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
     }
 
     override fun invalidTransactionMode() {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
             SDKSession.getPluginListener()?.invalidTransactionMode()
             this.finish()
         }else {
@@ -298,7 +298,7 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
     }
 
     override fun invalidCustomerID() {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
             SDKSession.getPluginListener()?.invalidCustomerID()
             this.finish()
         }else {
@@ -313,7 +313,7 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
     }
 
     override fun userEnabledSaveCardOption(saveCardEnabled: Boolean) {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.FLUTTER.name|| SDKSession.sdkIdentifier ==SdkIdentifier.REACT_NATIVE.name)){
+        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
             SDKSession.getPluginListener()?.userEnabledSaveCardOption(saveCardEnabled)
             this.finish()
         }else {

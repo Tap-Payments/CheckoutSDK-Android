@@ -303,7 +303,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
     fun openBottomSheet(view: View) {
         /// Configures the bottom sheet by creating one and assigning the correct delegates and datasources
         modalBottomSheet.arguments = getArguments()
-        sdkSession.startSDK(supportFragmentManager, this, this,null)
+        sdkSession.startSDK(supportFragmentManager, this, this)
         // modalBottomSheet.show(supportFragmentManager, TAG)
     }
 
@@ -313,6 +313,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         arguments.putInt(DialogConfigurations.Color, Color.TRANSPARENT)
         arguments.putBoolean(DialogConfigurations.Cancelable, false)
         arguments.putFloat(DialogConfigurations.Dim, 0.75f)
+
         return arguments
     }
 
