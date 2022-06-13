@@ -30,7 +30,6 @@ class TapCheckOutSDK {
 
             when (PaymentDataSource.getSDKMode()) {
                 SdkMode.SAND_BOX -> {
-                    SDKSession.sdkIdentifier = SdkIdentifier.ReactNative.name
                     initNetworkCall(context, secretKeyTest, packageId ,SDKSession.sdkIdentifier)
                     PaymentDataSource.setInitializeKeys(secretKeyTest)
                 }
