@@ -243,4 +243,161 @@ import company.tap.checkout.TapCheckOutSDK;
 ```koltin
 import company.tap.checkout.TapCheckOutSDK
 ```
+<a name="configure_sdk_look_and_feel"></a>
+### Configure SDK Look and Feel
+To customize the SDK look and feel you must use **ThemeManager**  as following:
+
+*Kotlin:*
+```kotlin
+ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "lighttheme")
+```
+or
+```kotlin
+ ThemeManager.loadTapTheme(this, urlString)
+```
+<a name="configure_sdk_Session"></a>
+## Configure SDK Session
+**SDKSession** is the main interface for checkOutSDK library from you application, so you can use it to start SDK with pay button or without pay button.
+### Properties
+
+<table style="text-align:center">
+    <th colspan=1>Property</th>
+    <th colspan=1>Type</th>
+    <th rowspan=1>Description</th>
+
+   <tr>
+	<td> payButton </td>
+	<td> PayButton </td>
+	<td> Pay Button can be used to start SDK </td>
+   <tr>
+
+   <tr>
+	<td> paymentDataSource  </td>
+	<td> PaymentDataSource </td>
+	<td> Payment data source. All input payment information is passed through this protocol. Required. </td>
+   <tr>
+
+   <tr>
+	<td> activityListener  </td>
+	<td> Activity </td>
+	<td> Activity. used as a context to setup sdk.</td>
+   <tr>
+
+   <tr>
+	<td> sessionDelegate  </td>
+	<td> Activity </td>
+	<td> Activity. it is used to notify Merchant application with all SDK Events </td>
+   <tr>
+
+
+</table>
+
+### Methods
+
+<table style="text-align:center">
+    <th colspan=1>Property</th>
+    <th colspan=1>Type</th>
+    <tr>
+	 <td> addSessionDelegate  </td>
+	 <td> pass your activity that implements SessionDelegate interface . you have to override all methods available through this interface </td>
+    </tr>
+    <tr>
+	 <td> instantiatePaymentDataSource  </td>
+	 <td> Payment Data Source Object is the main object that is responsible of holding all data required from our backend to return all payment options [ Debit Cards - Credit Cards ] available for this merchant . </td>
+    </tr>
+    <tr>
+   	 <td> setTransactionCurrency  </td>
+   	 <td> Set the transaction currency associated to your account. Transaction currency must be of type TapCurrency("currency_iso_code"). i.e new TapCurrency("KWD") </td>
+    </tr>
+    <tr>
+	 <td> setTransactionMode  </td>
+	 <td> SDK offers different transaction modes such as [ TransactionMode.PURCHASE - TransactionMode.AUTHORIZE_CAPTURE - TransactionMode.SAVE_CARD - TransactionMode.TOKENIZE_CARD]   </td>
+    </tr>
+    <tr>
+	 <td> setCustomer </td>
+	 <td> Pass your customer data. Customer must be of type Tap Customer. You can create Tap Customer as following
+	  TapCustomer(
+                "cust_id", "cust_firstname", "cust_middlename",
+                "cust_lastname", "cust_email",
+                PhoneNumber("country_code", "MobileNo"), "metdata",
+            )</td>
+    </tr>
+    <tr>
+	 <td> setAmount </td>
+	 <td> Set Total Amount. Amount value must be of type BigDecimal i.e new BigDecimal(40) </td>
+    </tr>
+    <tr>
+	 <td> setPaymentItems </td>
+	 <td> ArrayList that contains payment items. each item of this array must be of type PaymentItem. in case of SAVE_CARD or TOKENIZE_CARD you can pass it null</td>
+    </tr>
+    <tr>
+  	 <td> setTaxes </td>
+  	 <td> ArrayList that contains Tax items. each item of this array must be of type Tax. in case of SAVE_CARD or TOKENIZE_CARD you can pass it null</td>
+  	</tr>
+  	<tr>
+  	 <td> setShipping </td>
+  	 <td> ArrayList that contains Shipping items. each item of this array must be of type Shipping. in case of SAVE_CARD or TOKENIZE_CARD you can pass it null</td>
+  	</tr>
+  	<tr>
+  	 <td> setPostURL </td>
+  	 <td> POST URL. </td>
+  	</tr>
+  	<tr>
+  	 <td> setPaymentDescription </td>
+  	 <td> Payment description. </td>
+  	</tr>
+  	<tr>
+  	 <td> setPaymentMetadata </td>
+  	 <td> HashMap that contains any other payment related data. </td>
+  	</tr>
+  	<tr>
+  	 <td> setPaymentReference </td>
+  	 <td> Payment reference. it must be of type Reference object or null </td>
+  	</tr>
+  	<tr>
+  	 <td> setPaymentStatementDescriptor </td>
+  	 <td> Payment Statement Description </td>
+  	</tr>
+  	<tr>
+  	 <td> isRequires3DSecure </td>
+  	 <td> Enable or Disable 3D Secure </td>
+  	</tr>
+  	<tr>
+  	 <td> setReceiptSettings </td>
+  	 <td> Identify Receipt Settings. You must pass  Receipt object or null </td>
+  	</tr>
+  	<tr>
+  	 <td> setAuthorizeAction </td>
+  	 <td> Identify AuthorizeAction. You must pass AuthorizeAction object or null </td>
+  	</tr>
+  	<tr>
+  	 <td> setDestination </td>
+  	 <td> Identify Array of destination. You must pass Destinations object or null </td>
+  	</tr>
+  	<tr>
+  	 <td> start </td>
+  	 <td> Start SDK Without using Tap Pay button. You must call this method where ever you want to show TAP Payment screen. Also, you must pass your activity as a context   </td>
+  	</tr>
+  	<tr>
+  	 <td> setButtonView </td>
+  	 <td> If you included TAP PayButton in your activity then you need to configure it and then pass it to SDKSession through this method.</td>
+    </tr>
+    <tr>
+      <td> setDefaultCardHolderName </td>
+      <td> Sets default CardHoldername in the field, without the user need to re-type.(OPTIONAL) </td>
+     </tr>
+      <tr>
+           <td>isUserAllowedToEnableCardHolderName </td>
+           <td> Lets default CardHoldername in the field,can be editable or not based on user configuration .(OPTIONAL) </td>
+          </tr>
+      <tr>
+                <td>sdkSession.cancelSession(this); </td>
+                <td> Merchant can now cancel the session and stop all process initiating the SDK. .(OPTIONAL) </td>
+               </tr>
+               <tr>
+                               <td>setTopUp </td>
+                               <td> Merchant can now send a topUp object while initiating the SDK. .(OPTIONAL) </td>
+                              </tr>
+</table>
+
 
