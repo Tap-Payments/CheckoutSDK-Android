@@ -217,9 +217,10 @@ Below is the list of properties in checkOutSDK class you can manipulate. Make su
 ### Configure SDK Secret Key and Application ID and SDK Language
 
 To set it up, add the following line of code somewhere in your project and make sure it will be called before any usage of `checkOutSDK`, otherwise an exception will be thrown. **Required**.
+
 *Kotlin:*
 ```kotlin
-     /**
+        /**
          * Required step.
          * Configure SDK with your Secret API key and App Bundle name registered with tap company.
          */
@@ -227,3 +228,19 @@ To set it up, add the following line of code somewhere in your project and make 
    TapCheckOutSDK().init(this, "sk_test_kXXXXXXXXXXXXXXXXXXXXXXXX", "sk_live_XXXXXXXXXXXXXXXXXXXXXXXX", "app_id")  // to be replaced by merchant, you can contact tap support team to get you credentials
         }
 ```
+1. **`authToken`** - to authorize your requests.// Secret key (format: "sk_XXXXXXXXXXXXXXXXXXXXXXXX")
+2. **`app_id`** - replace it using your application ID "Application main package".
+
+Don't forget to import the class at the beginning of the file:
+
+*Java:*
+
+```java
+import company.tap.checkout.TapCheckOutSDK;
+```
+*Kotlin:*
+
+```koltin
+import company.tap.checkout.TapCheckOutSDK
+```
+
