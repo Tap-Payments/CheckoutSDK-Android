@@ -496,6 +496,50 @@ or
         sdkSession.setDefaultCardHolderName("TEST TAP"); // ** Optional ** you can pass default CardHolderName of the user .So you don't need to type it.
         sdkSession.isUserAllowedToEnableCardHolderName(false) // ** Optional ** you can enable/ disable  default CardHolderName .
         sdkSession.setSdkMode(SdkMode.SAND_BOX) //** Pass your SDK MODE
-    
+ ```
+ <a name="configure_sdk_transaction_mode"></a>
+  **Configure SDK Transaction Mode**
+  
+  You have to choose only one Mode of the following modes:
+  
+   **Note:-**
+     - In case of using PayButton, then don't call  sdkSession.startSDK(fragmentManager,this,this) because the SDK will start when user clicks the tap pay button.
+
+<a name="init_pay_button"></a>
+If you included Tap Pay Button then configure it first, if not then ignore this step.
+
+**Use Tap PayButton**
+
+*Kotlin:*
+  ```kotlin
+        /**
+          * Include pay button in merchant page
+          */
+            private fun initActionButton() {
+        payButton.setButtonDataSource(
+                true,
+                this.let { LocalizationManager.getLocale(it).language },
+                LocalizationManager.getValue("pay", "ActionButton"),
+                Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
+                Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
+        )
+
+        sdkSession.setButtonView(payButton, this, supportFragmentManager, this)
 
 
+    }
+```
+**To populate TAP Customer object**
+
+*Kotlin*:
+```kotlin
+   fun setCustomer(): TapCustomer { 
+        val tapCustomer: TapCustomer? = null
+        return TapCustomer(
+                "cus_TS012520211349Za012907577", "ahlaam", "middlename",
+                "lastname", "abcd@gmail.com",
+                PhoneNumber("00965", "66175090"), "description-metadata",
+        )
+
+    }
+ ```	
