@@ -399,5 +399,103 @@ or
                                <td> Merchant can now send a topUp object while initiating the SDK. .(OPTIONAL) </td>
                               </tr>
 </table>
+**Configure SDK Session Example** 
+
+*Kotlin:*
+```kotlin
+ // pass your activity as a session delegate to listen to SDK internal payment process follow
+        sdkSession.addSessionDelegate(this) //** Required **
+        
+        // initiate PaymentDataSource
+        sdkSession.instantiatePaymentDataSource() //** Required **
+
+
+        // set transaction currency associated to your account
+
+        sdkSession.setTransactionCurrency(TapCurrency("KWD")) //** Required **
+
+
+        // Using static CustomerBuilder method available inside TAP TapCustomer Class you can populate TAP TapCustomer object and pass it to SDK
+        sdkSession.setCustomer(setCustomer()) //** Required **
+
+
+        // Set Total Amount. The Total amount will be recalculated according to provided Taxes and Shipping
+
+        settingsManager?.getString("key_amount_name", "1")?.let { BigDecimal(it) }?.let {
+            sdkSession.setAmount(
+                    it
+            )
+        }//** Required **
+
+
+        // Set Payment Items array list
+        sdkSession.setPaymentItems(getPaymentItems()) // ** Optional ** you can pass empty array list
+
+
+        sdkSession.setPaymentType("ALL")  //** Merchant can pass paymentType
+
+        // Set Taxes array list
+        sdkSession.setTaxes(ArrayList()) // ** Optional ** you can pass empty array list
+
+
+        // Set Shipping array list
+          sdkSession.setShipping(settingsManager?.getShippingList()) // ** Optional ** you can pass empty array list
+
+        // Post URL
+        sdkSession.setPostURL("") // ** Optional **
+
+
+        // Payment Description
+        sdkSession.setPaymentDescription("") //** Optional **
+
+        // Payment Extra Info
+        sdkSession.setPaymentMetadata(HashMap()) // ** Optional ** you can pass empty array hash map
+
+        // Payment Reference
+        sdkSession.setPaymentReference(null) // ** Optional ** you can pass null
+
+        // Payment Statement Descriptor
+        sdkSession.setPaymentStatementDescriptor("") // ** Optional **
+
+
+        // Enable or Disable Saving Card
+        sdkSession.isUserAllowedToSaveCard(true) //  ** Required ** you can pass boolean
+
+
+        // Enable or Disable 3DSecure
+        sdkSession.isRequires3DSecure(true)
+
+        //Set Receipt Settings [SMS - Email ]
+        sdkSession.setReceiptSettings(
+                Receipt(
+                        false,
+                        false
+                )
+        ) // ** Optional ** you can pass Receipt object or null
+
+
+        // Set Authorize Action
+        sdkSession.setAuthorizeAction(null) // ** Optional ** you can pass AuthorizeAction object or null
+
+
+      //  sdkSession.setDestination(settingsManager?.getDestination()) // ** Optional ** you can pass Destinations object or null
+       sdkSession.setDestination(null) // ** Optional ** you can pass Destinations object or null
+
+
+        sdkSession.setMerchantID("xxxxx") // ** Optional ** you can pass merchant id or null
+
+
+        sdkSession.setCardType(CardType.ALL) // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
+
+         settingsManager?.getTransactionsMode("key_sdk_transaction_mode")?.let {
+            sdkSession.setTransactionMode(
+                    it
+            )
+        }
+
+        sdkSession.setDefaultCardHolderName("TEST TAP"); // ** Optional ** you can pass default CardHolderName of the user .So you don't need to type it.
+        sdkSession.isUserAllowedToEnableCardHolderName(false) // ** Optional ** you can enable/ disable  default CardHolderName .
+        sdkSession.setSdkMode(SdkMode.SAND_BOX) //** Pass your SDK MODE
+    
 
 
