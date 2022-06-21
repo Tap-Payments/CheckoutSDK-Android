@@ -93,3 +93,55 @@ Step 2. Add the dependency
 	        implementation 'com.github.Tap-Payments:CheckoutSDK-Android:Tag'
 	}
 ```
+<a name="setup"></a>
+# Setup
+---
+First of all, `goSellSDK` should be set up. In this section secret key and application ID are required.
+
+<a name="setup_gosellsdk_class_properties"></a>
+## goSellSDK Class Properties
+First of all, `goSellSDK` should be set up. To set it up, add the following lines of code somewhere in your project and make sure they will be called before any usage of `goSellSDK`.
+
+Below is the list of properties in goSellSDK class you can manipulate. Make sure you do the setup before any usage of the SDK.
+
+<a name="setup_checkoutsdk_class_properties_secret_key"></a>
+### Secret Key and Application ID
+
+To set it up, add the following line of code somewhere in your project and make sure it will be called before any usage of `goSellSDK`, otherwise an exception will be thrown. **Required**.
+
+*Java:*
+```java
+ TapCheckOutSDK().init(
+        this,
+        "sk_test_kXXXXXXXXXXXXXXXXXXXXXXXX",
+        "sk_live_XXXXXXXXXXXXXXXXXXXXXXXX",
+        "app_id"
+
+        );
+```
+*Kotlin:*
+```kotlin
+      TapCheckOutSDK().init(
+   this,
+   "sk_test_kXXXXXXXXXXXXXXXXXXXXXXXX",
+   "sk_live_XXXXXXXXXXXXXXXXXXXXXXXX",
+   "app_id"
+
+)
+ ```    
+1. **`authToken`** - to authorize your requests.// Secret key (format: "sk_XXXXXXXXXXXXXXXXXXXXXXXX")
+2. **`app_id`** - replace it using your application ID "Application main package".
+
+Don't forget to import the class at the beginning of the file:
+
+*Java:*
+
+```java
+import company.tap.checkout.TapCheckOutSDK;
+```
+*Kotlin:*
+
+```kotlin
+import company.tap.checkout.TapCheckOutSDK
+```
+<a name="setup_checkoutsdk_class_properties_mode"></a>
