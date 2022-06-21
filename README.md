@@ -536,10 +536,163 @@ If you included Tap Pay Button then configure it first, if not then ignore this 
    fun setCustomer(): TapCustomer { 
         val tapCustomer: TapCustomer? = null
         return TapCustomer(
-                "cus_TS012520211349Za012907577", "ahlaam", "middlename",
+                "cus_TSxxxxxxxxxxxxx", "firstname", "middlename",
                 "lastname", "abcd@gmail.com",
-                PhoneNumber("00965", "66175090"), "description-metadata",
+                PhoneNumber("00965", "xxxxxxxx"), "description-metadata",
         )
 
     }
  ```	
+<a name="sdkSession_data_source"></a>
+### SDKSession Payment Data Source
+
+**PaymentDataSource** is an interface which you should implement somewhere in your code to pass payment information in order to be able to access payment flow within the SDK.
+
+<a name="session_data_source_structure"></a>
+### Structure
+
+The following table describes its structure and specifies which fields are required for each of the modes.
+
+<table style="text-align:center">
+    <th rowspan=2>Member</th>
+    <th colspan=1>Type</th>
+    <th colspan=3>Required</th>
+    <th rowspan=2>Description</th>
+    <tr>
+        <th><sub>Android</sub></th>
+        <th><sub>Purchase</sub></th>
+        <th><sub>Authorize</sub></th>
+        <th><sub>Card Saving</sub></th>
+    </tr>
+    <tr>
+        <td><sub><i>mode</i></sub></td>
+        <td colspan=1><sub><b>TransactionMode</b></sub></td>
+        <td colspan=3><sub><i>false</i></sub></td>
+        <td align="left"><sub>Mode of the transactions (purchase or authorize). If this    property is not implemented, <i>purchase</i> mode is used.</sub></td>
+    </tr>
+     <tr>
+        <td><sub><i>customer</i></sub></td>
+        <td colspan=1><sub><b>Customer</b></sub></td>
+        <td colspan=3><sub><i>true</i></sub></td>
+        <td align="left"><sub>Customer information. For more details on how to create the customer, please refer to <i>Customer</i> class reference.</sub></td>
+    </tr>
+     <tr>
+        <td><sub><i>currency</i></sub></td>
+        <td colspan=1><sub><b>Currency</b></sub></td>
+        <td colspan=2><sub><i>true</i></sub></td><td><sub><i>false</i></sub></td>
+        <td align="left"><sub>Currency of the transaction.</sub></td>
+    </tr>
+    <tr>
+        <td><sub><i>amount</i></sub></td>
+        <td colspan=1><sub><b><nobr>BigDecimal</nobr></b></sub></td>
+        <td colspan=3><sub><i>false</i></sub></td>
+        <td align="left"><sub>Payment/Authorization amount.<br><b>Note:</b> In order to have payment amount either <i>amount</i> or <i>items</i> should be implemented. If both are implemented, <i>items</i> is preferred.</sub></td>
+    </tr>
+    <tr>
+    <td><sub><i>items</i></sub></td>
+    <td colspan=1><sub><b>ArrayList <nobr>[PaymentItem]</PaymentItem> </nobr></b></sub></td>
+    <td colspan=3><sub><i>false</i></sub></td>
+    <td align="left"><sub>List of items to pay for.<br><b>Note:</b> In order to have payment amount either <i>amount</i> or <i>items</i> should be implemented. If both are implemented, <i>items</i> is preferred.</sub></td>
+</tr>
+<tr>
+    <td><sub><i>taxes</i></sub></td>
+    <td colspan=1><sub><b>ArrayList <nobr>[Tax]</PaymentItem> </nobr></b></sub></td>
+    <td colspan=3><sub><i>false</i></sub></td>
+    <td align="left"><sub>You can specify taxation details here. By default, there are no taxes.<br> <b>Note:</b> Specifying taxes will affect total payment/authorization amount.</sub></td>
+</tr>
+<tr>
+    <td><sub><i>shipping</i></sub></td>
+    <td colspan=1><sub><b>ArrayList <nobr>[Shipping]</PaymentItem> </nobr></b></sub></td>
+    <td colspan=3><sub><i>false</i></sub></td>
+    <td align="left"><sub>You can specify shipping details here. By default, there are no shipping details.<br> <b>Note:</b> Specifying shipping will affect total payment/authorization amount.</sub></td>
+</tr>
+<tr>
+    <td><sub><i>postURL</i></sub></td>
+    <td colspan=1><sub><b>String </b></sub></td>
+    <td colspan=3><sub><i>false</i></sub></td>
+    <td align="left"><sub>The URL which will be called by Tap system notifying that payment has either succeed or failed</sub></td>
+</tr>
+<tr>
+    <td><sub><i>paymentDescription</i></sub></td>
+    <td colspan=1><sub><b>String </b></sub></td>
+    <td colspan=3><sub><i>false</i></sub></td>
+    <td align="left"><sub>Description of the payment.</sub></td>
+</tr>
+<tr>
+    <td><sub><i>paymentMetadata</i></sub></td>
+    <td colspan=1><sub><b>String </b></sub></td>
+    <td colspan=3><sub><i>false</i></sub></td>
+    <td align="left"><sub>Additional information you would like to pass along with the transaction.</sub></td>
+</tr>
+<tr>
+    <td><sub><i>paymentReference</i></sub></td>
+    <td colspan=1><sub><b>Reference </b></sub></td>
+    <td colspan=3><sub><i>false</i></sub></td>
+    <td align="left"><sub>You can keep a reference to the transaction using this property</sub></td>
+</tr>
+<tr>
+    <td><sub><i>paymentStatementDescriptor</i></sub></td>
+    <td colspan=1><sub><b>String </b></sub></td>
+    <td colspan=3><sub><i>false</i></sub></td>
+    <td align="left"><sub>Statement descriptor.</sub></td>
+</tr>
+<tr>
+    <td><sub><i>require3DSecure</i></sub></td>
+    <td colspan=1><sub><b>Boolean </b></sub></td>
+    <td colspan=3><sub><i>false</i></sub></td>
+    <td align="left"><sub>Defines if 3D secure check is required. If not implemented, treated as <i>true</i>.<br><b>Note:</b> If you disable 3D secure check, it still may occure. Final decision is taken by Tap</sub></td>
+</tr>
+<tr>
+    <td><sub><i>receiptSettings</i></sub></td>
+    <td colspan=1><sub><b>Receipt </b></sub></td>
+    <td colspan=3><sub><i>false</i></sub></td>
+    <td align="left"><sub>Receipt recipient details.</sub></td>
+</tr>
+<tr>
+    <td><sub><i>authorizeAction</i></sub></td>
+    <td colspan=1><sub><b>AuthorizeAction </b></sub></td>
+    <td><sub><i>false</i></sub></td><td><sub><i>true</i></sub></td><td><sub><i>false</i></sub></td>
+    <td align="left"><sub>Action to perform after authorization succeeds.</sub></td>
+</tr>
+
+</table>
+
+<a name="sdk_open_interfaces"></a>
+## SDK Open Interfaces
+ SDK open Interfaces available for implementation through Merchant Project:
+
+1. SessionDelegate
+```kotlin
+fun paymentSucceed(charge: Charge)
+    fun paymentFailed(charge: Charge?)
+
+    fun authorizationSucceed(authorize: Authorize)
+    fun authorizationFailed(authorize: Authorize?)
+
+
+    fun cardSaved(charge: Charge)
+    fun cardSavingFailed(charge: Charge)
+
+    fun cardTokenizedSuccessfully(token: Token)
+
+    fun savedCardsList(cardsList: CardsList)
+
+    fun sdkError(goSellError: GoSellError?)
+
+    fun sessionIsStarting()
+    fun sessionHasStarted()
+    fun sessionCancelled()
+    fun sessionFailedToStart()
+
+    fun invalidCardDetails()
+
+    fun backendUnknownError(message: GoSellError?)
+
+    fun invalidTransactionMode()
+
+    fun invalidCustomerID()
+
+    fun userEnabledSaveCardOption(saveCardEnabled: Boolean)
+
+    fun getStatusSDK(response :String ? ,charge: Charge?)
+```
