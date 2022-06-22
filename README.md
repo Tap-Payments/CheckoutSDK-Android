@@ -1464,5 +1464,266 @@ data class Reference(
 ```
 8. Shipping
 ```kotlin
+data class Shipping(
+    @SerializedName("name") private var name: String,
+    @SerializedName("description") @Nullable val description: String,
+    @SerializedName("amount") val amount: BigDecimal
+)
+```
+9.Tax
+```kotlin
+data class Tax(
+    @SerializedName("name") var name: String,
+    @SerializedName("description") val description: String,
+    @SerializedName("amount") val amount: AmountModificator
+)
+```
+10.TopUp
+```kotlin
+data class TopUp(
+    @SerializedName("id") @Expose
+    var Id: String? = null,
+    @SerializedName("wallet_id")
+    @Expose
+    var walletId: String? = null,
 
+    @SerializedName("created")
+    @Expose
+    var created: Long? = null,
 
+    @SerializedName("status")
+    @Expose
+    var status: String? = null,
+
+    @SerializedName("amount")
+    @Expose
+    var amount: BigDecimal? = null,
+
+    @SerializedName("currency")
+    @Expose
+    var currency: String? = null,
+
+    @SerializedName("charge")
+    @Expose
+    var charge: TopchargeModel? = null,
+
+    @SerializedName("customer")
+    @Expose
+    var customer: TopCustomerModel? = null,
+
+    @SerializedName("reference")
+    @Expose
+    var topUpReference: TopUpReference? = null,
+
+    @SerializedName("application")
+    @Expose
+    var application: TopUpApplication? = null,
+
+    @SerializedName("response")
+    @Expose
+    var response: Response? = null,
+
+    @SerializedName("post")
+    @Expose
+    var post: TopupPost? = null,
+
+    @SerializedName("metadata")
+    @Expose
+    var metadata: MetaData? = null
+) : Serializable
+
+data class TopchargeModel(
+    @SerializedName("id") @Expose
+    private var id: String? = null
+) : Serializable
+
+data class TopCustomerModel(
+    @SerializedName("id") @Expose
+    private var id: String? = null
+) : Serializable
+
+data class TopUpApplication(
+    @SerializedName("amount") @Expose
+    var amount: BigDecimal? = null,
+    @SerializedName("currency") @Expose
+    var currency: String? = null
+) : Serializable
+
+data class TopUpReference(
+    @SerializedName("order") @Expose
+    var order: String? = null,
+    @SerializedName("transaction")
+    @Expose
+    val transaction: String? = null
+) : Serializable
+
+data class TopupPost(
+    @SerializedName("url") @Expose
+    val url: String? = null
+) : Serializable
+
+data class MetaData(
+    @SerializedName("udf1") @Expose
+    private var udf1: String? = null,
+    @SerializedName("udf2")
+    @Expose
+    private var udf2: String? = null
+) : Serializable
+```
+11. CardsList
+```kotlin
+class CardsList(
+    responseCode: Int,
+    `object`: String,
+    has_more: Boolean,
+    data: ArrayList<SavedCard>?
+) {
+    private val responseCode: Int = responseCode
+    private val `object`: String
+    private val has_more: Boolean
+    private var cards: ArrayList<SavedCard>?
+
+    /**
+     * Gets Response Code
+     * @return responseCode
+     */
+    fun getResponseCode(): Int {
+        return responseCode
+    }
+
+    /**
+     * Gets Object type
+     * @return object
+     */
+    fun getObject(): String {
+        return `object`
+    }
+
+    /**
+     * Check if customer has more cards
+     * @return has_more
+     */
+    fun isHas_more(): Boolean {
+        return has_more
+    }
+
+    /**
+     * Gets cards.
+     *
+     * @return the cards
+     */
+    fun getCards(): ArrayList<SavedCard>? {
+        if (cards == null) {
+            cards = ArrayList<SavedCard>()
+        }
+        return cards
+    }
+
+    init {
+        this.`object` = `object`
+        this.has_more = has_more
+        cards = data
+    }
+}
+````
+<a name="sdk_delegate"></a>
+## SDKSession Delegate
+
+**SessionDelegate** is an interface which you may want to implement to receive payment/authorization/card saving status updates and update your user interface accordingly when payment window closes.
+Below are listed down all available callbacks:
+
+<a name="payment_success_callback"></a>
+### Payment Success Callback
+
+Notifies the receiver that payment has succeed.
+
+#### Declaration
+*Kotlin:*
+```kotlin
+- fun paymentSucceed(charge: Charge)
+```
+#### Arguments
+
+**charge**: Successful charge object.
+
+<a name="payment_failure_callback"></a>
+### Payment Failure Callback
+
+Notifies the receiver that payment has failed.
+#### Declaration
+
+*Kotlin:*
+```kotlin
+- fun paymentFailed(charge: Charge?) 
+```
+
+#### Arguments
+
+**charge**: Charge object that has failed (if reached the stage of charging).
+
+<a name="authorization_success_callback"></a>
+### Authorization Success Callback
+
+Notifies the receiver that authorization has succeed.
+#### Declaration
+
+*Kotlin:*
+
+```kotlin
+-  fun authorizationSucceed(authorize: Authorize)
+```
+
+#### Arguments
+
+**authorize**: Successful authorize object.
+
+<a name="authorization_failure_callback"></a>
+### Authorization Failure Callback
+
+Notifies the receiver that authorization has failed.
+
+#### Declaration
+
+*Kotlin:*
+
+```kotlin
+- fun authorizationFailed(authorize: Authorize?)
+```
+
+#### Arguments
+
+**authorize**: Authorize object that has failed (if reached the stage of authorization).
+
+<a name="card_saving_success_callback"></a>
+### Card Saving Success Callback
+
+Notifies the receiver that the customer has successfully saved the card.
+
+#### Declaration
+
+*Kotlin:*
+
+```kotlin
+- fun cardSaved(charge: Charge) // you have to cast Charge object to SaveCard object first to get card info 
+```
+
+#### Arguments
+
+**Charge**: Charge object with the details.
+
+<a name="card_saving_failure_callback"></a>
+### Card Saving Failure Callback
+
+Notifies the receiver that the customer failed to save the card.
+
+#### Declaration
+
+*Kotlin:*
+
+```kotlin
+- fun cardSavingFailed(charge: Charge)
+```
+
+#### Arguments
+
+**Charge**: Charge object with the details (if reached the stage of card saving).
