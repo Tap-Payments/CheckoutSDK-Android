@@ -845,3 +845,624 @@ interface PaymentDataSource {
 <a name="sdk_open_enums"></a>
 ## SDK Open ENUMs
 SDK open Enums available for implementation through Merchant Project:
+1. TransactionMode 
+```kotlin
+enum class TransactionMode {
+    PURCHASE,
+    AUTHORIZE_CAPTURE,
+    SAVE_CARD,
+    TOKENIZE_CARD
+
+}
+```
+
+2.SdkMode
+```kotlin
+enum class SdkMode {
+/**
+* Sandbox is for testing purposes
+*/
+@SerializedName("Sandbox")
+SAND_BOX,
+/**
+* Production is for live
+*/
+@SerializedName("Production")
+PRODUCTION
+}
+```
+3. SdkIdentifier
+```kotlin
+enum class SdkIdentifier {
+   /* react-native
+    */
+    @SerializedName("react-native")
+    ReactNative,
+    /**
+     * Flutter
+     */
+    @SerializedName("Flutter")
+    Flutter,
+
+    /**
+     * Native
+     */
+    @SerializedName("Native")
+    Native
+
+}
+```
+4.CardType
+```kotlin
+/**
+ * The Merchant can set different cardTypes CREDIT ,DEBIT , ALL to allow user his choice*/
+enum class CardType {
+
+    CREDIT,
+    DEBIT,
+    ALL
+}
+```
+<a name="sdk_open_models"></a>
+## SDK Open Models
+SDK open Models available for implementation through Merchant Project: 
+1. TapCustomer
+```kotlin
+class TapCustomer(
+    /**
+     * Gets identifier.
+     *
+     * @return the identifier
+     */
+    @field:Expose @field:SerializedName("id") val identifier: String?,
+    /**
+     * Gets first name.
+     *
+     * @return the first name
+     */
+    @field:Expose @field:SerializedName("first_name") var firstName: String?,
+    middleName: String?,
+    lastName: String?,
+    email: String?,
+    phone: PhoneNumber?,
+    metaData: String?
+) :
+    Serializable {
+
+    /**
+     * Gets middle name.
+     *
+     * @return the middle name
+     */
+    @SerializedName("middle_name")
+    @Expose
+    val middleName: String?
+
+    /**
+     * Gets last name.
+     *
+     * @return the last name
+     */
+    @SerializedName("last_name")
+    @Expose
+    val lastName: String?
+
+    /**
+     * Gets email.
+     *
+     * @return the email
+     */
+    @SerializedName("email")
+    @Expose
+    val email: String?
+
+    @SerializedName("phone")
+    @Expose
+    private val phone: PhoneNumber?
+    /**
+     * Gets meta data.
+     *
+     * @return the meta data
+     */
+    /**
+     * The Meta data.
+     */
+    @SerializedName("metadata")
+    var metaData: String?
+
+    /**
+     * Gets phone.
+     *
+     * @return the phone
+     */
+    fun getPhone(): PhoneNumber? {
+        return phone
+    }
+
+    override fun toString(): String {
+        return """TapCustomer {
+        id =  '$identifier'
+        email =  '$email'
+        first_name =  '$firstName'
+        middle_name =  '$middleName'
+        last_name =  '$lastName'
+        phone  country code =  '${phone?.countryCode}'
+        phone number =  '${phone?.number}'
+        metadata =  '$metaData'
+    }"""
+    }
+    ////////////////////////// ############################ Start of Builder Region ########################### ///////////////////////
+    /**
+     * The type TapCustomer builder.
+     */
+    class CustomerBuilder
+    /**
+     * Client app can create a customer object with only customer id
+     *
+     * @param innerId the inner id
+     */(private val nestedIdentifier: String) {
+        private var nestedFirstName: String? = null
+        private var nestedMiddleName: String? = null
+        private var nestedLastName: String? = null
+        private var nestedEmail: String? = null
+        private var nestedPhone: PhoneNumber? = null
+        private var nestedMetaData: String? = null
+
+        /**
+         * First name customer builder.
+         *
+         * @param innerFirstName the inner first name
+         * @return the customer builder
+         */
+        fun firstName(innerFirstName: String?): CustomerBuilder {
+            nestedFirstName = innerFirstName
+            return this
+        }
+
+        /**
+         * Middle name customer builder.
+         *
+         * @param innerMiddle the inner middle
+         * @return the customer builder
+         */
+        fun middleName(innerMiddle: String?): CustomerBuilder {
+            nestedMiddleName = innerMiddle
+            return this
+        }
+
+        /**
+         * Last name customer builder.
+         *
+         * @param innerLastName the inner last name
+         * @return the customer builder
+         */
+        fun lastName(innerLastName: String?): CustomerBuilder {
+            nestedLastName = innerLastName
+            return this
+        }
+
+        /**
+         * Email customer builder.
+         *
+         * @param innerEmail the inner email
+         * @return the customer builder
+         */
+        fun email(innerEmail: String?): CustomerBuilder {
+            nestedEmail = innerEmail
+            return this
+        }
+
+        /**
+         * Phone customer builder.
+         *
+         * @param innerPhone the inner phone
+         * @return the customer builder
+         */
+        fun phone(innerPhone: PhoneNumber?): CustomerBuilder {
+            nestedPhone = innerPhone
+            return this
+        }
+
+        /**
+         * Metadata customer builder.
+         *
+         * @param innerMetadata the inner metadata
+         * @return the customer builder
+         */
+        fun metadata(innerMetadata: String?): CustomerBuilder {
+            nestedMetaData = innerMetadata
+            return this
+        }
+
+        /**
+         * Build customer.
+         *
+         * @return the customer
+         */
+        fun build(): TapCustomer {
+            return TapCustomer(
+                nestedIdentifier, nestedFirstName, nestedMiddleName, nestedLastName,
+                nestedEmail, nestedPhone, nestedMetaData
+            )
+        }
+    } ////////////////////////// ############################ End of Builder Region ########################### ///////////////////////
+
+    //  Constructor is private to prevent access from client app, it must be through inner Builder class only
+    init {
+        firstName = firstName
+        this.middleName = middleName
+        this.lastName = lastName
+        this.email = email
+        this.phone = phone
+        this.metaData = metaData
+    }
+}
+```
+2.TapCurrency
+```kotlin
+class TapCurrency(isoCode: String) {
+    /**
+     * Gets iso code.
+     *
+     * @return the iso code
+     */
+    val isoCode: String
+
+    /**
+     * Instantiates a new Tap currency.
+     *
+     * @param isoCode the iso code
+     * @throws CurrencyException the currency exception
+     */
+    init {
+        if (isoCode.isEmpty()) {
+            this.isoCode = isoCode
+        } else {
+            val code = isoCode.toLowerCase()
+            if (!LocaleCurrencies.checkUserCurrency(code)) {
+                throw CurrencyException.getUnknown(code)
+            }
+            this.isoCode = code
+        }
+    }
+}
+```
+3.AuthorizeAction
+```kotlin
+class AuthorizeAction(void: AuthorizeActionType, i: Int) {
+    @SerializedName("type")
+    @Expose
+    private var type: AuthorizeActionType? = AuthorizeActionType.VOID
+
+    @SerializedName("time")
+    @Expose
+    private var timeInHours = 168
+
+    /**
+     * Gets default.
+     *
+     * @return the default
+     */
+   open fun getDefault() {
+        return AuthorizeAction(AuthorizeActionType.VOID, 168)
+    }
+
+    /**
+     * Gets type.
+     *
+     * @return the type
+     */
+    fun getType(): AuthorizeActionType? {
+        return type
+    }
+
+    /**
+     * Gets time in hours.
+     *
+     * @return the time in hours
+     */
+    fun getTimeInHours(): Int {
+        return timeInHours
+    }
+
+    /**
+     * Instantiates a new Authorize action.
+     *
+     * @param type        the type
+     * @param timeInHours the time in hours
+     */
+    fun AuthorizeAction(type: AuthorizeActionType?, timeInHours: Int) {
+        this.type = type
+        this.timeInHours = timeInHours
+    }
+}
+```
+4. Destination
+```kotlin
+data class Destination(
+    // Destination unique identifier (Required)
+    @SerializedName("id") @Expose
+    private var id: String? = null,
+
+    // Amount to be transferred to the destination account (Required)
+    @SerializedName("amount")
+    @Expose
+    private val amount: BigDecimal? = null,
+
+    // Currency code (three digit ISO format) (Required)
+    @SerializedName("currency")
+    @Expose
+    private val currency: String? = null,
+
+    //Description about the transfer (Optional)
+    @SerializedName("description")
+    @Expose
+    private val description: String? = null,
+
+    //Merchant reference number to the destination (Optional)
+    @SerializedName("reference")
+    @Expose
+    private val reference: String? = null
+)
+```
+5.Destinations
+```kotlin
+data class Destinations(
+
+    @SerializedName("amount") @Expose
+    private var amount: BigDecimal? = null,
+
+    @SerializedName("currency")
+    @Expose
+    private val currency: String? = null,
+
+    @SerializedName("count")
+    @Expose
+    private val count: Int = 0,
+
+    @SerializedName("destination")
+    @Expose
+    private val destination: ArrayList<Destination>? = null
+)
+```
+6.PaymentItem
+```kotlin
+class PaymentItem(name: String,
+                  @Nullable description: String,
+                  quantity: Quantity,
+                  amountPerUnit: BigDecimal,
+                  @Nullable discount: AmountModificator?,
+                  @Nullable taxes: ArrayList<Tax>?){
+    @SerializedName("name")
+    @Expose
+    var name: String? = null
+
+
+    @SerializedName("description")
+    @Expose
+     var description: String? = null
+
+    @SerializedName("quantity")
+    @Expose
+     var quantity: Quantity? = null
+
+    @SerializedName("amount_per_unit")
+    @Expose
+     var amountPerUnit: BigDecimal? = null
+
+    @SerializedName("discount")
+    @Expose
+     var discount: AmountModificator? = null
+
+    @SerializedName("taxes")
+    @Expose
+     var taxes: ArrayList<Tax>? = null
+
+    @SerializedName("total_amount")
+    @Expose
+     var totalAmount: BigDecimal? = null
+
+
+    init {
+        this.name = name
+        this.description = description
+        this.quantity = quantity
+        this.amountPerUnit = amountPerUnit
+        this.discount = discount
+        this.taxes = taxes
+        totalAmount = AmountCalculator.calculateTotalAmountOf(listOf(this),null,null)
+
+        println("calculated total amount : " + totalAmount)
+    }
+
+    /**
+     * Gets amount per unit.
+     *
+     * @return the amount per unit
+     */
+    @JvmName("getAmountPerUnit1")
+    fun getAmountPerUnit(): BigDecimal? {
+        return amountPerUnit
+    }
+
+    /**
+     * Gets quantity.
+     *
+     * @return the quantity
+     */
+    @JvmName("getQuantity1")
+    fun getQuantity(): Quantity? {
+        return quantity
+    }
+
+    /**
+     * Gets discount.
+     *
+     * @return the discount
+     */
+    @JvmName("getDiscount1")
+    fun getDiscount(): AmountModificator? {
+        return discount
+    }
+
+    /**
+     * Gets plain amount.
+     *
+     * @return the plain amount
+     */
+    fun getPlainAmount(): BigDecimal {
+        println("  #### getPlainAmount : " + getAmountPerUnit())
+        System.out.println("  #### this.getQuantity().getValue() : " + getQuantity()?.value)
+        println("  #### result : " + getAmountPerUnit()!!.multiply(getQuantity()?.value))
+        return getAmountPerUnit()!!.multiply(getQuantity()?.value)
+    }
+
+    /**
+     * Gets discount amount.
+     *
+     * @return the discount amount
+     */
+    fun getDiscountAmount(): BigDecimal? {
+        return if (getDiscount() == null) {
+            BigDecimal.ZERO
+        } else when (getDiscount()!!.getType()) {
+            AmountModificatorType.PERCENTAGE -> getPlainAmount().multiply(getDiscount()!!.getNormalizedValue())
+            AmountModificatorType.FIXED -> getDiscount()?.getValue()
+            else -> BigDecimal.ZERO
+        }
+    }
+
+    /**
+     * Gets taxes amount.
+     *
+     * @return the taxes amount
+     */
+    fun getTaxesAmount(): BigDecimal? {
+        val taxationAmount = getPlainAmount().subtract(getDiscountAmount())
+        return AmountCalculator.calculateTaxesOn(taxationAmount, taxes)
+    }
+
+
+    class PaymentItemBuilder
+    /**
+     * public constructor with only required data
+     *
+     * @param name          the name
+     * @param quantity      the quantity
+     * @param amountPerUnit the amount per unit
+     */(private var nestedName: String,
+        private var nestedQuantity: Quantity,
+        private var nestedAmountPerUnit: BigDecimal) {
+        private var nestedDescription: String? = null
+        private var nestedDiscount: AmountModificator? = null
+        private var nestedTaxes: ArrayList<Tax>? = null
+        private var nestedTotalAmount: BigDecimal? = null
+
+        /**
+         * Description payment item builder.
+         *
+         * @param innerDescription the inner description
+         * @return the payment item builder
+         */
+        fun description(innerDescription: String?): PaymentItemBuilder {
+            nestedDescription = innerDescription
+            return this
+        }
+
+        /**
+         * Discount payment item builder.
+         *
+         * @param innerDiscount the inner discount
+         * @return the payment item builder
+         */
+        fun discount(innerDiscount: AmountModificator?): PaymentItemBuilder {
+            nestedDiscount = innerDiscount
+            return this
+        }
+
+        /**
+         * Taxes payment item builder.
+         *
+         * @param innerTaxes the inner taxes
+         * @return the payment item builder
+         */
+        fun taxes(innerTaxes: ArrayList<Tax>?): PaymentItemBuilder {
+            nestedTaxes = innerTaxes
+            return this
+        }
+
+        /**
+         * Total amount payment item builder.
+         *
+         * @param innerTotalAmount the inner total amount
+         * @return the payment item builder
+         */
+        fun totalAmount(innerTotalAmount: BigDecimal?): PaymentItemBuilder {
+            nestedTotalAmount = innerTotalAmount
+            return this
+        }
+
+        /**
+         * Build payment item.
+         *
+         * @return the payment item
+         */
+        fun build(): PaymentItem {
+            return PaymentItem(nestedName, nestedDescription!!, nestedQuantity, nestedAmountPerUnit,
+                    nestedDiscount, nestedTaxes)
+        }
+    }
+
+
+}
+```
+7. Receipt
+```kotlin
+data class Receipt(
+    @SerializedName("id") @Expose
+    var id: Boolean,
+
+    @SerializedName("email")
+    @Expose
+    val email: Boolean = false,
+
+    @SerializedName("sms")
+    @Expose
+    private val sms: Boolean = false
+) : Serializable
+```
+8.Reference
+```kotlin
+data class Reference(
+    @SerializedName("acquirer") @Expose
+    private var acquirer: String? = null,
+
+    @SerializedName("gateway")
+    @Expose
+    private val gateway: String? = null,
+
+    @SerializedName("payment")
+    @Expose
+    private val payment: String? = null,
+
+    @SerializedName("track")
+    @Expose
+    private val track: String? = null,
+
+    @SerializedName("transaction")
+    @Expose
+    private val transaction: String? = null,
+
+    @SerializedName("order")
+    @Expose
+    private val order: String? = null,
+
+    @SerializedName("gosell_id")
+    @Expose
+    private val gosell_id: String? = null
+) : Serializable
+```
+8. Shipping
+```kotlin
+
+
