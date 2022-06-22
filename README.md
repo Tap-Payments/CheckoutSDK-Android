@@ -1777,3 +1777,28 @@ Notifies the receiver if any other error occurred.
 #### Arguments
 
 **GoSellError**: GoSellError object with details of error.
+
+<a name="invalid_card_details"></a>
+### Invalid Card details
+
+Notifies the client that card data passed are invalid
+
+#### Declaration
+
+*Kotlin:*
+
+```kotlin
+- fun invalidCardDetails()
+```
+<a name="backecnd_unknow_error"></a>
+### Backend Unknown Error
+
+Notifies the client that an unknown error has occurred in the backend
+
+#### Declaration
+
+*Kotlin:*
+
+```kotlin
+-  fun backendUnknownError(message: GoSellError?)
+```
