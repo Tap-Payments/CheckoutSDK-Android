@@ -1760,3 +1760,20 @@ Notifies the receiver with list of saved cards for a customer. If customer has n
 #### Arguments
 
 **cardsList**: CardsList model that holds the response.
+
+<a name="session_error_callback"></a>
+### Session Other Failure Callback
+
+Notifies the receiver if any other error occurred.
+
+#### Declaration
+
+*Kotlin:*
+
+```kotlin
+- fun sdkError(goSellError: GoSellError?)
+```
+
+#### Arguments
+
+**GoSellError**: GoSellError object with details of error.
