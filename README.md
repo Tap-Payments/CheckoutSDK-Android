@@ -1727,3 +1727,36 @@ Notifies the receiver that the customer failed to save the card.
 #### Arguments
 
 **Charge**: Charge object with the details (if reached the stage of card saving).
+
+<a name="card_tokenized_success_callback"></a>
+### Card Tokenized Success Callback
+
+Notifies the receiver that the card has successfully tokenized.
+
+#### Declaration
+
+*Kotlin:*
+
+```kotlin
+- fun cardTokenizedSuccessfully(token: Token)
+```
+#### Arguments
+
+**token**: card token object.
+
+<a name="saved_cards_list_callback"></a>
+### Saved Cards List Callback
+
+Notifies the receiver with list of saved cards for a customer. If customer has no cards then you will receive the same response but with empty cards array.
+
+#### Declaration
+
+*Kotlin:*
+
+```kotlin
+-  fun savedCardsList(cardsList: CardsList)
+```
+
+#### Arguments
+
+**cardsList**: CardsList model that holds the response.
