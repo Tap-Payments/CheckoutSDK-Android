@@ -1802,3 +1802,83 @@ Notifies the client that an unknown error has occurred in the backend
 ```kotlin
 -  fun backendUnknownError(message: GoSellError?)
 ```
+
+<a name="invalid_transaction_mode"></a>
+### Invalid Transaction Mode
+
+Notifies the client that Transaction Mode not configured.
+
+#### Declaration
+
+*Kotlin:*
+
+```kotlin
+-  fun invalidTransactionMode()
+```
+
+<a name="user_enabled_save_card_option"></a>
+### User Enabled Save Card call back
+
+Notifies the receiver (Merchant Activity) that the user wants to save his card.
+
+#### Declaration
+*Kotlin:*
+
+```kotlin
+- fun userEnabledSaveCardOption(saveCardEnabled: Boolean)
+```
+<a name="session_is_starting_callback"></a>
+### Session Is Starting Callback
+
+Notifies the receiver that session is about to start, but hasn't yet shown the SDK UI. You might want to use this method if you are not using `PayButton` in your application and want to show a loader before SDK UI appears on the screen.
+
+#### Declaration
+
+*Kotlin:*
+
+```kotlin
+- fun sessionIsStarting()
+```
+<a name="session_has_started_callback"></a>
+### Session Has Started Callback
+
+Notifies the receiver that session has successfully started and shown the SDK UI on the screen. You might want to use this method if you are not using `PayButton` in your application and want to hide a loader after SDK UI has appeared on the screen.
+
+#### Declaration
+
+*Kotlin*:
+
+```kotlin
+-  fun sessionHasStarted()
+```
+<a name="session_failed_to_start_callback"></a>
+### Session Failed To Start Callback
+
+Notifies the receiver that session has failed to start.
+
+#### Declaration
+
+*Kotlin:*
+
+```kotlin
+-  fun sessionFailedToStart()
+```
+<a name="session_cancel_callback"></a>
+### Session Cancel Callback
+
+Notifies the receiver (Merchant Activity) that the user cancelled payment process, clicked on soft back button, clicked hard back button or clicked Header cancel button.
+
+#### Declaration
+
+*Kotlin:*
+
+```kotlin
+- fun sessionCancelled()
+```
+-----
+<a name="docs"></a>
+# Documentation
+Documentation is available at [github-pages][2].<br>
+Also documented sources are attached to the library.
+
+[1]:https://www.tap.company/developers/
