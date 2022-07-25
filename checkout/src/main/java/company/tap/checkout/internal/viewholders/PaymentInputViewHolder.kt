@@ -172,6 +172,7 @@ class PaymentInputViewHolder(
     fun clearCardInputAction() {
         if (selectedType == PaymentTypeEnum.card) {
             tapCardInputView.clear()
+                tapCardInputView.clearFocus()
             switchViewHolder?.setSwitchLocals(PaymentTypeEnum.card)
         } else if (selectedType == PaymentTypeEnum.telecom) {
             tapMobileInputView.clearNumber()
@@ -194,6 +195,7 @@ class PaymentInputViewHolder(
         if (PaymentDataSource.getBinLookupResponse() != null) {
             PaymentDataSource.setBinLookupResponse(null)
         }
+
     }
 
     private fun initMobileInput() {

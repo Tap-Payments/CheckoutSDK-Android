@@ -1245,7 +1245,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         /**
          * Clear card input text
          */
-        paymentInputViewHolder.clearCardInputAction()
+
+        if(paymentInputViewHolder.tapCardInputView.hasFocus()){
+            paymentInputViewHolder.clearCardInputAction()
+            paymentInputViewHolder.onFocusChange("")
+        }
+
         when (savedCardsModel) {
             is SavedCard -> {
                 activateActionButton()

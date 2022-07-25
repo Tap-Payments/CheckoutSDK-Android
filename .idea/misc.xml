@@ -3,9 +3,20 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/87ded65bcd1db167d3a00c7113fec855/jetified-TapUIKit-Android-1.1.1.343/res/layout/item_view_adapter.xml" value="0.2667572463768116" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.10364583333333334" />
+        <entry key="app/src/main/res/layout/settings_activity.xml" value="0.1921875" />
+        <entry key="app/src/main/res/menu/menumain.xml" value="0.1921875" />
+        <entry key="app/src/main/res/xml/root_preferences.xml" value="0.10368314833501513" />
+        <entry key="checkout/src/main/res/drawable-xxhdpi/googlepay_button_content.xml" value="0.196" />
+        <entry key="checkout/src/main/res/drawable-xxhdpi/googlepay_button_no_shadow_background.xml" value="0.196" />
+        <entry key="checkout/src/main/res/drawable-xxhdpi/googlepay_button_overlay.xml" value="0.196" />
+        <entry key="checkout/src/main/res/layout/businessview_layout.xml" value="0.18802083333333333" />
+        <entry key="checkout/src/main/res/layout/googlepay_button.xml" value="0.18385416666666668" />
         <entry key="checkout/src/main/res/layout/item_currency_rows.xml" value="0.2477355072463768" />
         <entry key="checkout/src/main/res/layout/item_knet.xml" value="0.2477355072463768" />
+        <entry key="checkout/src/main/res/layout/payment_inputt_layout.xml" value="0.1956521739130435" />
+        <entry key="checkout/src/main/res/layout/switch_layout.xml" value="0.1" />
       </map>
     </option>
   </component>
