@@ -1,7 +1,6 @@
 package company.tap.checkout.internal.viewmodels
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -31,10 +30,7 @@ import cards.pay.paycardsrecognizer.sdk.Card
 import cards.pay.paycardsrecognizer.sdk.FrameManager
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewFragment
-import com.google.android.gms.wallet.AutoResolveHelper
 import com.google.android.gms.wallet.PaymentData
-import com.google.android.gms.wallet.PaymentDataRequest
-import com.google.android.gms.wallet.PaymentsClient
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import company.tap.cardscanner.TapCard
@@ -90,7 +86,6 @@ import kotlinx.android.synthetic.main.switch_layout.view.*
 import org.json.JSONException
 import org.json.JSONObject
 import java.math.BigDecimal
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
 
@@ -915,11 +910,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         goPayAdapter = GoPayCardAdapterUIKIT(this)
         itemAdapter = ItemAdapter()
        // adapter?.possiblyShowGooglePayButton()
-        val arrayList = ArrayList<String>()//Creating an empty arraylist
-        arrayList.add("Google Pay")//Adding object in arraylist
+       // val arrayList = ArrayList<String>()//Creating an empty arraylist
+      //  arrayList.add("Google Pay")//Adding object in arraylist
 
 
-        adapter.updateAdapterGooglePay(arrayList)
+        //adapter.updateAdapterGooglePay(arrayList)
         //  goPayAdapter.updateAdapterData(goPayCardList.value as List<GoPaySavedCards>)
         if (allCurrencies.value?.isNotEmpty() == true) {
             currencyAdapter.updateAdapterData(allCurrencies.value as List<SupportedCurrencies>)
@@ -2042,16 +2037,27 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             filteredByPaymentTypeAndCurrencyAndSortedList(
                     paymentOptionsWorker, PaymentType.CARD, currency
             )
+
+        val googlePaymentOptions: java.util.ArrayList<PaymentOption> =
+            filteredByPaymentTypeAndCurrencyAndSortedList(
+                    paymentOptionsWorker, PaymentType.GOOGLE_PAY, currency
+            )
         val hasWebPaymentOptions = webPaymentOptions.size > 0
         val hasCardPaymentOptions = cardPaymentOptions.size > 0
-        logicToHandlePaymentDataType(webPaymentOptions, cardPaymentOptions)
+        val hasGooglePaymentOptions = googlePaymentOptions.size > 0
+        if(hasGooglePaymentOptions){
+            adapter.updateAdapterGooglePay(googlePaymentOptions)
+            PaymentDataSource.setGoogleCardPay(googlePaymentOptions)
+        }
+        logicToHandlePaymentDataType(webPaymentOptions, cardPaymentOptions )
 
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun logicToHandlePaymentDataType(
-            webPaymentOptions: ArrayList<PaymentOption>,
-            cardPaymentOptions: ArrayList<PaymentOption>
+        webPaymentOptions: ArrayList<PaymentOption>,
+        cardPaymentOptions: ArrayList<PaymentOption>
+
     ) {
         println("webPaymentOptions in logic >>>>$webPaymentOptions")
         println("cardPaymentOptions in logic >>>>$cardPaymentOptions")

@@ -23,6 +23,11 @@ enum class PaymentType(val paymentType: String) {
     /**
      * Saved card payment type.
      */
+    /**
+     * Google Payment  payment type.
+     */
+    @SerializedName("google_pay")
+     GOOGLE_PAY("google_pay"),
     @SerializedName("savedCard")
     SavedCard("savedCard"),
     telecom ("telecom")

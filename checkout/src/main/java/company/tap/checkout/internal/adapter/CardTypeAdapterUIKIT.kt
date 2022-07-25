@@ -52,7 +52,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     private var arrayListCards:List<SavedCard> = java.util.ArrayList()
     private var arrayListSaveCard:ArrayList<List<SavedCard>> = ArrayList()
     private var adapterContent: List<PaymentOption> = java.util.ArrayList()
-    private var adapterString: List<String> = java.util.ArrayList()
+    private var adapterGooglePay: List<PaymentOption> = java.util.ArrayList()
     private var isShaking: Boolean = false
     private var goPayOpened: Boolean = false
     private var arrayModified : ArrayList<Any> = ArrayList()
@@ -72,8 +72,8 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         this.adapterContent = adapterContent
         notifyDataSetChanged()
     }
-    fun updateAdapterGooglePay(adapterString:List<String>){
-        this.adapterString =adapterString
+    fun updateAdapterGooglePay(adapterGooglePay:List<PaymentOption>){
+        this.adapterGooglePay =adapterGooglePay
         notifyDataSetChanged()
 
     }
@@ -132,7 +132,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                 arrayListSaveCard.add(arrayListCards)
                 return  TYPE_SAVED_CARD
             }
-        } else if(position.minus(adapterContent.size.plus(arrayListCards.size)) < adapterString.size){
+        } else if(position.minus(adapterContent.size.plus(arrayListCards.size)) < adapterGooglePay.size){
 
                 return  TYPE_GOOGLE_PAY
 
@@ -147,7 +147,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
 
     override fun getItemCount(): Int {
-           totalArraySize = adapterContent.size.plus(arrayListCards.size).plus(adapterString.size)
+           totalArraySize = adapterContent.size.plus(adapterGooglePay.size).plus(arrayListCards.size)
            return totalArraySize.plus(1)
 
     }

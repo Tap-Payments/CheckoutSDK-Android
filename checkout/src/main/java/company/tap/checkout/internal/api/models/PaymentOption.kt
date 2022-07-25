@@ -58,9 +58,38 @@ data class PaymentOption(
     @SerializedName("asynchronous")
     @Expose
      val asynchronous: Boolean = false ,
+
+
     @SerializedName("cc_markup")
-    @Expose
-     val cc_markup: Int = 0
+@Expose
+ val cc_markup: Double? = null,
+
+
+@SerializedName("allowed_auth_methods")
+@Expose
+ val allowed_auth_methods: ArrayList<String>? = null,
+
+@SerializedName("api_version")
+@Expose
+ val apiVersion: Int? = null,
+
+@SerializedName("api_version_minor")
+@Expose
+ val apiVersionMinor: Int? = null,
+
+@SerializedName("gateway_name")
+@Expose
+ val gatewayName: String,
+
+@SerializedName("gateway_merchant_id")
+@Expose
+ val gatewayMerchantId: String,
+
+
+@SerializedName("acquirer_country")
+@Expose
+ val acquirerCountryCode: String? = null
+
 ):Comparable<PaymentOption>, CurrenciesSupport, Serializable {
     override fun getSupportedCurrencies(): ArrayList<String>? {
        return supportedCurrencies

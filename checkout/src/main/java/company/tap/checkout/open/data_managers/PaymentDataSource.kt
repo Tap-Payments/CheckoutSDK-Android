@@ -18,7 +18,6 @@ import company.tap.checkout.open.models.Shipping
 import company.tap.checkout.open.models.Tax
 import java.math.BigDecimal
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * Created by AhlaamK on 10/5/20.
@@ -75,6 +74,7 @@ object PaymentDataSource :PaymentDataSource {
     private var tokenConfig: String? = null
     private var authKeys: String? = null
     private var merchantData: MerchantData? = null
+    private var googleCardPaymentOptions: ArrayList<PaymentOption>? = null
 
     //////////////////////// Setter's Area  ///////////////////////////////////////
     /**
@@ -335,8 +335,10 @@ object PaymentDataSource :PaymentDataSource {
     fun setSDKMode(sdkMode: SdkMode){
         this.sdkMode = sdkMode
     }
-    fun setAvailableCardPaymentOptions(cardPaymentOptions:ArrayList<PaymentOption>){
-        this.cardPaymentOption = cardPaymentOptions
+
+
+    fun setGoogleCardPay(googleCardPaymentOptions: ArrayList<PaymentOption>?) {
+       this. googleCardPaymentOptions = googleCardPaymentOptions
     }
 /////<<<<<<<<<<<<<<<<<<<<<<<<<,Getters Area >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>/////////////////
 
@@ -480,5 +482,9 @@ object PaymentDataSource :PaymentDataSource {
 
     override fun getInitOptionsResponse(): InitResponseModel? {
         return initResponseModel
+    }
+
+    override fun getGooglePaymentOptions(): ArrayList<PaymentOption>? {
+       return googleCardPaymentOptions
     }
 }

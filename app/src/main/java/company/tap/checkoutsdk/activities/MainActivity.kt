@@ -393,7 +393,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         val items: ArrayList<PaymentItem> = ArrayList<PaymentItem>()
         items.add(
                 PaymentItem(
-                        "Items1",
+                        "Items 1",
                         "Description for test item #1",
                         Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(1)),
                         BigDecimal.valueOf(10),
@@ -403,7 +403,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         )
         items.add(
                 PaymentItem(
-                        "Items2",
+                        "Items 2",
                         "Description for test item #2",
                         Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(1)),
                         BigDecimal.valueOf(10),
@@ -413,7 +413,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         )
         items.add(
                 PaymentItem(
-                        "Items3",
+                        "Items 3",
                         "Description for test item #3",
                         Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(1)),
                         BigDecimal.valueOf(10),

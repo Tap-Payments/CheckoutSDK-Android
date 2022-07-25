@@ -38,8 +38,8 @@ object PaymentsUtil {
      * @throws JSONException
      */
     private val baseRequest = JSONObject().apply {
-        put("apiVersion", 2)
-        put("apiVersionMinor", 0)
+        put("apiVersion", PaymentDataSource.getGooglePaymentOptions()?.get(0)?.apiVersion)
+        put("apiVersionMinor", PaymentDataSource.getGooglePaymentOptions()?.get(0)?.apiVersionMinor)
     }
 
     /**
@@ -56,12 +56,23 @@ object PaymentsUtil {
      * @throws JSONException
      * @see [PaymentMethodTokenizationSpecification](https://developers.google.com/pay/api/android/reference/object.PaymentMethodTokenizationSpecification)
      */
-    private fun gatewayTokenizationSpecification(): JSONObject {
-        return JSONObject().apply {
-            put("type", "PAYMENT_GATEWAY")
-            put("parameters", JSONObject(mapOf(
-                    "gateway" to "tappayments",
-                    "gatewayMerchantId" to "googletest")))
+    @Throws(JSONException::class)
+      fun getGatewayTokenizationSpecification(): JSONObject? {
+        //todo :25Jul22 replace value coming from API>>PENDING GATEWAY ID
+        return object : JSONObject() {
+            init {
+                put("type", "PAYMENT_GATEWAY")
+                put("parameters", object : JSONObject() {
+                    init {
+                        assert(PaymentDataSource.getGooglePaymentOptions() != null)
+                        put("gateway", "tappayments")
+                         // put("gateway", PaymentDataSource.getGooglePaymentOptions()?.get(0)?.gatewayName)
+                        put("gatewayMerchantId",
+                            PaymentDataSource.getGooglePaymentOptions()?.get(0)?.gatewayMerchantId
+                        )
+                    }
+                })
+            }
         }
     }
 
@@ -153,17 +164,37 @@ object PaymentsUtil {
      * @see [PaymentMethod](https://developers.google.com/pay/api/android/reference/object.PaymentMethod)
      */
     // Optionally, you can add billing address/phone number associated with a CARD payment method.
-    private fun baseCardPaymentMethod(): JSONObject {
-        return JSONObject().apply {
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Throws(JSONException::class)
+    private  fun getBaseCardPaymentMethod(): JSONObject {
+        val capCardBrandList: MutableList<String?> = ArrayList()
+        val cardPaymentMethod = JSONObject()
+        cardPaymentMethod.put("type", "CARD")
+        // System.out.println("Payment data"+PaymentDataSource.getInstance().getGooglePaymentOptions().get(0).getSupportedCardBrands());
+        val parameters = JSONObject()
+        parameters.put(
+            "allowedAuthMethods",
+            JSONArray(
+                PaymentDataSource.getGooglePaymentOptions()?.get(0)?.allowed_auth_methods
+            )
+        )
+        // parameters.put("allowedAuthMethods", getAllowedCardAuthMethods());
+        // parameters.put("allowedCardNetworks", getAllowedCardNetworks());
 
-            val parameters = JSONObject().apply {
-                put("allowedAuthMethods", allowedCardAuthMethods)
-                put("allowedCardNetworks", allowedCardNetworks)
+        var newValue: String? = null
+        //Logic done to get cardbrands in capitals
+        for (i in 0 until PaymentDataSource.getGooglePaymentOptions()?.get(0)?.supportedCardBrands?.size!!) {
+            if (PaymentDataSource.getGooglePaymentOptions()?.get(0)?.supportedCardBrands?.get(i) != null
+            ) {
+                newValue = java.lang.String.valueOf(
+                    PaymentDataSource.getGooglePaymentOptions()?.get(0)?.supportedCardBrands?.get(i)
+                ).toUpperCase()
             }
-
-            put("type", "CARD")
-            put("parameters", parameters)
+            capCardBrandList.add(i, newValue)
         }
+        parameters.put("allowedCardNetworks", JSONArray(capCardBrandList))
+        cardPaymentMethod.put("parameters", parameters)
+        return cardPaymentMethod
     }
 
     /**
@@ -174,8 +205,8 @@ object PaymentsUtil {
      * @see [PaymentMethod](https://developers.google.com/pay/api/android/reference/object.PaymentMethod)
      */
     private fun cardPaymentMethod(): JSONObject {
-        val cardPaymentMethod = baseCardPaymentMethod()
-        cardPaymentMethod.put("tokenizationSpecification", gatewayTokenizationSpecification())
+        val cardPaymentMethod = getBaseCardPaymentMethod()
+        cardPaymentMethod?.put("tokenizationSpecification", getGatewayTokenizationSpecification())
 
 
         return cardPaymentMethod
@@ -191,7 +222,7 @@ object PaymentsUtil {
     fun isReadyToPayRequest(): JSONObject? {
         return try {
             baseRequest.apply {
-                put("allowedPaymentMethods", JSONArray().put(baseCardPaymentMethod()))
+                put("allowedPaymentMethods", JSONArray().put(getBaseCardPaymentMethod()))
             }
 
         } catch (e: JSONException) {
@@ -207,7 +238,7 @@ object PaymentsUtil {
      * @see [MerchantInfo](https://developers.google.com/pay/api/android/reference/object.MerchantInfo)
      */
     private val merchantInfo: JSONObject =
-        JSONObject().put("merchantName", "Example Merchant")
+        JSONObject().put("merchantName", PaymentDataSource.getInitOptionsResponse()?.merchant?.name)
 
     /**
      * Creates an instance of [PaymentsClient] for use in an [Activity] using the
@@ -244,8 +275,8 @@ object PaymentsUtil {
         return JSONObject().apply {
             put("totalPrice", price)
             put("totalPriceStatus", "FINAL")
-            put("countryCode", Constants.COUNTRY_CODE)
-            put("currencyCode", Constants.CURRENCY_CODE)
+            put("countryCode",PaymentDataSource.getGooglePaymentOptions()?.get(0)?.acquirerCountryCode)
+            put("currencyCode", PaymentDataSource.getSelectedCurrency())
             put("checkoutOption", "COMPLETE_IMMEDIATE_PURCHASE")
         }
     }
