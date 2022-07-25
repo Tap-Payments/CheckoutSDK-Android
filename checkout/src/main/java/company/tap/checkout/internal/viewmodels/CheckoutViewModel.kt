@@ -33,6 +33,8 @@ import cards.pay.paycardsrecognizer.sdk.ui.InlineViewFragment
 import com.google.android.gms.wallet.PaymentData
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.gson.Gson
+import com.google.gson.JsonObject
 import company.tap.cardscanner.TapCard
 import company.tap.cardscanner.TapTextRecognitionCallBack
 import company.tap.cardscanner.TapTextRecognitionML
@@ -45,6 +47,7 @@ import company.tap.checkout.internal.adapter.ItemAdapter
 import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.api.models.*
+import company.tap.checkout.internal.api.requests.CreateTokenGPayRequest
 import company.tap.checkout.internal.api.responses.DeleteCardResponse
 import company.tap.checkout.internal.api.responses.InitResponseModel
 import company.tap.checkout.internal.api.responses.MerchantData
@@ -86,7 +89,6 @@ import kotlinx.android.synthetic.main.switch_layout.view.*
 import org.json.JSONException
 import org.json.JSONObject
 import java.math.BigDecimal
-import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
 
 
@@ -2298,19 +2300,35 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     /**
      * handlePaymentSuccess handles the payment token obtained from GooglePay API
      * **/
-     fun handlePaymentSuccess(paymentData: PaymentData) {
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun handlePaymentSuccess(paymentData: PaymentData) {
         val paymentInformation = paymentData.toJson() ?: return
 
         try {
             // Token will be null if PaymentDataRequest was not constructed using fromJson(String).
             val paymentMethodData = JSONObject(paymentInformation).getJSONObject("paymentMethodData")
 
+            // If the gateway is set to "example", no payment information is returned - instead, the
+            // token will only consist of "examplePaymentMethodToken".
+            val tokenizationData = paymentMethodData.getJSONObject("tokenizationData")
 
+            val token = tokenizationData.getString("token")
+
+            val gson = Gson()
+            val jsonToken = gson.fromJson(token, JsonObject::class.java)
+            /**
+             * At this stage, Passing the googlePaylaod to Tap Backend TokenAPI call followed by chargeAPI.
+             * ***/
+            /**
+             * At this stage, Passing the googlePaylaod to Tap Backend TokenAPI call followed by chargeAPI.
+             */
+            val createTokenGPayRequest = CreateTokenGPayRequest("googlepay", jsonToken)
+            CardViewModel().processEvent(CardViewEvent.CreateGoogleTokenEvent,this,null,null,null,null,null,null,null,null,null,null,context,createTokenGPayRequest)
             // Logging token string.
-            Log.e("GooglePaymentToken", paymentMethodData
+           /* Log.e("GooglePaymentToken", paymentMethodData
                     .getJSONObject("tokenizationData")
                     .getString("token"))
-
+*/
         } catch (e: JSONException) {
             Log.e("handlePaymentSuccess", "Error: " + e.toString())
         }

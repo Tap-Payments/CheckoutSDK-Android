@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import company.tap.checkout.internal.api.models.*
+import company.tap.checkout.internal.api.requests.CreateTokenGPayRequest
 import company.tap.checkout.internal.api.requests.TapConfigRequestModel
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.data_managers.PaymentDataSource
@@ -95,7 +96,7 @@ class CardViewModel : ViewModel() {
 
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun processEvent(event: CardViewEvent, viewModel: CheckoutViewModel,tapConfigRequestModel: TapConfigRequestModel?=null, selectedPaymentOption: PaymentOption?, binValue: String? = null, cardDataRequest: CreateTokenCard?, cardViewModel: CardViewModel? = null, customerId: String?=null, cardId: String?=null, createTokenWithExistingCardRequest: CreateTokenSavedCard?=null, otpString:String?=null, supportFragmentManager: FragmentManager?=null, context: Context?=null) {
+    fun processEvent(event: CardViewEvent, viewModel: CheckoutViewModel,tapConfigRequestModel: TapConfigRequestModel?=null, selectedPaymentOption: PaymentOption?, binValue: String? = null, cardDataRequest: CreateTokenCard?, cardViewModel: CardViewModel? = null, customerId: String?=null, cardId: String?=null, createTokenWithExistingCardRequest: CreateTokenSavedCard?=null, otpString:String?=null, supportFragmentManager: FragmentManager?=null, context: Context?=null,createTokenGPayRequest: CreateTokenGPayRequest?=null) {
         when (event) {
             CardViewEvent.ConfigEvent -> getConfigData(viewModel,cardViewModel,supportFragmentManager,context,tapConfigRequestModel)
            CardViewEvent.PaymentEvent -> getPaymentOptionsData(context,viewModel,supportFragmentManager)
@@ -112,6 +113,10 @@ class CardViewModel : ViewModel() {
             CardViewEvent.AuthenticateAuthorizeTransaction -> authenticateAuthorizeTransaction(viewModel,otpString)
             CardViewEvent.ListAllCards -> listAllCards(viewModel,customerId)
             CardViewEvent.InitEvent -> getInitData(viewModel,context)
+            CardViewEvent.CreateGoogleTokenEvent -> context?.let {
+                createGoogleTokenRequest(viewModel,
+                    it,createTokenGPayRequest)
+            }
         }
     }
 
@@ -171,6 +176,14 @@ class CardViewModel : ViewModel() {
         println("createTokenSavedCard>>."+createTokenSavedCard)
         if (createTokenSavedCard != null) {
             repository.createTokenWithExistingCard(context,viewModel,createTokenSavedCard)
+        }
+
+    }
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun createGoogleTokenRequest(viewModel: CheckoutViewModel,context: Context, createTokenGPayRequest: CreateTokenGPayRequest?) {
+        println("createTokenSavedCard>>."+createTokenGPayRequest)
+        if (createTokenGPayRequest != null) {
+            repository.createGoogleToken(context,viewModel,createTokenGPayRequest)
         }
 
     }

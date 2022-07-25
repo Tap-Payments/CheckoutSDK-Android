@@ -308,6 +308,20 @@ class CardRepository : APIRequestCallback {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
+    fun createGoogleToken(
+        context: Context, viewModel: CheckoutViewModel, createTokenGPayRequest: CreateTokenGPayRequest
+    ) {
+        this.viewModel = viewModel
+
+
+        val jsonString = Gson().toJson(createTokenGPayRequest)
+        NetworkController.getInstance().processRequest(
+            TapMethodType.POST, ApiService.TOKEN, jsonString,
+            this, CREATE_GOOGLE_TOKEN
+        )
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
     fun  authenticate(context: Context, viewModel: CheckoutViewModel, otpCode: String) {
         this.viewModel = viewModel
         val createOTPVerificationRequest: CreateOTPVerificationRequest = CreateOTPVerificationRequest.Builder(
@@ -475,6 +489,17 @@ class CardRepository : APIRequestCallback {
 
 
                 }
+            }
+        }
+        else if(requestCode == CREATE_GOOGLE_TOKEN){
+            response?.body().let {
+                tokenResponse = Gson().fromJson(it, Token::class.java)
+                if(tokenResponse!=null ) {
+                    createChargeRequest(viewModel, null, tokenResponse.id)
+                    }
+
+
+
             }
         }
         else if(requestCode == CREATE_AUTHORIZE_CODE){
@@ -865,6 +890,7 @@ class CardRepository : APIRequestCallback {
         private const val CREATE_SAVE_EXISTING_CODE = 13
         private const val AUTHENTICATE_CODE = 14
         private const val LIST_ALL_CARD_CODE = 15
+        private const val CREATE_GOOGLE_TOKEN = 16
 
 
     }

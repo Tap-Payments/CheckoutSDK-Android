@@ -373,6 +373,7 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onActivityResult(requestCode:Int, resultCode:Int, data:Intent?){
         super.onActivityResult(requestCode, resultCode, data)
         println("<<<<onActivityResult>>>"+resultCode)
@@ -391,6 +392,7 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
 
                     }
                     RESULT_CANCELED -> {
+                        tapCheckoutFragment._viewModel?.handleSuccessFailureResponseButton("Cancelled Google Pay",null,null)
                         isGooglePayClicked = false
 
                     }
