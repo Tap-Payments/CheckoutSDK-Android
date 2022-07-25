@@ -5,6 +5,8 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
+import android.text.InputFilter
+import android.text.InputFilter.AllCaps
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -80,6 +82,7 @@ class ItemAdapter :
         val totalAmount = holder.itemView.findViewById<TapTextView>(R.id.total_amount)
         val mainViewLinear = holder.itemView.findViewById<LinearLayout>(R.id.mainViewLinear)
         val itemName = holder.itemView.findViewById<TapTextView>(R.id.item_title)
+        itemName.filters = arrayOf<InputFilter>(AllCaps())
         val isExpanded = position == mExpandedPosition
         if(adapterContentItems.isNotEmpty()){
             for (i in adapterContentItems.indices) {
@@ -90,9 +93,9 @@ class ItemAdapter :
               /*  itemViewAdapter.setItemViewDataSource(
                     getItemViewDataSource(null, CurrencyFormatter.currencyFormat(adapterContentItems[position].totalAmount.toString()),adapterContentItems[position].currency ,  CurrencyFormatter.currencyFormat(adapterContentItems[position].totalAmount.toString()), adapterContentItems[position].currency, adapterContentItems[position].quantity.toString())
                 )*/
-                PaymentDataSource?.getSelectedCurrency()?.let {
-                    PaymentDataSource?.getSelectedCurrency()?.let { it1 ->
-                        getItemViewDataSource(adapterContentItems[position]?.name, CurrencyFormatter.currencyFormat(adapterContentItems[position].amountPerUnit.toString()),
+                PaymentDataSource.getSelectedCurrency()?.let {
+                    PaymentDataSource.getSelectedCurrency()?.let { it1 ->
+                        getItemViewDataSource(adapterContentItems[position]?.name.toString().toUpperCase(), CurrencyFormatter.currencyFormat(adapterContentItems[position].amountPerUnit.toString()),
                             it,  CurrencyFormatter.currencyFormat(adapterContentItems[position].totalAmount.toString()),
                             it1, adapterContentItems[position].quantity?.value.toString())
                     }
