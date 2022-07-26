@@ -72,6 +72,7 @@ class PaymentInputViewHolder(
     override val type = SectionType.PAYMENT_INPUT
      var tabLayout: TapSelectionTabLayout = view.findViewById(R.id.sections_tablayout)
     private var intertabLayout: TabLayout = tabLayout.findViewById(R.id.tab_layout)
+
     private val paymentInputContainer: LinearLayout
     private val clearView: ImageView
     var selectedType = PaymentTypeEnum.card
@@ -159,7 +160,7 @@ class PaymentInputViewHolder(
             onCardNFCCallListener.onClickNFC()
         }
         cardScannerBtn?.setOnClickListener {
-            onCardNFCCallListener.onClickCardScanner()
+            onCardNFCCallListener.onClickCardScanner(true)
         }
     }
 

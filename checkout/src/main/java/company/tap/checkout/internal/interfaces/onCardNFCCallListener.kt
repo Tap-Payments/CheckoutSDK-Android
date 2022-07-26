@@ -8,5 +8,5 @@ All rights reserved.
  **/
 interface onCardNFCCallListener {
    fun onClickNFC(){}
-   fun onClickCardScanner() {}
+   fun onClickCardScanner(scannerClicked:Boolean) {}
 }

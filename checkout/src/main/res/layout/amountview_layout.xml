@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
     <company.tap.tapuilibrary.uikit.views.TapAmountSectionView
         android:id="@+id/amount_section"
@@ -15,5 +16,35 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/separator_color" />
+    <LinearLayout
+        android:id="@+id/scannerLinearView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#BF000000"
+        android:orientation="vertical"
+        android:visibility="gone">
 
+        <company.tap.tapuilibrary.uikit.atoms.TapChip
+            style="@style/CustomCardViewStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:cardBackgroundColor="#f4f4f4">
+
+
+            <company.tap.tapuilibrary.uikit.atoms.TapTextView
+                android:id="@+id/cardscan_ready"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="sans-serif-light"
+                android:textColor="#4b4847"
+                android:textSize="12sp"
+                android:textStyle="normal"
+                tools:text="Ready to scan." />
+
+        </company.tap.tapuilibrary.uikit.atoms.TapChip>
+    </LinearLayout>
 </LinearLayout>

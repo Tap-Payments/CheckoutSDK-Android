@@ -126,14 +126,14 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
         }
 
-       else if(position.minus(adapterContent.size) < arrayListCards.size){
+        else if(position.minus(adapterContent.size.plus(arrayListCards.size)) < adapterGooglePay.size){
             if(arrayListCards[position.minus(adapterContent.size)].`object`.toUpperCase()==PaymentType.CARD.name){
                 arrayListSaveCard.clear()
                 arrayListSaveCard.add(arrayListCards)
                 return  TYPE_SAVED_CARD
             }
-        } else if(position.minus(adapterContent.size.plus(arrayListCards.size)) < adapterGooglePay.size){
-
+        }//else if(position.minus(adapterContent.size.plus(arrayListCards.size)) < adapterGooglePay.size){
+            else if(position.minus(adapterContent.size) < arrayListCards.size){
                 return  TYPE_GOOGLE_PAY
 
         }

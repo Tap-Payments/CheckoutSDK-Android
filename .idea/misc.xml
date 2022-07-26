@@ -11,11 +11,13 @@
         <entry key="checkout/src/main/res/drawable-xxhdpi/googlepay_button_content.xml" value="0.196" />
         <entry key="checkout/src/main/res/drawable-xxhdpi/googlepay_button_no_shadow_background.xml" value="0.196" />
         <entry key="checkout/src/main/res/drawable-xxhdpi/googlepay_button_overlay.xml" value="0.196" />
+        <entry key="checkout/src/main/res/layout/amountview_layout.xml" value="0.2015625" />
         <entry key="checkout/src/main/res/layout/businessview_layout.xml" value="0.18802083333333333" />
         <entry key="checkout/src/main/res/layout/googlepay_button.xml" value="0.18385416666666668" />
         <entry key="checkout/src/main/res/layout/item_currency_rows.xml" value="0.2477355072463768" />
         <entry key="checkout/src/main/res/layout/item_knet.xml" value="0.2477355072463768" />
-        <entry key="checkout/src/main/res/layout/payment_inputt_layout.xml" value="0.1956521739130435" />
+        <entry key="checkout/src/main/res/layout/item_save_cards.xml" value="0.20104166666666667" />
+        <entry key="checkout/src/main/res/layout/payment_inputt_layout.xml" value="0.25" />
         <entry key="checkout/src/main/res/layout/switch_layout.xml" value="0.1" />
       </map>
     </option>

@@ -413,6 +413,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 )
         )
         inLineCardLayout.visibility = View.GONE
+        amountViewHolder.readyToScanVisibility(false)
         saveCardSwitchHolder?.view?.cardviewSwitch?.cardElevation = 0f
 
 
@@ -1490,7 +1491,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
     // Override function to open card Scanner and scan the card.
-    override fun onClickCardScanner() {
+    @RequiresApi(Build.VERSION_CODES.N)
+    override fun onClickCardScanner(scannerClicked :Boolean) {
         setSlideAnimation()
         removeViews(
                 businessViewHolder,
@@ -1502,7 +1504,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 goPaySavedCardHolder,
                 goPayViewsHolder
         )
+        amountViewHolder.readyToScanVisibility(scannerClicked)
         addViews(businessViewHolder, amountViewHolder)
+
         inLineCardLayout.visibility = View.VISIBLE
         FrameManager.getInstance().frameColor = Color.WHITE
         fragmentManager
@@ -1842,6 +1846,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     .commit()
             isInlineOpened = false
             inLineCardLayout.visibility = View.GONE
+            amountViewHolder.readyToScanVisibility(false)
+
         }
 
     }

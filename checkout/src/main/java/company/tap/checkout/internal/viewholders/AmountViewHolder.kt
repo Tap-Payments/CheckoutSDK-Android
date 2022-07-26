@@ -3,6 +3,7 @@ package company.tap.checkout.internal.viewholders
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.LinearLayout
 
 import company.tap.checkout.R
 import company.tap.checkout.internal.enums.SectionType
@@ -10,6 +11,7 @@ import company.tap.checkout.internal.interfaces.AmountInterface
 import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.checkout.internal.utils.CurrencyFormatter
 import company.tap.taplocalizationkit.LocalizationManager
+import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.datasource.AmountViewDataSource
 import kotlinx.android.synthetic.main.action_button_animation.view.*
 import kotlinx.android.synthetic.main.amountview_layout.view.*
@@ -32,13 +34,25 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
      var originalAmount :String?=null
     private var isOpenedList :Boolean=true
     private var transactionCurrency :String?=null
-
+   private var scannerLinearView: LinearLayout = view.findViewById(R.id.scannerLinearView)
+   private var readyToScanText: TapTextView = view.findViewById(R.id.cardscan_ready)
+    var scannerClicked:Boolean? = false
     init {
         bindViewComponents()
     }
 
     override fun bindViewComponents() {
         view.amount_section.setAmountViewDataSource(getAmountDataSourceFromAPIs())
+
+    }
+
+    fun readyToScanVisibility(scannerClicked: Boolean) {
+        if(scannerClicked){
+            scannerLinearView.visibility =View.VISIBLE
+            readyToScanText.text = LocalizationManager.getValue("Default", "Hints", "scan")
+        }else {
+            scannerLinearView.visibility =View.GONE
+        }
     }
 
     private fun getAmountDataSourceFromAPIs(): AmountViewDataSource {
