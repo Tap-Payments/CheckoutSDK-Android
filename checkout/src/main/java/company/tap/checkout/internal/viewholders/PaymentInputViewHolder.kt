@@ -110,8 +110,8 @@ class PaymentInputViewHolder(
         tapSeparatorViewLinear = view.findViewById(R.id.tapSeparatorViewLinear)
         tapSeparatorViewLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
         tabLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.backgroundColor")))
-//        tabLayout.changeTabItemMarginBottomValue(50)
-//        tabLayout.changeTabItemMarginTopValue(50)
+        tabLayout.changeTabItemMarginBottomValue(10)
+        tabLayout.changeTabItemMarginTopValue(10)
         bindViewComponents()
     }
 
