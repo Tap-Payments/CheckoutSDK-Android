@@ -51,6 +51,7 @@ class CardViewHolder(private val context: Context, private val onCardSelectedAct
         )
         val adapter = CardTypeAdapterUIKIT(onCardSelectedActionListener )
         view.mainChipgroup.chipsRecycler.adapter = adapter
+        view.mainChipgroup.chipsRecycler.elevation = 0F
         paymentCardsList?.let { adapter.updateAdapterData(it) }
         println("saveCardsList in adapter"+saveCardsList)
         saveCardsList?.let { adapter.updateAdapterDataSavedCard(it) }

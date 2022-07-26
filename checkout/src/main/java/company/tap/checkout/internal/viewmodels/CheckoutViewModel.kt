@@ -816,9 +816,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             merchantData: MerchantData?,
             paymentOptionsResponse: PaymentOptionsResponse?
     ) {
-        println("if(::businessViewHolder.isInitialized getpay" + ::businessViewHolder.isInitialized)
-        println("merchantData name>>" + merchantData?.name)
-        println("merchantData logo>>" + merchantData?.logo)
+      //  println("if(::businessViewHolder.isInitialized getpay" + ::businessViewHolder.isInitialized)
+      //  println("merchantData name>>" + merchantData?.name)
+      //  println("merchantData logo>>" + merchantData?.logo)
         if (paymentOptionsResponse != null) {
             this.paymentOptionsResponse = paymentOptionsResponse
         }
@@ -2072,8 +2072,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         cardPaymentOptions: ArrayList<PaymentOption>
 
     ) {
-        println("webPaymentOptions in logic >>>>$webPaymentOptions")
-        println("cardPaymentOptions in logic >>>>$cardPaymentOptions")
+       // println("webPaymentOptions in logic >>>>$webPaymentOptions")
+      //  println("cardPaymentOptions in logic >>>>$cardPaymentOptions")
 
          if(PaymentDataSource.getPaymentDataType()!=null && PaymentDataSource.getPaymentDataType() == "WEB" && PaymentDataSource.getTransactionMode() !=TransactionMode.AUTHORIZE_CAPTURE ){
             adapter.updateAdapterDataSavedCard(ArrayList())

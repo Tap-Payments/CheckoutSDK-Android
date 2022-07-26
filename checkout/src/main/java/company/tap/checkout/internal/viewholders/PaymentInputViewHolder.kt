@@ -624,7 +624,7 @@ class PaymentInputViewHolder(
                     )
                 )
             }
-            println("itemsCardsList are" + itemsCardsList)
+           // println("itemsCardsList are" + itemsCardsList)
 
             }
         }
