@@ -1250,6 +1250,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         if(paymentInputViewHolder.tapCardInputView.hasFocus()){
             paymentInputViewHolder.clearCardInputAction()
             paymentInputViewHolder.onFocusChange("")
+            CustomUtils.hideKeyboardFrom(context,paymentInputViewHolder.view)
         }
 
         when (savedCardsModel) {

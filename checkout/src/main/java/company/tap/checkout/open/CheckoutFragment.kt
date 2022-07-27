@@ -5,31 +5,27 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.graphics.Color
+import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.view.View.OnTouchListener
+import android.view.inputmethod.InputMethodManager
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import cards.pay.paycardsrecognizer.sdk.Card
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
-import com.google.android.gms.wallet.AutoResolveHelper
-import com.google.android.gms.wallet.PaymentDataRequest
-import com.google.android.gms.wallet.PaymentsClient
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.apiresponse.CardViewState
 import company.tap.checkout.internal.apiresponse.Resource
 import company.tap.checkout.internal.enums.SectionType
-import company.tap.checkout.internal.utils.PaymentsUtil
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.controller.SDKSession.sessionDelegate
@@ -41,8 +37,6 @@ import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
-import org.json.JSONObject
-import kotlin.collections.ArrayList
 
 
 /**
@@ -65,13 +59,14 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
     @JvmField
     var isNfcOpened:Boolean=false
 
-
+    private var isFullscreen = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _activity = activity?.parent
         this._Context = context
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
+       // setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
+
 
     }
 
@@ -87,6 +82,13 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
 
 
 
+    private fun screenSize(context: Context): Point {
+        val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val display: Display? = windowManager.defaultDisplay
+        val point = Point()
+        display?.getSize(point)
+        return point
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -162,6 +164,20 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
          enableSections()
         sessionDelegate?.sessionIsStarting()
         dialog?.window?.attributes?.windowAnimations = R.style.DialogAnimation
+
+        bottomSheetDialog.setOnShowListener { dialog ->
+            Handler().postDelayed({
+                bottomSheetDialog.behavior.setState(BottomSheetBehavior.STATE_EXPANDED)
+            }, 0)
+        }
+
+        if (bottomSheetDialog.behavior is BottomSheetBehavior<*>) {
+            bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+            if (isFullscreen) {
+                bottomSheetDialog.behavior.peekHeight = context?.let { screenSize(it).y }!!
+            }
+        }
+
     }
 
 

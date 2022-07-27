@@ -422,6 +422,27 @@ object SettingsManager {
         ) return TransactionMode.SAVE_CARD
         else TransactionMode.PURCHASE
     }
+    /**
+     * get Transaction mode
+     * @param key
+     * @return
+     */
+    fun getSDKLanguage(key: String): String? {
+        val language = pref?.getString(key, "en")
+
+        if (language.equals(
+                "en",
+                ignoreCase = true
+            )
+        ) return "en"
+        if (language.equals(
+                "ar",
+                ignoreCase = true
+            )
+        ) return "ar"
+
+        else return "en"
+    }
 
     /**
      * get transaction currency
