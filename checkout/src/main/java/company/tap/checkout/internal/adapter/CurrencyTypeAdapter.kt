@@ -74,6 +74,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
 
         private fun setTheme() {
             val tapCardChip = view.findViewById<FrameLayout>(R.id.tapcard_Chip)
+            tapCardChip.elevation =0F
             tapCardChip?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.backgroundColor")))
             val totalQuantityTextViewTheme = TextViewTheme()
             totalQuantityTextViewTheme.textColor =
@@ -86,7 +87,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
             view.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
             setBorderedView(
                     itemView.CurrencyChipLinear,
-                    25.0f,
+                    15.0f,
                     0.0f,
                     Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.selected.shadow.color")),
                     Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.backgroundColor")),
@@ -165,7 +166,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
         else holder.itemView.setBackgroundResource(R.drawable.border_currency)
         setBorderedView(
                 holder.itemView.CurrencyChipLinear,
-                25.0f,// corner raduis
+                15.0f,// corner raduis
                 0.0f,
                 Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.selected.shadow.color")),
                 Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.backgroundColor")),
@@ -182,7 +183,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
         }
         setBorderedView(
                 holder.itemView.CurrencyChipLinear,
-                25.0f,// corner raduis
+                15.0f,// corner raduis
                 0.0f,
                 Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.unSelected.shadow.color")),
                 Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.backgroundColor")),
