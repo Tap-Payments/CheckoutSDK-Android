@@ -195,7 +195,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
     private fun configureSDKSession() {
         // Instantiate SDK Session
-        
+
         // pass your activity as a session delegate to listen to SDK internal payment process follow
         sdkSession.addSessionDelegate(this) //** Required **
 
