@@ -18,6 +18,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import company.tap.checkout.TapCheckOutSDK
 import company.tap.checkout.internal.api.enums.AmountModificatorType
 import company.tap.checkout.internal.api.enums.ChargeStatus
@@ -194,8 +195,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
     private fun configureSDKSession() {
         // Instantiate SDK Session
-
-
+        
         // pass your activity as a session delegate to listen to SDK internal payment process follow
         sdkSession.addSessionDelegate(this) //** Required **
 
@@ -304,6 +304,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
     fun openBottomSheet(view: View) {
         /// Configures the bottom sheet by creating one and assigning the correct delegates and datasources
         modalBottomSheet.arguments = getArguments()
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
+
         sdkSession.startSDK(supportFragmentManager, this, this)
         // modalBottomSheet.show(supportFragmentManager, TAG)
     }

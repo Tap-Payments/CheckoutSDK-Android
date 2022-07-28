@@ -11,6 +11,7 @@
     <application>
         tools:replace="android:allowBackup
         <activity android:name=".open.CheckOutActivity"
+            android:exported="true"
             android:theme="@style/Theme.AppCompat.Translucent"/>
         <!-- Enabling this flag is required in order to use the PaymentsClient -->
         <meta-data

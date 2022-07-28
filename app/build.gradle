@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     compileSdkVersion 31
@@ -12,7 +13,7 @@ android {
         minSdkVersion 22
         targetSdkVersion 31
         versionCode 1
-        versionName "1.0.1"
+        versionName "1.0.2.1"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'proguard-rules.pro'
@@ -68,5 +69,15 @@ dependencies {
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.preference:preference-ktx:1.1.1'
     implementation 'com.github.corouteam:GlideToVectorYou:v2.0.0'
+
+
+        // Import the BoM for the Firebase platform
+        implementation platform('com.google.firebase:firebase-bom:30.3.1')
+
+        // Declare the dependencies for the Crashlytics and Analytics libraries
+        // When using the BoM, you don't specify versions in Firebase library dependencies
+        implementation 'com.google.firebase:firebase-crashlytics'
+        implementation 'com.google.firebase:firebase-analytics'
+
 
 }
