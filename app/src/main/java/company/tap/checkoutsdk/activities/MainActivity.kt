@@ -31,6 +31,7 @@ import company.tap.checkout.open.enums.SdkMode
 import company.tap.checkout.open.interfaces.SessionDelegate
 import company.tap.checkout.open.models.*
 import company.tap.checkout.open.models.Receipt
+import company.tap.checkout.open.models.Tax
 import company.tap.checkoutsdk.BuildConfig
 import company.tap.checkoutsdk.R
 import company.tap.checkoutsdk.manager.SettingsManager
@@ -233,12 +234,12 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
         // Set Taxes array list
         sdkSession.setTaxes(ArrayList()) // ** Optional ** you can pass empty array list
-          sdkSession.setTaxes(settingsManager?.getTaxes()) // ** Optional ** you can pass empty array list
+         // sdkSession.setTaxes(settingsManager?.getTaxes()) // ** Optional ** you can pass empty array list
 
 
         // Set Shipping array list
-       // sdkSession.setShipping(ArrayList()) // ** Optional ** you can pass empty array list
-          sdkSession.setShipping(settingsManager?.getShippingList()) // ** Optional ** you can pass empty array list
+        sdkSession.setShipping(ArrayList()) // ** Optional ** you can pass empty array list
+       //   sdkSession.setShipping(settingsManager?.getShippingList()) // ** Optional ** you can pass empty array list
 
         // Post URL
         sdkSession.setPostURL("") // ** Optional **
@@ -395,28 +396,28 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
                 PaymentItem(
                         "Items 1",
                         "Description for test item #1",
-                        Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(1)),
+                        Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(2)),
                         BigDecimal.valueOf(10),
                         AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO),
-                        null
+                       null
                 )
         )
         items.add(
                 PaymentItem(
                         "Items 2",
                         "Description for test item #2",
-                        Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(1)),
-                        BigDecimal.valueOf(10),
-                        AmountModificator(AmountModificatorType.PERCENTAGE, BigDecimal.ZERO),
-                        null
+                        Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(3)),
+                        BigDecimal.valueOf(12),
+                        AmountModificator(AmountModificatorType.PERCENTAGE, BigDecimal.valueOf(30)),
+                    settingsManager?.getTaxes()
                 )
         )
         items.add(
                 PaymentItem(
                         "Items 3",
                         "Description for test item #3",
-                        Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(1)),
-                        BigDecimal.valueOf(10),
+                        Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(4)),
+                        BigDecimal.valueOf(14),
                         AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO),
                         null
                 )

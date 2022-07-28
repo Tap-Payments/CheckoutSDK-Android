@@ -308,7 +308,7 @@ object SettingsManager {
             Tax(
                 "Test tax #1",
                 "Test tax #1 description",
-                AmountModificator(AmountModificatorType.FIXED, BigDecimal.TEN)
+                AmountModificator(AmountModificatorType.PERCENTAGE, BigDecimal.valueOf(5))
             )
         )
         return taxes

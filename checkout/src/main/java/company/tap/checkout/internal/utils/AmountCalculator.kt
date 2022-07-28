@@ -33,7 +33,7 @@ object AmountCalculator {
             when (tax?.amount?.getType()) {
                 AmountModificatorType.PERCENTAGE -> {
                     result = result.add(amount.multiply(tax.amount.getNormalizedValue()))
-                    result = result.add(tax.amount.getValue())
+
                 }
                 AmountModificatorType.FIXED -> result = result.add(tax.amount.getValue())
             }

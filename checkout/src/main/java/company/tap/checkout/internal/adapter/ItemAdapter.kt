@@ -93,10 +93,12 @@ class ItemAdapter :
               /*  itemViewAdapter.setItemViewDataSource(
                     getItemViewDataSource(null, CurrencyFormatter.currencyFormat(adapterContentItems[position].totalAmount.toString()),adapterContentItems[position].currency ,  CurrencyFormatter.currencyFormat(adapterContentItems[position].totalAmount.toString()), adapterContentItems[position].currency, adapterContentItems[position].quantity.toString())
                 )*/
+
+
                 PaymentDataSource.getSelectedCurrency()?.let {
                     PaymentDataSource.getSelectedCurrency()?.let { it1 ->
-                        getItemViewDataSource(adapterContentItems[position]?.name.toString().toUpperCase(), CurrencyFormatter.currencyFormat(adapterContentItems[position].amountPerUnit.toString()),
-                            it,  CurrencyFormatter.currencyFormat(adapterContentItems[position].totalAmount.toString()),
+                        getItemViewDataSource(adapterContentItems[position]?.name.toString().toUpperCase(), CurrencyFormatter.currencyFormat(adapterContentItems[position].totalAmount.toString() ),
+                            it,CurrencyFormatter.currencyFormat(adapterContentItems[position].amountPerUnit.toString() ),
                             it1, adapterContentItems[position].quantity?.value.toString())
                     }
                 }?.let {
@@ -141,6 +143,7 @@ class ItemAdapter :
     }
 
 
+    @SuppressLint("SetTextI18n")
     private fun checkItemListPosition(
         position: Int,
         discount: TapTextView?,
@@ -167,7 +170,7 @@ class ItemAdapter :
                    discount?.text = adapterContentItems[i].discount.toString()
                     discount?.text = LocalizationManager.getValue("Discount", "ItemList")
                     totalAmount?.paintFlags = totalAmount?.paintFlags?.or(Paint.STRIKE_THRU_TEXT_FLAG)!!
-                    totalAmount.text = adapterContentItems[position].totalAmount.toString()
+                    totalAmount.text = adapterContentItems[position].getPlainAmount().toString()
 
                 }else{
                     discount?.visibility = View.INVISIBLE

@@ -1723,7 +1723,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         val totalAmount :String
         if(selectedTotalAmount!=null){
            totalAmount  = CurrencyFormatter.currencyFormat(fee?.add(
-                   selectedTotalAmount?.toDouble()?.let { BigDecimal.valueOf(it) }).toString())
+                     selectedTotalAmount?.toDouble()?.let { BigDecimal.valueOf(it) }).toString())
         }else {
             totalAmount  = CurrencyFormatter.currencyFormat(fee?.add(
                     amountedCurrency?.amount?.toDouble()?.let { BigDecimal.valueOf(it) }).toString())

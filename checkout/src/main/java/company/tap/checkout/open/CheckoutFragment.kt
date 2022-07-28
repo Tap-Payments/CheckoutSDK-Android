@@ -10,10 +10,9 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.*
-import android.view.View.OnTouchListener
-import android.view.inputmethod.InputMethodManager
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -171,12 +170,21 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
             }, 0)
         }
 
-        if (bottomSheetDialog.behavior is BottomSheetBehavior<*>) {
-            bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
-            if (isFullscreen) {
-                bottomSheetDialog.behavior.peekHeight = context?.let { screenSize(it).y }!!
+
+        bottomSheetDialog.behavior.setBottomSheetCallback(object:BottomSheetBehavior.BottomSheetCallback(){
+
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                if (newState == BottomSheetBehavior.STATE_HIDDEN) {
+                   resetTabAnimatedButton()
+                    dismiss()
+                }
             }
-        }
+
+            override fun onSlide(p0: View, p1: Float) {
+
+            }
+        })
+
 
     }
 
