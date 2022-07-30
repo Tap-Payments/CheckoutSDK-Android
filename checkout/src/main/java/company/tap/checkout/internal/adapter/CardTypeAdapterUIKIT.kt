@@ -117,7 +117,9 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     }
 
     override fun getItemViewType(position: Int): Int {
-       // println("position value are>>>" + position)
+        println("position value are>>>" + position)
+        println("totalArraySize value are>>>" + totalArraySize)
+        println("adapterContent value are>>>" + adapterContent.size)
         if(position < adapterContent.size){
             if(adapterContent[position].paymentType==PaymentType.WEB){
                 (adapterContent[position]).image?.let { arrayListRedirect.add(it) }
@@ -126,16 +128,17 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
         }
 
+        if(position - adapterContent.size < adapterGooglePay.size){
+            return TYPE_GOOGLE_PAY
+        }
+
         else if(position.minus(adapterContent.size.plus(arrayListCards.size)) < adapterGooglePay.size){
-            if(arrayListCards[position.minus(adapterContent.size)].`object`.toUpperCase()==PaymentType.CARD.name){
+            val index = totalArraySize -adapterContent.size - adapterGooglePay.size
+            if(arrayListCards[index-1].`object`.toUpperCase()==PaymentType.CARD.name){
                 arrayListSaveCard.clear()
                 arrayListSaveCard.add(arrayListCards)
                 return  TYPE_SAVED_CARD
             }
-        }//else if(position.minus(adapterContent.size.plus(arrayListCards.size)) < adapterGooglePay.size){
-            else if(position.minus(adapterContent.size) < arrayListCards.size){
-                return  TYPE_GOOGLE_PAY
-
         }
 
         return -1
@@ -147,8 +150,14 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
 
     override fun getItemCount(): Int {
-           totalArraySize = adapterContent.size.plus(adapterGooglePay.size).plus(arrayListCards.size)
-           return totalArraySize.plus(1)
+        if(adapterGooglePay.isNotEmpty()){
+            totalArraySize = adapterContent.size.plus(adapterGooglePay.size).plus(arrayListCards.size)
+        }else {
+            totalArraySize = adapterContent.size.plus(arrayListCards.size)
+
+        }
+
+        return totalArraySize.plus(1)
 
     }
 
@@ -296,8 +305,8 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                GlideToVectorYou
                 .init()
                 .with(holder.itemView.context)
-                .load(arrayListCards[position.minus(adapterContent.size)].image.toUri(), holder.itemView.imageView_amex)
-            holder.itemView.textViewCardDetails.text = maskCardNumber(arrayListCards[position.minus(adapterContent.size)].firstSix + arrayListCards[position.minus(adapterContent.size)].lastFour)
+                .load(arrayListCards[totalArraySize-position -adapterContent.size - adapterGooglePay.size].image.toUri(), holder.itemView.imageView_amex)
+            holder.itemView.textViewCardDetails.text = maskCardNumber(arrayListCards[totalArraySize-position -adapterContent.size - adapterGooglePay.size].firstSix + arrayListCards[totalArraySize-position -adapterContent.size - adapterGooglePay.size].lastFour)
            //holder.itemView.textViewCardDetails.text = adapterContent[holder.adapterPosition].chip1.title
         }
     }

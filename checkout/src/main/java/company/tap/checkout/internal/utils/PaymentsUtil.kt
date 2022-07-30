@@ -65,8 +65,8 @@ object PaymentsUtil {
                 put("parameters", object : JSONObject() {
                     init {
                         assert(PaymentDataSource.getGooglePaymentOptions() != null)
-                        put("gateway", "tappayments")
-                         // put("gateway", PaymentDataSource.getGooglePaymentOptions()?.get(0)?.gatewayName)
+                      //  put("gateway", "tappayments")
+                          put("gateway", PaymentDataSource.getGooglePaymentOptions()?.get(0)?.gatewayName)
                         put("gatewayMerchantId",
                             PaymentDataSource.getGooglePaymentOptions()?.get(0)?.gatewayMerchantId
                         )
