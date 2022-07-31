@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         settingsManager = SettingsManager
 
         initializeTheme()
-
+        settingsManager?.setPref(this)
 
         if(ThemeManager.currentTheme.isNotEmpty() && LocalizationManager.currentLocalized.toString().isNotEmpty()) {
 
@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
             if (modalBottomSheet.isHidden || modalBottomSheet.isDetached) {
                 println("paybutton hidden")
-                payButton.changeButtonState(ActionButtonState.IDLE)
+                payButton.changeButtonState(ActionButtonState.RESET)
             }
 
 
@@ -207,8 +207,9 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
 
         // set transaction currency associated to your account
-
-        sdkSession.setTransactionCurrency(TapCurrency("KWD")) //** Required **
+      //  if(settingsManager.getString("key_sdk_transaction_currency","KWD"))
+        settingsManager?.getString("key_sdk_transaction_currency","KWD")
+            ?.let { TapCurrency(it) }?.let { sdkSession.setTransactionCurrency(it) } //** Required **
 
 
         // Using static CustomerBuilder method available inside TAP TapCustomer Class you can populate TAP TapCustomer object and pass it to SDK
@@ -297,7 +298,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         sdkSession.setDefaultCardHolderName("TEST TAP"); // ** Optional ** you can pass default CardHolderName of the user .So you don't need to type it.
         sdkSession.isUserAllowedToEnableCardHolderName(false) // ** Optional ** you can enable/ disable  default CardHolderName .
         sdkSession.setSdkMode(SdkMode.SAND_BOX) //** Pass your SDK MODE
-        settingsManager?.setPref(this)
+
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -356,7 +357,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
         R.id.action_settings -> {
             val intent = Intent(this, SettingsActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NO_HISTORY)
             startActivity(intent)
 
             true

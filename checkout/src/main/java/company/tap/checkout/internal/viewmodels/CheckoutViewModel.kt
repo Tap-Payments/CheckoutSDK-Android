@@ -1542,13 +1542,18 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                if( currencySelected !="KWD" && lastSelectedCurrency !="KWD"){
                     itemList[i].amountPerUnit = currencyOldRate?.div(currencyRate)
                     itemList[i].amountPerUnit =  itemList[i].amountPerUnit?.times(currencyRate)
+                   itemList[i].totalAmount = currencyOldRate?.div(currencyRate)
+                   itemList[i].totalAmount =  itemList[i].totalAmount?.times(currencyRate)
 
 
-                }  else if(currencySelected == "KWD"){
+
+               }  else if(currencySelected == "KWD"){
                     currentCalculatedAmount = itemList[i].amountPerUnit
                     itemList[i].amountPerUnit = (currencyOldRate?.div(currencyRate))
+                   itemList[i].totalAmount = currencyOldRate?.div(currencyRate)
 
-                }
+
+               }
                 println("item per unit >>" + itemList[i].amountPerUnit)
 
             }

@@ -81,13 +81,6 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
 
 
 
-    private fun screenSize(context: Context): Point {
-        val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        val display: Display? = windowManager.defaultDisplay
-        val point = Point()
-        display?.getSize(point)
-        return point
-    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -164,10 +157,10 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
         sessionDelegate?.sessionIsStarting()
         dialog?.window?.attributes?.windowAnimations = R.style.DialogAnimation
 
-        bottomSheetDialog.setOnShowListener { dialog ->
-            Handler().postDelayed({
+        bottomSheetDialog.setOnShowListener {
+            //Handler().postDelayed({
                 bottomSheetDialog.behavior.setState(BottomSheetBehavior.STATE_EXPANDED)
-            }, 0)
+          //  }, 0)
         }
 
 
@@ -296,7 +289,7 @@ requireArguments().putBoolean(RESET_FRAG, resetFragment)
     @RequiresApi(Build.VERSION_CODES.N)
     private fun resetTabAnimatedButton(){
         SDKSession.sessionActive = false
-        tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+        tabAnimatedActionButton?.changeButtonState(ActionButtonState.RESET)
 if(checkOutActivity?.isGooglePayClicked == false){
     checkOutActivity?.finish()
 }
