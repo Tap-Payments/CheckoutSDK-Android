@@ -227,8 +227,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
 
         // Set Payment Items array list
-        // sdkSession.setPaymentItems(ArrayList()) // ** Optional ** you can pass empty array list
-        sdkSession.setPaymentItems(getPaymentItems()) // ** Optional ** you can pass empty array list
+        sdkSession.setPaymentItems(ArrayList()) // ** Optional ** you can pass empty array list
+      //  sdkSession.setPaymentItems(getPaymentItems()) // ** Optional ** you can pass empty array list
 
 
         sdkSession.setPaymentType("ALL")  //** Merchant can pass paymentType
@@ -405,7 +405,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
                        null
                 )
         )
-        items.add(
+ /*       items.add(
                 PaymentItem(
                         "Items 2",
                         "Description for test item #2",
@@ -424,7 +424,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
                         AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO),
                         null
                 )
-        )
+        )*/
         println("item are<<<<" + items)
 
         return items
