@@ -22,6 +22,7 @@
         <entry key="checkout/src/main/res/layout/googlepay_button.xml" value="0.335" />
         <entry key="checkout/src/main/res/layout/item_currency_rows.xml" value="0.2477355072463768" />
         <entry key="checkout/src/main/res/layout/item_googlepay.xml" value="0.14895833333333333" />
+        <entry key="checkout/src/main/res/layout/item_gopay.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/item_knet.xml" value="0.2477355072463768" />
         <entry key="checkout/src/main/res/layout/item_save_cards.xml" value="0.20104166666666667" />
         <entry key="checkout/src/main/res/layout/item_saved_card.xml" value="0.1923899102180419" />

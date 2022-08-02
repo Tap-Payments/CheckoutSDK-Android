@@ -3,7 +3,7 @@
 xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
 android:id="@+id/tapCardChip5"
-android:layout_width="125dp"
+android:layout_width="110dp"
 android:layout_height="40dp"
 app:cardCornerRadius="8dp"
 app:cardElevation="8dp"
@@ -11,8 +11,8 @@ app:cardElevation="8dp"
 android:layout_gravity="center">
 <LinearLayout
     android:id="@+id/tapCardChip5Linear"
-    android:layout_width="wrap_content"
-    android:layout_height="40dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
 
     android:orientation="horizontal">
     <include
