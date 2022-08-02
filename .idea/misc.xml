@@ -13,6 +13,7 @@
         <entry key="checkout/src/main/res/drawable-xxhdpi/googlepay_button_overlay.xml" value="0.196" />
         <entry key="checkout/src/main/res/drawable/layout_bg.xml" value="0.1925" />
         <entry key="checkout/src/main/res/layout/activity_check_out.xml" value="0.20260416666666667" />
+        <entry key="checkout/src/main/res/layout/activity_check_out1.xml" value="0.16631038905515177" />
         <entry key="checkout/src/main/res/layout/amountview_layout.xml" value="0.2015625" />
         <entry key="checkout/src/main/res/layout/businessview_layout.xml" value="0.18802083333333333" />
         <entry key="checkout/src/main/res/layout/cardviewholder_layout1.xml" value="0.14322916666666666" />

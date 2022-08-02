@@ -218,7 +218,6 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
 
         // Set Total Amount. The Total amount will be recalculated according to provided Taxes and Shipping
-
         settingsManager?.getString("key_amount_name", "1")?.let { BigDecimal(it) }?.let {
             sdkSession.setAmount(
                     it
@@ -357,7 +356,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
         R.id.action_settings -> {
             val intent = Intent(this, SettingsActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NO_HISTORY)
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NO_HISTORY or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            recreate()
             startActivity(intent)
 
             true
@@ -640,7 +640,9 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         if (settingsManager == null) {
             settingsManager?.setPref(this)
         }
+
     }
+
 
 
 

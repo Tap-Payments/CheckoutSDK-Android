@@ -109,12 +109,14 @@ class SettingsActivity : AppCompatActivity() {
 
             // Trigger the listener immediately with the preference's
             // current value.
-            sBindPreferenceSummaryToValueListener.onPreferenceChange(
-                preference,
-                PreferenceManager
-                    .getDefaultSharedPreferences(preference?.context)
-                    .getString(preference?.key, "")
-            )
+            if (preference != null) {
+                sBindPreferenceSummaryToValueListener.onPreferenceChange(
+                    preference,
+                    PreferenceManager
+                        .getDefaultSharedPreferences(preference?.context)
+                        .getString(preference?.key, "")
+                )
+            }
         }
     }
 
@@ -129,8 +131,12 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        startActivity(Intent(this, MainActivity::class.java))
+        val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NO_HISTORY or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         finish()
+        startActivity(intent)
+
+
     }
 
 }
