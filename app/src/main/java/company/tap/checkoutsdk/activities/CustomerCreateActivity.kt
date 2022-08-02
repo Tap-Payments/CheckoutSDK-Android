@@ -100,12 +100,12 @@ open class CustomerCreateActivity : AppCompatActivity() {
             ) {
                 println("inside: $operation")
                 SettingsManager.saveCustomer(
-                    name!!.text.toString().trim { it <= ' ' },
-                    middleName!!.text.toString().trim { it <= ' ' },
-                    lastName!!.text.toString().trim { it <= ' ' },
-                    email!!.text.toString().trim { it <= ' ' },
-                    sdn!!.text.toString().trim { it <= ' ' },
-                    mobile!!.text.toString().trim { it <= ' ' },
+                    name?.text.toString().trim { it <= ' ' },
+                    middleName?.text.toString().trim { it <= ' ' },
+                    lastName?.text.toString().trim { it <= ' ' },
+                    email?.text.toString().trim { it <= ' ' },
+                    sdn?.text.toString().trim { it <= ' ' },
+                    mobile?.text.toString().trim { it <= ' ' },
                     this
                 )
                 back(null)
@@ -117,22 +117,22 @@ open class CustomerCreateActivity : AppCompatActivity() {
                 SettingsManager.editCustomer(
                     customer,
                     CustomerViewModel(
-                        customer!!.getRef(),
-                        name!!.text.toString().trim { it <= ' ' },
-                        middleName!!.text.toString().trim { it <= ' ' },
-                        lastName!!.text.toString().trim { it <= ' ' },
-                        email!!.text.toString().trim { it <= ' ' },
-                        sdn!!.text.toString().trim { it <= ' ' },
-                        mobile!!.text.toString().trim { it <= ' ' }), this
+                        customer?.getRef(),
+                        name?.text.toString().trim { it <= ' ' },
+                        middleName?.text.toString().trim { it <= ' ' },
+                        lastName?.text.toString().trim { it <= ' ' },
+                        email?.text.toString().trim { it <= ' ' },
+                        sdn?.text.toString().trim { it <= ' ' },
+                        mobile?.text.toString().trim { it <= ' ' }), this
                 )
                 back(null)
             }
         } else {
-            if (!NAME_IS_VALID) name_l!!.error =
+            if (!NAME_IS_VALID) name_l?.error =
                 "getString(R.string.name_invalid_msg)" else name_l?.error = null
-            if (!EMAIL_IS_VALID) email_l!!.error =
+            if (!EMAIL_IS_VALID) email_l?.error =
                 "getString(R.string.email_invalid_msg)" else email_l?.error = null
-            if (!MOBILE_IS_VALID) mobile_l!!.error =
+            if (!MOBILE_IS_VALID) mobile_l?.error =
                 "getString(R.string.mobile_invalid_msg)" else mobile_l?.error = null
         }
     }

@@ -20,7 +20,7 @@ class CustomerViewHolder(itemView: View, listener: CustomerAdapter.OnClickListen
     private val name: TextView = itemView.findViewById(R.id.customer_name)
     private val email: TextView = itemView.findViewById(R.id.customer_email)
     private val mobile: TextView = itemView.findViewById(R.id.customer_mobile)
-    private val right_arrow: ImageView? = null
+    private val tick_mark: ImageView?= itemView.findViewById(R.id.tick_mark)
     private val listenerInterface: CustomerAdapter.OnClickListenerInterface? = listener
     private var viewModel: CustomerViewModel? = null
     fun bindData(viewModel: CustomerViewModel) {
@@ -34,6 +34,11 @@ class CustomerViewHolder(itemView: View, listener: CustomerAdapter.OnClickListen
         val customer_container: ConstraintLayout = itemView.findViewById(R.id.customer_container)
         customer_container.setOnClickListener { v: View? ->
             listenerInterface?.onClick(viewModel)
+
+
         }
     }
+
+
+
 }

@@ -261,9 +261,10 @@ object SettingsManager {
         )
 
         // check if customer id is in pref.
-        customer = if (customersList != null) {
+      //  customer =
+        if (customersList != null) {
             println("preparing data source with customer ref :" + customersList[0].getRef())
-            return TapCustomer(
+            customer= TapCustomer(
                 customersList[0].getRef(),
                 customersList[0].getName(),
                 customersList[0].getMiddleName(),
@@ -275,12 +276,13 @@ object SettingsManager {
         } else {
             println(" paymentResultDataManager.getCustomerRef(context) null")
             //65562630
-            return TapCustomer(
+            customer= TapCustomer(
                 "cus_TS012520211349Za012907577", "ahlaam", "middlename",
                 "lastname", "abcd@gmail.com",
                 PhoneNumber("00965", "66175090"), "description",
             )
         }
+        return customer
         //  65562630
 
     }
