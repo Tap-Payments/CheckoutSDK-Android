@@ -57,6 +57,7 @@
         <EditTextPreference
             android:defaultValue="1.00"
             android:inputType="numberDecimal"
+            android:digits="0123456789."
             android:key="key_amount_name"
             android:summary="key_amount_value"
             android:title="Enter the amount" />

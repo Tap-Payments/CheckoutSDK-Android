@@ -2,10 +2,13 @@ package company.tap.checkoutsdk.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputFilter
+import android.text.InputType
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.*
 import company.tap.checkoutsdk.R
+
 
 /**
  * Created by AhlaamK on 9/6/21.
@@ -82,6 +85,11 @@ class SettingsActivity : AppCompatActivity() {
                 )
 
             }else if (preference is EditTextPreference) {
+
+                preference.setOnBindEditTextListener { editText->
+                    editText.inputType = InputType.TYPE_CLASS_NUMBER
+
+                }
                 if (preference.getKey().equals("key_amount_name")) {
                     // update the changed gallery name to summary filed
                     preference.setSummary(stringValue)
@@ -124,4 +132,5 @@ class SettingsActivity : AppCompatActivity() {
         startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
+
 }
