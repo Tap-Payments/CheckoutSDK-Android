@@ -7,12 +7,12 @@
       "cardExpiryPlaceHolder": "MM/YY",
       "cardSaveLabel": "For faster and more secure checkout,\nsave your card",
       "emailPlaceHolder": "email@email.com",
-      "cardUseNFCLabel": "For faster and easier checkout,\n use card scanner or NFC.",
-      "cardSaveLater": "For faster and easier checkout,\n save the card for later."
+      "cardUseNFCLabel": "For faster and easier checkout,\nuse card scanner or NFC.",
+      "cardSaveLater": "For faster and easier checkout,\nsave the card for later."
     },
     "TapMobileInput": {
-      "mobileSaveLabel": "For faster and easier checkout,\n save your mobile number.",
-      "mobileUseLabel": "For faster and easier checkout,\n use your mobile number."
+      "mobileSaveLabel": "For faster and easier checkout,\nsave your mobile number.",
+      "mobileUseLabel": "For faster and easier checkout,\nuse your mobile number."
     },
     "TapMerchantSection": {
       "paymentFor" : "PAYMENT FOR"
