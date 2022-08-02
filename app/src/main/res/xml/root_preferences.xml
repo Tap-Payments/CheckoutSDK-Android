@@ -92,6 +92,13 @@
                 android:targetClass="company.tap.checkoutsdk.activities.TaxesActivity"
                 android:targetPackage="company.tap.checkoutsdk" />
         </Preference>
+
+        <Preference android:title="Set Items">
+            <intent
+                android:action="SETTING_START_ITEMS_ACTIVITY"
+                android:targetClass="company.tap.checkoutsdk.activities.ItemActivity"
+                android:targetPackage="company.tap.checkoutsdk" />
+        </Preference>
         <SwitchPreferenceCompat
             android:key="switch"
             android:title="Switch Preference"

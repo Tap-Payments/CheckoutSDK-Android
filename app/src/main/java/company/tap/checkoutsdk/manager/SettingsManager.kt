@@ -17,6 +17,7 @@ import company.tap.checkout.open.enums.SdkMode
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.models.*
 import company.tap.checkoutsdk.viewmodels.CustomerViewModel
+import company.tap.checkoutsdk.viewmodels.PaymentItemViewModel
 import company.tap.checkoutsdk.viewmodels.ShippingViewModel
 import company.tap.checkoutsdk.viewmodels.TaxesViewModel
 import java.math.BigDecimal
@@ -132,6 +133,81 @@ object SettingsManager {
         }
     }
 
+    fun saveItems(
+        itemname: String,
+        description: String,
+        quantity:Int,
+        priceperunit: Double,
+        totalamount: Double,
+
+        ctx: Context
+    ) {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(ctx)
+        val gson = Gson()
+        val response = preferences.getString("items", "")
+        var itemsList: ArrayList<PaymentItemViewModel?>? = gson.fromJson(
+            response,
+            object : TypeToken<List<PaymentItemViewModel?>?>() {}.getType()
+        )
+        if (itemsList == null) itemsList = ArrayList<PaymentItemViewModel?>()
+        itemsList.add(
+
+            PaymentItemViewModel(itemname, description, priceperunit, totalamount,quantity)
+
+        )
+        val data: String = gson.toJson(itemsList)
+        writeItemsToPreferences(data, preferences)
+    }
+    fun editItems(
+        oldItems: PaymentItemViewModel?,
+        newItems: PaymentItemViewModel,
+        ctx: Context?
+    ) {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(ctx)
+        val gson = Gson()
+        val response = preferences.getString("items", "")
+        val paymentItemList: ArrayList<PaymentItemViewModel> = gson.fromJson(
+            response,
+            object : TypeToken<List<PaymentItemViewModel?>?>() {}.getType()
+        )
+        if (paymentItemList != null) {
+            val itemsName: String? = paymentItemList[0].getItemsName()
+            paymentItemList.clear()
+
+            newItems.getItemDescription()?.let {
+                PaymentItemViewModel(
+                    newItems.getItemsName(),
+                    it,
+                    newItems.getPricePUnit()?.toDouble()!!,
+                    newItems.getitemTotalPrice()?.toDouble()!!,
+                    newItems.getitemQuantity()?.toInt()!!
+                )
+                    .let {
+                        paymentItemList.add(
+                            it
+                        )
+                    }
+            }
+            val data: String = gson.toJson(paymentItemList)
+            writeItemsToPreferences(data, preferences)
+        } else {
+            if (ctx != null) {
+
+                newItems.getItemsName()?.let {
+                    newItems.getPricePUnit()?.let { it1 ->
+                        saveItems(
+                            it,
+                            newItems.getItemDescription()!!,
+                            newItems.getitemQuantity()!!,
+                            it1,
+                            newItems.getitemTotalPrice()!!, ctx
+                        )
+                    }
+                }
+
+            }
+        }
+    }
 
     fun editShipping(
         oldShipping: ShippingViewModel?,
@@ -213,7 +289,11 @@ object SettingsManager {
         }
     }
 
-
+    private fun writeItemsToPreferences(data: String, preferences: SharedPreferences) {
+        val editor = preferences.edit()
+        editor.putString("items", data)
+        editor.commit()
+    }
     private fun writeCustomersToPreferences(data: String, preferences: SharedPreferences) {
         val editor = preferences.edit()
         editor.putString("customer", data)
@@ -248,7 +328,16 @@ object SettingsManager {
         return shippingList ?: ArrayList<ShippingViewModel>()
     }
 
-
+    fun getAddedItems(ctx: Context?): List<PaymentItemViewModel> {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(ctx)
+        val gson = Gson()
+        val response = preferences.getString("items", "")
+        val itemsList: ArrayList<PaymentItemViewModel>? = gson.fromJson(
+            response,
+            object : TypeToken<List<PaymentItemViewModel?>?>() {}.type
+        )
+        return itemsList ?: ArrayList<PaymentItemViewModel>()
+    }
     //////////////////////////////////////   Get Payment Settings ////////////////////////////////
     fun getCustomer(): TapCustomer? {
         val customer: TapCustomer
@@ -286,7 +375,55 @@ object SettingsManager {
         //  65562630
 
     }
+    fun getDynamicPaymentItems():  PaymentItem?{
+        val paymentitems: PaymentItem
+        val gson = Gson()
+        val response = pref?.getString("paymentitems", "")
+        println(" get customer: $response")
+        val itemsList = gson.fromJson<ArrayList<PaymentItemViewModel>>(
+            response,
+            object : TypeToken<List<PaymentItemViewModel?>?>() {}.type
+        )
 
+        // check if customer id is in pref.
+        //  customer =
+        if (itemsList != null) {
+            println("preparing data source with customer ref :" + itemsList[0].getItemDescription())
+            paymentitems= itemsList[0].getPricePUnit()?.let { BigDecimal(it) }?.let {
+                itemsList[0].getItemDescription()?.let { it1 ->
+                    itemsList[0].getItemsName()?.let { it2 ->
+                        PaymentItem(
+                            it2,
+                            it1,
+                            Quantity(Measurement.UNITS, Measurement.MASS.name,
+                                itemsList[0].getitemQuantity()?.let { it3 -> BigDecimal(it3) }),
+                            it,
+                           AmountModificator(AmountModificatorType.FIXED,
+                               itemsList[0].getitemTotalPrice()?.let { it3 -> BigDecimal(it3) }),
+
+                           null )
+                    }
+                }
+            }!!
+        } else {
+            println(" paymentResultDataManager.getCustomerRef(context) null")
+            paymentitems=
+                PaymentItem(
+                    "Items1",
+                    "Description for test item #1",
+                    Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(1)),
+                    BigDecimal.valueOf(
+                        1
+                    ),
+                    AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO),
+                    null
+                )
+
+        }
+        return paymentitems
+
+
+    }
     private fun getPaymentItems(): ArrayList<PaymentItem>? {
         val items: ArrayList<PaymentItem> = ArrayList<PaymentItem>()
         items.add(

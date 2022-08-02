@@ -4,7 +4,14 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../.gradle/caches/transforms-2/files-2.1/87ded65bcd1db167d3a00c7113fec855/jetified-TapUIKit-Android-1.1.1.343/res/layout/item_view_adapter.xml" value="0.2667572463768116" />
+        <entry key="app/src/main/res/layout/activity_customer.xml" value="0.129115006412997" />
+        <entry key="app/src/main/res/layout/activity_customer_create.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_item.xml" value="0.13894826849080805" />
+        <entry key="app/src/main/res/layout/activity_items_create.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.10364583333333334" />
+        <entry key="app/src/main/res/layout/customer_layout.xml" value="0.129115006412997" />
+        <entry key="app/src/main/res/layout/customer_toolbar.xml" value="0.129115006412997" />
+        <entry key="app/src/main/res/layout/items_layout.xml" value="0.10602821718683197" />
         <entry key="app/src/main/res/layout/settings_activity.xml" value="0.1921875" />
         <entry key="app/src/main/res/menu/menumain.xml" value="0.1921875" />
         <entry key="app/src/main/res/xml/root_preferences.xml" value="0.17782135009765626" />
