@@ -8,7 +8,7 @@
 
 
     <TextView
-        android:id="@+id/customer_name"
+        android:id="@+id/item_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -16,7 +16,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:textColor="@color/black"
-        android:text="customer name"
+        android:text="Item name"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.1"
@@ -25,33 +25,57 @@
         app:layout_constraintVertical_bias="0.050000012" />
 
     <TextView
-        android:id="@+id/customer_email"
+        android:id="@+id/item_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="customer email"
+        android:text="Item description"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.16"
-        app:layout_constraintStart_toStartOf="@id/customer_name"
-        app:layout_constraintTop_toBottomOf="@+id/customer_name"
+        app:layout_constraintStart_toStartOf="@id/item_name"
+        app:layout_constraintTop_toBottomOf="@+id/item_name"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/customer_mobile"
+        android:id="@+id/item_quantity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:text="000 00000000"
+        android:text="Quantity"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.16"
-        app:layout_constraintStart_toStartOf="@id/customer_name"
-        app:layout_constraintTop_toBottomOf="@+id/customer_email"
+        app:layout_constraintStart_toStartOf="@id/item_name"
+        app:layout_constraintTop_toBottomOf="@+id/item_description"
         app:layout_constraintVertical_bias="0.0" />
+    <TextView
+        android:id="@+id/item_per_unit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="perunit"
+        app:layout_constraintStart_toStartOf="@id/item_name"
+      app:layout_constraintTop_toBottomOf="@+id/item_quantity"
+        app:layout_constraintHorizontal_bias="0.16"
+        app:layout_constraintVertical_bias="0.0"/>
+    <TextView
+        android:id="@+id/item_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="total"
+        app:layout_constraintStart_toStartOf="@id/item_name"
+        app:layout_constraintTop_toBottomOf="@+id/item_per_unit"
+        app:layout_constraintHorizontal_bias="0.16"
+        app:layout_constraintVertical_bias="0.0"/>
 
     <ImageView
         android:id="@+id/tick_mark"
@@ -64,7 +88,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.62"
-        app:layout_constraintStart_toEndOf="@+id/customer_email"
+        app:layout_constraintStart_toEndOf="@+id/item_description"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.53"
         app:srcCompat="@drawable/ic_checkmark_normal" />

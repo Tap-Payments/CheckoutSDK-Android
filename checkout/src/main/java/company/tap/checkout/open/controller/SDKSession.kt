@@ -69,6 +69,9 @@ object  SDKSession : APIRequestCallback {
 
     @JvmField
     var pluginSessionDelegate: PluginSessionDelegate? = null
+
+    @JvmField
+    var showCloseImage: Boolean? = false
     init {
         initPaymentDataSource()
 

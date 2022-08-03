@@ -9,6 +9,7 @@
         <entry key="app/src/main/res/layout/activity_item.xml" value="0.13894826849080805" />
         <entry key="app/src/main/res/layout/activity_items_create.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.10364583333333334" />
+        <entry key="app/src/main/res/layout/crud_toolbar.xml" value="0.1" />
         <entry key="app/src/main/res/layout/customer_layout.xml" value="0.129115006412997" />
         <entry key="app/src/main/res/layout/customer_toolbar.xml" value="0.129115006412997" />
         <entry key="app/src/main/res/layout/items_layout.xml" value="0.10602821718683197" />

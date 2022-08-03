@@ -22,8 +22,8 @@ class ItemsViewHolder(itemView: View, listener: ItemsAdapter.OnClickListenerInte
     private val name: TextView = itemView.findViewById(R.id.item_name)
     private val description: TextView = itemView.findViewById(R.id.item_description)
     private val quantity: TextView = itemView.findViewById(R.id.item_quantity)
-    private val amountPerunit: TextView = itemView.findViewById(R.id.item_quantity)
-    private val totalAmount: TextView = itemView.findViewById(R.id.item_quantity)
+    private val amountPerunit: TextView = itemView.findViewById(R.id.item_per_unit)
+    private val totalAmount: TextView = itemView.findViewById(R.id.item_total)
     private val tick_mark: ImageView?= itemView.findViewById(R.id.tick_mark)
     private val listenerInterface: ItemsAdapter.OnClickListenerInterface? = listener
     private var viewModel: PaymentItemViewModel? = null
@@ -31,9 +31,9 @@ class ItemsViewHolder(itemView: View, listener: ItemsAdapter.OnClickListenerInte
         this.viewModel = viewModel
         name.text = viewModel.getItemsName()
         description.text = viewModel.getItemDescription()
-        quantity.text = viewModel.getitemQuantity().toString()
-        amountPerunit.text = viewModel.getPricePUnit().toString()
-        totalAmount.text = viewModel.getitemTotalPrice().toString()
+        quantity.text = "Quantity :"+viewModel.getitemQuantity().toString()
+        amountPerunit.text = "Amount per unit :"+viewModel.getPricePUnit().toString()
+        totalAmount.text = "Total Price :"+viewModel.getitemTotalPrice().toString()
     }
 
     init {

@@ -5,14 +5,14 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.graphics.Color
-import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -32,10 +32,12 @@ import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.atoms.TapImageView
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
+import kotlin.properties.Delegates
 
 
 /**
@@ -51,7 +53,8 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
     private lateinit var cardViewModel: CardViewModel
     var _activity: Activity? = null
     var checkOutActivity: CheckOutActivity? = null
-
+    lateinit var closeText: TapTextView
+    lateinit var closeImage: TapImageView
     var hideAllView =false
     lateinit var status :ChargeStatus
     private  var _resetFragment :Boolean = true
@@ -59,6 +62,7 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
     var isNfcOpened:Boolean=false
 
     private var isFullscreen = true
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,17 +109,37 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
         val frameLayout: FrameLayout? = view.findViewById(R.id.fragment_container_nfc_lib)
         val webFrameLayout: FrameLayout? = view.findViewById(R.id.webFrameLayout)
         val inLineCardLayout: FrameLayout? = view.findViewById(R.id.inline_container)
-        val closeText: TapTextView? = view.findViewById(R.id.closeText)
+         closeText = view.findViewById(R.id.closeText)
+         closeImage= view.findViewById(R.id.closeImage)
         closeText?.text = LocalizationManager.getValue("close", "Common")
 
-        if(!hideAllView) {
-        Handler().postDelayed({
-            closeText?.visibility = View.VISIBLE
 
-        }, 4000)
+        if (SDKSession.showCloseImage ==true) {
+
+            if(!hideAllView) {
+                Handler().postDelayed({
+                    closeImage.visibility = View.VISIBLE
+
+                }, 3000)
+            }
+
+        } else {
+            if(!hideAllView) {
+                Handler().postDelayed({
+                    closeText.visibility = View.VISIBLE
+
+                }, 3000)
+            }
+
         }
+        closeText.setOnClickListener {
+            bottomSheetDialog.dismissWithAnimation
+            bottomSheetDialog.hide()
+            bottomSheetDialog.dismiss()
+            resetTabAnimatedButton()
 
-        closeText?.setOnClickListener {
+        }
+        closeImage.setOnClickListener {
             bottomSheetDialog.dismissWithAnimation
             bottomSheetDialog.hide()
             bottomSheetDialog.dismiss()
@@ -184,6 +208,7 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
 
 
     }
+
 
 
 

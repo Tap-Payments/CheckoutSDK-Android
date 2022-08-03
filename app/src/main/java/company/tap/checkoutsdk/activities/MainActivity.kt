@@ -97,11 +97,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
             initializeSDK()
             configureSDKSession()
             initActionButton()
-
-            if (modalBottomSheet.isHidden || modalBottomSheet.isDetached) {
-                println("paybutton hidden")
-                payButton.changeButtonState(ActionButtonState.RESET)
-            }
+            initializeBottomSheet()
 
 
             /* if (ThemeManager.currentTheme.isNotEmpty() && (ThemeManager.currentTheme.contains("dark") || ThemeManager.currentTheme.contains("light"))){
@@ -116,6 +112,15 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
                   }
               }*/
 
+        }
+    }
+
+    private fun initializeBottomSheet() {
+        modalBottomSheet.arguments = getArguments()
+      //  modalBottomSheet.showCloseImage = settingsManager?.getBoolean("showImageKey",false) == true
+        if (modalBottomSheet.isHidden || modalBottomSheet.isDetached) {
+            println("paybutton hidden")
+            payButton.changeButtonState(ActionButtonState.RESET)
         }
     }
 
@@ -198,7 +203,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
         // pass your activity as a session delegate to listen to SDK internal payment process follow
         sdkSession.addSessionDelegate(this) //** Required **
-
+        sdkSession.showCloseImage = settingsManager?.getBoolean("showImageKey",false)
 
         // initiate PaymentDataSource
 
@@ -226,7 +231,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
 
         // Set Payment Items array list
-        sdkSession.setPaymentItems(ArrayList()) // ** Optional ** you can pass empty array list
+       // sdkSession.setPaymentItems(ArrayList()) // ** Optional ** you can pass empty array list
+        sdkSession.setPaymentItems(settingsManager?.getDynamicPaymentItems()) // ** Optional ** you can pass empty array list
       //  sdkSession.setPaymentItems(getPaymentItems()) // ** Optional ** you can pass empty array list
 
 

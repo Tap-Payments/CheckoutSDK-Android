@@ -77,6 +77,19 @@
         android:layout_alignParentEnd="true"
         android:layout_gravity="end"/>
 
+    <company.tap.tapuilibrary.uikit.atoms.TapImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/closeImage"
+        android:src="@drawable/ic_close"
+        android:gravity="center"
+        android:layout_marginEnd="10dp"
+        android:text="close"
+        android:visibility="gone"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="end"/>
+
+
 </RelativeLayout>
 
 </LinearLayout>

@@ -43,6 +43,7 @@ class SettingsActivity : AppCompatActivity() {
             bindPreferenceSummaryToValue(findPreference("key_amount_name"))
             bindPreferenceSummaryToValue(findPreference("key_sdk_payment_type"))
             bindPreferenceSummaryToValue(findPreference("key_sdk_card_type"))
+            bindPreferenceSummaryToValue(findPreference("showImageKey"))
 
         }
     }
@@ -94,6 +95,11 @@ class SettingsActivity : AppCompatActivity() {
                     // update the changed gallery name to summary filed
                     preference.setSummary(stringValue)
                 }
+            } else if(preference is CheckBoxPreference){
+                if (preference.getKey().equals("showImageKey")) {
+                    // update the changed gallery name to summary filed
+
+                }
             }
             else {
                 // For all other preferences, set the summary to the value's
@@ -109,7 +115,15 @@ class SettingsActivity : AppCompatActivity() {
 
             // Trigger the listener immediately with the preference's
             // current value.
-            if (preference != null) {
+            if (preference != null && preference is CheckBoxPreference) {
+                sBindPreferenceSummaryToValueListener.onPreferenceChange(
+                    preference,
+                    PreferenceManager
+                        .getDefaultSharedPreferences(preference.context)
+                        .getBoolean(preference.key, false)
+                )
+            }else{
+                if(preference!=null)
                 sBindPreferenceSummaryToValueListener.onPreferenceChange(
                     preference,
                     PreferenceManager
@@ -117,8 +131,10 @@ class SettingsActivity : AppCompatActivity() {
                         .getString(preference?.key, "")
                 )
             }
+
+            }
         }
-    }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {

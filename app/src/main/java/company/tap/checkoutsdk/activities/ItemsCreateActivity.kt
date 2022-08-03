@@ -1,16 +1,17 @@
 package company.tap.checkoutsdk.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.CheckBox
+import android.widget.SeekBar
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatEditText
 import com.google.android.material.textfield.TextInputLayout
+import company.tap.checkout.internal.api.enums.AmountModificatorType
 import company.tap.checkoutsdk.R
 import company.tap.checkoutsdk.manager.SettingsManager
-import company.tap.checkoutsdk.utils.Validator
 import company.tap.checkoutsdk.viewmodels.PaymentItemViewModel
 import kotlinx.android.synthetic.main.activity_customer_create.*
 import java.util.*
@@ -30,6 +31,8 @@ open class ItemsCreateActivity : AppCompatActivity() {
     private var quantity_il: TextInputLayout? = null
     private var price_il: TextInputLayout? = null
     private var totalamount_textView: TextView? = null
+    private var mSeekbaBar: SeekBar? = null
+    private var seekBarText: TextView? = null
 
     private var operation = ""
     private var paymentitemsViewModel: PaymentItemViewModel? = null
@@ -44,6 +47,7 @@ open class ItemsCreateActivity : AppCompatActivity() {
     var EMAIL_IS_VALID = false
     @JvmField
     var MOBILE_IS_VALID = false
+    var amountModificatorType :AmountModificatorType = AmountModificatorType.FIXED
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_items_create)
@@ -71,12 +75,38 @@ open class ItemsCreateActivity : AppCompatActivity() {
         checkBoxFixed = findViewById(R.id.checkBoxFixed)
         checkBoxPercentage = findViewById(R.id.checkBoxPercentage)
         checkBoxNone = findViewById(R.id.checkBoxNone)
+        mSeekbaBar = findViewById(R.id.seekBar)
+        seekBarText = findViewById(R.id.seekbar_value)
 
         itemname_il = findViewById(R.id.itemname_il)
         description_il = findViewById(R.id.description_il)
         quantity_il = findViewById(R.id.quantity_il)
         price_il = findViewById(R.id.price_il)
         totalamount_textView = findViewById(R.id.totalamount_textView)
+
+        checkBoxPercentage?.setOnClickListener() {
+            checkBoxPercentage?.isChecked = true
+            checkBoxFixed?.isChecked = false
+            checkBoxNone?.isChecked = false
+            amountModificatorType = AmountModificatorType.PERCENTAGE
+
+        }
+        checkBoxFixed?.setOnClickListener {
+            checkBoxPercentage?.isChecked = false
+            checkBoxFixed?.isChecked = true
+            checkBoxNone?.isChecked = false
+            amountModificatorType = AmountModificatorType.FIXED
+
+        }
+        checkBoxNone?.setOnClickListener {
+            checkBoxPercentage?.isChecked = false
+            checkBoxFixed?.isChecked = false
+            checkBoxNone?.isChecked = true
+
+        }
+        mSeekbaBar?.post(Runnable {
+           seekBarText?.text = mSeekbaBar?.progress.toString()
+        })
 
     }
 
@@ -85,7 +115,8 @@ open class ItemsCreateActivity : AppCompatActivity() {
         item_description?.setText(paymentItems?.getItemDescription())
         item_quantity?.setText(paymentItems?.getitemQuantity().toString())
         item_price_per_unit?.setText(paymentItems?.getPricePUnit().toString())
-        totalamount_textView?.setText(paymentItems?.getitemTotalPrice().toString())
+        totalamount_textView?.text = "Total price is"+paymentItems?.getitemTotalPrice().toString()
+
 
     }
 
@@ -98,32 +129,37 @@ open class ItemsCreateActivity : AppCompatActivity() {
                 )
             ) {
                 println("inside: $operation")
-                SettingsManager.saveItems(
-                    item_name?.text.toString().trim { it <= ' ' },
-                    item_description?.text.toString().trim { it <= ' ' },
-                    item_quantity?.text.toString().toInt(),
-                    item_price_per_unit?.text.toString().toDouble(),
-                    item_quantity?.text.toString().toDouble().times(item_price_per_unit?.text.toString().toDouble()),
-
-
-                    this
-                )
+                amountModificatorType.let {
+                    SettingsManager.saveItems(
+                        item_name?.text.toString().trim { it <= ' ' },
+                        item_description?.text.toString().trim { it <= ' ' },
+                        item_quantity?.text.toString().toInt(),
+                        item_price_per_unit?.text.toString().toDouble(),
+                        item_quantity?.text.toString().toDouble().times(item_price_per_unit?.text.toString().toDouble()),
+                        it,
+                        this
+                    )
+                }
                 back(null)
             } else if (operation.equals(
                     OPERATION_EDIT,
                     ignoreCase = true
                 )
             ) {
-                SettingsManager.editItems(
-                    paymentitemsViewModel,
+                amountModificatorType.let {
                     PaymentItemViewModel(
                         item_name?.text.toString().trim { it <= ' ' },
                         item_description?.text.toString().trim { it <= ' ' },
                         item_price_per_unit?.text.toString().toDouble() ,
-                        totalamount_textView?.text.toString().toDouble(),
-                        item_quantity?.text.toString().toInt(),
-                       ), this
-                )
+                        item_price_per_unit?.text.toString().toDouble().times( item_quantity?.text.toString().toInt()),
+                        item_quantity?.text.toString().toInt(), it,
+                    )
+                }.let {
+                    SettingsManager.editItems(
+                        paymentitemsViewModel,
+                        it, this
+                    )
+                }
                 back(null)
             }
        /* } else {

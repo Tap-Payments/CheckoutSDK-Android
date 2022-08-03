@@ -38,15 +38,17 @@ class ItemActivity : AppCompatActivity() ,ItemsAdapter.OnClickListenerInterface 
         recyclerView?.addItemDecoration(dividerItemDecoration)
 
     }
-    private fun generateRegisteredItems(): List<PaymentItemViewModel> {
+   /* private fun generateRegisteredItems(): List<PaymentItemViewModel> {
         return SettingsManager.getAddedItems(this)
-    }
+    }*/
 
 
     fun back(view: View?) {
         onBackPressed()
     }
-
+    private fun generateRegisteredItems(): List<PaymentItemViewModel> {
+        return SettingsManager.getRegisteredItems(this)
+    }
 
     fun addCustomer(view: View?) {
         val intent = Intent(this, ItemsCreateActivity::class.java)

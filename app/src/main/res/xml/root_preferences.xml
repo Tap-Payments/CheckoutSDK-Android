@@ -105,4 +105,9 @@
             android:summary="Click to switch on or off"
             android:defaultValue="true"/>
     </PreferenceCategory>
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="showImageKey"
+        android:title="Show Close Image" />
+
 </PreferenceScreen>
