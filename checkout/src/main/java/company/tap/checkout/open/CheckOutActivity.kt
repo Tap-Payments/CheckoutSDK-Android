@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
@@ -19,6 +20,7 @@ import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.models.Authorize
 import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.api.models.Token
+import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.utils.PaymentsUtil
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.controller.SDKSession
@@ -51,6 +53,8 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
 
     lateinit var _paymentsClient: PaymentsClient
     @JvmField
+     var displayMetrics: Int?=0
+    @JvmField
     var isGooglePayClicked:Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +62,7 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
         setContentView(R.layout.activity_check_out)
         val intent = intent
         val bundle = intent.extras
-
+        displayMetrics= CustomUtils.getDeviceDisplayMetrics(this)
         if (bundle != null) {
             if(bundle["hideAllViews"]!=null){
                 hideAllViews = bundle["hideAllViews"] as Boolean? == true

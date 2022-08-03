@@ -21,6 +21,7 @@ import company.tap.checkout.internal.api.requests.Gateway
 import company.tap.checkout.internal.api.requests.TapConfigRequestModel
 import company.tap.checkout.internal.apiresponse.CardViewEvent
 import company.tap.checkout.internal.apiresponse.CardViewModel
+import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.utils.CustomUtils.showDialog
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.CheckOutActivity
@@ -387,6 +388,7 @@ object  SDKSession : APIRequestCallback {
                 startSDK(supportFragmentManager, context,activity)
                 this.tabAnimatedActionButton = payButtonView
                 if (tabAnimatedActionButton != null) {
+                     tabAnimatedActionButton?.setDisplayMetrics(CustomUtils.getDeviceDisplayMetrics(activity))
                     tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
                 }
 
@@ -481,7 +483,7 @@ object  SDKSession : APIRequestCallback {
         }*/
 
         sessionActive =false
-        payButtonView?.changeButtonState(ActionButtonState.IDLE)
+        payButtonView.changeButtonState(ActionButtonState.RESET)
         payButtonView?.visibility=View.GONE
         payButtonView?.setButtonDataSource(
             true,

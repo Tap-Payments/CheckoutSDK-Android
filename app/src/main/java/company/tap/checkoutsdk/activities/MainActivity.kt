@@ -2,14 +2,14 @@ package company.tap.checkoutsdk.activities
 
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Color
-import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
+import android.util.DisplayMetrics
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -21,19 +21,15 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import company.tap.checkout.TapCheckOutSDK
 import company.tap.checkout.internal.api.enums.AmountModificatorType
-import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.enums.Measurement
 import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.enums.CardType
-import company.tap.checkout.open.enums.SdkIdentifier
 import company.tap.checkout.open.enums.SdkMode
 import company.tap.checkout.open.interfaces.SessionDelegate
 import company.tap.checkout.open.models.*
 import company.tap.checkout.open.models.Receipt
-import company.tap.checkout.open.models.Tax
-import company.tap.checkoutsdk.BuildConfig
 import company.tap.checkoutsdk.R
 import company.tap.checkoutsdk.manager.SettingsManager
 import company.tap.taplocalizationkit.LocalizationManager
@@ -42,7 +38,6 @@ import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.models.DialogConfigurations
 import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
-import kotlinx.coroutines.*
 import java.math.BigDecimal
 import java.util.*
 
@@ -67,6 +62,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
         initializeTheme()
         settingsManager?.setPref(this)
+
+        displayMertrc()
 
         if(ThemeManager.currentTheme.isNotEmpty() && LocalizationManager.currentLocalized.toString().isNotEmpty()) {
 
@@ -113,6 +110,70 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
               }*/
 
         }
+    }
+
+    private fun displayMertrc() {
+        val displaymetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displaymetrics)
+        val ht = displaymetrics.heightPixels
+        var wt: Int = displaymetrics.widthPixels
+
+        if (resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK == Configuration.SCREENLAYOUT_SIZE_LARGE) {
+            Toast.makeText(this, "Large screen", Toast.LENGTH_LONG).show()
+        } else if (resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
+            Toast.makeText(this, "Normal sized screen", Toast.LENGTH_LONG)
+                .show()
+        } else if (resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK == Configuration.SCREENLAYOUT_SIZE_SMALL) {
+            Toast.makeText(this, "Small sized screen", Toast.LENGTH_LONG)
+                .show()
+        } else {
+            Toast.makeText(
+                this,
+                "Screen size is neither large, normal or small",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+
+
+
+        // Determine density
+        val metrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(metrics)
+        val density = metrics.densityDpi
+
+        if (density == DisplayMetrics.DENSITY_HIGH) {
+            Toast.makeText(
+                this,
+                "DENSITY_HIGH... Density is $density",
+                Toast.LENGTH_LONG
+            ).show()
+        } else if (density == DisplayMetrics.DENSITY_MEDIUM) {
+            Toast.makeText(
+                this,
+                "DENSITY_MEDIUM... Density is $density",
+                Toast.LENGTH_LONG
+            ).show()
+        } else if (density == DisplayMetrics.DENSITY_LOW) {
+            Toast.makeText(
+                this,
+                "DENSITY_LOW... Density is $density",
+                Toast.LENGTH_LONG
+            ).show()
+        } else {
+            Toast.makeText(
+                this, "Density is neither HIGH, MEDIUM OR LOW.  Density is "
+                        + density.toString(), Toast.LENGTH_LONG
+            )
+                .show()
+        }
+        // These are deprecated
+        // These are deprecated
+        val display = (getSystemService(Context.WINDOW_SERVICE) as WindowManager)
+            .defaultDisplay
+        val width = display.width
+        val height = display.height
+
+        println("width"+width+"////height"+height+"///model"+android.os.Build.MANUFACTURER+"///ht metrci"+ht+"///wt metric"+wt)
     }
 
     private fun initializeBottomSheet() {
