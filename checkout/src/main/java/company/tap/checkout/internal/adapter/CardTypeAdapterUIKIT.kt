@@ -230,6 +230,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
     fun resetSelection (){
         selectedPosition = -1
+        adapterGooglePay =ArrayList()
        //onCardSelectedActionListener.onCardSelectedAction(false, null)
 //        goPayOpenedfromMain(goPayOpened)
         notifyDataSetChanged()
