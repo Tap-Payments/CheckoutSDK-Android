@@ -53,6 +53,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     private var arrayListSaveCard:ArrayList<List<SavedCard>> = ArrayList()
     private var adapterContent: List<PaymentOption> = java.util.ArrayList()
     private var adapterGooglePay: List<PaymentOption> = java.util.ArrayList()
+    private var arrayListGoogle:ArrayList<String> = ArrayList()
     private var isShaking: Boolean = false
     private var goPayOpened: Boolean = false
     private var arrayModified : ArrayList<Any> = ArrayList()
@@ -128,11 +129,12 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
         }
 
+        if(adapterGooglePay.isNotEmpty())
         if(position - adapterContent.size < adapterGooglePay.size){
             return TYPE_GOOGLE_PAY
         }
 
-        else if(position.minus(adapterContent.size.plus(arrayListCards.size)) < adapterGooglePay.size){
+         if(position.minus(adapterContent.size.plus(arrayListCards.size)) < adapterGooglePay.size){
             val index = totalArraySize -adapterContent.size - adapterGooglePay.size
             if(arrayListCards[index-1].`object`.toUpperCase()==PaymentType.CARD.name){
                 arrayListSaveCard.clear()
@@ -300,14 +302,24 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
     private fun bindSavedCardData(holder: RecyclerView.ViewHolder, position: Int) {
         for (i in arrayListCards.indices) {
+            if(adapterGooglePay.isNotEmpty()){
+                GlideToVectorYou
+                    .init()
+                    .with(holder.itemView.context)
+                    .load(arrayListCards[position.minus(adapterContent.size).minus(adapterGooglePay.size)].image.toUri(), holder.itemView.imageView_amex)
+                holder.itemView.textViewCardDetails.text = maskCardNumber(arrayListCards[position.minus(adapterContent.size).minus(adapterGooglePay.size)].firstSix + arrayListCards[position.minus(adapterContent.size).minus(adapterGooglePay.size)].lastFour)
+                //holder.itemView.textViewCardDetails.text = adapterContent[holder.adapterPosition].chip1.title
+            }else{
+                // arrayListCards [position.minus(adapterContent.size)].image.let { holder.itemView.imageView_amex.loadSvg(it) }
 
-           // arrayListCards [position.minus(adapterContent.size)].image.let { holder.itemView.imageView_amex.loadSvg(it) }
-               GlideToVectorYou
-                .init()
-                .with(holder.itemView.context)
-                .load(arrayListCards[totalArraySize-position -adapterContent.size - adapterGooglePay.size].image.toUri(), holder.itemView.imageView_amex)
-            holder.itemView.textViewCardDetails.text = maskCardNumber(arrayListCards[totalArraySize-position -adapterContent.size - adapterGooglePay.size].firstSix + arrayListCards[totalArraySize-position -adapterContent.size - adapterGooglePay.size].lastFour)
-           //holder.itemView.textViewCardDetails.text = adapterContent[holder.adapterPosition].chip1.title
+                GlideToVectorYou
+                    .init()
+                    .with(holder.itemView.context)
+                    .load(arrayListCards[position.minus(adapterContent.size)].image.toUri(), holder.itemView.imageView_amex)
+                holder.itemView.textViewCardDetails.text = maskCardNumber(arrayListCards[position.minus(adapterContent.size)].firstSix + arrayListCards[position.minus(adapterContent.size)].lastFour)
+                //holder.itemView.textViewCardDetails.text = adapterContent[holder.adapterPosition].chip1.title
+            }
+
         }
     }
 

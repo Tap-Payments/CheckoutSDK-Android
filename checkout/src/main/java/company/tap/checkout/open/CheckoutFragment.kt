@@ -171,6 +171,10 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
                    resetTabAnimatedButton()
                     dismiss()
                 }
+                if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+                   bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                   bottomSheetDialog.behavior.isDraggable = true
+                }
             }
 
             override fun onSlide(p0: View, p1: Float) {

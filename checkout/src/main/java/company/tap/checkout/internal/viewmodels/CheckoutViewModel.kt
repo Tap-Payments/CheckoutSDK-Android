@@ -923,7 +923,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             currencyAdapter.updateAdapterData(allCurrencies.value as List<SupportedCurrencies>)
         }
         if (savedCardList.value?.isNotEmpty() == true) {
-            println("getCardType" + PaymentDataSource.getCardType())
+            println("savedCardList.value" + PaymentDataSource.getCardType())
             if (PaymentDataSource.getCardType() != null && PaymentDataSource.getCardType() != CardType.ALL) {
                 filterSavedCardTypes(savedCardList.value as List<SavedCard>)
             } else adapter.updateAdapterDataSavedCard(savedCardList.value as List<SavedCard>)
@@ -946,7 +946,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             java.util.ArrayList<PaymentOption>(paymentOptionsResponse.paymentOptions)
 
        // filterViewModels(PaymentDataSource.getCurrency()?.isoCode.toString())
-        PaymentDataSource.getSelectedCurrency()?.let { filterViewModels(it) }
+        filterViewModels(currentCurrency)
         // filterModels(PaymentDataSource.getCurrency()?.isoCode.toString())
         //  filterCardTypes(PaymentDataSource.getCurrency()?.isoCode.toString(),paymentOptionsWorker)
 
