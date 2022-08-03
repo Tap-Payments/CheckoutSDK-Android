@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         initializeTheme()
         settingsManager?.setPref(this)
 
-        displayMertrc()
+     //   displayMertrc()
 
         if(ThemeManager.currentTheme.isNotEmpty() && LocalizationManager.currentLocalized.toString().isNotEmpty()) {
 
