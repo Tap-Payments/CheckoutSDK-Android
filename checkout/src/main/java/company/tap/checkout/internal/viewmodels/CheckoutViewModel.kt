@@ -841,8 +841,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         if (paymentOptionsResponse?.supportedCurrencies != null && ::amountViewHolder.isInitialized) {
             currentCurrency = paymentOptionsResponse.currency
             for (i in paymentOptionsResponse.supportedCurrencies.indices) {
-                if (paymentOptionsResponse?.supportedCurrencies[i].currency == currentCurrency) {
-                    println("current amount value>>" + paymentOptionsResponse?.supportedCurrencies[i].amount)
+
+                if (paymentOptionsResponse.supportedCurrencies[i].currency == currentCurrency) {
+                    println("current amount value>>" + paymentOptionsResponse.supportedCurrencies[i].amount)
                     currentAmount =
                         CurrencyFormatter.currencyFormat(paymentOptionsResponse.supportedCurrencies[i].amount.toString())
 
@@ -1534,7 +1535,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
     @RequiresApi(Build.VERSION_CODES.N)
-    override fun onCurrencyClicked(currencySelected: String, currencyRate: BigDecimal, totalSelectedAmount: BigDecimal, previousSelectedCurrency: String) {
+    override fun onCurrencyClicked(currencySelected: String, currencyRate: BigDecimal, totalSelectedAmount: BigDecimal, previousSelectedCurrency: String,selectedCurrencySymbol:String) {
         currencyOldRate = currencyRate
         lastSelectedCurrency = previousSelectedCurrency
         if (::itemList.isInitialized) {
@@ -1571,14 +1572,24 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         selectedCurrency = currencySelected
         selectedTotalAmount = selectedAmount
         println("selectedAmount final>>" + selectedAmount)
-        println("selectedCurrency final>>" + selectedCurrency)
+        println("selectedCurrency final>>" + selectedCurrency.length)
         println("currentAmount final>>" + currentAmount)
         println("currentCurrency final>>" + currentCurrency)
-        amountViewHolder.updateSelectedCurrency(
+        println("selectedCurrencySymbol final>>" + selectedCurrencySymbol.length)
+        if(selectedCurrencySymbol.length == 2){
+            amountViewHolder.updateSelectedCurrency(
                 displayItemsOpen,
                 selectedAmount, selectedCurrency,
                 currentAmount, currentCurrency
-        )
+            )
+        }else{
+            amountViewHolder.updateSelectedCurrency(
+                displayItemsOpen,
+                selectedAmount, selectedCurrency,
+                currentAmount, currentCurrency ,selectedCurrencySymbol
+            )
+        }
+
             PaymentDataSource.setSelectedCurrency(selectedCurrency = selectedCurrency)
             PaymentDataSource.setSelectedAmount(currencyRate)
     if(paymentInputViewHolder.tapCardInputView.isNotEmpty()){
@@ -1586,6 +1597,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         paymentInputViewHolder.tapAlertView?.visibility = View.GONE
         paymentInputViewHolder.tabLayout.resetBehaviour()
     }
+
         adapter.resetSelection()
 
     if(::selectedCurrency.isInitialized){

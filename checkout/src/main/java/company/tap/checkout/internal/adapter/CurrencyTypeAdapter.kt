@@ -141,8 +141,9 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
                 onCurrencyChangedActionListener.onCurrencyClicked(
                         adapterContentCurrencies[position].currency.toString(),
                         it1.toBigDecimal(),
-                adapterContentCurrencies[position].amount,adapterContentCurrencies[previousIndex].currency.toString())
+                adapterContentCurrencies[position].amount,adapterContentCurrencies[previousIndex].currency.toString(),  adapterContentCurrencies[position].symbol.toString())
             }
+            println("selcted symbol"+adapterContentCurrencies[position].symbol)
              CheckoutViewModel().selectedCurrencyPos = adapterContentCurrencies[position].currency.toString()
              CheckoutViewModel().selectedAmountPos = adapterContentCurrencies[position].amount
 
