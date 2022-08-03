@@ -945,7 +945,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         paymentOptionsWorker =
             java.util.ArrayList<PaymentOption>(paymentOptionsResponse.paymentOptions)
 
-        filterViewModels(PaymentDataSource.getCurrency()?.isoCode.toString())
+       // filterViewModels(PaymentDataSource.getCurrency()?.isoCode.toString())
+        PaymentDataSource.getSelectedCurrency()?.let { filterViewModels(it) }
         // filterModels(PaymentDataSource.getCurrency()?.isoCode.toString())
         //  filterCardTypes(PaymentDataSource.getCurrency()?.isoCode.toString(),paymentOptionsWorker)
 
@@ -1780,18 +1781,18 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     private fun startSavedCardPaymentProcess(savedCard: SavedCard?) {
         val createTokenSavedCard =
-            CreateTokenSavedCard(savedCard?.id, PaymentDataSource?.getCustomer().identifier)
-        cardViewModel?.processEvent(
-                CardViewEvent.CreateTokenExistingCardEvent,
-                this,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                createTokenSavedCard
+            CreateTokenSavedCard(savedCard?.id, PaymentDataSource.getCustomer().identifier)
+        cardViewModel.processEvent(
+            CardViewEvent.CreateTokenExistingCardEvent,
+            this,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            createTokenSavedCard
         )
     }
 
@@ -1988,7 +1989,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private fun filteredByPaymentTypeAndCurrencyAndSortedList(
             list: java.util.ArrayList<PaymentOption>, paymentType: PaymentType, currency: String
     ): java.util.ArrayList<PaymentOption> {
-        var currencyFilter: String? = currency
+        var currencyFilter: String? = currency.toUpperCase()
         val filters: java.util.ArrayList<Utils.List.Filter<PaymentOption>> =
             java.util.ArrayList<Utils.List.Filter<PaymentOption>>()
 
@@ -2099,6 +2100,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
              }else{
                 adapter.updateAdapterData(webPaymentOptions)
                 paymentInputViewHolder.setDataFromAPI(cardPaymentOptions)
+
              }
         }
     }
