@@ -56,6 +56,13 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
     }
 
     private fun getAmountDataSourceFromAPIs(): AmountViewDataSource {
+        if(itemCountt?.equals("1") == true){
+            return AmountViewDataSource(
+                selectedCurr = originalAmount ,
+                selectedCurrText = transactionCurrency,
+                itemCount = itemCountt  + "  "+ LocalizationManager.getValue("item","Common")
+            )
+        }else
         return AmountViewDataSource(
             selectedCurr = originalAmount ,
             selectedCurrText = transactionCurrency,
@@ -69,13 +76,24 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
 
     override fun changeGroupAction(isOpen: Boolean) {
         isOpenedList = isOpen
-        if (isOpen)
-            changeDataSource(
+        if (isOpen) {
+            if(itemCountt?.contentEquals("1") == true){
+                changeDataSource(
+                    AmountViewDataSource(
+                        selectedCurr = originalAmount,
+                        selectedCurrText = transactionCurrency,
+                        itemCount = itemCountt + "  " + LocalizationManager.getValue("item", "Common")
+                    )
+                )
+            }else  changeDataSource(
                 AmountViewDataSource(
-                    selectedCurr = originalAmount ,
+                    selectedCurr = originalAmount,
                     selectedCurrText = transactionCurrency,
-                    itemCount = itemCountt + "  "+ LocalizationManager.getValue("items","Common")))
-        else {
+                    itemCount = itemCountt + "  " + LocalizationManager.getValue("items", "Common")
+                )
+            )
+
+        }else {
 //            if (::originalAmount?.isInitialized)
                 changeDataSource(
                     AmountViewDataSource(
@@ -107,25 +125,53 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
         }
         if (isOpen) {
             if(selectedCurrencySymbol?.isNotBlank() == true || selectedCurrencySymbol?.isNotEmpty() == true){
-                changeDataSource(
+                if(itemCountt?.equals("1") == true){
+                        changeDataSource(
+                            AmountViewDataSource(
+                                selectedCurr = selectedAmount,
+                                selectedCurrText = selectedCurrencySymbol,
+                                currentCurr = currentAmount,
+                                currentCurrText = currentCurrency,
+                                itemCount = itemCountt + "  " + LocalizationManager.getValue("item", "Common")
+                            )
+                        )
+                    }else{
+                    changeDataSource(
+                        AmountViewDataSource(
+                            selectedCurr = selectedAmount,
+                            selectedCurrText = selectedCurrencySymbol,
+                            currentCurr = currentAmount,
+                            currentCurrText = currentCurrency,
+                            itemCount = itemCountt + "  " + LocalizationManager.getValue("items", "Common")
+                        )
+                    )
+                    }
+
+            }else{
+                if(itemCountt?.equals("1") == true){
+                    changeDataSource(
+                        AmountViewDataSource(
+                            selectedCurr = selectedAmount,
+                            selectedCurrText = selectedCurrency,
+                            currentCurr = currentAmount,
+                            currentCurrText = currentCurrency,
+                            itemCount = itemCountt + "  " + LocalizationManager.getValue("item", "Common")
+                        )
+                    )
+                }else{
+                    changeDataSource(
                     AmountViewDataSource(
                         selectedCurr = selectedAmount,
-                        selectedCurrText = selectedCurrencySymbol,
+                        selectedCurrText = selectedCurrency,
                         currentCurr = currentAmount,
                         currentCurrText = currentCurrency,
                         itemCount = itemCountt + "  " + LocalizationManager.getValue("items", "Common")
                     )
-                )
-            }else
-            changeDataSource(
-                AmountViewDataSource(
-                    selectedCurr = selectedAmount,
-                    selectedCurrText = selectedCurrency,
-                    currentCurr = currentAmount,
-                    currentCurrText = currentCurrency,
-                    itemCount = itemCountt + "  " + LocalizationManager.getValue("items", "Common")
-                )
-            )
+                    )
+                }
+            }
+
+
         }else{
             if(selectedCurrencySymbol?.isNotBlank() == true || selectedCurrencySymbol?.isNotEmpty() == true){
                 changeDataSource(
