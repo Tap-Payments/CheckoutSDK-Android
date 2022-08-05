@@ -13,6 +13,7 @@ import company.tap.checkoutsdk.utils.Validator
 import java.util.*
 
 open class CustomerCreateActivity : AppCompatActivity() {
+    private var customer_id: AppCompatEditText? = null
     private var name: AppCompatEditText? = null
     private var middleName: AppCompatEditText? = null
     private var lastName: AppCompatEditText? = null
@@ -21,6 +22,7 @@ open class CustomerCreateActivity : AppCompatActivity() {
     private var mobile: AppCompatEditText? = null
 
 
+    private var customerid_il: TextInputLayout? = null
     private var name_l: TextInputLayout? = null
     private var middlename_l: TextInputLayout? = null
     private var lastname_l: TextInputLayout? = null
@@ -61,6 +63,7 @@ open class CustomerCreateActivity : AppCompatActivity() {
     }
 
     private fun bindViews() {
+        customer_id = findViewById(R.id.customer_id)
         name = findViewById(R.id.customer_name)
         middleName = findViewById(R.id.middlename)
         lastName = findViewById(R.id.lastname)
@@ -68,6 +71,7 @@ open class CustomerCreateActivity : AppCompatActivity() {
         sdn = findViewById(R.id.sdn)
         mobile = findViewById(R.id.customer_mobile)
 
+        customerid_il = findViewById(R.id.customerid_il)
         name_l = findViewById(R.id.name_il)
         middlename_l = findViewById(R.id.middlename_il)
         lastname_l = findViewById(R.id.lastname_il)
@@ -77,6 +81,7 @@ open class CustomerCreateActivity : AppCompatActivity() {
     }
 
     private fun populateCustomerFields(customer: CustomerViewModel?) {
+        customer_id?.setText(customer?.getRef())
         name?.setText(customer?.getName())
         middleName?.setText(customer?.getMiddleName())
         lastName?.setText(customer?.getLastName())
@@ -100,6 +105,7 @@ open class CustomerCreateActivity : AppCompatActivity() {
             ) {
                 println("inside: $operation")
                 SettingsManager.saveCustomer(
+                    customer_id?.text.toString().trim { it <= ' ' },
                     name?.text.toString().trim { it <= ' ' },
                     middleName?.text.toString().trim { it <= ' ' },
                     lastName?.text.toString().trim { it <= ' ' },

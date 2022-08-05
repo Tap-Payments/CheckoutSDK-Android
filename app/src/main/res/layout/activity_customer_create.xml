@@ -155,7 +155,26 @@
         </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_margin="8dp"
+        android:id="@+id/customerid_il"
+        android:hint="Customer Name"
+        app:errorEnabled="true"
+        android:textColorHint="@color/black"
+        app:hintTextAppearance="@style/TextInputLayout.Hint">
 
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/customer_id"
+            style="@style/EditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="start"
+            android:text="cus_TS012520211349Za012907577"
+            app:backgroundTint="@color/mercury" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
 
 

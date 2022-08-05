@@ -40,6 +40,7 @@ object SettingsManager {
     }
 
     fun saveCustomer(
+        customerid:String?,
         name: String,
         middle: String,
         last: String,
@@ -58,7 +59,7 @@ object SettingsManager {
         if (customersList == null) customersList = ArrayList<CustomerViewModel?>()
         customersList.add(last.let {
 
-            CustomerViewModel(null, name, middle, it, email, sdn, mobile)
+            CustomerViewModel(customerid, name, middle, it, email, sdn, mobile)
 
         })
         val data: String = gson.toJson(customersList)
@@ -121,9 +122,10 @@ object SettingsManager {
             if (ctx != null) {
                 newCustomer?.getSdn()?.let {
                     saveCustomer(
+                        newCustomer.getRef(),
                         newCustomer.getName(),
-                        newCustomer?.getMiddleName()!!,
-                        newCustomer?.getLastName()!!,
+                        newCustomer.getMiddleName()!!,
+                        newCustomer.getLastName()!!,
                         newCustomer.getEmail(),
                         it,
                         newCustomer.getMobile(), ctx
