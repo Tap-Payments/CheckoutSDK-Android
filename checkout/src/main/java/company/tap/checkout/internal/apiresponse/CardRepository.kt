@@ -21,9 +21,11 @@ import company.tap.checkout.internal.api.responses.*
 import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.interfaces.IPaymentDataProvider
 import company.tap.checkout.internal.utils.AmountCalculator
+import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.CheckOutActivity
 import company.tap.checkout.open.controller.SDKSession
+import company.tap.checkout.open.controller.SDKSession.activity
 import company.tap.checkout.open.controller.SDKSession.contextSDK
 import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
 import company.tap.checkout.open.controller.SessionManager
@@ -409,6 +411,11 @@ class CardRepository : APIRequestCallback {
                    CardViewModel().processEvent(CardViewEvent.PaymentEvent, CheckoutViewModel(),null,null,null,null,null,null,null,null,null,
                             supportFragmentManager,contextSDK)
                     if (tabAnimatedActionButton != null) {
+                        activity?.let { it1 ->
+                            CustomUtils.getDeviceDisplayMetrics(
+                                it1
+                            )
+                        }?.let { it2 -> tabAnimatedActionButton?.setDisplayMetrics(it2) }
                         tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
                     }
                 }
