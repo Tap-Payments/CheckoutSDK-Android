@@ -415,7 +415,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         inLineCardLayout.visibility = View.GONE
         amountViewHolder.readyToScanVisibility(false)
         saveCardSwitchHolder?.view?.cardviewSwitch?.cardElevation = 0f
-
+        SDKSession.activity?.let {
+            CustomUtils.getDeviceDisplayMetrics(
+                it
+            )
+        }?.let { saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setDisplayMetrics(it) }
 
     }
 
