@@ -1388,14 +1388,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 "rightTitle"
         )
         val title: String = LocalizationManager.getValue("deleteSavedCardTitle", "SavedCardTitle")
+        val message: String = LocalizationManager.getValue(
+            "deleteSavedCardMsg",
+            "SavedCardTitle"
+        )
         CustomUtils.showDialog(
-                "$title$maskedCardNumber ?",
-                LocalizationManager.getValue(
-                        "deleteMessage",
-                        "GoPay"
-                ),
+                "$title",
+                "$message $maskedCardNumber ?",
                 context,
-                2,
+                4,
                 this, null, null, false
         )
         selectedItemsDel = itemId

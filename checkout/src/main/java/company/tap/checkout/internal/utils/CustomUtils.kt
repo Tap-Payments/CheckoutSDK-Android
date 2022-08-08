@@ -51,14 +51,26 @@ object CustomUtils {
                     baseLayoutManager?.dialogueExecuteExtraFees("NO",paymentType,savedCardsModel)
                 }
             }
+        }else if (btnType == 4) {
+            builder.setPositiveListener(LocalizationManager.getValue("deleteSavedCardButtonDelete","SavedCardTitle")) { dialog ->
+                dialog.dismiss()
+                baseLayoutManager?.didDialogueExecute("YES", cardTypeDialog)
+
+            }
+            builder.setNegativeListener(LocalizationManager.getValue("deleteSavedCardButtonCancel","SavedCardTitle")) { dialog ->
+                dialog.dismiss()
+                baseLayoutManager?.didDialogueExecute("NO", cardTypeDialog)
+            }
+                .build().show()
         }
         else {
             builder.setPositiveListener(LocalizationManager.getValue("ok","Common")) { dialog ->
                 dialog.dismiss()
                 baseLayoutManager?.didDialogueExecute("OK",cardTypeDialog)
             }
+                .build().show()
         }
-       .build().show()
+
 
     }
 
