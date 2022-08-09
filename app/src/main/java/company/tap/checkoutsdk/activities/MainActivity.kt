@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         initializeTheme()
         settingsManager?.setPref(this)
 
-     //   displayMertrc()
+        //displayMertrc()
 
         if(ThemeManager.currentTheme.isNotEmpty() && LocalizationManager.currentLocalized.toString().isNotEmpty()) {
 
@@ -299,6 +299,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
         sdkSession.setPaymentType("ALL")  //** Merchant can pass paymentType
 
+
         // Set Taxes array list
         sdkSession.setTaxes(ArrayList()) // ** Optional ** you can pass empty array list
          // sdkSession.setTaxes(settingsManager?.getTaxes()) // ** Optional ** you can pass empty array list
@@ -385,7 +386,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         if(displayMetrics == DisplayMetrics.DENSITY_450 ||displayMetrics == DisplayMetrics.DENSITY_420 ||displayMetrics == DisplayMetrics.DENSITY_400||displayMetrics == DisplayMetrics.DENSITY_440||displayMetrics == DisplayMetrics.DENSITY_XXHIGH){
 
             arguments.putFloatArray(DialogConfigurations.Corners, floatArrayOf(25f, 25f, 0f, 0f))
-        }else if (displayMetrics == DisplayMetrics.DENSITY_300||displayMetrics == DisplayMetrics.DENSITY_XHIGH || displayMetrics == DisplayMetrics.DENSITY_340||displayMetrics == DisplayMetrics.DENSITY_360){
+        }else if (displayMetrics == DisplayMetrics.DENSITY_260||displayMetrics == DisplayMetrics.DENSITY_280||displayMetrics == DisplayMetrics.DENSITY_300||displayMetrics == DisplayMetrics.DENSITY_XHIGH || displayMetrics == DisplayMetrics.DENSITY_340||displayMetrics == DisplayMetrics.DENSITY_360){
             arguments.putFloatArray(DialogConfigurations.Corners, floatArrayOf(5f, 5f, 0f, 0f))
         }
         arguments.putInt(DialogConfigurations.Color, Color.TRANSPARENT)

@@ -454,7 +454,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     private fun maskCardNumber(cardInput: String): String {
         val maskLen: Int = cardInput.length - 4
         if (maskLen <= 0) return cardInput // Nothing to mask
-        return (cardInput).replaceRange(0, 6, "••••")
+        return (cardInput).replaceRange(0, 6, "•••• ")
     }
     /**
      * Determine the viewer's ability to pay with a payment method supported by your app and display a
