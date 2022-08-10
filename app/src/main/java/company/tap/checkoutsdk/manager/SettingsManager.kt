@@ -16,10 +16,7 @@ import company.tap.checkout.internal.api.models.Quantity
 import company.tap.checkout.open.enums.SdkMode
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.models.*
-import company.tap.checkoutsdk.viewmodels.CustomerViewModel
-import company.tap.checkoutsdk.viewmodels.PaymentItemViewModel
-import company.tap.checkoutsdk.viewmodels.ShippingViewModel
-import company.tap.checkoutsdk.viewmodels.TaxesViewModel
+import company.tap.checkoutsdk.viewmodels.*
 import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList
@@ -65,7 +62,6 @@ object SettingsManager {
         val data: String = gson.toJson(customersList)
         writeCustomersToPreferences(data, preferences)
     }
-
 
     fun saveShipping(
         name: String,
@@ -134,6 +130,7 @@ object SettingsManager {
             }
         }
     }
+
 
     fun saveItems(
         itemname: String,
@@ -312,6 +309,11 @@ object SettingsManager {
         editor.commit()
     }
 
+    private fun writeSDKToPreferences(data: String, preferences: SharedPreferences) {
+        val editor = preferences.edit()
+        editor.putString("sdkconfig", data)
+        editor.commit()
+    }
     fun getRegisteredCustomers(ctx: Context?): List<CustomerViewModel> {
         val preferences = PreferenceManager.getDefaultSharedPreferences(ctx)
         val gson = Gson()
@@ -358,7 +360,7 @@ object SettingsManager {
 
         // check if customer id is in pref.
       //  customer =
-        if (customersList != null) {
+        if (!customersList.isNullOrEmpty() && customersList.isNotEmpty()) {
             println("preparing data source with customer ref :" + customersList[0].getRef())
             customer= TapCustomer(
                 customersList[0].getRef(),
@@ -537,6 +539,7 @@ object SettingsManager {
         val op_mode = pref!!.getString(key, SdkMode.SAND_BOX.name)
         return if (op_mode == SdkMode.SAND_BOX.name) SdkMode.SAND_BOX else SdkMode.PRODUCTION
     }
+
 
     /**
      * get Transaction mode
