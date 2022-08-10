@@ -387,7 +387,7 @@ object  SDKSession : APIRequestCallback {
                 sessionActive = true
                 startSDK(supportFragmentManager, context,activity)
                 this.tabAnimatedActionButton = payButtonView
-                if (tabAnimatedActionButton != null) {
+               if (tabAnimatedActionButton != null) {
                      tabAnimatedActionButton?.setDisplayMetrics(CustomUtils.getDeviceDisplayMetrics(activity))
                     tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
                 }

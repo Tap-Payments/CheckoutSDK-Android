@@ -416,12 +416,13 @@ class CardRepository : APIRequestCallback {
                                 it1
                             )
                         }?.let { it2 -> tabAnimatedActionButton?.setDisplayMetrics(it2) }
-                        tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
+                       // tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
                     }
                 }
 
             }else {
                 sdkSession.sessionDelegate?.sessionFailedToStart()
+                 tabAnimatedActionButton?.changeButtonState(ActionButtonState.RESET)
             }
 
         }
@@ -431,9 +432,9 @@ class CardRepository : APIRequestCallback {
                     paymentOptionsResponse = Gson().fromJson(it, PaymentOptionsResponse::class.java)
                     PaymentDataSource.setPaymentOptionsResponse(paymentOptionsResponse)
 
-                    if (tabAnimatedActionButton != null) {
+                   /* if (tabAnimatedActionButton != null) {
                         tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
-                    }
+                    }*/
                 }
 
             }else {

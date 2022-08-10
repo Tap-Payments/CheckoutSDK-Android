@@ -149,7 +149,7 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
         }
 
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
-
+        sessionDelegate?.sessionIsStarting()
         bottomSheetLayout?.let {
             viewModel.setBottomSheetLayout(it)
         }
@@ -179,7 +179,7 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
             }
         }
          enableSections()
-        sessionDelegate?.sessionIsStarting()
+
         dialog?.window?.attributes?.windowAnimations = R.style.DialogAnimation
 
         bottomSheetDialog.setOnShowListener {
