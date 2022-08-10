@@ -866,7 +866,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
          * PaymentDatasource.getItems()  >>>>>>>> */
         if (PaymentDataSource.getItems() != null) {
             itemList = PaymentDataSource.getItems()!!
-            unModifiedItemList = itemList
+         //  unModifiedItemList = itemList
+            unModifiedItemList = itemList.map{it.copy()}
         }
 
 
@@ -1543,24 +1544,31 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     override fun onCurrencyClicked(currencySelected: String, currencyRate: BigDecimal, totalSelectedAmount: BigDecimal, previousSelectedCurrency: String,selectedCurrencySymbol:String) {
         currencyOldRate = currencyRate
         lastSelectedCurrency = previousSelectedCurrency
+        println("unModifiedItemList"+unModifiedItemList)
         if (::itemList.isInitialized) {
             for (i in itemList.indices) {
+                itemList[i].amountPerUnit = unModifiedItemList[i].amountPerUnit.times(currencyRate)
+                //itemList[i].totalAmount = currencyOldRate?.div(currencyRate)
+                itemList[i].totalAmount =  unModifiedItemList[i].totalAmount?.times(currencyRate)
 
-               if( currencySelected !="KWD" && lastSelectedCurrency !="KWD"){
-                    itemList[i].amountPerUnit = currencyOldRate?.div(currencyRate)
-                    itemList[i].amountPerUnit =  itemList[i].amountPerUnit?.times(currencyRate)
-                   itemList[i].totalAmount = currencyOldRate?.div(currencyRate)
-                   itemList[i].totalAmount =  itemList[i].totalAmount?.times(currencyRate)
-
-
-
-               }  else if(currencySelected == "KWD"){
-                    currentCalculatedAmount = itemList[i].amountPerUnit
-                    itemList[i].amountPerUnit = (currencyOldRate?.div(currencyRate))
-                   itemList[i].totalAmount = currencyOldRate?.div(currencyRate)
+              // if( currencySelected !="KWD" && lastSelectedCurrency !="KWD"){
+            /*   if( currencySelected !=PaymentDataSource.getCurrency()?.isoCode && lastSelectedCurrency !=PaymentDataSource.getCurrency()?.isoCode){
+                 //   itemList[i].amountPerUnit = currencyOldRate?.div(currencyRate)!!
+                    itemList[i].amountPerUnit = unModifiedItemList[i].amountPerUnit.times(currencyRate)
+                        //itemList[i].totalAmount = currencyOldRate?.div(currencyRate)
+                   itemList[i].totalAmount =  unModifiedItemList[i].totalAmount?.times(currencyRate)
 
 
-               }
+
+             //  }  else if(currencySelected == PaymentDataSource.getSelectedCurrency()){
+               }  else if(currencySelected == PaymentDataSource.getCurrency()?.isoCode){
+                   // currentCalculatedAmount = itemList[i].amountPerUnit
+                   // itemList[i].amountPerUnit = (currencyOldRate?.div(currencyRate)!!)
+                    itemList[i].amountPerUnit = unModifiedItemList[i].amountPerUnit.div(currencyRate)
+                   itemList[i].totalAmount = unModifiedItemList[i].totalAmount?.div(currencyRate)
+
+
+               }*/
                 println("item per unit >>" + itemList[i].amountPerUnit)
 
             }

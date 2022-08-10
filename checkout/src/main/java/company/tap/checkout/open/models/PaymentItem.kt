@@ -16,40 +16,14 @@ import java.util.*
 Copyright (c) 2021    Tap Payments.
 All rights reserved.
  **/
-class PaymentItem(name: String,
-                  @Nullable description: String,
-                  quantity: Quantity,
-                  amountPerUnit: BigDecimal,
-                  @Nullable discount: AmountModificator?,
-                  @Nullable taxes: ArrayList<Tax>?){
-    @SerializedName("name")
-    @Expose
-    var name: String? = null
+data class PaymentItem(var name: String,
+                  @Nullable var description: String,
+                 var quantity: Quantity,
+                 var amountPerUnit: BigDecimal,
+                  @Nullable var discount: AmountModificator?,
+                  @Nullable var taxes: ArrayList<Tax>?, var totalAmount: BigDecimal? = null){
 
 
-    @SerializedName("description")
-    @Expose
-     var description: String? = null
-
-    @SerializedName("quantity")
-    @Expose
-     var quantity: Quantity? = null
-
-    @SerializedName("amount_per_unit")
-    @Expose
-     var amountPerUnit: BigDecimal? = null
-
-    @SerializedName("discount")
-    @Expose
-     var discount: AmountModificator? = null
-
-    @SerializedName("taxes")
-    @Expose
-     var taxes: ArrayList<Tax>? = null
-
-    @SerializedName("total_amount")
-    @Expose
-     var totalAmount: BigDecimal? = null
 
 
     init {
