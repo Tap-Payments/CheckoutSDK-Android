@@ -41,6 +41,9 @@ class SettingsActivity : AppCompatActivity() {
             bindPreferenceSummaryToValue(findPreference("key_sdk_transaction_mode"))
             bindPreferenceSummaryToValue(findPreference("key_sdk_transaction_currency"))
             bindPreferenceSummaryToValue(findPreference("key_amount_name"))
+            bindPreferenceSummaryToValue(findPreference("key_package_name"))
+             bindPreferenceSummaryToValue(findPreference("key_test_name"))
+             bindPreferenceSummaryToValue(findPreference("key_live_name"))
             bindPreferenceSummaryToValue(findPreference("key_sdk_payment_type"))
             bindPreferenceSummaryToValue(findPreference("key_sdk_card_type"))
             bindPreferenceSummaryToValue(findPreference("showImageKey"))
@@ -57,7 +60,7 @@ class SettingsActivity : AppCompatActivity() {
         private val sBindPreferenceSummaryToValueListener = Preference.OnPreferenceChangeListener { preference, value ->
 
             val stringValue = value.toString()
-            println("stringValue>>" + stringValue)
+           // println("stringValue>>" + stringValue)
 
             if (preference is ListPreference) {
                 // For list preferences, look up the correct display value in
@@ -87,11 +90,22 @@ class SettingsActivity : AppCompatActivity() {
 
             }else if (preference is EditTextPreference) {
 
-                preference.setOnBindEditTextListener { editText->
-                    editText.inputType = InputType.TYPE_CLASS_NUMBER
 
-                }
                 if (preference.getKey().equals("key_amount_name")) {
+                    preference.setOnBindEditTextListener { editText->
+                        editText.inputType = InputType.TYPE_CLASS_NUMBER
+
+                    }
+                    // update the changed gallery name to summary filed
+                    preference.setSummary(stringValue)
+                }
+               else if (preference.getKey().equals("key_package_name")) {
+                    // update the changed gallery name to summary filed
+                    preference.setSummary(stringValue)
+                } else if (preference.getKey().equals("key_test_name")) {
+                    // update the changed gallery name to summary filed
+                    preference.setSummary(stringValue)
+                } else if (preference.getKey().equals("key_live_name")) {
                     // update the changed gallery name to summary filed
                     preference.setSummary(stringValue)
                 }

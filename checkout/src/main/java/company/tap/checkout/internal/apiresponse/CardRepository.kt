@@ -1,8 +1,11 @@
 package company.tap.checkout.internal.apiresponse
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
+import android.os.Handler
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentManager
@@ -35,11 +38,13 @@ import company.tap.checkout.open.models.*
 import company.tap.checkout.open.models.AuthorizeAction
 import company.tap.checkout.open.models.Receipt
 import company.tap.checkout.open.models.Reference
+import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapnetworkkit.connection.NetworkApp
 import company.tap.tapnetworkkit.controller.NetworkController
 import company.tap.tapnetworkkit.enums.TapMethodType
 import company.tap.tapnetworkkit.exception.GoSellError
 import company.tap.tapnetworkkit.interfaces.APIRequestCallback
+import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog.Companion.TAG
 import io.reactivex.plugins.RxJavaPlugins
@@ -840,8 +845,20 @@ class CardRepository : APIRequestCallback {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onFailure(requestCode: Int, errorDetails: GoSellError?) {
+        if (requestCode == CONFIG_CODE) {
+            sdkSession.getListener()?.sdkError(errorDetails)
+            viewModel.handleSuccessFailureResponseButton(
+                "failure",
+                null,
+                null
+
+            )
+        }
         println("response body CHARGE_REQ_CODE>>" + errorDetails?.errorBody)
+
+
         errorDetails?.let {
             if (it.throwable != null) {
                 resultObservable.onError(it.throwable)
@@ -856,22 +873,8 @@ class CardRepository : APIRequestCallback {
                 try {
                     // resultObservable.onError(Throwable(it.errorMessage))
                     RxJavaPlugins.setErrorHandler(Throwable::printStackTrace)
-                    sdkSession.getListener()?.backendUnknownError(errorDetails)
+                   // sdkSession.getListener()?.backendUnknownError(errorDetails)
 
-                    if(::chargeResponse.isInitialized){
-                        viewModel?.handleSuccessFailureResponseButton(
-                            "failure",
-                            chargeResponse.authenticate,
-                            chargeResponse
-
-                        )
-                    }else{
-                        viewModel?.handleSuccessFailureResponseButton(
-                            "failure",
-                            null,
-                            null
-                        )
-                    }
 
                 }catch (e: Exception){
 

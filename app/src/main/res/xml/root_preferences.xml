@@ -32,6 +32,25 @@
             android:key="key_sdk_transaction_mode"
             android:summary="Select Transaction Mode"
             android:title="Transaction Mode" />
+
+        <EditTextPreference
+            android:defaultValue="company.tap.goSellSDKExample"
+            android:inputType="text"
+            android:key="key_package_name"
+            android:summary="key_package_value"
+            android:title="Enter the package ID" />
+        <EditTextPreference
+            android:defaultValue="sk_test_kovrMB0mupFJXfNZWx6Etg5y"
+            android:inputType="text"
+            android:key="key_test_name"
+            android:summary="key_test_value"
+            android:title="Enter the Test Key" />
+        <EditTextPreference
+            android:defaultValue="sk_live_QglH8V7Fw6NPAom4qRcynDK2"
+            android:inputType="text"
+            android:key="key_live_name"
+            android:summary="key_live_value"
+            android:title="Enter the Live Key" />
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="threeDSecureKey"
@@ -78,7 +97,17 @@
             android:key="key_sdk_card_type"
             android:summary="Select Card Type"
             android:title="Card Type" />
+        <Preference android:title="Set SDK Keys">
+            <intent
 
+                android:action="SETTING_START_CONFIG_SDK_ACTIVITY"
+                android:targetClass="company.tap.checkoutsdk.activities.ConfigSDKActivity"
+                android:targetPackage="company.tap.checkoutsdk" >
+                <extra
+                    android:name="operation"
+                    android:value="edit" />
+            </intent>
+        </Preference>
         <Preference android:title="Select Shipping">
             <intent
                 android:action="SETTING_START_SHIPING_ACTIVITY"

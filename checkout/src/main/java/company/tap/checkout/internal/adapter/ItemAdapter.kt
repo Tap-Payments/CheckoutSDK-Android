@@ -107,6 +107,8 @@ class ItemAdapter :
                     )
                 }
             }
+
+
         }else{
            // descriptionTextView.text = adapterContentItems[0].description
             descriptionTextView.visibility = if (isExpanded) View.VISIBLE else View.GONE

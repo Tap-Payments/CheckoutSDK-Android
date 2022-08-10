@@ -25,6 +25,7 @@ import company.tap.checkout.internal.api.enums.Measurement
 import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession
+import company.tap.checkout.open.controller.SessionManager
 import company.tap.checkout.open.enums.CardType
 import company.tap.checkout.open.enums.SdkMode
 import company.tap.checkout.open.interfaces.SessionDelegate
@@ -232,9 +233,9 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
     private fun initializeSDK() {
         TapCheckOutSDK().init(
                 this,
-                "sk_test_kovrMB0mupFJXfNZWx6Etg5y",
-                "sk_live_QglH8V7Fw6NPAom4qRcynDK2",
-               "company.tap.goSellSDKExample"
+            settingsManager?.getString("key_test_name","sk_test_kovrMB0mupFJXfNZWx6Etg5y"),
+            settingsManager?.getString("key_live_name","sk_live_QglH8V7Fw6NPAom4qRcynDK2"),
+            settingsManager?.getString("key_package_name","company.tap.goSellSDKExample")
 
         )
 
@@ -687,11 +688,24 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         println("invalidCardDetails>>>>>")
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun backendUnknownError(message: GoSellError?) {
         println("backendUnknownError>>>>>" + message)
-        //  payButton?.changeButtonState(ActionButtonState.ERROR)
+     payButton?.changeButtonState(ActionButtonState.RESET)
+        payButton.setButtonDataSource(
+            true,
+            this.let { LocalizationManager.getLocale(it).language },
+            LocalizationManager.getValue("pay", "ActionButton"),
+            Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
+            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
+        )
+        payButton?.setOnClickListener {
+            sdkSession.setButtonView(payButton, this, supportFragmentManager, this)
+        }
+
 
     }
+
 
     override fun invalidTransactionMode() {
         println("invalidTransactionMode>>>>>")
@@ -709,6 +723,21 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun getStatusSDK(response :String ? ,charge: Charge?) {
+        if(charge==null) {
+            payButton.changeButtonState(ActionButtonState.RESET)
+            SessionManager.setActiveSession(false)
+            payButton.setButtonDataSource(
+                true,
+                this.let { LocalizationManager.getLocale(it).language },
+                LocalizationManager.getValue("pay", "ActionButton"),
+                Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
+                Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
+            )
+            payButton.setOnClickListener {
+                payButton.changeButtonState(ActionButtonState.LOADING)
+                SDKSession.startSDK(supportFragmentManager, this, this)
+            }
+        }
     }
 
     override fun onResume() {

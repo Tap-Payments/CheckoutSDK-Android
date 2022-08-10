@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".activities.ConfigSDKActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.ItemActivity"
             android:exported="false" />
         <activity android:name=".activities.TaxesCreateActivity" />
