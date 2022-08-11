@@ -20,13 +20,15 @@
         <entry key="checkout/src/main/res/drawable-xxhdpi/googlepay_button_content.xml" value="0.196" />
         <entry key="checkout/src/main/res/drawable-xxhdpi/googlepay_button_no_shadow_background.xml" value="0.196" />
         <entry key="checkout/src/main/res/drawable-xxhdpi/googlepay_button_overlay.xml" value="0.196" />
-        <entry key="checkout/src/main/res/drawable/layout_bg.xml" value="0.1925" />
+        <entry key="checkout/src/main/res/drawable/layout_bb.xml" value="0.1815" />
+        <entry key="checkout/src/main/res/drawable/layout_bg.xml" value="0.45" />
         <entry key="checkout/src/main/res/layout/activity_check_out.xml" value="0.20260416666666667" />
         <entry key="checkout/src/main/res/layout/activity_check_out1.xml" value="0.16631038905515177" />
         <entry key="checkout/src/main/res/layout/amountview_layout.xml" value="0.2015625" />
         <entry key="checkout/src/main/res/layout/businessview_layout.xml" value="0.18802083333333333" />
         <entry key="checkout/src/main/res/layout/cardviewholder_layout1.xml" value="0.14322916666666666" />
-        <entry key="checkout/src/main/res/layout/fragment_checkouttaps.xml" value="0.20260416666666667" />
+        <entry key="checkout/src/main/res/layout/fragment_checkouttaps.xml" value="0.165" />
+        <entry key="checkout/src/main/res/layout/fragment_checkouttaps_full.xml" value="0.13852073535699017" />
         <entry key="checkout/src/main/res/layout/fragment_web.xml" value="0.15775972637879435" />
         <entry key="checkout/src/main/res/layout/googlepay_button.xml" value="0.335" />
         <entry key="checkout/src/main/res/layout/item_currency_rows.xml" value="0.2477355072463768" />
@@ -35,6 +37,7 @@
         <entry key="checkout/src/main/res/layout/item_knet.xml" value="0.2477355072463768" />
         <entry key="checkout/src/main/res/layout/item_save_cards.xml" value="0.20104166666666667" />
         <entry key="checkout/src/main/res/layout/item_saved_card.xml" value="0.1923899102180419" />
+        <entry key="checkout/src/main/res/layout/layout_background.xml" value="0.13852073535699017" />
         <entry key="checkout/src/main/res/layout/payment_inputt_layout.xml" value="0.25" />
         <entry key="checkout/src/main/res/layout/switch_layout.xml" value="0.1" />
       </map>
