@@ -8,6 +8,7 @@ import android.graphics.drawable.ShapeDrawable
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.text.format.DateFormat
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -89,6 +90,7 @@ import kotlinx.android.synthetic.main.switch_layout.view.*
 import org.json.JSONException
 import org.json.JSONObject
 import java.math.BigDecimal
+import java.util.*
 import kotlin.properties.Delegates
 
 
@@ -2004,7 +2006,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun setNfcCardDetails(emvCard: TapEmvCard) {
         paymentInputViewHolder.tapCardInputView.setCardNumber(emvCard.cardNumber)
-        convertDateString(emvCard.expireDate.toString())
+        convertDateString(emvCard)
+
 
     }
 
@@ -2021,11 +2024,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
 
-    private fun convertDateString(date: String) {
-        val dateParts: List<String> = date.split(" ")
-        val month = dateParts[2].toInt()
-        val year = dateParts[5].toInt()
-        paymentInputViewHolder.tapCardInputView.setExpiryDate(month, year)
+    private fun convertDateString(emvCard: TapEmvCard) {
+        println("emvCard.getExpireDate()"+emvCard.getExpireDate())
+        val dateParts: CharSequence? = DateFormat.format("M/y", emvCard.getExpireDate())
+        val month =  (dateParts)?.substring(0,1)?.toInt()
+        val year = (dateParts)?.substring(2,4)?.toInt()
+        if(month!=null && year!=null)
+            paymentInputViewHolder.tapCardInputView.setExpiryDate(month, year)
+
+
+
     }
 
     private fun filteredByPaymentTypeAndCurrencyAndSortedList(
