@@ -2025,7 +2025,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
     private fun convertDateString(emvCard: TapEmvCard) {
-        println("emvCard.getExpireDate()"+emvCard.getExpireDate())
+      //  println("emvCard.getExpireDate()"+emvCard.getExpireDate())
         val dateParts: CharSequence? = DateFormat.format("M/y", emvCard.getExpireDate())
         val month =  (dateParts)?.substring(0,1)?.toInt()
         val year = (dateParts)?.substring(2,4)?.toInt()
