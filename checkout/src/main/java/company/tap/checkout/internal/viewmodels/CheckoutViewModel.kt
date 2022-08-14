@@ -2025,15 +2025,22 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
     private fun convertDateString(emvCard: TapEmvCard) {
-      //  println("emvCard.getExpireDate()"+emvCard.getExpireDate())
+        //  println("emvCard.getExpireDate()"+emvCard.getExpireDate())
         val dateParts: CharSequence? = DateFormat.format("M/y", emvCard.getExpireDate())
-        val month =  (dateParts)?.substring(0,1)?.toInt()
-        val year = (dateParts)?.substring(2,4)?.toInt()
-        if(month!=null && year!=null)
-            paymentInputViewHolder.tapCardInputView.setExpiryDate(month, year)
+        if (dateParts?.contains("/") == true) {
+            if (dateParts.length <= 2) {
+                return
+            } else {
+                if (dateParts.length >= 5 || dateParts.length >= 4) {
+                    val month = (dateParts).substring(0, 1).toInt()
+                    val year = (dateParts).substring(2, 4).toInt()
+                    paymentInputViewHolder.tapCardInputView.setExpiryDate(month, year)
+                }
+
+            }
 
 
-
+        }
     }
 
     private fun filteredByPaymentTypeAndCurrencyAndSortedList(
