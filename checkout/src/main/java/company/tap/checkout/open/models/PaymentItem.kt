@@ -73,11 +73,11 @@ data class PaymentItem(var name: String,
      *
      * @return the plain amount
      */
-    fun getPlainAmount(): BigDecimal {
+    fun getPlainAmount(): BigDecimal? {
         println("  #### getPlainAmount : " + getAmountPerUnit())
         System.out.println("  #### this.getQuantity().getValue() : " + getQuantity()?.value)
         println("  #### result : " + getAmountPerUnit()!!.multiply(getQuantity()?.value))
-        return getAmountPerUnit()!!.multiply(getQuantity()?.value)
+        return getAmountPerUnit()?.multiply(getQuantity()?.value)
     }
 
     /**
@@ -89,7 +89,7 @@ data class PaymentItem(var name: String,
         return if (getDiscount() == null) {
             BigDecimal.ZERO
         } else when (getDiscount()!!.getType()) {
-            AmountModificatorType.PERCENTAGE -> getPlainAmount().multiply(getDiscount()!!.getNormalizedValue())
+            AmountModificatorType.PERCENTAGE -> getPlainAmount()?.multiply(getDiscount()!!.getNormalizedValue())
             AmountModificatorType.FIXED -> getDiscount()?.getValue()
             else -> BigDecimal.ZERO
         }
@@ -101,8 +101,8 @@ data class PaymentItem(var name: String,
      * @return the taxes amount
      */
     fun getTaxesAmount(): BigDecimal? {
-        val taxationAmount = getPlainAmount().subtract(getDiscountAmount())
-        return AmountCalculator.calculateTaxesOn(taxationAmount, taxes)
+        val taxationAmount = getPlainAmount()?.subtract(getDiscountAmount())
+        return taxationAmount?.let { AmountCalculator.calculateTaxesOn(it, taxes) }
     }
 
 

@@ -398,25 +398,24 @@ object SettingsManager {
         //  customer =
         if (itemsList != null) {
             println("preparing data source with customer ref :" + itemsList[0].getItemDescription())
-            paymentitems.add(itemsList[0].getPricePUnit()?.let { BigDecimal(it) }?.let {
-                itemsList[0].getItemDescription()?.let { it1 ->
-                    itemsList[0].getItemsName()?.let { it2 ->
-                        PaymentItem(
-                            it2,
-                            it1,
-                            Quantity(Measurement.UNITS, Measurement.MASS.name,
-                                itemsList[0].getitemQuantity()?.let { it3 -> BigDecimal(it3) }),
-                            it,
-                            AmountModificator(itemsList[0].getAmountType(),
-                                itemsList[0].getitemTotalPrice()?.let { it3 -> BigDecimal(it3) }),
-
-                            null )
-                    }
-                }
-            }!!)
+            itemsList[0].getPricePUnit()?.let {
+                BigDecimal.valueOf(
+                    it
+                )
+            }?.let {
+                PaymentItem(
+                    itemsList[0].getItemsName().toString(),
+                    itemsList[0].getItemDescription().toString(),
+                    Quantity(Measurement.UNITS, Measurement.MASS.name,
+                        itemsList[0].getitemQuantity()?.let { BigDecimal.valueOf(it.toDouble()) }),
+                    it,
+                    AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO),
+                    null
+                )
+            }?.let { paymentitems.add(it) }
         } else {
             println(" paymentResultDataManager.getCustomerRef(context) null")
-            paymentitems.add(    PaymentItem(
+            paymentitems.add(   PaymentItem(
                 "Items1",
                 "Description for test item #1",
                 Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(1)),
