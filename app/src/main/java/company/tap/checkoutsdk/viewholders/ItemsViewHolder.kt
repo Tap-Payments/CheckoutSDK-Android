@@ -24,6 +24,7 @@ class ItemsViewHolder(itemView: View, listener: ItemsAdapter.OnClickListenerInte
     private val quantity: TextView = itemView.findViewById(R.id.item_quantity)
     private val amountPerunit: TextView = itemView.findViewById(R.id.item_per_unit)
     private val totalAmount: TextView = itemView.findViewById(R.id.item_total)
+    private val discountAmount: TextView = itemView.findViewById(R.id.item_discount)
     private val tick_mark: ImageView?= itemView.findViewById(R.id.tick_mark)
     private val listenerInterface: ItemsAdapter.OnClickListenerInterface? = listener
     private var viewModel: PaymentItemViewModel? = null
@@ -34,6 +35,7 @@ class ItemsViewHolder(itemView: View, listener: ItemsAdapter.OnClickListenerInte
         quantity.text = "Quantity :"+viewModel.getitemQuantity().toString()
         amountPerunit.text = "Amount per unit :"+viewModel.getPricePUnit().toString()
         totalAmount.text = "Total Price :"+viewModel.getitemTotalPrice().toString()
+        discountAmount.text = viewModel.getitemDiscount().toString()
     }
 
     init {

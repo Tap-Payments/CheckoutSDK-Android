@@ -76,7 +76,18 @@
         app:layout_constraintTop_toBottomOf="@+id/item_per_unit"
         app:layout_constraintHorizontal_bias="0.16"
         app:layout_constraintVertical_bias="0.0"/>
-
+    <TextView
+        android:id="@+id/item_discount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="discount"
+        app:layout_constraintStart_toStartOf="@id/item_total"
+        app:layout_constraintTop_toBottomOf="@+id/item_total"
+        app:layout_constraintHorizontal_bias="0.16"
+        app:layout_constraintVertical_bias="0.0"/>
     <ImageView
         android:id="@+id/tick_mark"
         android:layout_width="wrap_content"

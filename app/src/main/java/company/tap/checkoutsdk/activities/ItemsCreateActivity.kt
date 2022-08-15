@@ -21,6 +21,7 @@ open class ItemsCreateActivity : AppCompatActivity() {
     private var item_description: AppCompatEditText? = null
     private var item_quantity: AppCompatEditText? = null
     private var item_price_per_unit: AppCompatEditText? = null
+    private var item_discount_unit: AppCompatEditText? = null
     private var checkBoxFixed: CheckBox? = null
     private var checkBoxPercentage: CheckBox? = null
     private var checkBoxNone: CheckBox? = null
@@ -30,6 +31,7 @@ open class ItemsCreateActivity : AppCompatActivity() {
     private var description_il: TextInputLayout? = null
     private var quantity_il: TextInputLayout? = null
     private var price_il: TextInputLayout? = null
+    private var itemDisc_il: TextInputLayout? = null
     private var totalamount_textView: TextView? = null
     private var mSeekbaBar: SeekBar? = null
     private var seekBarText: TextView? = null
@@ -72,6 +74,7 @@ open class ItemsCreateActivity : AppCompatActivity() {
         item_description = findViewById(R.id.item_description)
         item_quantity = findViewById(R.id.item_quantity)
         item_price_per_unit = findViewById(R.id.item_price_per_unit)
+        item_discount_unit = findViewById(R.id.item_discount_unit)
         checkBoxFixed = findViewById(R.id.checkBoxFixed)
         checkBoxPercentage = findViewById(R.id.checkBoxPercentage)
         checkBoxNone = findViewById(R.id.checkBoxNone)
@@ -82,6 +85,7 @@ open class ItemsCreateActivity : AppCompatActivity() {
         description_il = findViewById(R.id.description_il)
         quantity_il = findViewById(R.id.quantity_il)
         price_il = findViewById(R.id.price_il)
+        itemDisc_il = findViewById(R.id.itemDisc_il)
         totalamount_textView = findViewById(R.id.totalamount_textView)
 
         checkBoxPercentage?.setOnClickListener() {
@@ -116,6 +120,7 @@ open class ItemsCreateActivity : AppCompatActivity() {
         item_quantity?.setText(paymentItems?.getitemQuantity().toString())
         item_price_per_unit?.setText(paymentItems?.getPricePUnit().toString())
         totalamount_textView?.text = "Total price is"+paymentItems?.getitemTotalPrice().toString()
+        item_discount_unit?.setText(paymentItems?.getitemDiscount().toString())
 
 
     }
@@ -136,7 +141,7 @@ open class ItemsCreateActivity : AppCompatActivity() {
                         item_quantity?.text.toString().toInt(),
                         item_price_per_unit?.text.toString().toDouble(),
                         item_quantity?.text.toString().toDouble().times(item_price_per_unit?.text.toString().toDouble()),
-                        it,
+                        it,item_discount_unit?.text.toString().toDouble(),
                         this
                     )
                 }
@@ -152,7 +157,7 @@ open class ItemsCreateActivity : AppCompatActivity() {
                         item_description?.text.toString().trim { it <= ' ' },
                         item_price_per_unit?.text.toString().toDouble() ,
                         item_price_per_unit?.text.toString().toDouble().times( item_quantity?.text.toString().toInt()),
-                        item_quantity?.text.toString().toInt(), it,
+                        item_quantity?.text.toString().toInt(), it,item_discount_unit?.text.toString().toDouble()
                     )
                 }.let {
                     SettingsManager.editItems(

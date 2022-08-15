@@ -13,7 +13,7 @@ All rights reserved.
 class PaymentItemViewModel(
     itemsName: String?,
     itemDescrp: String, itemPriceUnit: Double,
-    itemTotalPrice: Double, itemQuantity: Int, amountModificator: AmountModificatorType
+    itemTotalPrice: Double, itemQuantity: Int, amountModificator: AmountModificatorType, itemDiscount: Double
 
     ) : Serializable {
     private var itemsName: String? = null
@@ -22,6 +22,7 @@ class PaymentItemViewModel(
     private var itemTotalPrice: Double? = null
     private var itemQuantity: Int? = null
     private var amountModificator: AmountModificatorType? = null
+    private var itemDiscount: Double? = null
 
 
     fun getItemsName(): String? {
@@ -46,11 +47,13 @@ class PaymentItemViewModel(
  fun getAmountType(): AmountModificatorType? {
         return amountModificator
     }
-
+    fun getitemDiscount(): Double? {
+        return itemDiscount
+    }
 
     private fun setSimpleText(
         itemsName: String?, itemDescrp: String, itemQuantity: Int,
-        itemPriceUnit: Double, itemTotalPrice: Double , amountModificator:AmountModificatorType?
+        itemPriceUnit: Double, itemTotalPrice: Double , amountModificator:AmountModificatorType?, itemDiscount: Double
     ) {
         this.itemsName = itemsName
         this.itemDescrp = itemDescrp
@@ -58,12 +61,13 @@ class PaymentItemViewModel(
         this.itemPriceUnit = itemPriceUnit
         this.itemTotalPrice = itemTotalPrice
         this.amountModificator = amountModificator
+        this.itemDiscount = itemDiscount
 
     }
 
 
     init {
-        setSimpleText(itemsName, itemDescrp, itemQuantity, itemPriceUnit, itemTotalPrice,amountModificator)
+        setSimpleText(itemsName, itemDescrp, itemQuantity, itemPriceUnit, itemTotalPrice,amountModificator,itemDiscount)
     }
 
 }

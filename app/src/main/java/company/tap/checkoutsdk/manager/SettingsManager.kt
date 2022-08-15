@@ -138,7 +138,7 @@ object SettingsManager {
         quantity:Int,
         priceperunit: Double,
         totalamount: Double,
-        amountModificatorType: AmountModificatorType,
+        amountModificatorType: AmountModificatorType,itemDiscount :Double,
 
         ctx: Context
     ) {
@@ -152,7 +152,7 @@ object SettingsManager {
         if (itemsList == null) itemsList = ArrayList<PaymentItemViewModel?>()
         itemsList.add(
 
-            PaymentItemViewModel(itemname, description, priceperunit, totalamount,quantity,amountModificatorType)
+            PaymentItemViewModel(itemname, description, priceperunit, totalamount,quantity,amountModificatorType,itemDiscount)
 
         )
         val data: String = gson.toJson(itemsList)
@@ -181,7 +181,7 @@ object SettingsManager {
                     newItems.getPricePUnit()?.toDouble()!!,
                     newItems.getitemTotalPrice()?.toDouble()!!,
                     newItems.getitemQuantity()?.toInt()!!,
-                    newItems.getAmountType()!!
+                    newItems.getAmountType()!!, newItems.getitemDiscount()!!
                 )
                     .let {
                         paymentItemList.add(
@@ -202,7 +202,8 @@ object SettingsManager {
                                 newItems.getItemDescription()!!,
                                 newItems.getitemQuantity()!!,
                                 it1,
-                                newItems.getitemTotalPrice()!!, it2, ctx
+                                newItems.getitemTotalPrice()!!, it2,
+                                newItems.getitemDiscount()!!, ctx
                             )
                         }
                     }
@@ -398,6 +399,7 @@ object SettingsManager {
         //  customer =
         if (itemsList != null) {
             println("preparing data source with customer ref :" + itemsList[0].getItemDescription())
+
             itemsList[0].getPricePUnit()?.let {
                 BigDecimal.valueOf(
                     it
@@ -409,7 +411,7 @@ object SettingsManager {
                     Quantity(Measurement.UNITS, Measurement.MASS.name,
                         itemsList[0].getitemQuantity()?.let { BigDecimal.valueOf(it.toDouble()) }),
                     it,
-                    AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO),
+                    AmountModificator(itemsList[0].getAmountType(), BigDecimal.ZERO),
                     null
                 )
             }?.let { paymentitems.add(it) }
