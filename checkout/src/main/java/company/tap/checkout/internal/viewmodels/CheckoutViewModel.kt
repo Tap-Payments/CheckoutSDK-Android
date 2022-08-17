@@ -80,6 +80,7 @@ import company.tap.tapuilibrary.themekit.theme.SeparatorViewTheme
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
+import company.tap.tapuilibrary.uikit.utils.KeyboardUtil
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.businessview_layout.view.*
 import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
@@ -343,6 +344,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 this,
                 cardViewModel
         )
+
         itemsViewHolder = ItemsViewHolder(context, this)
         otpViewHolder = OTPViewHolder(context)
         otpViewHolder.otpView.visibility=View.GONE
@@ -679,6 +681,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         addViews(amountViewHolder, otpViewHolder)
         otpViewHolder.otpView.visibility = View.VISIBLE
+        otpViewHolder.otpView.otpViewInput1.setSelection(0)
+        otpViewHolder.otpView.otpViewInput1.isCursorVisible = true
         setOtpPhoneNumber(phoneNumber)
         otpViewHolder.otpView.changePhone.visibility = View.INVISIBLE
         otpViewHolder.otpView.timerText.setOnClickListener {
@@ -959,6 +963,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         cardViewHolder.view.mainChipgroup.groupAction?.visibility = View.VISIBLE
         cardViewHolder.view.mainChipgroup.groupAction?.setOnClickListener {
             setMainChipGroupActionListener()
+            paymentInputViewHolder.clearCardInputAction()
+            paymentInputViewHolder.onFocusChange("")
+            CustomUtils.hideKeyboardFrom(context,paymentInputViewHolder.view)
         }
         // filterCardTypes(paymentOptionsList.value as ArrayList<PaymentOption>)
         paymentOptionsWorker =
