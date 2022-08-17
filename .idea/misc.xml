@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../../../layout/custom_preview.xml" value="0.125" />
         <entry key="../../../../.gradle/caches/transforms-2/files-2.1/87ded65bcd1db167d3a00c7113fec855/jetified-TapUIKit-Android-1.1.1.343/res/layout/item_view_adapter.xml" value="0.2667572463768116" />
+        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/8a1264d6d8bd2dd07b14c410745d1f0d/jetified-TapUIKit-Android-1.1.1.357.1/res/drawable/cardscan_button_select.xml" value="0.157" />
         <entry key="app/src/main/res/layout/activity_config_sdkactivity.xml" value="0.1085934159897392" />
         <entry key="app/src/main/res/layout/activity_customer.xml" value="0.129115006412997" />
         <entry key="app/src/main/res/layout/activity_customer_create.xml" value="0.165" />
@@ -27,7 +29,7 @@
         <entry key="checkout/src/main/res/layout/amountview_layout.xml" value="0.2015625" />
         <entry key="checkout/src/main/res/layout/businessview_layout.xml" value="0.18802083333333333" />
         <entry key="checkout/src/main/res/layout/cardviewholder_layout1.xml" value="0.14322916666666666" />
-        <entry key="checkout/src/main/res/layout/fragment_checkouttaps.xml" value="0.165" />
+        <entry key="checkout/src/main/res/layout/fragment_checkouttaps.xml" value="0.48518518518518516" />
         <entry key="checkout/src/main/res/layout/fragment_checkouttaps_full.xml" value="0.13852073535699017" />
         <entry key="checkout/src/main/res/layout/fragment_web.xml" value="0.15775972637879435" />
         <entry key="checkout/src/main/res/layout/googlepay_button.xml" value="0.335" />
@@ -38,12 +40,14 @@
         <entry key="checkout/src/main/res/layout/item_save_cards.xml" value="0.20104166666666667" />
         <entry key="checkout/src/main/res/layout/item_saved_card.xml" value="0.1923899102180419" />
         <entry key="checkout/src/main/res/layout/layout_background.xml" value="0.13852073535699017" />
+        <entry key="checkout/src/main/res/layout/otpview_layout.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/payment_inputt_layout.xml" value="0.25" />
         <entry key="checkout/src/main/res/layout/switch_layout.xml" value="0.1" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK" />
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK" />
   <component name="VisualizationToolProject">
     <option name="state">
       <ProjectState>

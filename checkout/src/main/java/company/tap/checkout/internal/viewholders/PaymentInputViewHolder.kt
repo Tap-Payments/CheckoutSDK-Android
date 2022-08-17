@@ -1,6 +1,7 @@
 package company.tap.checkout.internal.viewholders
 
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.os.Build
@@ -8,6 +9,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.transition.Fade
 import android.transition.TransitionManager
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
@@ -46,6 +48,7 @@ import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.interfaces.TapPaymentShowHideClearImage
 import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
 import company.tap.tapuilibrary.uikit.models.SectionTabItem
+import company.tap.tapuilibrary.uikit.utils.KeyboardUtil
 import company.tap.tapuilibrary.uikit.views.TapAlertView
 import company.tap.tapuilibrary.uikit.views.TapMobilePaymentView
 import company.tap.tapuilibrary.uikit.views.TapSelectionTabLayout
@@ -99,6 +102,8 @@ class PaymentInputViewHolder(
     private lateinit var cardSchema: String
     var schema: CardScheme?=null
     var itemsCardsList = ArrayList<SectionTabItem>()
+    var resetView:Boolean = false
+    private var displayMetrics: Int? = 0
     init {
         tabLayout.setTabLayoutInterface(this)
         tapMobileInputView = TapMobilePaymentView(context, null)
@@ -112,6 +117,8 @@ class PaymentInputViewHolder(
         tabLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.backgroundColor")))
         tabLayout.changeTabItemMarginBottomValue(10)
         tabLayout.changeTabItemMarginTopValue(10)
+
+
         bindViewComponents()
     }
 
@@ -122,13 +129,34 @@ class PaymentInputViewHolder(
         initClearText()
         initializeCardForm()
         tapMobileInputViewWatcher()
+        initializeCardBrandView()
         /**
          * set separator background
          */
         //  view.separator?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
         //setSeparatorTheme()
     }
+    private fun initializeCardBrandView() {
+        if (displayMetrics == DisplayMetrics.DENSITY_260||displayMetrics == DisplayMetrics.DENSITY_280||displayMetrics == DisplayMetrics.DENSITY_300||displayMetrics == DisplayMetrics.DENSITY_XHIGH || displayMetrics == DisplayMetrics.DENSITY_340||displayMetrics == DisplayMetrics.DENSITY_360){
 
+            tabLayout.changeTabItemMarginBottomValue(15)
+            tabLayout.changeTabItemMarginTopValue(15)
+            ///tabLayout?.changeTabItemMarginLeftValue(-10)
+
+        }else{
+            tabLayout.changeTabItemMarginBottomValue(30)
+            tabLayout.changeTabItemMarginTopValue(40)
+            tabLayout.changeTabItemMarginRightValue(-30)
+            tabLayout.changeTabItemMarginRightValue(10)
+        }
+
+
+    }
+
+    fun resetView(){
+        clearView.visibility= View.VISIBLE
+        CustomUtils.hideKeyboardFrom(context,view)
+    }
     private fun tapMobileInputViewWatcher() {
         tapMobileInputView.mobileNumber.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -223,11 +251,30 @@ class PaymentInputViewHolder(
 
     private fun initCardInput() {
         tapCardInputView.holderNameEnabled = false
-        paymentInputContainer.addView(tapCardInputView)
+        addViewsToPaymentViewContainer()
         tapCardInputView.clearFocus()
         cardNumberWatcher()
         expiryDateWatcher()
         cvcNumberWatcher()
+    }
+
+    private fun addViewsToPaymentViewContainer() {
+        val layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        displayMetrics = CustomUtils.getDeviceDisplayMetrics(context as Activity)
+        if(displayMetrics == DisplayMetrics.DENSITY_420||displayMetrics == DisplayMetrics.DENSITY_450 ||displayMetrics == DisplayMetrics.DENSITY_400||displayMetrics == DisplayMetrics.DENSITY_440||displayMetrics == DisplayMetrics.DENSITY_560){
+            layoutParams.setMargins(0, -10, -115, 0) //for holder enabel
+
+        }else if (displayMetrics == DisplayMetrics.DENSITY_300||displayMetrics == DisplayMetrics.DENSITY_XHIGH || displayMetrics == DisplayMetrics.DENSITY_340||displayMetrics == DisplayMetrics.DENSITY_360){
+            layoutParams.setMargins(0, 0, -175, 0)
+        }else if(displayMetrics == DisplayMetrics.DENSITY_XXHIGH ){
+            layoutParams.setMargins(0, 0, -210, 0)
+        }
+
+        paymentInputContainer.layoutParams = layoutParams
+        paymentInputContainer.addView(tapCardInputView)
+
     }
 
     private fun cardNumberWatcher() {
@@ -252,6 +299,7 @@ class PaymentInputViewHolder(
         } else {
             clearView.visibility = View.VISIBLE
         }
+
     }
 
     private fun expiryDateWatcher() {
@@ -281,7 +329,7 @@ class PaymentInputViewHolder(
                     "missingCVV"
                 ))
                 tapAlertView?.visibility = View.VISIBLE
-
+                lastFocusField =CardInputListener.FocusField.FOCUS_CVC
             }
 
 
@@ -298,6 +346,7 @@ class PaymentInputViewHolder(
                         true, PaymentType.CARD
                     )
                     tapAlertView?.visibility = View.GONE
+                    CustomUtils.hideKeyboardFrom(context, view)
                 } else {
                     onPaymentCardComplete.onPayCardSwitchAction(
                         false, PaymentType.CARD
@@ -345,7 +394,10 @@ class PaymentInputViewHolder(
         if (charSequence != null) {
             baseLayoutManager.resetViewHolder()
 
-            if (charSequence.length > 2) callCardBinNumberApi(charSequence, textWatcher) else {
+            if (charSequence.length > 2) {
+                callCardBinNumberApi(charSequence, textWatcher)
+            }
+            else {
                 tabLayout.resetBehaviour()
                 PaymentDataSource.setBinLookupResponse(null)
             }
@@ -391,7 +443,7 @@ class PaymentInputViewHolder(
         binLookupResponse: BINLookupResponse?,
         cardBrand: DefinedCardBrand
     ) {
-        if (binLookupResponse?.cardBrand?.name == binLookupResponse?.scheme?.name) {
+        if (binLookupResponse?.cardBrand?.name?.toUpperCase() == binLookupResponse?.scheme?.name) {
             // we will send card brand to validator
             binLookupResponse?.cardBrand?.let { it1 ->
                 tabLayout.selectTab(
@@ -450,6 +502,7 @@ class PaymentInputViewHolder(
                 else tabLayout.selectTab(card.cardBrand, true)
 
                 tapAlertView?.visibility = View.GONE
+                lastFocusField =CardInputListener.FocusField.FOCUS_EXPIRY
             }
             else -> {
                 tapAlertView?.visibility = View.VISIBLE
@@ -550,6 +603,14 @@ class PaymentInputViewHolder(
 
     override fun onFocusChange(focusField: String) {
         lastFocusField = focusField
+        println("lastFocusField"+lastFocusField)
+      //  tapCardInputView.
+        if(resetView){
+            lastFocusField =  CardInputListener.FocusField.FOCUS_CVC
+          //  tapCardInputView.onTouchView()
+            resetView = false
+        }
+
     }
 
     /**
@@ -563,6 +624,7 @@ class PaymentInputViewHolder(
         val itemsMobilesList = ArrayList<SectionTabItem>()
          itemsCardsList = ArrayList<SectionTabItem>()
         intertabLayout.removeAllTabs()
+        intertabLayout.setPadding(-50,0,0,0)
         PaymentDataSource.setBinLookupResponse(null)
 //        tabLayout.changeTabItemAlphaValue(1f)
         decideTapSelection(imageURLApi, itemsMobilesList, itemsCardsList)
@@ -707,6 +769,9 @@ class PaymentInputViewHolder(
        // println("cardBrandArrayList is>>"+cardBrandArrayList)
 
         if(cardBrand != null  && !cardBrandArrayList.contains(cardBrand.name)){
+            clearCardInputAction()
+            tapCardInputView.clear()
+            tabLayout.resetBehaviour()
             CustomUtils.showDialog(
                     LocalizationManager.getValue(
                         "alertUnsupportedCardTitle",
@@ -723,7 +788,6 @@ class PaymentInputViewHolder(
 
         }
     }
-
 
 
 

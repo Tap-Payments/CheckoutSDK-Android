@@ -10,6 +10,7 @@ import android.os.Handler
 import android.os.Looper
 import android.text.format.DateFormat
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
@@ -36,6 +37,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardscanner.TapCard
 import company.tap.cardscanner.TapTextRecognitionCallBack
 import company.tap.cardscanner.TapTextRecognitionML
@@ -967,6 +969,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             paymentInputViewHolder.onFocusChange("")
             CustomUtils.hideKeyboardFrom(context,paymentInputViewHolder.view)
         }
+
         // filterCardTypes(paymentOptionsList.value as ArrayList<PaymentOption>)
         paymentOptionsWorker =
             java.util.ArrayList<PaymentOption>(paymentOptionsResponse.paymentOptions)
@@ -979,6 +982,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         //    goPaySavedCardHolder.view.goPayLoginView.groupAction.setOnClickListener {
         //       setGoPayLoginViewGroupActionListener()
         //   }
+        paymentInputViewHolder.view.setOnTouchListener { v, _ ->
+            CustomUtils.hideKeyboardFrom(context, paymentInputViewHolder.view)
+            paymentInputViewHolder.resetView = true
+            paymentInputViewHolder.onFocusChange("")
+
+            true
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.N)

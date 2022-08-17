@@ -5,15 +5,18 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.graphics.Color
+import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import cards.pay.paycardsrecognizer.sdk.Card
@@ -25,7 +28,6 @@ import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.apiresponse.CardViewState
 import company.tap.checkout.internal.apiresponse.Resource
 import company.tap.checkout.internal.enums.SectionType
-import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.controller.SDKSession.sessionDelegate
@@ -38,7 +40,6 @@ import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
-import kotlin.properties.Delegates
 
 
 /**
@@ -103,7 +104,7 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
         this._viewModel = viewModel
         _Context?.let { cardViewModel.getContext(it) }
         backgroundColor = (Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.clear")))
-
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
         bottomSheetDialog.behavior.peekHeight
         bottomSheetDialog.behavior.isDraggable
         val checkoutLayout: LinearLayout? = view.findViewById(R.id.fragment_all)
@@ -341,7 +342,35 @@ if(checkOutActivity?.isGooglePayClicked == false){
     }
 
 
+  /*  private fun initKeyBoardListener() {
+        // Минимальное значение клавиатуры.
+        // Threshold for minimal keyboard height.
+        val MIN_KEYBOARD_HEIGHT_PX = 150
+        // Окно верхнего уровня view.
+        // Top-level window decor view.
+            // val decorView: View = netscape.javascript.JSObject.getWindow().getDecorView()
+        // Регистрируем глобальный слушатель. Register global layout listener.
+        decorView.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
+            // Видимый прямоугольник внутри окна.
+            // Retrieve visible rectangle inside window.
+            private val windowVisibleDisplayFrame: Rect = Rect()
+            private var lastVisibleDecorViewHeight = 0
+            override fun onGlobalLayout() {
+                decorView.getWindowVisibleDisplayFrame(windowVisibleDisplayFrame)
+                val visibleDecorViewHeight: Int = windowVisibleDisplayFrame.height()
+                if (lastVisibleDecorViewHeight != 0) {
+                    if (lastVisibleDecorViewHeight > visibleDecorViewHeight + MIN_KEYBOARD_HEIGHT_PX) {
 
+                    } else if (lastVisibleDecorViewHeight + MIN_KEYBOARD_HEIGHT_PX < visibleDecorViewHeight) {
+
+                    }
+                }
+                // Сохраняем текущую высоту view до следующего вызова.
+                // Save current decor view height for the next call.
+                lastVisibleDecorViewHeight = visibleDecorViewHeight
+            }
+        })
+    }*/
 
 
 }
