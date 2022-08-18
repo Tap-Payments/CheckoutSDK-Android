@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/layout_bg"
+    android:windowSoftInputMode="adjustResize|adjustPan"
     android:orientation="vertical"
     tools:context=".open.CheckoutFragment">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/layout_bg"
+        android:orientation="vertical"
+        android:windowSoftInputMode="adjustResize|adjustPan"
 
+        tools:context=".open.CheckoutFragment">
 
 <RelativeLayout
     android:layout_width="match_parent"
@@ -67,13 +74,15 @@
 
 
     <company.tap.tapuilibrary.uikit.atoms.TapTextView
-        android:layout_width="40dp"
+        android:layout_width="48dp"
         android:layout_height="40dp"
         android:id="@+id/closeText"
         android:gravity="center"
         android:layout_marginEnd="10dp"
-        android:text="close"
-        android:visibility="gone"
+        android:text="CLOSE"
+        android:visibility="visible"
+        android:textSize="12sp"
+        android:textColor="@color/dark_gray"
         android:layout_alignParentEnd="true"
         android:layout_gravity="end"/>
 
@@ -93,3 +102,4 @@
 </RelativeLayout>
 
 </LinearLayout>
+</androidx.core.widget.NestedScrollView>
