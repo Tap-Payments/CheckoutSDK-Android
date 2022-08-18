@@ -32,7 +32,10 @@ class TapCustomer(
     lastName: String?,
     email: String?,
     phone: PhoneNumber?,
-    metaData: String?
+    metaData: String?,
+    @SerializedName("nationality") @Expose
+    private var nationality: String? = null, @SerializedName("address") @Expose
+    private var address: AddressCustomer? = null
 ) :
     Serializable {
 
@@ -86,6 +89,16 @@ class TapCustomer(
         return phone
     }
 
+    /**
+     * Gets Address.
+     *
+     * @return the Address
+     */
+    fun getAddress(): AddressCustomer? {
+        return address
+    }
+
+
     override fun toString(): String {
         return """TapCustomer {
         id =  '$identifier'
@@ -114,6 +127,8 @@ class TapCustomer(
         private var nestedEmail: String? = null
         private var nestedPhone: PhoneNumber? = null
         private var nestedMetaData: String? = null
+        private var nestedNationality: String? = null
+        private var nestedAddress: AddressCustomer? = null
 
         /**
          * First name customer builder.
@@ -182,6 +197,28 @@ class TapCustomer(
         }
 
         /**
+         * Nationality of customer builder.
+         *
+         * @param innerNationality the inner innerNationality
+         * @return the customer builder
+         */
+        fun nationality(innerNationality: String): CustomerBuilder? {
+            this.nestedNationality = innerNationality
+            return this
+        }
+
+        /**
+         * Address of customer builder.
+         *
+         * @param innerAddress the inner innerAddress
+         * @return the customer builder
+         */
+        fun address(innerAddress: AddressCustomer): CustomerBuilder? {
+            this.nestedAddress = innerAddress
+            return this
+        }
+
+        /**
          * Build customer.
          *
          * @return the customer
@@ -189,7 +226,7 @@ class TapCustomer(
         fun build(): TapCustomer {
             return TapCustomer(
                 nestedIdentifier, nestedFirstName, nestedMiddleName, nestedLastName,
-                nestedEmail, nestedPhone, nestedMetaData
+                nestedEmail, nestedPhone, nestedMetaData,nestedNationality,nestedAddress
             )
         }
     } ////////////////////////// ############################ End of Builder Region ########################### ///////////////////////
@@ -202,5 +239,7 @@ class TapCustomer(
         this.email = email
         this.phone = phone
         this.metaData = metaData
+        this.nationality = nationality
+        this.address = address
     }
 }

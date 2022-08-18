@@ -1,0 +1,120 @@
+package company.tap.checkout.open.models
+
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
+import company.tap.checkout.internal.api.enums.AmountModificatorType
+import company.tap.checkout.internal.api.models.AmountModificator
+import company.tap.checkout.open.enums.Category
+import java.io.Serializable
+import java.math.BigDecimal
+
+data
+class Items(
+    @field:Expose @field:SerializedName("product_id") val productId: String?,
+    @field:Expose @field:SerializedName(
+        "name"
+    ) val name: String?,
+    @field:Expose @field:SerializedName("amount") val amount: BigDecimal?,
+    @field:Expose @field:SerializedName(
+        "currency"
+    ) val currency: String?,
+    @field:Expose @field:SerializedName("quantity") val quantity: BigDecimal?,
+    @SerializedName("category")
+    @Expose
+    private var category: Category?,
+
+    @SerializedName("discount")
+@Expose
+private val discount: AmountModificator?,
+
+    @SerializedName("vendor")
+@Expose
+private val vendor: Vendor?,
+
+    @SerializedName("fulfillment_service")
+@Expose
+val fulfillmentService: String?,
+
+    @SerializedName("requires_shipping")
+@Expose
+val isRequireShipping: Boolean,
+
+    @SerializedName("item_code")
+@Expose
+val itemCode: String?,
+
+    @SerializedName("account_code")
+@Expose
+val accountCode: String?,
+
+    @SerializedName("description")
+@Expose
+val description: String?,
+
+    @SerializedName("image")
+@Expose
+val image: String?,
+
+    @SerializedName("reference")
+@Expose
+private val reference: ReferenceItem?,
+
+    @SerializedName("dimensions")
+@Expose
+val dimensions: ItemDimensions?,
+
+    @SerializedName("tags")
+@Expose
+val tags: String?,
+
+    @SerializedName("meta_data")
+@Expose
+val metaData: MetaData?
+) : Serializable {
+
+
+
+    fun getCategory(): Category? {
+        return category
+    }
+
+    fun getDiscount(): AmountModificator? {
+        return discount
+    }
+
+    fun getVendor(): Vendor? {
+        return vendor
+    }
+
+    fun getReference(): ReferenceItem? {
+        return reference
+    }
+
+    /**
+     * Gets plain amount.
+     *
+     * @return the plain amount
+     */
+    val plainAmount: BigDecimal
+        get() {
+            println("  #### getPlainAmount : " + amount)
+            assert(amount != null)
+            return amount!!.multiply(quantity)
+        }
+
+    /**
+     * Gets discount amount.
+     *
+     * @return the discount amount
+     */
+    val discountAmount: BigDecimal
+        get() = if (getDiscount() == null) {
+            BigDecimal.ZERO
+        } else when (getDiscount()?.getType()) {
+            AmountModificatorType.PERCENTAGE -> plainAmount.multiply(getDiscount()?.getNormalizedValue())
+            AmountModificatorType.FIXED -> getDiscount()?.getValue()
+            else -> BigDecimal.ZERO
+        }!!
+
+
+}

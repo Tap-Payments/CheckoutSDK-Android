@@ -2,6 +2,7 @@ package company.tap.checkout.open.models
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 import java.math.BigDecimal
 
 /**
@@ -38,4 +39,4 @@ data class Destination(
     @SerializedName("reference")
     @Expose
     private val reference: String? = null
-)
+): Serializable

@@ -4,13 +4,12 @@ import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import company.tap.checkout.internal.api.models.AmountedCurrency
+import company.tap.checkout.internal.api.models.OrderId
 import company.tap.checkout.internal.api.models.PaymentOption
 import company.tap.checkout.internal.api.models.SavedCard
 import company.tap.checkout.internal.api.models.SupportedCurrencies
 import company.tap.checkout.internal.interfaces.BaseResponse
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * Created by AhlaamK on 6/15/21.
@@ -48,5 +47,8 @@ data class PaymentOptionsResponse(
 
     @SerializedName("settlement_currency")
     @Expose
-    @Nullable  val settlement_currency: String? = null
+    @Nullable  val settlement_currency: String? = null,
+
+    @SerializedName("order") @Expose
+    private var order: OrderId ?= null
 ) : BaseResponse

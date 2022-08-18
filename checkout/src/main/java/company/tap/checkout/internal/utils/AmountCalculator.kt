@@ -5,9 +5,7 @@ import company.tap.checkout.internal.api.models.AmountedCurrency
 import company.tap.checkout.internal.api.models.ExtraFee
 import company.tap.checkout.internal.api.models.SupportedCurrencies
 import company.tap.checkout.open.data_managers.PaymentDataSource
-import company.tap.checkout.open.models.PaymentItem
-import company.tap.checkout.open.models.Shipping
-import company.tap.checkout.open.models.Tax
+import company.tap.checkout.open.models.*
 import java.math.BigDecimal
 import java.math.MathContext
 import java.math.RoundingMode
@@ -184,5 +182,110 @@ object AmountCalculator {
         }
         return null
     }
+
+    /**
+     * Calculate total amount of big decimal.
+     *
+     * @param orderObject the orderObject
+     * @return the big decimal
+     */
+    fun calculateTotalAmountOfObject(orderObject: OrderObject): BigDecimal? {
+        return orderObject.amount
+    }
+
+
+    /**
+     * Calculate total amount of big decimal.
+     *
+     * @param orderObjects     the orderObjects
+     * @param taxes     the taxes
+     * @param shippings the shippings
+     * @return the big decimal
+     */
+    fun calculateTotalAmountOfOrder(
+        items: java.util.ArrayList<Items>?,
+        taxes: java.util.ArrayList<TaxObject>?,
+        shippings: java.util.ArrayList<ShippingObject>?,
+        orderObjects: OrderObject
+    ): BigDecimal? {
+        var itemsPlainAmount = BigDecimal.ZERO
+        val itemsDiscountAmount = BigDecimal.ZERO
+        var itemsTaxesAmount = BigDecimal.ZERO
+        if (items != null) {
+            for (item in items) {
+                itemsPlainAmount = itemsPlainAmount.add(item.amount)
+            }
+        }
+
+        //  itemsPlainAmount    = itemsPlainAmount.add(orderObjects.getAmount());
+        itemsTaxesAmount = itemsTaxesAmount.add(orderObjects.taxesAmount)
+        val discountedAmount = itemsPlainAmount.subtract(itemsDiscountAmount)
+        var shippingAmount = BigDecimal.ZERO
+        if (shippings != null) {
+            for (shipping in shippings) {
+                shippingAmount = shippingAmount.add(shipping?.getAmount())
+            }
+        }
+        val taxesAmount =
+            calculateTaxesOnOrder(discountedAmount.add(shippingAmount), taxes)
+        val totalTaxesAmount = itemsTaxesAmount.add(taxesAmount)
+        return discountedAmount.add(shippingAmount).add(totalTaxesAmount)
+    }
+
+
+    /**
+     * Calculate taxes on big decimal.
+     *
+     * @param amount the amount
+     * @param taxes  the taxes
+     * @return the big decimal
+     */
+    fun calculateTaxesOnOrder(
+        amount: BigDecimal,
+        taxes: java.util.ArrayList<TaxObject>?
+    ): BigDecimal {
+        var result = BigDecimal.ZERO
+        if (taxes == null) {
+            return result
+        }
+        for (tax in taxes) {
+            when (tax?.getAmount()?.getType()) {
+                AmountModificatorType.PERCENTAGE -> {
+                    result = result.add(amount.multiply(tax.getAmount().getNormalizedValue()))
+                    result = result.add(tax.getAmount().getValue())
+                }
+                AmountModificatorType.FIXED -> result = result.add(tax.getAmount().getValue())
+            }
+        }
+        return result
+    }
+
+    /**
+     * Calculate taxes on big decimal.
+     *
+     * @param amount the amount
+     * @param taxes  the taxes
+     * @return the big decimal
+     */
+    fun calculateTaxesOnItems(
+        amount: BigDecimal,
+        taxes: java.util.ArrayList<TaxObject>?
+    ): BigDecimal? {
+        var result = BigDecimal.ZERO
+        if (taxes == null) {
+            return result
+        }
+        for (tax in taxes) {
+            when (tax.amount.getType()) {
+                AmountModificatorType.PERCENTAGE -> {
+                    result = result.add(amount.multiply(tax.amount.getNormalizedValue()))
+                    result = result.add(tax.amount.getValue())
+                }
+                AmountModificatorType.FIXED -> result = result.add(tax.amount.getValue())
+            }
+        }
+        return result
+    }
+
 
 }

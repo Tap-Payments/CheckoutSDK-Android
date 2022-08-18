@@ -636,7 +636,7 @@ class PaymentInputViewHolder(
 
         hideTabLayoutWhenOnlyOnePayment(itemsCardsList, itemsMobilesList)
         tabLayout.addSection(itemsCardsList)
-        tabLayout.addSection(itemsMobilesList)
+       // tabLayout.addSection(itemsMobilesList)
 //        tabLayout.
 
         if(itemsMobilesList.size!=0) tabLayout.addSection(itemsMobilesList)
@@ -670,7 +670,7 @@ class PaymentInputViewHolder(
                 imageURLApi[i].brand?.name.toString()
 
     /// set payment option object for all payment types and send it to paymentcompletion action function and i will pass it to show extra fees
-            if (paymentType == PaymentType.telecom) {
+      /*      if (paymentType == PaymentType.telecom) {
                 itemsMobilesList.add(
                     SectionTabItem(
                         imageURL, imageURL, CardBrand.valueOf(
@@ -686,9 +686,15 @@ class PaymentInputViewHolder(
                         CardBrand.valueOf(cardBrandType)
                     )
                 )
-            }
+            }*/
            // println("itemsCardsList are" + itemsCardsList)
-
+            itemsCardsList.add(
+                SectionTabItem(
+                    imageURL,
+                    imageURL,
+                    CardBrand.valueOf(cardBrandType)
+                )
+            )
             }
         }
 

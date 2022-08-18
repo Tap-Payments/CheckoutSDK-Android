@@ -9,7 +9,6 @@ import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.models.*
 import java.math.BigDecimal
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * Created by AhlaamK on 6/15/21.
@@ -29,7 +28,8 @@ open class PaymentOptionsRequest(
     customer: String?,
     merchant_id: String?,
     payment_type: String,
-    topup :TopUp?
+    topup :TopUp?,
+    orderObject: OrderObject? = null
 
 ) {
     @SerializedName("transaction_mode")
@@ -76,6 +76,10 @@ open class PaymentOptionsRequest(
     @SerializedName("topup")
     @Expose
     private val topup: TopUp? = null
+
+    @SerializedName("order")
+    @Expose
+    private val orderObject: OrderObject? = null
     /**
      * Gets transaction mode.
      *
@@ -118,10 +122,19 @@ open class PaymentOptionsRequest(
         if (items != null && items.size > 0) {
             this.items = items
             totalAmount = AmountCalculator.calculateTotalAmountOf(items, taxes, shipping)
+            if (orderObject != null) {
+                totalAmount =
+                    totalAmount?.add(AmountCalculator.calculateTotalAmountOfObject(orderObject))
+            }
         } else {
             this.items = null
             val plainAmount = amount ?: BigDecimal.ZERO
             totalAmount = AmountCalculator.calculateTotalAmountOf(ArrayList(), taxes, shipping)?.add(plainAmount)
+            if (orderObject != null) {
+                totalAmount = BigDecimal.ZERO
+                totalAmount =
+                    totalAmount?.add(AmountCalculator.calculateTotalAmountOfObject(orderObject))
+            }
         }
     }
 }
