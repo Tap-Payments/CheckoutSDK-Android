@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
+import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
@@ -70,7 +71,6 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
         super.onCreate(savedInstanceState)
         _activity = activity?.parent
         this._Context = context
-       // setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
 
 
     }
@@ -91,7 +91,8 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
+        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
         return inflater.inflate(R.layout.fragment_checkouttaps, container, false)
     }
