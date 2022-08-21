@@ -411,7 +411,8 @@ object SettingsManager {
                     Quantity(Measurement.UNITS, Measurement.MASS.name,
                         itemsList[0].getitemQuantity()?.let { BigDecimal.valueOf(it.toDouble()) }),
                     it,
-                    AmountModificator(itemsList[0].getAmountType(), BigDecimal.ZERO),
+                    AmountModificator(itemsList[0].getAmountType(),
+                        itemsList[0].getitemDiscount()?.let { it1 -> BigDecimal.valueOf(it1) }),
                     null
                 )
             }?.let { paymentitems.add(it) }

@@ -135,9 +135,8 @@ open class ItemsCreateActivity : AppCompatActivity() {
             ) {
                 println("inside: $operation")
                 amountModificatorType.let {
-                    if(item_discount_unit?.text.toString().isNullOrEmpty()){
-                        item_discount_unit?.setText("0.0")
-                    }else
+                    if(item_discount_unit?.text.toString().isNullOrEmpty()) item_discount_unit?.setText("0.0")
+
                     SettingsManager.saveItems(
                         item_name?.text.toString().trim { it <= ' ' },
                         item_description?.text.toString().trim { it <= ' ' },
