@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat.getSystemService
 import com.gdacciaro.iOSDialog.iOSDialogBuilder
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.interfaces.BaseLayoutManager
@@ -83,6 +84,16 @@ object CustomUtils {
     fun hideKeyboardFrom(context: Context, view: View) {
         val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+    /**
+     * Show keyboard from.
+     *
+     * @param context the context
+     *
+     */
+    fun showKeyboard(context: Context){
+        val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
+        imm?.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
     }
 
     fun getDeviceDisplayMetrics(activity: Activity) : Int{

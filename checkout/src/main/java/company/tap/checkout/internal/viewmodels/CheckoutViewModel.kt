@@ -350,6 +350,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         itemsViewHolder = ItemsViewHolder(context, this)
         otpViewHolder = OTPViewHolder(context)
         otpViewHolder.otpView.visibility=View.GONE
+        otpViewHolder.otpView.requestFocus()
+        otpViewHolder.otpView.otpViewInput1.cursorColor = Color.parseColor("#007aff")
+        otpViewHolder.otpView.otpViewInput1.isCursorVisible = true
         goPayViewsHolder = GoPayViewsHolder(context, this, otpViewHolder)
         asynchronousPaymentViewHolder = AsynchronousPaymentViewHolder(context, this)
         // nfcViewHolder = NFCViewHolder(context as Activity, context, this, fragmentManager)
@@ -683,8 +686,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         addViews(amountViewHolder, otpViewHolder)
         otpViewHolder.otpView.visibility = View.VISIBLE
-        otpViewHolder.otpView.otpViewInput1.setSelection(0)
-        otpViewHolder.otpView.otpViewInput1.isCursorVisible = true
+        CustomUtils.showKeyboard(context)
         setOtpPhoneNumber(phoneNumber)
         otpViewHolder.otpView.changePhone.visibility = View.INVISIBLE
         otpViewHolder.otpView.timerText.setOnClickListener {

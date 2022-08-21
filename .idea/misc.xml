@@ -6,6 +6,7 @@
         <entry key="checkout/src/main/res/drawable/layout_bg.xml" value="0.11" />
         <entry key="checkout/src/main/res/layout/fragment_checkouttaps.xml" value="0.10641399416909621" />
         <entry key="checkout/src/main/res/layout/itemviewholder_layout.xml" value="0.1" />
+        <entry key="checkout/src/main/res/layout/otpview_layout.xml" value="0.10944848225737494" />
         <entry key="checkout/src/main/res/layout/payment_inputt_layout.xml" value="0.1" />
       </map>
     </option>
