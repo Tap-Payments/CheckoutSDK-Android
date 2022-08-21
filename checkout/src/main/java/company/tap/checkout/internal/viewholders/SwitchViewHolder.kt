@@ -8,6 +8,7 @@ import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.SectionType
+import company.tap.nfcreader.open.utils.TapNfcUtils
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
@@ -55,7 +56,20 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
         alertgoPaySignupString = LocalizationManager.getValue("goPaySignupLabel", "GoPay")
         println("payname in switch" + payName.name)
         if(payName.name == "card"){
-            switchString =LocalizationManager.getValue("cardUseNFCLabel", "TapCardInputKit")
+            if(TapNfcUtils.isNfcAvailable(context)){
+                switchString =LocalizationManager.getValue("cardUseNFCLabel", "TapCardInputKit")
+
+            }else {
+                //Logic applied to  stop showing NFC on non supported devices
+                if(LocalizationManager.getLocale(context).language=="en"){
+                    switchString =LocalizationManager.getValue<String?>("cardUseNFCLabel", "TapCardInputKit")?.replace(" or NFC","")
+
+                }else {
+                    switchString =LocalizationManager.getValue<String?>("cardUseNFCLabel", "TapCardInputKit")?.replace("الــ NFC","")
+
+                }
+            }
+
             switchString?.let { getMainSwitchDataSource(it) }?.let {
                 view.mainSwitch.setSwitchDataSource(it) }
             view.cardSwitch.setSwitchDataSource(
