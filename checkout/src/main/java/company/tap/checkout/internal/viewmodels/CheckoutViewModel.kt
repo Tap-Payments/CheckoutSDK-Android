@@ -821,7 +821,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 this,
                 cardViewModel
         )
-        paymentInputViewHolder.tabLayout.setUnselectedAlphaLevel(0.5f)
+      //  paymentInputViewHolder.tabLayout.setUnselectedAlphaLevel(1.0f)
         if (::paymentInputViewHolder.isInitialized)
             paymentInputViewHolder.setCurrentBinData(binLookupResponse)
 

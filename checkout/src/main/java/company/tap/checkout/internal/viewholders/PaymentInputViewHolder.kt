@@ -114,7 +114,7 @@ class PaymentInputViewHolder(
         clearView = view.findViewById(R.id.clear_text)
         tapSeparatorViewLinear = view.findViewById(R.id.tapSeparatorViewLinear)
         tapSeparatorViewLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
-        tabLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.backgroundColor")))
+       // tabLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.backgroundColor")))
         tabLayout.changeTabItemMarginBottomValue(10)
         tabLayout.changeTabItemMarginTopValue(10)
 
@@ -222,7 +222,7 @@ class PaymentInputViewHolder(
             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
         )
         tabLayout.resetBehaviour()
-        if (PaymentDataSource.getBinLookupResponse() != null) {
+       if (PaymentDataSource.getBinLookupResponse() != null) {
             PaymentDataSource.setBinLookupResponse(null)
         }
 
@@ -394,9 +394,7 @@ class PaymentInputViewHolder(
         if (charSequence != null) {
             baseLayoutManager.resetViewHolder()
 
-            if (charSequence.length > 2) {
-                callCardBinNumberApi(charSequence, textWatcher)
-            }
+            if (charSequence.length > 2) callCardBinNumberApi(charSequence, textWatcher)
             else {
                 tabLayout.resetBehaviour()
                 PaymentDataSource.setBinLookupResponse(null)
@@ -443,7 +441,7 @@ class PaymentInputViewHolder(
         binLookupResponse: BINLookupResponse?,
         cardBrand: DefinedCardBrand
     ) {
-        if (binLookupResponse?.cardBrand?.name?.toUpperCase() == binLookupResponse?.scheme?.name) {
+        if (binLookupResponse?.cardBrand?.name == binLookupResponse?.scheme?.name) {
             // we will send card brand to validator
             binLookupResponse?.cardBrand?.let { it1 ->
                 tabLayout.selectTab(
@@ -502,7 +500,7 @@ class PaymentInputViewHolder(
                 else tabLayout.selectTab(card.cardBrand, true)
 
                 tapAlertView?.visibility = View.GONE
-                lastFocusField =CardInputListener.FocusField.FOCUS_EXPIRY
+               // lastFocusField =CardInputListener.FocusField.FOCUS_EXPIRY
             }
             else -> {
                 tapAlertView?.visibility = View.VISIBLE
@@ -519,7 +517,7 @@ class PaymentInputViewHolder(
         }
         val card = CardValidator.validate(cardTyped)
         // checkValidationState(card.cardBrand)
-        if (card.cardBrand != null && ::cardSchema.isInitialized) {
+        if (card.cardBrand != null ) {
             println("card brand: ${card.validationState}")
             nfcButton?.visibility = View.GONE
             cardScannerBtn?.visibility = View.GONE
