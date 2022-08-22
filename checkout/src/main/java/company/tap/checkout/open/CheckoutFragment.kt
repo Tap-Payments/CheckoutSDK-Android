@@ -78,9 +78,9 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onDestroyView() {
         println("onDestroyView>>>")
-        if (view?.parent != null) {
+        /*if (view?.parent != null) {
             (view?.parent as ViewGroup).removeView(view)
-        }
+        }*/
         resetTabAnimatedButton()
         super.onDestroyView()
     }

@@ -229,14 +229,15 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
             SDKSession.getPluginListener()?.sdkError(goSellError)
             this.finish()
         }else {
-            tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
-            Handler().postDelayed({
-                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-            }, 1000)
+            if (!this.isDestroyed) {
+                tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
+                Handler().postDelayed({
+                    tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+                }, 1000)
 
-            this.finish()
+                this.finish()
+            }
         }
-
     }
 
     override fun sessionIsStarting() {
