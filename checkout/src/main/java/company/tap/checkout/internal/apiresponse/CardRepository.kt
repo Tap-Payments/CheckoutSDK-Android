@@ -847,7 +847,7 @@ class CardRepository : APIRequestCallback {
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onFailure(requestCode: Int, errorDetails: GoSellError?) {
-        if (requestCode == CONFIG_CODE ||requestCode == CHARGE_REQ_CODE) {
+        if (requestCode == CONFIG_CODE ||requestCode == CHARGE_REQ_CODE ||requestCode == INIT_CODE) {
             sdkSession.getListener()?.sdkError(errorDetails)
             viewModel.handleSuccessFailureResponseButton(
                 "failure",
