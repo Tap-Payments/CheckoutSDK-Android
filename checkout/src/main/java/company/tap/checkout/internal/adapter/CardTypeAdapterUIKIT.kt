@@ -118,9 +118,9 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     }
 
     override fun getItemViewType(position: Int): Int {
-        println("position value are>>>" + position)
-        println("totalArraySize value are>>>" + totalArraySize)
-        println("adapterContent value are>>>" + adapterContent.size)
+      //  println("position value are>>>" + position)
+      //  println("totalArraySize value are>>>" + totalArraySize)
+      //  println("adapterContent value are>>>" + adapterContent.size)
         if(position < adapterContent.size){
             if(adapterContent[position].paymentType==PaymentType.WEB){
                 (adapterContent[position]).image?.let { arrayListRedirect.add(it) }
