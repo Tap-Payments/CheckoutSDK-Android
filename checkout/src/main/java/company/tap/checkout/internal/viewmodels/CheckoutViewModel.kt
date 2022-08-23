@@ -352,7 +352,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         otpViewHolder = OTPViewHolder(context)
         otpViewHolder.otpView.visibility=View.GONE
         otpViewHolder.otpView.requestFocus()
-        otpViewHolder.otpView.otpViewInput1.cursorColor = Color.parseColor("#007aff")
+        otpViewHolder.otpView.otpViewInput1.cursorColor = Color.parseColor(ThemeManager.getValue("TapOtpView.OtpController.activeBottomColor"))
+        otpViewHolder.otpView.otpViewInput1.setLineColorInactive(Color.parseColor(ThemeManager.getValue("TapOtpView.OtpController.bottomLineColor")) )
+        otpViewHolder.otpView.otpViewInput1.setLineColorActive(Color.parseColor(ThemeManager.getValue("TapOtpView.OtpController.activeBottomColor")) )
         otpViewHolder.otpView.otpViewInput1.isCursorVisible = true
         goPayViewsHolder = GoPayViewsHolder(context, this, otpViewHolder)
         asynchronousPaymentViewHolder = AsynchronousPaymentViewHolder(context, this)

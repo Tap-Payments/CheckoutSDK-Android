@@ -15,10 +15,12 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import androidx.annotation.RequiresApi
 import androidx.core.widget.doAfterTextChanged
 import com.google.android.material.tabs.TabLayout
 import company.tap.cardinputwidget.CardBrandSingle
+import company.tap.cardinputwidget.utils.CardUtils
 import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardinputwidget.widget.inline.InlineCardInput
 import company.tap.checkout.R
@@ -36,6 +38,7 @@ import company.tap.checkout.internal.interfaces.PaymentCardComplete
 import company.tap.checkout.internal.interfaces.onCardNFCCallListener
 import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
+import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.CardType
 import company.tap.nfcreader.open.utils.TapNfcUtils
@@ -338,6 +341,7 @@ class PaymentInputViewHolder(
 
 
     private fun cvcNumberWatcher() {
+        tapCardInputView.setCVVHint(LocalizationManager.getValue("cardCVVPlaceHolder", "TapCardInputKit"))
         tapCardInputView.setCvcNumberTextWatcher(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -429,6 +433,7 @@ class PaymentInputViewHolder(
              * we will get the full card number
              */
             cardNumber = charSequence.toString()
+
             lastCardInput = it.toString()
             shouldShowScannerOptions = it.isEmpty()
             controlScannerOptions()
@@ -488,6 +493,11 @@ class PaymentInputViewHolder(
                 tapAlertView?.visibility = View.VISIBLE
                 tapAlertView?.alertMessage?.text =
                     (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
+                CheckoutFragment().scrollView?.top?.let {
+                    CheckoutFragment().scrollView?.scrollTo(0,
+                        it
+                    )
+                }
             }
             CardValidationState.incomplete -> {
                 tapAlertView?.visibility = View.VISIBLE
@@ -593,7 +603,12 @@ class PaymentInputViewHolder(
         controlScannerOptions()
     }
 
-    override fun onCardComplete() {}
+    override fun onCardComplete() {
+        if(view.layoutDirection ==View.LAYOUT_DIRECTION_RTL){
+            cardNumber = cardNumber?.reversed()
+        }
+
+    }
 
     override fun onCvcComplete() {}
 
