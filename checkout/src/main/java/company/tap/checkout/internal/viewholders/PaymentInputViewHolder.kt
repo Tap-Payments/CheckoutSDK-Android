@@ -266,13 +266,19 @@ class PaymentInputViewHolder(
             LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
         )
         displayMetrics = CustomUtils.getDeviceDisplayMetrics(context as Activity)
-        if(displayMetrics == DisplayMetrics.DENSITY_420||displayMetrics == DisplayMetrics.DENSITY_450 ||displayMetrics == DisplayMetrics.DENSITY_400||displayMetrics == DisplayMetrics.DENSITY_440||displayMetrics == DisplayMetrics.DENSITY_560){
+        println("displayMetrics>>")
+        if(displayMetrics == DisplayMetrics.DENSITY_420||displayMetrics == DisplayMetrics.DENSITY_450 ||displayMetrics == DisplayMetrics.DENSITY_440||displayMetrics == DisplayMetrics.DENSITY_560){
             layoutParams.setMargins(0, -10, -115, 0) //for holder enabel
 
         }else if (displayMetrics == DisplayMetrics.DENSITY_300||displayMetrics == DisplayMetrics.DENSITY_XHIGH || displayMetrics == DisplayMetrics.DENSITY_340||displayMetrics == DisplayMetrics.DENSITY_360){
             layoutParams.setMargins(0, 0, -175, 0)
         }else if(displayMetrics == DisplayMetrics.DENSITY_XXHIGH ){
             layoutParams.setMargins(0, 0, -210, 0)
+        }else if(displayMetrics == DisplayMetrics.DENSITY_400){
+            if(TapNfcUtils.isNfcAvailable(context)){
+                layoutParams.setMargins(0, -10, -80, 0)
+
+            }else layoutParams.setMargins(0, -10, 50, 0)
         }
 
         paymentInputContainer.layoutParams = layoutParams
