@@ -13,6 +13,7 @@
         tools:replace="android:allowBackup
         <activity android:name=".open.CheckOutActivity"
             android:exported="true"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.AppCompat.Translucent">
             <intent-filter>
                 <action android:name="android.nfc.action.TECH_DISCOVERED" />

@@ -275,7 +275,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
         // set transaction currency associated to your account
       //  if(settingsManager.getString("key_sdk_transaction_currency","KWD"))
-        settingsManager?.getString("key_sdk_transaction_currency","USD")
+        settingsManager?.getString("key_sdk_transaction_currency","KWD")
             ?.let { TapCurrency(it) }?.let { sdkSession.setTransactionCurrency(it) } //** Required **
 
 

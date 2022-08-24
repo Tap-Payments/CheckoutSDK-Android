@@ -3,6 +3,7 @@ package company.tap.checkout.internal.viewholders
 
 import android.app.Activity
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Color
 import android.os.Build
 import android.text.Editable
@@ -15,12 +16,10 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.ScrollView
 import androidx.annotation.RequiresApi
 import androidx.core.widget.doAfterTextChanged
 import com.google.android.material.tabs.TabLayout
 import company.tap.cardinputwidget.CardBrandSingle
-import company.tap.cardinputwidget.utils.CardUtils
 import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardinputwidget.widget.inline.InlineCardInput
 import company.tap.checkout.R
@@ -51,7 +50,6 @@ import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.interfaces.TapPaymentShowHideClearImage
 import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
 import company.tap.tapuilibrary.uikit.models.SectionTabItem
-import company.tap.tapuilibrary.uikit.utils.KeyboardUtil
 import company.tap.tapuilibrary.uikit.views.TapAlertView
 import company.tap.tapuilibrary.uikit.views.TapMobilePaymentView
 import company.tap.tapuilibrary.uikit.views.TapSelectionTabLayout
@@ -70,7 +68,8 @@ class PaymentInputViewHolder(
     private val onCardNFCCallListener: onCardNFCCallListener,
     private val switchViewHolder: SwitchViewHolder?,
     private val baseLayoutManager: BaseLayoutManager,
-    private val cardViewModel: CardViewModel
+    private val cardViewModel: CardViewModel,
+    private val checkoutFragment: CheckoutFragment
 ) : TapBaseViewHolder,
     TapSelectionTabLayoutInterface, CardInputListener, TapPaymentShowHideClearImage {
     override val view: View =
@@ -107,6 +106,7 @@ class PaymentInputViewHolder(
     var itemsCardsList = ArrayList<SectionTabItem>()
     var resetView:Boolean = false
     private var displayMetrics: Int? = 0
+    private var height: Int=0
     init {
         tabLayout.setTabLayoutInterface(this)
         tapMobileInputView = TapMobilePaymentView(context, null)
@@ -121,8 +121,8 @@ class PaymentInputViewHolder(
         tabLayout.changeTabItemMarginBottomValue(10)
         tabLayout.changeTabItemMarginTopValue(10)
 
-
         bindViewComponents()
+
     }
 
 
@@ -254,6 +254,7 @@ class PaymentInputViewHolder(
 
     private fun initCardInput() {
         tapCardInputView.holderNameEnabled = false
+        height = Resources.getSystem().displayMetrics.heightPixels
         addViewsToPaymentViewContainer()
         tapCardInputView.clearFocus()
         cardNumberWatcher()
@@ -339,6 +340,7 @@ class PaymentInputViewHolder(
                 ))
                 tapAlertView?.visibility = View.VISIBLE
                 lastFocusField =CardInputListener.FocusField.FOCUS_CVC
+               checkoutFragment.scrollView?.scrollTo(0,height)
             }
 
 
@@ -349,7 +351,10 @@ class PaymentInputViewHolder(
     private fun cvcNumberWatcher() {
         tapCardInputView.setCVVHint(LocalizationManager.getValue("cardCVVPlaceHolder", "TapCardInputKit"))
         tapCardInputView.setCvcNumberTextWatcher(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                checkoutFragment.scrollView?.scrollTo(0,height)
+
+            }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s?.trim()?.length == 3 || s?.trim()?.length == 4) {
                     onPaymentCardComplete.onPayCardSwitchAction(
@@ -492,6 +497,7 @@ class PaymentInputViewHolder(
 
 
     private fun checkValidationState(card: DefinedCardBrand) {
+
         when (card.validationState) {
             CardValidationState.invalid -> {
                 if (card.cardBrand != null)
@@ -499,16 +505,14 @@ class PaymentInputViewHolder(
                 tapAlertView?.visibility = View.VISIBLE
                 tapAlertView?.alertMessage?.text =
                     (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
-                CheckoutFragment().scrollView?.top?.let {
-                    CheckoutFragment().scrollView?.scrollTo(0,
-                        it
-                    )
-                }
+                checkoutFragment.scrollView?.smoothScrollTo(0,height)
             }
             CardValidationState.incomplete -> {
                 tapAlertView?.visibility = View.VISIBLE
                 tapAlertView?.alertMessage?.text =
                     (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
+                checkoutFragment.scrollView?.smoothScrollTo(0,height)
+                //checkoutFragment.scrollView?.smoothScrollTo(0,0)
             }
             CardValidationState.valid -> {
                 if (schema != null)

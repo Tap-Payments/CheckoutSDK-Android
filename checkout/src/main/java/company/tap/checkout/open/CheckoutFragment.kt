@@ -9,14 +9,13 @@ import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
-import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import androidx.annotation.RequiresApi
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -61,6 +60,8 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
     var hideAllView =false
     lateinit var status :ChargeStatus
     private  var _resetFragment :Boolean = true
+    @JvmField
+      var scrollView :NestedScrollView ?= null
     @JvmField
     var isNfcOpened:Boolean=false
 
@@ -114,7 +115,10 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
         val inLineCardLayout: FrameLayout? = view.findViewById(R.id.inline_container)
          closeText = view.findViewById(R.id.closeText)
          closeImage= view.findViewById(R.id.closeImage)
+        scrollView = view.findViewById(R.id.scrollView)
+
         closeText?.text = LocalizationManager.getValue("close", "Common")
+
 
 
         if (SDKSession.showCloseImage ==true) {
