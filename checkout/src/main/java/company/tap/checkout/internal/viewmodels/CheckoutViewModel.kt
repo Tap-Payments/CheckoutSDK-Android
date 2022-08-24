@@ -11,7 +11,6 @@ import android.os.Handler
 import android.os.Looper
 import android.text.format.DateFormat
 import android.util.Log
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
@@ -38,7 +37,6 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardscanner.TapCard
 import company.tap.cardscanner.TapTextRecognitionCallBack
 import company.tap.cardscanner.TapTextRecognitionML
@@ -83,7 +81,6 @@ import company.tap.tapuilibrary.themekit.theme.SeparatorViewTheme
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
-import company.tap.tapuilibrary.uikit.utils.KeyboardUtil
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.businessview_layout.view.*
 import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
@@ -345,7 +342,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 this,
                 saveCardSwitchHolder,
                 this,
-                cardViewModel
+                cardViewModel,checkoutFragment
         )
 
         itemsViewHolder = ItemsViewHolder(context, this)
@@ -817,12 +814,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             cardViewModel: CardViewModel
     ) {
         paymentInputViewHolder = PaymentInputViewHolder(
-                context,
-                this,
-                this,
-                saveCardSwitchHolder,
-                this,
-                cardViewModel
+            context,
+            this,
+            this,
+            saveCardSwitchHolder,
+            this,
+            cardViewModel,
+            checkoutFragment
         )
       //  paymentInputViewHolder.tabLayout.setUnselectedAlphaLevel(1.0f)
         if (::paymentInputViewHolder.isInitialized)
