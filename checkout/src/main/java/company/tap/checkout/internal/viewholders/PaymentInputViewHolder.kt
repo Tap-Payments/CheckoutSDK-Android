@@ -451,6 +451,9 @@ class PaymentInputViewHolder(
             cardBrandDetection(charSequence.toString())
             if (card != null)  checkValidationState(card)
         }
+        if(resetView){
+            resetTouchView()
+        }
     }
 
     private fun setTabLayoutBasedOnApiResponse(
@@ -626,14 +629,19 @@ class PaymentInputViewHolder(
 
     override fun onFocusChange(focusField: String) {
         lastFocusField = focusField
-        println("lastFocusField"+lastFocusField)
-      //  tapCardInputView.
+        println("lastFocusField>>>>"+lastFocusField)
         if(resetView){
-            lastFocusField =  CardInputListener.FocusField.FOCUS_CVC
-          //  tapCardInputView.onTouchView()
+            tapCardInputView.onTouchView()
             resetView = false
         }
 
+    }
+
+    fun resetTouchView(){
+        if(resetView){
+            tapCardInputView.onTouchView()
+            resetView = false
+        }
     }
 
     /**

@@ -985,10 +985,52 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         //    goPaySavedCardHolder.view.goPayLoginView.groupAction.setOnClickListener {
         //       setGoPayLoginViewGroupActionListener()
         //   }
-        paymentInputViewHolder.view.setOnTouchListener { v, _ ->
+        //paymentInputViewHolder.tabLayout.setOnTouchListener { v, _ ->
+        touchHandlingForCardView()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    @SuppressLint("ClickableViewAccessibility")
+    private fun touchHandlingForCardView() {
+        saveCardSwitchHolder?.view?.setOnTouchListener { v, _ ->
             CustomUtils.hideKeyboardFrom(context, paymentInputViewHolder.view)
             paymentInputViewHolder.resetView = true
             paymentInputViewHolder.onFocusChange("")
+
+            true
+        }
+        cardViewHolder.view.cardLinearLayout.setOnTouchListener { v, _ ->
+            CustomUtils.hideKeyboardFrom(context, paymentInputViewHolder.view)
+            paymentInputViewHolder.resetView = true
+            paymentInputViewHolder.resetTouchView()
+
+            true
+        }
+        amountViewHolder.view.setOnTouchListener { v, _ ->
+            CustomUtils.hideKeyboardFrom(context, paymentInputViewHolder.view)
+            paymentInputViewHolder.resetView = true
+            paymentInputViewHolder.resetTouchView()
+
+            true
+        }
+        paymentInputViewHolder.tapAlertView?.setOnTouchListener { v, _ ->
+            CustomUtils.hideKeyboardFrom(context, paymentInputViewHolder.view)
+            paymentInputViewHolder.resetView = true
+            paymentInputViewHolder.resetTouchView()
+
+            true
+        }
+        paymentInputViewHolder.tabLayout.setOnTouchListener { v, _ ->
+            CustomUtils.hideKeyboardFrom(context, paymentInputViewHolder.view)
+            paymentInputViewHolder.resetView = true
+            paymentInputViewHolder.resetTouchView()
+
+            true
+        }
+        businessViewHolder.view.setOnTouchListener { v, _ ->
+            CustomUtils.hideKeyboardFrom(context, paymentInputViewHolder.view)
+            paymentInputViewHolder.resetView = true
+            paymentInputViewHolder.resetTouchView()
 
             true
         }

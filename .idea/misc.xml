@@ -5,6 +5,7 @@
       <map>
         <entry key="app/src/main/res/xml/root_preferences.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/activity_check_out.xml" value="0.15231187669990934" />
+        <entry key="checkout/src/main/res/layout/cardviewholder_layout1.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/fragment_checkouttaps.xml" value="0.11876699909338169" />
         <entry key="checkout/src/main/res/layout/fragment_checkouttaps_full.xml" value="0.15231187669990934" />
         <entry key="checkout/src/main/res/layout/payment_inputt_layout.xml" value="0.1" />
