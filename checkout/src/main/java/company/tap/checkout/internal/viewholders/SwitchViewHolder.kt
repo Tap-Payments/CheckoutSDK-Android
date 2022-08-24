@@ -216,7 +216,7 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
             view.mainSwitch.setSwitchDataSource(
                 getMainSwitchDataSource(
                     LocalizationManager.getValue(
-                        "cardSaveLabel",
+                        "cardSaveLater",
                         "TapCardInputKit"
                     )
                 )
