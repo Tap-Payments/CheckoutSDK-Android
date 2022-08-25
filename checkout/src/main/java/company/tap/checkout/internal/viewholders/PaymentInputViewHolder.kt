@@ -19,7 +19,9 @@ import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.core.widget.doAfterTextChanged
 import com.google.android.material.tabs.TabLayout
+import company.tap.cardinputwidget.Card
 import company.tap.cardinputwidget.CardBrandSingle
+import company.tap.cardinputwidget.views.CardNumberEditText
 import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardinputwidget.widget.inline.InlineCardInput
 import company.tap.checkout.R
@@ -451,9 +453,9 @@ class PaymentInputViewHolder(
             cardBrandDetection(charSequence.toString())
             if (card != null)  checkValidationState(card)
         }
-        if(resetView){
+       /* if(resetView){
             resetTouchView()
-        }
+        }*/
     }
 
     private fun setTabLayoutBasedOnApiResponse(
@@ -630,17 +632,20 @@ class PaymentInputViewHolder(
     override fun onFocusChange(focusField: String) {
         lastFocusField = focusField
         println("lastFocusField>>>>"+lastFocusField)
-        if(resetView){
+       /* if(resetView){
             tapCardInputView.onTouchView()
             resetView = false
-        }
+        }*/
 
     }
 
     fun resetTouchView(){
         if(resetView){
-            tapCardInputView.onTouchView()
-            resetView = false
+           if(!cardNumber.isNullOrEmpty() && !cardNumber.isNullOrBlank() &&  CardValidator.validate(cardNumber).validationState ==CardValidationState.valid){
+               tapCardInputView.onTouchView()
+               resetView = false
+           }
+
         }
     }
 

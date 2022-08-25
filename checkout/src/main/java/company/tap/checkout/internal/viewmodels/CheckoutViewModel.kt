@@ -26,6 +26,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.transition.Fade
+import androidx.transition.Scene
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import cards.pay.paycardsrecognizer.sdk.Card
@@ -61,9 +62,12 @@ import company.tap.checkout.internal.apiresponse.testmodels.TapCardPhoneListData
 import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.*
-import company.tap.checkout.internal.utils.*
 import company.tap.checkout.internal.utils.AmountCalculator.calculateExtraFeesAmount
+import company.tap.checkout.internal.utils.AnimationEngine
 import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
+import company.tap.checkout.internal.utils.CurrencyFormatter
+import company.tap.checkout.internal.utils.CustomUtils
+import company.tap.checkout.internal.utils.Utils
 import company.tap.checkout.internal.viewholders.*
 import company.tap.checkout.internal.webview.WebFragment
 import company.tap.checkout.internal.webview.WebViewContract
@@ -91,7 +95,6 @@ import kotlinx.android.synthetic.main.switch_layout.view.*
 import org.json.JSONException
 import org.json.JSONObject
 import java.math.BigDecimal
-import java.util.*
 import kotlin.properties.Delegates
 
 
@@ -209,7 +212,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             inlineViewCallback: InlineViewCallback,
             intent: Intent,
             cardViewModel: CardViewModel,
-            checkoutFragment: CheckoutFragment
+            checkoutFragment: CheckoutFragment,headerLayout: LinearLayout
     ) {
         this.context = context
         this.fragmentManager = fragmentManager
@@ -223,7 +226,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         this.cardViewModel = cardViewModel
         this.checkoutFragment = checkoutFragment
 
-
+        val aScene: Scene ?= Scene.getCurrentScene(sdkLayout)
+        aScene?.setEnterAction {
+            AnimationUtils.loadAnimation(context,R.anim.slide_down)
+        }
 
         textRecognitionML = TapTextRecognitionML(this)
         inlineViewFragment.setCallBackListener(inlineViewCallback)
@@ -541,8 +547,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun caseDisplayControlCurrency() {
         removeViews(
-                businessViewHolder,
-                amountViewHolder,
+
                 cardViewHolder,
                 paymentInputViewHolder,
                 saveCardSwitchHolder,
@@ -550,8 +555,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 otpViewHolder,
                 itemsViewHolder
         )
-        removeAllViews()
-        addViews(businessViewHolder, amountViewHolder, itemsViewHolder)
+       // removeAllViews()
+        addViews( itemsViewHolder)
 
         /**
          * will be replaced by itemList coming from the API**/
@@ -995,7 +1000,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         saveCardSwitchHolder?.view?.setOnTouchListener { v, _ ->
             CustomUtils.hideKeyboardFrom(context, paymentInputViewHolder.view)
             paymentInputViewHolder.resetView = true
-            paymentInputViewHolder.onFocusChange("")
+            paymentInputViewHolder.resetTouchView()
+          //  paymentInputViewHolder.onFocusChange("")
 
             true
         }
@@ -1263,12 +1269,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         viewHolders.forEach {
             Handler(Looper.getMainLooper()).postDelayed(Runnable {
+                if (::context.isInitialized) {
+                  /*  val animation = AnimationUtils.loadAnimation(context, R.anim.slide_down)
+                    animation.duration=30L
+                    it?.view?.startAnimation(animation)*/
+                  //  AnimationEngine.applyTransition(it?.view as ViewGroup,AnimationEngine.Type.SLIDE,500)
+                }
                 if (::sdkLayout.isInitialized)
                     sdkLayout.removeView(it?.view)
-                if (::context.isInitialized) {
-                    val animation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
-                    it?.view?.startAnimation(animation)
-                }
+
 
 
             }, 0)
@@ -1280,15 +1289,30 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private fun addViews(vararg viewHolders: TapBaseViewHolder?) {
         viewHolders.forEach {
             Handler(Looper.getMainLooper()).postDelayed(Runnable {
+              //  val animati1on = AnimationUtils.loadAnimation(context, R.anim.slide_down)
+                if (::context.isInitialized) {
+                 //   val animation = AnimationUtils.loadAnimation(context, R.anim.slide_down)
+                 //   it?.view?.startAnimation(animation)
+                    val animati1on= AnimationUtils.loadAnimation(context, R.anim.fade_in)
+                   // animati1on.duration = 500L
+                    it?.view?.startAnimation(animati1on)
+                  //  AnimationEngine.applyTransition(it?.view as ViewGroup,AnimationEngine.Type.FADE_IN,500)
+
+                }
                 if (::sdkLayout.isInitialized)
                     sdkLayout.addView(it?.view)
-                if (::context.isInitialized) {
-                    val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
-                    it?.view?.startAnimation(animation)
+                checkoutFragment.scrollView?.bottom?.let { it1 ->
+                    checkoutFragment.scrollView?.smoothScrollTo(0,
+                        it1
+                    )
                 }
+              //  checkoutFragment.scrollView?.fullScroll(View.FOCUS_DOWN)
 
-            }, 0)
+               // AnimationEngine.applyTransition(sdkLayout,SLIDE,1500)
+
+            }, 50)
         }
+
     }
 
     private fun unActivateActionButton() {

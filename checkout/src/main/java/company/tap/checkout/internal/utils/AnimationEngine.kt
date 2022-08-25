@@ -1,9 +1,11 @@
 package company.tap.checkout.internal.utils
 
+import android.view.Gravity
+import android.view.Gravity.BOTTOM
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.Barrier.BOTTOM
 import androidx.transition.*
-import company.tap.checkout.internal.utils.AnimationEngine.Type.FADE
-import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
+import company.tap.checkout.internal.utils.AnimationEngine.Type.*
 
 /**
  *
@@ -12,11 +14,15 @@ import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
  *
  */
 object AnimationEngine {
+    var fadeIn = Fade(Visibility.MODE_OUT)
+    var slideDown= Slide(Gravity.BOTTOM)
 
     fun applyTransition(sceneRoot: ViewGroup, type: Type, duration: Long? = null) {
         val transitionSet = when (type) {
             FADE -> fadeTransition
             SLIDE -> slideTransition
+            FADE_IN ->fadeInTransition
+            SLIDE_DOWN->slideDownTransition
         }
         duration?.let { transitionSet.setDuration(it) }
         TransitionManager.beginDelayedTransition(sceneRoot, transitionSet)
@@ -24,10 +30,21 @@ object AnimationEngine {
 
     private val slideTransition = TransitionSet()
         .setOrdering(TransitionSet.ORDERING_SEQUENTIAL)
-        .addTransition(Fade())
-        .addTransition(ChangeBounds())
         .addTransition(Slide())
+        .addTransition(ChangeBounds())
+        .addTransition(Fade())
 
+    private val slideDownTransition = TransitionSet()
+        .setOrdering(TransitionSet.ORDERING_SEQUENTIAL)
+        .addTransition(slideDown)
+        .addTransition(ChangeBounds())
+        .addTransition(Fade())
+
+    private val fadeInTransition = TransitionSet()
+        .setOrdering(TransitionSet.ORDERING_SEQUENTIAL)
+        .addTransition(fadeIn)
+       //  .addTransition(ChangeBounds())
+        .addTransition(slideDown)
     private val fadeTransition = TransitionSet()
         .setOrdering(TransitionSet.ORDERING_SEQUENTIAL)
         .addTransition(Fade())
@@ -35,7 +52,9 @@ object AnimationEngine {
 
     enum class Type {
         SLIDE,
-        FADE
+        FADE,
+        FADE_IN,
+        SLIDE_DOWN
     }
 
 }
