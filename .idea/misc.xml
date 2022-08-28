@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/xml/root_preferences.xml" value="0.1" />
+        <entry key="checkout/src/main/res/drawable/layout_bb.xml" value="0.157" />
         <entry key="checkout/src/main/res/layout/activity_check_out.xml" value="0.15231187669990934" />
         <entry key="checkout/src/main/res/layout/cardviewholder_layout1.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/fragment_checkouttaps.xml" value="0.11876699909338169" />
@@ -12,5 +13,6 @@
       </map>
     </option>
   </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
 </project>

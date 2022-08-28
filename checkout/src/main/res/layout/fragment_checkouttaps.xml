@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:windowSoftInputMode="adjustResize|adjustPan|stateVisible"
+    android:windowSoftInputMode="adjustResize|adjustPan"
     android:orientation="vertical"
     android:fillViewport="true"
     android:id="@+id/scrollView"
@@ -28,6 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:id="@+id/headerLayout"
         android:background="@drawable/layout_bg"
         tools:context=".open.CheckoutFragment">
 
@@ -35,8 +36,9 @@
             android:id="@+id/fragment_all"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/layout_bg"
+            android:background="@drawable/layout_bb"
             android:visibility="visible"
+
             android:orientation="vertical" />
 
         <!-- <LinearLayout
@@ -63,7 +65,7 @@
             android:id="@+id/inline_container"
             android:layout_width="match_parent"
             android:visibility="gone"
-            android:layout_height="match_parent"
+            android:layout_height="500dp"
             android:layout_margin="20dp" />
 
 

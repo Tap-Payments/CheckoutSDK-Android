@@ -15,10 +15,12 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import androidx.annotation.RequiresApi
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.viewModels
 import cards.pay.paycardsrecognizer.sdk.Card
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
@@ -29,7 +31,6 @@ import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.apiresponse.CardViewState
 import company.tap.checkout.internal.apiresponse.Resource
 import company.tap.checkout.internal.enums.SectionType
-import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.controller.SDKSession.sessionDelegate
@@ -66,9 +67,10 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
       var scrollView :NestedScrollView ?= null
     @JvmField
     var isNfcOpened:Boolean=false
-
-    private var isFullscreen = true
-
+    @JvmField
+     var isFullscreen = false
+    var heightIn :Int=0
+   private var inLineCardLayout: FrameLayout?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -109,17 +111,17 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
         _Context?.let { cardViewModel.getContext(it) }
         backgroundColor = (Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.clear")))
         setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
-        bottomSheetDialog.behavior.peekHeight
-        bottomSheetDialog.behavior.isDraggable
+        bottomSheetDialog.behavior.isDraggable= true
         val checkoutLayout: LinearLayout? = view.findViewById(R.id.fragment_all)
         val frameLayout: FrameLayout? = view.findViewById(R.id.fragment_container_nfc_lib)
         val webFrameLayout: FrameLayout? = view.findViewById(R.id.webFrameLayout)
-        val inLineCardLayout: FrameLayout? = view.findViewById(R.id.inline_container)
+       inLineCardLayout = view.findViewById(R.id.inline_container)
         val headerLayout: LinearLayout? = view.findViewById(R.id.headerLayout)
          closeText = view.findViewById(R.id.closeText)
          closeImage= view.findViewById(R.id.closeImage)
         scrollView = view.findViewById(R.id.scrollView)
         val  heightscreen: Int = Resources.getSystem().getDisplayMetrics().heightPixels;
+       // bottomSheetDialog.behavior.peekHeight = heightscreen
 
         println("heightscreen"+heightscreen)
         println("sdkLayoutheight"+checkoutLayout?.height)
@@ -182,7 +184,7 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
                                         checkoutLayout,
                                         frameLayout,
                                         it1,
-                                        inLineCardLayout,
+                                        inLineCardLayout!!,
                                         this,
                                         it2,
                                         cardViewModel, this,headerLayout
@@ -195,7 +197,9 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
                 }
             }
         }
-         enableSections()
+        inLineCardLayout?.minimumHeight= heightscreen - checkoutLayout?.height!!
+
+        enableSections()
 
         dialog?.window?.attributes?.windowAnimations = R.style.DialogAnimation
 
@@ -211,28 +215,33 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 println("111heightscreen>>>>"+heightscreen)
                 println("1111sdkLayoutheight>>>>>"+checkoutLayout?.height)
+                println("1111newState>>>>>"+newState)
+                println("1111difff>>>>>"+ checkoutLayout?.height?.let { heightscreen.minus(it) })
+                println("1111peek>>>>>"+bottomSheetDialog.behavior.peekHeight)
+var diff = checkoutLayout?.height?.let { heightscreen.minus(it) }
 
 
-
-                bottomSheet.post { //workaround for the bottomsheet  bug
-                    bottomSheet.requestLayout()
-                    bottomSheet.invalidate()
-                }
                 if (newState == BottomSheetBehavior.STATE_HIDDEN) {
                    resetTabAnimatedButton()
                     dismiss()
                 }
-                /*if (newState == BottomSheetBehavior.STATE_EXPANDED) {
-                  // bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+
+                    if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+                        bottomSheetDialog.behavior.peekHeight = heightscreen
+
+                   bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
                   // bottomSheetDialog.behavior.saveFlags = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
+                  scrollView?.smoothScrollTo(0, heightscreen)
                    bottomSheetDialog.behavior.isDraggable = true
-                }*/
+
+                }
             }
 
             override fun onSlide(p0: View, p1: Float) {
                 println("onSlide"+p0)
                 println("onSlide"+p1)
-
+                bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                scrollView?.smoothScrollTo(0, heightscreen)
             }
         })
 

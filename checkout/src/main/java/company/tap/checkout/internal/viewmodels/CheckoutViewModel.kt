@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ShapeDrawable
 import android.os.Build
@@ -13,14 +14,17 @@ import android.text.format.DateFormat
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
 import androidx.annotation.RestrictTo
 import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -84,6 +88,7 @@ import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.SeparatorViewTheme
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
+import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.businessview_layout.view.*
@@ -547,7 +552,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun caseDisplayControlCurrency() {
         removeViews(
-
+              //  businessViewHolder,
+           // amountViewHolder,
                 cardViewHolder,
                 paymentInputViewHolder,
                 saveCardSwitchHolder,
@@ -556,7 +562,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 itemsViewHolder
         )
        // removeAllViews()
-        addViews( itemsViewHolder)
+        addViews(
+            itemsViewHolder)
+       // checkoutFragment?.isFullscreen =true
 
         /**
          * will be replaced by itemList coming from the API**/
@@ -577,8 +585,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun setActionGoPayOpenedItemsDisplayed() {
         removeViews(
-                businessViewHolder,
-                amountViewHolder,
+
                 cardViewHolder,
                 paymentInputViewHolder,
                 saveCardSwitchHolder,
@@ -587,9 +594,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 itemsViewHolder
         )
         addViews(
-                businessViewHolder,
-                amountViewHolder,
-                cardViewHolder,
+            cardViewHolder,
                 paymentInputViewHolder,
                 saveCardSwitchHolder
         )
@@ -602,8 +607,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private fun setActionNotGoPayOpenedNotItemsDisplayed() {
         saveCardSwitchHolder?.let {
             removeViews(
-                    businessViewHolder,
-                    amountViewHolder,
+
                     cardViewHolder,
                     paymentInputViewHolder,
                     it,
@@ -612,8 +616,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
         saveCardSwitchHolder?.let {
             addViews(
-                    businessViewHolder,
-                    amountViewHolder,
+
                     cardViewHolder,
                     paymentInputViewHolder,
                     it
@@ -1269,14 +1272,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         viewHolders.forEach {
             Handler(Looper.getMainLooper()).postDelayed(Runnable {
-                if (::context.isInitialized) {
-                  /*  val animation = AnimationUtils.loadAnimation(context, R.anim.slide_down)
-                    animation.duration=30L
-                    it?.view?.startAnimation(animation)*/
-                  //  AnimationEngine.applyTransition(it?.view as ViewGroup,AnimationEngine.Type.SLIDE,500)
-                }
                 if (::sdkLayout.isInitialized)
                     sdkLayout.removeView(it?.view)
+
+                if (::context.isInitialized) {
+                    val animation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
+                    it?.view?.startAnimation(animation)
+                }
+
 
 
 
@@ -1289,6 +1292,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private fun addViews(vararg viewHolders: TapBaseViewHolder?) {
         viewHolders.forEach {
             Handler(Looper.getMainLooper()).postDelayed(Runnable {
+
+               // checkoutFragment?.scrollView?.post(Runnable { checkoutFragment?.scrollView?.scrollBy(0,sdkLayout.height) })
               //  val animati1on = AnimationUtils.loadAnimation(context, R.anim.slide_down)
                 if (::context.isInitialized) {
                  //   val animation = AnimationUtils.loadAnimation(context, R.anim.slide_down)
@@ -1299,18 +1304,18 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                   //  AnimationEngine.applyTransition(it?.view as ViewGroup,AnimationEngine.Type.FADE_IN,500)
 
                 }
+
                 if (::sdkLayout.isInitialized)
                     sdkLayout.addView(it?.view)
-                checkoutFragment.scrollView?.bottom?.let { it1 ->
-                    checkoutFragment.scrollView?.smoothScrollTo(0,
-                        it1
-                    )
-                }
-              //  checkoutFragment.scrollView?.fullScroll(View.FOCUS_DOWN)
+                //   checkoutFragment?.scrollView?.fullScroll(View.FOCUS_DOWN)
+               // bottomSheetDialog.behavior.setPeekHeight(sdkLayout.height)
+              //  bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                //bottomSheetDialog.behavior.saveFlags = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
+              // checkoutFragment.scrollView?.fullScroll(View.FOCUS_DOWN)
 
                // AnimationEngine.applyTransition(sdkLayout,SLIDE,1500)
 
-            }, 50)
+            }, 0)
         }
 
     }
@@ -1569,8 +1574,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     override fun onClickNFC() {
         setSlideAnimation()
         removeViews(
-                businessViewHolder,
-                amountViewHolder,
+                //businessViewHolder,
+               // amountViewHolder,
                 cardViewHolder,
 
                 saveCardSwitchHolder,
@@ -1579,7 +1584,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 goPaySavedCardHolder,
                 goPayViewsHolder
         )
-        addViews(businessViewHolder, amountViewHolder)
+      //  addViews(businessViewHolder, amountViewHolder)
         frameLayout.visibility = View.VISIBLE
         fragmentManager
             .beginTransaction()
@@ -1603,8 +1608,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     override fun onClickCardScanner(scannerClicked :Boolean) {
         setSlideAnimation()
         removeViews(
-                businessViewHolder,
-                amountViewHolder,
+               //businessViewHolder,
+              //  amountViewHolder,
                 cardViewHolder,
                 saveCardSwitchHolder,
                 paymentInputViewHolder,
@@ -1613,18 +1618,21 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 goPayViewsHolder
         )
         amountViewHolder.readyToScanVisibility(scannerClicked)
-        addViews(businessViewHolder, amountViewHolder)
+       // addViews(businessViewHolder, amountViewHolder)
 
-        inLineCardLayout.visibility = View.VISIBLE
         FrameManager.getInstance().frameColor = Color.WHITE
-        fragmentManager
-            .beginTransaction()
-            .replace(R.id.inline_container, inlineViewFragment)
-            .commit()
-        isInlineOpened = true
-        amountViewHolder.changeGroupAction(false)
+        // Use
         val bottomSheet: FrameLayout? = bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet)
         BottomSheetBehavior.from(bottomSheet as View).state = BottomSheetBehavior.STATE_EXPANDED
+        bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        fragmentManager
+            .beginTransaction()
+            .replace(R.id.inline_container,inlineViewFragment)
+            .commit()
+        isInlineOpened = true
+        inLineCardLayout.visibility = View.VISIBLE
+        amountViewHolder.changeGroupAction(false)
+
         checkSelectedAmountInitiated()
     }
 
@@ -1992,10 +2000,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     fun handleScanFailedResult() {
         println("handleScanFailedResult card is")
         removeInlineScanner()
-        removeViews(amountViewHolder, businessViewHolder)
+      //  removeViews(amountViewHolder, businessViewHolder)
         addViews(
-                businessViewHolder,
-                amountViewHolder,
+               // businessViewHolder,
+              //  amountViewHolder,
                 cardViewHolder,
                 paymentInputViewHolder,
                 saveCardSwitchHolder
@@ -2006,10 +2014,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     fun handleScanSuccessResult(card: Card) {
         removeInlineScanner()
-        removeViews(amountViewHolder, businessViewHolder)
+      //  removeViews(amountViewHolder, businessViewHolder)
         addViews(
-                businessViewHolder,
-                amountViewHolder,
+               // businessViewHolder,
+               /// amountViewHolder,
                 cardViewHolder,
                 paymentInputViewHolder,
                 saveCardSwitchHolder
@@ -2062,10 +2070,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     fun handleNFCScannedResult(emvCard: TapEmvCard) {
         println("emvCard>>" + emvCard)
-        removeViews(amountViewHolder, businessViewHolder)
+     //   removeViews(amountViewHolder, businessViewHolder)
         addViews(
-                businessViewHolder,
-                amountViewHolder,
+             //   businessViewHolder,
+             //   amountViewHolder,
                 cardViewHolder,
                 paymentInputViewHolder,
                 saveCardSwitchHolder
