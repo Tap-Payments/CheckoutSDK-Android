@@ -2268,7 +2268,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                  paymentInputViewHolder.setDataFromAPI(cardPaymentOptions)
              }else{
                 adapter.updateAdapterData(webPaymentOptions)
-                paymentInputViewHolder.setDataFromAPI(cardPaymentOptions)
+                 if(!cardPaymentOptions.isEmpty()){
+                     paymentInputViewHolder.setDataFromAPI(cardPaymentOptions)
+
+                 }else {
+                     saveCardSwitchHolder?.mainTextSave?.visibility = View.GONE
+                     removeViews(paymentInputViewHolder)
+                 }
 
              }
         }
