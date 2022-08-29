@@ -238,10 +238,10 @@ var diff = checkoutLayout?.height?.let { heightscreen.minus(it) }
             }
 
             override fun onSlide(p0: View, p1: Float) {
-                println("onSlide"+p0)
-                println("onSlide"+p1)
-                bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
-                scrollView?.smoothScrollTo(0, heightscreen)
+               // println("onSlide"+p0)
+               // println("onSlide"+p1)
+              //  bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+              //  scrollView?.smoothScrollTo(0, heightscreen)
             }
         })
 
@@ -355,7 +355,7 @@ requireArguments().putBoolean(RESET_FRAG, resetFragment)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun resetTabAnimatedButton(){
+     fun resetTabAnimatedButton(){
         checkOutActivity?.displayMetrics?.let { tabAnimatedActionButton?.setDisplayMetrics(it) }
         SDKSession.sessionActive = false
         tabAnimatedActionButton?.changeButtonState(ActionButtonState.RESET)

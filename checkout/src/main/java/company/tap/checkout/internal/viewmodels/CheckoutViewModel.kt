@@ -782,15 +782,19 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         if (::redirectURL.isInitialized && ::fragmentManager.isInitialized) {
             if (otpViewHolder.otpView.isVisible) {
                 removeViews(
-                        businessViewHolder,
-                        amountViewHolder,
+                       // businessViewHolder,
+
                         cardViewHolder,
                         paymentInputViewHolder,
                         otpViewHolder
                 )
             }
             setSlideAnimation()
+            businessViewHolder.view.headerView.constraint.visibility= View.GONE
+            businessViewHolder.view.topSeparatorLinear.visibility= View.GONE
+            checkoutFragment.closeText.visibility =  View.GONE
 
+            // removeViews(amountViewHolder)
             val bottomSheet: FrameLayout? = bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet)
             BottomSheetBehavior.from(bottomSheet as View).state = BottomSheetBehavior.STATE_EXPANDED
             Handler(Looper.getMainLooper()).postDelayed({
@@ -801,13 +805,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                                 this, cardViewModel, authenticate
                         )
                         ).commitNow()
+                checkoutFragment.closeText.visibility =  View.VISIBLE
 
-            }, 1000)
+            }, 1500)
 
         }
         saveCardSwitchHolder?.view?.visibility = View.GONE
         webFrameLayout.visibility =View.VISIBLE
-       removeViews(saveCardSwitchHolder)
+         removeViews(amountViewHolder,businessViewHolder)
        // tabAnimatedActionButtonViewHolder?.view?.actionButton?.visibility = View.INVISIBLE
     }
 
@@ -1205,7 +1210,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
         if(saveCardSwitchHolder!=null){
             removeViews(saveCardSwitchHolder)
-            addViews(saveCardSwitchHolder)
+            addViews(businessViewHolder,saveCardSwitchHolder)
+            businessViewHolder.view.headerView.constraint.visibility= View.GONE
+            businessViewHolder.view.topSeparatorLinear.visibility= View.GONE
             saveCardSwitchHolder?.view?.visibility = View.VISIBLE
             saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
         }
@@ -1230,8 +1237,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 )
             }else{
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
-                        ActionButtonState.ERROR
+                        ActionButtonState.RESET
                 )}
+
             }
         }
         Handler().postDelayed({
@@ -1424,8 +1432,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         saveCardSwitchHolder?.view?.mainSwitch?.mainTextSave?.visibility = View.INVISIBLE
 
         removeViews(
-                businessViewHolder,
-                amountViewHolder,
+            //    businessViewHolder,
+            //    amountViewHolder,
                 cardViewHolder,
                 paymentInputViewHolder,
                 tabAnimatedActionButtonViewHolder

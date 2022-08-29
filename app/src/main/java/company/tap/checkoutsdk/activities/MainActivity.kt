@@ -658,7 +658,18 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
     override fun sdkError(goSellError: GoSellError?) {
         println("sdkError>>>>>" + goSellError)
-
+        Toast.makeText(this, "sdkError" +  goSellError?.errorBody, Toast.LENGTH_SHORT).show()
+        payButton?.changeButtonState(ActionButtonState.RESET)
+        payButton.setButtonDataSource(
+            true,
+            this.let { LocalizationManager.getLocale(it).language },
+            LocalizationManager.getValue("pay", "ActionButton"),
+            Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
+            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
+        )
+        payButton?.setOnClickListener {
+            sdkSession.setButtonView(payButton, this, supportFragmentManager, this)
+        }
 
     }
 
@@ -724,6 +735,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun getStatusSDK(response :String ? ,charge: Charge?) {
         if(charge==null) {
+
             payButton.changeButtonState(ActionButtonState.RESET)
             SessionManager.setActiveSession(false)
             payButton.setButtonDataSource(
@@ -745,6 +757,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         if (settingsManager == null) {
             settingsManager?.setPref(this)
         }
+
 
     }
 
