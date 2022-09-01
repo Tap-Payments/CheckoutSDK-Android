@@ -56,9 +56,9 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.7.0'
     api 'com.github.Tap-Payments:LocalisationManager-Android:0.0.1.29'
   //  implementation 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.25'
-    implementation 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.36.45'
+    implementation 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.36.50'
  //   api 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.25'
-    api 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.36.45'
+    api 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.36.50'
     implementation "com.hbb20:ccp:2.5.0"
     api 'androidx.activity:activity-ktx:1.4.0'
     testImplementation 'junit:junit:4.13'
@@ -87,8 +87,8 @@ dependencies {
     implementation 'com.koushikdutta.ion:ion:3.1.0'
     implementation "com.google.android.gms:play-services-wallet:19.1.0"
 
-    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.357.43'
-    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.357.43'
+    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.357.56'
+    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.357.56'
     implementation 'com.github.corouteam:GlideToVectorYou:v2.0.0'
 
 }

@@ -38,5 +38,5 @@ interface PluginSessionDelegate {
 
     fun userEnabledSaveCardOption(saveCardEnabled: Boolean)
 
-    fun getStatusSDK(response :String ? ,charge: Charge?)
+   // fun getStatusSDK(response :String ? ,charge: Charge?)
 }

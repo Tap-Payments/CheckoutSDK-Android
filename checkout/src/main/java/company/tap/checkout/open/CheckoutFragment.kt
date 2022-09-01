@@ -16,6 +16,7 @@ import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ScrollView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.DialogFragment
@@ -24,6 +25,7 @@ import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.viewModels
 import cards.pay.paycardsrecognizer.sdk.Card
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.ChargeStatus
@@ -34,6 +36,7 @@ import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.controller.SDKSession.sessionDelegate
+import company.tap.checkout.open.controller.SDKSession.supportFragmentManager
 import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.taplocalizationkit.LocalizationManager
@@ -80,17 +83,26 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
+  /*  @RequiresApi(Build.VERSION_CODES.N)
     override fun onDestroyView() {
         println("onDestroyView>>>")
-        /*if (view?.parent != null) {
+        *//*if (view?.parent != null) {
             (view?.parent as ViewGroup).removeView(view)
-        }*/
+        }*//*
         resetTabAnimatedButton()
         super.onDestroyView()
+    }*/
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+       // if (!this.isDestroyed()) {
+            Glide.with(this).pauseRequests()
+       // }
+        resetTabAnimatedButton()
+
     }
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -164,6 +176,8 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
             resetTabAnimatedButton()
 
         }
+
+
 
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
         sessionDelegate?.sessionIsStarting()
@@ -358,7 +372,7 @@ requireArguments().putBoolean(RESET_FRAG, resetFragment)
      fun resetTabAnimatedButton(){
         checkOutActivity?.displayMetrics?.let { tabAnimatedActionButton?.setDisplayMetrics(it) }
         SDKSession.sessionActive = false
-        tabAnimatedActionButton?.changeButtonState(ActionButtonState.RESET)
+        //tabAnimatedActionButton?.changeButtonState(ActionButtonState.RESET)
 if(checkOutActivity?.isGooglePayClicked == false){
     checkOutActivity?.finish()
 }
@@ -374,7 +388,12 @@ if(checkOutActivity?.isGooglePayClicked == false){
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
         )
-
+      /*  tabAnimatedActionButton?.setOnClickListener {
+            requireActivity().supportFragmentManager.let { it1 -> SDKSession.contextSDK?.let { it2 ->
+                SDKSession.startSDK(it1,
+                    it2,SDKSession.contextSDK as Activity)
+            } }
+        }*/
         tabAnimatedActionButton?.isClickable=true
     }
 

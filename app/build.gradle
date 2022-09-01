@@ -13,7 +13,7 @@ android {
         minSdkVersion 22
         targetSdkVersion 31
         versionCode 1
-        versionName "1.0.2.15"
+        versionName "1.0.2.16"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'proguard-rules.pro'
@@ -52,10 +52,10 @@ dependencies {
 
     implementation 'com.koushikdutta.ion:ion:3.1.0'
 
-    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.357.43'
-    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.357.43'
-    implementation 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.36.45'
-    api 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.36.45'
+    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.357.56'
+    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.357.56'
+    implementation 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.36.50'
+    api 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.36.50'
     implementation 'company.tap:PayCards-Tap-Android:0.1.6.4'
     api 'company.tap:PayCards-Tap-Android:0.1.6.4'
 

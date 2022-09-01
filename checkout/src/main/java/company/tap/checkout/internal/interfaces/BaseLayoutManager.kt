@@ -10,6 +10,7 @@ import company.tap.checkout.internal.api.models.PhoneNumber
 import company.tap.checkout.internal.api.responses.*
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.enums.SectionType
+import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
 
 /**
  *
@@ -32,7 +33,8 @@ interface BaseLayoutManager {
      fun handleSuccessFailureResponseButton(
          response: String,
          authenticate: Authenticate?,
-         chargeResponse: Charge?
+         chargeResponse: Charge?,
+         tabAnimatedActionButton: TabAnimatedActionButton?
      )
     fun displayAsynchronousPaymentView(chargeResponse:Charge)
 

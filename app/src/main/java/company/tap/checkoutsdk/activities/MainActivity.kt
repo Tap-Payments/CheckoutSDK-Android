@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import company.tap.checkout.TapCheckOutSDK
+import company.tap.checkout.internal.api.crypto.CryptoUtil
 import company.tap.checkout.internal.api.enums.AmountModificatorType
 import company.tap.checkout.internal.api.enums.Measurement
 import company.tap.checkout.internal.api.models.*
@@ -238,8 +239,6 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
             settingsManager?.getString("key_package_name","company.tap.goSellSDKExample")
 
         )
-
-
 
     }
 
@@ -517,7 +516,13 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
                 Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
         )
 
-        sdkSession.setButtonView(payButton, this, supportFragmentManager, this)
+        payButton.setOnClickListener {
+            payButton.clearAnimation()
+            sdkSession.setButtonView(payButton, this, supportFragmentManager, this)
+
+        }
+
+
 
 
     }
@@ -659,7 +664,10 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
     override fun sdkError(goSellError: GoSellError?) {
         println("sdkError>>>>>" + goSellError)
         Toast.makeText(this, "sdkError" +  goSellError?.errorBody, Toast.LENGTH_SHORT).show()
-        payButton?.changeButtonState(ActionButtonState.RESET)
+        payButton?.setOnClickListener {
+            sdkSession.setButtonView(payButton, this, supportFragmentManager, this)
+        }
+       /* payButton?.changeButtonState(ActionButtonState.ERROR)
         payButton.setButtonDataSource(
             true,
             this.let { LocalizationManager.getLocale(it).language },
@@ -669,7 +677,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         )
         payButton?.setOnClickListener {
             sdkSession.setButtonView(payButton, this, supportFragmentManager, this)
-        }
+        }*/
 
     }
 
@@ -691,7 +699,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
     }
 
     override fun sessionFailedToStart() {
-        println("invalidCardDetails>>>>>")
+        Toast.makeText(this, "sessionFailedToStart>> it already active!", Toast.LENGTH_SHORT).show()
 
     }
 
@@ -732,9 +740,9 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         println("userEnabledSaveCardOption>>>>>$saveCardEnabled")
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
+/*    @RequiresApi(Build.VERSION_CODES.N)
     override fun getStatusSDK(response :String ? ,charge: Charge?) {
-        if(charge==null) {
+      *//*  if(charge==null) {
 
             payButton.changeButtonState(ActionButtonState.RESET)
             SessionManager.setActiveSession(false)
@@ -749,8 +757,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
                 payButton.changeButtonState(ActionButtonState.LOADING)
                 SDKSession.startSDK(supportFragmentManager, this, this)
             }
-        }
-    }
+        }*//*
+    }*/
 
     override fun onResume() {
         super.onResume()

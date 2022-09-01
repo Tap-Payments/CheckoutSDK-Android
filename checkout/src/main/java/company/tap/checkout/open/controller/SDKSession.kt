@@ -127,10 +127,11 @@ object  SDKSession : APIRequestCallback {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun startSDK(supportFragmentManager: FragmentManager, context: Context, activity:Activity) {
+    fun startSDK(supportFragmentManager: FragmentManager?, context: Context, activity:Activity) {
         println("is session enabled ${SessionManager.isSessionEnabled()}")
         if (SessionManager.isSessionEnabled()) {
             println("Session already active!!!")
+            sessionDelegate?.sessionFailedToStart()
             return
         }
         this.contextSDK = context
@@ -402,7 +403,7 @@ object  SDKSession : APIRequestCallback {
      * call payment methods API
      */
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun getPaymentOptions(supportFragmentManager: FragmentManager) {
+    private fun getPaymentOptions(supportFragmentManager: FragmentManager?) {
         when (isInternetConnectionAvailable()) {
             ErrorTypes.SDK_NOT_CONFIGURED_WITH_VALID_CONTEXT -> contextSDK?.let {
                 showDialog(
@@ -448,7 +449,7 @@ object  SDKSession : APIRequestCallback {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun startPayment(_supportFragmentManager:FragmentManager) {
+    fun startPayment(_supportFragmentManager:FragmentManager?) {
        // persistPaymentDataSource()
       //  if (tabAnimatedActionButton != null) tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
         val requestModel =TapConfigRequestModel(PaymentDataSource?.getAuthKeys()?.let { PaymentDataSource?.getMerchant()?.id?.let { it1 ->
@@ -492,6 +493,7 @@ object  SDKSession : APIRequestCallback {
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
         )
+
         payButtonView.setOnClickListener {
             payButtonView.changeButtonState(ActionButtonState.LOADING)
             startSDK(__supportFragmentManager,context, activity)

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ShapeDrawable
 import android.os.Build
@@ -14,17 +13,15 @@ import android.text.format.DateFormat
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import android.widget.ScrollView
 import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
 import androidx.annotation.RestrictTo
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
-import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -37,6 +34,7 @@ import cards.pay.paycardsrecognizer.sdk.Card
 import cards.pay.paycardsrecognizer.sdk.FrameManager
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewFragment
+import com.bumptech.glide.Glide
 import com.google.android.gms.wallet.PaymentData
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -88,8 +86,8 @@ import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.SeparatorViewTheme
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
-import company.tap.tapuilibrary.uikit.fragment.CardScannerFragment
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
+import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.businessview_layout.view.*
 import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
@@ -530,7 +528,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
         if(otpViewHolder.otpView.isVisible){
             removeViews(otpViewHolder)
-            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.IDLE)
+            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.RESET)
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isClickable = true
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.stateListAnimator=null
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
@@ -810,7 +808,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }, 1500)
 
         }
-        saveCardSwitchHolder?.view?.visibility = View.GONE
+        saveCardSwitchHolder?.view?.visibility = View.VISIBLE
         webFrameLayout.visibility =View.VISIBLE
          removeViews(amountViewHolder,businessViewHolder)
        // tabAnimatedActionButtonViewHolder?.view?.actionButton?.visibility = View.INVISIBLE
@@ -1171,16 +1169,18 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     override fun handleSuccessFailureResponseButton(
-            response: String,
-            authenticate: Authenticate?,
-            chargeResponse: Charge?
+        response: String,
+        authenticate: Authenticate?,
+        chargeResponse: Charge?,
+        tabAnimatedActionButton: TabAnimatedActionButton?
     ) {
-        if(chargeResponse?.status == null && response == "tokenized"){
+        SDKSession.sessionActive = false
+       /* if(chargeResponse?.status == null && response == "tokenized"){
             //todo replaced authorized with chargeresponse
             SDKSession.getListener()?.getStatusSDK(response,chargeResponse)
         }else{
             SDKSession.getListener()?.getStatusSDK(response,chargeResponse)
-        }
+        }*/
 
         /***
          * This function is  working fine as expected in case when 3ds is false
@@ -1189,7 +1189,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
          * WRONG OTP scenario also handled here as similar to old sdk show user error button and
          * close the sdk.
          * **/
-
+        tabAnimatedActionButton?.clearAnimation()
         if (::webFrameLayout.isInitialized) {
             if (fragmentManager.findFragmentById(R.id.webFrameLayout) != null)
                 fragmentManager.beginTransaction()
@@ -1223,12 +1223,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                         ActionButtonState.SUCCESS
                 )
+                tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
             }
             ChargeStatus.CANCELLED, ChargeStatus.TIMEDOUT, ChargeStatus.FAILED, ChargeStatus.DECLINED, ChargeStatus.UNKNOWN,
             ChargeStatus.RESTRICTED, ChargeStatus.ABANDONED, ChargeStatus.VOID, ChargeStatus.INVALID -> {
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                         ActionButtonState.ERROR
                 )
+
+                tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
             }else->{
 
             if(response == "tokenized"){
@@ -1237,15 +1240,31 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 )
             }else{
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
-                        ActionButtonState.RESET
-                )}
+                        ActionButtonState.ERROR
+                )
+                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isEnabled =true
+                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isClickable =true
+            }
 
             }
         }
         Handler().postDelayed({
+            tabAnimatedActionButton?.onMorphAnimationReverted()
+            tabAnimatedActionButton?.clearAnimation()
+            SDKSession.sessionActive = false
+
+        }, 4000)
+        SDKSession.sessionActive = false
+        tabAnimatedActionButton?.setOnClickListener {
+           // if(::fragmentManager.isInitialized)
+            tabAnimatedActionButton.changeButtonState(ActionButtonState.LOADING)
+            SDKSession.startSDK((tabAnimatedActionButton.context as AppCompatActivity).supportFragmentManager,tabAnimatedActionButton.context,tabAnimatedActionButton.context as AppCompatActivity)
+        }
+        Handler().postDelayed({
             if (::bottomSheetDialog.isInitialized)
                 bottomSheetDialog.dismiss()
-        }, 8000)
+
+        }, 15000)
 
 
     }
@@ -2418,7 +2437,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 saveCardSwitchHolder
         )
         saveCardSwitchHolder?.view?.visibility= View.VISIBLE
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.IDLE)
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.RESET)
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
                 true,
                 context.let { LocalizationManager.getLocale(it).language },

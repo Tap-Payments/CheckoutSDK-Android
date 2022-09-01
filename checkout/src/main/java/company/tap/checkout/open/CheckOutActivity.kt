@@ -5,34 +5,24 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.util.DisplayMetrics
 import android.util.Log
-import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.google.android.gms.wallet.AutoResolveHelper
 import com.google.android.gms.wallet.PaymentData
 import com.google.android.gms.wallet.PaymentDataRequest
 import com.google.android.gms.wallet.PaymentsClient
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.ChargeStatus
-import company.tap.checkout.internal.api.models.Authorize
-import company.tap.checkout.internal.api.models.Charge
-import company.tap.checkout.internal.api.models.Token
 import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.utils.PaymentsUtil
-import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
 import company.tap.checkout.open.data_managers.PaymentDataSource
-import company.tap.checkout.open.enums.SdkIdentifier
-import company.tap.checkout.open.interfaces.SessionDelegate
-import company.tap.checkout.open.models.CardsList
 import company.tap.nfcreader.open.reader.TapEmvCard
 import company.tap.nfcreader.open.reader.TapNfcCardReader
-import company.tap.tapnetworkkit.exception.GoSellError
-import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.models.DialogConfigurations
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -40,7 +30,7 @@ import io.reactivex.disposables.Disposables
 import kotlinx.android.synthetic.main.item_googlepay.*
 import org.json.JSONObject
 
-class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
+class CheckOutActivity : AppCompatActivity()  {
     private val tapCheckoutFragment = CheckoutFragment()
     var hideAllViews:Boolean = false
     lateinit var chargeStatus:ChargeStatus
@@ -72,7 +62,7 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
                 chargeStatus = bundle["status"] as ChargeStatus
             }
         }
-        sdkSession.addSessionDelegate(this)
+       // sdkSession.addSessionDelegate(this)
         tapCheckoutFragment.hideAllView =hideAllViews
         tapCheckoutFragment.checkOutActivity = this
         if(::chargeStatus.isInitialized)
@@ -109,14 +99,14 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
 
     }
 
-    override fun paymentSucceed(charge: Charge) {
+/*    override fun paymentSucceed(charge: Charge) {
         if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
             SDKSession.getPluginListener()?.paymentSucceed(charge)
             this.finish()
         }else {
             tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
             Handler().postDelayed({
-                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+              //  tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
             }, 1000)
 
             this.finish()
@@ -131,7 +121,7 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
             println("paymentFailed called here")
             tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
             Handler().postDelayed({
-                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+               // tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
             }, 1000)
 
             this.finish()
@@ -145,7 +135,7 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
         }else {
             tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
             Handler().postDelayed({
-                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+              //  tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
             }, 1000)
 
             this.finish()
@@ -232,7 +222,7 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
             if (!this.isDestroyed) {
                 tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
                 Handler().postDelayed({
-                    tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+                   // tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
                 }, 1000)
 
                 this.finish()
@@ -271,7 +261,7 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
         }else {
             tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
             Handler().postDelayed({
-                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+             //   tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
             }, 1000)
 
             this.finish()
@@ -286,7 +276,7 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
         }else {
             tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
             Handler().postDelayed({
-                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+              //  tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
             }, 1000)
             this.finish()
         }
@@ -300,7 +290,7 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
         }else {
             tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
             Handler().postDelayed({
-                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+              //  tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
             }, 1000)
 
             this.finish()
@@ -315,7 +305,7 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
         }else {
             tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
             Handler().postDelayed({
-                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+              //  tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
             }, 1000)
 
             this.finish()
@@ -330,14 +320,14 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
         }else {
             tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
             Handler().postDelayed({
-                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+                tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
             }, 1000)
 
             this.finish()
         }
-    }
+    }*/
 
-    @RequiresApi(Build.VERSION_CODES.N)
+/*    @RequiresApi(Build.VERSION_CODES.N)
     override fun getStatusSDK(response:String? ,charge: Charge?) {
         println("tabAnimatedActionButton is"+tabAnimatedActionButton)
         tabAnimatedActionButton?.let {
@@ -347,10 +337,13 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
             )
         }
         tabAnimatedActionButton?.visibility = View.VISIBLE
-    }
+    }*/
 
     override fun onBackPressed() {
         super.onBackPressed()
+        if(isDestroyed){
+            Glide.with(this).pauseRequests()
+        }
         finish()
     }
 
@@ -403,7 +396,12 @@ class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
 
                     }
                     RESULT_CANCELED -> {
-                        tapCheckoutFragment._viewModel?.handleSuccessFailureResponseButton("Cancelled Google Pay",null,null)
+                        tapCheckoutFragment._viewModel?.handleSuccessFailureResponseButton(
+                            "Cancelled Google Pay",
+                            null,
+                            null,
+                            tabAnimatedActionButton
+                        )
                         isGooglePayClicked = false
 
                     }
