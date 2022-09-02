@@ -1,5 +1,7 @@
 package company.tap.checkout.internal.viewmodels
 
+import android.animation.ObjectAnimator
+import android.animation.PropertyValuesHolder
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -14,6 +16,7 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.view.animation.OvershootInterpolator
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.Nullable
@@ -34,7 +37,6 @@ import cards.pay.paycardsrecognizer.sdk.Card
 import cards.pay.paycardsrecognizer.sdk.FrameManager
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewFragment
-import com.bumptech.glide.Glide
 import com.google.android.gms.wallet.PaymentData
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -65,8 +67,6 @@ import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.*
 import company.tap.checkout.internal.utils.AmountCalculator.calculateExtraFeesAmount
-import company.tap.checkout.internal.utils.AnimationEngine
-import company.tap.checkout.internal.utils.AnimationEngine.Type.SLIDE
 import company.tap.checkout.internal.utils.CurrencyFormatter
 import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.utils.Utils
@@ -76,6 +76,8 @@ import company.tap.checkout.internal.webview.WebViewContract
 import company.tap.checkout.open.CheckOutActivity
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession
+import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
+import company.tap.checkout.open.controller.SessionManager
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.CardType
 import company.tap.checkout.open.enums.TransactionMode
@@ -292,6 +294,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun confirmOTPCode(otpCode: String) {
+        otpViewHolder.view.otpView.otpViewActionButton.setDisplayMetrics(CustomUtils.getDeviceDisplayMetrics(context as Activity))
         otpViewHolder.view.otpView.otpViewActionButton.changeButtonState(ActionButtonState.LOADING)
         when(PaymentDataSource.getTransactionMode())
         {
@@ -471,7 +474,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun setSlideAnimation() {
         if (this::bottomSheetLayout.isInitialized)
-            AnimationEngine.applyTransition(bottomSheetLayout, SLIDE)
+            AnimationUtils.loadAnimation(bottomSheetLayout.context,R.anim.slide_down)
+          //  AnimationEngine.applyTransition(bottomSheetLayout, SLIDE_DOWN,9000 )
     }
 
     override fun displayGoPay() {
@@ -559,9 +563,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 otpViewHolder,
                 itemsViewHolder
         )
+
        // removeAllViews()
         addViews(
             itemsViewHolder)
+        //setSlideAnimation()
        // checkoutFragment?.isFullscreen =true
 
         /**
@@ -1174,7 +1180,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         chargeResponse: Charge?,
         tabAnimatedActionButton: TabAnimatedActionButton?
     ) {
-        SDKSession.sessionActive = false
+        SessionManager.setActiveSession(false)
        /* if(chargeResponse?.status == null && response == "tokenized"){
             //todo replaced authorized with chargeresponse
             SDKSession.getListener()?.getStatusSDK(response,chargeResponse)
@@ -1254,7 +1260,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             SDKSession.sessionActive = false
 
         }, 4000)
-        SDKSession.sessionActive = false
+        SessionManager.setActiveSession(false)
         tabAnimatedActionButton?.setOnClickListener {
            // if(::fragmentManager.isInitialized)
             tabAnimatedActionButton.changeButtonState(ActionButtonState.LOADING)
@@ -1570,6 +1576,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     override fun onPayCardSwitchAction(isCompleted: Boolean, paymentType: PaymentType) {
         println("isCompleted???" + isCompleted)
         if (isCompleted) {
+            businessViewHolder.view?.headerView.constraint.visibility = View.VISIBLE
             saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.VISIBLE
             saveCardSwitchHolder?.view?.mainSwitch?.switchSaveMobile?.visibility = View.VISIBLE
             saveCardSwitchHolder?.setSwitchToggleData(paymentType)
@@ -2481,6 +2488,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                             ActionButtonState.ERROR
                     )
                 }, 500)
+                tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
             }else->{
 
             if(status.equals("tokenized")){

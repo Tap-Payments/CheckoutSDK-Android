@@ -32,13 +32,13 @@ object AnimationEngine {
         .setOrdering(TransitionSet.ORDERING_SEQUENTIAL)
         .addTransition(Slide())
         .addTransition(ChangeBounds())
-        .addTransition(Fade())
+       // .addTransition(Fade())
 
     private val slideDownTransition = TransitionSet()
-        .setOrdering(TransitionSet.ORDERING_SEQUENTIAL)
+        .setOrdering(TransitionSet.ORDERING_TOGETHER)
         .addTransition(slideDown)
         .addTransition(ChangeBounds())
-        .addTransition(Fade())
+        //.addTransition(Fade())
 
     private val fadeInTransition = TransitionSet()
         .setOrdering(TransitionSet.ORDERING_SEQUENTIAL)
