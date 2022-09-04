@@ -12,7 +12,6 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentManager
 import com.google.gson.JsonElement
-import company.tap.checkout.TapCheckOutSDK
 import company.tap.checkout.internal.PaymentDataProvider
 import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.models.Merchant
@@ -25,7 +24,6 @@ import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.utils.CustomUtils.showDialog
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.CheckOutActivity
-import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.CardType
 import company.tap.checkout.open.enums.SdkIdentifier
@@ -353,6 +351,20 @@ object  SDKSession : APIRequestCallback {
      */
     fun setSdkMode(sdkMode: SdkMode) {
         paymentDataSource?.setSDKMode(sdkMode)
+    }
+
+    /**
+     * set OrderObject
+     */
+    fun setOrderObject(orderObject: OrderObject) {
+        paymentDataSource?.setOrder(orderObject)
+    }
+
+    /**
+     * set OrderObject Items
+     */
+    fun setOrderItems(orderItems: ArrayList<Items>) {
+        paymentDataSource?.setOrderItems(orderItems)
     }
 
     override fun onSuccess(responseCode: Int, requestCode: Int, response: Response<JsonElement>?) {

@@ -20,14 +20,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import company.tap.checkout.TapCheckOutSDK
-import company.tap.checkout.internal.api.crypto.CryptoUtil
 import company.tap.checkout.internal.api.enums.AmountModificatorType
 import company.tap.checkout.internal.api.enums.Measurement
 import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession
-import company.tap.checkout.open.controller.SessionManager
 import company.tap.checkout.open.enums.CardType
+import company.tap.checkout.open.enums.Category
 import company.tap.checkout.open.enums.SdkMode
 import company.tap.checkout.open.interfaces.SessionDelegate
 import company.tap.checkout.open.models.*
@@ -53,7 +52,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
     var urlStrDark :String="https://gist.githubusercontent.com/AhlaamK-tap/2ca0cbeaf430c6d40baa4d0700024848/raw/2e23f76a6d323c9e154b63083e5a5a84f73a1994/darktheme.json"
     var urlStrLight :String="https://gist.githubusercontent.com/AhlaamK-tap/9862436dff3b3ca222243dad3705ec6a/raw/1f553408e0f1f7e0a1e15987f987b6033d64a90d/lighttheme.json"
     var urlLocalisation :String="https://gist.githubusercontent.com/AhlaamK-tap/4285f9b4e10fb9a5c51a58f5064d470e/raw/5769a9ddc5ea74020f406d729afba2b0cf29db6c/lang.json"
-
+    var itemsList = ArrayList<Items>()
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -234,9 +233,12 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
     private fun initializeSDK() {
         TapCheckOutSDK().init(
                 this,
-            settingsManager?.getString("key_test_name","sk_test_kovrMB0mupFJXfNZWx6Etg5y"),
+          /*  settingsManager?.getString("key_test_name","sk_test_kovrMB0mupFJXfNZWx6Etg5y"),
             settingsManager?.getString("key_live_name","sk_live_QglH8V7Fw6NPAom4qRcynDK2"),
-            settingsManager?.getString("key_package_name","company.tap.goSellSDKExample")
+            settingsManager?.getString("key_package_name","company.tap.goSellSDKExample") */
+                    settingsManager?.getString("key_test_name","sk_test_2kGVSuR6bKAXLF4rDe0wa9QU"),
+            settingsManager?.getString("key_live_name","sk_live_QglH8V7Fw6NPAom4qRcynDK2"),
+            settingsManager?.getString("key_package_name","resources.gosell.io")
 
         )
 
@@ -274,22 +276,24 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
         // set transaction currency associated to your account
       //  if(settingsManager.getString("key_sdk_transaction_currency","KWD"))
-        settingsManager?.getString("key_sdk_transaction_currency","KWD")
-            ?.let { TapCurrency(it) }?.let { sdkSession.setTransactionCurrency(it) } //** Required **
-
+     //   settingsManager?.getString("key_sdk_transaction_currency","KWD")
+       //     ?.let { TapCurrency(it) }?.let { sdkSession.setTransactionCurrency(it) } //** Required **
+        sdkSession.setTransactionCurrency(TapCurrency("usd"))
 
         // Using static CustomerBuilder method available inside TAP TapCustomer Class you can populate TAP TapCustomer object and pass it to SDK
-      //  sdkSession.setCustomer(setCustomer()) //** Required **
-        settingsManager?.getCustomer()?.let { sdkSession.setCustomer(it) } //** Required **
+       sdkSession.setCustomer(setCustomer()) //** Required **
+       // settingsManager?.getCustomer()?.let { sdkSession.setCustomer(it) } //** Required **
 
 
         // Set Total Amount. The Total amount will be recalculated according to provided Taxes and Shipping
-        settingsManager?.getString("key_amount_name", "1")?.let { BigDecimal(it) }?.let {
-            sdkSession.setAmount(
-                    it
-            )
-        }//** Required **
-
+       // settingsManager?.getString("key_amount_name", "1")?.let { BigDecimal(it) }?.let {
+         //   sdkSession.setAmount(
+         //           it
+        //    )
+       // }//** Required **
+        sdkSession.setAmount(
+            BigDecimal.valueOf(38)
+        )
 
         // Set Payment Items array list
        // sdkSession.setPaymentItems(ArrayList()) // ** Optional ** you can pass empty array list
@@ -350,7 +354,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
        sdkSession.setDestination(null) // ** Optional ** you can pass Destinations object or null
 
 
-        sdkSession.setMerchantID(settingsManager?.getString("key_merchant_id","1124340"),) // ** Optional ** you can pass merchant id or null
+       // sdkSession.setMerchantID(settingsManager?.getString("key_merchant_id", "1124340")) // ** Optional ** you can pass merchant id or null
+        sdkSession.setMerchantID("599424") // ** Optional ** you can pass merchant id or null
 
 
         sdkSession.setCardType(CardType.ALL) // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
@@ -365,6 +370,13 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         sdkSession.setDefaultCardHolderName("TEST TAP"); // ** Optional ** you can pass default CardHolderName of the user .So you don't need to type it.
         sdkSession.isUserAllowedToEnableCardHolderName(false) // ** Optional ** you can enable/ disable  default CardHolderName .
         sdkSession.setSdkMode(SdkMode.SAND_BOX) //** Pass your SDK MODE
+
+        //    sdkSession.setCardType(CardType.CREDIT); // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
+        sdkSession.setOrderItems(getOrderItemsList()) // ** Usually Optional ** Required when creating order object
+
+
+        sdkSession.setOrderObject(getOrder()) // ** Usually Optional ** Required when creating order object
+
 
     }
 
@@ -461,8 +473,9 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
     fun setCustomer(): TapCustomer { // test customer id cus_Kh1b4220191939i1KP2506448// cus_TS012520211349Za012907577 checkout
         val tapCustomer: TapCustomer? = null
         //if (customer != null) customer.phone else Phone(965, 69045932)
+
         return TapCustomer(
-                "cus_TS012520211349Za012907577", "ahlaam", "middlename",
+                "", "ahlaam", "middlename",
                 "lastname", "abcd@gmail.com",
                 PhoneNumber("00965", "66175090"), "description",
         )
@@ -767,6 +780,60 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         }
 
 
+    }
+
+    private fun getOrderItemsList(): ArrayList<Items
+            > {
+        itemsList = ArrayList<Items>()
+        itemsList.add(
+            Items(
+                "",
+                "abcjuice",
+                BigDecimal.valueOf(12),
+                "kwd",
+                BigDecimal.valueOf(3),
+                Category.DIGITAL_GOODS,
+                AmountModificator(AmountModificatorType.FIXED, BigDecimal.valueOf(1)),
+                Vendor("id", "name"),
+                "ff",
+                true,
+                "items1",
+                "aac1",
+                "descr1",
+                "image1",
+                ReferenceItem("GTU", "SKI"),
+                ItemDimensions(
+                    "KG",
+                    0.5, "IN", 1.0, 1.0, 1.0
+                ),
+                "",
+                null
+            )
+        )
+        return itemsList
+    }
+
+    //Set Order object
+    private fun getOrder(): OrderObject {
+        return OrderObject(
+            BigDecimal.valueOf(12),
+            "kwd",
+            setCustomer(),
+            getOrderItemsList(),
+            ArrayList(
+                setOf(
+                    TaxObject(
+                        "Tax1",
+                        "tax described",
+                        AmountModificator(AmountModificatorType.FIXED, BigDecimal.valueOf(2))
+                    )
+                )
+            ),
+            null,
+            Merchant("1124340"),
+            null,
+            ReferId("")
+        )
     }
 
     override fun onRestart() {

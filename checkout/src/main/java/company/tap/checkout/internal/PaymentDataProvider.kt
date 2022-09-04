@@ -58,7 +58,10 @@ internal class PaymentDataProvider:IPaymentDataProvider {
 
     override fun getPaymentOptionsOrderID(): String? {
       //return getPaymentOptionsDataManager().getPaymentOptionsResponse().getOrderID()
-        return PaymentDataSource?.getPaymentOptionsResponse()?.orderID
+        return if (PaymentDataSource.getPaymentOptionsResponse()?.orderID == null
+        ) {
+            ""
+        } else  PaymentDataSource.getPaymentOptionsResponse()?.orderID
     }
 
     override fun getPostURL(): String? {

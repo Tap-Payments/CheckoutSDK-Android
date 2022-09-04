@@ -68,7 +68,7 @@ class TapCheckOutSDK {
             secretKey,
             packageId,
             ApiService.BASE_URL,
+         //   sdkIdentifier,BuildConfig.EncryptAPIKEY)
             sdkIdentifier)
     }
-
 }

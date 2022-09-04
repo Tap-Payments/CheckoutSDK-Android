@@ -75,7 +75,9 @@ object PaymentDataSource :PaymentDataSource {
     private var authKeys: String? = null
     private var merchantData: MerchantData? = null
     private var googleCardPaymentOptions: ArrayList<PaymentOption>? = null
+    private var orderObject: OrderObject? = null
 
+    private var orderItems: ArrayList<Items>? = null
     //////////////////////// Setter's Area  ///////////////////////////////////////
     /**
      * Set transaction currency.
@@ -336,7 +338,24 @@ object PaymentDataSource :PaymentDataSource {
         this.sdkMode = sdkMode
     }
 
+    /**
+     * Set Order.
+     *
+     * @param orderObject the orderObject
+     */
+    fun setOrder(orderObject: OrderObject) {
+       this.orderObject = orderObject
+    }
 
+
+    /**
+     * Set Order.
+     *
+     * @param orderItems the orderItems
+     */
+    fun setOrderItems(orderItems: ArrayList<Items>) {
+        this.orderItems = orderItems
+    }
     fun setGoogleCardPay(googleCardPaymentOptions: ArrayList<PaymentOption>?) {
        this. googleCardPaymentOptions = googleCardPaymentOptions
     }
@@ -486,5 +505,9 @@ object PaymentDataSource :PaymentDataSource {
 
     override fun getGooglePaymentOptions(): ArrayList<PaymentOption>? {
        return googleCardPaymentOptions
+    }
+
+    override fun getOrderObject(): OrderObject? {
+      return orderObject
     }
 }
