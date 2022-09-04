@@ -63,6 +63,7 @@ object PaymentDataSource :PaymentDataSource {
 
     private var topup: TopUp? = null
     private var selectedCurrency: String? = null
+    private var selectedCurrencySymbol: String? = null
     private var selectedAmount: BigDecimal? = null
     private var sdkSettings: SDKSettings? = null
     private var paymentOptionsResponse: PaymentOptionsResponse? = null
@@ -279,8 +280,9 @@ object PaymentDataSource :PaymentDataSource {
         this.enableEditCardHolderName = enableEditCardHolderName
     }
 
-    fun setSelectedCurrency(selectedCurrency: String){
+    fun setSelectedCurrency(selectedCurrency: String , selectedCurrencySymbol: String?){
         this.selectedCurrency =selectedCurrency
+        this.selectedCurrencySymbol =selectedCurrencySymbol
     }
 
     fun setSelectedAmount(selectedAmount: BigDecimal){

@@ -948,7 +948,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
             }
 
-        PaymentDataSource.setSelectedCurrency(currentCurrency)
+        PaymentDataSource.setSelectedCurrency(currentCurrency,null)
         PaymentDataSource.setSelectedAmount(currentAmount.toBigDecimal())
     }
 
@@ -1215,7 +1215,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             )
         }
         if(saveCardSwitchHolder!=null){
-            removeViews(saveCardSwitchHolder)
+            removeViews(businessViewHolder,amountViewHolder,saveCardSwitchHolder)
             addViews(businessViewHolder,saveCardSwitchHolder)
             businessViewHolder.view.headerView.constraint.visibility= View.GONE
             businessViewHolder.view.topSeparatorLinear.visibility= View.GONE
@@ -1736,7 +1736,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 selectedAmount, selectedCurrency,
                 currentAmount, currentCurrency
             )
-            PaymentDataSource.setSelectedCurrency(selectedCurrency = selectedCurrency)
+            PaymentDataSource.setSelectedCurrency(selectedCurrency = selectedCurrency,null)
 
         }else{
             amountViewHolder.updateSelectedCurrency(
@@ -1744,7 +1744,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 selectedAmount, selectedCurrency,
                 currentAmount, currentCurrency ,selectedCurrencySymbol
             )
-            PaymentDataSource.setSelectedCurrency(selectedCurrency = selectedCurrencySymbol)
+            PaymentDataSource.setSelectedCurrency(selectedCurrency, selectedCurrencySymbol)
 
         }
         currentCurrencySymbol = selectedCurrencySymbol

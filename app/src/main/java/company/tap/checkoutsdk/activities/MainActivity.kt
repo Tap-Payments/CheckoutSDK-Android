@@ -276,9 +276,9 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
         // set transaction currency associated to your account
       //  if(settingsManager.getString("key_sdk_transaction_currency","KWD"))
-     //   settingsManager?.getString("key_sdk_transaction_currency","KWD")
-       //     ?.let { TapCurrency(it) }?.let { sdkSession.setTransactionCurrency(it) } //** Required **
-        sdkSession.setTransactionCurrency(TapCurrency("usd"))
+        settingsManager?.getString("key_sdk_transaction_currency","KWD")
+            ?.let { TapCurrency(it) }?.let { sdkSession.setTransactionCurrency(it) } //** Required **
+       // sdkSession.setTransactionCurrency(TapCurrency("KWD"))
 
         // Using static CustomerBuilder method available inside TAP TapCustomer Class you can populate TAP TapCustomer object and pass it to SDK
        sdkSession.setCustomer(setCustomer()) //** Required **

@@ -63,7 +63,7 @@
             android:title="3D Secure" />
 
         <ListPreference
-            android:defaultValue="kwd"
+            android:defaultValue="KWD"
             android:dialogTitle="Transaction currency"
             android:entries="@array/pref_array_sdk_transactions_currency_entries"
             android:entryValues="@array/pref_array_sdk_transaction_currency_values"
