@@ -29,7 +29,7 @@ open class PaymentOptionsRequest(
     merchant_id: String?,
     payment_type: String,
     topup :TopUp?,
-    orderObject: OrderObject? = null
+    orderObject: OrderObject?
 
 ) {
     @SerializedName("transaction_mode")
@@ -79,7 +79,7 @@ open class PaymentOptionsRequest(
 
     @SerializedName("order")
     @Expose
-    private val orderObject: OrderObject? = null
+    private val orderObject: OrderObject? = orderObject
     /**
      * Gets transaction mode.
      *
@@ -103,7 +103,8 @@ open class PaymentOptionsRequest(
                 "total_amout : " + totalAmount + " /n " +
                 "merchant_id : " + merchant_id + " /n " +
                 "payment_type : " + payment_type + " /n "+
-                "topup : " + topup + " /n "
+                "topup : " + topup + " /n "+
+                "orderObject : " + orderObject + " /n "
     }
 
     /**
@@ -129,7 +130,8 @@ open class PaymentOptionsRequest(
         } else {
             this.items = null
             val plainAmount = amount ?: BigDecimal.ZERO
-            totalAmount = AmountCalculator.calculateTotalAmountOf(ArrayList(), taxes, shipping)?.add(plainAmount)
+            totalAmount = AmountCalculator.calculateTotalAmountOf(ArrayList(), taxes, shipping)!!
+                .add(plainAmount)
             if (orderObject != null) {
                 totalAmount = BigDecimal.ZERO
                 totalAmount =

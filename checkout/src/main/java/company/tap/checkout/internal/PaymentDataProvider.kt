@@ -58,10 +58,10 @@ internal class PaymentDataProvider:IPaymentDataProvider {
 
     override fun getPaymentOptionsOrderID(): String? {
       //return getPaymentOptionsDataManager().getPaymentOptionsResponse().getOrderID()
-        return if (PaymentDataSource.getPaymentOptionsResponse()?.orderID == null
+        return if (PaymentDataSource.getPaymentOptionsResponse()?.orderID?.getId() == null
         ) {
             ""
-        } else  PaymentDataSource.getPaymentOptionsResponse()?.orderID
+        } else  PaymentDataSource.getPaymentOptionsResponse()?.orderID?.getId()
     }
 
     override fun getPostURL(): String? {

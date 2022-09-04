@@ -7,37 +7,43 @@ import company.tap.checkout.internal.utils.AmountCalculator
 import java.math.BigDecimal
 
 data class OrderObject(
-    @field:Expose @field:SerializedName("amount") var amount: BigDecimal,
-    @field:Expose @field:SerializedName(
-        "currency"
-    ) private val currency: String,
-    @SerializedName("customer")
+    @SerializedName("amount")
     @Expose
-    private var customer: TapCustomer?,
+    private var amount: BigDecimal ,
+
+    @com.google.gson.annotations.SerializedName("currency")
+@Expose
+private val currency: String ,
+
+    @SerializedName("customer")
+@Expose
+private var customer: TapCustomer? = null,
 
     @SerializedName("items")
-    @Expose
-    private var items: ArrayList<Items>? = null,
+@Expose
+private var items: ArrayList<Items>? = null,
+
 
     @SerializedName("tax")
-    @Expose
-    private var tax: ArrayList<TaxObject>?,
+@Expose
+private var tax: ArrayList<TaxObject>? = null,
 
     @SerializedName("shipping")
-    @Expose
-    private var shipping: ArrayList<ShippingObject>?,
+@Expose
+private var shipping: ArrayList<ShippingObject>? = null,
 
     @SerializedName("merchant")
-    @Expose
-    private var merchant: Merchant?,
+@Expose
+private var merchant: Merchant? = null,
 
     @SerializedName("metadata")
-    @Expose
-    private var metaData: MetaData?,
+@Expose
+private var metaData: MetaData? = null,
 
     @SerializedName("reference")
-    @Expose
-    private val reference: ReferId? = null
+@Expose
+private val reference: ReferId? = null
+
 ) {
 
 
@@ -47,10 +53,10 @@ data class OrderObject(
      *
      * @return the taxes amount
      */
-    val taxesAmount: BigDecimal
+    val taxesAmount: BigDecimal?
         get() {
             val taxationAmount = amount
-            return AmountCalculator.calculateTaxesOnItems(taxationAmount, tax)!!
+            return AmountCalculator.calculateTaxesOnItems(taxationAmount, tax)
         }
 
     //  Constructor is private to prevent access from client app, it must be through inner Builder class only
@@ -58,7 +64,7 @@ data class OrderObject(
         this.customer = customer
         if (items != null && items!!.size > 0) {
             this.items = items
-            amount = AmountCalculator.calculateTotalAmountOfOrder(items, tax, shipping, this)!!
+            amount = items?.let { AmountCalculator.calculateTotalAmountOfOrder(it, tax, shipping, this) }!!
         } else {
             this.items = null
             val plainAmount = amount ?: BigDecimal.ZERO
@@ -70,5 +76,20 @@ data class OrderObject(
         this.shipping = shipping
         this.merchant = merchant
         this.metaData = metaData
+    }
+
+    /**
+     * Gets taxes amount.
+     *
+     * @return the taxes amount
+     */
+    @JvmName("getTaxesAmount1")
+    fun getTaxesAmount(): BigDecimal? {
+        val taxationAmount = amount
+        return AmountCalculator.calculateTaxesOnItems(taxationAmount, tax)
+    }
+
+    fun getAmount(): BigDecimal {
+        return amount
     }
 }

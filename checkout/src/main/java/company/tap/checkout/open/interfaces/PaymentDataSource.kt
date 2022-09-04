@@ -173,5 +173,16 @@ interface PaymentDataSource {
      */
     fun getGooglePaymentOptions(): java.util.ArrayList<PaymentOption>?
 
+
+
+
+    /**
+     * Defines the OrderObject Items. Optional. @return the default OrderItems
+     */
+    fun getOrderItems(): java.util.ArrayList<Items>?
+
+    /**
+     * Defines the OrderObject details. Optional. @return the default Order
+     */
     fun getOrderObject():OrderObject ?
 }

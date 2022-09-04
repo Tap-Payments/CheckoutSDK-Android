@@ -190,7 +190,7 @@ object AmountCalculator {
      * @return the big decimal
      */
     fun calculateTotalAmountOfObject(orderObject: OrderObject): BigDecimal? {
-        return orderObject.amount
+        return orderObject.getAmount()
     }
 
 
@@ -213,17 +213,17 @@ object AmountCalculator {
         var itemsTaxesAmount = BigDecimal.ZERO
         if (items != null) {
             for (item in items) {
-                itemsPlainAmount = itemsPlainAmount.add(item.amount)
+                itemsPlainAmount = itemsPlainAmount.add(item.getPlainAmount())
             }
         }
 
         //  itemsPlainAmount    = itemsPlainAmount.add(orderObjects.getAmount());
-        itemsTaxesAmount = itemsTaxesAmount.add(orderObjects.taxesAmount)
+        itemsTaxesAmount = itemsTaxesAmount.add(orderObjects.getTaxesAmount())
         val discountedAmount = itemsPlainAmount.subtract(itemsDiscountAmount)
         var shippingAmount = BigDecimal.ZERO
         if (shippings != null) {
             for (shipping in shippings) {
-                shippingAmount = shippingAmount.add(shipping?.getAmount())
+                shippingAmount = shippingAmount.add(shipping.getAmount())
             }
         }
         val taxesAmount =
@@ -231,7 +231,6 @@ object AmountCalculator {
         val totalTaxesAmount = itemsTaxesAmount.add(taxesAmount)
         return discountedAmount.add(shippingAmount).add(totalTaxesAmount)
     }
-
 
     /**
      * Calculate taxes on big decimal.

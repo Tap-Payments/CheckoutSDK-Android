@@ -21,9 +21,9 @@ data class PaymentOptionsResponse(
     @SerializedName("id") @Expose
     @NonNull  var id: String,
 
-    @SerializedName("order_id")
+    @SerializedName("order")
     @Expose
-    @NonNull  val orderID: String,
+    @NonNull  val orderID: OrderId,
 
     @SerializedName("object")
     @Expose
@@ -49,6 +49,4 @@ data class PaymentOptionsResponse(
     @Expose
     @Nullable  val settlement_currency: String? = null,
 
-    @SerializedName("order") @Expose
-    private var order: OrderId ?= null
 ) : BaseResponse

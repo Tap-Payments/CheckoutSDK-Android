@@ -10,7 +10,8 @@ import java.math.BigDecimal
 
 data
 class Items(
-    @field:Expose @field:SerializedName("product_id") val productId: String?,
+    @field:Expose @field:SerializedName("product_id")
+    val productId: String?,
     @field:Expose @field:SerializedName(
         "name"
     ) val name: String?,
@@ -95,26 +96,28 @@ val metaData: MetaData?
      *
      * @return the plain amount
      */
-    val plainAmount: BigDecimal
-        get() {
-            println("  #### getPlainAmount : " + amount)
-            assert(amount != null)
-            return amount!!.multiply(quantity)
-        }
+    fun getPlainAmount(): BigDecimal {
+        println("  #### getPlainAmount : " + amount)
+        assert(amount != null)
+        return amount!!.multiply(quantity)
+    }
 
     /**
      * Gets discount amount.
      *
      * @return the discount amount
      */
-    val discountAmount: BigDecimal
-        get() = if (getDiscount() == null) {
+    fun getDiscountAmount(): BigDecimal? {
+        return if (getDiscount() == null) {
             BigDecimal.ZERO
-        } else when (getDiscount()?.getType()) {
-            AmountModificatorType.PERCENTAGE -> plainAmount.multiply(getDiscount()?.getNormalizedValue())
-            AmountModificatorType.FIXED -> getDiscount()?.getValue()
+        } else when (getDiscount()!!.getType()) {
+            AmountModificatorType.PERCENTAGE -> getPlainAmount().multiply(
+                getDiscount()!!.getNormalizedValue()
+            )
+            AmountModificatorType.FIXED -> getDiscount()!!.getValue()
             else -> BigDecimal.ZERO
-        }!!
+        }
+    }
 
 
 }

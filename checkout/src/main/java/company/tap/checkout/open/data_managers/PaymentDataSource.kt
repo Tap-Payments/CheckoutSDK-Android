@@ -507,6 +507,10 @@ object PaymentDataSource :PaymentDataSource {
        return googleCardPaymentOptions
     }
 
+    override fun getOrderItems(): ArrayList<Items>? {
+        return orderItems
+    }
+
     override fun getOrderObject(): OrderObject? {
       return orderObject
     }

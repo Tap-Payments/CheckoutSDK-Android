@@ -292,13 +292,13 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         //    )
        // }//** Required **
         sdkSession.setAmount(
-            BigDecimal.valueOf(38)
+            BigDecimal.valueOf(36)
         )
 
         // Set Payment Items array list
-       // sdkSession.setPaymentItems(ArrayList()) // ** Optional ** you can pass empty array list
-        sdkSession.setPaymentItems(settingsManager?.getDynamicPaymentItems()) // ** Optional ** you can pass empty array list
-       // sdkSession.setPaymentItems(getPaymentItems()) // ** Optional ** you can pass empty array list
+        sdkSession.setPaymentItems(ArrayList()) // ** Optional ** you can pass empty array list
+      //  sdkSession.setPaymentItems(settingsManager?.getDynamicPaymentItems()) // ** Optional ** you can pass empty array list
+      //  sdkSession.setPaymentItems(getPaymentItems()) // ** Optional ** you can pass empty array list
 
 
         sdkSession.setPaymentType("ALL")  //** Merchant can pass paymentType
@@ -790,7 +790,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
                 "",
                 "abcjuice",
                 BigDecimal.valueOf(12),
-                "kwd",
+                "USD",
                 BigDecimal.valueOf(3),
                 Category.DIGITAL_GOODS,
                 AmountModificator(AmountModificatorType.FIXED, BigDecimal.valueOf(1)),
@@ -816,8 +816,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
     //Set Order object
     private fun getOrder(): OrderObject {
         return OrderObject(
-            BigDecimal.valueOf(12),
-            "kwd",
+            BigDecimal.valueOf(38),
+            "USD",
             setCustomer(),
             getOrderItemsList(),
             ArrayList(
@@ -825,12 +825,12 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
                     TaxObject(
                         "Tax1",
                         "tax described",
-                        AmountModificator(AmountModificatorType.FIXED, BigDecimal.valueOf(2))
+                        AmountModificator(AmountModificatorType.FIXED, BigDecimal.valueOf(0))
                     )
                 )
             ),
             null,
-            Merchant("1124340"),
+            Merchant("599424"),
             null,
             ReferId("")
         )

@@ -114,11 +114,11 @@ class CardRepository : APIRequestCallback {
             PaymentDataSource.getTaxes(),
             PaymentDataSource.getDestination(),
             PaymentDataSource.getCurrency()?.isoCode,
-            PaymentDataSource.getCustomer()?.identifier,
+            PaymentDataSource.getCustomer().identifier,
             PaymentDataSource.getMerchant()?.id,
             PaymentDataSource.getPaymentDataType().toString(),
             PaymentDataSource.getTopup(),
-            if (PaymentDataSource.getOrderObject() != null) PaymentDataSource.getOrderObject() else null
+            PaymentDataSource.getOrderObject()
         )
         println("getTransactionMode"+PaymentDataSource.getTransactionMode())
 
