@@ -594,7 +594,7 @@
         },
         "Invalid" : {
             "goLoginBackgroundColor" : "clear",
-            "backgroundColor" : "veryLightPinkThree",
+            "backgroundColor" : "#b9b9b9",
             "titleLabelColor" : "white"
         },
         "Valid" : {
