@@ -233,12 +233,12 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
     private fun initializeSDK() {
         TapCheckOutSDK().init(
                 this,
-          /*  settingsManager?.getString("key_test_name","sk_test_kovrMB0mupFJXfNZWx6Etg5y"),
+            settingsManager?.getString("key_test_name","sk_test_kovrMB0mupFJXfNZWx6Etg5y"),
             settingsManager?.getString("key_live_name","sk_live_QglH8V7Fw6NPAom4qRcynDK2"),
-            settingsManager?.getString("key_package_name","company.tap.goSellSDKExample") */
-                    settingsManager?.getString("key_test_name","sk_test_2kGVSuR6bKAXLF4rDe0wa9QU"),
+            settingsManager?.getString("key_package_name","company.tap.goSellSDKExample")
+                 /*   settingsManager?.getString("key_test_name","sk_test_2kGVSuR6bKAXLF4rDe0wa9QU"),
             settingsManager?.getString("key_live_name","sk_live_QglH8V7Fw6NPAom4qRcynDK2"),
-            settingsManager?.getString("key_package_name","resources.gosell.io")
+            settingsManager?.getString("key_package_name","resources.gosell.io")*/
 
         )
 
@@ -281,8 +281,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
        // sdkSession.setTransactionCurrency(TapCurrency("KWD"))
 
         // Using static CustomerBuilder method available inside TAP TapCustomer Class you can populate TAP TapCustomer object and pass it to SDK
-       sdkSession.setCustomer(setCustomer()) //** Required **
-       // settingsManager?.getCustomer()?.let { sdkSession.setCustomer(it) } //** Required **
+      // sdkSession.setCustomer(setCustomer()) //** Required **
+        settingsManager?.getCustomer()?.let { sdkSession.setCustomer(it) } //** Required **
 
 
         // Set Total Amount. The Total amount will be recalculated according to provided Taxes and Shipping
@@ -296,8 +296,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         )
 
         // Set Payment Items array list
-        sdkSession.setPaymentItems(ArrayList()) // ** Optional ** you can pass empty array list
-      //  sdkSession.setPaymentItems(settingsManager?.getDynamicPaymentItems()) // ** Optional ** you can pass empty array list
+      //  sdkSession.setPaymentItems(ArrayList()) // ** Optional ** you can pass empty array list
+        sdkSession.setPaymentItems(settingsManager?.getDynamicPaymentItems()) // ** Optional ** you can pass empty array list
       //  sdkSession.setPaymentItems(getPaymentItems()) // ** Optional ** you can pass empty array list
 
 
@@ -354,8 +354,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
        sdkSession.setDestination(null) // ** Optional ** you can pass Destinations object or null
 
 
-       // sdkSession.setMerchantID(settingsManager?.getString("key_merchant_id", "1124340")) // ** Optional ** you can pass merchant id or null
-        sdkSession.setMerchantID("599424") // ** Optional ** you can pass merchant id or null
+        sdkSession.setMerchantID(settingsManager?.getString("key_merchant_id", "1124340")) // ** Optional ** you can pass merchant id or null
+       // sdkSession.setMerchantID("599424") // ** Optional ** you can pass merchant id or null
 
 
         sdkSession.setCardType(CardType.ALL) // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
@@ -372,10 +372,18 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         sdkSession.setSdkMode(SdkMode.SAND_BOX) //** Pass your SDK MODE
 
         //    sdkSession.setCardType(CardType.CREDIT); // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
-        sdkSession.setOrderItems(getOrderItemsList()) // ** Usually Optional ** Required when creating order object
+       var useOrderObjectKey = settingsManager?.getBoolean("useOrderObjectKey",false)
+
+        if(useOrderObjectKey == true){
+                sdkSession.setOrderItems(getOrderItemsList()) // ** Usually Optional ** Required when creating order object
 
 
-        sdkSession.setOrderObject(getOrder()) // ** Usually Optional ** Required when creating order object
+               sdkSession.setOrderObject(getOrder()) // ** Usually Optional ** Required when creating order object
+        }
+    //    sdkSession.setOrderItems(getOrderItemsList()) // ** Usually Optional ** Required when creating order object
+
+
+     //   sdkSession.setOrderObject(getOrder()) // ** Usually Optional ** Required when creating order object
 
 
     }
@@ -830,16 +838,14 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
                 )
             ),
             null,
-            Merchant("599424"),
+            settingsManager?.getString("key_merchant_id", "1124340")?.let { Merchant(it) },
+         //   Merchant("1124340"),
             null,
             ReferId("")
         )
     }
 
-    override fun onRestart() {
-        super.onRestart()
 
-    }
 
 
 

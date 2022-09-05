@@ -1,7 +1,6 @@
 package company.tap.checkout.internal.viewmodels
 
 import android.animation.ObjectAnimator
-import android.animation.PropertyValuesHolder
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -16,7 +15,6 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.view.animation.OvershootInterpolator
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.Nullable
@@ -1305,8 +1303,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         viewHolders.forEach {
             Handler(Looper.getMainLooper()).postDelayed(Runnable {
-                if (::sdkLayout.isInitialized)
+                if (::sdkLayout.isInitialized){
                     sdkLayout.removeView(it?.view)
+
+                }
 
                 if (::context.isInitialized) {
                     val animation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
@@ -1338,8 +1338,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
                 }
 
-                if (::sdkLayout.isInitialized)
+                if (::sdkLayout.isInitialized){
                     sdkLayout.addView(it?.view)
+                }
+
                 //   checkoutFragment?.scrollView?.fullScroll(View.FOCUS_DOWN)
                // bottomSheetDialog.behavior.setPeekHeight(sdkLayout.height)
               //  bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED

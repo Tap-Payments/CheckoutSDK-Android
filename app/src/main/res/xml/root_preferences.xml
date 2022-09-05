@@ -144,5 +144,8 @@
         android:defaultValue="false"
         android:key="showImageKey"
         android:title="Show Close Image" />
-
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="useOrderObjectKey"
+        android:title="Enable Order Object" />
 </PreferenceScreen>

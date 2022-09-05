@@ -864,6 +864,7 @@ class CardRepository : APIRequestCallback {
             )
         }
         SDKSession.sessionActive = false
+        SessionManager.setActiveSession(false)
         println("response body CHARGE_REQ_CODE>>" + errorDetails?.errorBody)
 
 

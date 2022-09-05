@@ -15,13 +15,10 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import android.widget.ScrollView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.viewModels
 import cards.pay.paycardsrecognizer.sdk.Card
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
@@ -36,14 +33,12 @@ import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.controller.SDKSession.sessionDelegate
-import company.tap.checkout.open.controller.SDKSession.supportFragmentManager
 import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.atoms.TapImageView
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
-import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
 
@@ -251,8 +246,7 @@ var diff = checkoutLayout?.height?.let { heightscreen.minus(it) }
                 }
             }
 
-            override fun onSlide(p0: View, p1: Float) {
-               // println("onSlide"+p0)
+            override fun onSlide(view: View, slideOffset: Float) {
                // println("onSlide"+p1)
               //  bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
               //  scrollView?.smoothScrollTo(0, heightscreen)
@@ -261,8 +255,6 @@ var diff = checkoutLayout?.height?.let { heightscreen.minus(it) }
 
 
     }
-
-
 
 
     @RequiresApi(Build.VERSION_CODES.N)

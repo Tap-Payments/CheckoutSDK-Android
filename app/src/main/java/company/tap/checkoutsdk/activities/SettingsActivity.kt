@@ -48,6 +48,7 @@ class SettingsActivity : AppCompatActivity() {
             bindPreferenceSummaryToValue(findPreference("key_sdk_payment_type"))
             bindPreferenceSummaryToValue(findPreference("key_sdk_card_type"))
             bindPreferenceSummaryToValue(findPreference("showImageKey"))
+            bindPreferenceSummaryToValue(findPreference("useOrderObjectKey"))
 
         }
     }
@@ -116,6 +117,8 @@ class SettingsActivity : AppCompatActivity() {
             } else if(preference is CheckBoxPreference){
                 if (preference.getKey().equals("showImageKey")) {
                     // update the changed gallery name to summary filed
+
+                } else  if (preference.getKey().equals("useOrderObjectKey")){
 
                 }
             }
