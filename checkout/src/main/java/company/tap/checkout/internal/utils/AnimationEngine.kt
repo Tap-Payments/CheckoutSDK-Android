@@ -30,9 +30,10 @@ object AnimationEngine {
 
     private val slideTransition = TransitionSet()
         .setOrdering(TransitionSet.ORDERING_SEQUENTIAL)
-        .addTransition(Slide())
-        .addTransition(ChangeBounds())
        // .addTransition(Fade())
+        .addTransition(ChangeBounds())
+       // .addTransition(Slide())
+       // .addTransition(ChangeBounds())
 
     private val slideDownTransition = TransitionSet()
         .setOrdering(TransitionSet.ORDERING_TOGETHER)
@@ -43,8 +44,8 @@ object AnimationEngine {
     private val fadeInTransition = TransitionSet()
         .setOrdering(TransitionSet.ORDERING_SEQUENTIAL)
         .addTransition(fadeIn)
-       //  .addTransition(ChangeBounds())
-        .addTransition(slideDown)
+         .addTransition(ChangeBounds())
+      //  .addTransition(slideDown)
     private val fadeTransition = TransitionSet()
         .setOrdering(TransitionSet.ORDERING_SEQUENTIAL)
         .addTransition(Fade())

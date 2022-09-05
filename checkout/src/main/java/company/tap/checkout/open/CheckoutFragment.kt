@@ -124,6 +124,7 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
         val webFrameLayout: FrameLayout? = view.findViewById(R.id.webFrameLayout)
        inLineCardLayout = view.findViewById(R.id.inline_container)
         val headerLayout: LinearLayout? = view.findViewById(R.id.headerLayout)
+        bottomSheetLayout = bottomSheetDialog.findViewById(R.id.design_bottom_sheet)
          closeText = view.findViewById(R.id.closeText)
          closeImage= view.findViewById(R.id.closeImage)
         scrollView = view.findViewById(R.id.scrollView)
@@ -132,6 +133,7 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
 
         println("heightscreen"+heightscreen)
         println("sdkLayoutheight"+checkoutLayout?.height)
+        println("bottomSheetLayout"+bottomSheetLayout)
 
 
 

@@ -65,6 +65,7 @@ import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.*
 import company.tap.checkout.internal.utils.AmountCalculator.calculateExtraFeesAmount
+import company.tap.checkout.internal.utils.AnimationEngine
 import company.tap.checkout.internal.utils.CurrencyFormatter
 import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.utils.Utils
@@ -472,8 +473,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun setSlideAnimation() {
         if (this::bottomSheetLayout.isInitialized)
-            AnimationUtils.loadAnimation(bottomSheetLayout.context,R.anim.slide_down)
-          //  AnimationEngine.applyTransition(bottomSheetLayout, SLIDE_DOWN,9000 )
+           // AnimationUtils.loadAnimation(bottomSheetLayout.context,R.anim.slide_down)
+            AnimationEngine.applyTransition(bottomSheetLayout, AnimationEngine.Type.SLIDE , 1000)
     }
 
     override fun displayGoPay() {
@@ -547,6 +548,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
         removeInlineScanner()
         removeNFCViewFragment()
+        setSlideAnimation()
     }
 
 
@@ -565,7 +567,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
        // removeAllViews()
         addViews(
             itemsViewHolder)
-        //setSlideAnimation()
+
+
+
        // checkoutFragment?.isFullscreen =true
 
         /**
@@ -583,6 +587,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private fun caseNotDisplayControlCurrency() {
         if (goPayViewsHolder.goPayopened || itemsViewHolder.itemsdisplayed) setActionGoPayOpenedItemsDisplayed()
         else setActionNotGoPayOpenedNotItemsDisplayed()
+
     }
 
     private fun setActionGoPayOpenedItemsDisplayed() {
@@ -1317,6 +1322,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
             }, 0)
+
         }
 
     }
@@ -1334,7 +1340,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     val animati1on= AnimationUtils.loadAnimation(context, R.anim.fade_in)
                    // animati1on.duration = 500L
                     it?.view?.startAnimation(animati1on)
-                  //  AnimationEngine.applyTransition(it?.view as ViewGroup,AnimationEngine.Type.FADE_IN,500)
+                   // AnimationEngine.applyTransition(it?.view as ViewGroup,AnimationEngine.Type.FADE_IN,500)
 
                 }
 
