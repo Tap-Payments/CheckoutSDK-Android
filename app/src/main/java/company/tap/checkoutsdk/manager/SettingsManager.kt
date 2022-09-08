@@ -138,8 +138,8 @@ object SettingsManager {
         itemname: String,
         description: String,
         quantity:Int,
-        priceperunit: Double,
-        totalamount: Double,
+        priceperunit: Double?,
+        totalamount: Double?,
         itemDiscount: AmountModificator,
         itemCurrency : String?,
         itemCategory:Category?,
@@ -165,10 +165,15 @@ object SettingsManager {
         )
         if (itemsList == null) itemsList = ArrayList<PaymentItemViewModel?>()
         itemsList.add(
-
-            PaymentItemViewModel(proudctId,itemname, description, priceperunit, totalamount,quantity,itemDiscount,itemCurrency,
-            itemCategory,itemVendor,itemFullFillService,itemIsRequireShip,itemCode,accountCode,itemImage,itemReference,
-                itemsDimensions, itemsTags, itemMetaData)
+            totalamount?.let {
+                priceperunit?.let { it1 ->
+                    PaymentItemViewModel(proudctId,itemname, description,
+                        it1,
+                        it,quantity,itemDiscount,itemCurrency,
+                        itemCategory,itemVendor,itemFullFillService,itemIsRequireShip,itemCode,accountCode,itemImage,itemReference,
+                        itemsDimensions, itemsTags, itemMetaData)
+                }
+            }
 
         )
         val data: String = gson.toJson(itemsList)
@@ -189,7 +194,6 @@ object SettingsManager {
         if (paymentItemList != null) {
             val itemsName: String? = paymentItemList[0].getItemsName()
             paymentItemList.clear()
-
             newItems.getItemDescription()?.let {
                 PaymentItemViewModel(
                     newItems.getProductId(),
@@ -198,20 +202,27 @@ object SettingsManager {
                     newItems.getPricePUnit()?.toDouble()!!,
                     newItems.getitemTotalPrice()?.toDouble()!!,
                     newItems.getitemQuantity()?.toInt()!!,
-                    newItems.getAmountType()!!, newItems.getItemCurrency()!!,newItems.getItemCategory(),newItems.getItemVendor(),
-                    newItems.getItemFullfillmentService(),newItems.getItemIsRequireShip(),newItems.getItemCode(),newItems.getAccountCode(),
-                    newItems.getItemImage(),newItems.getItemReference(),newItems.getItemDimens(),newItems.getItemTags(),
+                    AmountModificator(
+                        newItems.getAmountType()?.getType(),
+                        newItems.getAmountType()?.getNormalizedValue()
+                    ),
+                    newItems.getItemCurrency(),
+                    newItems.getItemCategory(),
+                    newItems.getItemVendor(),
+                    newItems.getItemFullfillmentService(),
+                    newItems.getItemIsRequireShip(),
+                    newItems.getItemCode(),
+                    newItems.getAccountCode(),
+                    newItems.getItemImage(),
+                    newItems.getItemReference(),
+                    newItems.getItemDimens(),
+                    newItems.getItemTags(),
                     newItems.getItemMetaData()
                 )
-                    .let {
-                        paymentItemList.add(
-                            it
-                        )
-                    }
-            }
+            }?.let { paymentItemList.add(it) }
             val data: String = gson.toJson(paymentItemList)
             writeItemsToPreferences(data, preferences)
-        } else {
+        }  else {
             if (ctx != null) {
 
                 newItems.getItemsName()?.let {
@@ -223,7 +234,7 @@ object SettingsManager {
                                     newItems.getItemDescription()!!,
                                     it1,
                                     it2,
-                                    newItems.getitemTotalPrice()!!,
+                                    newItems.getitemTotalPrice(),
                                     it3,newItems.getItemCurrency(),newItems.getItemCategory(),
                                     newItems.getItemVendor(),newItems.getItemFullfillmentService(),newItems.getItemIsRequireShip(),newItems.getItemCode(),
                                     newItems.getAccountCode(),newItems.getItemImage(),newItems.getItemReference(),newItems.getItemDimens(),newItems.getItemTags(),
@@ -422,21 +433,18 @@ object SettingsManager {
         // check if customer id is in pref.
         //  customer =
         if (itemsList != null) {
-            println("preparing data source with customer ref :" + itemsList[0].getItemDescription())
+            println("preparing data source with itemsList ref :" + itemsList[0].getItemCurrency())
 
-
-
-            itemsList[0].getItemIsRequireShip()?.let {
-                ItemsModel(itemsList[0].getProductId(),itemsList[0].getItemsName(),
+  ItemsModel(itemsList[0].getProductId(),itemsList[0].getItemsName(),
                     itemsList[0].getPricePUnit()?.let { BigDecimal.valueOf(it) },itemsList[0].getItemCurrency(),
                     itemsList[0].getitemQuantity()?.toDouble()?.let { BigDecimal.valueOf(it) }, itemsList[0].getItemCategory(), itemsList[0].getAmountType(),  itemsList[0].getItemVendor(),
                     itemsList[0].getItemFullfillmentService(),
-                    it,  itemsList[0].getItemCode(),
+                    itemsList[0].getItemIsRequireShip(),  itemsList[0].getItemCode(),
                     itemsList[0].getAccountCode(), itemsList[0].getItemDescription(), itemsList[0].getItemImage(),  itemsList[0].getItemReference(),
                     itemsList[0].getItemDimens(), itemsList[0].getItemTags(),  itemsList[0].getItemMetaData())
-            }?.let { paymentitems.add(it) }
+            .let { paymentitems.add(it) }
         } else {
-            println(" paymentResultDataManager.getCustomerRef(context) null")
+            println(" paymentResultDataManager.itemsList(context) null")
             paymentitems.add(ItemsModel(
                 "",
                 "Items1",

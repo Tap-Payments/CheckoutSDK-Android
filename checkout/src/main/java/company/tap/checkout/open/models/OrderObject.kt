@@ -66,7 +66,7 @@ private val reference: ReferId? = null
 
         if (items == null){
             items = defaultArrayList()
-        }
+        }else this.items = items
 
 
         this.customer = customer
@@ -74,7 +74,7 @@ private val reference: ReferId? = null
             this.items = items
             amount = items?.let { AmountCalculator.calculateTotalAmountOfOrder(it, tax, shipping, this) }!!
         } else {
-            this.items = null
+           // this.items = null
             val plainAmount = amount ?: BigDecimal.ZERO
             amount =
                 AmountCalculator.calculateTotalAmountOfOrder(null, tax, shipping, this)

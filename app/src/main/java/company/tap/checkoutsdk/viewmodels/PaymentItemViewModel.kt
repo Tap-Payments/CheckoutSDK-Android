@@ -2,6 +2,7 @@ package company.tap.checkoutsdk.viewmodels
 
 import company.tap.checkout.internal.api.enums.AmountModificatorType
 import company.tap.checkout.internal.api.models.AmountModificator
+import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.Category
 import company.tap.checkout.open.models.ItemDimensions
 import company.tap.checkout.open.models.MetaData

@@ -233,13 +233,13 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
     private fun initializeSDK() {
         TapCheckOutSDK().init(
             this,
-            settingsManager?.getString("key_test_name","sk_test_kovrMB0mupFJXfNZWx6Etg5y"),
-            settingsManager?.getString("key_live_name","sk_live_QglH8V7Fw6NPAom4qRcynDK2"),
-            settingsManager?.getString("key_package_name","company.tap.goSellSDKExample"))
-        /*settingsManager?.getString("key_test_name","sk_test_2kGVSuR6bKAXLF4rDe0wa9QU"),
+            /* settingsManager?.getString("key_test_name","sk_test_kovrMB0mupFJXfNZWx6Etg5y"),
+             settingsManager?.getString("key_live_name","sk_live_QglH8V7Fw6NPAom4qRcynDK2"),
+             settingsManager?.getString("key_package_name","company.tap.goSellSDKExample"))*/
+        settingsManager?.getString("key_test_name","sk_test_2kGVSuR6bKAXLF4rDe0wa9QU"),
    settingsManager?.getString("key_live_name","sk_live_QglH8V7Fw6NPAom4qRcynDK2"),
    settingsManager?.getString("key_package_name","resources.gosell.io")
-)*/
+)
 
     }
 
@@ -824,7 +824,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
     private fun getOrder(): OrderObject {
         return OrderObject(
             BigDecimal.valueOf(38),
-            "kwd",
+            settingsManager?.getString("key_sdk_transaction_currency","KWD").toString(),
             "",
             settingsManager?.getDynamicPaymentItems(),
             ArrayList(

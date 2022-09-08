@@ -11,6 +11,7 @@ import androidx.appcompat.widget.AppCompatEditText
 import com.google.android.material.textfield.TextInputLayout
 import company.tap.checkout.internal.api.enums.AmountModificatorType
 import company.tap.checkout.internal.api.models.AmountModificator
+import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkoutsdk.R
 import company.tap.checkoutsdk.manager.SettingsManager
 import company.tap.checkoutsdk.viewmodels.PaymentItemViewModel
@@ -90,6 +91,7 @@ open class ItemsCreateActivity : AppCompatActivity() {
         itemDisc_il = findViewById(R.id.itemDisc_il)
         totalamount_textView = findViewById(R.id.totalamount_textView)
 
+        item_discount_unit?.setText("1.0")
         checkBoxPercentage?.setOnClickListener() {
             checkBoxPercentage?.isChecked = true
             checkBoxFixed?.isChecked = false
@@ -122,7 +124,7 @@ open class ItemsCreateActivity : AppCompatActivity() {
         item_quantity?.setText(paymentItems?.getitemQuantity().toString())
         item_price_per_unit?.setText(paymentItems?.getPricePUnit().toString())
         totalamount_textView?.text = "Total price is"+paymentItems?.getitemTotalPrice().toString()
-        item_discount_unit?.setText(paymentItems?.getAmountType()?.getValue().toString())
+        item_discount_unit?.setText(paymentItems?.getAmountType()?.getNormalizedValue().toString())
 
 
     }
@@ -136,21 +138,24 @@ open class ItemsCreateActivity : AppCompatActivity() {
                 )
             ) {
                 println("inside: $operation")
-                amountModificatorType.let {
+
                     if(item_discount_unit?.text.toString().isNullOrEmpty()) item_discount_unit?.setText("0.0")
 
                     SettingsManager.saveItems(
-                        null,
+                        "",
                         item_name?.text.toString().trim { it <= ' ' },
                         item_description?.text.toString().trim { it <= ' ' },
                         item_quantity?.text.toString().toInt(),
                         item_price_per_unit?.text.toString().toDouble(),
                         item_quantity?.text.toString().toDouble().times(item_price_per_unit?.text.toString().toDouble()),
-                        AmountModificator(amountModificatorType, BigDecimal.ZERO),null,null,null,null,null,null,
+                        AmountModificator(amountModificatorType,
+                            item_discount_unit?.text?.toString()?.toDouble()
+                                ?.let { it1 -> BigDecimal.valueOf(it1) }),
+                        SettingsManager.getString("key_sdk_transaction_currency","KWD"),null,null,null,false,null,
                         null,null,null,null,null,
                         null,this
                     )
-                }
+
                 back(null)
             } else if (operation.equals(
                     OPERATION_EDIT,
@@ -164,7 +169,7 @@ open class ItemsCreateActivity : AppCompatActivity() {
                         item_description?.text.toString().trim { it <= ' ' },
                         item_price_per_unit?.text.toString().toDouble() ,
                         item_price_per_unit?.text.toString().toDouble().times( item_quantity?.text.toString().toInt()),
-                        item_quantity?.text.toString().toInt(),  AmountModificator(amountModificatorType, BigDecimal.ZERO),null,null,null,null,null,null,
+                        item_quantity?.text.toString().toInt(),  AmountModificator(amountModificatorType, BigDecimal.ZERO), SettingsManager.getString("key_sdk_transaction_currency","KWD"),null,null,null,null,null,
                         null,null,null,null,null,
                         null,
                     )
