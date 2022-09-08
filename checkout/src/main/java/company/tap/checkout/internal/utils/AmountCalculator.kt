@@ -48,17 +48,19 @@ object AmountCalculator {
      * @return the big decimal
      */
     open fun calculateTotalAmountOf(
-        items: List<PaymentItem>,
+        items: List<PaymentItem>?,
         taxes: java.util.ArrayList<Tax>?,
         shippings: java.util.ArrayList<Shipping>?
     ): BigDecimal? {
         var itemsPlainAmount = BigDecimal.ZERO
         var itemsDiscountAmount = BigDecimal.ZERO
         var itemsTaxesAmount = BigDecimal.ZERO
-        for (item in items) {
-            itemsPlainAmount = itemsPlainAmount.add(item.getPlainAmount())
-            itemsDiscountAmount = itemsDiscountAmount.add(item.getDiscountAmount())
-            itemsTaxesAmount = itemsTaxesAmount.add(item.getTaxesAmount())
+        if (items != null) {
+            for (item in items) {
+                itemsPlainAmount = itemsPlainAmount.add(item.getPlainAmount())
+                itemsDiscountAmount = itemsDiscountAmount.add(item.getDiscountAmount())
+                itemsTaxesAmount = itemsTaxesAmount.add(item.getTaxesAmount())
+            }
         }
         val discountedAmount = itemsPlainAmount.subtract(itemsDiscountAmount)
         var shippingAmount = BigDecimal.ZERO
@@ -205,7 +207,7 @@ object AmountCalculator {
     fun calculateTotalAmountOfOrder(
         items: java.util.ArrayList<Items>?,
         taxes: java.util.ArrayList<TaxObject>?,
-        shippings: java.util.ArrayList<ShippingObject>?,
+        shippings: ShippingObject?,
         orderObjects: OrderObject
     ): BigDecimal? {
         var itemsPlainAmount = BigDecimal.ZERO
@@ -222,9 +224,11 @@ object AmountCalculator {
         val discountedAmount = itemsPlainAmount.subtract(itemsDiscountAmount)
         var shippingAmount = BigDecimal.ZERO
         if (shippings != null) {
-            for (shipping in shippings) {
-                shippingAmount = shippingAmount.add(shipping.getAmount())
-            }
+            //for (shipping in shippings) {
+               // shippingAmount = shippingAmount.add(shipping.getAmount())
+          //  }
+            shippingAmount = shippingAmount.add(shippings.getAmount())
+
         }
         val taxesAmount =
             calculateTaxesOnOrder(discountedAmount.add(shippingAmount), taxes)

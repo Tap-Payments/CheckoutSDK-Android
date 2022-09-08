@@ -35,7 +35,9 @@ class TapCustomer(
     metaData: String?,
     @SerializedName("nationality") @Expose
     private var nationality: String? = null, @SerializedName("address") @Expose
-    private var address: AddressCustomer? = null
+    private var address: AddressModel? = null,
+    @SerializedName("locale") @Expose
+    private var locale: String? = null
 ) :
     Serializable {
 
@@ -94,8 +96,17 @@ class TapCustomer(
      *
      * @return the Address
      */
-    fun getAddress(): AddressCustomer? {
+    fun getAddress(): AddressModel? {
         return address
+    }
+
+    /**
+     * Gets Address.
+     *
+     * @return the Address
+     */
+    fun getLocale(): String? {
+        return locale
     }
 
 
@@ -109,6 +120,7 @@ class TapCustomer(
         phone  country code =  '${phone?.countryCode}'
         phone number =  '${phone?.number}'
         metadata =  '$metaData'
+        address = '$address'
     }"""
     }
     ////////////////////////// ############################ Start of Builder Region ########################### ///////////////////////
@@ -128,7 +140,7 @@ class TapCustomer(
         private var nestedPhone: PhoneNumber? = null
         private var nestedMetaData: String? = null
         private var nestedNationality: String? = null
-        private var nestedAddress: AddressCustomer? = null
+        private var nestedAddress: AddressModel? = null
 
         /**
          * First name customer builder.
@@ -213,7 +225,7 @@ class TapCustomer(
          * @param innerAddress the inner innerAddress
          * @return the customer builder
          */
-        fun address(innerAddress: AddressCustomer): CustomerBuilder? {
+        fun address(innerAddress: AddressModel): CustomerBuilder? {
             this.nestedAddress = innerAddress
             return this
         }
@@ -241,5 +253,6 @@ class TapCustomer(
         this.metaData = metaData
         this.nationality = nationality
         this.address = address
+        this.locale = locale
     }
 }

@@ -4,7 +4,7 @@ import androidx.annotation.RestrictTo
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.math.BigDecimal
-import company.tap.checkout.internal.api.models.Merchant
+import company.tap.checkout.open.models.Merchant
 
 import company.tap.checkout.internal.api.models.Order
 
@@ -35,26 +35,26 @@ All rights reserved.
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 open class CreateChargeRequest(
-        merchant: Merchant?,
-        amount: BigDecimal,
-        currency: String?,
-        selectedAmount: BigDecimal,
-        selectedCurrency: String,
-        customer: TapCustomer,
-        fee: BigDecimal,
-        order: Order,
-        redirect: TrackingURL,
-        post: TrackingURL?,
-        source: SourceRequest,
-        description: String?,
-        metadata: HashMap<String, String>?,
-        reference: Reference?,
-        saveCard: Boolean,
-        statementDescriptor: String?,
-        threeDSecure: Boolean,
-        receipt: Receipt?,
-        destinations: Destinations?,
-        topUp: TopUp?
+    merchant: Merchant?,
+    amount: BigDecimal,
+    currency: String?,
+    selectedAmount: BigDecimal,
+    selectedCurrency: String,
+    customer: TapCustomer,
+    fee: BigDecimal,
+    order: Order,
+    redirect: TrackingURL,
+    post: TrackingURL?,
+    source: SourceRequest,
+    description: String?,
+    metadata: HashMap<String, String>?,
+    reference: Reference?,
+    saveCard: Boolean,
+    statementDescriptor: String?,
+    threeDSecure: Boolean,
+    receipt: Receipt?,
+    destinations: Destinations?,
+    topUp: TopUp?
 ) {
     @SerializedName("merchant")
     @Expose

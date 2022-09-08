@@ -235,12 +235,11 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
                 this,
             settingsManager?.getString("key_test_name","sk_test_kovrMB0mupFJXfNZWx6Etg5y"),
             settingsManager?.getString("key_live_name","sk_live_QglH8V7Fw6NPAom4qRcynDK2"),
-            settingsManager?.getString("key_package_name","company.tap.goSellSDKExample")
-                 /*   settingsManager?.getString("key_test_name","sk_test_2kGVSuR6bKAXLF4rDe0wa9QU"),
+            settingsManager?.getString("key_package_name","company.tap.goSellSDKExample"))
+                 /*settingsManager?.getString("key_test_name","sk_test_2kGVSuR6bKAXLF4rDe0wa9QU"),
             settingsManager?.getString("key_live_name","sk_live_QglH8V7Fw6NPAom4qRcynDK2"),
-            settingsManager?.getString("key_package_name","resources.gosell.io")*/
-
-        )
+            settingsManager?.getString("key_package_name","resources.gosell.io")
+ )*/
 
     }
 
@@ -292,12 +291,12 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         //    )
        // }//** Required **
         sdkSession.setAmount(
-            BigDecimal.valueOf(36)
+            BigDecimal.valueOf(38)
         )
 
         // Set Payment Items array list
       //  sdkSession.setPaymentItems(ArrayList()) // ** Optional ** you can pass empty array list
-        sdkSession.setPaymentItems(settingsManager?.getDynamicPaymentItems()) // ** Optional ** you can pass empty array list
+       // sdkSession.setPaymentItems(settingsManager?.getDynamicPaymentItems()) // ** Optional ** you can pass empty array list
       //  sdkSession.setPaymentItems(getPaymentItems()) // ** Optional ** you can pass empty array list
 
 
@@ -354,8 +353,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
        sdkSession.setDestination(null) // ** Optional ** you can pass Destinations object or null
 
 
-        sdkSession.setMerchantID(settingsManager?.getString("key_merchant_id", "1124340")) // ** Optional ** you can pass merchant id or null
-       // sdkSession.setMerchantID("599424") // ** Optional ** you can pass merchant id or null
+      //  sdkSession.setMerchantID(settingsManager?.getString("key_merchant_id", "1124340")) // ** Optional ** you can pass merchant id or null
+        sdkSession.setMerchantID("599424") // ** Optional ** you can pass merchant id or null
 
 
         sdkSession.setCardType(CardType.ALL) // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
@@ -375,7 +374,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
        var useOrderObjectKey = settingsManager?.getBoolean("useOrderObjectKey",false)
 
         if(useOrderObjectKey == true){
-                sdkSession.setOrderItems(getOrderItemsList()) // ** Usually Optional ** Required when creating order object
+               // sdkSession.setOrderItems(getOrderItemsList()) // ** Usually Optional ** Required when creating order object
 
 
                sdkSession.setOrderObject(getOrder()) // ** Usually Optional ** Required when creating order object
@@ -798,7 +797,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
                 "",
                 "abcjuice",
                 BigDecimal.valueOf(12),
-                "USD",
+                "kwd",
                 BigDecimal.valueOf(3),
                 Category.DIGITAL_GOODS,
                 AmountModificator(AmountModificatorType.FIXED, BigDecimal.valueOf(1)),
@@ -815,7 +814,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
                     0.5, "IN", 1.0, 1.0, 1.0
                 ),
                 "",
-                null
+                MetaData("udf1","udf2")
             )
         )
         return itemsList
@@ -825,9 +824,9 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
     private fun getOrder(): OrderObject {
         return OrderObject(
             BigDecimal.valueOf(38),
-            "USD",
-            setCustomer(),
-            getOrderItemsList(),
+            "kwd",
+           "",
+           getOrderItemsList(),
             ArrayList(
                 setOf(
                     TaxObject(
@@ -837,10 +836,19 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
                     )
                 )
             ),
-            null,
-            settingsManager?.getString("key_merchant_id", "1124340")?.let { Merchant(it) },
-         //   Merchant("1124340"),
-            null,
+            ShippingObject(BigDecimal(1),"KWD",
+                Description("test"),"",AddressModel("Home",
+                "line1",
+            "lin2","line3",
+        "line4", "avenue",
+        "salem mubarak","8mall",
+        "6","kw",
+        "Salmiya","Salmiyaah",
+        "Hawally","30003",
+        "","en"), Provider("prov_FFSFAGGAHAAJAJ","ARAMEX")),
+           // settingsManager?.getString("key_merchant_id", "1124340")?.let { Merchant(it) },
+            Merchant("599424"),
+            MetaData("udf1","udf2"),
             ReferId("")
         )
     }

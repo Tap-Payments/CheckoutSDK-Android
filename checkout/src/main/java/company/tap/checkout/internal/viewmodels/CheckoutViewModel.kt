@@ -1693,6 +1693,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     override fun onCurrencyClicked(currencySelected: String, currencyRate: BigDecimal, totalSelectedAmount: BigDecimal, previousSelectedCurrency: String,selectedCurrencySymbol:String) {
         currencyOldRate = currencyRate
         lastSelectedCurrency = previousSelectedCurrency
+        if(::unModifiedItemList.isInitialized)
         println("unModifiedItemList"+unModifiedItemList)
         if (::itemList.isInitialized) {
             for (i in itemList.indices) {

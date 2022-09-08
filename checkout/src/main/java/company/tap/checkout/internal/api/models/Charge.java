@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import company.tap.checkout.internal.api.enums.ChargeStatus;
-import company.tap.checkout.internal.api.requests.Gateway;
 import company.tap.checkout.internal.interfaces.BaseResponse;
 import company.tap.checkout.open.models.Destinations;
 
+import company.tap.checkout.open.models.Merchant;
 import company.tap.checkout.open.models.TapCustomer;
 import company.tap.checkout.open.models.TopUp;
 
@@ -26,7 +26,7 @@ public class Charge implements BaseResponse, Serializable {
 
     @SerializedName("merchant")
     @Expose
-     Merchant merchant;
+    Merchant merchant;
 
     @SerializedName("amount")
     @Expose

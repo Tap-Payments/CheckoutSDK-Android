@@ -4,75 +4,85 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import company.tap.checkout.internal.api.enums.AmountModificatorType
 import company.tap.checkout.internal.api.models.AmountModificator
+import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.Category
 import java.io.Serializable
 import java.math.BigDecimal
 
-data
-class Items(
-    @field:Expose @field:SerializedName("product_id")
+data class Items(
+    @field:Expose
+    @field:SerializedName("product_id")
     val productId: String?,
-    @field:Expose @field:SerializedName(
-        "name"
-    ) val name: String?,
-    @field:Expose @field:SerializedName("amount") val amount: BigDecimal?,
-    @field:Expose @field:SerializedName(
-        "currency"
-    ) val currency: String?,
-    @field:Expose @field:SerializedName("quantity") val quantity: BigDecimal?,
+
+    @field:Expose
+    @field:SerializedName(
+        "name")
+    val name: String? = null,
+
+    @field:Expose
+    @field:SerializedName("amount")
+    val amount: BigDecimal? = null,
+
+    @field:Expose
+    @field:SerializedName("currency")
+    val currency: String?,
+
+    @field:Expose
+    @field:SerializedName("quantity")
+    val quantity: BigDecimal? = null,
+
     @SerializedName("category")
     @Expose
     private var category: Category?,
 
     @SerializedName("discount")
-@Expose
-private val discount: AmountModificator?,
+    @Expose
+    private val discount: AmountModificator?,
 
     @SerializedName("vendor")
-@Expose
-private val vendor: Vendor?,
+    @Expose
+    private val vendor: Vendor?,
 
     @SerializedName("fulfillment_service")
-@Expose
-val fulfillmentService: String?,
+    @Expose
+    val fulfillmentService: String?,
 
     @SerializedName("requires_shipping")
-@Expose
-val isRequireShipping: Boolean,
+    @Expose
+    val isRequireShipping: Boolean,
 
     @SerializedName("item_code")
-@Expose
-val itemCode: String?,
+    @Expose
+    val itemCode: String?,
 
     @SerializedName("account_code")
-@Expose
-val accountCode: String?,
+    @Expose
+    val accountCode: String?,
 
     @SerializedName("description")
-@Expose
-val description: String?,
+    @Expose
+    val description: String?,
 
     @SerializedName("image")
-@Expose
-val image: String?,
+    @Expose
+    val image: String?,
 
     @SerializedName("reference")
-@Expose
-private val reference: ReferenceItem?,
+    @Expose
+    private val reference: ReferenceItem?,
 
     @SerializedName("dimensions")
-@Expose
-val dimensions: ItemDimensions?,
+    @Expose
+    val dimensions: ItemDimensions?,
 
     @SerializedName("tags")
-@Expose
-val tags: String?,
+    @Expose
+    val tags: String?,
 
     @SerializedName("meta_data")
-@Expose
-val metaData: MetaData?
+    @Expose
+    val metaData: MetaData?
 ) : Serializable {
-
 
 
     fun getCategory(): Category? {

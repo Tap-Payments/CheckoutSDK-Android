@@ -2,26 +2,30 @@ package company.tap.checkout.open.models
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import company.tap.checkout.internal.api.models.Merchant
+import company.tap.checkout.internal.api.enums.AmountModificatorType
+import company.tap.checkout.internal.api.models.AmountModificator
 import company.tap.checkout.internal.utils.AmountCalculator
+import company.tap.checkout.open.data_managers.PaymentDataSource
+import company.tap.checkout.open.enums.Category
 import java.math.BigDecimal
 
 data class OrderObject(
     @SerializedName("amount")
     @Expose
-    private var amount: BigDecimal ,
+    private var amount: BigDecimal,
 
-    @com.google.gson.annotations.SerializedName("currency")
+    @SerializedName("currency")
 @Expose
-private val currency: String ,
+private val currency: String,
 
     @SerializedName("customer")
 @Expose
-private var customer: TapCustomer? = null,
+private var customer: String? = null,
 
     @SerializedName("items")
 @Expose
-private var items: ArrayList<Items>? = null,
+
+ var items: ArrayList<Items>? =  null ,
 
 
     @SerializedName("tax")
@@ -30,7 +34,7 @@ private var tax: ArrayList<TaxObject>? = null,
 
     @SerializedName("shipping")
 @Expose
-private var shipping: ArrayList<ShippingObject>? = null,
+private var shipping: ShippingObject? = null,
 
     @SerializedName("merchant")
 @Expose
@@ -48,6 +52,7 @@ private val reference: ReferId? = null
 
 
 
+
     /**
      * Gets taxes amount.
      *
@@ -61,6 +66,12 @@ private val reference: ReferId? = null
 
     //  Constructor is private to prevent access from client app, it must be through inner Builder class only
     init {
+
+        if (items == null){
+            items = defaultArrayList()
+        }
+
+
         this.customer = customer
         if (items != null && items!!.size > 0) {
             this.items = items
@@ -91,5 +102,39 @@ private val reference: ReferId? = null
 
     fun getAmount(): BigDecimal {
         return amount
+    }
+
+    fun  defaultArrayList() : ArrayList<Items>
+    {
+        val itemsList = java.util.ArrayList<Items>()
+        var itemsAmount: BigDecimal ?= BigDecimal.ONE
+        if(PaymentDataSource.getSelectedAmount()!=null){
+            itemsAmount =  PaymentDataSource.getSelectedAmount()
+        }else {
+            itemsAmount = PaymentDataSource.getAmount()
+        }
+        itemsList.add(
+            Items(
+                "",
+                "Default Name1",
+               itemsAmount ,
+                "KWD",
+                BigDecimal.valueOf(1),
+                null,
+               null,
+               null,
+                null,
+                false,
+                null,
+               null ,
+                null,
+                null,
+                null,
+                null,
+                "",
+              null
+            )
+        )
+        return itemsList
     }
 }

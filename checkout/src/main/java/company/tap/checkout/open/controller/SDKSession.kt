@@ -14,7 +14,7 @@ import androidx.fragment.app.FragmentManager
 import com.google.gson.JsonElement
 import company.tap.checkout.internal.PaymentDataProvider
 import company.tap.checkout.internal.api.enums.ChargeStatus
-import company.tap.checkout.internal.api.models.Merchant
+import company.tap.checkout.open.models.Merchant
 import company.tap.checkout.internal.api.requests.Config
 import company.tap.checkout.internal.api.requests.Gateway
 import company.tap.checkout.internal.api.requests.TapConfigRequestModel
@@ -464,10 +464,10 @@ object  SDKSession : APIRequestCallback {
     fun startPayment(_supportFragmentManager:FragmentManager?) {
        // persistPaymentDataSource()
       //  if (tabAnimatedActionButton != null) tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
-        val requestModel =TapConfigRequestModel(PaymentDataSource?.getAuthKeys()?.let { PaymentDataSource?.getMerchant()?.id?.let { it1 ->
-            Gateway(it,
-                it1,Config(NetworkApp.getApplicationInfo()))
-        } })
+        val requestModel =TapConfigRequestModel(
+            PaymentDataSource.getAuthKeys()
+                ?.let { Gateway(it,PaymentDataSource.getMerchant()?.id,Config(NetworkApp.getApplicationInfo())) })
+
         println("tapConfigRequestModel : " + requestModel)
         CardViewModel().processEvent(CardViewEvent.ConfigEvent, CheckoutViewModel(),requestModel,null,null,null,null,null,null,null,null,
             _supportFragmentManager,contextSDK)

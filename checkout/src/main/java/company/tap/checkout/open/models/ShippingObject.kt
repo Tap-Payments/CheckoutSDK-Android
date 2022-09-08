@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 import java.math.BigDecimal
 
-data  class ShippingObject(
+data class ShippingObject(
     @SerializedName("amount")
     @Expose
     private val amount: BigDecimal,
@@ -19,16 +19,16 @@ data  class ShippingObject(
     private var description: Description?,
 
     @SerializedName("recipient_name")
-@Expose
-private val recipientName: String?,
+    @Expose
+    private val recipientName: String?,
 
     @SerializedName("address")
-@Expose
-private val address: AddressCustomer?,
+    @Expose
+    private val address: AddressModel?,
 
     @SerializedName("provider")
-@Expose
-private val provider: Provider?
+    @Expose
+    private val provider: Provider?
 ) : Serializable {
 
 
@@ -48,7 +48,7 @@ private val provider: Provider?
         return recipientName
     }
 
-    fun getAddress(): AddressCustomer? {
+    fun getAddress(): AddressModel? {
         return address
     }
 

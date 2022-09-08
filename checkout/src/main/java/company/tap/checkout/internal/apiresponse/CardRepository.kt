@@ -14,7 +14,7 @@ import company.tap.checkout.internal.api.enums.AuthenticationType
 import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.enums.URLStatus
 import company.tap.checkout.internal.api.models.*
-import company.tap.checkout.internal.api.models.Merchant
+import company.tap.checkout.open.models.Merchant
 import company.tap.checkout.internal.api.requests.*
 import company.tap.checkout.internal.api.responses.*
 import company.tap.checkout.internal.enums.PaymentTypeEnum
@@ -105,11 +105,9 @@ class CardRepository : APIRequestCallback {
         supportFragmentManagerdata: FragmentManager
     ) {
         this.viewModel = viewModel
-
         val requestBody = PaymentOptionsRequest(
             PaymentDataSource.getTransactionMode(),
             PaymentDataSource.getAmount(),
-            PaymentDataSource.getItems(),
             PaymentDataSource.getShipping(),
             PaymentDataSource.getTaxes(),
             PaymentDataSource.getDestination(),

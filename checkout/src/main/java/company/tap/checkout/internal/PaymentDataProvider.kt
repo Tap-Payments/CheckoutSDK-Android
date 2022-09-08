@@ -3,7 +3,7 @@ package company.tap.checkout.internal
 import company.tap.checkout.internal.api.enums.AuthorizeActionType
 import company.tap.checkout.internal.api.models.AmountedCurrency
 import company.tap.checkout.internal.api.models.CardIssuer
-import company.tap.checkout.internal.api.models.Merchant
+import company.tap.checkout.open.models.Merchant
 import company.tap.checkout.internal.api.models.SupportedCurrencies
 import company.tap.checkout.internal.interfaces.IPaymentDataProvider
 import company.tap.checkout.open.data_managers.PaymentDataSource

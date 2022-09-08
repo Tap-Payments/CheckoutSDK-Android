@@ -20,7 +20,6 @@ All rights reserved.
 open class PaymentOptionsRequest(
     transactionMode: TransactionMode?,
     amount: BigDecimal?,
-    items: ArrayList<PaymentItem>?,
     shipping: ArrayList<Shipping>?,
     taxes: ArrayList<Tax>?,
     destinations:Destinations?,
@@ -112,26 +111,21 @@ open class PaymentOptionsRequest(
      *
      * @param transactionMode the transaction mode
      * @param amount          the amount
-     * @param items           the items
      * @param shipping        the shipping
      * @param taxes           the taxes
      * @param currency        the currency
      * @param topUp        the topup
+     * @param orderObject        the orderObject
      */
     init {
 
-        if (items != null && items.size > 0) {
-            this.items = items
-            totalAmount = AmountCalculator.calculateTotalAmountOf(items, taxes, shipping)
+
+            totalAmount = AmountCalculator.calculateTotalAmountOf( null ,taxes, shipping)
             if (orderObject != null) {
                 totalAmount =
                     totalAmount?.add(AmountCalculator.calculateTotalAmountOfObject(orderObject))
             }
-        } else {
-            this.items = null
-            val plainAmount = amount ?: BigDecimal.ZERO
-            totalAmount = AmountCalculator.calculateTotalAmountOf(ArrayList(), taxes, shipping)!!
-                .add(plainAmount)
+         else {
             if (orderObject != null) {
                 totalAmount = BigDecimal.ZERO
                 totalAmount =

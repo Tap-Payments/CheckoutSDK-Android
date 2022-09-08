@@ -1,4 +1,4 @@
-package company.tap.checkout.internal.api.models
+package company.tap.checkout.open.models
 
 import androidx.annotation.Nullable
 import androidx.annotation.RestrictTo
@@ -12,9 +12,9 @@ import java.io.Serializable
 Copyright (c) 2021    Tap Payments.
 All rights reserved.
  **/
-@RestrictTo(RestrictTo.Scope.LIBRARY)
+
 data class Merchant(
     @SerializedName("id")
     @Expose
-    @Nullable var id: String
+    @Nullable var id: String?
 ):Serializable

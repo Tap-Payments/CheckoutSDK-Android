@@ -10,7 +10,7 @@ import company.tap.checkout.open.models.Receipt
 import company.tap.checkout.open.models.Reference
 import company.tap.checkout.open.models.TopUp
 import java.math.BigDecimal
-import company.tap.checkout.internal.api.models.Merchant
+import company.tap.checkout.open.models.Merchant
 import company.tap.checkout.internal.api.models.Order
 import company.tap.checkout.internal.api.models.SourceRequest
 import company.tap.checkout.internal.api.models.TrackingURL
