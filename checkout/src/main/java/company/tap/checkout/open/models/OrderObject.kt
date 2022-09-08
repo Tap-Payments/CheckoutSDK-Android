@@ -12,42 +12,40 @@ data class OrderObject(
     private var amount: BigDecimal,
 
     @SerializedName("currency")
-@Expose
-private val currency: String,
+    @Expose
+    private val currency: String,
 
     @SerializedName("customer")
-@Expose
-private var customer: String? = null,
+    @Expose
+    private var customer: TapCustomer? = null,
 
     @SerializedName("items")
-@Expose
+    @Expose
 
- var items: ArrayList<ItemsModel>? =  null,
+    var items: ArrayList<ItemsModel>? = null,
 
 
     @SerializedName("tax")
-@Expose
-private var tax: ArrayList<TaxObject>? = null,
+    @Expose
+    private var tax: ArrayList<TaxObject>? = null,
 
     @SerializedName("shipping")
-@Expose
-private var shipping: ShippingObject? = null,
+    @Expose
+    private var shipping: ShippingObject? = null,
 
     @SerializedName("merchant")
-@Expose
-private var merchant: Merchant? = null,
+    @Expose
+    private var merchant: Merchant? = null,
 
     @SerializedName("metadata")
-@Expose
-private var metaData: MetaData? = null,
+    @Expose
+    private var metaData: MetaData? = null,
 
     @SerializedName("reference")
-@Expose
-private val reference: ReferId? = null
+    @Expose
+    private val reference: ReferId? = null
 
 ) {
-
-
 
 
     /**
@@ -64,17 +62,24 @@ private val reference: ReferId? = null
     //  Constructor is private to prevent access from client app, it must be through inner Builder class only
     init {
 
-        if (items == null){
+        if (items == null) {
             items = defaultArrayList()
-        }else this.items = items
+        } else this.items = items
 
 
         this.customer = customer
         if (items != null && items!!.size > 0) {
             this.items = items
-            amount = items?.let { AmountCalculator.calculateTotalAmountOfOrder(it, tax, shipping, this) }!!
+            amount = items?.let {
+                AmountCalculator.calculateTotalAmountOfOrder(
+                    it,
+                    tax,
+                    shipping,
+                    this
+                )
+            }!!
         } else {
-           // this.items = null
+            // this.items = null
             val plainAmount = amount ?: BigDecimal.ZERO
             amount =
                 AmountCalculator.calculateTotalAmountOfOrder(null, tax, shipping, this)
@@ -101,35 +106,34 @@ private val reference: ReferId? = null
         return amount
     }
 
-    fun  defaultArrayList() : ArrayList<ItemsModel>
-    {
+    fun defaultArrayList(): ArrayList<ItemsModel> {
         val itemsList = java.util.ArrayList<ItemsModel>()
-        var itemsAmount: BigDecimal ?= BigDecimal.ONE
-        if(PaymentDataSource.getSelectedAmount()!=null){
-            itemsAmount =  PaymentDataSource.getSelectedAmount()
-        }else {
+        var itemsAmount: BigDecimal? = BigDecimal.ONE
+        if (PaymentDataSource.getSelectedAmount() != null) {
+            itemsAmount = PaymentDataSource.getSelectedAmount()
+        } else {
             itemsAmount = PaymentDataSource.getAmount()
         }
         itemsList.add(
             ItemsModel(
                 "",
                 "Default Name1",
-               itemsAmount ,
+                itemsAmount,
                 "KWD",
                 BigDecimal.valueOf(1),
                 null,
-               null,
-               null,
+                null,
+                null,
                 null,
                 false,
                 null,
-               null ,
+                null,
                 null,
                 null,
                 null,
                 null,
                 "",
-              null, null
+                null, null
             )
         )
         return itemsList

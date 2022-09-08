@@ -371,18 +371,13 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         sdkSession.setSdkMode(SdkMode.SAND_BOX) //** Pass your SDK MODE
 
         //    sdkSession.setCardType(CardType.CREDIT); // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
-        var useOrderObjectKey = settingsManager?.getBoolean("useOrderObjectKey",false)
+        val useShippingEnableKey = settingsManager?.getBoolean("useShippingEnableKey",false)
 
-        if(useOrderObjectKey == true){
+        if(useShippingEnableKey == true){
             // sdkSession.setOrderItems(getOrderItemsList()) // ** Usually Optional ** Required when creating order object
-
-
-            sdkSession.setOrderObject(getOrder()) // ** Usually Optional ** Required when creating order object
-        }
-        //    sdkSession.setOrderItems(getOrderItemsList()) // ** Usually Optional ** Required when creating order object
-
-
-        //   sdkSession.setOrderObject(getOrder()) // ** Usually Optional ** Required when creating order object
+                 sdkSession.setOrderObject(getOrder())
+            // ** Usually Optional ** Required when creating order object
+        }else { sdkSession.setOrderObject(getOrderWithoutAdd())}
 
 
     }
@@ -489,42 +484,6 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
     }
 
-    private fun getPaymentItems(): ArrayList<PaymentItem>? {
-        val items: ArrayList<PaymentItem> = ArrayList<PaymentItem>()
-        items.add(
-            PaymentItem(
-                "ItemsModel 1",
-                "Description for test item #1",
-                Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(2)),
-                BigDecimal.valueOf(10),
-                AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO),
-                null
-            )
-        )
-        items.add(
-            PaymentItem(
-                "ItemsModel 2",
-                "Description for test item #2",
-                Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(3)),
-                BigDecimal.valueOf(12),
-                AmountModificator(AmountModificatorType.PERCENTAGE, BigDecimal.valueOf(30)),
-                settingsManager?.getTaxes()
-            )
-        )
-        items.add(
-            PaymentItem(
-                "ItemsModel 3",
-                "Description for test item #3",
-                Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(4)),
-                BigDecimal.valueOf(14),
-                AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO),
-                null
-            )
-        )
-        println("item are<<<<" + items)
-
-        return items
-    }
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun initActionButton() {
@@ -825,7 +784,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         return OrderObject(
             BigDecimal.valueOf(38),
             settingsManager?.getString("key_sdk_transaction_currency","KWD").toString(),
-            "",
+            settingsManager?.getCustomer(),
             settingsManager?.getDynamicPaymentItems(),
             ArrayList(
                 setOf(
@@ -835,25 +794,35 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
                         AmountModificator(AmountModificatorType.FIXED, BigDecimal.valueOf(0))
                     )
                 )
-            ),null,
-/*            ShippingObject(BigDecimal(0),"KWD",
-                Description("test"),"",AddressModel("Home",
-                    "line1",
-                    "lin2","line3",
-                    "line4", "avenue",
-                    "salem mubarak","8mall",
-                    "6","kw",
-                    "Salmiya","Salmiyaah",
-                    "Hawally","30003",
-                    "","en"), Provider("prov_FFSFAGGAHAAJAJ","ARAMEX")),*/
-            // settingsManager?.getString("key_merchant_id", "1124340")?.let { Merchant(it) },
-            Merchant("599424"),
+            ),
+            settingsManager?.getShippingObject(),
+             settingsManager?.getString("key_merchant_id", "1124340")?.let { Merchant(it) },
             MetaData("udf1","udf2"),
             ReferId("")
         )
     }
 
-
+    private fun getOrderWithoutAdd(): OrderObject {
+        return OrderObject(
+            BigDecimal.valueOf(38),
+            settingsManager?.getString("key_sdk_transaction_currency","KWD").toString(),
+            settingsManager?.getCustomer(),
+            settingsManager?.getDynamicPaymentItems(),
+            ArrayList(
+                setOf(
+                    TaxObject(
+                        "Tax1",
+                        "tax described",
+                        AmountModificator(AmountModificatorType.FIXED, BigDecimal.valueOf(0))
+                    )
+                )
+            ),
+            null,
+            settingsManager?.getString("key_merchant_id", "1124340")?.let { Merchant(it) },
+            MetaData("udf1","udf2"),
+            ReferId("")
+        )
+    }
 
 
 

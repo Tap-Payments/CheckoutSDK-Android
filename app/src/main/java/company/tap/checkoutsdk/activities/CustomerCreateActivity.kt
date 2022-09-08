@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.appcompat.widget.SwitchCompat
 import com.google.android.material.textfield.TextInputLayout
 import company.tap.checkoutsdk.viewmodels.CustomerViewModel
 import company.tap.checkoutsdk.R
@@ -30,6 +31,8 @@ open class CustomerCreateActivity : AppCompatActivity() {
     private var mobile_l: TextInputLayout? = null
     private var sdn_l: TextInputLayout? = null
 
+    private var customerAddSwitchCompat: SwitchCompat? = null
+
     private var operation = ""
     private var customer: CustomerViewModel? = null
 
@@ -43,6 +46,9 @@ open class CustomerCreateActivity : AppCompatActivity() {
     var EMAIL_IS_VALID = false
     @JvmField
     var MOBILE_IS_VALID = false
+
+    @JvmField var  isAddressEnabled:Boolean?=true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_customer_create)
@@ -78,6 +84,16 @@ open class CustomerCreateActivity : AppCompatActivity() {
         email_l = findViewById(R.id.email_il)
         mobile_l = findViewById(R.id.mobile_il)
         sdn_l = findViewById(R.id.sdn_il)
+
+        customerAddSwitchCompat = findViewById(R.id.customer_address_switch)
+
+        customerAddSwitchCompat?.setOnCheckedChangeListener { _, isChecked ->
+            // do whatever you need to do when the switch is toggled here
+            isAddressEnabled = isChecked
+
+            println("isAddressEnabled>>"+isAddressEnabled)
+
+        }
     }
 
     private fun populateCustomerFields(customer: CustomerViewModel?) {

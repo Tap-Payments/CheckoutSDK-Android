@@ -17,6 +17,7 @@ import company.tap.checkout.open.enums.Category
 import company.tap.checkout.open.enums.SdkMode
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.models.*
+import company.tap.checkoutsdk.activities.CustomerCreateActivity
 import company.tap.checkoutsdk.viewmodels.*
 import java.math.BigDecimal
 import java.util.*
@@ -398,23 +399,46 @@ object SettingsManager {
       //  customer =
         if (!customersList.isNullOrEmpty() && customersList.isNotEmpty()) {
             println("preparing data source with customer ref :" + customersList[0].getRef())
-            customer= TapCustomer(
-                customersList[0].getRef(),
-                customersList[0].getName(),
-                customersList[0].getMiddleName(),
-                customersList[0].getLastName(),
-                customersList[0].getEmail(),
-                PhoneNumber(customersList[0].getSdn(), customersList[0].getMobile()),
-                "meta"
-            )
+            println("preparing data source with isAdd ref :" + CustomerCreateActivity().isAddressEnabled)
+            if(CustomerCreateActivity().isAddressEnabled == true){
+                customer= TapCustomer(
+                    customersList[0].getRef(),
+                    customersList[0].getName(),
+                    customersList[0].getMiddleName(),
+                    customersList[0].getLastName(),
+                    customersList[0].getEmail(),
+                    PhoneNumber(customersList[0].getSdn(), customersList[0].getMobile()),
+                    "meta","nationality", getCustomerAddress(),"en"
+                )
+            }else {
+                customer = TapCustomer(
+                    customersList[0].getRef(),
+                    customersList[0].getName(),
+                    customersList[0].getMiddleName(),
+                    customersList[0].getLastName(),
+                    customersList[0].getEmail(),
+                    PhoneNumber(customersList[0].getSdn(), customersList[0].getMobile()),
+                    "meta", "nationality", null, "en"
+                )
+            }
+
         } else {
             println(" paymentResultDataManager.getCustomerRef(context) null")
             //65562630
-            customer= TapCustomer(
-                "cus_TS012520211349Za012907577", "ahlaam", "middlename",
-                "lastname", "abcd@gmail.com",
-                PhoneNumber("00965", "66175090"), "description",
-            )
+            if(CustomerCreateActivity().isAddressEnabled == true){
+                customer= TapCustomer(
+                    "cus_TS012520211349Za012907577", "ahlaam", "middlename",
+                    "lastname", "abcd@gmail.com",
+                    PhoneNumber("00965", "66175090"), "description","nationality", getCustomerAddress(),"en"
+                )
+            }else {
+                customer= TapCustomer(
+                    "cus_TS012520211349Za012907577", "ahlaam", "middlename",
+                    "lastname", "abcd@gmail.com",
+                    PhoneNumber("00965", "66175090"), "description", "nationality", null, "en"
+                )
+            }
+
         }
         return customer
         //  65562630
@@ -513,6 +537,27 @@ object SettingsManager {
             "track_1",
             "transaction_1",
             "order_1"
+        )
+    }
+
+    fun getCustomerAddress(): AddressModel {
+        return AddressModel(
+            "Office",
+            "Tap Payments",
+            "Block 2",
+            "Opp. Terrace Mall",
+            "Lane 4",
+            "Mall no",
+            "Salem Al Mubarak",
+            "8 Mall",
+            "6th floor",
+            "Kuwait",
+            "Hawally",
+            "Salmiyah --Block",
+            "Salmiya",
+            "30003",
+            "23232",
+            "en"
         )
     }
 
@@ -783,5 +828,13 @@ object SettingsManager {
         }
         return taxList
 
+    }
+
+    //Set topup object
+
+    fun getShippingObject(): ShippingObject? {
+        return ShippingObject(BigDecimal(1),"KWD",
+            Description("test"),"resource receipt", getCustomerAddress(), Provider("prov_FFSFAGGAHAAJAJ","ARAMEX")
+        )
     }
 }

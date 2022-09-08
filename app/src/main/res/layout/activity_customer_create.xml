@@ -177,6 +177,19 @@
     </com.google.android.material.textfield.TextInputLayout>
 
 
+    <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/customer_address_switch"
+            style="@style/EditText"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_margin="8dp"
+            android:gravity="start"
+            android:text="Add address Details:"
+            app:backgroundTint="@color/mercury"
+        android:checked="true"/>
+
+
+
 
 
 </LinearLayout>

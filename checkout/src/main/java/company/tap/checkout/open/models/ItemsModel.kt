@@ -48,7 +48,7 @@ data class ItemsModel(
 
     @SerializedName("requires_shipping")
     @Expose
-    val isRequireShipping: Boolean? = null,
+    val isRequireShipping: Boolean? = false,
 
     @SerializedName("item_code")
     @Expose

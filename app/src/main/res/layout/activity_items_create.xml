@@ -192,5 +192,15 @@
             android:layout_height="15dp"
             android:text="text value"/>
     </LinearLayout>
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/itemsSwitch"
+        style="@style/EditText"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_margin="8dp"
+        android:gravity="start"
+        android:text="Item is Shippable:"
+        app:backgroundTint="@color/mercury"
+        android:checked="false"/>
 
 </LinearLayout>

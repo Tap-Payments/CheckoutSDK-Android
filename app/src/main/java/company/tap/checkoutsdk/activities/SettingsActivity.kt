@@ -48,7 +48,7 @@ class SettingsActivity : AppCompatActivity() {
             bindPreferenceSummaryToValue(findPreference("key_sdk_payment_type"))
             bindPreferenceSummaryToValue(findPreference("key_sdk_card_type"))
             bindPreferenceSummaryToValue(findPreference("showImageKey"))
-            bindPreferenceSummaryToValue(findPreference("useOrderObjectKey"))
+            bindPreferenceSummaryToValue(findPreference("useShippingEnableKey"))
 
         }
     }
@@ -118,7 +118,7 @@ class SettingsActivity : AppCompatActivity() {
                 if (preference.getKey().equals("showImageKey")) {
                     // update the changed gallery name to summary filed
 
-                } else  if (preference.getKey().equals("useOrderObjectKey")){
+                } else  if (preference.getKey().equals("useShippingEnableKey")){
 
                 }
             }
