@@ -193,7 +193,7 @@ object  SDKSession : APIRequestCallback {
      *
      * @param paymentItems the payment items
      */
-    fun setPaymentItems(paymentItems: ArrayList<PaymentItem>?) {
+    fun setPaymentItems(paymentItems: ArrayList<ItemsModel>?) {
         paymentDataSource?.setPaymentItems(paymentItems)
     }
 
@@ -361,9 +361,9 @@ object  SDKSession : APIRequestCallback {
     }
 
     /**
-     * set OrderObject Items
+     * set OrderObject ItemsModel
      */
-    fun setOrderItems(orderItems: ArrayList<Items>) {
+    fun setOrderItems(orderItems: ArrayList<ItemsModel>) {
         paymentDataSource?.setOrderItems(orderItems)
     }
 

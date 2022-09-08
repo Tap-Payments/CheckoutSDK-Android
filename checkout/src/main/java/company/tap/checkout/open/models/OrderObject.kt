@@ -2,11 +2,8 @@ package company.tap.checkout.open.models
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import company.tap.checkout.internal.api.enums.AmountModificatorType
-import company.tap.checkout.internal.api.models.AmountModificator
 import company.tap.checkout.internal.utils.AmountCalculator
 import company.tap.checkout.open.data_managers.PaymentDataSource
-import company.tap.checkout.open.enums.Category
 import java.math.BigDecimal
 
 data class OrderObject(
@@ -25,7 +22,7 @@ private var customer: String? = null,
     @SerializedName("items")
 @Expose
 
- var items: ArrayList<Items>? =  null ,
+ var items: ArrayList<ItemsModel>? =  null,
 
 
     @SerializedName("tax")
@@ -104,9 +101,9 @@ private val reference: ReferId? = null
         return amount
     }
 
-    fun  defaultArrayList() : ArrayList<Items>
+    fun  defaultArrayList() : ArrayList<ItemsModel>
     {
-        val itemsList = java.util.ArrayList<Items>()
+        val itemsList = java.util.ArrayList<ItemsModel>()
         var itemsAmount: BigDecimal ?= BigDecimal.ONE
         if(PaymentDataSource.getSelectedAmount()!=null){
             itemsAmount =  PaymentDataSource.getSelectedAmount()
@@ -114,7 +111,7 @@ private val reference: ReferId? = null
             itemsAmount = PaymentDataSource.getAmount()
         }
         itemsList.add(
-            Items(
+            ItemsModel(
                 "",
                 "Default Name1",
                itemsAmount ,
@@ -132,7 +129,7 @@ private val reference: ReferId? = null
                 null,
                 null,
                 "",
-              null
+              null, null
             )
         )
         return itemsList

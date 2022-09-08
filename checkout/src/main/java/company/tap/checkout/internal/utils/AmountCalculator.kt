@@ -205,7 +205,7 @@ object AmountCalculator {
      * @return the big decimal
      */
     fun calculateTotalAmountOfOrder(
-        items: java.util.ArrayList<Items>?,
+        items: java.util.ArrayList<ItemsModel>?,
         taxes: java.util.ArrayList<TaxObject>?,
         shippings: ShippingObject?,
         orderObjects: OrderObject

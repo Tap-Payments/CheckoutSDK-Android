@@ -13,6 +13,7 @@ import company.tap.checkout.internal.api.enums.Measurement
 import company.tap.checkout.internal.api.models.AmountModificator
 import company.tap.checkout.internal.api.models.PhoneNumber
 import company.tap.checkout.internal.api.models.Quantity
+import company.tap.checkout.open.enums.Category
 import company.tap.checkout.open.enums.SdkMode
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.models.*
@@ -133,12 +134,25 @@ object SettingsManager {
 
 
     fun saveItems(
+        proudctId:String?,
         itemname: String,
         description: String,
         quantity:Int,
         priceperunit: Double,
         totalamount: Double,
-        amountModificatorType: AmountModificatorType,itemDiscount :Double,
+        itemDiscount: AmountModificator,
+        itemCurrency : String?,
+        itemCategory:Category?,
+        itemVendor: Vendor?,
+        itemFullFillService: String?,
+        itemIsRequireShip:Boolean?,
+        itemCode:String?,
+        accountCode:String?,
+        itemImage:String?,
+        itemReference:ReferenceItem?,
+        itemsDimensions : ItemDimensions?,
+        itemsTags :String?,
+        itemMetaData: MetaData?,
 
         ctx: Context
     ) {
@@ -152,7 +166,9 @@ object SettingsManager {
         if (itemsList == null) itemsList = ArrayList<PaymentItemViewModel?>()
         itemsList.add(
 
-            PaymentItemViewModel(itemname, description, priceperunit, totalamount,quantity,amountModificatorType,itemDiscount)
+            PaymentItemViewModel(proudctId,itemname, description, priceperunit, totalamount,quantity,itemDiscount,itemCurrency,
+            itemCategory,itemVendor,itemFullFillService,itemIsRequireShip,itemCode,accountCode,itemImage,itemReference,
+                itemsDimensions, itemsTags, itemMetaData)
 
         )
         val data: String = gson.toJson(itemsList)
@@ -176,12 +192,16 @@ object SettingsManager {
 
             newItems.getItemDescription()?.let {
                 PaymentItemViewModel(
+                    newItems.getProductId(),
                     newItems.getItemsName(),
                     it,
                     newItems.getPricePUnit()?.toDouble()!!,
                     newItems.getitemTotalPrice()?.toDouble()!!,
                     newItems.getitemQuantity()?.toInt()!!,
-                    newItems.getAmountType()!!, newItems.getitemDiscount()!!
+                    newItems.getAmountType()!!, newItems.getItemCurrency()!!,newItems.getItemCategory(),newItems.getItemVendor(),
+                    newItems.getItemFullfillmentService(),newItems.getItemIsRequireShip(),newItems.getItemCode(),newItems.getAccountCode(),
+                    newItems.getItemImage(),newItems.getItemReference(),newItems.getItemDimens(),newItems.getItemTags(),
+                    newItems.getItemMetaData()
                 )
                     .let {
                         paymentItemList.add(
@@ -195,16 +215,20 @@ object SettingsManager {
             if (ctx != null) {
 
                 newItems.getItemsName()?.let {
-                    newItems.getPricePUnit()?.let { it1 ->
-                        newItems.getAmountType()?.let { it2 ->
-                            saveItems(
-                                it,
-                                newItems.getItemDescription()!!,
-                                newItems.getitemQuantity()!!,
-                                it1,
-                                newItems.getitemTotalPrice()!!, it2,
-                                newItems.getitemDiscount()!!, ctx
-                            )
+                    newItems.getitemQuantity()?.let { it1 ->
+                        newItems.getPricePUnit()?.let { it2 ->
+                            newItems.getAmountType()?.let { it3 ->
+                                saveItems(newItems.getProductId(),
+                                    it,
+                                    newItems.getItemDescription()!!,
+                                    it1,
+                                    it2,
+                                    newItems.getitemTotalPrice()!!,
+                                    it3,newItems.getItemCurrency(),newItems.getItemCategory(),
+                                    newItems.getItemVendor(),newItems.getItemFullfillmentService(),newItems.getItemIsRequireShip(),newItems.getItemCode(),
+                                    newItems.getAccountCode(),newItems.getItemImage(),newItems.getItemReference(),newItems.getItemDimens(),newItems.getItemTags(),
+                                    newItems.getItemMetaData(),ctx)
+                            }
                         }
                     }
                 }
@@ -385,8 +409,8 @@ object SettingsManager {
         //  65562630
 
     }
-    fun getDynamicPaymentItems(): ArrayList<PaymentItem> ?{
-        val paymentitems: ArrayList<PaymentItem> = ArrayList()
+    fun getDynamicPaymentItems(): ArrayList<ItemsModel> ?{
+        val paymentitems: ArrayList<ItemsModel> = ArrayList()
         val gson = Gson()
         val response = pref?.getString("paymentitems", "")
         println(" get customer: $response")
@@ -400,33 +424,30 @@ object SettingsManager {
         if (itemsList != null) {
             println("preparing data source with customer ref :" + itemsList[0].getItemDescription())
 
-            itemsList[0].getPricePUnit()?.let {
-                BigDecimal.valueOf(
-                    it
-                )
-            }?.let {
-                PaymentItem(
-                    itemsList[0].getItemsName().toString(),
-                    itemsList[0].getItemDescription().toString(),
-                    Quantity(Measurement.UNITS, Measurement.MASS.name,
-                        itemsList[0].getitemQuantity()?.let { BigDecimal.valueOf(it.toDouble()) }),
-                    it,
-                    AmountModificator(itemsList[0].getAmountType(),
-                        itemsList[0].getitemDiscount()?.let { it1 -> BigDecimal.valueOf(it1) }),
-                    null
-                )
+
+
+            itemsList[0].getItemIsRequireShip()?.let {
+                ItemsModel(itemsList[0].getProductId(),itemsList[0].getItemsName(),
+                    itemsList[0].getPricePUnit()?.let { BigDecimal.valueOf(it) },itemsList[0].getItemCurrency(),
+                    itemsList[0].getitemQuantity()?.toDouble()?.let { BigDecimal.valueOf(it) }, itemsList[0].getItemCategory(), itemsList[0].getAmountType(),  itemsList[0].getItemVendor(),
+                    itemsList[0].getItemFullfillmentService(),
+                    it,  itemsList[0].getItemCode(),
+                    itemsList[0].getAccountCode(), itemsList[0].getItemDescription(), itemsList[0].getItemImage(),  itemsList[0].getItemReference(),
+                    itemsList[0].getItemDimens(), itemsList[0].getItemTags(),  itemsList[0].getItemMetaData())
             }?.let { paymentitems.add(it) }
         } else {
             println(" paymentResultDataManager.getCustomerRef(context) null")
-            paymentitems.add(   PaymentItem(
+            paymentitems.add(ItemsModel(
+                "",
                 "Items1",
-                "Description for test item #1",
-                Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(1)),
+                BigDecimal.valueOf(30),
+               "KWD",
                 BigDecimal.valueOf(
-                    1
-                ),
+                    2
+                ),null,
                 AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO),
-                null
+                null,null,false,null,null,null,
+                null,null,null,null,null
             ))
 
 
@@ -435,22 +456,7 @@ object SettingsManager {
 
 
     }
-    private fun getPaymentItems(): ArrayList<PaymentItem>? {
-        val items: ArrayList<PaymentItem> = ArrayList<PaymentItem>()
-        items.add(
-            PaymentItem(
-                "Items1",
-                "Description for test item #1",
-                Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(1)),
-                BigDecimal.valueOf(
-                    1
-                ),
-                AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO),
-                null
-            )
-        )
-        return items
-    }
+
 
     fun getTaxes(): ArrayList<Tax> {
         val taxes: ArrayList<Tax> = ArrayList<Tax>()

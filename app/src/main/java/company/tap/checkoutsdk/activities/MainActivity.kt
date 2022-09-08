@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
     var urlStrDark :String="https://gist.githubusercontent.com/AhlaamK-tap/2ca0cbeaf430c6d40baa4d0700024848/raw/2e23f76a6d323c9e154b63083e5a5a84f73a1994/darktheme.json"
     var urlStrLight :String="https://gist.githubusercontent.com/AhlaamK-tap/9862436dff3b3ca222243dad3705ec6a/raw/1f553408e0f1f7e0a1e15987f987b6033d64a90d/lighttheme.json"
     var urlLocalisation :String="https://gist.githubusercontent.com/AhlaamK-tap/4285f9b4e10fb9a5c51a58f5064d470e/raw/5769a9ddc5ea74020f406d729afba2b0cf29db6c/lang.json"
-    var itemsList = ArrayList<Items>()
+    var itemsList = ArrayList<ItemsModel>()
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -179,7 +179,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
     private fun initializeBottomSheet() {
         modalBottomSheet.arguments = getArguments()
-      //  modalBottomSheet.showCloseImage = settingsManager?.getBoolean("showImageKey",false) == true
+        //  modalBottomSheet.showCloseImage = settingsManager?.getBoolean("showImageKey",false) == true
         if (modalBottomSheet.isHidden || modalBottomSheet.isDetached) {
             println("paybutton hidden")
             payButton.changeButtonState(ActionButtonState.RESET)
@@ -194,23 +194,23 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         /** Configures the theme manager by setting the provided custom theme file names
         - Parameter customTheme: Please pass the tap checkout theme object with the names of your custom theme files if needed. If not set, the normal and default TAP theme will be used
          */
-         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))
-             ThemeManager.loadTapTheme(resources, R.raw.defaultdarktheme, "darktheme")
-         else if (ThemeManager.currentTheme.isNotEmpty() && !ThemeManager.currentTheme.contains("dark"))
-             ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "lighttheme")
-         else ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "lighttheme")
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))
+            ThemeManager.loadTapTheme(resources, R.raw.defaultdarktheme, "darktheme")
+        else if (ThemeManager.currentTheme.isNotEmpty() && !ThemeManager.currentTheme.contains("dark"))
+            ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "lighttheme")
+        else ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "lighttheme")
 
 
         /** Configures the theme manager by passing the provided custom theme url
         - Parameter urlString: Please pass the themeUrL
          */
 
-   /*  if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))
-            ThemeManager.loadTapTheme(this, urlStrDark)
-        else if (ThemeManager.currentTheme.isNotEmpty() && !ThemeManager.currentTheme.contains("dark"))
-            ThemeManager.loadTapTheme(this, urlStrLight)
-        else ThemeManager.loadTapTheme(this, urlStrLight)
-*/
+        /*  if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))
+                 ThemeManager.loadTapTheme(this, urlStrDark)
+             else if (ThemeManager.currentTheme.isNotEmpty() && !ThemeManager.currentTheme.contains("dark"))
+                 ThemeManager.loadTapTheme(this, urlStrLight)
+             else ThemeManager.loadTapTheme(this, urlStrLight)
+     */
 
     }
 
@@ -221,7 +221,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
          */
 
 
-       // LocalizationManager.loadTapLocale(this, urlLocalisation)
+        // LocalizationManager.loadTapLocale(this, urlLocalisation)
 
         /** Configures the localisation manager by setting the locale, adjusting the flipping and the localisation custom file if any
         - Parameter localiseFile: Please pass the name of the custom localisation file if needed. If not set, the normal and default TAP localisations will be used
@@ -232,14 +232,14 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
     private fun initializeSDK() {
         TapCheckOutSDK().init(
-                this,
+            this,
             settingsManager?.getString("key_test_name","sk_test_kovrMB0mupFJXfNZWx6Etg5y"),
             settingsManager?.getString("key_live_name","sk_live_QglH8V7Fw6NPAom4qRcynDK2"),
             settingsManager?.getString("key_package_name","company.tap.goSellSDKExample"))
-                 /*settingsManager?.getString("key_test_name","sk_test_2kGVSuR6bKAXLF4rDe0wa9QU"),
-            settingsManager?.getString("key_live_name","sk_live_QglH8V7Fw6NPAom4qRcynDK2"),
-            settingsManager?.getString("key_package_name","resources.gosell.io")
- )*/
+        /*settingsManager?.getString("key_test_name","sk_test_2kGVSuR6bKAXLF4rDe0wa9QU"),
+   settingsManager?.getString("key_live_name","sk_live_QglH8V7Fw6NPAom4qRcynDK2"),
+   settingsManager?.getString("key_package_name","resources.gosell.io")
+)*/
 
     }
 
@@ -274,30 +274,30 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
 
         // set transaction currency associated to your account
-      //  if(settingsManager.getString("key_sdk_transaction_currency","KWD"))
+        //  if(settingsManager.getString("key_sdk_transaction_currency","KWD"))
         settingsManager?.getString("key_sdk_transaction_currency","KWD")
             ?.let { TapCurrency(it) }?.let { sdkSession.setTransactionCurrency(it) } //** Required **
-       // sdkSession.setTransactionCurrency(TapCurrency("KWD"))
+        // sdkSession.setTransactionCurrency(TapCurrency("KWD"))
 
         // Using static CustomerBuilder method available inside TAP TapCustomer Class you can populate TAP TapCustomer object and pass it to SDK
-      // sdkSession.setCustomer(setCustomer()) //** Required **
+        // sdkSession.setCustomer(setCustomer()) //** Required **
         settingsManager?.getCustomer()?.let { sdkSession.setCustomer(it) } //** Required **
 
 
         // Set Total Amount. The Total amount will be recalculated according to provided Taxes and Shipping
-       // settingsManager?.getString("key_amount_name", "1")?.let { BigDecimal(it) }?.let {
-         //   sdkSession.setAmount(
-         //           it
+        // settingsManager?.getString("key_amount_name", "1")?.let { BigDecimal(it) }?.let {
+        //   sdkSession.setAmount(
+        //           it
         //    )
-       // }//** Required **
+        // }//** Required **
         sdkSession.setAmount(
             BigDecimal.valueOf(38)
         )
 
-        // Set Payment Items array list
-      //  sdkSession.setPaymentItems(ArrayList()) // ** Optional ** you can pass empty array list
-       // sdkSession.setPaymentItems(settingsManager?.getDynamicPaymentItems()) // ** Optional ** you can pass empty array list
-      //  sdkSession.setPaymentItems(getPaymentItems()) // ** Optional ** you can pass empty array list
+        // Set Payment ItemsModel array list
+        //  sdkSession.setPaymentItems(ArrayList()) // ** Optional ** you can pass empty array list
+        sdkSession.setPaymentItems(settingsManager?.getDynamicPaymentItems()) // ** Optional ** you can pass empty array list
+        //  sdkSession.setPaymentItems(getPaymentItems()) // ** Optional ** you can pass empty array list
 
 
         sdkSession.setPaymentType("ALL")  //** Merchant can pass paymentType
@@ -305,12 +305,12 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
         // Set Taxes array list
         sdkSession.setTaxes(ArrayList()) // ** Optional ** you can pass empty array list
-         // sdkSession.setTaxes(settingsManager?.getTaxes()) // ** Optional ** you can pass empty array list
+        // sdkSession.setTaxes(settingsManager?.getTaxes()) // ** Optional ** you can pass empty array list
 
 
         // Set Shipping array list
         sdkSession.setShipping(ArrayList()) // ** Optional ** you can pass empty array list
-       //   sdkSession.setShipping(settingsManager?.getShippingList()) // ** Optional ** you can pass empty array list
+        //   sdkSession.setShipping(settingsManager?.getShippingList()) // ** Optional ** you can pass empty array list
 
         // Post URL
         sdkSession.setPostURL("") // ** Optional **
@@ -338,10 +338,10 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
         //Set Receipt Settings [SMS - Email ]
         sdkSession.setReceiptSettings(
-                Receipt(
-                        false,
-                        false
-                )
+            Receipt(
+                false,
+                false
+            )
         ) // ** Optional ** you can pass Receipt object or null
 
 
@@ -349,40 +349,40 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         sdkSession.setAuthorizeAction(null) // ** Optional ** you can pass AuthorizeAction object or null
 
 
-      //  sdkSession.setDestination(settingsManager?.getDestination()) // ** Optional ** you can pass Destinations object or null
-       sdkSession.setDestination(null) // ** Optional ** you can pass Destinations object or null
+        //  sdkSession.setDestination(settingsManager?.getDestination()) // ** Optional ** you can pass Destinations object or null
+        sdkSession.setDestination(null) // ** Optional ** you can pass Destinations object or null
 
 
-      //  sdkSession.setMerchantID(settingsManager?.getString("key_merchant_id", "1124340")) // ** Optional ** you can pass merchant id or null
+        //  sdkSession.setMerchantID(settingsManager?.getString("key_merchant_id", "1124340")) // ** Optional ** you can pass merchant id or null
         sdkSession.setMerchantID("599424") // ** Optional ** you can pass merchant id or null
 
 
         sdkSession.setCardType(CardType.ALL) // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
 
-         settingsManager?.getTransactionsMode("key_sdk_transaction_mode")?.let {
+        settingsManager?.getTransactionsMode("key_sdk_transaction_mode")?.let {
             sdkSession.setTransactionMode(
-                    it
+                it
             )
         }
-       // sdkSession.setTransactionMode(TransactionMode.PURCHASE)
+        // sdkSession.setTransactionMode(TransactionMode.PURCHASE)
 
         sdkSession.setDefaultCardHolderName("TEST TAP"); // ** Optional ** you can pass default CardHolderName of the user .So you don't need to type it.
         sdkSession.isUserAllowedToEnableCardHolderName(false) // ** Optional ** you can enable/ disable  default CardHolderName .
         sdkSession.setSdkMode(SdkMode.SAND_BOX) //** Pass your SDK MODE
 
         //    sdkSession.setCardType(CardType.CREDIT); // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
-       var useOrderObjectKey = settingsManager?.getBoolean("useOrderObjectKey",false)
+        var useOrderObjectKey = settingsManager?.getBoolean("useOrderObjectKey",false)
 
         if(useOrderObjectKey == true){
-               // sdkSession.setOrderItems(getOrderItemsList()) // ** Usually Optional ** Required when creating order object
+            // sdkSession.setOrderItems(getOrderItemsList()) // ** Usually Optional ** Required when creating order object
 
 
-               sdkSession.setOrderObject(getOrder()) // ** Usually Optional ** Required when creating order object
+            sdkSession.setOrderObject(getOrder()) // ** Usually Optional ** Required when creating order object
         }
-    //    sdkSession.setOrderItems(getOrderItemsList()) // ** Usually Optional ** Required when creating order object
+        //    sdkSession.setOrderItems(getOrderItemsList()) // ** Usually Optional ** Required when creating order object
 
 
-     //   sdkSession.setOrderObject(getOrder()) // ** Usually Optional ** Required when creating order object
+        //   sdkSession.setOrderObject(getOrder()) // ** Usually Optional ** Required when creating order object
 
 
     }
@@ -482,9 +482,9 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         //if (customer != null) customer.phone else Phone(965, 69045932)
 
         return TapCustomer(
-                "", "ahlaam", "middlename",
-                "lastname", "abcd@gmail.com",
-                PhoneNumber("00965", "66175090"), "description",
+            "", "ahlaam", "middlename",
+            "lastname", "abcd@gmail.com",
+            PhoneNumber("00965", "66175090"), "description",
         )
 
     }
@@ -492,34 +492,34 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
     private fun getPaymentItems(): ArrayList<PaymentItem>? {
         val items: ArrayList<PaymentItem> = ArrayList<PaymentItem>()
         items.add(
-                PaymentItem(
-                        "Items 1",
-                        "Description for test item #1",
-                        Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(2)),
-                        BigDecimal.valueOf(10),
-                        AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO),
-                       null
-                )
+            PaymentItem(
+                "ItemsModel 1",
+                "Description for test item #1",
+                Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(2)),
+                BigDecimal.valueOf(10),
+                AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO),
+                null
+            )
         )
         items.add(
-                PaymentItem(
-                        "Items 2",
-                        "Description for test item #2",
-                        Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(3)),
-                        BigDecimal.valueOf(12),
-                        AmountModificator(AmountModificatorType.PERCENTAGE, BigDecimal.valueOf(30)),
-                    settingsManager?.getTaxes()
-                )
+            PaymentItem(
+                "ItemsModel 2",
+                "Description for test item #2",
+                Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(3)),
+                BigDecimal.valueOf(12),
+                AmountModificator(AmountModificatorType.PERCENTAGE, BigDecimal.valueOf(30)),
+                settingsManager?.getTaxes()
+            )
         )
         items.add(
-                PaymentItem(
-                        "Items 3",
-                        "Description for test item #3",
-                        Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(4)),
-                        BigDecimal.valueOf(14),
-                        AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO),
-                        null
-                )
+            PaymentItem(
+                "ItemsModel 3",
+                "Description for test item #3",
+                Quantity(Measurement.UNITS, Measurement.MASS.name, BigDecimal.valueOf(4)),
+                BigDecimal.valueOf(14),
+                AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO),
+                null
+            )
         )
         println("item are<<<<" + items)
 
@@ -529,11 +529,11 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
     @RequiresApi(Build.VERSION_CODES.N)
     private fun initActionButton() {
         payButton.setButtonDataSource(
-                true,
-                this.let { LocalizationManager.getLocale(it).language },
-                LocalizationManager.getValue("pay", "ActionButton"),
-                Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-                Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
+            true,
+            this.let { LocalizationManager.getLocale(it).language },
+            LocalizationManager.getValue("pay", "ActionButton"),
+            Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
+            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
         )
 
         payButton.setOnClickListener {
@@ -687,17 +687,17 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         payButton?.setOnClickListener {
             sdkSession.setButtonView(payButton, this, supportFragmentManager, this)
         }
-       /* payButton?.changeButtonState(ActionButtonState.ERROR)
-        payButton.setButtonDataSource(
-            true,
-            this.let { LocalizationManager.getLocale(it).language },
-            LocalizationManager.getValue("pay", "ActionButton"),
-            Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
-        )
-        payButton?.setOnClickListener {
-            sdkSession.setButtonView(payButton, this, supportFragmentManager, this)
-        }*/
+        /* payButton?.changeButtonState(ActionButtonState.ERROR)
+         payButton.setButtonDataSource(
+             true,
+             this.let { LocalizationManager.getLocale(it).language },
+             LocalizationManager.getValue("pay", "ActionButton"),
+             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
+             Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
+         )
+         payButton?.setOnClickListener {
+             sdkSession.setButtonView(payButton, this, supportFragmentManager, this)
+         }*/
 
     }
 
@@ -730,7 +730,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun backendUnknownError(message: GoSellError?) {
         println("backendUnknownError>>>>>" + message)
-     payButton?.changeButtonState(ActionButtonState.RESET)
+        payButton?.changeButtonState(ActionButtonState.RESET)
         payButton.setButtonDataSource(
             true,
             this.let { LocalizationManager.getLocale(it).language },
@@ -789,11 +789,11 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
     }
 
-    private fun getOrderItemsList(): ArrayList<Items
+    private fun getOrderItemsList(): ArrayList<ItemsModel
             > {
-        itemsList = ArrayList<Items>()
+        itemsList = ArrayList<ItemsModel>()
         itemsList.add(
-            Items(
+            ItemsModel(
                 "",
                 "abcjuice",
                 BigDecimal.valueOf(12),
@@ -825,8 +825,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         return OrderObject(
             BigDecimal.valueOf(38),
             "kwd",
-           "",
-           getOrderItemsList(),
+            "",
+            settingsManager?.getDynamicPaymentItems(),
             ArrayList(
                 setOf(
                     TaxObject(
@@ -835,18 +835,18 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
                         AmountModificator(AmountModificatorType.FIXED, BigDecimal.valueOf(0))
                     )
                 )
-            ),
-            ShippingObject(BigDecimal(1),"KWD",
+            ),null,
+/*            ShippingObject(BigDecimal(0),"KWD",
                 Description("test"),"",AddressModel("Home",
-                "line1",
-            "lin2","line3",
-        "line4", "avenue",
-        "salem mubarak","8mall",
-        "6","kw",
-        "Salmiya","Salmiyaah",
-        "Hawally","30003",
-        "","en"), Provider("prov_FFSFAGGAHAAJAJ","ARAMEX")),
-           // settingsManager?.getString("key_merchant_id", "1124340")?.let { Merchant(it) },
+                    "line1",
+                    "lin2","line3",
+                    "line4", "avenue",
+                    "salem mubarak","8mall",
+                    "6","kw",
+                    "Salmiya","Salmiyaah",
+                    "Hawally","30003",
+                    "","en"), Provider("prov_FFSFAGGAHAAJAJ","ARAMEX")),*/
+            // settingsManager?.getString("key_merchant_id", "1124340")?.let { Merchant(it) },
             Merchant("599424"),
             MetaData("udf1","udf2"),
             ReferId("")

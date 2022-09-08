@@ -35,7 +35,7 @@ class ItemsViewHolder(itemView: View, listener: ItemsAdapter.OnClickListenerInte
         quantity.text = "Quantity :"+viewModel.getitemQuantity().toString()
         amountPerunit.text = "Amount per unit :"+viewModel.getPricePUnit().toString()
         totalAmount.text = "Total Price :"+viewModel.getitemTotalPrice().toString()
-        discountAmount.text = viewModel.getitemDiscount().toString()
+        discountAmount.text = viewModel.getAmountType()?.getValue().toString()
     }
 
     init {

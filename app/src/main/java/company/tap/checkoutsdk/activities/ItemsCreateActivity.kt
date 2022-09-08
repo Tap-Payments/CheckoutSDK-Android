@@ -10,10 +10,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatEditText
 import com.google.android.material.textfield.TextInputLayout
 import company.tap.checkout.internal.api.enums.AmountModificatorType
+import company.tap.checkout.internal.api.models.AmountModificator
 import company.tap.checkoutsdk.R
 import company.tap.checkoutsdk.manager.SettingsManager
 import company.tap.checkoutsdk.viewmodels.PaymentItemViewModel
 import kotlinx.android.synthetic.main.activity_customer_create.*
+import java.math.BigDecimal
 import java.util.*
 
 open class ItemsCreateActivity : AppCompatActivity() {
@@ -120,7 +122,7 @@ open class ItemsCreateActivity : AppCompatActivity() {
         item_quantity?.setText(paymentItems?.getitemQuantity().toString())
         item_price_per_unit?.setText(paymentItems?.getPricePUnit().toString())
         totalamount_textView?.text = "Total price is"+paymentItems?.getitemTotalPrice().toString()
-        item_discount_unit?.setText(paymentItems?.getitemDiscount().toString())
+        item_discount_unit?.setText(paymentItems?.getAmountType()?.getValue().toString())
 
 
     }
@@ -138,13 +140,15 @@ open class ItemsCreateActivity : AppCompatActivity() {
                     if(item_discount_unit?.text.toString().isNullOrEmpty()) item_discount_unit?.setText("0.0")
 
                     SettingsManager.saveItems(
+                        null,
                         item_name?.text.toString().trim { it <= ' ' },
                         item_description?.text.toString().trim { it <= ' ' },
                         item_quantity?.text.toString().toInt(),
                         item_price_per_unit?.text.toString().toDouble(),
                         item_quantity?.text.toString().toDouble().times(item_price_per_unit?.text.toString().toDouble()),
-                        it,item_discount_unit?.text.toString().toDouble(),
-                        this
+                        AmountModificator(amountModificatorType, BigDecimal.ZERO),null,null,null,null,null,null,
+                        null,null,null,null,null,
+                        null,this
                     )
                 }
                 back(null)
@@ -155,11 +159,14 @@ open class ItemsCreateActivity : AppCompatActivity() {
             ) {
                 amountModificatorType.let {
                     PaymentItemViewModel(
+                        null,
                         item_name?.text.toString().trim { it <= ' ' },
                         item_description?.text.toString().trim { it <= ' ' },
                         item_price_per_unit?.text.toString().toDouble() ,
                         item_price_per_unit?.text.toString().toDouble().times( item_quantity?.text.toString().toInt()),
-                        item_quantity?.text.toString().toInt(), it,item_discount_unit?.text.toString().toDouble()
+                        item_quantity?.text.toString().toInt(),  AmountModificator(amountModificatorType, BigDecimal.ZERO),null,null,null,null,null,null,
+                        null,null,null,null,null,
+                        null,
                     )
                 }.let {
                     SettingsManager.editItems(

@@ -80,6 +80,7 @@ import company.tap.checkout.open.controller.SessionManager
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.CardType
 import company.tap.checkout.open.enums.TransactionMode
+import company.tap.checkout.open.models.ItemsModel
 import company.tap.checkout.open.models.PaymentItem
 import company.tap.nfcreader.open.reader.TapEmvCard
 import company.tap.taplocalizationkit.LocalizationManager
@@ -162,8 +163,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @SuppressLint("StaticFieldLeak")
     private lateinit var sdkLayout: LinearLayout
     private lateinit var checkoutFragment: CheckoutFragment
-    private lateinit var itemList: List<PaymentItem>
-    private lateinit var unModifiedItemList: List<PaymentItem>
+    private lateinit var itemList: List<ItemsModel>
+    private lateinit var unModifiedItemList: List<ItemsModel>
     private lateinit var selectedPaymentOption: PaymentOption
     @SuppressLint("StaticFieldLeak")
     private lateinit var context: Context
@@ -1697,9 +1698,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         println("unModifiedItemList"+unModifiedItemList)
         if (::itemList.isInitialized) {
             for (i in itemList.indices) {
-                itemList[i].amountPerUnit = unModifiedItemList[i].amountPerUnit.times(currencyRate)
+                itemList[i].amount = unModifiedItemList[i].amount?.times(currencyRate)
                 //itemList[i].totalAmount = currencyOldRate?.div(currencyRate)
-                itemList[i].totalAmount =  unModifiedItemList[i].totalAmount?.times(currencyRate)
+                itemList[i].totalAmount =  unModifiedItemList[i].getPlainAmount()?.times(currencyRate)
 
               // if( currencySelected !="KWD" && lastSelectedCurrency !="KWD"){
             /*   if( currencySelected !=PaymentDataSource.getCurrency()?.isoCode && lastSelectedCurrency !=PaymentDataSource.getCurrency()?.isoCode){
@@ -1719,7 +1720,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
                }*/
-                println("item per unit >>" + itemList[i].amountPerUnit)
+                println("item per unit >>" + itemList[i].amount)
 
             }
 

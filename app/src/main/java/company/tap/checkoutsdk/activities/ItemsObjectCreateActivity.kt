@@ -117,7 +117,7 @@ open class ItemsObjectCreateActivity : AppCompatActivity() {
         tt_amount?.setText(paymentItems?.getitemQuantity().toString())
         item_currency?.setText(paymentItems?.getPricePUnit().toString())
         totalamount_textView?.text = "Total price is" + paymentItems?.getitemTotalPrice().toString()
-        item_quantoty_unit?.setText(paymentItems?.getitemDiscount().toString())
+        item_quantoty_unit?.setText(paymentItems?.getitemQuantity().toString())
 
 
     }

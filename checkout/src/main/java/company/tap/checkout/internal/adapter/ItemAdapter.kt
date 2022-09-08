@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.internal.api.enums.AmountModificatorType
 import company.tap.checkout.internal.utils.CurrencyFormatter
 import company.tap.checkout.open.data_managers.PaymentDataSource
+import company.tap.checkout.open.models.ItemsModel
 import company.tap.checkout.open.models.PaymentItem
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.R
@@ -42,7 +43,7 @@ class ItemAdapter :
     private lateinit var itemViewAdapter: TapListItemView
     private lateinit var context: Context
     private var arrayModifiedItem : ArrayList<Any> = ArrayList()
-    private var adapterContentItems: List<PaymentItem> = java.util.ArrayList()
+    private var adapterContentItems: List<ItemsModel> = java.util.ArrayList()
     override fun onCreateViewHolder(@NonNull parent: ViewGroup, viewType: Int): ItemHolder {
 
 
@@ -56,7 +57,7 @@ class ItemAdapter :
         return ItemHolder(v)
     }
 
-    fun updateAdapterData(adapterContentItems: List<PaymentItem>) {
+    fun updateAdapterData(adapterContentItems: List<ItemsModel>) {
         println("adapterContentItems val"+adapterContentItems)
         this.adapterContentItems = adapterContentItems
         notifyDataSetChanged()
@@ -89,7 +90,7 @@ class ItemAdapter :
                 descriptionTextView.text = adapterContentItems[position].description
                 descriptionTextView.visibility = if (isExpanded) View.VISIBLE else View.GONE
                 holder.itemView.isActivated = isExpanded
-                totalQuantity.text = adapterContentItems[position].quantity?.value.toString()
+                totalQuantity.text = adapterContentItems[position].quantity?.toString()
               /*  itemViewAdapter.setItemViewDataSource(
                     getItemViewDataSource(null, CurrencyFormatter.currencyFormat(adapterContentItems[position].totalAmount.toString()),adapterContentItems[position].currency ,  CurrencyFormatter.currencyFormat(adapterContentItems[position].totalAmount.toString()), adapterContentItems[position].currency, adapterContentItems[position].quantity.toString())
                 )*/
@@ -97,9 +98,13 @@ class ItemAdapter :
 
                 PaymentDataSource.getSelectedCurrency()?.let {
                     PaymentDataSource.getSelectedCurrency()?.let { it1 ->
-                        getItemViewDataSource(adapterContentItems[position]?.name.toString().toUpperCase(), CurrencyFormatter.currencyFormat(adapterContentItems[position].totalAmount.toString() ),
-                            it,CurrencyFormatter.currencyFormat(adapterContentItems[position].amountPerUnit.toString() ),
-                            it1, adapterContentItems[position].quantity?.value.toString())
+                        adapterContentItems[position].quantity?.toString()?.let { it2 ->
+                            getItemViewDataSource(adapterContentItems[position]?.name.toString().toUpperCase(), CurrencyFormatter.currencyFormat(adapterContentItems[position].getPlainAmount().toString() ),
+                                it,CurrencyFormatter.currencyFormat(adapterContentItems[position].amount.toString() ),
+                                it1,
+                                it2
+                            )
+                        }
                     }
                 }?.let {
                     itemViewAdapter.setItemViewDataSource(

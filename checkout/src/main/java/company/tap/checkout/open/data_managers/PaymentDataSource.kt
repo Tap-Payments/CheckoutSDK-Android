@@ -31,7 +31,7 @@ object PaymentDataSource :PaymentDataSource {
     private var currency: TapCurrency? = null
     private lateinit var tapCustomer: TapCustomer
     private var amount: BigDecimal? = null
-    private var items: ArrayList<PaymentItem>? = null
+    private var items: ArrayList<ItemsModel>? = null
     private lateinit var transactionMode: TransactionMode
     private var taxes: ArrayList<Tax>? = null
     private var shipping: ArrayList<Shipping>? = null
@@ -78,7 +78,7 @@ object PaymentDataSource :PaymentDataSource {
     private var googleCardPaymentOptions: ArrayList<PaymentOption>? = null
     private var orderObject: OrderObject? = null
 
-    private var orderItems: ArrayList<Items>? = null
+    private var orderItems: ArrayList<ItemsModel>? = null
     //////////////////////// Setter's Area  ///////////////////////////////////////
     /**
      * Set transaction currency.
@@ -119,7 +119,7 @@ object PaymentDataSource :PaymentDataSource {
      *
      * @param paymentItems the payment items
      */
-    fun setPaymentItems(paymentItems: ArrayList<PaymentItem>?) {
+    fun setPaymentItems(paymentItems: ArrayList<ItemsModel>?) {
         this.items = paymentItems
     }
 
@@ -356,7 +356,7 @@ object PaymentDataSource :PaymentDataSource {
      *
      * @param orderItems the orderItems
      */
-    fun setOrderItems(orderItems: ArrayList<Items>) {
+    fun setOrderItems(orderItems: ArrayList<ItemsModel>) {
         this.orderItems = orderItems
     }
     fun setGoogleCardPay(googleCardPaymentOptions: ArrayList<PaymentOption>?) {
@@ -379,7 +379,7 @@ object PaymentDataSource :PaymentDataSource {
         }else return amount
     }
 
-    override fun getItems(): ArrayList<PaymentItem>? {
+    override fun getItems(): ArrayList<ItemsModel>? {
         return items
     }
 
@@ -510,7 +510,7 @@ object PaymentDataSource :PaymentDataSource {
        return googleCardPaymentOptions
     }
 
-    override fun getOrderItems(): ArrayList<Items>? {
+    override fun getOrderItems(): ArrayList<ItemsModel>? {
 
         return orderItems
     }

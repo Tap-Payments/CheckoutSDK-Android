@@ -44,7 +44,7 @@ interface PaymentDataSource {
     /**
      * List of items to pay for. Either amount or items should return nonnull value. If both return nonnull, then items is preferred. @return the items
      */
-    fun getItems(): ArrayList<PaymentItem>?
+    fun getItems(): ArrayList<ItemsModel>?
 
     /**
      * Transaction mode. If you return null in this method, it will be treated as PURCHASE. @return the transaction mode
@@ -177,9 +177,9 @@ interface PaymentDataSource {
 
 
     /**
-     * Defines the OrderObject Items. Optional. @return the default OrderItems
+     * Defines the OrderObject ItemsModel. Optional. @return the default OrderItems
      */
-    fun getOrderItems(): java.util.ArrayList<Items>?
+    fun getOrderItems(): java.util.ArrayList<ItemsModel>?
 
     /**
      * Defines the OrderObject details. Optional. @return the default Order

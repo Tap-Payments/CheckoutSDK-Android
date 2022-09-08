@@ -9,7 +9,7 @@ import company.tap.checkout.open.enums.Category
 import java.io.Serializable
 import java.math.BigDecimal
 
-data class Items(
+data class ItemsModel(
     @field:Expose
     @field:SerializedName("product_id")
     val productId: String?,
@@ -21,7 +21,7 @@ data class Items(
 
     @field:Expose
     @field:SerializedName("amount")
-    val amount: BigDecimal? = null,
+    var amount: BigDecimal? = null,
 
     @field:Expose
     @field:SerializedName("currency")
@@ -36,8 +36,7 @@ data class Items(
     private var category: Category?,
 
     @SerializedName("discount")
-    @Expose
-    private val discount: AmountModificator?,
+    @Expose val discount: AmountModificator?,
 
     @SerializedName("vendor")
     @Expose
@@ -81,7 +80,9 @@ data class Items(
 
     @SerializedName("meta_data")
     @Expose
-    val metaData: MetaData?
+    val metaData: MetaData?,
+
+    var totalAmount :BigDecimal? = null
 ) : Serializable {
 
 
@@ -89,6 +90,7 @@ data class Items(
         return category
     }
 
+    @JvmName("getDiscount1")
     fun getDiscount(): AmountModificator? {
         return discount
     }
@@ -106,10 +108,11 @@ data class Items(
      *
      * @return the plain amount
      */
-    fun getPlainAmount(): BigDecimal {
+    fun getPlainAmount(): BigDecimal? {
         println("  #### getPlainAmount : " + amount)
         assert(amount != null)
-        return amount!!.multiply(quantity)
+        totalAmount = amount!!?.multiply(quantity)
+        return totalAmount
     }
 
     /**
@@ -121,7 +124,7 @@ data class Items(
         return if (getDiscount() == null) {
             BigDecimal.ZERO
         } else when (getDiscount()!!.getType()) {
-            AmountModificatorType.PERCENTAGE -> getPlainAmount().multiply(
+            AmountModificatorType.PERCENTAGE -> getPlainAmount()?.multiply(
                 getDiscount()!!.getNormalizedValue()
             )
             AmountModificatorType.FIXED -> getDiscount()!!.getValue()

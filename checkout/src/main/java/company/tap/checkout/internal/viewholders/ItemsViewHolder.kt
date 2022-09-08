@@ -14,12 +14,11 @@ import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.R
 import company.tap.checkout.internal.adapter.CurrencyTypeAdapter
 import company.tap.checkout.internal.adapter.ItemAdapter
-import company.tap.checkout.internal.api.models.AmountedCurrency
 import company.tap.checkout.internal.api.models.SupportedCurrencies
 
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener
-import company.tap.checkout.open.models.PaymentItem
+import company.tap.checkout.open.models.ItemsModel
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.atoms.TapChipGroup
 
@@ -40,7 +39,7 @@ class ItemsViewHolder(private val context: Context, private val onCurrencyChange
 
     var itemsdisplayed: Boolean = false
     private lateinit var supportedCurrecnyList: ArrayList<SupportedCurrencies>
-    private  var supportedItemList: List<PaymentItem>?=null
+    private  var supportedItemList: List<ItemsModel>?=null
      var mainCurrencyChip: TapChipGroup
      var itemsRecyclerView:RecyclerView
      var currencyRecyclerView:RecyclerView
@@ -101,7 +100,7 @@ class ItemsViewHolder(private val context: Context, private val onCurrencyChange
      * */
     fun setDataFromAPI(
         supportedCurrencyApi: ArrayList<SupportedCurrencies>,
-        supportItemListApi: List<PaymentItem>?
+        supportItemListApi: List<ItemsModel>?
     ) {
         supportedCurrecnyList = supportedCurrencyApi
         if (supportItemListApi != null) {
