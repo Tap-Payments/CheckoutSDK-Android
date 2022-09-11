@@ -457,7 +457,7 @@ object SettingsManager {
         // check if customer id is in pref.
         //  customer =
         if (itemsList != null) {
-            println("preparing data source with itemsList ref :" + itemsList[0].getItemCurrency())
+            println("preparing data source with itemsList ref :" + itemsList[0].getItemIsRequireShip())
 
   ItemsModel(itemsList[0].getProductId(),itemsList[0].getItemsName(),
                     itemsList[0].getPricePUnit()?.let { BigDecimal.valueOf(it) },itemsList[0].getItemCurrency(),

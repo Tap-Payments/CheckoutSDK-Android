@@ -88,6 +88,31 @@
         app:layout_constraintTop_toBottomOf="@+id/item_total"
         app:layout_constraintHorizontal_bias="0.16"
         app:layout_constraintVertical_bias="0.0"/>
+
+    <TextView
+        android:id="@+id/item_shippable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Item shippable"
+        app:layout_constraintStart_toStartOf="@id/item_discount"
+        app:layout_constraintTop_toBottomOf="@+id/item_discount"
+        app:layout_constraintHorizontal_bias="0.16"
+        app:layout_constraintVertical_bias="0.0"/>
+    <TextView
+        android:id="@+id/item_currency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Item Currency"
+        app:layout_constraintStart_toStartOf="@id/item_shippable"
+        app:layout_constraintTop_toBottomOf="@+id/item_shippable"
+        app:layout_constraintHorizontal_bias="0.16"
+        app:layout_constraintVertical_bias="0.0"/>
     <ImageView
         android:id="@+id/tick_mark"
         android:layout_width="wrap_content"

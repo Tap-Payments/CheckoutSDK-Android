@@ -201,6 +201,7 @@
         android:gravity="start"
         android:text="Item is Shippable:"
         app:backgroundTint="@color/mercury"
-        android:checked="false"/>
+        android:checked="true"
+      />
 
 </LinearLayout>

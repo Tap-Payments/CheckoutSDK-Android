@@ -291,7 +291,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         //    )
         // }//** Required **
         sdkSession.setAmount(
-            BigDecimal.valueOf(38)
+            BigDecimal.valueOf(25)
         )
 
         // Set Payment ItemsModel array list
@@ -304,12 +304,12 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
 
         // Set Taxes array list
-        sdkSession.setTaxes(ArrayList()) // ** Optional ** you can pass empty array list
+      //  sdkSession.setTaxes(ArrayList()) // ** Optional ** you can pass empty array list
         // sdkSession.setTaxes(settingsManager?.getTaxes()) // ** Optional ** you can pass empty array list
 
 
         // Set Shipping array list
-        sdkSession.setShipping(ArrayList()) // ** Optional ** you can pass empty array list
+       // sdkSession.setShipping(ArrayList()) // ** Optional ** you can pass empty array list
         //   sdkSession.setShipping(settingsManager?.getShippingList()) // ** Optional ** you can pass empty array list
 
         // Post URL
@@ -373,11 +373,12 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         //    sdkSession.setCardType(CardType.CREDIT); // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
         val useShippingEnableKey = settingsManager?.getBoolean("useShippingEnableKey",false)
 
+        println("useShippingEnableKey value>>>$useShippingEnableKey")
         if(useShippingEnableKey == true){
-            // sdkSession.setOrderItems(getOrderItemsList()) // ** Usually Optional ** Required when creating order object
                  sdkSession.setOrderObject(getOrder())
-            // ** Usually Optional ** Required when creating order object
-        }else { sdkSession.setOrderObject(getOrderWithoutAdd())}
+        }else {
+            sdkSession.setOrderObject(getOrderWithoutAdd())
+        }
 
 
     }

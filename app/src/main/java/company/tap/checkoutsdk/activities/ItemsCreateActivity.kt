@@ -32,6 +32,7 @@ open class ItemsCreateActivity : AppCompatActivity() {
     private var checkBoxNone: CheckBox? = null
 
 
+
     private var itemname_il: TextInputLayout? = null
     private var description_il: TextInputLayout? = null
     private var quantity_il: TextInputLayout? = null
@@ -77,7 +78,7 @@ open class ItemsCreateActivity : AppCompatActivity() {
         ) {
             paymentitemsViewModel =
                 intent.getSerializableExtra("paymentitems") as PaymentItemViewModel?
-            println(" desc : " + paymentitemsViewModel?.getItemDescription())
+            println(" desc : " + paymentitemsViewModel?.getItemIsRequireShip())
             populateItemPaymentFields(paymentitemsViewModel)
         }
 
@@ -102,6 +103,8 @@ open class ItemsCreateActivity : AppCompatActivity() {
         itemDisc_il = findViewById(R.id.itemDisc_il)
         totalamount_textView = findViewById(R.id.totalamount_textView)
         itemsSwitch = findViewById(R.id.itemsSwitch)
+
+
 
         item_discount_unit?.setText("1.0")
         checkBoxPercentage?.setOnClickListener() {

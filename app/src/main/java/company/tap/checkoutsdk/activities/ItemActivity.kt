@@ -50,7 +50,7 @@ class ItemActivity : AppCompatActivity() ,ItemsAdapter.OnClickListenerInterface 
         return SettingsManager.getRegisteredItems(this)
     }
 
-    fun addCustomer(view: View?) {
+    fun addItems(view: View?) {
         val intent = Intent(this, ItemsCreateActivity::class.java)
         intent.putExtra("operation", ItemsCreateActivity().OPERATION_ADD)
         startActivity(intent)
