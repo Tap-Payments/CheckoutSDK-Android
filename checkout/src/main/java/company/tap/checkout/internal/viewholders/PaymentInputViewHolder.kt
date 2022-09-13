@@ -199,6 +199,7 @@ class PaymentInputViewHolder(
 
     private fun initClearText() {
         clearView.setOnClickListener {
+            println("clearView is cleared")
             clearCardInputAction()
             CustomUtils.hideKeyboardFrom(context,it)
         }

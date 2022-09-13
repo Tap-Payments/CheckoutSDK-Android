@@ -1,9 +1,11 @@
 package company.tap.checkoutsdk.activities
 
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Color
@@ -18,10 +20,11 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import company.tap.checkout.TapCheckOutSDK
 import company.tap.checkout.internal.api.enums.AmountModificatorType
-import company.tap.checkout.internal.api.enums.Measurement
 import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession
@@ -53,11 +56,12 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
     var urlStrLight :String="https://gist.githubusercontent.com/AhlaamK-tap/9862436dff3b3ca222243dad3705ec6a/raw/1f553408e0f1f7e0a1e15987f987b6033d64a90d/lighttheme.json"
     var urlLocalisation :String="https://gist.githubusercontent.com/AhlaamK-tap/4285f9b4e10fb9a5c51a58f5064d470e/raw/5769a9ddc5ea74020f406d729afba2b0cf29db6c/lang.json"
     var itemsList = ArrayList<ItemsModel>()
+    val REQUEST_ID_MULTIPLE_PERMISSIONS = 7
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //Loading the theme and localization files prior to loading the view to avoid crashes
-
+        checkAndroidVersion()
         initializeLanguage()
         settingsManager = SettingsManager
 
@@ -233,13 +237,13 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
     private fun initializeSDK() {
         TapCheckOutSDK().init(
             this,
-            /* settingsManager?.getString("key_test_name","sk_test_kovrMB0mupFJXfNZWx6Etg5y"),
+             settingsManager?.getString("key_test_name","sk_test_kovrMB0mupFJXfNZWx6Etg5y"),
              settingsManager?.getString("key_live_name","sk_live_QglH8V7Fw6NPAom4qRcynDK2"),
-             settingsManager?.getString("key_package_name","company.tap.goSellSDKExample"))*/
-        settingsManager?.getString("key_test_name","sk_test_2kGVSuR6bKAXLF4rDe0wa9QU"),
+             settingsManager?.getString("key_package_name","company.tap.goSellSDKExample"))
+      /*  settingsManager?.getString("key_test_name","sk_test_2kGVSuR6bKAXLF4rDe0wa9QU"),
    settingsManager?.getString("key_live_name","sk_live_QglH8V7Fw6NPAom4qRcynDK2"),
    settingsManager?.getString("key_package_name","resources.gosell.io")
-)
+)*/
 
     }
 
@@ -354,7 +358,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
 
         //  sdkSession.setMerchantID(settingsManager?.getString("key_merchant_id", "1124340")) // ** Optional ** you can pass merchant id or null
-        sdkSession.setMerchantID("599424") // ** Optional ** you can pass merchant id or null
+       // sdkSession.setMerchantID("599424") // ** Optional ** you can pass merchant id or null
+        sdkSession.setMerchantID("1124340") // ** Optional ** you can pass merchant id or null
 
 
         sdkSession.setCardType(CardType.ALL) // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
@@ -825,7 +830,44 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         )
     }
 
+    private fun checkAndroidVersion() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            checkAndRequestPermissions()
+        } else {
+            // code for lollipop and pre-lollipop devices
+        }
+    }
 
+
+    private fun checkAndRequestPermissions(): Boolean {
+        val camera = ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.CAMERA
+        )
+        val wtite =
+            ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        val read =
+            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+        val listPermissionsNeeded: MutableList<String> = ArrayList()
+        if (wtite != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        }
+        if (camera != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.CAMERA)
+        }
+        if (read != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(
+                this,
+                listPermissionsNeeded.toTypedArray(),
+                REQUEST_ID_MULTIPLE_PERMISSIONS
+            )
+            return false
+        }
+        return true
+    }
 
 }
 

@@ -14,6 +14,7 @@ import com.google.android.gms.wallet.AutoResolveHelper
 import com.google.android.gms.wallet.PaymentData
 import com.google.android.gms.wallet.PaymentDataRequest
 import com.google.android.gms.wallet.PaymentsClient
+import company.tap.cardscanner.*
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.utils.CustomUtils
@@ -30,7 +31,7 @@ import io.reactivex.disposables.Disposables
 import kotlinx.android.synthetic.main.item_googlepay.*
 import org.json.JSONObject
 
-class CheckOutActivity : AppCompatActivity()  {
+class CheckOutActivity : AppCompatActivity()   {
     private val tapCheckoutFragment = CheckoutFragment()
     var hideAllViews:Boolean = false
     lateinit var chargeStatus:ChargeStatus
@@ -40,6 +41,7 @@ class CheckOutActivity : AppCompatActivity()  {
     @JvmField
     // Arbitrarily-picked constant integer you define to track a request for payment data activity.
     val LOAD_PAYMENT_DATA_REQUEST_CODE = 991
+
 
     lateinit var _paymentsClient: PaymentsClient
     @JvmField
@@ -73,6 +75,9 @@ class CheckOutActivity : AppCompatActivity()  {
         )
         tapCheckoutFragment.arguments=getArguments()
         tapNfcCardReader = TapNfcCardReader(this)
+
+
+
 
     }
 
@@ -443,4 +448,7 @@ class CheckOutActivity : AppCompatActivity()  {
         }
     }
 
-    }
+
+
+
+}

@@ -1,6 +1,5 @@
 package company.tap.checkout.internal.viewmodels
 
-import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -31,18 +30,15 @@ import androidx.transition.Fade
 import androidx.transition.Scene
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
-import cards.pay.paycardsrecognizer.sdk.Card
 import cards.pay.paycardsrecognizer.sdk.FrameManager
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
-import cards.pay.paycardsrecognizer.sdk.ui.InlineViewFragment
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.android.gms.wallet.PaymentData
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import company.tap.cardscanner.TapCard
-import company.tap.cardscanner.TapTextRecognitionCallBack
-import company.tap.cardscanner.TapTextRecognitionML
+import company.tap.cardscanner.*
 import company.tap.checkout.R
 import company.tap.checkout.internal.PaymentDataProvider
 import company.tap.checkout.internal.adapter.CardTypeAdapterUIKIT
@@ -81,7 +77,6 @@ import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.CardType
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.models.ItemsModel
-import company.tap.checkout.open.models.PaymentItem
 import company.tap.nfcreader.open.reader.TapEmvCard
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
@@ -111,7 +106,7 @@ import kotlin.properties.Delegates
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedActionListener,
     PaymentCardComplete, onCardNFCCallListener, OnCurrencyChangedActionListener, WebViewContract,
-    TapTextRecognitionCallBack {
+    TapTextRecognitionCallBack , TapScannerCallback {
     private var savedCardList = MutableLiveData<List<SavedCard>>()
     private var paymentOptionsList = MutableLiveData<List<PaymentOption>>()
     private var goPayCardList = MutableLiveData<List<GoPaySavedCards>>()
@@ -133,6 +128,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private lateinit var itemsViewHolder: ItemsViewHolder
     private lateinit var cardViewHolder: CardViewHolder
     private lateinit var asynchronousPaymentViewHolder: AsynchronousPaymentViewHolder
+    private lateinit var loyaltyViewHolder: LoyaltyViewHolder
 
     private  var tabAnimatedActionButtonViewHolder: TabAnimatedActionButtonViewHolder?=null
     private lateinit var bottomSheetDialog: BottomSheetDialog
@@ -172,7 +168,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private var otpTypeString: PaymentTypeEnum = PaymentTypeEnum.SAVEDCARD
     private lateinit var paymentActionType: PaymentType
     private val nfcFragment = NFCFragment()
-    private val inlineViewFragment = InlineViewFragment()
+  //  private val inlineViewFragment = InlineViewFragment()
+    private val inlineCamerFragment = CameraFragment()
     private var isInlineOpened = false
     @JvmField
     var isNFCOpened = false
@@ -236,14 +233,21 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             AnimationUtils.loadAnimation(context,R.anim.slide_down)
         }
 
-        textRecognitionML = TapTextRecognitionML(this)
-        inlineViewFragment.setCallBackListener(inlineViewCallback)
+
+
+
+        initializeScanner(this)
         initViewHolders()
         initAmountAction()
         initSwitchAction()
         initOtpActionButton()
         setAllSeparatorTheme()
 
+    }
+
+    private fun initializeScanner(checkoutViewModel: CheckoutViewModel) {
+        textRecognitionML = TapTextRecognitionML(checkoutViewModel)
+        textRecognitionML?.addTapScannerCallback(checkoutViewModel)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -367,6 +371,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         otpViewHolder.otpView.otpViewInput1.isCursorVisible = true
         goPayViewsHolder = GoPayViewsHolder(context, this, otpViewHolder)
         asynchronousPaymentViewHolder = AsynchronousPaymentViewHolder(context, this)
+        loyaltyViewHolder = LoyaltyViewHolder(context,this)
         // nfcViewHolder = NFCViewHolder(context as Activity, context, this, fragmentManager)
 
     }
@@ -954,6 +959,20 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         PaymentDataSource.setSelectedCurrency(currentCurrency,null)
         PaymentDataSource.setSelectedAmount(currentAmount.toBigDecimal())
+
+        if (::loyaltyViewHolder.isInitialized){
+            val objectMapper = ObjectMapper()
+            val tapLoyaltyModel: TapLoyaltyModel =
+                objectMapper.readValue(context.resources.openRawResource(R.raw.loyalty), TapLoyaltyModel::class.java)
+
+            println("tapLoyaltyModel>>>"+tapLoyaltyModel.bankLogo)
+            tapLoyaltyModel.bankLogo?.let { tapLoyaltyModel.bankName?.let { it1 ->
+                loyaltyViewHolder.setDataFromAPI(it,
+                    it1
+                )
+            } }
+
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -1346,6 +1365,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 }
 
                 if (::sdkLayout.isInitialized){
+                    sdkLayout.removeView(it?.view)
                     sdkLayout.addView(it?.view)
                 }
 
@@ -1649,7 +1669,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     // Override function to open card Scanner and scan the card.
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onClickCardScanner(scannerClicked :Boolean) {
-        setSlideAnimation()
+       // setSlideAnimation()
         removeViews(
                //businessViewHolder,
               //  amountViewHolder,
@@ -1665,13 +1685,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         FrameManager.getInstance().frameColor = Color.WHITE
         // Use
-        val bottomSheet: FrameLayout? = bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet)
-        BottomSheetBehavior.from(bottomSheet as View).state = BottomSheetBehavior.STATE_EXPANDED
-        bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+      //  val bottomSheet: FrameLayout? = bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet)
+      //  BottomSheetBehavior.from(bottomSheet as View).state = BottomSheetBehavior.STATE_EXPANDED
+     //   bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
         fragmentManager
             .beginTransaction()
-            .replace(R.id.inline_container,inlineViewFragment)
+            .replace(R.id.inline_container,inlineCamerFragment)
             .commit()
+
         isInlineOpened = true
         inLineCardLayout.visibility = View.VISIBLE
         amountViewHolder.changeGroupAction(false)
@@ -2018,8 +2039,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onRecognitionSuccess(card: TapCard?) {
 //to be added for unembossed cards
+        if (card != null) {
+            if (card.cardNumber != null && card.cardHolder != null && card.expirationDate != null) {
+               onReadSuccess(card)
+            }
+        }
+
+
     }
 
     override fun onRecognitionFailure(error: String?) {
@@ -2029,10 +2058,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun removeInlineScanner() {
         if (isInlineOpened) {
-            if (fragmentManager.findFragmentById(R.id.inline_container) != null)
+            if (fragmentManager.findFragmentById(R.id.inline_container) != null) {
                 fragmentManager.beginTransaction()
-                    .remove(fragmentManager.findFragmentById(R.id.inline_container)!!)
+                    .remove(fragmentManager?.findFragmentById(R.id.inline_container)!!)
                     .commit()
+            }
+           // inlineCamerFragment.onDestroy()
             isInlineOpened = false
             inLineCardLayout.visibility = View.GONE
             amountViewHolder.readyToScanVisibility(false)
@@ -2041,7 +2072,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     }
 
-    fun handleScanFailedResult() {
+    fun handleScanFailedResult(error: String?) {
         println("handleScanFailedResult card is")
         removeInlineScanner()
       //  removeViews(amountViewHolder, businessViewHolder)
@@ -2056,7 +2087,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun handleScanSuccessResult(card: Card) {
+    fun handleScanSuccessResult(card: TapCard) {
         removeInlineScanner()
       //  removeViews(amountViewHolder, businessViewHolder)
         addViews(
@@ -2066,8 +2097,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 paymentInputViewHolder,
                 saveCardSwitchHolder
         )
-        println("scanned card is$card")
-        callBinLookupApi(card.cardNumber?.substring(0, 6))
+
+        if(card!=null && card.cardNumber?.trim()!=null && card.cardNumber.trim().length==6){
+            callBinLookupApi(card.cardNumber.trim().substring(0, 6))
+        }
+
 
         Handler().postDelayed({
             val binLookupResponse: BINLookupResponse? = PaymentDataSource.getBinLookupResponse()
@@ -2084,13 +2118,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }, 300)
 
 
-        // paymentInputViewHolder.tapCardInputView.cardHolder.setText(card.cardHolderName)
+        paymentInputViewHolder.tapCardInputView.setCardHolderName(card.cardHolder)
+       // inlineCamerFragment.onDestroy()
 
 
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun setScannedCardDetails(card: Card) {
+    private fun setScannedCardDetails(card: TapCard) {
+        println("scanned card holder is${card.cardHolder}")
+        println("scanned card number is${card.cardNumber}")
         paymentInputViewHolder.tapCardInputView.setCardNumber(card.cardNumber)
         val dateParts: List<String>? = card.expirationDate?.split("/")
         val month = dateParts?.get(0)?.toInt()
@@ -2100,6 +2137,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 paymentInputViewHolder.tapCardInputView.setExpiryDate(month, year)
             }
         }
+
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -2571,6 +2609,22 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
      * **/
      fun handleError(statusCode: Int) {
         Log.e("loadPaymentData failed", String.format("Error code: %d", statusCode))
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    override fun onReadSuccess(card: TapCard?) {
+        if (card != null) {
+            if(card.cardNumber!=null)
+           handleScanSuccessResult(card)
+           /* Log.d("checkOutViewModel", "onRecognitionSuccess: " + card.cardNumber)
+            Log.d("checkOutViewModel", "onRecognitionSuccess: " + card.expirationDate)
+            Log.d("checkOutViewModel", "onRecognitionSuccess: " + card.cardHolder)*/
+
+        }
+    }
+
+    override fun onReadFailure(error: String?) {
+        handleScanFailedResult(error)
     }
 
 }

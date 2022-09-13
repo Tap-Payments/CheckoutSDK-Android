@@ -1,13 +1,15 @@
 package company.tap.checkout
 
 import android.content.Context
+import com.fasterxml.jackson.databind.ObjectMapper
+import company.tap.checkout.internal.api.models.TapLoyaltyModel
 import company.tap.checkout.internal.apiresponse.ApiService
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.data_managers.PaymentDataSource
-import company.tap.checkout.open.enums.SdkIdentifier
 import company.tap.checkout.open.enums.SdkMode
 import company.tap.checkout.open.exceptions.ErrorReport
 import company.tap.tapnetworkkit.connection.NetworkApp
+import java.io.File
 
 /**
  * Created by AhlaamK on 6/17/21.

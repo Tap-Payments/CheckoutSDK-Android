@@ -224,12 +224,12 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
         bottomSheetDialog.behavior.setBottomSheetCallback(object:BottomSheetBehavior.BottomSheetCallback(){
 
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-                println("111heightscreen>>>>"+heightscreen)
+              /*  println("111heightscreen>>>>"+heightscreen)
                 println("1111sdkLayoutheight>>>>>"+checkoutLayout?.height)
                 println("1111newState>>>>>"+newState)
                 println("1111difff>>>>>"+ checkoutLayout?.height?.let { heightscreen.minus(it) })
                 println("1111peek>>>>>"+bottomSheetDialog.behavior.peekHeight)
-var diff = checkoutLayout?.height?.let { heightscreen.minus(it) }
+                var diff = checkoutLayout?.height?.let { heightscreen.minus(it) }*/
 
 
                 if (newState == BottomSheetBehavior.STATE_HIDDEN) {
@@ -312,14 +312,14 @@ requireArguments().putBoolean(RESET_FRAG, resetFragment)
 
     override fun onScanCardFailed(e: Exception?) {
         println("onScanCardFailed")
-        _viewModel?.handleScanFailedResult()
+       // _viewModel?.handleScanFailedResult()
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onScanCardFinished(card: Card?, cardImage: ByteArray?) {
         if (card != null) {
             println("scanned card is$card")
-            _viewModel?.handleScanSuccessResult(card)
+          //  _viewModel?.handleScanSuccessResult(card)
 
         }
     }

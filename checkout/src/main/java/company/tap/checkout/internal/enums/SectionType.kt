@@ -16,7 +16,8 @@ enum class SectionType {
     FRAGMENT,
     ActionButton,
     OTP_VIEW,
-    GOOGLE_PAY
+    GOOGLE_PAY,
+    LOYALTY
 
 
 }

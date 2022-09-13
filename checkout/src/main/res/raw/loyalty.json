@@ -1,0 +1,25 @@
+
+
+    {
+      "id":"paymentOptionID",
+      "bankName": "ADCB",
+      "bankLogo": "https://is4-ssl.mzstatic.com/image/thumb/Purple112/v4/05/33/67/05336718-a6f6-8ca1-1ea0-0644f5071ce9/AppIcon-0-0-1x_U007emarketing-0-0-0-5-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/1200x600wa.png",
+      "loyaltyProgramName": "ADCB TouchPoints",
+      "loyaltyPointsName": "TouchPoints",
+      "transactionsCount": "8,1100",
+      "termsConditionsLink": "http://wwww.google.com",
+      "supportedCurrencies":
+      [
+        {
+          "rate": 1,
+          "currency":"KWD",
+          "balance": 23123
+        },
+        {
+          "rate": 1,
+          "currency":"AED",
+          "balance": 23123
+        }
+      ]
+    }
+
