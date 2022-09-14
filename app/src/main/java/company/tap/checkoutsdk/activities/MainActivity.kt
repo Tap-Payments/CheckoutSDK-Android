@@ -357,9 +357,9 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         sdkSession.setDestination(null) // ** Optional ** you can pass Destinations object or null
 
 
-        //  sdkSession.setMerchantID(settingsManager?.getString("key_merchant_id", "1124340")) // ** Optional ** you can pass merchant id or null
+          sdkSession.setMerchantID(settingsManager?.getString("key_merchant_id", "1124340")) // ** Optional ** you can pass merchant id or null
        // sdkSession.setMerchantID("599424") // ** Optional ** you can pass merchant id or null
-        sdkSession.setMerchantID("1124340") // ** Optional ** you can pass merchant id or null
+       // sdkSession.setMerchantID("1124340") // ** Optional ** you can pass merchant id or null
 
 
         sdkSession.setCardType(CardType.ALL) // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.

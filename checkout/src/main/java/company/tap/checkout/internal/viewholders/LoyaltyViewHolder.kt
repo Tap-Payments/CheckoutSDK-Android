@@ -1,13 +1,20 @@
 package company.tap.checkout.internal.viewholders
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.PaymentType
+import company.tap.checkout.internal.api.models.LoyaltySupportedCurrency
+import company.tap.checkout.internal.api.models.SavedCard
+import company.tap.checkout.internal.api.models.TapLoyaltyModel
 import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
@@ -20,6 +27,7 @@ import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.atoms.TextInputEditText
 import company.tap.tapuilibrary.uikit.datasource.LoyaltyHeaderDataSource
 import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
+import company.tap.tapuilibrary.uikit.ktx.makeLinks
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import company.tap.tapuilibrary.uikit.ktx.setBottomBorders
 import company.tap.tapuilibrary.uikit.organisms.TapLoyaltyView
@@ -41,9 +49,14 @@ class LoyaltyViewHolder(private val context: Context, checkoutViewModel: Checkou
     lateinit var editTextAmount :TextInputEditText
     lateinit var textViewRemainPoints:TapTextView
     lateinit var textViewRemainAmount :TapTextView
+    lateinit var textViewTouchPoints :TapTextView
 
     private var bankName: String? = null
     private var bankLogo: String? = null
+    private var tapLoyaltyModel: TapLoyaltyModel?=null
+    private var arrayListLoyal:List<LoyaltySupportedCurrency> = java.util.ArrayList()
+
+
 
     init {
         bindViewComponents()
@@ -59,29 +72,48 @@ class LoyaltyViewHolder(private val context: Context, checkoutViewModel: Checkou
          editTextAmount = view.findViewById(R.id.editTextAmount)
          textViewRemainPoints= view.findViewById(R.id.textViewRemainPoints)
          textViewRemainAmount= view.findViewById(R.id.textViewRemainAmount)
+        textViewTouchPoints= view.findViewById(R.id.textViewTouchPoints)
         loyaltyView.setLoyaltyHeaderDataSource(LoyaltyHeaderDataSource(bankName,bankLogo))
 
         configureSwitch()
+
+
+
+    }
+
+    private fun setData() {
+        textViewTitle.setText("Redeem"+tapLoyaltyModel?.loyaltyProgramName)
+        textViewClickable.text = "Balance: "+arrayListLoyal?.get(0).currency+ " " +arrayListLoyal?.get(0).balance+ "  "+ "("+tapLoyaltyModel?.transactionsCount+")"+ " "+
+                tapLoyaltyModel?.loyaltyPointsName+"  (T&C)"
+        textViewTouchPoints.text = "="+tapLoyaltyModel?.loyaltyPointsName
+
+        loyaltyView.textViewClickable?.makeLinks(
+            Pair("  (T&C)", View.OnClickListener {
+                val url = "https://www.adcb.com/en/tools-resources/adcb-privacy-policy/"
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse(url)
+                context.startActivity(intent)
+            }))
     }
 
     private fun configureSwitch() {
         /**
          * Logic for switchLoyalty switch
          * **/
-        view.loyaltyView.switchLoyalty?.setOnCheckedChangeListener { buttonView, isChecked ->
-            if(isChecked) {
-                textViewSubTitle.visibility =View.VISIBLE
-                editTextAmount .visibility =View.VISIBLE
-                textViewRemainPoints.visibility =View.VISIBLE
-                textViewRemainAmount.visibility =View.VISIBLE
-            }
-            else{
-                textViewSubTitle.visibility =View.GONE
-                editTextAmount .visibility =View.GONE
-                textViewRemainPoints.visibility =View.GONE
-                textViewRemainAmount.visibility =View.GONE
+        loyaltyView.switchLoyalty?.setOnCheckedChangeListener { buttonView, isChecked ->
+            loyaltyView.switchTheme()
 
-            }            }
+            if(isChecked){
+                loyaltyView.linearLayout2?.visibility = View.VISIBLE
+                loyaltyView.linearLayout3?.visibility = View.VISIBLE
+
+            }else {
+
+                loyaltyView.linearLayout2?.visibility = View.GONE
+                loyaltyView.linearLayout3?.visibility = View.GONE
+
+            }
+        }
     }
 
 
@@ -90,11 +122,18 @@ class LoyaltyViewHolder(private val context: Context, checkoutViewModel: Checkou
      * @param bankLogo represents the images of payment methods.
      * @param bankName represents the Name of payment methods.
      * */
-    fun setDataFromAPI(bankLogo : String , bankName:String){
+    fun setDataFromAPI(
+        bankLogo: String,
+        bankName: String,
+        tapLoyaltyModel: TapLoyaltyModel,
+        supportedLoyalCards: List<LoyaltySupportedCurrency>
+    ){
         this.bankLogo = bankLogo
         this.bankName = bankName
+        this.tapLoyaltyModel = tapLoyaltyModel
+        this.arrayListLoyal = supportedLoyalCards
         bindViewComponents()
-
+        setData()
     }
 }
 

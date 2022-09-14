@@ -15,11 +15,14 @@
         <entry key="app/src/main/res/xml/root_preferences.xml" value="0.1" />
         <entry key="checkout/src/main/res/drawable/layout_bb.xml" value="0.157" />
         <entry key="checkout/src/main/res/layout/activity_check_out.xml" value="0.15231187669990934" />
+        <entry key="checkout/src/main/res/layout/amountview_layout.xml" value="0.128739800543971" />
         <entry key="checkout/src/main/res/layout/businessview_layout.xml" value="0.125" />
         <entry key="checkout/src/main/res/layout/cardviewholder_layout1.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/fragment_checkouttaps.xml" value="0.11876699909338169" />
         <entry key="checkout/src/main/res/layout/fragment_checkouttaps_full.xml" value="0.15231187669990934" />
         <entry key="checkout/src/main/res/layout/fragment_web.xml" value="0.1" />
+        <entry key="checkout/src/main/res/layout/gopaysavedcard_layout.xml" value="0.2364258230012826" />
+        <entry key="checkout/src/main/res/layout/itemviewholder_layout.xml" value="0.128739800543971" />
         <entry key="checkout/src/main/res/layout/loyalty_view_layout.xml" value="0.20949123557075675" />
         <entry key="checkout/src/main/res/layout/payment_inputt_layout.xml" value="0.1" />
       </map>

@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ShapeDrawable
+import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
@@ -81,15 +82,18 @@ import company.tap.nfcreader.open.reader.TapEmvCard
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.SeparatorViewTheme
+import company.tap.tapuilibrary.uikit.datasource.LoyaltyHeaderDataSource
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
+import company.tap.tapuilibrary.uikit.ktx.makeLinks
 import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.businessview_layout.view.*
 import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
 import kotlinx.android.synthetic.main.gopaysavedcard_layout.view.*
 import kotlinx.android.synthetic.main.itemviewholder_layout.view.*
+import kotlinx.android.synthetic.main.loyalty_view_layout.view.*
 import kotlinx.android.synthetic.main.otpview_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 import org.json.JSONException
@@ -108,6 +112,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     PaymentCardComplete, onCardNFCCallListener, OnCurrencyChangedActionListener, WebViewContract,
     TapTextRecognitionCallBack , TapScannerCallback {
     private var savedCardList = MutableLiveData<List<SavedCard>>()
+    private var supportedLoyalCards = MutableLiveData<List<LoyaltySupportedCurrency>>()
     private var paymentOptionsList = MutableLiveData<List<PaymentOption>>()
     private var goPayCardList = MutableLiveData<List<GoPaySavedCards>>()
 
@@ -373,7 +378,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         asynchronousPaymentViewHolder = AsynchronousPaymentViewHolder(context, this)
         loyaltyViewHolder = LoyaltyViewHolder(context,this)
         // nfcViewHolder = NFCViewHolder(context as Activity, context, this, fragmentManager)
-
+        logicForLoyaltyProgram()
     }
 
     private fun initSwitchAction() {
@@ -428,6 +433,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         amountViewHolder,
                         cardViewHolder,
                         paymentInputViewHolder,
+                    loyaltyViewHolder,
                         saveCardSwitchHolder
                 )
             }
@@ -448,7 +454,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 it
             )
         }?.let { saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setDisplayMetrics(it) }
-
+        loyaltyViewHolder.view.loyaltyView.constraintLayout?.visibility = View.GONE
     }
 
     fun setBottomSheetLayout(bottomSheetLayout: FrameLayout) {
@@ -964,11 +970,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             val objectMapper = ObjectMapper()
             val tapLoyaltyModel: TapLoyaltyModel =
                 objectMapper.readValue(context.resources.openRawResource(R.raw.loyalty), TapLoyaltyModel::class.java)
-
+            supportedLoyalCards.value = tapLoyaltyModel.supportedCurrencies as List<LoyaltySupportedCurrency>
             println("tapLoyaltyModel>>>"+tapLoyaltyModel.bankLogo)
             tapLoyaltyModel.bankLogo?.let { tapLoyaltyModel.bankName?.let { it1 ->
                 loyaltyViewHolder.setDataFromAPI(it,
-                    it1
+                    it1,tapLoyaltyModel,supportedLoyalCards.value as List<LoyaltySupportedCurrency>
                 )
             } }
 
@@ -1464,6 +1470,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
                 Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
         )
+
         saveCardSwitchHolder?.view?.cardSwitch?.showOnlyPayButton()
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated
     }
@@ -1609,6 +1616,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.VISIBLE
             saveCardSwitchHolder?.view?.mainSwitch?.switchSaveMobile?.visibility = View.VISIBLE
             saveCardSwitchHolder?.setSwitchToggleData(paymentType)
+            loyaltyViewHolder.view.loyaltyView?.constraintLayout?.visibility = View.VISIBLE
             activateActionButton()
             paymentActionType = paymentType
         } else {
@@ -2625,6 +2633,35 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     override fun onReadFailure(error: String?) {
         handleScanFailedResult(error)
+    }
+
+    private fun logicForLoyaltyProgram(){
+
+        loyaltyViewHolder.loyaltyView.switchLoyalty?.setOnCheckedChangeListener { buttonView, isChecked ->
+            loyaltyViewHolder.loyaltyView.switchTheme()
+
+            if(isChecked){
+                loyaltyViewHolder.loyaltyView.linearLayout2?.visibility = View.VISIBLE
+                loyaltyViewHolder.loyaltyView.linearLayout3?.visibility = View.VISIBLE
+
+            }else {
+
+                loyaltyViewHolder.loyaltyView.linearLayout2?.visibility = View.GONE
+                loyaltyViewHolder.loyaltyView.linearLayout3?.visibility = View.GONE
+
+            }
+        }
+
+        loyaltyViewHolder.loyaltyView.setLoyaltyHeaderDataSource(LoyaltyHeaderDataSource("ADCB","https://is4-ssl.mzstatic.com/image/thumb/Purple112/v4/05/33/67/05336718-a6f6-8ca1-1ea0-0644f5071ce9/AppIcon-0-0-1x_U007emarketing-0-0-0-5-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/1200x600wa.png"))
+
+        loyaltyViewHolder.loyaltyView.textViewClickable?.makeLinks(
+            Pair("(T&C)", View.OnClickListener {
+                val url = "https://www.adcb.com/en/tools-resources/adcb-privacy-policy/"
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse(url)
+               context.startActivity(intent)
+
+            }))
     }
 
 }
