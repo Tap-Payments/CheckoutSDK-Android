@@ -189,6 +189,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     var currencyOldRate:BigDecimal?=null
     var currentCalculatedAmount:BigDecimal?=null
     var lastSelectedCurrency:String?=null
+    var loyatFlag:Boolean?=false
 
     @JvmField
     var selectedTotalAmount : String? = null
@@ -247,7 +248,18 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         initSwitchAction()
         initOtpActionButton()
         setAllSeparatorTheme()
+        initLoyaltyView()
 
+    }
+
+    private fun initLoyaltyView() {
+        if(loyatFlag== true){
+            removeViews(saveCardSwitchHolder)
+            addViews(loyaltyViewHolder,saveCardSwitchHolder)
+            loyaltyViewHolder.view.loyaltyView.constraintLayout?.visibility = View.VISIBLE
+
+        }else
+        loyaltyViewHolder.view.loyaltyView.constraintLayout?.visibility = View.GONE
     }
 
     private fun initializeScanner(checkoutViewModel: CheckoutViewModel) {
@@ -376,7 +388,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         otpViewHolder.otpView.otpViewInput1.isCursorVisible = true
         goPayViewsHolder = GoPayViewsHolder(context, this, otpViewHolder)
         asynchronousPaymentViewHolder = AsynchronousPaymentViewHolder(context, this)
-        loyaltyViewHolder = LoyaltyViewHolder(context,this)
+        loyaltyViewHolder = LoyaltyViewHolder(context,this,this)
         // nfcViewHolder = NFCViewHolder(context as Activity, context, this, fragmentManager)
         logicForLoyaltyProgram()
     }
@@ -433,7 +445,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         amountViewHolder,
                         cardViewHolder,
                         paymentInputViewHolder,
-                    loyaltyViewHolder,
                         saveCardSwitchHolder
                 )
             }
@@ -454,7 +465,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 it
             )
         }?.let { saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setDisplayMetrics(it) }
-        loyaltyViewHolder.view.loyaltyView.constraintLayout?.visibility = View.GONE
+
     }
 
     fun setBottomSheetLayout(bottomSheetLayout: FrameLayout) {
@@ -1617,6 +1628,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             saveCardSwitchHolder?.view?.mainSwitch?.switchSaveMobile?.visibility = View.VISIBLE
             saveCardSwitchHolder?.setSwitchToggleData(paymentType)
             loyaltyViewHolder.view.loyaltyView?.constraintLayout?.visibility = View.VISIBLE
+            loyatFlag = true
+            initLoyaltyView()
             activateActionButton()
             paymentActionType = paymentType
         } else {
@@ -1639,6 +1652,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         setPayButtonAction(paymentType, null)
 
 
+    }
+
+    override fun onPaymentCardIsLoyaltyCard(isLoyaltyCard: Boolean) {
+       //Todo logic for loyalty card
     }
 
     // Override function to open NFC fragment and scan the card via NFC.

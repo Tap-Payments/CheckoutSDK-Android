@@ -126,6 +126,23 @@
       "enableNFC":"Please enable NFC",
       "disabledNFC": "NFC not enabled",
       "scanSuccess": "Scanned Successful!"
+    },
+    "TapLoyaltySection": {
+      "headerView": {
+        "tc": "T&C",
+        "redeem": "Redeem",
+        "balance": "Balance"
+      },
+      "amountView": {
+        "title" : "Amount to redeem"
+      },
+      "footerView": {
+        "points": "Remaining",
+        "amount": "Remaining amount to pay"
+      },
+      "hintView": {
+        "minimumWarning": "Minimum redemption is"
+      }
     }
   },
   "ar": {
@@ -257,6 +274,22 @@
       "alertUnsupportedCardMessage": "نوع البطاقة غير مدعوم",
       "alertUnsupportedCardTitle": "تنبيه"
     }
+  },"TapLoyaltySection": {
+  "headerView": {
+    "tc": "شروط",
+    "redeem": "استخدام",
+    "balance": "الرصيد"
+  },
+  "amountView": {
+    "title" : "المبلغ المستبدل"
+  },
+  "footerView": {
+    "points": "متبقي",
+    "amount": "متبقي القيمة للدفع"
+  },
+  "hintView": {
+    "minimumWarning": "أقل قيمة للإستبدال"
   }
+}
 
 }

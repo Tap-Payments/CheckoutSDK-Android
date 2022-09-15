@@ -729,6 +729,11 @@
         "amountFont" : "Roboto-Regular,16",
         "pointsTextColor" : "greyishBrown",
         "pointsFont" : "Roboto-Regular,12"
+    },"footerView": {
+        "pointsTextColor" : "#7E7E7E",
+        "pointsFont" : "Roboto-Regular,11",
+        "amountTextColor" : "greyishBrown",
+        "amountFont" : "Roboto-Regular,11"
     }
 }
 }

@@ -357,7 +357,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         sdkSession.setDestination(null) // ** Optional ** you can pass Destinations object or null
 
 
-          sdkSession.setMerchantID(settingsManager?.getString("key_merchant_id", "1124340")) // ** Optional ** you can pass merchant id or null
+         sdkSession.setMerchantID(settingsManager?.getString("key_merchant_id", "1124340")) // ** Optional ** you can pass merchant id or null
        // sdkSession.setMerchantID("599424") // ** Optional ** you can pass merchant id or null
        // sdkSession.setMerchantID("1124340") // ** Optional ** you can pass merchant id or null
 
