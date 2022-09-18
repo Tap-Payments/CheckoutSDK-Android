@@ -30,7 +30,7 @@ object AnimationEngine {
 
     private val slideTransition = TransitionSet()
         .setOrdering(TransitionSet.ORDERING_SEQUENTIAL)
-       // .addTransition(Fade())
+        .addTransition(Fade())
         .addTransition(ChangeBounds())
        // .addTransition(Slide())
        // .addTransition(ChangeBounds())

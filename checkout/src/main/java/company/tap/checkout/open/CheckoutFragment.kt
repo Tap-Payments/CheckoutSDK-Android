@@ -251,7 +251,7 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
             override fun onSlide(view: View, slideOffset: Float) {
                // println("onSlide"+p1)
               //  bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
-              //  scrollView?.smoothScrollTo(0, heightscreen)
+                scrollView?.smoothScrollTo(0, heightscreen)
             }
         })
 

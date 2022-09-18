@@ -343,7 +343,7 @@ class PaymentInputViewHolder(
                 ))
                 tapAlertView?.visibility = View.VISIBLE
                 lastFocusField =CardInputListener.FocusField.FOCUS_CVC
-               checkoutFragment.scrollView?.scrollTo(0,height)
+              // checkoutFragment.scrollView?.scrollTo(0,height)
             }
 
 
@@ -355,7 +355,7 @@ class PaymentInputViewHolder(
         tapCardInputView.setCVVHint(LocalizationManager.getValue("cardCVVPlaceHolder", "TapCardInputKit"))
         tapCardInputView.setCvcNumberTextWatcher(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                checkoutFragment.scrollView?.scrollTo(0,height)
+             //   checkoutFragment.scrollView?.scrollTo(0,height)
 
             }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -511,13 +511,13 @@ class PaymentInputViewHolder(
                 tapAlertView?.visibility = View.VISIBLE
                 tapAlertView?.alertMessage?.text =
                     (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
-                checkoutFragment.scrollView?.smoothScrollTo(0,height)
+               // checkoutFragment.scrollView?.smoothScrollTo(0,height)
             }
             CardValidationState.incomplete -> {
                 tapAlertView?.visibility = View.VISIBLE
                 tapAlertView?.alertMessage?.text =
                     (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
-                checkoutFragment.scrollView?.smoothScrollTo(0,height)
+               // checkoutFragment.scrollView?.smoothScrollTo(0,height)
                 //checkoutFragment.scrollView?.smoothScrollTo(0,0)
             }
             CardValidationState.valid -> {
