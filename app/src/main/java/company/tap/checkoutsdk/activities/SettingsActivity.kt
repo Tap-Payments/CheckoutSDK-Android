@@ -49,6 +49,7 @@ class SettingsActivity : AppCompatActivity() {
             bindPreferenceSummaryToValue(findPreference("key_sdk_card_type"))
             bindPreferenceSummaryToValue(findPreference("showImageKey"))
             bindPreferenceSummaryToValue(findPreference("useShippingEnableKey"))
+            bindPreferenceSummaryToValue(findPreference("enableLoyaltyProgram"))
 
         }
     }
@@ -119,6 +120,8 @@ class SettingsActivity : AppCompatActivity() {
                     // update the changed gallery name to summary filed
 
                 } else  if (preference.getKey().equals("useShippingEnableKey")){
+
+                }else  if (preference.getKey().equals("enableLoyaltyProgram")){
 
                 }
             }

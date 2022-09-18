@@ -71,6 +71,9 @@ object  SDKSession : APIRequestCallback {
 
     @JvmField
     var showCloseImage: Boolean? = false
+
+    @JvmField
+    var enableLoyalty: Boolean? = false
     init {
         initPaymentDataSource()
 

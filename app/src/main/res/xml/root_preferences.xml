@@ -148,4 +148,8 @@
         android:defaultValue="false"
         android:key="useShippingEnableKey"
         android:title="Enable Default Shipping 1 For PayPal " />
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="enableLoyaltyProgram"
+        android:title="Enable Loyalty Program " />
 </PreferenceScreen>

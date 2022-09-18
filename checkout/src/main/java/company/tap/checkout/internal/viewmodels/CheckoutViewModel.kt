@@ -248,14 +248,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         initSwitchAction()
         initOtpActionButton()
         setAllSeparatorTheme()
-        initLoyaltyView()
+      //  initLoyaltyView()
 
     }
 
     private fun initLoyaltyView() {
-        if(loyatFlag== true){
-            removeViews(saveCardSwitchHolder)
-            addViews(loyaltyViewHolder,saveCardSwitchHolder)
+        if(SDKSession.enableLoyalty== true){
+/*            removeViews(saveCardSwitchHolder)
+            addViews(loyaltyViewHolder,saveCardSwitchHolder)*/
+                removeAllViews()
+            addViews(businessViewHolder,amountViewHolder,cardViewHolder,paymentInputViewHolder,loyaltyViewHolder,saveCardSwitchHolder)
             loyaltyViewHolder.view.loyaltyView.constraintLayout?.visibility = View.VISIBLE
 
         }else
@@ -440,13 +442,24 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                             saveCardSwitchHolder
                     )
                 }else
+                    if(SDKSession.enableLoyalty== true){
                 addViews(
                         businessViewHolder,
                         amountViewHolder,
                         cardViewHolder,
                         paymentInputViewHolder,
+                    loyaltyViewHolder,
                         saveCardSwitchHolder
                 )
+                    }else{
+                        addViews(
+                            businessViewHolder,
+                            amountViewHolder,
+                            cardViewHolder,
+                            paymentInputViewHolder,
+                            saveCardSwitchHolder
+                        )
+                    }
             }
         }
 
@@ -1628,8 +1641,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             saveCardSwitchHolder?.view?.mainSwitch?.switchSaveMobile?.visibility = View.VISIBLE
             saveCardSwitchHolder?.setSwitchToggleData(paymentType)
             loyaltyViewHolder.view.loyaltyView?.constraintLayout?.visibility = View.VISIBLE
-            loyatFlag = true
-            initLoyaltyView()
+           // loyatFlag = true
+           // initLoyaltyView()
             activateActionButton()
             paymentActionType = paymentType
         } else {

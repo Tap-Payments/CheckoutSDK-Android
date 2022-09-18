@@ -49,8 +49,12 @@ class LoyaltyViewHolder(private val context: Context, checkoutViewModel: Checkou
     private var bankLogo: String? = null
     private var tapLoyaltyModel: TapLoyaltyModel?=null
     private var arrayListLoyal:List<LoyaltySupportedCurrency> = java.util.ArrayList()
-
-
+    private var  newBalance:Int?=0
+    private var  newTouchPoints:Int?=0
+    private var  initialBalance:Int?=0
+    private var  initialTouchPoints:Int?=0
+    private var remainingAmountText:String ?=null
+    private var remainingPointsText:String ?=null
 
     init {
         bindViewComponents()
@@ -67,9 +71,10 @@ class LoyaltyViewHolder(private val context: Context, checkoutViewModel: Checkou
          textViewRemainPoints= view.findViewById(R.id.textViewRemainPoints)
          textViewRemainAmount= view.findViewById(R.id.textViewRemainAmount)
         textViewTouchPoints= view.findViewById(R.id.textViewTouchPoints)
-        constraintt= view.findViewById(R.id.constraintt)
+      //  constraintt= view.findViewById(R.id.constraintt)
         loyaltyView.setLoyaltyHeaderDataSource(LoyaltyHeaderDataSource(bankName,bankLogo))
-        constraintt.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
+       // constraintt.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
+
         configureSwitch()
         amountEditTextWatcher()
 
@@ -78,23 +83,33 @@ class LoyaltyViewHolder(private val context: Context, checkoutViewModel: Checkou
     private fun setData() {
         val redeemText :String =LocalizationManager.getValue("headerView","TapLoyaltySection","redeem")
         val balanceText :String =LocalizationManager.getValue("headerView","TapLoyaltySection","balance")
+        val termsConditionsText :String =LocalizationManager.getValue("headerView","TapLoyaltySection","tc")
         textViewTitle.setText(redeemText+" "+tapLoyaltyModel?.loyaltyProgramName)
-        textViewClickable.text = balanceText+" "+arrayListLoyal?.get(0).currency+ " " +arrayListLoyal?.get(0).balance+ "  "+ "("+tapLoyaltyModel?.transactionsCount+")"+ " "+
-                tapLoyaltyModel?.loyaltyPointsName+"  (T&C)"
-        textViewTouchPoints.text = "="+tapLoyaltyModel?.loyaltyPointsName
+        initialBalance = arrayListLoyal[1].balance
+        initialTouchPoints = "6400".toInt()
+        textViewClickable.text = balanceText+" "+arrayListLoyal?.get(1).currency+ " " +initialBalance+ "  "+ "("+tapLoyaltyModel?.transactionsCount+")"+ " "+
+                tapLoyaltyModel?.loyaltyPointsName+" "+termsConditionsText
+        textViewTouchPoints.text = "="+initialTouchPoints +tapLoyaltyModel?.loyaltyPointsName
         textViewSubTitle.text = LocalizationManager.getValue("amountView","TapLoyaltySection","title")
         loyaltyView.textViewClickable?.makeLinks(
-            Pair("  (T&C)", View.OnClickListener {
+            Pair(termsConditionsText, View.OnClickListener {
                 val url = "https://www.adcb.com/en/tools-resources/adcb-privacy-policy/"
                 val intent = Intent(Intent.ACTION_VIEW)
                 intent.data = Uri.parse(url)
                 context.startActivity(intent)
             }))
-        val remainingPointsText :String =LocalizationManager.getValue("footerView","TapLoyaltySection","points")
-        textViewRemainPoints.text = remainingPointsText+" "+arrayListLoyal?.get(0).balance
+        editTextAmount.setText("320")
+        val alertMessage:String=LocalizationManager.getValue("hintView","TapLoyaltySection","minimumWarning")
+        loyaltyView.loyaltyAlertView?.alertMessage?.text = alertMessage+" "+arrayListLoyal?.get(1).currency+"20.00"
+        loyaltyView.loyaltyAlertView?.visibility =View.GONE
 
-        val remainingAmountText :String =LocalizationManager.getValue("footerView","TapLoyaltySection","amount")
-        textViewRemainAmount.text = remainingAmountText+" "+arrayListLoyal?.get(0).balance
+         remainingPointsText  =LocalizationManager.getValue("footerView","TapLoyaltySection","points")
+        textViewRemainPoints.text = remainingPointsText+" "+tapLoyaltyModel?.loyaltyPointsName+" : "+arrayListLoyal?.get(1).balance
+        remainingAmountText  =LocalizationManager.getValue("footerView","TapLoyaltySection","amount")
+
+        reCalculateAmount(initialBalance,editTextAmount.text.toString().toInt())
+
+
     }
 
     private fun configureSwitch() {
@@ -152,18 +167,66 @@ class LoyaltyViewHolder(private val context: Context, checkoutViewModel: Checkou
                 s: CharSequence, start: Int, count: Int,
                 after: Int
             ) {
+
             }
 
             override fun afterTextChanged(s: Editable) {
                 if(s.toString().isNullOrEmpty()){
-                    loyaltyView.loyaltyAlertView?.alertMessage?.text = LocalizationManager.getValue("hintView","TapLoyaltySection","minimumWarning")
                     loyaltyView.loyaltyAlertView?.visibility =View.VISIBLE
+                    textViewTouchPoints.text = "= "+"0 "+tapLoyaltyModel?.loyaltyPointsName
                 }else{
+                    var touchPoints :Int= s.toString().toInt().times(20)
+                    textViewTouchPoints.text = "= "+touchPoints+" "+tapLoyaltyModel?.loyaltyPointsName
                     loyaltyView.loyaltyAlertView?.visibility =View.GONE
+                    reCalculateTouchPoints(initialTouchPoints,touchPoints)
                 }
+                if(!s.isNullOrEmpty()) reCalculateAmount(initialBalance,s.toString().toInt())
                 onPaymentCardComplete.onPaymentCardIsLoyaltyCard(true)
             }
         })
+    }
+
+    private fun reCalculateAmount(previousBalance:Int?,amountTypedInText:Int){
+        println("previousBalance>>"+previousBalance)
+        println("newBalance>>"+newBalance)
+        if (previousBalance != null) {
+            newBalance = previousBalance-amountTypedInText
+
+
+                if (newBalance!!.toInt() >= 0 && newBalance!!.toInt() <= previousBalance) {
+                    textViewRemainAmount.text =
+                        remainingAmountText + " : " + arrayListLoyal?.get(1).currency + " " + newBalance
+                } else {
+                    loyaltyView.loyaltyAlertView?.visibility = View.VISIBLE
+
+                    textViewRemainAmount.text =
+                        remainingAmountText + " : " + arrayListLoyal?.get(1).currency + "  " + initialBalance
+                }
+
+
+        }
+
+    }
+
+    private fun reCalculateTouchPoints(previousTouchPoints:Int?,reflectedTouchPoints:Int){
+        println("previousTouchPoints>>"+previousTouchPoints)
+        println("newTouchPoints>>"+newTouchPoints)
+        if (previousTouchPoints != null) {
+            newTouchPoints = previousTouchPoints-reflectedTouchPoints
+
+
+            if (newBalance!!.toInt() >= 0 && newBalance!!.toInt() <= newTouchPoints!!) {
+                textViewRemainPoints.text =
+                    remainingPointsText + " " + tapLoyaltyModel?.loyaltyPointsName+" : " +  newTouchPoints
+            } else {
+              //  loyaltyView.loyaltyAlertView?.visibility = View.VISIBLE
+                  textViewRemainAmount.text =
+                    remainingPointsText + " " + tapLoyaltyModel?.loyaltyPointsName +" : " + initialTouchPoints
+            }
+
+
+        }
+
     }
 }
 

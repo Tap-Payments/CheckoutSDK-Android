@@ -13,12 +13,12 @@
     {
       "rate": 1,
       "currency":"KWD",
-      "balance": 23123
+      "balance": 2000
     },
     {
       "rate": 1,
       "currency":"AED",
-      "balance": 23123
+      "balance": 2000
     }
   ]
 }

@@ -377,6 +377,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
         //    sdkSession.setCardType(CardType.CREDIT); // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
         val useShippingEnableKey = settingsManager?.getBoolean("useShippingEnableKey",false)
+        val enableLoyaltyProgram = settingsManager?.getBoolean("enableLoyaltyProgram",false)
 
         println("useShippingEnableKey value>>>$useShippingEnableKey")
         if(useShippingEnableKey == true){
@@ -385,7 +386,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
             sdkSession.setOrderObject(getOrderWithoutAdd())
         }
 
-
+        sdkSession.enableLoyalty = enableLoyaltyProgram
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
