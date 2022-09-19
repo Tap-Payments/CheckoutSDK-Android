@@ -15,7 +15,7 @@
         <entry key="app/src/main/res/xml/root_preferences.xml" value="0.1" />
         <entry key="checkout/src/main/res/drawable/background_react.xml" value="0.375" />
         <entry key="checkout/src/main/res/drawable/layout_bb.xml" value="0.157" />
-        <entry key="checkout/src/main/res/drawable/layout_bg.xml" value="2.3637039184570314" />
+        <entry key="checkout/src/main/res/drawable/layout_bg.xml" value="0.25" />
         <entry key="checkout/src/main/res/layout/activity_check_out.xml" value="0.15231187669990934" />
         <entry key="checkout/src/main/res/layout/amountview_layout.xml" value="0.128739800543971" />
         <entry key="checkout/src/main/res/layout/businessview_layout.xml" value="0.125" />

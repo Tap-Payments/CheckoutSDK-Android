@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:fillViewport="true"
     android:clipToOutline="true"
-    app:cardCornerRadius="0dp"
+    app:cardCornerRadius="1.5dp"
     app:cardBackgroundColor="#10ffffff"
 
 
@@ -17,6 +17,10 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:behavior_hideable="false"
+        app:behavior_peekHeight="0dp"
+        android:clipToOutline="true"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         android:id="@+id/scrollView">
 
     <LinearLayout
