@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<company.tap.tapuilibrary.uikit.organisms.TapLoyaltyView
+
+<LinearLayout
 xmlns:android="http://schemas.android.com/apk/res/android"
-android:id="@+id/loyaltyView"
+android:id="@+id/constraintt"
 android:layout_width="match_parent"
 android:layout_height="wrap_content"
-android:padding="@dimen/margin_basic_10dp"
+
 
 app:layout_constraintTop_toTopOf="parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
    >
+<company.tap.tapuilibrary.uikit.organisms.TapLoyaltyView
+    android:id="@+id/loyaltyView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/margin_basic_10dp"
+    app:layout_constraintTop_toTopOf="parent"/>
 
-
-
-</company.tap.tapuilibrary.uikit.organisms.TapLoyaltyView>
+</LinearLayout>

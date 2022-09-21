@@ -26,6 +26,7 @@ import company.tap.tapuilibrary.uikit.ktx.makeLinks
 import company.tap.tapuilibrary.uikit.organisms.TapLoyaltyView
 import kotlinx.android.synthetic.main.loyalty_view_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
+import java.math.BigDecimal
 
 class LoyaltyViewHolder(private val context: Context, checkoutViewModel: CheckoutViewModel,
                         private val onPaymentCardComplete: PaymentCardComplete,) : TapBaseViewHolder  {
@@ -71,9 +72,9 @@ class LoyaltyViewHolder(private val context: Context, checkoutViewModel: Checkou
          textViewRemainPoints= view.findViewById(R.id.textViewRemainPoints)
          textViewRemainAmount= view.findViewById(R.id.textViewRemainAmount)
         textViewTouchPoints= view.findViewById(R.id.textViewTouchPoints)
-      //  constraintt= view.findViewById(R.id.constraintt)
+        constraintt= view.findViewById(R.id.constraintt)
         loyaltyView.setLoyaltyHeaderDataSource(LoyaltyHeaderDataSource(bankName,bankLogo))
-       // constraintt.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
+        constraintt.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
 
         configureSwitch()
         amountEditTextWatcher()
@@ -175,14 +176,19 @@ class LoyaltyViewHolder(private val context: Context, checkoutViewModel: Checkou
                     loyaltyView.loyaltyAlertView?.visibility =View.VISIBLE
                     textViewTouchPoints.text = "= "+"0 "+tapLoyaltyModel?.loyaltyPointsName
                 }else{
-                    var touchPoints :Int= s.toString().toInt().times(20)
+                    var touchPoints :BigDecimal= s.toString().toBigDecimal().times(BigDecimal.valueOf(20))
                     textViewTouchPoints.text = "= "+touchPoints+" "+tapLoyaltyModel?.loyaltyPointsName
                     loyaltyView.loyaltyAlertView?.visibility =View.GONE
-                    reCalculateTouchPoints(initialTouchPoints,touchPoints)
+                    reCalculateTouchPoints(initialTouchPoints,touchPoints.toInt())
                 }
-                if(!s.isNullOrEmpty()) reCalculateAmount(initialBalance,s.toString().toInt())
-                onPaymentCardComplete.onPaymentCardIsLoyaltyCard(true)
-            }
+                if(!s.isNullOrEmpty()){
+                    if(s.contains(".")){
+                        reCalculateAmount(initialBalance,s.toString().replace(".","").toInt())
+                    }
+
+                    onPaymentCardComplete.onPaymentCardIsLoyaltyCard(true)
+                }
+                }
         })
     }
 

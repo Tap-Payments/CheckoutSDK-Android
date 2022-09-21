@@ -705,7 +705,7 @@
         "topTextFont": "Roboto-Light,12",
         "bottomTextColor": "#ffffff",
         "bottomTextFont": "Roboto-Light,12"
-    }, "loyaltyView" : {
+    },"loyaltyView" : {
     "cardView": {
         "backgroundColor" : "white",
         "radius": 8,
@@ -719,17 +719,19 @@
         "titleTextColor" : "greyishBrown",
         "subTitleTextColor" : "brownGreySeven",
         "titleFont" : "Roboto-Regular,12",
-        "subTitleFont" : "Roboto-Regular,10"
-    },"amountView": {
+        "subTitleFont" : "Roboto-Regular,11"
+    },
+    "amountView": {
         "titleTextColor" : "#9F9F9F",
-        "titleFont" : "Roboto-Regular,10",
+        "titleFont" : "Roboto-Regular,11",
         "currencyTextColor" : "greyishBrown",
         "currencyFont" : "Roboto-Regular,16",
         "amountTextColor" : "greyishBrown",
         "amountFont" : "Roboto-Regular,16",
         "pointsTextColor" : "greyishBrown",
         "pointsFont" : "Roboto-Regular,12"
-    },"footerView": {
+    },
+    "footerView": {
         "pointsTextColor" : "#7E7E7E",
         "pointsFont" : "Roboto-Regular,11",
         "amountTextColor" : "greyishBrown",
