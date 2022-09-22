@@ -176,7 +176,7 @@ class LoyaltyViewHolder(private val context: Context, checkoutViewModel: Checkou
                     loyaltyView.loyaltyAlertView?.visibility =View.VISIBLE
                     textViewTouchPoints.text = "= "+"0 "+tapLoyaltyModel?.loyaltyPointsName
                 }else{
-                    var touchPoints :BigDecimal= s.toString().toBigDecimal().times(BigDecimal.valueOf(20))
+                    val touchPoints :BigDecimal= s.toString().toBigDecimal().times(BigDecimal.valueOf(20))
                     textViewTouchPoints.text = "= "+touchPoints+" "+tapLoyaltyModel?.loyaltyPointsName
                     loyaltyView.loyaltyAlertView?.visibility =View.GONE
                     reCalculateTouchPoints(initialTouchPoints,touchPoints.toInt())
@@ -220,6 +220,10 @@ class LoyaltyViewHolder(private val context: Context, checkoutViewModel: Checkou
         if (previousTouchPoints != null) {
             newTouchPoints = previousTouchPoints-reflectedTouchPoints
 
+            if(newTouchPoints!! > initialTouchPoints!!){
+                loyaltyView.loyaltyAlertView?.visibility = View.VISIBLE
+                return
+            }
 
             if (newBalance!!.toInt() >= 0 && newBalance!!.toInt() <= newTouchPoints!!) {
                 textViewRemainPoints.text =
