@@ -2,6 +2,7 @@ package company.tap.checkout.internal.adapter
 
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Color.parseColor
@@ -13,6 +14,7 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
@@ -33,9 +35,14 @@ import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.utils.PaymentsUtil
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
+import kotlinx.android.synthetic.main.item_benefit_pay.view.*
 import kotlinx.android.synthetic.main.item_googlepay.view.*
 import kotlinx.android.synthetic.main.item_knet.view.*
 import kotlinx.android.synthetic.main.item_save_cards.view.*
+import mobi.foo.benefitinapp.data.Transaction
+import mobi.foo.benefitinapp.listener.BenefitInAppButtonListener
+import mobi.foo.benefitinapp.listener.CheckoutListener
+import mobi.foo.benefitinapp.utils.BenefitInAppCheckout
 import kotlin.collections.ArrayList
 
 
@@ -60,6 +67,12 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     private var __context: Context? = null
     private var totalArraySize: Int =0
 
+    val appId:String="4530082749"
+    val merchantId:String="00000101"
+    val seceret:String="3l5e0cstdim11skgwoha8x9vx9zo0kxxi4droryjp4eqd"
+    val countrycode:String="1001"
+    val mcc:String="4816"
+
     // A client for interacting with the Google Pay API.
     private var paymentsClient: PaymentsClient? = null
     companion object {
@@ -67,6 +80,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         private const val TYPE_REDIRECT = 2
         private const val TYPE_GO_PAY = 3
         private const val TYPE_GOOGLE_PAY = 4
+        private const val TYPE_3PPG = 1
     }
 
     fun updateAdapterData(adapterContent: List<PaymentOption>) {
@@ -109,6 +123,11 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                         LayoutInflater.from(parent.context).inflate(R.layout.item_googlepay, parent, false)
                 GooglePayViewHolder(view)
             }
+            TYPE_3PPG -> {
+                view =
+                        LayoutInflater.from(parent.context).inflate(R.layout.item_benefit_pay, parent, false)
+                GooglePayViewHolder(view)
+            }
             else -> {
                 view =
                     LayoutInflater.from(parent.context).inflate(R.layout.item_gopay, parent, false)
@@ -120,11 +139,15 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     override fun getItemViewType(position: Int): Int {
       //  println("position value are>>>" + position)
       //  println("totalArraySize value are>>>" + totalArraySize)
-      //  println("adapterContent value are>>>" + adapterContent.size)
         if(position < adapterContent.size){
             if(adapterContent[position].paymentType==PaymentType.WEB){
-                (adapterContent[position]).image?.let { arrayListRedirect.add(it) }
-                return TYPE_REDIRECT
+                println("adapterContent value are>>>" + adapterContent[position].brand?.name)
+                if(adapterContent[position].brand?.name?.equals("benefit") == true){
+                        return TYPE_3PPG
+                    }else {
+                        (adapterContent[position]).image?.let { arrayListRedirect.add(it) }
+                        return TYPE_REDIRECT
+                    }
             }
 
         }
@@ -190,6 +213,13 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
              */
             getItemViewType(position) == TYPE_SAVED_CARD -> {
                 typeSavedCard(holder, position)
+            }
+            /**
+             * 3Rd PartyPG Type
+             */
+            getItemViewType(position) == TYPE_3PPG -> {
+                setAlphaWhenShaking(isShaking, holder)
+                type3PPG(holder, position)
             }
             /**
              * Knet Type
@@ -373,6 +403,47 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         (holder as SingleViewHolder)
         holder.itemView.setOnClickListener {if (!isShaking) { setOnRedirectCardOnClickAction(holder, position) }}
         bindRedirectCardImage(holder)
+    }
+
+    private fun type3PPG(holder: RecyclerView.ViewHolder, position: Int) {
+        holder.itemView.checkout_btn.setListener(object : BenefitInAppButtonListener,
+            CheckoutListener {
+            override fun onButtonClicked() {
+                Toast.makeText(__context, "type3ppg", Toast.LENGTH_SHORT).show()
+                BenefitInAppCheckout.newInstance(
+                    __context as Activity,
+                    appId,
+                    "445544",
+                    merchantId,
+                    seceret,
+                    "20.0",
+                    "BH",
+                    "048",
+                    mcc,
+                    "Tap",
+                    "Manama",
+                    this)
+                println("values set in benefit checckout are ${"app val : "+ appId +"merchant id :"+ merchantId +"sceret : " + seceret+"countrycode are :"+ countrycode +"mcc val : "+mcc } ")
+            }
+
+            override fun onFail(p0: Int) {
+                println("failed is value is  ${p0}")
+                Toast.makeText(__context, "onFail"+p0, Toast.LENGTH_SHORT).show()
+
+
+            }
+
+            override fun onTransactionSuccess(p0: Transaction?) {
+                Toast.makeText(__context, "onTransactionSuccess"+p0, Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onTransactionFail(p0: Transaction?) {
+                Toast.makeText(__context, "onTransactionFail"+p0, Toast.LENGTH_SHORT).show()
+            }
+
+
+        })
+
     }
 
     private fun typeGooglePay(holder: RecyclerView.ViewHolder, position: Int) {

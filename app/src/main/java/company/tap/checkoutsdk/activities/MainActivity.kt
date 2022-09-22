@@ -42,11 +42,13 @@ import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.models.DialogConfigurations
 import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
+import mobi.foo.benefitinapp.data.Transaction
+import mobi.foo.benefitinapp.listener.CheckoutListener
 import java.math.BigDecimal
 import java.util.*
 
 
-class MainActivity : AppCompatActivity(), SessionDelegate {
+class MainActivity : AppCompatActivity(), SessionDelegate , CheckoutListener {
     private var settingsManager: SettingsManager? = null
     var sdkSession: SDKSession = SDKSession
     private val payButton by lazy { findViewById<TabAnimatedActionButton>(R.id.payButton) }
@@ -868,6 +870,15 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
             return false
         }
         return true
+    }
+
+    override fun onTransactionSuccess(p0: Transaction?) {
+        Toast.makeText(this, "onTransactionSuccess"+p0, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onTransactionFail(p0: Transaction?) {
+        Toast.makeText(this, "onTransactionFail"+p0, Toast.LENGTH_SHORT).show()
+
     }
 
 }

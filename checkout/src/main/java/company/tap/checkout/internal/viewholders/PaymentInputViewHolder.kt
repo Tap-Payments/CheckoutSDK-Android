@@ -55,6 +55,7 @@ import company.tap.tapuilibrary.uikit.models.SectionTabItem
 import company.tap.tapuilibrary.uikit.views.TapAlertView
 import company.tap.tapuilibrary.uikit.views.TapMobilePaymentView
 import company.tap.tapuilibrary.uikit.views.TapSelectionTabLayout
+import kotlinx.android.synthetic.main.loyalty_view_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 
 
@@ -71,7 +72,8 @@ class PaymentInputViewHolder(
     private val switchViewHolder: SwitchViewHolder?,
     private val baseLayoutManager: BaseLayoutManager,
     private val cardViewModel: CardViewModel,
-    private val checkoutFragment: CheckoutFragment
+    private val checkoutFragment: CheckoutFragment,
+    private val loyaltyViewHolder: LoyaltyViewHolder?,
 ) : TapBaseViewHolder,
     TapSelectionTabLayoutInterface, CardInputListener, TapPaymentShowHideClearImage {
     override val view: View =
@@ -202,6 +204,7 @@ class PaymentInputViewHolder(
             println("clearView is cleared")
             clearCardInputAction()
             CustomUtils.hideKeyboardFrom(context,it)
+            loyaltyViewHolder?.view?.loyaltyView?.constraintLayout?.visibility = View.GONE
         }
     }
 

@@ -50,7 +50,7 @@ class LoyaltyViewHolder(private val context: Context, checkoutViewModel: Checkou
     private var bankLogo: String? = null
     private var tapLoyaltyModel: TapLoyaltyModel?=null
     private var arrayListLoyal:List<LoyaltySupportedCurrency> = java.util.ArrayList()
-    private var  newBalance:Int?=0
+    private var  newBalance:BigDecimal?= BigDecimal.ZERO
     private var  newTouchPoints:Int?=0
     private var  initialBalance:Int?=0
     private var  initialTouchPoints:Int?=0
@@ -108,7 +108,7 @@ class LoyaltyViewHolder(private val context: Context, checkoutViewModel: Checkou
         textViewRemainPoints.text = remainingPointsText+" "+tapLoyaltyModel?.loyaltyPointsName+" : "+arrayListLoyal?.get(1).balance
         remainingAmountText  =LocalizationManager.getValue("footerView","TapLoyaltySection","amount")
 
-        reCalculateAmount(initialBalance,editTextAmount.text.toString().toInt())
+        reCalculateAmount(initialBalance?.toBigDecimal(),editTextAmount.text.toString().toBigDecimal())
 
 
     }
@@ -183,7 +183,7 @@ class LoyaltyViewHolder(private val context: Context, checkoutViewModel: Checkou
                 }
                 if(!s.isNullOrEmpty()){
                     if(s.contains(".")){
-                        reCalculateAmount(initialBalance,s.toString().replace(".","").toInt())
+                        reCalculateAmount(initialBalance?.toBigDecimal(),s.toString().replace(".","").toBigDecimal())
                     }
 
                     onPaymentCardComplete.onPaymentCardIsLoyaltyCard(true)
@@ -192,14 +192,14 @@ class LoyaltyViewHolder(private val context: Context, checkoutViewModel: Checkou
         })
     }
 
-    private fun reCalculateAmount(previousBalance:Int?,amountTypedInText:Int){
+    private fun reCalculateAmount(previousBalance:BigDecimal?,amountTypedInText:BigDecimal){
         println("previousBalance>>"+previousBalance)
         println("newBalance>>"+newBalance)
         if (previousBalance != null) {
-            newBalance = previousBalance-amountTypedInText
+            newBalance = previousBalance.minus(amountTypedInText)
 
 
-                if (newBalance!!.toInt() >= 0 && newBalance!!.toInt() <= previousBalance) {
+                if (newBalance!!.toInt() >= 0 && newBalance!!.toInt() <= previousBalance.toInt()) {
                     textViewRemainAmount.text =
                         remainingAmountText + " : " + arrayListLoyal?.get(1).currency + " " + newBalance
                 } else {

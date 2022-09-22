@@ -17,6 +17,7 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
 import androidx.annotation.RestrictTo
@@ -92,10 +93,15 @@ import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.businessview_layout.view.*
 import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
 import kotlinx.android.synthetic.main.gopaysavedcard_layout.view.*
+import kotlinx.android.synthetic.main.item_benefit_pay.view.*
 import kotlinx.android.synthetic.main.itemviewholder_layout.view.*
 import kotlinx.android.synthetic.main.loyalty_view_layout.view.*
 import kotlinx.android.synthetic.main.otpview_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
+import mobi.foo.benefitinapp.data.Transaction
+import mobi.foo.benefitinapp.listener.BenefitInAppButtonListener
+import mobi.foo.benefitinapp.listener.CheckoutListener
+import mobi.foo.benefitinapp.utils.BenefitInAppCheckout
 import org.json.JSONException
 import org.json.JSONObject
 import java.math.BigDecimal
@@ -110,7 +116,7 @@ import kotlin.properties.Delegates
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedActionListener,
     PaymentCardComplete, onCardNFCCallListener, OnCurrencyChangedActionListener, WebViewContract,
-    TapTextRecognitionCallBack , TapScannerCallback {
+    TapTextRecognitionCallBack , TapScannerCallback , CheckoutListener {
     private var savedCardList = MutableLiveData<List<SavedCard>>()
     private var supportedLoyalCards = MutableLiveData<List<LoyaltySupportedCurrency>>()
     private var paymentOptionsList = MutableLiveData<List<PaymentOption>>()
@@ -206,7 +212,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private val googlePayButton: View? = null
 
-
+    val appId:String="4530082749"
+    val merchantId:String="00000101"
+    val seceret:String="3l5e0cstdim11skgwoha8x9vx9zo0kxxi4droryjp4eqd"
+    val countrycode:String="1001"
+    val mcc:String="4816"
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun initLayoutManager(
@@ -254,9 +264,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun initLoyaltyView() {
         if(SDKSession.enableLoyalty== true){
-/*            removeViews(saveCardSwitchHolder)
+            /*removeViews(saveCardSwitchHolder)
             addViews(loyaltyViewHolder,saveCardSwitchHolder)*/
-                removeAllViews()
+               removeAllViews()
             addViews(businessViewHolder,amountViewHolder,cardViewHolder,paymentInputViewHolder,loyaltyViewHolder,saveCardSwitchHolder)
             loyaltyViewHolder.view.loyaltyView.constraintLayout?.visibility = View.VISIBLE
 
@@ -371,13 +381,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         cardViewHolder = CardViewHolder(context, this)
         goPaySavedCardHolder = GoPaySavedCardHolder(context, this, this)
         saveCardSwitchHolder = SwitchViewHolder(context)
+        loyaltyViewHolder = LoyaltyViewHolder(context,this,this)
+
         paymentInputViewHolder = PaymentInputViewHolder(
                 context,
                 this,
                 this,
                 saveCardSwitchHolder,
                 this,
-                cardViewModel,checkoutFragment
+                cardViewModel,checkoutFragment, loyaltyViewHolder
         )
 
         itemsViewHolder = ItemsViewHolder(context, this)
@@ -390,7 +402,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         otpViewHolder.otpView.otpViewInput1.isCursorVisible = true
         goPayViewsHolder = GoPayViewsHolder(context, this, otpViewHolder)
         asynchronousPaymentViewHolder = AsynchronousPaymentViewHolder(context, this)
-        loyaltyViewHolder = LoyaltyViewHolder(context,this,this)
         // nfcViewHolder = NFCViewHolder(context as Activity, context, this, fragmentManager)
         logicForLoyaltyProgram()
     }
@@ -442,6 +453,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                             saveCardSwitchHolder
                     )
                 }else
+                    //Checkimg to be removed once loyalty enabled form api level onluy else will be there
                     if(SDKSession.enableLoyalty== true){
                 addViews(
                         businessViewHolder,
@@ -876,7 +888,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             saveCardSwitchHolder,
             this,
             cardViewModel,
-            checkoutFragment
+            checkoutFragment,loyaltyViewHolder
         )
       //  paymentInputViewHolder.tabLayout.setUnselectedAlphaLevel(1.0f)
         if (::paymentInputViewHolder.isInitialized)
@@ -1446,6 +1458,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCardSelectedAction(isSelected: Boolean, savedCardsModel: Any?) {
 
+
         /**
          * Clear card input text
          */
@@ -1468,6 +1481,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         setPayButtonAction(PaymentType.WEB, savedCardsModel)
                     }
                 } else
+
                     displayGoPayLogin()
             }
         }
@@ -1633,6 +1647,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     }
 
+
+
     override fun onPayCardSwitchAction(isCompleted: Boolean, paymentType: PaymentType) {
         println("isCompleted???" + isCompleted)
         if (isCompleted) {
@@ -1642,7 +1658,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             saveCardSwitchHolder?.setSwitchToggleData(paymentType)
             loyaltyViewHolder.view.loyaltyView?.constraintLayout?.visibility = View.VISIBLE
            // loyatFlag = true
-           // initLoyaltyView()
+          //  initLoyaltyView() // Will be enabled when coming from API directly
             activateActionButton()
             paymentActionType = paymentType
         } else {
@@ -2693,6 +2709,34 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
             }))
     }
+
+     fun onButtonClicked() {
+        println("onButtonClicked")
+        BenefitInAppCheckout.newInstance(
+            context as Activity,
+            appId,
+            "448544",
+            merchantId,
+            seceret,
+            "20.0",
+            "BH",
+            "048",
+            mcc,
+            "Tap",
+            "Manama",
+           this)
+    }
+
+
+    override fun onTransactionSuccess(p0: Transaction?) {
+        println("transaction is success $p0")
+
+    }
+
+    override fun onTransactionFail(p0: Transaction?) {
+        println("onTransactionFail is  $p0")
+    }
+
 
 }
 

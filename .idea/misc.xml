@@ -18,15 +18,19 @@
         <entry key="checkout/src/main/res/drawable/layout_bg.xml" value="0.25" />
         <entry key="checkout/src/main/res/layout/activity_check_out.xml" value="0.15231187669990934" />
         <entry key="checkout/src/main/res/layout/amountview_layout.xml" value="0.128739800543971" />
+        <entry key="checkout/src/main/res/layout/benefitpay_button.xml" value="0.17281420765027322" />
         <entry key="checkout/src/main/res/layout/businessview_layout.xml" value="0.125" />
         <entry key="checkout/src/main/res/layout/cardviewholder_layout1.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/fragment_checkouttaps.xml" value="0.335" />
         <entry key="checkout/src/main/res/layout/fragment_checkouttaps_full.xml" value="0.15231187669990934" />
         <entry key="checkout/src/main/res/layout/fragment_web.xml" value="0.1" />
+        <entry key="checkout/src/main/res/layout/googlepay_button.xml" value="0.13558743169398907" />
         <entry key="checkout/src/main/res/layout/gopaysavedcard_layout.xml" value="0.2364258230012826" />
+        <entry key="checkout/src/main/res/layout/item_benefit_pay.xml" value="0.46075286865234377" />
         <entry key="checkout/src/main/res/layout/item_googlepay.xml" value="0.15519452757588714" />
         <entry key="checkout/src/main/res/layout/item_knet.xml" value="0.15519452757588714" />
         <entry key="checkout/src/main/res/layout/item_paypal.xml" value="0.335" />
+        <entry key="checkout/src/main/res/layout/item_save_cards.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/itemviewholder_layout.xml" value="0.128739800543971" />
         <entry key="checkout/src/main/res/layout/loyalty_view_layout.xml" value="0.20949123557075675" />
         <entry key="checkout/src/main/res/layout/payment_inputt_layout.xml" value="0.1" />
