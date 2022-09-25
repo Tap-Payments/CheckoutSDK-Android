@@ -57,7 +57,7 @@ class LoyaltyViewHolder(private val context: Context, checkoutViewModel: Checkou
     private var  initialTouchPoints:Int?=0
     private var remainingAmountText:String ?=null
     private var remainingPointsText:String ?=null
-
+    private var alertMessage:String ?=null
     init {
         bindViewComponents()
 
@@ -101,7 +101,7 @@ class LoyaltyViewHolder(private val context: Context, checkoutViewModel: Checkou
                 context.startActivity(intent)
             }))
         editTextAmount.setText("320")
-        val alertMessage:String=LocalizationManager.getValue("hintView","TapLoyaltySection","minimumWarning")
+       alertMessage =LocalizationManager.getValue("hintView","TapLoyaltySection","minimumWarning")
         loyaltyView.loyaltyAlertView?.alertMessage?.text = alertMessage+" "+arrayListLoyal?.get(1).currency+"20.00"
         loyaltyView.loyaltyAlertView?.visibility =View.GONE
 
@@ -175,6 +175,8 @@ class LoyaltyViewHolder(private val context: Context, checkoutViewModel: Checkou
             override fun afterTextChanged(s: Editable) {
                 if(s.toString().isNullOrEmpty()){
                     loyaltyView.loyaltyAlertView?.visibility =View.VISIBLE
+                    loyaltyView.loyaltyAlertView?.alertMessage?.text = alertMessage+" "+arrayListLoyal?.get(1).currency+"20.00"
+
                     textViewTouchPoints.text = "= "+"0 "+tapLoyaltyModel?.loyaltyPointsName
                 }else{
                     val touchPoints :BigDecimal= s.toString().toBigDecimal().times(BigDecimal.valueOf(20))
@@ -205,6 +207,7 @@ class LoyaltyViewHolder(private val context: Context, checkoutViewModel: Checkou
                         remainingAmountText + " : " + arrayListLoyal?.get(1).currency + " " + newBalance
                 } else {
                     loyaltyView.loyaltyAlertView?.visibility = View.VISIBLE
+                    loyaltyView.loyaltyAlertView?.alertMessage?.text = alertMessage+" "+arrayListLoyal?.get(1).currency+"20.00"
 
                     textViewRemainAmount.text =
                         remainingAmountText + " : " + arrayListLoyal?.get(1).currency + "  " + initialBalance
@@ -221,10 +224,10 @@ class LoyaltyViewHolder(private val context: Context, checkoutViewModel: Checkou
         if (previousTouchPoints != null) {
             newTouchPoints = previousTouchPoints-reflectedTouchPoints
 
-            if(newTouchPoints!! >0 &&newTouchPoints!!  < tapLoyaltyModel?.transactionsCount?.replace(",","")?.toInt()!!){
+            if(newTouchPoints!! < 0 && newTouchPoints!!  < tapLoyaltyModel?.transactionsCount?.replace(",","")?.toInt()!!){
                 loyaltyView.loyaltyAlertView?.visibility = View.VISIBLE
                 loyaltyView.loyaltyAlertView?.alertMessage?.text = "Insufficent Touchpoints"
-                return
+
             }
 
             if (newBalance!!.toInt() >= 0 && newBalance!!.toInt() <= newTouchPoints!!) {
