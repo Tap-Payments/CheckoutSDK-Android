@@ -2096,11 +2096,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onRecognitionSuccess(card: TapCard?) {
 //to be added for unembossed cards
-        if (card != null) {
+       /* if (card != null) {
             if (card.cardNumber != null && card.cardHolder != null && card.expirationDate != null) {
                onReadSuccess(card)
             }
-        }
+        }*/
 
 
     }
@@ -2667,13 +2667,18 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onReadSuccess(card: TapCard?) {
-        if (card != null) {
+     /*   if (card != null) {
             if(card.cardNumber!=null)
            handleScanSuccessResult(card)
-           /* Log.d("checkOutViewModel", "onRecognitionSuccess: " + card.cardNumber)
+           *//* Log.d("checkOutViewModel", "onRecognitionSuccess: " + card.cardNumber)
             Log.d("checkOutViewModel", "onRecognitionSuccess: " + card.expirationDate)
-            Log.d("checkOutViewModel", "onRecognitionSuccess: " + card.cardHolder)*/
+            Log.d("checkOutViewModel", "onRecognitionSuccess: " + card.cardHolder)*//*
 
+        }*/
+        if (card != null) {
+            if (card.cardNumber != null && card.cardHolder != null && card.expirationDate != null) {
+                handleScanSuccessResult(card)
+            }
         }
     }
 

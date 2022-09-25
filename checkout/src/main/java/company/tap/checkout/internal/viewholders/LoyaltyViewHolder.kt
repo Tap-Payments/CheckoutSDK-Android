@@ -24,6 +24,7 @@ import company.tap.tapuilibrary.uikit.atoms.TextInputEditText
 import company.tap.tapuilibrary.uikit.datasource.LoyaltyHeaderDataSource
 import company.tap.tapuilibrary.uikit.ktx.makeLinks
 import company.tap.tapuilibrary.uikit.organisms.TapLoyaltyView
+import kotlinx.android.synthetic.main.alertdialog_view_layout.view.*
 import kotlinx.android.synthetic.main.loyalty_view_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 import java.math.BigDecimal
@@ -220,8 +221,9 @@ class LoyaltyViewHolder(private val context: Context, checkoutViewModel: Checkou
         if (previousTouchPoints != null) {
             newTouchPoints = previousTouchPoints-reflectedTouchPoints
 
-            if(newTouchPoints!! > initialTouchPoints!!){
+            if(newTouchPoints!! >0 &&newTouchPoints!!  < tapLoyaltyModel?.transactionsCount?.replace(",","")?.toInt()!!){
                 loyaltyView.loyaltyAlertView?.visibility = View.VISIBLE
+                loyaltyView.loyaltyAlertView?.alertMessage?.text = "Insufficent Touchpoints"
                 return
             }
 
