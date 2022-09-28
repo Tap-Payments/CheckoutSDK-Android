@@ -3,37 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="app/src/main/res/layout/activity_customer.xml" value="0.21940163191296463" />
-        <entry key="app/src/main/res/layout/activity_customer_create.xml" value="0.5" />
-        <entry key="app/src/main/res/layout/activity_item.xml" value="0.18683197947840957" />
-        <entry key="app/src/main/res/layout/activity_items_create.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/activity_items_object_create.xml" value="0.2231722958529286" />
-        <entry key="app/src/main/res/layout/crud_toolbar.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/customer_layout.xml" value="0.15989739204788372" />
-        <entry key="app/src/main/res/layout/customer_toolbar.xml" value="0.15989739204788372" />
-        <entry key="app/src/main/res/layout/items_layout.xml" value="0.18683197947840957" />
-        <entry key="app/src/main/res/xml/root_preferences.xml" value="0.1" />
-        <entry key="checkout/src/main/res/drawable/background_react.xml" value="0.375" />
-        <entry key="checkout/src/main/res/drawable/layout_bb.xml" value="0.157" />
-        <entry key="checkout/src/main/res/drawable/layout_bg.xml" value="0.25" />
-        <entry key="checkout/src/main/res/layout/activity_check_out.xml" value="0.15231187669990934" />
-        <entry key="checkout/src/main/res/layout/amountview_layout.xml" value="0.128739800543971" />
-        <entry key="checkout/src/main/res/layout/benefitpay_button.xml" value="0.17281420765027322" />
-        <entry key="checkout/src/main/res/layout/businessview_layout.xml" value="0.125" />
+        <entry key="checkout/src/main/res/drawable/cc.xml" value="0.2335" />
+        <entry key="checkout/src/main/res/drawable/close_ic.xml" value="0.2335" />
+        <entry key="checkout/src/main/res/layout/activity_check_out.xml" value="0.1437841530054645" />
         <entry key="checkout/src/main/res/layout/cardviewholder_layout1.xml" value="0.1" />
-        <entry key="checkout/src/main/res/layout/fragment_checkouttaps.xml" value="0.335" />
-        <entry key="checkout/src/main/res/layout/fragment_checkouttaps_full.xml" value="0.15231187669990934" />
-        <entry key="checkout/src/main/res/layout/fragment_web.xml" value="0.1" />
-        <entry key="checkout/src/main/res/layout/googlepay_button.xml" value="0.13558743169398907" />
-        <entry key="checkout/src/main/res/layout/gopaysavedcard_layout.xml" value="0.2364258230012826" />
-        <entry key="checkout/src/main/res/layout/item_benefit_pay.xml" value="0.46075286865234377" />
-        <entry key="checkout/src/main/res/layout/item_googlepay.xml" value="0.15519452757588714" />
-        <entry key="checkout/src/main/res/layout/item_knet.xml" value="0.15519452757588714" />
-        <entry key="checkout/src/main/res/layout/item_paypal.xml" value="0.335" />
-        <entry key="checkout/src/main/res/layout/item_save_cards.xml" value="0.1" />
-        <entry key="checkout/src/main/res/layout/itemviewholder_layout.xml" value="0.128739800543971" />
-        <entry key="checkout/src/main/res/layout/loyalty_view_layout.xml" value="0.20949123557075675" />
-        <entry key="checkout/src/main/res/layout/payment_inputt_layout.xml" value="0.1" />
+        <entry key="checkout/src/main/res/layout/fragment_checkouttaps.xml" value="0.1437841530054645" />
+        <entry key="checkout/src/main/res/layout/item_saved_card.xml" value="0.1445945945945946" />
+        <entry key="checkout/src/main/res/layout/loyalty_view_layout.xml" value="0.1437841530054645" />
+        <entry key="checkout/src/main/res/layout/payment_inputt_layout.xml" value="0.1437841530054645" />
+        <entry key="checkout/src/main/res/layout/switch_layout.xml" value="0.14290540540540542" />
       </map>
     </option>
   </component>

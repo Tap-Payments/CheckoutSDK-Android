@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import company.tap.checkout.R
 import company.tap.checkout.internal.enums.SectionType
+import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.atoms.TapImageView
 import company.tap.tapuilibrary.uikit.datasource.HeaderDataSource
 import gotap.com.tapglkitandroid.gl.Views.TapLoadingView
 import kotlinx.android.synthetic.main.businessview_layout.view.*
@@ -20,7 +22,7 @@ import kotlinx.android.synthetic.main.businessview_layout.view.*
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class BusinessViewHolder(private val context: Context) : TapBaseViewHolder {
+class BusinessViewHolder( context: Context, private  val checkoutViewModel: CheckoutViewModel) : TapBaseViewHolder {
 
 
     override val view: View =
@@ -30,6 +32,8 @@ class BusinessViewHolder(private val context: Context) : TapBaseViewHolder {
 
     private var merchantName: String? = null
     private var merchantLogo: String? = null
+   private var tapCloseIcon : TapImageView= view.findViewById(R.id.tapCloseIcon)
+
 
 
     init {
@@ -51,6 +55,10 @@ class BusinessViewHolder(private val context: Context) : TapBaseViewHolder {
             view.headerView.businessIcon.visibility= View.VISIBLE
             view.headerView.showHideLoading(false)
             view.headerView.constraint.visibility= View.VISIBLE
+
+                tapCloseIcon.setOnClickListener {
+                    checkoutViewModel?.dismissBottomSheet()
+                }
 
         }
         /**

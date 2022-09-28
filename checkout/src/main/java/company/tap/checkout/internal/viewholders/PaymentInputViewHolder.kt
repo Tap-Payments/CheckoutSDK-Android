@@ -16,6 +16,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import androidx.annotation.RequiresApi
 import androidx.core.widget.doAfterTextChanged
 import com.google.android.material.tabs.TabLayout
@@ -49,6 +50,7 @@ import company.tap.tapcardvalidator_android.CardValidator
 import company.tap.tapcardvalidator_android.DefinedCardBrand
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.datasource.LoyaltyHeaderDataSource
 import company.tap.tapuilibrary.uikit.interfaces.TapPaymentShowHideClearImage
 import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
 import company.tap.tapuilibrary.uikit.models.SectionTabItem
@@ -111,6 +113,7 @@ class PaymentInputViewHolder(
     var resetView:Boolean = false
     private var displayMetrics: Int? = 0
     private var height: Int=0
+    lateinit var constraintt :LinearLayout
     init {
         tabLayout.setTabLayoutInterface(this)
         tapMobileInputView = TapMobilePaymentView(context, null)
@@ -124,7 +127,8 @@ class PaymentInputViewHolder(
        // tabLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.backgroundColor")))
         tabLayout.changeTabItemMarginBottomValue(10)
         tabLayout.changeTabItemMarginTopValue(10)
-
+        constraintt= view.findViewById(R.id.constraintt)
+        constraintt.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
         bindViewComponents()
 
     }
@@ -205,6 +209,7 @@ class PaymentInputViewHolder(
             clearCardInputAction()
             CustomUtils.hideKeyboardFrom(context,it)
             loyaltyViewHolder?.view?.loyaltyView?.constraintLayout?.visibility = View.GONE
+            tabLayout.visibility = View.VISIBLE
         }
     }
 
@@ -274,7 +279,7 @@ class PaymentInputViewHolder(
         )
         displayMetrics = CustomUtils.getDeviceDisplayMetrics(context as Activity)
         println("displayMetrics>>")
-        if(displayMetrics == DisplayMetrics.DENSITY_420||displayMetrics == DisplayMetrics.DENSITY_450 ||displayMetrics == DisplayMetrics.DENSITY_440||displayMetrics == DisplayMetrics.DENSITY_560){
+       if(displayMetrics == DisplayMetrics.DENSITY_420||displayMetrics == DisplayMetrics.DENSITY_450 ||displayMetrics == DisplayMetrics.DENSITY_440||displayMetrics == DisplayMetrics.DENSITY_560){
             layoutParams.setMargins(0, -10, -115, 0) //for holder enabel
 
         }else if (displayMetrics == DisplayMetrics.DENSITY_300||displayMetrics == DisplayMetrics.DENSITY_XHIGH || displayMetrics == DisplayMetrics.DENSITY_340||displayMetrics == DisplayMetrics.DENSITY_360){
@@ -287,7 +292,7 @@ class PaymentInputViewHolder(
 
             }else layoutParams.setMargins(0, -10, 50, 0)
         }
-
+     //   layoutParams.setMargins(0, -10, 50, 0)
         paymentInputContainer.layoutParams = layoutParams
         paymentInputContainer.addView(tapCardInputView)
 
@@ -382,7 +387,7 @@ class PaymentInputViewHolder(
                  */
                 cvvNumber = s.toString()
                 if (s?.trim()?.length == 3 || s?.trim()?.length == 4) {
-                    cardNumber?.let {
+                    maskCardNumber(cardNumber.toString())?.let {
                         expiryDate?.let { it1 ->
                             cvvNumber?.let { it2 ->
                                 onPaymentCardComplete.onPayCardCompleteAction(
@@ -451,6 +456,8 @@ class PaymentInputViewHolder(
              */
             cardNumber = charSequence.toString()
 
+
+
             lastCardInput = it.toString()
             shouldShowScannerOptions = it.isEmpty()
             controlScannerOptions()
@@ -474,16 +481,22 @@ class PaymentInputViewHolder(
                     true
                 )
             }
+            tapCardInputView.setSingleCardInput(CardBrandSingle.fromCode(binLookupResponse?.cardBrand.toString()))
+
 //            tabLayout.setUnselectedAlphaLevel(0.5f)
         } else {
             //we will send scheme
                 schema = binLookupResponse?.scheme
 
 
-            binLookupResponse?.scheme?.cardBrand?.let { it1 -> tabLayout.selectTab(it1, false) }
+            binLookupResponse?.scheme?.cardBrand?.let { it1 -> tabLayout.selectTab(it1, false)
+            }
+            tapCardInputView.setSingleCardInput(CardBrandSingle.fromCode(binLookupResponse?.scheme?.cardBrand.toString()))
+
 //            tabLayout.setUnselectedAlphaLevel(0.5f)
 
         }
+        tabLayout.visibility = View.GONE
        // PaymentDataSource.setBinLookupResponse(null)
     }
 
@@ -836,7 +849,11 @@ class PaymentInputViewHolder(
     }
 
 
-
+    private fun maskCardNumber(cardInput: String): String {
+        val maskLen: Int = cardInput.length - 4
+        if (maskLen <= 0) return cardInput // Nothing to mask
+        return (cardInput).replaceRange(0, maskLen, "•••• ")
+    }
 
     }
 

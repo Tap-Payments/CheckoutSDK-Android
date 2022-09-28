@@ -20,9 +20,16 @@
             android:id="@+id/separator_1"
             android:layout_width="wrap_content"
             android:layout_height="1dp"
+            android:visibility="gone"
+            android:background="@color/separator_color" />
+        <company.tap.tapuilibrary.uikit.atoms.TapTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/default_padding"
             android:layout_marginEnd="@dimen/default_padding"
-            android:background="@color/separator_color" />
+            android:textAllCaps="true"
+            android:textColor="#9F9F9F"
+            android:text="Card InFormation"/>
 
     </LinearLayout>
 

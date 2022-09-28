@@ -145,7 +145,7 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
 
             if(!hideAllView) {
                 Handler().postDelayed({
-                    closeImage.visibility = View.VISIBLE
+                    closeImage.visibility = View.GONE
 
                 }, 3000)
             }
@@ -153,7 +153,7 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
         } else {
             if(!hideAllView) {
                 Handler().postDelayed({
-                    closeText.visibility = View.VISIBLE
+                    closeText.visibility = View.GONE
 
                 }, 3000)
             }
@@ -421,6 +421,14 @@ if(checkOutActivity?.isGooglePayClicked == false){
             }
         })
     }*/
+
+    fun  dismissBottomSheetDialog(){
+        bottomSheetDialog.dismissWithAnimation
+        bottomSheetDialog.hide()
+        bottomSheetDialog.dismiss()
+        resetTabAnimatedButton()
+
+    }
 
 
 }
