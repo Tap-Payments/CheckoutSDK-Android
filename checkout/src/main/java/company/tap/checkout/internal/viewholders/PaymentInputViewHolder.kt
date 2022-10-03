@@ -16,6 +16,7 @@ import android.view.View
 import android.widget.*
 import androidx.annotation.ColorInt
 import androidx.annotation.RequiresApi
+import androidx.appcompat.widget.TooltipCompat
 import androidx.core.widget.doAfterTextChanged
 import com.google.android.material.tabs.TabLayout
 import company.tap.cardinputwidget.Card
@@ -48,6 +49,7 @@ import company.tap.tapcardvalidator_android.CardValidator
 import company.tap.tapcardvalidator_android.DefinedCardBrand
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.atoms.TapImageView
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.datasource.LoyaltyHeaderDataSource
 import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
@@ -121,6 +123,7 @@ class PaymentInputViewHolder(
     var secondaryLayout: LinearLayout? = null
     var textViewPowered: TapTextView? = null
     var saveForOtherCheckBox: CheckBox? = null
+    var toolstipImageView: TapImageView? = null
     init {
         tabLayout.setTabLayoutInterface(this)
         tapMobileInputView = TapMobilePaymentView(context, null)
@@ -134,6 +137,8 @@ class PaymentInputViewHolder(
         secondaryLayout = tapCardInputView.findViewById(R.id.secondary_Layout)
         textViewPowered = tapCardInputView.findViewById(R.id.textViewPowered)
         saveForOtherCheckBox = tapCardInputView.findViewById(R.id.saveForOtherCheckBox)
+        toolstipImageView = tapCardInputView.findViewById(R.id.toolsTipImageView)
+        initToolsTip()
         tapInlineCardSwitch?.setSwitchDataSource(TapSwitchDataSource("dummy",LocalizationManager.getValue("cardSaveLabel","TapCardInputKit"),"dummy","dummy","dummy"))
 
         tapSeparatorViewLinear = view.findViewById(R.id.tapSeparatorViewLinear)
@@ -148,6 +153,16 @@ class PaymentInputViewHolder(
         saveForOtherCheckBox?.text = "Save for other stores powered by Tap"
         saveForOtherCheckBox?.setTextColor(Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.brownGreySeven")))
         bindViewComponents()
+
+    }
+
+    private fun initToolsTip() {
+
+            toolstipImageView?.setOnClickListener {
+                TooltipCompat.setTooltipText(toolstipImageView!!, "Checkout everywhere in just one click. Tap is a better and secure way to pay locally across 100k+ stores. Your details are encrypted and can only be accessed by you. You’ll receive an email to get started and manage your details.")
+
+            }
+        toolstipImageView?.let { TooltipCompat.setTooltipText(it, "Checkout everywhere in just one click. Tap is a better and secure way to pay locally across 100k+ stores. Your details are encrypted and can only be accessed by you. You’ll receive an email to get started and manage your details.") }
 
     }
 
