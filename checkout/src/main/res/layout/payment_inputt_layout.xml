@@ -8,16 +8,12 @@
 
 
     <company.tap.tapuilibrary.uikit.organisms.TapPaymentInput
-        android:layout_marginTop="@dimen/margin_basic_10dp"
+
         android:id="@+id/tap_payment_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layoutDirection="locale" />
 
-    <company.tap.tapuilibrary.uikit.views.TapAlertView
-        android:id="@+id/alertView"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+
 
 </LinearLayout>

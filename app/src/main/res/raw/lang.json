@@ -1,11 +1,11 @@
 {
   "en": {
     "TapCardInputKit": {
-      "cardNumberPlaceHolder": "0000 0000 0000 0000",
+      "cardNumberPlaceHolder": "Card number",
       "cardNamePlaceHolder": "Card Holder name",
       "cardCVVPlaceHolder": "CVV",
       "cardExpiryPlaceHolder": "MM/YY",
-      "cardSaveLabel": "For faster and more secure checkout,\nsave your card",
+      "cardSaveLabel": "Save For Later",
       "emailPlaceHolder": "email@email.com",
       "cardUseNFCLabel": "For faster and easier checkout,\nuse card scanner or NFC.",
       "cardSaveLater": "For faster and easier checkout,\nsave the card for later."
@@ -147,7 +147,7 @@
   },
   "ar": {
     "TapCardInputKit": {
-      "cardNumberPlaceHolder": "0000 0000 0000 0000",
+      "cardNumberPlaceHolder": "رقم البطاق",
       "cardNamePlaceHolder": "إسم صاحب البطاقة",
       "cardCVVPlaceHolder": "الرمز الأمني",
       "cardExpiryPlaceHolder": "شهر/سنة",

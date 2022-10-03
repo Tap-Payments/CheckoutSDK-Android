@@ -747,5 +747,8 @@
         "amountTextColor" : "greyishBrown",
         "amountFont" : "Roboto-Regular,11"
     }
+},"poweredBYBranding": {
+    "poweredByTextColor" : "#626262",
+    "poweredByFont" : "Roboto-Regular,10"
 }
 }
