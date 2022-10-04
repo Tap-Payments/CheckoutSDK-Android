@@ -176,7 +176,6 @@ class PaymentInputViewHolder(
     override fun bindViewComponents() {
         initCardInput()
         initMobileInput()
-        initClearText()
         initializeCardForm()
         initializeIcons()
         tapMobileInputViewWatcher()
@@ -196,8 +195,11 @@ class PaymentInputViewHolder(
             checkoutViewModel.onClickCardScanner(true)
         }
         closeButton ?.setOnClickListener {
-           tapCardInputView?.clear()
+           tapCardInputView.clear()
             clearCardInputAction()
+            CustomUtils.hideKeyboardFrom(context,it)
+            loyaltyViewHolder?.view?.loyaltyView?.constraintLayout?.visibility = View.GONE
+            tabLayout.visibility = View.VISIBLE
         }
     }
 
@@ -209,10 +211,10 @@ class PaymentInputViewHolder(
             ///tabLayout?.changeTabItemMarginLeftValue(-10)
 
         }else{
-            tabLayout.changeTabItemMarginBottomValue(30)
-            tabLayout.changeTabItemMarginTopValue(40)
-            tabLayout.changeTabItemMarginRightValue(-30)
-            tabLayout.changeTabItemMarginRightValue(10)
+            tabLayout.changeTabItemMarginBottomValue(20)
+            tabLayout.changeTabItemMarginTopValue(30)
+            tabLayout.changeTabItemMarginLeftValue(-30)
+          //  tabLayout.changeTabItemMarginRightValue(10)
         }
 
 
@@ -257,15 +259,7 @@ class PaymentInputViewHolder(
         }
     }
 
-    private fun initClearText() {
-        clearView.setOnClickListener {
-            println("clearView is cleared")
-            clearCardInputAction()
-            CustomUtils.hideKeyboardFrom(context,it)
-            loyaltyViewHolder?.view?.loyaltyView?.constraintLayout?.visibility = View.GONE
-            tabLayout.visibility = View.VISIBLE
-        }
-    }
+
 
     fun clearCardInputAction() {
         if (selectedType == PaymentTypeEnum.card) {

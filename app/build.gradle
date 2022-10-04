@@ -52,8 +52,8 @@ dependencies {
 
     implementation 'com.koushikdutta.ion:ion:3.1.0'
 
-    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.358.72'
-    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.358.72'
+    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.358.73'
+    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.358.73'
     implementation 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.36.65'
     api 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.36.65'
     implementation 'company.tap:PayCards-Tap-Android:0.1.6.4'
