@@ -381,7 +381,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         loyaltyViewHolder = LoyaltyViewHolder(context,this,this)
 
         paymentInputViewHolder = PaymentInputViewHolder(
-                context,
+                context,this,
                 this,
                 this,
                 saveCardSwitchHolder,
@@ -404,7 +404,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     private fun initSwitchAction() {
-        saveCardSwitchHolder?.view?.mainSwitch?.mainSwitch?.visibility = View.VISIBLE
+        saveCardSwitchHolder?.view?.mainSwitch?.mainSwitch?.visibility = View.GONE
         //By Default switchGoPayCheckout will be hidden , will appear only when goPayLoggedin
         saveCardSwitchHolder?.view?.cardSwitch?.switchGoPayCheckout?.isChecked = false
         saveCardSwitchHolder?.view?.cardSwitch?.switchGoPayCheckout?.visibility = View.GONE
@@ -806,7 +806,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 otpViewHolder
         )
         //Added check change listener to handle showing of extra save options
-        saveCardSwitchHolder?.view?.mainSwitch?.switchSaveMobile?.visibility = View.VISIBLE
+        saveCardSwitchHolder?.view?.mainSwitch?.switchSaveMobile?.visibility = View.GONE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = View.GONE
         saveCardSwitchHolder?.view?.mainSwitch?.switchSaveMobile?.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) saveCardSwitchHolder?.view?.cardSwitch?.switchesLayout?.visibility =
@@ -880,6 +880,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     ) {
         paymentInputViewHolder = PaymentInputViewHolder(
             context,
+            this,
             this,
             this,
             saveCardSwitchHolder,

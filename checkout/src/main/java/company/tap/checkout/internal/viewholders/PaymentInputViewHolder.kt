@@ -72,6 +72,7 @@ import kotlinx.android.synthetic.main.switch_layout.view.*
 @RequiresApi(Build.VERSION_CODES.N)
 class PaymentInputViewHolder(
     private val context: Context,
+    private val checkoutViewModel: CheckoutViewModel,
     private val onPaymentCardComplete: PaymentCardComplete,
     private val onCardNFCCallListener: onCardNFCCallListener,
     private val switchViewHolder: SwitchViewHolder?,
@@ -94,10 +95,10 @@ class PaymentInputViewHolder(
     private var lastFocusField = CardInputListener.FocusField.FOCUS_CARD
     private var lastCardInput = ""
     private var cardScannerBtn: ImageView? = null
-    private var nfcButton: ImageView? = null
+   // private var nfcButton: ImageView? = null
     var tapCardInputView: InlineCardInput
     internal var tapMobileInputView: TapMobilePaymentView
-    private var linearLayoutPay: RelativeLayout? = null
+    private var linearLayoutPay: LinearLayout? = null
     private var tapSeparatorViewLinear: LinearLayout? = null
     private var tabPosition: Int? = null
     var tapAlertView: TapAlertView? = null
@@ -124,12 +125,18 @@ class PaymentInputViewHolder(
     var textViewPowered: TapTextView? = null
     var saveForOtherCheckBox: CheckBox? = null
     var toolstipImageView: TapImageView? = null
+    var nfcButton: ImageView? = null
+    var scannerButton: ImageView? = null
+    var closeButton: ImageView? = null
     init {
         tabLayout.setTabLayoutInterface(this)
         tapMobileInputView = TapMobilePaymentView(context, null)
         tapMobileInputView.setTapPaymentShowHideClearImage(this)
         tapCardInputView = InlineCardInput(context, null)
         tapAlertView = tapCardInputView.findViewById(R.id.alertView)
+        nfcButton = tapCardInputView.findViewById(R.id.nfc_button)
+        scannerButton = tapCardInputView.findViewById(R.id.card_scanner_button)
+        closeButton = tapCardInputView.findViewById(R.id.clear_text)
         //cardSwitchLayout = tapCardInputView.findViewById(R.id.mainSwitchInline)
         paymentInputContainer = view.findViewById(R.id.payment_input_layout)
         clearView = view.findViewById(R.id.clear_text)
@@ -151,7 +158,6 @@ class PaymentInputViewHolder(
         acceptedCardText= view.findViewById(R.id.acceptedCardText)
         acceptedCardText.text = "We accept"
         saveForOtherCheckBox?.text = "Save for other stores powered by Tap"
-        saveForOtherCheckBox?.setTextColor(Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.brownGreySeven")))
         bindViewComponents()
 
     }
@@ -172,6 +178,7 @@ class PaymentInputViewHolder(
         initMobileInput()
         initClearText()
         initializeCardForm()
+        initializeIcons()
         tapMobileInputViewWatcher()
         initializeCardBrandView()
         /**
@@ -180,6 +187,20 @@ class PaymentInputViewHolder(
         //  view.separator?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
         //setSeparatorTheme()
     }
+
+    private fun initializeIcons() {
+        nfcButton?.setOnClickListener {
+            checkoutViewModel.onClickNFC()
+        }
+        scannerButton?.setOnClickListener {
+            checkoutViewModel.onClickCardScanner(true)
+        }
+        closeButton ?.setOnClickListener {
+           tapCardInputView?.clear()
+            clearCardInputAction()
+        }
+    }
+
     private fun initializeCardBrandView() {
         if (displayMetrics == DisplayMetrics.DENSITY_260||displayMetrics == DisplayMetrics.DENSITY_280||displayMetrics == DisplayMetrics.DENSITY_300||displayMetrics == DisplayMetrics.DENSITY_XHIGH || displayMetrics == DisplayMetrics.DENSITY_340||displayMetrics == DisplayMetrics.DENSITY_360){
 
