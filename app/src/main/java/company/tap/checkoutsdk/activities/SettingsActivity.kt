@@ -41,6 +41,7 @@ class SettingsActivity : AppCompatActivity() {
             bindPreferenceSummaryToValue(findPreference("key_sdk_transaction_mode"))
             bindPreferenceSummaryToValue(findPreference("key_sdk_transaction_currency"))
             bindPreferenceSummaryToValue(findPreference("key_amount_name"))
+            bindPreferenceSummaryToValue(findPreference("key_default_holder_name"))
             bindPreferenceSummaryToValue(findPreference("key_package_name"))
              bindPreferenceSummaryToValue(findPreference("key_test_name"))
              bindPreferenceSummaryToValue(findPreference("key_live_name"))
@@ -50,6 +51,7 @@ class SettingsActivity : AppCompatActivity() {
             bindPreferenceSummaryToValue(findPreference("showImageKey"))
             bindPreferenceSummaryToValue(findPreference("useShippingEnableKey"))
             bindPreferenceSummaryToValue(findPreference("enableLoyaltyProgram"))
+            bindPreferenceSummaryToValue(findPreference("enableHolderName"))
 
         }
     }
@@ -115,6 +117,10 @@ class SettingsActivity : AppCompatActivity() {
                     // update the changed gallery name to summary filed
                     preference.setSummary(stringValue)
                 }
+                else if (preference.getKey().equals("key_default_holder_name")) {
+                    // update the changed gallery name to summary filed
+                    preference.setSummary(stringValue)
+                }
             } else if(preference is CheckBoxPreference){
                 if (preference.getKey().equals("showImageKey")) {
                     // update the changed gallery name to summary filed
@@ -122,6 +128,8 @@ class SettingsActivity : AppCompatActivity() {
                 } else  if (preference.getKey().equals("useShippingEnableKey")){
 
                 }else  if (preference.getKey().equals("enableLoyaltyProgram")){
+
+                }else  if (preference.getKey().equals("enableHolderName")){
 
                 }
             }

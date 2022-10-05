@@ -373,8 +373,10 @@ class MainActivity : AppCompatActivity(), SessionDelegate , CheckoutListener {
         }
         // sdkSession.setTransactionMode(TransactionMode.PURCHASE)
 
-        sdkSession.setDefaultCardHolderName("TEST TAP"); // ** Optional ** you can pass default CardHolderName of the user .So you don't need to type it.
-        sdkSession.isUserAllowedToEnableCardHolderName(false) // ** Optional ** you can enable/ disable  default CardHolderName .
+        sdkSession.setDefaultCardHolderName(settingsManager?.getString("key_default_holder_name","Tap Test")); // ** Optional ** you can pass default CardHolderName of the user .So you don't need to type it.
+        settingsManager?.getBoolean("enableHolderName",false)
+            ?.let { sdkSession.isUserAllowedToEnableCardHolderName(it) } // ** Optional ** you can enable/ disable  default CardHolderName .
+
         sdkSession.setSdkMode(SdkMode.SAND_BOX) //** Pass your SDK MODE
 
         //    sdkSession.setCardType(CardType.CREDIT); // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.

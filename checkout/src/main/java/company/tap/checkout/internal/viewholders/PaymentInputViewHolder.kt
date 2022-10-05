@@ -312,7 +312,10 @@ class PaymentInputViewHolder(
     }
 
     private fun initCardInput() {
-        tapCardInputView.holderNameEnabled = false
+        tapCardInputView.holderNameEnabled = PaymentDataSource.getEnableEditCardHolderName()!=null && PaymentDataSource.getEnableEditCardHolderName()
+        if(PaymentDataSource.getDefaultCardHolderName()!=null) {
+            tapCardInputView.setCardHolderName(PaymentDataSource.getDefaultCardHolderName())
+        }
         height = Resources.getSystem().displayMetrics.heightPixels
         addViewsToPaymentViewContainer()
         tapCardInputView.clearFocus()
@@ -881,6 +884,7 @@ class PaymentInputViewHolder(
         var cardholderName: String? =null
         if(PaymentDataSource.getDefaultCardHolderName()!=null) {
             cardholderName = PaymentDataSource.getDefaultCardHolderName()
+            tapCardInputView.setCardHolderName(cardholderName)
         }else {
             cardholderName = "cardholderName"
         }

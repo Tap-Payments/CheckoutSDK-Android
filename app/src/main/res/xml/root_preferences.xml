@@ -78,7 +78,15 @@
                 android:targetClass="company.tap.checkoutsdk.activities.CustomerActivity"
                 android:targetPackage="company.tap.checkoutsdk" />
         </Preference>
-
+        <EditTextPreference
+            android:inputType="textPersonName"
+            android:key="key_default_holder_name"
+            android:summary="key_default_holder_name_value"
+            android:title="Enter the Default Holder Name" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="enableHolderName"
+            android:title="Enable Cardholder name" />
         <EditTextPreference
             android:defaultValue="1.00"
             android:inputType="numberDecimal"
