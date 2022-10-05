@@ -1471,7 +1471,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         when (savedCardsModel) {
             is SavedCard -> {
-                activateActionButton()
+
                 paymentInputViewHolder.setDataForSavedCard(savedCardsModel ,CardInputUIStatus.SavedCard)
                 setPayButtonAction(PaymentType.SavedCard, savedCardsModel)
             }
@@ -1652,6 +1652,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     override fun onPayCardSwitchAction(isCompleted: Boolean, paymentType: PaymentType) {
         println("isCompleted???" + isCompleted)
+        //todo add validations from api when cvv is valid the only  activate ActionButton
         if (isCompleted) {
             businessViewHolder.view?.headerView.constraint.visibility = View.VISIBLE
             saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.VISIBLE
