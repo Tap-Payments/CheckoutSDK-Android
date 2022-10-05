@@ -2,6 +2,7 @@ package company.tap.checkout.internal.api.models
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import company.tap.cardinputwidget.Card
 import company.tap.checkout.internal.interfaces.CurrenciesSupport
 import company.tap.commonmodels.CardScheme
 import company.tap.tapcardvalidator_android.CardBrand
@@ -82,7 +83,8 @@ data class SavedCard(
 
     @SerializedName("customer")
     @Expose
-     val customer: String? = null
+     val customer: String? = null,
+
 
 ): Comparable<SavedCard> ,CurrenciesSupport ,java.io.Serializable{
     override fun compareTo(other: SavedCard): Int {

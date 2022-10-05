@@ -39,6 +39,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import company.tap.cardinputwidget.CardInputUIStatus
 import company.tap.cardscanner.*
 import company.tap.checkout.R
 import company.tap.checkout.internal.PaymentDataProvider
@@ -1466,10 +1467,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             paymentInputViewHolder.onFocusChange("")
             CustomUtils.hideKeyboardFrom(context,paymentInputViewHolder.view)
         }
+        println("savedCardsModel"+savedCardsModel)
 
         when (savedCardsModel) {
             is SavedCard -> {
                 activateActionButton()
+                paymentInputViewHolder.setDataForSavedCard(savedCardsModel ,CardInputUIStatus.SavedCard)
                 setPayButtonAction(PaymentType.SavedCard, savedCardsModel)
             }
             else -> {

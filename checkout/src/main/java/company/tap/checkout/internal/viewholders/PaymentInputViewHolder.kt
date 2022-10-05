@@ -21,6 +21,7 @@ import androidx.core.widget.doAfterTextChanged
 import com.google.android.material.tabs.TabLayout
 import company.tap.cardinputwidget.Card
 import company.tap.cardinputwidget.CardBrandSingle
+import company.tap.cardinputwidget.CardInputUIStatus
 import company.tap.cardinputwidget.views.CardNumberEditText
 import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardinputwidget.widget.inline.InlineCardInput
@@ -30,6 +31,7 @@ import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.api.models.BINLookupResponse
 import company.tap.checkout.internal.api.models.CreateTokenCard
 import company.tap.checkout.internal.api.models.PaymentOption
+import company.tap.checkout.internal.api.models.SavedCard
 import company.tap.checkout.internal.apiresponse.CardViewEvent
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.enums.PaymentTypeEnum
@@ -128,6 +130,8 @@ class PaymentInputViewHolder(
     var nfcButton: ImageView? = null
     var scannerButton: ImageView? = null
     var closeButton: ImageView? = null
+    var cardInputUIStatus: CardInputUIStatus? = null
+    var backArrow: TapImageView? = null
     init {
         tabLayout.setTabLayoutInterface(this)
         tapMobileInputView = TapMobilePaymentView(context, null)
@@ -140,6 +144,7 @@ class PaymentInputViewHolder(
         //cardSwitchLayout = tapCardInputView.findViewById(R.id.mainSwitchInline)
         paymentInputContainer = view.findViewById(R.id.payment_input_layout)
         clearView = view.findViewById(R.id.clear_text)
+        backArrow = tapCardInputView.findViewById(R.id.backView)
         tapInlineCardSwitch = tapCardInputView.findViewById(R.id.mainSwitchInline)
         secondaryLayout = tapCardInputView.findViewById(R.id.secondary_Layout)
         textViewPowered = tapCardInputView.findViewById(R.id.textViewPowered)
@@ -256,6 +261,14 @@ class PaymentInputViewHolder(
         }
         cardScannerBtn?.setOnClickListener {
             onCardNFCCallListener.onClickCardScanner(true)
+        }
+        backArrow?.setOnClickListener {
+            tabLayout.resetBehaviour()
+            tapCardInputView.clear()
+            clearView.visibility =View.GONE
+            tapAlertView?.visibility =View.GONE
+            nfcButton?.visibility =View.VISIBLE
+            cardScannerBtn?.visibility =View.VISIBLE
         }
     }
 
@@ -389,12 +402,16 @@ class PaymentInputViewHolder(
             override fun afterTextChanged(s: Editable?) {
 //                cardNumAfterTextChangeListener(s, this)
 
+
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (cardInputUIStatus != CardInputUIStatus.SavedCard){
                 onCardTextChange(s)
                 cardNumAfterTextChangeListener(s, this)
+
+                }
             }
         })
     }
@@ -572,8 +589,8 @@ class PaymentInputViewHolder(
             }
             if(itemsCardsList.isNotEmpty()){
                 for (i in itemsCardsList.indices){
-                    println("binLookupResponse>>>"+binLookupResponse?.cardBrand?.name)
-                    println("selectedImageURL>>>"+itemsCardsList[i].selectedImageURL)
+                 //   println("binLookupResponse>>>"+binLookupResponse?.cardBrand?.name)
+                //    println("selectedImageURL>>>"+itemsCardsList[i].selectedImageURL)
                     if(binLookupResponse?.cardBrand?.name?.let {
                             itemsCardsList[i].selectedImageURL.contains(
                                 it
@@ -758,7 +775,11 @@ class PaymentInputViewHolder(
 
     override fun onCvcComplete() {}
 
-    override fun onExpirationComplete() {}
+    override fun onExpirationComplete() {
+        if (cardInputUIStatus == CardInputUIStatus.SavedCard){
+            onFocusChange(CardInputListener.FocusField.FOCUS_CVC)
+        }
+    }
 
     override fun onFocusChange(focusField: String) {
         lastFocusField = focusField
@@ -968,6 +989,21 @@ class PaymentInputViewHolder(
         val maskLen: Int = cardInput.length - 4
         if (maskLen <= 0) return cardInput // Nothing to mask
         return (cardInput).replaceRange(0, maskLen, "•••• ")
+    }
+    private fun maskCardNumber2(cardInput: String): String {
+        val maskLen: Int = cardInput.length - 4
+        if (maskLen <= 0) return cardInput // Nothing to mask
+        return (cardInput).replaceRange(0, 6, "•••• ")
+    }
+
+    fun setDataForSavedCard(savedCardsModel: SavedCard, cardInputUIStatus: CardInputUIStatus) {
+        this.cardInputUIStatus = cardInputUIStatus
+        val cardModel = Card(maskCardNumber2(savedCardsModel.firstSix+savedCardsModel.lastFour),null,savedCardsModel.expiry?.month?.toInt(),savedCardsModel.expiry?.year?.toInt(),
+        savedCardsModel.cardholderName,null,null,null,null,null,null,null,null,
+        savedCardsModel.lastFour,company.tap.cardinputwidget.CardBrand.MasterCard,null,null,savedCardsModel.currency,savedCardsModel.customer,null,null)
+
+       tapCardInputView.setSavedCardDetails(cardModel , cardInputUIStatus)
+
     }
 
     }
