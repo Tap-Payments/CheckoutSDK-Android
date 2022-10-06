@@ -1655,8 +1655,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         //todo add validations from api when cvv is valid the only  activate ActionButton
         if (isCompleted) {
             businessViewHolder.view?.headerView.constraint.visibility = View.VISIBLE
-            saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.VISIBLE
-            saveCardSwitchHolder?.view?.mainSwitch?.switchSaveMobile?.visibility = View.VISIBLE
+            saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
+            saveCardSwitchHolder?.view?.mainSwitch?.switchSaveMobile?.visibility = View.GONE
             saveCardSwitchHolder?.setSwitchToggleData(paymentType)
             loyaltyViewHolder.view.loyaltyView?.constraintLayout?.visibility = View.VISIBLE
            // loyatFlag = true

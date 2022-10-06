@@ -265,6 +265,7 @@ class PaymentInputViewHolder(
         backArrow?.setOnClickListener {
             tabLayout.resetBehaviour()
             tapCardInputView.clear()
+            baseLayoutManager.resetViewHolder()
             clearView.visibility =View.GONE
             tapAlertView?.visibility =View.GONE
             nfcButton?.visibility =View.VISIBLE
@@ -469,6 +470,7 @@ class PaymentInputViewHolder(
         tapCardInputView.setCvcNumberTextWatcher(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
              //   checkoutFragment.scrollView?.scrollTo(0,height)
+                tapCardInputView.requestFocus()
 
             }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -482,7 +484,7 @@ class PaymentInputViewHolder(
                     onPaymentCardComplete.onPayCardSwitchAction(
                         false, PaymentType.CARD
                     )
-                    tapAlertView?.visibility = View.VISIBLE
+               //     tapAlertView?.visibility = View.VISIBLE
                 }
             }
 
@@ -1003,6 +1005,7 @@ class PaymentInputViewHolder(
         savedCardsModel.lastFour,company.tap.cardinputwidget.CardBrand.MasterCard,null,null,savedCardsModel.currency,savedCardsModel.customer,null,null)
 
        tapCardInputView.setSavedCardDetails(cardModel , cardInputUIStatus)
+        tapCardInputView.onTouchView()
 
     }
 

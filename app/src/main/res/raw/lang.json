@@ -106,7 +106,9 @@
       "deleteSavedCardTitle": "Delete Card",
       "deleteSavedCardButtonDelete": "Delete",
       "deleteSavedCardButtonCancel": "Cancel",
-      "deleteSavedCardMsg": "Are you sure you would like to delete card ending with"
+      "deleteSavedCardMsg": "Are you sure you would like to delete card ending with",
+      "saveCardCVV": "Enter CVV"
+
     },
     "ExtraFees": {
       "extraFeesAlertTitle": "Confirm extra charges",
@@ -253,7 +255,8 @@
       "deleteSavedCardTitle": "حذف البطاقة",
       "deleteSavedCardButtonDelete": "حذف",
       "deleteSavedCardButtonCancel": "إلغاء",
-      "deleteSavedCardMsg": "هل أنت متأكد من مسح البطاقة"
+      "deleteSavedCardMsg": "هل أنت متأكد من مسح البطاقة",
+      "saveCardCVV": "أدخل CVV"
     },
     "NFC": {
       "scan": "جاهز للمسح الضوئي ، أضف البطاقة أسفل الجهاز لمسحها ضوئيًا.",
