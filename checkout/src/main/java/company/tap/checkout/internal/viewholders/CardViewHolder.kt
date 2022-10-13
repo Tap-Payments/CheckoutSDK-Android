@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.R
@@ -16,6 +17,8 @@ import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.themekit.theme.TextViewTheme
+import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
 
 
@@ -30,6 +33,7 @@ class CardViewHolder(private val context: Context, private val onCardSelectedAct
     override val type = SectionType.CARD
     private var paymentCardsList: MutableList<PaymentOption>? = null
     private var saveCardsList: MutableList<SavedCard>? = null
+    lateinit var cardInfoHeaderText: TapTextView
 
     init { bindViewComponents() }
 
@@ -60,6 +64,14 @@ class CardViewHolder(private val context: Context, private val onCardSelectedAct
          * set separator background
          */
         view.tapSeparatorViewLinear1?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
+        cardInfoHeaderText = view.findViewById(R.id.cardInfoHeaderText)
+       /* var cardInfoTextTheme = TextViewTheme()
+        cardInfoTextTheme.textColor =
+            Color.parseColor(ThemeManager.getValue("horizontalList.headers.labelTextColor"))
+        cardInfoTextTheme.textSize =
+            ThemeManager.getFontSize("horizontalList.headers.labelTextFont")
+        cardInfoTextTheme.font = ThemeManager.getFontName("horizontalList.headers.labelTextFont")
+        cardInfoHeaderText.setTheme(cardInfoTextTheme)*/
     }
 
     /**
