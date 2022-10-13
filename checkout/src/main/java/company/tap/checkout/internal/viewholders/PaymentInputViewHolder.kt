@@ -91,7 +91,7 @@ class PaymentInputViewHolder(
     private var intertabLayout: TabLayout = tabLayout.findViewById(R.id.tab_layout)
 
     private val paymentInputContainer: LinearLayout
-    private val clearView: ImageView
+   // private val clearView: ImageView
     var selectedType = PaymentTypeEnum.card
     private var shouldShowScannerOptions = true
     private var lastFocusField = CardInputListener.FocusField.FOCUS_CARD
@@ -143,7 +143,7 @@ class PaymentInputViewHolder(
         closeButton = tapCardInputView.findViewById(R.id.clear_text)
         //cardSwitchLayout = tapCardInputView.findViewById(R.id.mainSwitchInline)
         paymentInputContainer = view.findViewById(R.id.payment_input_layout)
-        clearView = view.findViewById(R.id.clear_text)
+       // clearView = view.findViewById(R.id.clear_text)
         backArrow = tapCardInputView.findViewById(R.id.backView)
         tapInlineCardSwitch = tapCardInputView.findViewById(R.id.mainSwitchInline)
         secondaryLayout = tapCardInputView.findViewById(R.id.secondary_Layout)
@@ -205,6 +205,7 @@ class PaymentInputViewHolder(
             CustomUtils.hideKeyboardFrom(context,it)
             loyaltyViewHolder?.view?.loyaltyView?.constraintLayout?.visibility = View.GONE
             tabLayout.visibility = View.VISIBLE
+            closeButton?.visibility= View.GONE
         }
     }
 
@@ -226,7 +227,7 @@ class PaymentInputViewHolder(
     }
 
     fun resetView(){
-        clearView.visibility= View.VISIBLE
+       // clearView.visibility= View.VISIBLE
         CustomUtils.hideKeyboardFrom(context,view)
     }
     private fun tapMobileInputViewWatcher() {
@@ -255,7 +256,8 @@ class PaymentInputViewHolder(
         nfcButton = view.findViewById(R.id.nfc_button)
         cardScannerBtn?.visibility = View.VISIBLE
         linearLayoutPay = view.findViewById(R.id.linear_paylayout)
-        clearView.visibility = View.INVISIBLE
+       // clearView.visibility = View.INVISIBLE
+        closeButton?.visibility = View.GONE
         nfcButton?.setOnClickListener {
             onCardNFCCallListener.onClickNFC()
         }
@@ -266,7 +268,8 @@ class PaymentInputViewHolder(
             tabLayout.resetBehaviour()
             tapCardInputView.clear()
             baseLayoutManager.resetViewHolder()
-            clearView.visibility =View.GONE
+           // clearView.visibility =View.GONE
+            closeButton?.visibility =View.GONE
             tapAlertView?.visibility =View.GONE
             nfcButton?.visibility =View.VISIBLE
             cardScannerBtn?.visibility =View.VISIBLE
@@ -309,9 +312,9 @@ class PaymentInputViewHolder(
             it?.let {
                 println("is this called")
                 if (it.isEmpty()) {
-                    clearView.visibility = View.INVISIBLE
+                    closeButton?.visibility = View.INVISIBLE
                 } else {
-                    clearView.visibility = View.VISIBLE
+                    closeButton?.visibility = View.VISIBLE
                 }
                 //check if editable start with number of oridoo or zain etc
                 // onPaymentCardComplete.onPaycardSwitchAction(true, PaymentType.MOBILE)
@@ -419,10 +422,10 @@ class PaymentInputViewHolder(
 
     private fun onCardTextChange(s: CharSequence?) {
         if (s.toString().isEmpty()) {
-            clearView.visibility = View.INVISIBLE
+            closeButton?.visibility = View.GONE
             tapAlertView?.visibility = View.GONE
         } else {
-            clearView.visibility = View.VISIBLE
+            closeButton?.visibility = View.VISIBLE
         }
 
     }
@@ -739,9 +742,9 @@ class PaymentInputViewHolder(
         nfcButton?.visibility = View.GONE
         cardScannerBtn?.visibility = View.GONE
         if (tapMobileInputView.mobileNumber.text.isEmpty())
-            clearView.visibility = View.INVISIBLE
+            closeButton?.visibility = View.GONE
         else
-            clearView.visibility = View.VISIBLE
+            closeButton?.visibility = View.VISIBLE
 
         paymentInputContainer.addView(tapMobileInputView)
     }
@@ -756,7 +759,7 @@ class PaymentInputViewHolder(
 
         nfcButton?.visibility = View.VISIBLE
         cardScannerBtn?.visibility = View.VISIBLE
-        clearView.visibility = View.GONE
+        closeButton?.visibility = View.GONE
         paymentInputContainer.addView(tapCardInputView)
         checkForFocus()
     }
@@ -892,9 +895,9 @@ class PaymentInputViewHolder(
 
     override fun showHideClearImage(show: Boolean) {
         if (show) {
-            clearView.visibility = View.VISIBLE
+            closeButton?.visibility = View.VISIBLE
         } else {
-            clearView.visibility = View.GONE
+            closeButton?.visibility = View.GONE
             tapAlertView?.visibility = View.GONE
         }
     }
