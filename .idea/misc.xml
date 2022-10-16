@@ -9,7 +9,7 @@
         <entry key="checkout/src/main/res/drawable/cc.xml" value="0.2335" />
         <entry key="checkout/src/main/res/drawable/close_ic.xml" value="0.2335" />
         <entry key="checkout/src/main/res/layout/activity_check_out.xml" value="0.1437841530054645" />
-        <entry key="checkout/src/main/res/layout/cardviewholder_layout1.xml" value="0.4" />
+        <entry key="checkout/src/main/res/layout/cardviewholder_layout1.xml" value="0.125" />
         <entry key="checkout/src/main/res/layout/fragment_checkouttaps.xml" value="0.1437841530054645" />
         <entry key="checkout/src/main/res/layout/item_saved_card.xml" value="0.1445945945945946" />
         <entry key="checkout/src/main/res/layout/loyalty_view_layout.xml" value="0.1437841530054645" />
