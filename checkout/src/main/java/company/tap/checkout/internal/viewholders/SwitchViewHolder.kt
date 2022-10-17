@@ -8,6 +8,7 @@ import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.SectionType
+import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.nfcreader.open.utils.TapNfcUtils
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
@@ -22,7 +23,7 @@ import kotlinx.android.synthetic.main.switch_layout.view.*
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
+class SwitchViewHolder(private val context: Context , private val checkoutViewModel: CheckoutViewModel) : TapBaseViewHolder {
 
     override val view: View = LayoutInflater.from(context).inflate(R.layout.switch_layout, null)
 
@@ -34,12 +35,13 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
     private var goPayString: String? = null
     private var savegoPayString: String? = null
     private var alertgoPaySignupString: String? = null
-    lateinit var mobileString:String
+    lateinit var mobileString: String
 
 
     @JvmField
-     var goPayisLoggedin:Boolean=false
-     var mainTextSave:TapTextView
+    var goPayisLoggedin: Boolean = false
+    var mainTextSave: TapTextView
+
     init {
         bindViewComponents()
         mainTextSave = view.findViewById(R.id.mainTextSave)
@@ -48,6 +50,7 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
     override fun bindViewComponents() {
         configureSwitch()
     }
+
     // Function / Logic is responsible for sett ing the data to switch based on user selection
     fun setSwitchLocals(payName: PaymentTypeEnum) {
 
@@ -55,23 +58,28 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
         savegoPayString = LocalizationManager.getValue("savegoPayLabel", "GoPay")
         alertgoPaySignupString = LocalizationManager.getValue("goPaySignupLabel", "GoPay")
         println("payname in switch" + payName.name)
-        if(payName.name == "card"){
-            if(TapNfcUtils.isNfcAvailable(context)){
-                switchString =LocalizationManager.getValue("cardUseNFCLabel", "TapCardInputKit")
+        if (payName.name == "card") {
+            if (TapNfcUtils.isNfcAvailable(context)) {
+                switchString = LocalizationManager.getValue("cardUseNFCLabel", "TapCardInputKit")
 
-            }else {
+            } else {
                 //Logic applied to  stop showing NFC on non supported devices
-                if(LocalizationManager.getLocale(context).language=="en"){
-                    switchString =LocalizationManager.getValue<String?>("cardUseNFCLabel", "TapCardInputKit")?.replace(" or NFC","")
+                if (LocalizationManager.getLocale(context).language == "en") {
+                    switchString =
+                        LocalizationManager.getValue<String?>("cardUseNFCLabel", "TapCardInputKit")
+                            ?.replace(" or NFC", "")
 
-                }else {
-                    switchString =LocalizationManager.getValue<String?>("cardUseNFCLabel", "TapCardInputKit")?.replace("الــ NFC","")
+                } else {
+                    switchString =
+                        LocalizationManager.getValue<String?>("cardUseNFCLabel", "TapCardInputKit")
+                            ?.replace("الــ NFC", "")
 
                 }
             }
 
             switchString?.let { getMainSwitchDataSource(it) }?.let {
-                view.mainSwitch.setSwitchDataSource(it) }
+                view.mainSwitch.setSwitchDataSource(it)
+            }
             view.cardSwitch.setSwitchDataSource(
                 getTapSwitchDataSourceFromAPI(
                     switchString,
@@ -81,7 +89,7 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
                 )
             )
 
-        }else if( payName.name == "telecom") {
+        } else if (payName.name == "telecom") {
             mobileString = LocalizationManager.getValue("mobileUseLabel", "TapMobileInput")
             view.mainSwitch.setSwitchDataSource(getMainSwitchDataSource(mobileString))
             view.cardSwitch.setSwitchDataSource(
@@ -102,14 +110,14 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
         savegoPayString: String?,
         alertgoPaySignupString: String?
     ): TapSwitchDataSource {
-        val saveForString :String =LocalizationManager.getValue("saveFor", "Common")
-        val saveForStringArabic :String =LocalizationManager.getValue("saveFor", "Common")
-        val checkoutsString :String =LocalizationManager.getValue("checkouts", "Common")
-        val switchSaveMerchantCheckout:String
-        if(LocalizationManager.getLocale(context).language=="ar"){
+        val saveForString: String = LocalizationManager.getValue("saveFor", "Common")
+        val saveForStringArabic: String = LocalizationManager.getValue("saveFor", "Common")
+        val checkoutsString: String = LocalizationManager.getValue("checkouts", "Common")
+        val switchSaveMerchantCheckout: String
+        if (LocalizationManager.getLocale(context).language == "ar") {
             switchSaveMerchantCheckout = "$saveForStringArabic $merchantName"
-        }else{
-           switchSaveMerchantCheckout = "$saveForString$merchantName  $checkoutsString"
+        } else {
+            switchSaveMerchantCheckout = "$saveForString$merchantName  $checkoutsString"
         }
 
         return TapSwitchDataSource(
@@ -141,7 +149,7 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
      */
     private fun configureSwitch() {
         view.mainSwitch.mainSwitchLinear.setBackgroundColor(Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor")))
-        view.mainSwitch.mainTextSave.visibility=View.VISIBLE
+        view.mainSwitch.mainTextSave.visibility = View.VISIBLE
         view.cardviewSwitch.cardElevation = 0f
         setBottomBorders(
             view.cardviewSwitch,
@@ -164,17 +172,15 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
          * Logic for Main switch
          * **/
         view.mainSwitch.switchSaveMobile?.setOnCheckedChangeListener { buttonView, isChecked ->
-            if(isChecked){
+            if (isChecked) {
                 view.cardSwitch.payButton.isActivated
-                view.cardSwitch.payButton.setButtonDataSource(
-                    true, context.let {
-                        LocalizationManager.getLocale(
-                            it
-                        ).language
-                    },
-                    LocalizationManager.getValue("pay", "ActionButton"),
+                val payString: String = LocalizationManager.getValue("pay", "ActionButton")
+                view?.cardSwitch?.payButton?.setButtonDataSource(
+                    false,
+                    "en",
+                    "$payString $checkoutViewModel.currentCurrency $checkoutViewModel.currentAmount",
                     Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-                    Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
+                    null,
                 )
                 /**
                  * Here we will check if there is saving options if NOT ----> We will just activate action button
@@ -182,7 +188,7 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
                  * if YES -----> we will set Logic of function mainSwitchCheckedAction()
                  */
                 mainSwitchCheckedAction()
-            }else mainSwitchUncheckedAction()
+            } else mainSwitchUncheckedAction()
         }
 
         /**
@@ -194,16 +200,16 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
         /**
          * Logic for save goPay Checkout switch
          * **/
-       if(goPayisLoggedin){
-           view.cardSwitch.switchGoPayCheckout.visibility= View.VISIBLE
-           view.cardSwitch.switchGoPayCheckout?.setOnCheckedChangeListener { _, _ ->
-               switchGoPayCheckoutChangeCheckedAction()
-           }
-       }
-
+        if (goPayisLoggedin) {
+            view.cardSwitch.switchGoPayCheckout.visibility = View.VISIBLE
+            view.cardSwitch.switchGoPayCheckout?.setOnCheckedChangeListener { _, _ ->
+                switchGoPayCheckoutChangeCheckedAction()
+            }
+        }
 
 
     }
+
     //Setting data to TapMainSwitchDataSource
     private fun getMainSwitchDataSource(switchText: String): TapSwitchDataSource {
         return TapSwitchDataSource(
@@ -211,8 +217,8 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
         )
     }
 
-    fun setSwitchToggleData(paymentType: PaymentType){
-        if(paymentType== PaymentType.CARD) {
+    fun setSwitchToggleData(paymentType: PaymentType) {
+        if (paymentType == PaymentType.CARD) {
             view.mainSwitch.setSwitchDataSource(
                 getMainSwitchDataSource(
                     LocalizationManager.getValue(
@@ -221,7 +227,7 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
                     )
                 )
             )
-        }else{
+        } else {
             view.mainSwitch.setSwitchDataSource(
                 getMainSwitchDataSource(
                     LocalizationManager.getValue(
@@ -264,6 +270,7 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
 
 
     }
+
     private fun mainSwitchCheckedAction() {
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
             view.cardSwitch.tapCardSwitchLinear.setBackgroundResource(R.drawable.ic_blurbackgroundblack)
@@ -282,12 +289,13 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
         )//
         view.cardSwitch.payButton.stateListAnimator = null
         view.cardSwitch.payButton.isActivated
-        view.cardSwitch.payButton.setButtonDataSource(
-            true,
-            context.let { LocalizationManager.getLocale(it).language },
-            LocalizationManager.getValue("pay", "ActionButton"),
+        val payString: String = LocalizationManager.getValue("pay", "ActionButton")
+        view?.cardSwitch?.payButton?.setButtonDataSource(
+            false,
+            "en",
+            "$payString $checkoutViewModel.currentCurrency $checkoutViewModel.currentAmount",
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
+            null,
         )
         view.cardSwitch.switchesLayout?.visibility = View.VISIBLE
         view.cardSwitch.switchSaveMerchant?.visibility = View.VISIBLE
@@ -298,7 +306,7 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
          * if YES -----> we will show the switches also
          * Please NOTE : @paramgoPayisLoggedin is false for now will update when api is added
          */
-        if(goPayisLoggedin){
+        if (goPayisLoggedin) {
             view.cardSwitch.switchGoPayCheckout?.isChecked = true
             view.cardSwitch.switchGoPayCheckout?.visibility = View.VISIBLE
             view.cardSwitch.saveGoPay?.visibility = View.VISIBLE
@@ -308,7 +316,7 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
 
     }
 
-    private fun switchGoPayCheckoutChangeCheckedAction(){
+    private fun switchGoPayCheckoutChangeCheckedAction() {
         if (!view.cardSwitch.switchSaveMerchant?.isChecked!! && !view.cardSwitch.switchGoPayCheckout?.isChecked!!) {
             view.mainSwitch.switchSaveMobile?.isChecked = false
             view.cardSwitch.switchesLayout?.visibility = View.GONE
@@ -322,7 +330,7 @@ class SwitchViewHolder(private val context: Context) : TapBaseViewHolder  {
         }
     }
 
-    private fun switchMerchantCheckoutChangeCheckedAction(){
+    private fun switchMerchantCheckoutChangeCheckedAction() {
         if (!view.cardSwitch.switchSaveMerchant?.isChecked!! && !view.cardSwitch.switchGoPayCheckout?.isChecked!!) {
             view.mainSwitch.switchSaveMobile?.isChecked = false
             view.cardSwitch.switchesLayout?.visibility = View.GONE
