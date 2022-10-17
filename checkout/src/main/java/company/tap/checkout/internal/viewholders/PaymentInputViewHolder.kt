@@ -317,7 +317,7 @@ class PaymentInputViewHolder(
         switchViewHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
             false,
             "en",
-            "$payString $checkoutViewModel.currentCurrency $checkoutViewModel.currentAmount",
+            payString+" "+checkoutViewModel.currentCurrency+" "+checkoutViewModel.currentAmount ,
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             null,
         )

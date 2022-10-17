@@ -1486,24 +1486,24 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     private fun unActivateActionButton() {
-        val payButtonText: String
+        val payString: String
 
         when (PaymentDataSource.getTransactionMode()) {
-            TransactionMode.TOKENIZE_CARD -> payButtonText = LocalizationManager.getValue(
+            TransactionMode.TOKENIZE_CARD -> payString = LocalizationManager.getValue(
                 "pay",
                 "ActionButton"
             )
-            TransactionMode.SAVE_CARD -> payButtonText = LocalizationManager.getValue(
+            TransactionMode.SAVE_CARD -> payString = LocalizationManager.getValue(
                 "savecard",
                 "ActionButton"
             )
-            else -> payButtonText = LocalizationManager.getValue("pay", "ActionButton")
+            else -> payString = LocalizationManager.getValue("pay", "ActionButton")
         }
-        val payString: String = LocalizationManager.getValue("pay", "ActionButton")
+
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
             false,
             "en",
-            "$payButtonText $currentCurrency $currentAmount",
+            "$payString $currentCurrency $currentAmount",
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             null,
         )
@@ -1531,7 +1531,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             CustomUtils.hideKeyboardFrom(context, paymentInputViewHolder.view)
         }
         println("savedCardsModel" + savedCardsModel)
-
+        unActivateActionButton()
         when (savedCardsModel) {
             is SavedCard -> {
 
@@ -1556,23 +1556,22 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
     private fun activateActionButton() {
-        var payButtonText: String
+        val payString: String
         when (PaymentDataSource.getTransactionMode()) {
-            TransactionMode.TOKENIZE_CARD -> payButtonText = LocalizationManager.getValue(
+            TransactionMode.TOKENIZE_CARD -> payString = LocalizationManager.getValue(
                 "pay",
                 "ActionButton"
             )
-            TransactionMode.SAVE_CARD -> payButtonText = LocalizationManager.getValue(
+            TransactionMode.SAVE_CARD -> payString = LocalizationManager.getValue(
                 "savecard",
                 "ActionButton"
             )
-            else -> payButtonText = LocalizationManager.getValue("pay", "ActionButton")
+            else -> payString = LocalizationManager.getValue("pay", "ActionButton")
         }
-        val payString: String = LocalizationManager.getValue("pay", "ActionButton")
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
-            false,
+            true,
             "en",
-            "$payButtonText $currentCurrency $currentAmount",
+            "$payString $currentCurrency $currentAmount",
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             null,
         )
@@ -1952,6 +1951,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun setPayButtonAction(paymentTypeEnum: PaymentType, savedCardsModel: Any?) {
+
         /**
          * payment from onSelectPaymentOptionActionListener
          */
@@ -2096,6 +2096,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun payActionSavedCard(savedCardsModel: SavedCard?) {
+        println("payActionSavedCard"+savedCardsModel)
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
             ActionButtonState.LOADING
         )
