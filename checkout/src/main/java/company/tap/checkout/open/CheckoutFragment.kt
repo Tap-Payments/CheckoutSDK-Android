@@ -374,9 +374,9 @@ if(checkOutActivity?.isGooglePayClicked == false){
 
         val payString: String = LocalizationManager.getValue("pay", "ActionButton")
         tabAnimatedActionButton?.setButtonDataSource(
-            false,
-            "en",
-            "$payString $_viewModel.currentCurrency $_viewModel.currentAmount",
+            true,
+            context?.let { LocalizationManager.getLocale(it).language },
+            payString,
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             null,
         )

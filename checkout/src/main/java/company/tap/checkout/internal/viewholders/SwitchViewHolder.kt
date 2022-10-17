@@ -178,7 +178,7 @@ class SwitchViewHolder(private val context: Context , private val checkoutViewMo
                 view?.cardSwitch?.payButton?.setButtonDataSource(
                     false,
                     "en",
-                    "$payString $checkoutViewModel.currentCurrency $checkoutViewModel.currentAmount",
+                    payString+" "+checkoutViewModel.currentCurrency+" "+checkoutViewModel.currentAmount,
                     Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
                     null,
                 )
@@ -293,7 +293,7 @@ class SwitchViewHolder(private val context: Context , private val checkoutViewMo
         view?.cardSwitch?.payButton?.setButtonDataSource(
             false,
             "en",
-            "$payString $checkoutViewModel.currentCurrency $checkoutViewModel.currentAmount",
+            payString+" "+checkoutViewModel.currentCurrency+" "+checkoutViewModel.currentAmount,
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             null,
         )
