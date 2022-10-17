@@ -116,7 +116,7 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
         val cardViewModel: CardViewModel by viewModels()
         this._viewModel = viewModel
         _Context?.let { cardViewModel.getContext(it) }
-        backgroundColor = (Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.clear")))
+        backgroundColor =  (Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.clear")))
         setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
         bottomSheetDialog.behavior.isDraggable= true
         val checkoutLayout: LinearLayout? = view.findViewById(R.id.fragment_all)
@@ -371,16 +371,14 @@ if(checkOutActivity?.isGooglePayClicked == false){
     checkOutActivity?.finish()
 }
       //  checkOutActivity?.finish()
+
+        val payString: String = LocalizationManager.getValue("pay", "ActionButton")
         tabAnimatedActionButton?.setButtonDataSource(
-            true,
-            context.let {
-                if (it != null) {
-                    LocalizationManager.getLocale(it).language
-                }
-            }.toString(),
-            LocalizationManager.getValue("pay", "ActionButton"),
+            false,
+            "en",
+            "$payString $_viewModel.currentCurrency $_viewModel.currentAmount",
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
+            null,
         )
       /*  tabAnimatedActionButton?.setOnClickListener {
             requireActivity().supportFragmentManager.let { it1 -> SDKSession.contextSDK?.let { it2 ->

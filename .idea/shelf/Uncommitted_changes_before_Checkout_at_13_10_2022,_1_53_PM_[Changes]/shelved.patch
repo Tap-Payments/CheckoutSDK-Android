@@ -1,0 +1,570 @@
+Index: checkout/src/main/res/layout/fragment_checkouttaps.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<androidx.core.widget.NestedScrollView xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"wrap_content\"\n    android:windowSoftInputMode=\"adjustResize|adjustPan\"\n    android:orientation=\"vertical\"\n    tools:context=\".open.CheckoutFragment\">\n    <LinearLayout\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:background=\"@drawable/layout_bg\"\n        android:orientation=\"vertical\"\n        android:windowSoftInputMode=\"adjustResize|adjustPan\"\n\n        tools:context=\".open.CheckoutFragment\">\n\n<RelativeLayout\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"wrap_content\"\n    android:clipToOutline=\"true\"\n    android:background=\"@drawable/layout_bg\"\n    android:gravity=\"center\">\n  <!--  android:background=\"@drawable/layout_bg\"-->\n    <LinearLayout\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:orientation=\"vertical\"\n        android:background=\"@drawable/layout_bg\"\n        tools:context=\".open.CheckoutFragment\">\n\n        <LinearLayout\n            android:id=\"@+id/fragment_all\"\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"wrap_content\"\n            android:background=\"@drawable/layout_bg\"\n            android:visibility=\"visible\"\n            android:orientation=\"vertical\" />\n\n        <!-- <LinearLayout\n             android:id=\"@+id/sdkContainer\"\n             android:layout_width=\"match_parent\"\n             android:layout_height=\"wrap_content\"\n             android:orientation=\"vertical\"\n            >\n         </LinearLayout>-->\n\n\n        <FrameLayout\n            android:id=\"@+id/fragment_container_nfc_lib\"\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"match_parent\"\n            android:layout_gravity=\"bottom\"\n            android:orientation=\"vertical\"\n            android:visibility=\"gone\"\n            android:gravity=\"bottom\"/>\n\n\n\n        <FrameLayout\n            android:id=\"@+id/inline_container\"\n            android:layout_width=\"match_parent\"\n            android:visibility=\"gone\"\n            android:layout_height=\"match_parent\"\n            android:layout_margin=\"20dp\" />\n\n\n    </LinearLayout>\n    <!--Kept webframelayout outside so that it takes full screen-->\n    <FrameLayout\n        android:id=\"@+id/webFrameLayout\"\n        android:layout_width=\"match_parent\"\n        android:visibility=\"gone\"\n        android:layout_marginTop=\"12dp\"\n        android:layout_height=\"match_parent\" />\n\n\n    <company.tap.tapuilibrary.uikit.atoms.TapTextView\n        android:layout_width=\"48dp\"\n        android:layout_height=\"40dp\"\n        android:id=\"@+id/closeText\"\n        android:gravity=\"center\"\n        android:layout_marginEnd=\"10dp\"\n        android:text=\"CLOSE\"\n        android:visibility=\"visible\"\n        android:textSize=\"12sp\"\n        android:textColor=\"@color/dark_gray\"\n        android:layout_alignParentEnd=\"true\"\n        android:layout_gravity=\"end\"/>\n\n    <company.tap.tapuilibrary.uikit.atoms.TapImageView\n        android:layout_width=\"40dp\"\n        android:layout_height=\"40dp\"\n        android:id=\"@+id/closeImage\"\n        android:src=\"@drawable/ic_close\"\n        android:gravity=\"center\"\n        android:layout_marginEnd=\"10dp\"\n        android:text=\"close\"\n        android:visibility=\"gone\"\n        android:layout_alignParentEnd=\"true\"\n        android:layout_gravity=\"end\"/>\n\n\n</RelativeLayout>\n\n</LinearLayout>\n</androidx.core.widget.NestedScrollView>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/checkout/src/main/res/layout/fragment_checkouttaps.xml b/checkout/src/main/res/layout/fragment_checkouttaps.xml
+--- a/checkout/src/main/res/layout/fragment_checkouttaps.xml	(revision 7b1dc9bb5d67476583ef824fdc375087d10ac445)
++++ b/checkout/src/main/res/layout/fragment_checkouttaps.xml	(date 1663223962322)
+@@ -12,7 +12,6 @@
+         android:background="@drawable/layout_bg"
+         android:orientation="vertical"
+         android:windowSoftInputMode="adjustResize|adjustPan"
+-
+         tools:context=".open.CheckoutFragment">
+ 
+ <RelativeLayout
+Index: checkout/src/main/java/company/tap/checkout/open/CheckOutActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package company.tap.checkout.open\n\nimport android.app.Activity\nimport android.content.Intent\nimport android.graphics.Color\nimport android.os.Build\nimport android.os.Bundle\nimport android.os.Handler\nimport android.util.DisplayMetrics\nimport android.util.Log\nimport android.view.View\nimport androidx.annotation.RequiresApi\nimport androidx.appcompat.app.AppCompatActivity\nimport com.google.android.gms.wallet.AutoResolveHelper\nimport com.google.android.gms.wallet.PaymentData\nimport com.google.android.gms.wallet.PaymentDataRequest\nimport com.google.android.gms.wallet.PaymentsClient\nimport company.tap.checkout.R\nimport company.tap.checkout.internal.api.enums.ChargeStatus\nimport company.tap.checkout.internal.api.models.Authorize\nimport company.tap.checkout.internal.api.models.Charge\nimport company.tap.checkout.internal.api.models.Token\nimport company.tap.checkout.internal.utils.CustomUtils\nimport company.tap.checkout.internal.utils.PaymentsUtil\nimport company.tap.checkout.internal.viewmodels.CheckoutViewModel\nimport company.tap.checkout.open.controller.SDKSession\nimport company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton\nimport company.tap.checkout.open.data_managers.PaymentDataSource\nimport company.tap.checkout.open.enums.SdkIdentifier\nimport company.tap.checkout.open.interfaces.SessionDelegate\nimport company.tap.checkout.open.models.CardsList\nimport company.tap.nfcreader.open.reader.TapEmvCard\nimport company.tap.nfcreader.open.reader.TapNfcCardReader\nimport company.tap.tapnetworkkit.exception.GoSellError\nimport company.tap.tapuilibrary.uikit.enums.ActionButtonState\nimport company.tap.tapuilibrary.uikit.models.DialogConfigurations\nimport io.reactivex.android.schedulers.AndroidSchedulers\nimport io.reactivex.disposables.Disposable\nimport io.reactivex.disposables.Disposables\nimport kotlinx.android.synthetic.main.item_googlepay.*\nimport org.json.JSONObject\n\nclass CheckOutActivity : AppCompatActivity() ,SessionDelegate {\n    private val tapCheckoutFragment = CheckoutFragment()\n    var hideAllViews:Boolean = false\n    lateinit var chargeStatus:ChargeStatus\n    var sdkSession: SDKSession = SDKSession\n    private lateinit var tapNfcCardReader: TapNfcCardReader\n    private var cardReadDisposable: Disposable = Disposables.empty()\n    @JvmField\n    // Arbitrarily-picked constant integer you define to track a request for payment data activity.\n    val LOAD_PAYMENT_DATA_REQUEST_CODE = 991\n\n    lateinit var _paymentsClient: PaymentsClient\n    @JvmField\n     var displayMetrics: Int?=0\n    @JvmField\n    var isGooglePayClicked:Boolean = false\n    override fun onCreate(savedInstanceState: Bundle?) {\n        super.onCreate(savedInstanceState)\n\n        setContentView(R.layout.activity_check_out)\n        val intent = intent\n        val bundle = intent.extras\n        displayMetrics= CustomUtils.getDeviceDisplayMetrics(this)\n        if (bundle != null) {\n            if(bundle[\"hideAllViews\"]!=null){\n                hideAllViews = bundle[\"hideAllViews\"] as Boolean? == true\n\n            }\n            if( bundle[\"status\"]!=null){\n                chargeStatus = bundle[\"status\"] as ChargeStatus\n            }\n        }\n        sdkSession.addSessionDelegate(this)\n        tapCheckoutFragment.hideAllView =hideAllViews\n        tapCheckoutFragment.checkOutActivity = this\n        if(::chargeStatus.isInitialized)\n            tapCheckoutFragment.status =chargeStatus\n        tapCheckoutFragment.show(\n            supportFragmentManager.beginTransaction().addToBackStack(null),\n            \"CheckOutFragment\"\n        )\n        tapCheckoutFragment.arguments=getArguments()\n        tapNfcCardReader = TapNfcCardReader(this)\n\n    }\n\n    private fun getArguments(): Bundle {\n        val arguments = Bundle()\n        if(displayMetrics == DisplayMetrics.DENSITY_450 ||displayMetrics == DisplayMetrics.DENSITY_420 ||displayMetrics == DisplayMetrics.DENSITY_400||displayMetrics == DisplayMetrics.DENSITY_440||displayMetrics == DisplayMetrics.DENSITY_XXHIGH){\n\n            arguments.putFloatArray(DialogConfigurations.Corners, floatArrayOf(25f, 25f, 0f, 0f))\n        }else if (displayMetrics == DisplayMetrics.DENSITY_280||displayMetrics == DisplayMetrics.DENSITY_260||displayMetrics == DisplayMetrics.DENSITY_300||displayMetrics == DisplayMetrics.DENSITY_XHIGH || displayMetrics == DisplayMetrics.DENSITY_340||displayMetrics == DisplayMetrics.DENSITY_360){\n            arguments.putFloatArray(DialogConfigurations.Corners, floatArrayOf(5f, 5f, 0f, 0f))\n        }\n\n            arguments.putInt(DialogConfigurations.Color, Color.TRANSPARENT)\n        arguments.putBoolean(DialogConfigurations.Cancelable, false)\n        arguments.putFloat(DialogConfigurations.Dim, 0.75f)\n        return arguments\n    }\n\n\n    @RequiresApi(Build.VERSION_CODES.N)\n    override fun onNewIntent(intent: Intent?) {\n        super.onNewIntent(intent)\n        handleNFCResult(intent)\n\n    }\n\n    override fun paymentSucceed(charge: Charge) {\n        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){\n            SDKSession.getPluginListener()?.paymentSucceed(charge)\n            this.finish()\n        }else {\n            tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)\n            Handler().postDelayed({\n                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)\n            }, 1000)\n\n            this.finish()\n        }\n    }\n\n    override fun paymentFailed(charge: Charge?) {\n        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){\n            SDKSession.getPluginListener()?.paymentFailed(charge)\n            this.finish()\n        }else {\n            println(\"paymentFailed called here\")\n            tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)\n            Handler().postDelayed({\n                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)\n            }, 1000)\n\n            this.finish()\n        }\n    }\n\n    override fun authorizationSucceed(authorize: Authorize) {\n        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){\n            SDKSession.getPluginListener()?.authorizationSucceed(authorize)\n            this.finish()\n        }else {\n            tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)\n            Handler().postDelayed({\n                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)\n            }, 1000)\n\n            this.finish()\n        }\n    }\n\n    override fun authorizationFailed(authorize: Authorize?) {\n        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){\n            SDKSession.getPluginListener()?.authorizationFailed(authorize)\n            this.finish()\n        }else {\n            tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)\n            Handler().postDelayed({\n                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)\n            }, 1000)\n\n            this.finish()\n        }\n\n    }\n\n    override fun cardSaved(charge: Charge) {\n        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){\n            SDKSession.getPluginListener()?.cardSaved(charge)\n            this.finish()\n        }else {\n            tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)\n            Handler().postDelayed({\n                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)\n            }, 1000)\n\n            this.finish()\n        }\n    }\n\n    override fun cardSavingFailed(charge: Charge) {\n        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){\n            SDKSession.getPluginListener()?.cardSavingFailed(charge)\n            this.finish()\n        }else {\n            tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)\n            Handler().postDelayed({\n                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)\n            }, 1000)\n\n            this.finish()\n        }\n    }\n\n    override fun cardTokenizedSuccessfully(token: Token) {\n        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){\n            SDKSession.getPluginListener()?.cardTokenizedSuccessfully(token)\n            this.finish()\n        }else {\n            tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)\n            Handler().postDelayed({\n                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)\n            }, 1000)\n\n            this.finish()\n        }\n    }\n\n    override fun savedCardsList(cardsList: CardsList) {\n        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){\n            SDKSession.getPluginListener()?.savedCardsList(cardsList)\n            this.finish()\n        }else {\n            tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)\n            Handler().postDelayed({\n                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)\n            }, 1000)\n\n            this.finish()\n        }\n\n    }\n\n    override fun sdkError(goSellError: GoSellError?) {\n        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){\n            SDKSession.getPluginListener()?.sdkError(goSellError)\n            this.finish()\n        }else {\n            if (!this.isDestroyed) {\n                tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)\n                Handler().postDelayed({\n                    tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)\n                }, 1000)\n\n                this.finish()\n            }\n        }\n    }\n\n    override fun sessionIsStarting() {\n        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){\n            SDKSession.getPluginListener()?.sessionIsStarting()\n        }\n    }\n\n    override fun sessionHasStarted() {\n        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){\n            SDKSession.getPluginListener()?.sessionHasStarted()\n        }\n    }\n\n    override fun sessionCancelled() {\n        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){\n            SDKSession.getPluginListener()?.sessionCancelled()\n        }\n    }\n\n    override fun sessionFailedToStart() {\n        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){\n            SDKSession.getPluginListener()?.sessionFailedToStart()\n        }\n    }\n\n    override fun invalidCardDetails() {\n        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){\n            SDKSession.getPluginListener()?.invalidCardDetails()\n            this.finish()\n        }else {\n            tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)\n            Handler().postDelayed({\n                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)\n            }, 1000)\n\n            this.finish()\n        }\n\n    }\n\n    override fun backendUnknownError(message: GoSellError?) {\n        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){\n            SDKSession.getPluginListener()?.backendUnknownError(message)\n            this.finish()\n        }else {\n            tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)\n            Handler().postDelayed({\n                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)\n            }, 1000)\n            this.finish()\n        }\n\n    }\n\n    override fun invalidTransactionMode() {\n        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){\n            SDKSession.getPluginListener()?.invalidTransactionMode()\n            this.finish()\n        }else {\n            tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)\n            Handler().postDelayed({\n                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)\n            }, 1000)\n\n            this.finish()\n        }\n\n    }\n\n    override fun invalidCustomerID() {\n        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){\n            SDKSession.getPluginListener()?.invalidCustomerID()\n            this.finish()\n        }else {\n            tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)\n            Handler().postDelayed({\n                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)\n            }, 1000)\n\n            this.finish()\n        }\n\n    }\n\n    override fun userEnabledSaveCardOption(saveCardEnabled: Boolean) {\n        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){\n            SDKSession.getPluginListener()?.userEnabledSaveCardOption(saveCardEnabled)\n            this.finish()\n        }else {\n            tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)\n            Handler().postDelayed({\n                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)\n            }, 1000)\n\n            this.finish()\n        }\n    }\n\n    @RequiresApi(Build.VERSION_CODES.N)\n    override fun getStatusSDK(response:String? ,charge: Charge?) {\n        println(\"tabAnimatedActionButton is\"+tabAnimatedActionButton)\n        tabAnimatedActionButton?.let {\n            SDKSession.resetBottomSheetForButton(\n                supportFragmentManager, this,\n                it, this, charge?.status\n            )\n        }\n        tabAnimatedActionButton?.visibility = View.VISIBLE\n    }\n\n    override fun onBackPressed() {\n        super.onBackPressed()\n        finish()\n    }\n\n    override fun onPause() {\n        super.onPause()\n        if(tapCheckoutFragment.isNfcOpened){\n            cardReadDisposable.dispose()\n            tapNfcCardReader.disableDispatch()\n        }\n        else if(!isGooglePayClicked){\n             finish()\n        }\n//changed above condition ELSE of simply finish to check gpay and finish , otherwise it ws not calling onactivity result\n\n    }\n\n    @RequiresApi(Build.VERSION_CODES.N)\n    fun handleNFCResult(intent: Intent?) {\n        if (tapNfcCardReader.isSuitableIntent(intent)) {\n            cardReadDisposable = tapNfcCardReader\n                .readCardRx2(intent)\n                .observeOn(AndroidSchedulers.mainThread())\n                .subscribe({ emvCard: TapEmvCard? ->\n                    if (emvCard != null) {\n                        tapCheckoutFragment._viewModel?.handleNFCScannedResult(emvCard)\n                        println(\"emvCard$emvCard\")\n                    }\n                },\n                    { throwable -> throwable.message?.let { println(\"error is nfc\" + throwable.printStackTrace()) } })\n        }\n\n    }\n\n    @RequiresApi(Build.VERSION_CODES.N)\n    override fun onActivityResult(requestCode:Int, resultCode:Int, data:Intent?){\n        super.onActivityResult(requestCode, resultCode, data)\n        println(\"<<<<onActivityResult>>>\"+resultCode)\n        when (requestCode) {\n            LOAD_PAYMENT_DATA_REQUEST_CODE -> {\n                when (resultCode) {\n                    RESULT_OK -> {\n                        val paymentData = data?.let { PaymentData.getFromIntent(it) }\n                        if (paymentData != null) {\n                            tapCheckoutFragment._viewModel?.handlePaymentSuccess(paymentData)\n                        }else {\n                            AutoResolveHelper.getStatusFromIntent(data)?.statusCode?.let { tapCheckoutFragment._viewModel?.handleError(it) }\n                        }\n\n                        isGooglePayClicked = false\n\n                    }\n                    RESULT_CANCELED -> {\n                        tapCheckoutFragment._viewModel?.handleSuccessFailureResponseButton(\"Cancelled Google Pay\",null,null)\n                        isGooglePayClicked = false\n\n                    }\n                    AutoResolveHelper.RESULT_ERROR -> {\n                        val status = AutoResolveHelper.getStatusFromIntent(data)\n                        if (status != null) println(if (\"status values are>>$status\" != null) status.statusMessage else status.toString() + \" >> code \" + status.statusCode)\n                        tapCheckoutFragment._viewModel?.handleError(status?.statusCode ?: 400)\n                        isGooglePayClicked = false\n\n                    }\n\n                }\n            }\n        }\n    }\n\n    fun handleGooglePayApiCall(){\n        // Disables the button to prevent multiple clicks.\n          googlePayButton?.isClickable = false\n        // assert(PaymentDataSource.getInstance().getAmount() != null)\n        _paymentsClient = PaymentsUtil.createPaymentsClient(this)\n        isGooglePayClicked = true\n        val paymentDataRequestJson: JSONObject? = PaymentDataSource.getSelectedAmount()?.toLong()?.let { PaymentsUtil.getPaymentDataRequest(it) }\n        if (paymentDataRequestJson == null) {\n            Log.e(\"RequestPayment\", \"Can't fetch payment data request\")\n            return\n        }\n\n        val request = PaymentDataRequest.fromJson(paymentDataRequestJson.toString())\n        println(\"request value is>>>\" + request.toJson())\n        println(\"Activity is>>>\" + this as Activity)\n\n        // Since loadPaymentData may show the UI asking the user to select a payment method, we use\n        // AutoResolveHelper to wait for the user interacting with it. Once completed,\n        // onActivityResult will be called with the result.\n        if (request != null) {\n            AutoResolveHelper.resolveTask(\n                    _paymentsClient.loadPaymentData(request), this, LOAD_PAYMENT_DATA_REQUEST_CODE)\n        }\n    }\n\n    }\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/checkout/src/main/java/company/tap/checkout/open/CheckOutActivity.kt b/checkout/src/main/java/company/tap/checkout/open/CheckOutActivity.kt
+--- a/checkout/src/main/java/company/tap/checkout/open/CheckOutActivity.kt	(revision 7b1dc9bb5d67476583ef824fdc375087d10ac445)
++++ b/checkout/src/main/java/company/tap/checkout/open/CheckOutActivity.kt	(date 1663239045623)
+@@ -40,62 +40,65 @@
+ import kotlinx.android.synthetic.main.item_googlepay.*
+ import org.json.JSONObject
+ 
+-class CheckOutActivity : AppCompatActivity() ,SessionDelegate {
++class CheckOutActivity : AppCompatActivity(), SessionDelegate {
+     private val tapCheckoutFragment = CheckoutFragment()
+-    var hideAllViews:Boolean = false
+-    lateinit var chargeStatus:ChargeStatus
++    var hideAllViews: Boolean = false
++    lateinit var chargeStatus: ChargeStatus
+     var sdkSession: SDKSession = SDKSession
+     private lateinit var tapNfcCardReader: TapNfcCardReader
+     private var cardReadDisposable: Disposable = Disposables.empty()
++
+     @JvmField
+     // Arbitrarily-picked constant integer you define to track a request for payment data activity.
+     val LOAD_PAYMENT_DATA_REQUEST_CODE = 991
+ 
+     lateinit var _paymentsClient: PaymentsClient
++
+     @JvmField
+-     var displayMetrics: Int?=0
++    var displayMetrics: Int? = 0
++
+     @JvmField
+-    var isGooglePayClicked:Boolean = false
++    var isGooglePayClicked: Boolean = false
+     override fun onCreate(savedInstanceState: Bundle?) {
+         super.onCreate(savedInstanceState)
+ 
+         setContentView(R.layout.activity_check_out)
+         val intent = intent
+         val bundle = intent.extras
+-        displayMetrics= CustomUtils.getDeviceDisplayMetrics(this)
++        displayMetrics = CustomUtils.getDeviceDisplayMetrics(this)
+         if (bundle != null) {
+-            if(bundle["hideAllViews"]!=null){
++            if (bundle["hideAllViews"] != null) {
+                 hideAllViews = bundle["hideAllViews"] as Boolean? == true
+ 
+             }
+-            if( bundle["status"]!=null){
++            if (bundle["status"] != null) {
+                 chargeStatus = bundle["status"] as ChargeStatus
+             }
+         }
+         sdkSession.addSessionDelegate(this)
+-        tapCheckoutFragment.hideAllView =hideAllViews
++        tapCheckoutFragment.hideAllView = hideAllViews
+         tapCheckoutFragment.checkOutActivity = this
+-        if(::chargeStatus.isInitialized)
+-            tapCheckoutFragment.status =chargeStatus
++        if (::chargeStatus.isInitialized)
++            tapCheckoutFragment.status = chargeStatus
+         tapCheckoutFragment.show(
+             supportFragmentManager.beginTransaction().addToBackStack(null),
+             "CheckOutFragment"
+         )
+-        tapCheckoutFragment.arguments=getArguments()
++        tapCheckoutFragment.arguments = getArguments()
+         tapNfcCardReader = TapNfcCardReader(this)
+ 
+     }
+ 
+     private fun getArguments(): Bundle {
+         val arguments = Bundle()
+-        if(displayMetrics == DisplayMetrics.DENSITY_450 ||displayMetrics == DisplayMetrics.DENSITY_420 ||displayMetrics == DisplayMetrics.DENSITY_400||displayMetrics == DisplayMetrics.DENSITY_440||displayMetrics == DisplayMetrics.DENSITY_XXHIGH){
++        if (displayMetrics == DisplayMetrics.DENSITY_450 || displayMetrics == DisplayMetrics.DENSITY_420 || displayMetrics == DisplayMetrics.DENSITY_400 || displayMetrics == DisplayMetrics.DENSITY_440 || displayMetrics == DisplayMetrics.DENSITY_XXHIGH) {
+ 
+             arguments.putFloatArray(DialogConfigurations.Corners, floatArrayOf(25f, 25f, 0f, 0f))
+-        }else if (displayMetrics == DisplayMetrics.DENSITY_280||displayMetrics == DisplayMetrics.DENSITY_260||displayMetrics == DisplayMetrics.DENSITY_300||displayMetrics == DisplayMetrics.DENSITY_XHIGH || displayMetrics == DisplayMetrics.DENSITY_340||displayMetrics == DisplayMetrics.DENSITY_360){
++        } else if (displayMetrics == DisplayMetrics.DENSITY_280 || displayMetrics == DisplayMetrics.DENSITY_260 || displayMetrics == DisplayMetrics.DENSITY_300 || displayMetrics == DisplayMetrics.DENSITY_XHIGH || displayMetrics == DisplayMetrics.DENSITY_340 || displayMetrics == DisplayMetrics.DENSITY_360) {
+             arguments.putFloatArray(DialogConfigurations.Corners, floatArrayOf(5f, 5f, 0f, 0f))
+         }
+ 
+-            arguments.putInt(DialogConfigurations.Color, Color.TRANSPARENT)
++        arguments.putInt(DialogConfigurations.Color, Color.TRANSPARENT)
+         arguments.putBoolean(DialogConfigurations.Cancelable, false)
+         arguments.putFloat(DialogConfigurations.Dim, 0.75f)
+         return arguments
+@@ -110,10 +113,10 @@
+     }
+ 
+     override fun paymentSucceed(charge: Charge) {
+-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
++        if (sdkSession.sdkIdentifier != null && (SDKSession.sdkIdentifier == SdkIdentifier.Flutter.name || SDKSession.sdkIdentifier == SdkIdentifier.ReactNative.name)) {
+             SDKSession.getPluginListener()?.paymentSucceed(charge)
+             this.finish()
+-        }else {
++        } else {
+             tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
+             Handler().postDelayed({
+                 tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+@@ -124,10 +127,10 @@
+     }
+ 
+     override fun paymentFailed(charge: Charge?) {
+-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
++        if (sdkSession.sdkIdentifier != null && (SDKSession.sdkIdentifier == SdkIdentifier.Flutter.name || SDKSession.sdkIdentifier == SdkIdentifier.ReactNative.name)) {
+             SDKSession.getPluginListener()?.paymentFailed(charge)
+             this.finish()
+-        }else {
++        } else {
+             println("paymentFailed called here")
+             tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
+             Handler().postDelayed({
+@@ -139,10 +142,10 @@
+     }
+ 
+     override fun authorizationSucceed(authorize: Authorize) {
+-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
++        if (sdkSession.sdkIdentifier != null && (SDKSession.sdkIdentifier == SdkIdentifier.Flutter.name || SDKSession.sdkIdentifier == SdkIdentifier.ReactNative.name)) {
+             SDKSession.getPluginListener()?.authorizationSucceed(authorize)
+             this.finish()
+-        }else {
++        } else {
+             tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
+             Handler().postDelayed({
+                 tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+@@ -153,10 +156,10 @@
+     }
+ 
+     override fun authorizationFailed(authorize: Authorize?) {
+-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
++        if (sdkSession.sdkIdentifier != null && (SDKSession.sdkIdentifier == SdkIdentifier.Flutter.name || SDKSession.sdkIdentifier == SdkIdentifier.ReactNative.name)) {
+             SDKSession.getPluginListener()?.authorizationFailed(authorize)
+             this.finish()
+-        }else {
++        } else {
+             tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
+             Handler().postDelayed({
+                 tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+@@ -168,10 +171,10 @@
+     }
+ 
+     override fun cardSaved(charge: Charge) {
+-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
++        if (sdkSession.sdkIdentifier != null && (SDKSession.sdkIdentifier == SdkIdentifier.Flutter.name || SDKSession.sdkIdentifier == SdkIdentifier.ReactNative.name)) {
+             SDKSession.getPluginListener()?.cardSaved(charge)
+             this.finish()
+-        }else {
++        } else {
+             tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
+             Handler().postDelayed({
+                 tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+@@ -182,10 +185,10 @@
+     }
+ 
+     override fun cardSavingFailed(charge: Charge) {
+-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
++        if (sdkSession.sdkIdentifier != null && (SDKSession.sdkIdentifier == SdkIdentifier.Flutter.name || SDKSession.sdkIdentifier == SdkIdentifier.ReactNative.name)) {
+             SDKSession.getPluginListener()?.cardSavingFailed(charge)
+             this.finish()
+-        }else {
++        } else {
+             tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
+             Handler().postDelayed({
+                 tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+@@ -196,10 +199,10 @@
+     }
+ 
+     override fun cardTokenizedSuccessfully(token: Token) {
+-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
++        if (sdkSession.sdkIdentifier != null && (SDKSession.sdkIdentifier == SdkIdentifier.Flutter.name || SDKSession.sdkIdentifier == SdkIdentifier.ReactNative.name)) {
+             SDKSession.getPluginListener()?.cardTokenizedSuccessfully(token)
+             this.finish()
+-        }else {
++        } else {
+             tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
+             Handler().postDelayed({
+                 tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+@@ -210,10 +213,10 @@
+     }
+ 
+     override fun savedCardsList(cardsList: CardsList) {
+-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
++        if (sdkSession.sdkIdentifier != null && (SDKSession.sdkIdentifier == SdkIdentifier.Flutter.name || SDKSession.sdkIdentifier == SdkIdentifier.ReactNative.name)) {
+             SDKSession.getPluginListener()?.savedCardsList(cardsList)
+             this.finish()
+-        }else {
++        } else {
+             tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
+             Handler().postDelayed({
+                 tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+@@ -225,10 +228,10 @@
+     }
+ 
+     override fun sdkError(goSellError: GoSellError?) {
+-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
++        if (sdkSession.sdkIdentifier != null && (SDKSession.sdkIdentifier == SdkIdentifier.Flutter.name || SDKSession.sdkIdentifier == SdkIdentifier.ReactNative.name)) {
+             SDKSession.getPluginListener()?.sdkError(goSellError)
+             this.finish()
+-        }else {
++        } else {
+             if (!this.isDestroyed) {
+                 tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
+                 Handler().postDelayed({
+@@ -241,34 +244,34 @@
+     }
+ 
+     override fun sessionIsStarting() {
+-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
++        if (sdkSession.sdkIdentifier != null && (SDKSession.sdkIdentifier == SdkIdentifier.Flutter.name || SDKSession.sdkIdentifier == SdkIdentifier.ReactNative.name)) {
+             SDKSession.getPluginListener()?.sessionIsStarting()
+         }
+     }
+ 
+     override fun sessionHasStarted() {
+-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
++        if (sdkSession.sdkIdentifier != null && (SDKSession.sdkIdentifier == SdkIdentifier.Flutter.name || SDKSession.sdkIdentifier == SdkIdentifier.ReactNative.name)) {
+             SDKSession.getPluginListener()?.sessionHasStarted()
+         }
+     }
+ 
+     override fun sessionCancelled() {
+-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
++        if (sdkSession.sdkIdentifier != null && (SDKSession.sdkIdentifier == SdkIdentifier.Flutter.name || SDKSession.sdkIdentifier == SdkIdentifier.ReactNative.name)) {
+             SDKSession.getPluginListener()?.sessionCancelled()
+         }
+     }
+ 
+     override fun sessionFailedToStart() {
+-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
++        if (sdkSession.sdkIdentifier != null && (SDKSession.sdkIdentifier == SdkIdentifier.Flutter.name || SDKSession.sdkIdentifier == SdkIdentifier.ReactNative.name)) {
+             SDKSession.getPluginListener()?.sessionFailedToStart()
+         }
+     }
+ 
+     override fun invalidCardDetails() {
+-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
++        if (sdkSession.sdkIdentifier != null && (SDKSession.sdkIdentifier == SdkIdentifier.Flutter.name || SDKSession.sdkIdentifier == SdkIdentifier.ReactNative.name)) {
+             SDKSession.getPluginListener()?.invalidCardDetails()
+             this.finish()
+-        }else {
++        } else {
+             tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
+             Handler().postDelayed({
+                 tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+@@ -280,10 +283,10 @@
+     }
+ 
+     override fun backendUnknownError(message: GoSellError?) {
+-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
++        if (sdkSession.sdkIdentifier != null && (SDKSession.sdkIdentifier == SdkIdentifier.Flutter.name || SDKSession.sdkIdentifier == SdkIdentifier.ReactNative.name)) {
+             SDKSession.getPluginListener()?.backendUnknownError(message)
+             this.finish()
+-        }else {
++        } else {
+             tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
+             Handler().postDelayed({
+                 tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+@@ -294,10 +297,10 @@
+     }
+ 
+     override fun invalidTransactionMode() {
+-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
++        if (sdkSession.sdkIdentifier != null && (SDKSession.sdkIdentifier == SdkIdentifier.Flutter.name || SDKSession.sdkIdentifier == SdkIdentifier.ReactNative.name)) {
+             SDKSession.getPluginListener()?.invalidTransactionMode()
+             this.finish()
+-        }else {
++        } else {
+             tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
+             Handler().postDelayed({
+                 tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+@@ -309,10 +312,10 @@
+     }
+ 
+     override fun invalidCustomerID() {
+-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
++        if (sdkSession.sdkIdentifier != null && (SDKSession.sdkIdentifier == SdkIdentifier.Flutter.name || SDKSession.sdkIdentifier == SdkIdentifier.ReactNative.name)) {
+             SDKSession.getPluginListener()?.invalidCustomerID()
+             this.finish()
+-        }else {
++        } else {
+             tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
+             Handler().postDelayed({
+                 tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+@@ -324,10 +327,10 @@
+     }
+ 
+     override fun userEnabledSaveCardOption(saveCardEnabled: Boolean) {
+-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
++        if (sdkSession.sdkIdentifier != null && (SDKSession.sdkIdentifier == SdkIdentifier.Flutter.name || SDKSession.sdkIdentifier == SdkIdentifier.ReactNative.name)) {
+             SDKSession.getPluginListener()?.userEnabledSaveCardOption(saveCardEnabled)
+             this.finish()
+-        }else {
++        } else {
+             tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
+             Handler().postDelayed({
+                 tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
+@@ -338,8 +341,8 @@
+     }
+ 
+     @RequiresApi(Build.VERSION_CODES.N)
+-    override fun getStatusSDK(response:String? ,charge: Charge?) {
+-        println("tabAnimatedActionButton is"+tabAnimatedActionButton)
++    override fun getStatusSDK(response: String?, charge: Charge?) {
++        println("tabAnimatedActionButton is" + tabAnimatedActionButton)
+         tabAnimatedActionButton?.let {
+             SDKSession.resetBottomSheetForButton(
+                 supportFragmentManager, this,
+@@ -356,12 +359,11 @@
+ 
+     override fun onPause() {
+         super.onPause()
+-        if(tapCheckoutFragment.isNfcOpened){
++        if (tapCheckoutFragment.isNfcOpened) {
+             cardReadDisposable.dispose()
+             tapNfcCardReader.disableDispatch()
+-        }
+-        else if(!isGooglePayClicked){
+-             finish()
++        } else if (!isGooglePayClicked) {
++            finish()
+         }
+ //changed above condition ELSE of simply finish to check gpay and finish , otherwise it ws not calling onactivity result
+ 
+@@ -385,9 +387,9 @@
+     }
+ 
+     @RequiresApi(Build.VERSION_CODES.N)
+-    override fun onActivityResult(requestCode:Int, resultCode:Int, data:Intent?){
++    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+         super.onActivityResult(requestCode, resultCode, data)
+-        println("<<<<onActivityResult>>>"+resultCode)
++        println("<<<<onActivityResult>>>" + resultCode)
+         when (requestCode) {
+             LOAD_PAYMENT_DATA_REQUEST_CODE -> {
+                 when (resultCode) {
+@@ -395,15 +397,23 @@
+                         val paymentData = data?.let { PaymentData.getFromIntent(it) }
+                         if (paymentData != null) {
+                             tapCheckoutFragment._viewModel?.handlePaymentSuccess(paymentData)
+-                        }else {
+-                            AutoResolveHelper.getStatusFromIntent(data)?.statusCode?.let { tapCheckoutFragment._viewModel?.handleError(it) }
++                        } else {
++                            AutoResolveHelper.getStatusFromIntent(data)?.statusCode?.let {
++                                tapCheckoutFragment._viewModel?.handleError(
++                                    it
++                                )
++                            }
+                         }
+ 
+                         isGooglePayClicked = false
+ 
+                     }
+                     RESULT_CANCELED -> {
+-                        tapCheckoutFragment._viewModel?.handleSuccessFailureResponseButton("Cancelled Google Pay",null,null)
++                        tapCheckoutFragment._viewModel?.handleSuccessFailureResponseButton(
++                            "Cancelled Google Pay",
++                            null,
++                            null
++                        )
+                         isGooglePayClicked = false
+ 
+                     }
+@@ -420,13 +430,14 @@
+         }
+     }
+ 
+-    fun handleGooglePayApiCall(){
++    fun handleGooglePayApiCall() {
+         // Disables the button to prevent multiple clicks.
+-          googlePayButton?.isClickable = false
++        googlePayButton?.isClickable = false
+         // assert(PaymentDataSource.getInstance().getAmount() != null)
+         _paymentsClient = PaymentsUtil.createPaymentsClient(this)
+         isGooglePayClicked = true
+-        val paymentDataRequestJson: JSONObject? = PaymentDataSource.getSelectedAmount()?.toLong()?.let { PaymentsUtil.getPaymentDataRequest(it) }
++        val paymentDataRequestJson: JSONObject? = PaymentDataSource.getSelectedAmount()?.toLong()
++            ?.let { PaymentsUtil.getPaymentDataRequest(it) }
+         if (paymentDataRequestJson == null) {
+             Log.e("RequestPayment", "Can't fetch payment data request")
+             return
+@@ -441,8 +452,9 @@
+         // onActivityResult will be called with the result.
+         if (request != null) {
+             AutoResolveHelper.resolveTask(
+-                    _paymentsClient.loadPaymentData(request), this, LOAD_PAYMENT_DATA_REQUEST_CODE)
++                _paymentsClient.loadPaymentData(request), this, LOAD_PAYMENT_DATA_REQUEST_CODE
++            )
+         }
+     }
+ 
+-    }
++}
+Index: checkout/src/main/res/drawable/layout_bg.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n\n    <shape xmlns:android=\"http://schemas.android.com/apk/res/android\">\n        <solid android:color=\"#00FFFFFF\"/>\n        <stroke android:width=\"3dp\" android:color=\"#00FFFFFF\" />\n        <corners android:radius=\"60dp\"/>\n        <padding android:left=\"0dp\" android:top=\"0dp\" android:right=\"0dp\" android:bottom=\"0dp\" />\n    </shape>\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/checkout/src/main/res/drawable/layout_bg.xml b/checkout/src/main/res/drawable/layout_bg.xml
+--- a/checkout/src/main/res/drawable/layout_bg.xml	(revision 7b1dc9bb5d67476583ef824fdc375087d10ac445)
++++ b/checkout/src/main/res/drawable/layout_bg.xml	(date 1663144399361)
+@@ -3,6 +3,6 @@
+     <shape xmlns:android="http://schemas.android.com/apk/res/android">
+         <solid android:color="#00FFFFFF"/>
+         <stroke android:width="3dp" android:color="#00FFFFFF" />
+-        <corners android:radius="60dp"/>
++        <corners android:topLeftRadius="5dp" android:topRightRadius="5dp"/>
+         <padding android:left="0dp" android:top="0dp" android:right="0dp" android:bottom="0dp" />
+     </shape>
+Index: checkout/src/main/java/company/tap/checkout/open/CheckoutFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package company.tap.checkout.open\n\n\nimport android.annotation.SuppressLint\nimport android.app.Activity\nimport android.content.Context\nimport android.graphics.Color\nimport android.graphics.Rect\nimport android.os.Build\nimport android.os.Bundle\nimport android.os.Handler\nimport android.view.LayoutInflater\nimport android.view.View\nimport android.view.ViewGroup\nimport android.view.ViewTreeObserver.OnGlobalLayoutListener\nimport android.view.WindowManager\nimport android.widget.FrameLayout\nimport android.widget.LinearLayout\nimport androidx.annotation.RequiresApi\nimport androidx.fragment.app.DialogFragment\nimport androidx.fragment.app.Fragment\nimport androidx.fragment.app.viewModels\nimport cards.pay.paycardsrecognizer.sdk.Card\nimport cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback\nimport com.google.android.material.bottomsheet.BottomSheetBehavior\nimport company.tap.checkout.R\nimport company.tap.checkout.internal.api.enums.ChargeStatus\nimport company.tap.checkout.internal.apiresponse.CardViewModel\nimport company.tap.checkout.internal.apiresponse.CardViewState\nimport company.tap.checkout.internal.apiresponse.Resource\nimport company.tap.checkout.internal.enums.SectionType\nimport company.tap.checkout.internal.viewmodels.CheckoutViewModel\nimport company.tap.checkout.open.controller.SDKSession\nimport company.tap.checkout.open.controller.SDKSession.sessionDelegate\nimport company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton\nimport company.tap.checkout.open.data_managers.PaymentDataSource\nimport company.tap.taplocalizationkit.LocalizationManager\nimport company.tap.tapuilibrary.themekit.ThemeManager\nimport company.tap.tapuilibrary.uikit.atoms.TapImageView\nimport company.tap.tapuilibrary.uikit.atoms.TapTextView\nimport company.tap.tapuilibrary.uikit.enums.ActionButtonState\nimport company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface\nimport company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog\n\n\n/**\n * A simple [Fragment] subclass.\n// * Use the [CheckoutFragment.newInstance] factory method to\n * create an instance of this fragment.\n */\nclass CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, InlineViewCallback {\n\n    private var _Context: Context? = null\n    @JvmField\n     var _viewModel: CheckoutViewModel?=null\n    private lateinit var cardViewModel: CardViewModel\n    var _activity: Activity? = null\n    var checkOutActivity: CheckOutActivity? = null\n    lateinit var closeText: TapTextView\n    lateinit var closeImage: TapImageView\n    var hideAllView =false\n    lateinit var status :ChargeStatus\n    private  var _resetFragment :Boolean = true\n    @JvmField\n    var isNfcOpened:Boolean=false\n\n    private var isFullscreen = true\n\n\n    override fun onCreate(savedInstanceState: Bundle?) {\n        super.onCreate(savedInstanceState)\n        _activity = activity?.parent\n        this._Context = context\n\n\n    }\n\n    @RequiresApi(Build.VERSION_CODES.N)\n    override fun onDestroyView() {\n        println(\"onDestroyView>>>\")\n        /*if (view?.parent != null) {\n            (view?.parent as ViewGroup).removeView(view)\n        }*/\n        resetTabAnimatedButton()\n        super.onDestroyView()\n    }\n\n\n\n    override fun onCreateView(\n        inflater: LayoutInflater, container: ViewGroup?,\n        savedInstanceState: Bundle?\n    ): View? {\n        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)\n        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)\n\n        return inflater.inflate(R.layout.fragment_checkouttaps, container, false)\n    }\n\n    @RequiresApi(Build.VERSION_CODES.N)\n    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {\n        super.onViewCreated(view, savedInstanceState)\n        val viewModel: CheckoutViewModel by viewModels()\n        val cardViewModel: CardViewModel by viewModels()\n        this._viewModel = viewModel\n        _Context?.let { cardViewModel.getContext(it) }\n        backgroundColor = (Color.parseColor(ThemeManager.getValue(\"GlobalValues.Colors.clear\")))\n        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)\n        bottomSheetDialog.behavior.peekHeight\n        bottomSheetDialog.behavior.isDraggable\n        val checkoutLayout: LinearLayout? = view.findViewById(R.id.fragment_all)\n        val frameLayout: FrameLayout? = view.findViewById(R.id.fragment_container_nfc_lib)\n        val webFrameLayout: FrameLayout? = view.findViewById(R.id.webFrameLayout)\n        val inLineCardLayout: FrameLayout? = view.findViewById(R.id.inline_container)\n         closeText = view.findViewById(R.id.closeText)\n         closeImage= view.findViewById(R.id.closeImage)\n        closeText?.text = LocalizationManager.getValue(\"close\", \"Common\")\n\n\n        if (SDKSession.showCloseImage ==true) {\n\n            if(!hideAllView) {\n                Handler().postDelayed({\n                    closeImage.visibility = View.VISIBLE\n\n                }, 3000)\n            }\n\n        } else {\n            if(!hideAllView) {\n                Handler().postDelayed({\n                    closeText.visibility = View.VISIBLE\n\n                }, 3000)\n            }\n\n        }\n        closeText.setOnClickListener {\n            bottomSheetDialog.dismissWithAnimation\n            bottomSheetDialog.hide()\n            bottomSheetDialog.dismiss()\n            resetTabAnimatedButton()\n\n        }\n        closeImage.setOnClickListener {\n            bottomSheetDialog.dismissWithAnimation\n            bottomSheetDialog.hide()\n            bottomSheetDialog.dismiss()\n            resetTabAnimatedButton()\n\n        }\n\n        LocalizationManager.loadTapLocale(resources, R.raw.lang)\n        sessionDelegate?.sessionIsStarting()\n        bottomSheetLayout?.let {\n            viewModel.setBottomSheetLayout(it)\n        }\n        if (checkoutLayout != null) {\n            context?.let {\n                if (frameLayout != null) {\n                    webFrameLayout?.let { it1 ->\n                        if (inLineCardLayout != null) {\n                            activity?.intent?.let { it2 ->\n                                viewModel.initLayoutManager(\n                                    bottomSheetDialog,\n                                    it,\n                                    childFragmentManager,\n                                    checkoutLayout,\n                                    frameLayout,\n                                    it1,\n                                    inLineCardLayout,\n                                    this,\n                                    it2,\n                                    cardViewModel, this\n                                )\n                            }\n\n                        }\n                    }\n                }\n            }\n        }\n         enableSections()\n\n        dialog?.window?.attributes?.windowAnimations = R.style.DialogAnimation\n\n        bottomSheetDialog.setOnShowListener {\n            //Handler().postDelayed({\n                bottomSheetDialog.behavior.setState(BottomSheetBehavior.STATE_EXPANDED)\n          //  }, 0)\n        }\n\n\n        bottomSheetDialog.behavior.setBottomSheetCallback(object:BottomSheetBehavior.BottomSheetCallback(){\n\n            override fun onStateChanged(bottomSheet: View, newState: Int) {\n                if (newState == BottomSheetBehavior.STATE_HIDDEN) {\n                   resetTabAnimatedButton()\n                    dismiss()\n                }\n                if (newState == BottomSheetBehavior.STATE_EXPANDED) {\n                   bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED\n                   bottomSheetDialog.behavior.isDraggable = true\n                }\n            }\n\n            override fun onSlide(p0: View, p1: Float) {\n\n            }\n        })\n\n\n    }\n\n\n\n\n    @RequiresApi(Build.VERSION_CODES.N)\n    fun enableSections(): ArrayList<SectionType> {\n        val enabledSections = ArrayList<SectionType>()\n        enabledSections.add(SectionType.BUSINESS)\n        enabledSections.add(SectionType.AMOUNT_ITEMS)\n        enabledSections.add(SectionType.FRAGMENT)\n        enabledSections.add(SectionType.ActionButton)\n\n        println(\"_resetFragment>>\" + _resetFragment)\n        println(\"hideAllView>>\" + hideAllView)\nif(_resetFragment) {\n    if (hideAllView) {\n        if (::status.isInitialized)\n            _viewModel?.showOnlyButtonView(status, checkOutActivity as CheckOutActivity?, this)\n\n    } else {\n        _viewModel?.displayStartupLayout(enabledSections)\n        _viewModel?.getDatasfromAPIs(\n            PaymentDataSource.getMerchantData(),\n            PaymentDataSource.getPaymentOptionsResponse()\n        )\n\n    }\n}else{\n    if (::status.isInitialized)\n        _viewModel?.showOnlyButtonView(status, checkOutActivity as CheckOutActivity?, this)\n}\n\n        setBottomSheetInterface(this)\n\n        return enabledSections\n    }\n\n\n\n\n\n    companion object {\n        // TODO: Rename and change types and number of parameters\n        const val RESET_FRAG = \"resetFragment\"\n        @JvmStatic\n        fun newInstance(context: Context, activity: Activity?, resetFragment: Boolean) =\n            CheckoutFragment().apply {\n                arguments = Bundle().apply {}\n                _Context = context\n                _activity = activity\n                _resetFragment =resetFragment\nrequireArguments().putBoolean(RESET_FRAG, resetFragment)\n            }\n    }\n\n    override fun onScanCardFailed(e: Exception?) {\n        println(\"onScanCardFailed\")\n        _viewModel?.handleScanFailedResult()\n    }\n\n    @RequiresApi(Build.VERSION_CODES.N)\n    override fun onScanCardFinished(card: Card?, cardImage: ByteArray?) {\n        if (card != null) {\n            println(\"scanned card is$card\")\n            _viewModel?.handleScanSuccessResult(card)\n\n        }\n    }\n\n\n\n\n    private fun consumeResponse(response: Resource<CardViewState>) {\n        println(\"response value is\" + response.data?.configResponseModel)\n        when (response) {\n            is Resource.Loading -> concatText(\"Loading\")\n            is Resource.Finished -> renderView(response.data)\n            is Error -> response.message?.let { concatText(it) }\n            is Resource.Success -> renderView(response.data)\n\n        }\n    }\n\n    private fun renderView(data: CardViewState?) {\n\n    }\n    @SuppressLint(\"SetTextI18n\")\n    private fun concatText(newText: String) {\n        println(\"newText respoonse$newText\")\n\n    }\n\n\n\n    override fun onDetach() {\n        super.onDetach()\n     if (view == null) {\n            return\n        }\n        if(isNfcOpened){\n        }else {\n            checkOutActivity?.onBackPressed()\n        }\n\n\n    }\n\n    @RequiresApi(Build.VERSION_CODES.N)\n    private fun resetTabAnimatedButton(){\n        checkOutActivity?.displayMetrics?.let { tabAnimatedActionButton?.setDisplayMetrics(it) }\n        SDKSession.sessionActive = false\n        tabAnimatedActionButton?.changeButtonState(ActionButtonState.RESET)\nif(checkOutActivity?.isGooglePayClicked == false){\n    checkOutActivity?.finish()\n}\n      //  checkOutActivity?.finish()\n        tabAnimatedActionButton?.setButtonDataSource(\n            true,\n            context.let {\n                if (it != null) {\n                    LocalizationManager.getLocale(it).language\n                }\n            }.toString(),\n            LocalizationManager.getValue(\"pay\", \"ActionButton\"),\n            Color.parseColor(ThemeManager.getValue(\"actionButton.Valid.paymentBackgroundColor\")),\n            Color.parseColor(ThemeManager.getValue(\"actionButton.Valid.titleLabelColor\"))\n        )\n\n        tabAnimatedActionButton?.isClickable=true\n    }\n\n\n  /*  private fun initKeyBoardListener() {\n        // Минимальное значение клавиатуры.\n        // Threshold for minimal keyboard height.\n        val MIN_KEYBOARD_HEIGHT_PX = 150\n        // Окно верхнего уровня view.\n        // Top-level window decor view.\n            // val decorView: View = netscape.javascript.JSObject.getWindow().getDecorView()\n        // Регистрируем глобальный слушатель. Register global layout listener.\n        decorView.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {\n            // Видимый прямоугольник внутри окна.\n            // Retrieve visible rectangle inside window.\n            private val windowVisibleDisplayFrame: Rect = Rect()\n            private var lastVisibleDecorViewHeight = 0\n            override fun onGlobalLayout() {\n                decorView.getWindowVisibleDisplayFrame(windowVisibleDisplayFrame)\n                val visibleDecorViewHeight: Int = windowVisibleDisplayFrame.height()\n                if (lastVisibleDecorViewHeight != 0) {\n                    if (lastVisibleDecorViewHeight > visibleDecorViewHeight + MIN_KEYBOARD_HEIGHT_PX) {\n\n                    } else if (lastVisibleDecorViewHeight + MIN_KEYBOARD_HEIGHT_PX < visibleDecorViewHeight) {\n\n                    }\n                }\n                // Сохраняем текущую высоту view до следующего вызова.\n                // Save current decor view height for the next call.\n                lastVisibleDecorViewHeight = visibleDecorViewHeight\n            }\n        })\n    }*/\n\n\n}\n\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/checkout/src/main/java/company/tap/checkout/open/CheckoutFragment.kt b/checkout/src/main/java/company/tap/checkout/open/CheckoutFragment.kt
+--- a/checkout/src/main/java/company/tap/checkout/open/CheckoutFragment.kt	(revision 7b1dc9bb5d67476583ef824fdc375087d10ac445)
++++ b/checkout/src/main/java/company/tap/checkout/open/CheckoutFragment.kt	(date 1663226859044)
+@@ -104,7 +104,7 @@
+         val cardViewModel: CardViewModel by viewModels()
+         this._viewModel = viewModel
+         _Context?.let { cardViewModel.getContext(it) }
+-        backgroundColor = (Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.clear")))
++        backgroundColor =  (Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.clear")))
+         setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
+         bottomSheetDialog.behavior.peekHeight
+         bottomSheetDialog.behavior.isDraggable
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"DesignSurface\">\n    <option name=\"filePathToZoomLevelMap\">\n      <map>\n        <entry key=\"app/src/main/res/xml/root_preferences.xml\" value=\"0.1\" />\n        <entry key=\"checkout/src/main/res/layout/fragment_checkouttaps.xml\" value=\"0.11876699909338169\" />\n        <entry key=\"checkout/src/main/res/layout/payment_inputt_layout.xml\" value=\"0.1\" />\n      </map>\n    </option>\n  </component>\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_11\" default=\"true\" project-jdk-name=\"11\" project-jdk-type=\"JavaSDK\" />\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision 7b1dc9bb5d67476583ef824fdc375087d10ac445)
++++ b/.idea/misc.xml	(date 1663224792725)
+@@ -3,11 +3,17 @@
+   <component name="DesignSurface">
+     <option name="filePathToZoomLevelMap">
+       <map>
+-        <entry key="app/src/main/res/xml/root_preferences.xml" value="0.1" />
+-        <entry key="checkout/src/main/res/layout/fragment_checkouttaps.xml" value="0.11876699909338169" />
+-        <entry key="checkout/src/main/res/layout/payment_inputt_layout.xml" value="0.1" />
++        <entry key="../../../../layout/custom_preview.xml" value="0.11772620248906829" />
++        <entry key="app/src/main/res/layout/activity_main.xml" value="0.29393115942028986" />
++        <entry key="checkout/src/main/res/drawable/layout_bb.xml" value="0.191" />
++        <entry key="checkout/src/main/res/drawable/layout_bg.xml" value="0.1565" />
++        <entry key="checkout/src/main/res/layout/activity_check_out.xml" value="0.1646403242147923" />
++        <entry key="checkout/src/main/res/layout/businessview_layout.xml" value="0.1646403242147923" />
++        <entry key="checkout/src/main/res/layout/fragment_checkouttaps.xml" value="0.1" />
++        <entry key="checkout/src/main/res/layout/fragment_checkouttaps_full.xml" value="0.1646403242147923" />
++        <entry key="checkout/src/main/res/layout/gopayloginview_layout.xml" value="0.1646403242147923" />
+       </map>
+     </option>
+   </component>
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK" />
+ </project>
+\ No newline at end of file
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>apply plugin: 'com.android.application'\napply plugin: 'kotlin-android'\napply plugin: 'kotlin-android-extensions'\napply plugin: 'com.google.gms.google-services'\napply plugin: 'com.google.firebase.crashlytics'\n\nandroid {\n    compileSdkVersion 31\n   // buildToolsVersion \"29.0.3\"\n\n    defaultConfig {\n        applicationId \"company.tap.checkoutsdk\"\n        minSdkVersion 22\n        targetSdkVersion 31\n        versionCode 1\n        versionName \"1.0.2.14\"\n        multiDexEnabled true\n        testInstrumentationRunner \"androidx.test.runner.AndroidJUnitRunner\"\n        consumerProguardFiles 'proguard-rules.pro'\n    }\n\n    buildTypes {\n        release {\n            minifyEnabled false\n            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'\n        }\n    }\n\n\n    compileOptions {\n        sourceCompatibility JavaVersion.VERSION_1_8\n        targetCompatibility JavaVersion.VERSION_1_8\n    }\n    kotlinOptions {\n        jvmTarget = JavaVersion.VERSION_1_8.toString()\n    }\n}\n\ndependencies {\n    implementation fileTree(dir: 'libs', include: ['*.jar'])\n    implementation \"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version\"\n    implementation 'androidx.core:core-ktx:1.7.0'\n    implementation project(\":checkout\")\n    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'\n    testImplementation 'junit:junit:4.13'\n\n    androidTestImplementation 'androidx.test.ext:junit:1.1.3'\n    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'\n\n    androidTestImplementation 'androidx.test.ext:junit:1.1.3'\n    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'\n\n    implementation 'com.koushikdutta.ion:ion:3.1.0'\n\n    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.357.35'\n    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.357.35'\n    implementation 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.36.40'\n    api 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.36.40'\n    implementation 'company.tap:PayCards-Tap-Android:0.1.6.4'\n    api 'company.tap:PayCards-Tap-Android:0.1.6.4'\n\n  // implementation 'com.google.firebase:firebase-analytics:18.0.0'\n    implementation 'androidx.multidex:multidex:2.0.1'\n    implementation \"androidx.fragment:fragment-ktx:1.4.1\"\n    implementation \"com.github.Tap-Payments:TapGLKit-Android:1.18\"\n    implementation 'com.github.Tap-Payments:LocalisationManager-Android:0.0.1.29'\n    implementation 'androidx.appcompat:appcompat:1.3.1'\n    implementation 'com.google.android.material:material:1.4.0'\n    implementation 'androidx.preference:preference-ktx:1.2.0'\n    implementation 'com.github.corouteam:GlideToVectorYou:v2.0.0'\n\n\n        // Import the BoM for the Firebase platform\n        implementation platform('com.google.firebase:firebase-bom:30.3.1')\n\n        // Declare the dependencies for the Crashlytics and Analytics libraries\n        // When using the BoM, you don't specify versions in Firebase library dependencies\n        implementation 'com.google.firebase:firebase-crashlytics'\n        implementation 'com.google.firebase:firebase-analytics'\n\n\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/build.gradle b/app/build.gradle
+--- a/app/build.gradle	(revision 7b1dc9bb5d67476583ef824fdc375087d10ac445)
++++ b/app/build.gradle	(date 1662551956751)
+@@ -52,7 +52,8 @@
+ 
+     implementation 'com.koushikdutta.ion:ion:3.1.0'
+ 
+-    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.357.35'
++    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.358'
++   // implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.357.35'
+     api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.357.35'
+     implementation 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.36.40'
+     api 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.36.40'
+Index: .idea/compiler.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"CompilerConfiguration\">\n    <bytecodeTargetLevel target=\"11\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/compiler.xml b/.idea/compiler.xml
+--- a/.idea/compiler.xml	(revision 7b1dc9bb5d67476583ef824fdc375087d10ac445)
++++ b/.idea/compiler.xml	(date 1662551451973)
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="CompilerConfiguration">
+-    <bytecodeTargetLevel target="11" />
++    <bytecodeTargetLevel target="1.8" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: .idea/gradle.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"GradleMigrationSettings\" migrationVersion=\"1\" />\n  <component name=\"GradleSettings\">\n    <option name=\"linkedExternalProjectsSettings\">\n      <GradleProjectSettings>\n        <option name=\"testRunner\" value=\"GRADLE\" />\n        <option name=\"distributionType\" value=\"DEFAULT_WRAPPED\" />\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$\" />\n        <option name=\"gradleJvm\" value=\"#JAVA_HOME\" />\n        <option name=\"modules\">\n          <set>\n            <option value=\"$PROJECT_DIR$\" />\n            <option value=\"$PROJECT_DIR$/app\" />\n            <option value=\"$PROJECT_DIR$/checkout\" />\n          </set>\n        </option>\n        <option name=\"resolveModulePerSourceSet\" value=\"false\" />\n      </GradleProjectSettings>\n    </option>\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/gradle.xml b/.idea/gradle.xml
+--- a/.idea/gradle.xml	(revision 7b1dc9bb5d67476583ef824fdc375087d10ac445)
++++ b/.idea/gradle.xml	(date 1661317251593)
+@@ -7,7 +7,8 @@
+         <option name="testRunner" value="GRADLE" />
+         <option name="distributionType" value="DEFAULT_WRAPPED" />
+         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+-        <option name="gradleJvm" value="#JAVA_HOME" />
++        <option name="gradleHome" value="/usr/local/Cellar/gradle/6.7.1/libexec" />
++        <option name="gradleJvm" value="1.8" />
+         <option name="modules">
+           <set>
+             <option value="$PROJECT_DIR$" />
+@@ -15,7 +16,6 @@
+             <option value="$PROJECT_DIR$/checkout" />
+           </set>
+         </option>
+-        <option name="resolveModulePerSourceSet" value="false" />
+       </GradleProjectSettings>
+     </option>
+   </component>
+Index: checkout/src/main/res/values/styles.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<resources>\n    <style name=\"DialogStyle\" parent=\"Theme.Design.Light.BottomSheetDialog\">\n        <item name=\"android:windowIsFloating\">false</item>\n        <item name=\"android:statusBarColor\">@android:color/transparent</item>\n        <item name=\"android:windowSoftInputMode\">adjustResize</item>\n    </style>\n\n    <style name=\"Theme.AppCompat.Translucent\" parent=\"Theme.MaterialComponents.NoActionBar\">\n        <item name=\"android:windowNoTitle\">true</item>\n        <item name=\"android:windowBackground\">@android:color/transparent</item>\n        <item name=\"android:colorBackgroundCacheHint\">@null</item>\n        <item name=\"android:windowIsTranslucent\">true</item>\n        <item name=\"android:editTextColor\">@color/black_color</item>\n        <item name=\"android:windowAnimationStyle\">@android:style/Animation</item>\n    </style>\n\n    <style name=\"DialogAnimation\">\n        <item name=\"android:windowEnterAnimation\">@anim/slide_up</item>\n        <item name=\"android:windowExitAnimation\">@anim/fade_in</item>\n    </style>\n    <style name=\"CustomCardViewStyle\" parent=\"@style/Widget.MaterialComponents.CardView\">\n        <item name=\"shapeAppearanceOverlay\">@style/ShapeAppearanceOverlay.MaterialCardView.Cut</item>\n    </style>\n</resources>\n<!--\n<item name=\"android:background\">#00000000</item>  Or any transparency or color you need -->\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/checkout/src/main/res/values/styles.xml b/checkout/src/main/res/values/styles.xml
+--- a/checkout/src/main/res/values/styles.xml	(revision 7b1dc9bb5d67476583ef824fdc375087d10ac445)
++++ b/checkout/src/main/res/values/styles.xml	(date 1661326525211)
+@@ -4,6 +4,7 @@
+         <item name="android:windowIsFloating">false</item>
+         <item name="android:statusBarColor">@android:color/transparent</item>
+         <item name="android:windowSoftInputMode">adjustResize</item>
++        <item name="android:backgroundDimAmount">0</item>
+     </style>
+ 
+     <style name="Theme.AppCompat.Translucent" parent="Theme.MaterialComponents.NoActionBar">
