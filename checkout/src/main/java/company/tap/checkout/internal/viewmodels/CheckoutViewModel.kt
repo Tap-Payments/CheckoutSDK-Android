@@ -1014,6 +1014,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             } }
 
         }
+        val payString:String = LocalizationManager.getValue("pay", "ActionButton")
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(false,"en",
+            "$payString $currentCurrency $currentAmount",Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),null)
+
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
