@@ -142,12 +142,13 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         if(position < adapterContent.size){
             if(adapterContent[position].paymentType==PaymentType.WEB){
                 println("adapterContent value are>>>" + adapterContent[position].brand?.name)
-                if(adapterContent[position].brand?.name?.equals("benefit") == true){
+                //BenefitPay condition for native removed
+               /* if(adapterContent[position].brand?.name?.equals("benefit") == true){
                         return TYPE_3PPG
-                    }else {
+                    }else {*/
                         (adapterContent[position]).image?.let { arrayListRedirect.add(it) }
                         return TYPE_REDIRECT
-                    }
+                   // }
             }
 
         }
