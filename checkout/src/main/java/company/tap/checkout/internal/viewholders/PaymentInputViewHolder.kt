@@ -514,7 +514,7 @@ class PaymentInputViewHolder(
         tapCardInputView.setCvcNumberTextWatcher(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 //   checkoutFragment.scrollView?.scrollTo(0,height)
-                tapCardInputView.requestFocus()
+               // tapCardInputView.requestFocus()
 
             }
 
