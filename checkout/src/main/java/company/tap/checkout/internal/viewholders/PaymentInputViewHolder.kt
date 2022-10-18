@@ -872,7 +872,7 @@ class PaymentInputViewHolder(
         val itemsMobilesList = ArrayList<SectionTabItem>()
         itemsCardsList = ArrayList<SectionTabItem>()
         intertabLayout.removeAllTabs()
-        intertabLayout.setPadding(-50, 0, 0, 0)
+      //  intertabLayout.setPadding(-50, 0, 0, 0)
         PaymentDataSource.setBinLookupResponse(null)
 //        tabLayout.changeTabItemAlphaValue(1f)
         decideTapSelection(imageURLApi, itemsMobilesList, itemsCardsList)
