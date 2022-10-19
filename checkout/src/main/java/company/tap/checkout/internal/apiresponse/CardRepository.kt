@@ -390,7 +390,7 @@ class CardRepository : APIRequestCallback {
 
                 println("configResponse>>"+configResponse?.token)
                 PaymentDataSource.setTokenConfig(configResponse?.token)
-                NetworkApp.initNetworkToken(configResponse?.token, contextSDK,ApiService.BASE_URL)
+                NetworkApp.initNetworkToken(configResponse?.token, contextSDK,ApiService.BASE_URL,true)
                 val reqBody = EmptyBody()
                 jsonString =Gson().toJson(reqBody)
                 NetworkController.getInstance().processRequest(
