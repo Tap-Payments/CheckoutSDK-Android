@@ -52,10 +52,10 @@ dependencies {
 
     implementation 'com.koushikdutta.ion:ion:3.1.0'
 
-    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.358.79'
-    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.358.79'
-    implementation 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.36.77'
-    api 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.36.77'
+    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.358.97'
+    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.358.97'
+    implementation 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.36.81'
+    api 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.36.81'
     implementation 'company.tap:PayCards-Tap-Android:0.1.6.4'
     api 'company.tap:PayCards-Tap-Android:0.1.6.4'
 
@@ -67,7 +67,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.preference:preference-ktx:1.2.0'
-    implementation 'com.github.corouteam:GlideToVectorYou:v2.0.0'
+    implementation 'com.github.2coffees1team:GlideToVectorYou:v2.0.0'
     implementation files('libs/benefitinappsdk-1.0.23.aar')
 
         // Import the BoM for the Firebase platform
