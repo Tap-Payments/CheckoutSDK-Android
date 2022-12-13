@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="checkout/src/main/res/layout/cardviewholder_layout1.xml" value="0.779443359375" />
         <entry key="checkout/src/main/res/layout/fragment_checkouttaps.xml" value="0.1858108108108108" />
         <entry key="checkout/src/main/res/layout/payment_inputt_layout.xml" value="0.12263513513513513" />
         <entry key="checkout/src/main/res/layout/switch_layout.xml" value="0.1" />

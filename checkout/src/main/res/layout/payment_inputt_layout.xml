@@ -14,6 +14,16 @@
         android:layout_height="wrap_content"
         android:layoutDirection="locale" />
 
+  <company.tap.tapuilibrary.uikit.views.TapContactDetailsView
+        android:id="@+id/contactDetailsView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+      android:visibility="gone"/>
 
+    <company.tap.tapuilibrary.uikit.views.TapShippingDetailView
+        android:id="@+id/shipDetailsView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
 
 </LinearLayout>

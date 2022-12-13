@@ -58,10 +58,8 @@ import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
 import company.tap.tapuilibrary.uikit.interfaces.TapPaymentShowHideClearImage
 import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
 import company.tap.tapuilibrary.uikit.models.SectionTabItem
-import company.tap.tapuilibrary.uikit.views.TapAlertView
-import company.tap.tapuilibrary.uikit.views.TapInlineCardSwitch
-import company.tap.tapuilibrary.uikit.views.TapMobilePaymentView
-import company.tap.tapuilibrary.uikit.views.TapSelectionTabLayout
+import company.tap.tapuilibrary.uikit.organisms.TapPaymentInput
+import company.tap.tapuilibrary.uikit.views.*
 import kotlinx.android.synthetic.main.loyalty_view_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 
@@ -135,21 +133,27 @@ class PaymentInputViewHolder(
     var closeButton: ImageView? = null
     var cardInputUIStatus: CardInputUIStatus? = null
     var backArrow: TapImageView? = null
+    var contactDetailsView: TapContactDetailsView? = null
+    var shippingDetailView: TapShippingDetailView? = null
+    var tapPaymentInput: TapPaymentInput? = null
 
     init {
         tabLayout.setTabLayoutInterface(this)
         tapMobileInputView = TapMobilePaymentView(context, null)
         tapMobileInputView.setTapPaymentShowHideClearImage(this)
         tapCardInputView = InlineCardInput(context, null)
-        tapAlertView = tapCardInputView.findViewById(R.id.alertView)
+       // tapAlertView = tapCardInputView.findViewById(R.id.alertView)
         nfcButton = tapCardInputView.findViewById(R.id.nfc_button)
         scannerButton = tapCardInputView.findViewById(R.id.card_scanner_button)
         closeButton = tapCardInputView.findViewById(R.id.clear_text)
+        tapPaymentInput = view.findViewById(R.id.tap_payment_input)
+        tapAlertView = tapPaymentInput?.findViewById(R.id.alertView)
         //cardSwitchLayout = tapCardInputView.findViewById(R.id.mainSwitchInline)
         paymentInputContainer = view.findViewById(R.id.payment_input_layout)
         // clearView = view.findViewById(R.id.clear_text)
         backArrow = tapCardInputView.findViewById(R.id.backView)
-        tapInlineCardSwitch = tapCardInputView.findViewById(R.id.mainSwitchInline)
+        contactDetailsView = view.findViewById(R.id.contactDetailsView)
+        tapInlineCardSwitch = tapPaymentInput?.findViewById(R.id.switch_Inline_card)
         secondaryLayout = tapCardInputView.findViewById(R.id.secondary_Layout)
         textViewPowered = tapCardInputView.findViewById(R.id.textViewPowered)
         saveForOtherCheckBox = tapCardInputView.findViewById(R.id.saveForOtherCheckBox)
@@ -173,7 +177,7 @@ class PaymentInputViewHolder(
         constraintt = view.findViewById(R.id.constraintt)
         constraintt.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
         acceptedCardText = view.findViewById(R.id.acceptedCardText)
-        acceptedCardText.text = "We accept"
+        acceptedCardText.text =  LocalizationManager.getValue("weSupport", "TapCardInputKit")
         saveForOtherCheckBox?.text = "Save for other stores powered by Tap"
         bindViewComponents()
 
@@ -205,11 +209,18 @@ class PaymentInputViewHolder(
         initializeIcons()
         tapMobileInputViewWatcher()
         initializeCardBrandView()
+        initCustomerDetailView()
         /**
          * set separator background
          */
         //  view.separator?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
         //setSeparatorTheme()
+    }
+
+    private fun initCustomerDetailView() {
+        contactDetailsView?.cardDetailTitle?.text =  LocalizationManager.getValue("SaveCardHeader", "HorizontalHeaders","contactDetailsSectionTitle")
+        shippingDetailView?.shippingDetailTitle?.text =  LocalizationManager.getValue("SaveCardHeader", "HorizontalHeaders","shippingSectionTitle")
+        tapInlineCardSwitch?.switchSaveCard?.isChecked = false
     }
 
     private fun initializeIcons() {
@@ -325,6 +336,8 @@ class PaymentInputViewHolder(
         if (PaymentDataSource.getBinLookupResponse() != null) {
             PaymentDataSource.setBinLookupResponse(null)
         }
+        tapInlineCardSwitch?.switchSaveCard?.isChecked = true
+        tapInlineCardSwitch?.visibility = View.GONE
 
     }
 
@@ -350,6 +363,7 @@ class PaymentInputViewHolder(
     }
 
     private fun initCardInput() {
+        tapInlineCardSwitch?.visibility = View.GONE
         tapCardInputView.holderNameEnabled =
             PaymentDataSource.getEnableEditCardHolderName() != null && PaymentDataSource.getEnableEditCardHolderName()
         if (PaymentDataSource.getDefaultCardHolderName() != null) {
@@ -481,6 +495,7 @@ class PaymentInputViewHolder(
     }
 
     private fun afterTextChangeAction(s: Editable?) {
+        tapInlineCardSwitch?.visibility = View.VISIBLE
         if (s.isNullOrEmpty()) {
             // tabLayout.resetBehaviour()
         } else {
@@ -497,6 +512,7 @@ class PaymentInputViewHolder(
                 tapAlertView?.visibility = View.VISIBLE
                 lastFocusField = CardInputListener.FocusField.FOCUS_CVC
                 // checkoutFragment.scrollView?.scrollTo(0,height)
+                tapInlineCardSwitch?.switchSaveCard?.isChecked = true
             }
 
 
@@ -534,6 +550,7 @@ class PaymentInputViewHolder(
             }
 
             override fun afterTextChanged(s: Editable?) {
+                tapPaymentInput?.visibility = View.VISIBLE
                 /**
                  * we will get cvv number
                  */
@@ -546,7 +563,7 @@ class PaymentInputViewHolder(
                                     true, PaymentType.CARD,
                                     it, it1, it2
                                 )
-                                tapCardInputView.switchCardEnabled = true
+                                tapInlineCardSwitch?.switchSaveCard?.isChecked = true
 
                             }
                         }
