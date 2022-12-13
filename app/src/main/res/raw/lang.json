@@ -8,7 +8,9 @@
       "cardSaveLabel": "Save For Later",
       "emailPlaceHolder": "email@email.com",
       "cardUseNFCLabel": "For faster and easier checkout,\nuse card scanner or NFC.",
-      "cardSaveLater": "For faster and easier checkout,\nsave the card for later."
+      "cardSaveLater": "For faster and easier checkout,\nsave the card for later.",
+      "weSupport":"WE ACCEPT",
+      "cardSectionTitle": "CARD INFORMATION"
     },
     "TapMobileInput": {
       "mobileSaveLabel": "For faster and easier checkout,\nsave your mobile number.",
@@ -21,6 +23,10 @@
       "GatewayHeader":{
         "leftTitle": "SELECT",
         "rightTitle": "EDIT"
+      },"SaveCardHeader": {
+        "shippingSectionTitle" : "SHIPPING",
+        "contactDetailsSectionTitle" : "CONTACT DETAILS",
+        "contactCountryPickerHeader" : "PICK YOUR COUNTRY"
       }
     },
     "ItemList": {
@@ -156,7 +162,10 @@
       "cardSaveLabel": "إحفظ البطاقة،\n لدفع أسرع وأسهل.",
       "emailPlaceHolder": "email@email.com",
       "cardUseNFCLabel":"لدفع أسرع وأسهل،\n إستخدم الماسح الضوئي للبطاقة أو خاصية الــ NFC. ",
-      "cardSaveLater":"إحفظ البطاقة، \n لدفع أسرع وأسهل لاحقاً. "
+      "cardSaveLater":"إحفظ البطاقة، \n لدفع أسرع وأسهل لاحقاً. ",
+      "weSupport":"نحن ندعم",
+      "cardSectionTitle": "بيانات البطاقة",
+      "savedCardSectionTitle": "البطاقة المحفوظة"
     },
     "TapMobileInput": {
       "mobileSaveLabel": "إحفظ رقم هاتفك،\n لدفع أسرع وأسهل.",
@@ -169,6 +178,10 @@
       "GatewayHeader":{
         "leftTitle": "إختار",
         "rightTitle": "تعديل"
+      },"SaveCardHeader": {
+        "shippingSectionTitle" : "العنوان",
+        "contactDetailsSectionTitle" : "بيانات الاتصال",
+        "contactCountryPickerHeader" : "إختر بلدك"
       }
     },
     "ItemList": {
