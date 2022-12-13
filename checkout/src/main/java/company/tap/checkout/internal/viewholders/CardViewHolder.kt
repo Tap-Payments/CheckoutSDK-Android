@@ -65,6 +65,7 @@ class CardViewHolder(private val context: Context, private val onCardSelectedAct
          */
         view.tapSeparatorViewLinear1?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
         cardInfoHeaderText = view.findViewById(R.id.cardInfoHeaderText)
+        cardInfoHeaderText.text =  LocalizationManager.getValue("cardSectionTitle", "TapCardInputKit")
        /* var cardInfoTextTheme = TextViewTheme()
         cardInfoTextTheme.textColor =
             Color.parseColor(ThemeManager.getValue("horizontalList.headers.labelTextColor"))
