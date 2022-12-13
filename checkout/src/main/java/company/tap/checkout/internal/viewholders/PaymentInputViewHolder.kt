@@ -305,6 +305,7 @@ class PaymentInputViewHolder(
             tapAlertView?.visibility = View.GONE
             nfcButton?.visibility = View.VISIBLE
             cardScannerBtn?.visibility = View.VISIBLE
+            tapInlineCardSwitch?.visibility = View.GONE
         }
     }
 
@@ -1101,7 +1102,7 @@ class PaymentInputViewHolder(
 
         tapCardInputView.setSavedCardDetails(cardModel, cardInputUIStatus)
         tapCardInputView.onTouchView()
-
+        tapInlineCardSwitch?.visibility = View.GONE
     }
 
 }
