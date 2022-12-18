@@ -341,7 +341,7 @@ class PaymentInputViewHolder(
         }
         tapInlineCardSwitch?.switchSaveCard?.isChecked = true
         tapInlineCardSwitch?.visibility = View.GONE
-
+        tapCardInputView.setVisibilityOfHolderField(false)
     }
 
     private fun initMobileInput() {
