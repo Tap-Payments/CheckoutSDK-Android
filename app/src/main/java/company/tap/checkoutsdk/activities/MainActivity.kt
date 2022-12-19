@@ -297,7 +297,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate , CheckoutListener {
         //    )
         // }//** Required **
         sdkSession.setAmount(
-            BigDecimal.valueOf(25)
+            BigDecimal.valueOf(60)
         )
 
         // Set Payment ItemsModel array list
@@ -651,6 +651,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate , CheckoutListener {
         println("savedCardsList>>>>>" + cardsList)
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun sdkError(goSellError: GoSellError?) {
         println("sdkError>>>>>" + goSellError)
         Toast.makeText(this, "sdkError" +  goSellError?.errorBody, Toast.LENGTH_SHORT).show()
