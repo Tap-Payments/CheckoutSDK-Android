@@ -48,17 +48,21 @@ import java.math.BigDecimal
 import java.util.*
 
 
-class MainActivity : AppCompatActivity(), SessionDelegate , CheckoutListener {
+class MainActivity : AppCompatActivity(), SessionDelegate, CheckoutListener {
     private var settingsManager: SettingsManager? = null
     var sdkSession: SDKSession = SDKSession
     private val payButton by lazy { findViewById<TabAnimatedActionButton>(R.id.payButton) }
 
     private val modalBottomSheet = CheckoutFragment()
-    var urlStrDark :String="https://gist.githubusercontent.com/AhlaamK-tap/2ca0cbeaf430c6d40baa4d0700024848/raw/2e23f76a6d323c9e154b63083e5a5a84f73a1994/darktheme.json"
-    var urlStrLight :String="https://gist.githubusercontent.com/AhlaamK-tap/9862436dff3b3ca222243dad3705ec6a/raw/1f553408e0f1f7e0a1e15987f987b6033d64a90d/lighttheme.json"
-    var urlLocalisation :String="https://gist.githubusercontent.com/AhlaamK-tap/4285f9b4e10fb9a5c51a58f5064d470e/raw/5769a9ddc5ea74020f406d729afba2b0cf29db6c/lang.json"
+    var urlStrDark: String =
+        "https://gist.githubusercontent.com/AhlaamK-tap/2ca0cbeaf430c6d40baa4d0700024848/raw/2e23f76a6d323c9e154b63083e5a5a84f73a1994/darktheme.json"
+    var urlStrLight: String =
+        "https://gist.githubusercontent.com/AhlaamK-tap/9862436dff3b3ca222243dad3705ec6a/raw/1f553408e0f1f7e0a1e15987f987b6033d64a90d/lighttheme.json"
+    var urlLocalisation: String =
+        "https://gist.githubusercontent.com/AhlaamK-tap/4285f9b4e10fb9a5c51a58f5064d470e/raw/5769a9ddc5ea74020f406d729afba2b0cf29db6c/lang.json"
     var itemsList = ArrayList<ItemsModel>()
     val REQUEST_ID_MULTIPLE_PERMISSIONS = 7
+
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,7 +76,9 @@ class MainActivity : AppCompatActivity(), SessionDelegate , CheckoutListener {
 
         //displayMertrc()
 
-        if(ThemeManager.currentTheme.isNotEmpty() && LocalizationManager.currentLocalized.toString().isNotEmpty()) {
+        if (ThemeManager.currentTheme.isNotEmpty() && LocalizationManager.currentLocalized.toString()
+                .isNotEmpty()
+        ) {
 
 
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
@@ -142,7 +148,6 @@ class MainActivity : AppCompatActivity(), SessionDelegate , CheckoutListener {
         }
 
 
-
         // Determine density
         val metrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(metrics)
@@ -180,7 +185,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate , CheckoutListener {
         val width = display.width
         val height = display.height
 
-        println("width"+width+"////height"+height+"///model"+android.os.Build.MANUFACTURER+"///ht metrci"+ht+"///wt metric"+wt)
+        println("width" + width + "////height" + height + "///model" + android.os.Build.MANUFACTURER + "///ht metrci" + ht + "///wt metric" + wt)
     }
 
     private fun initializeBottomSheet() {
@@ -221,7 +226,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate , CheckoutListener {
     }
 
 
-    private fun initializeLanguage(){
+    private fun initializeLanguage() {
         /** Configures the LocalizationManager by setting the provided language  url
         - Parameter  languageUrl json: Please pass the taplanguage to be loaded dynamically  if needed. If not set, the normal and default language will be used
          */
@@ -239,13 +244,14 @@ class MainActivity : AppCompatActivity(), SessionDelegate , CheckoutListener {
     private fun initializeSDK() {
         TapCheckOutSDK().init(
             this,
-             settingsManager?.getString("key_test_name","sk_test_kovrMB0mupFJXfNZWx6Etg5y"),
-             settingsManager?.getString("key_live_name","sk_live_QglH8V7Fw6NPAom4qRcynDK2"),
-             settingsManager?.getString("key_package_name","company.tap.goSellSDKExample"))
-      /*  settingsManager?.getString("key_test_name","sk_test_2kGVSuR6bKAXLF4rDe0wa9QU"),
-   settingsManager?.getString("key_live_name","sk_live_QglH8V7Fw6NPAom4qRcynDK2"),
-   settingsManager?.getString("key_package_name","resources.gosell.io")
-)*/
+            settingsManager?.getString("key_test_name", "sk_test_kovrMB0mupFJXfNZWx6Etg5y"),
+            settingsManager?.getString("key_live_name", "sk_live_QglH8V7Fw6NPAom4qRcynDK2"),
+            settingsManager?.getString("key_package_name", "company.tap.goSellSDKExample")
+        )
+        /*  settingsManager?.getString("key_test_name","sk_test_2kGVSuR6bKAXLF4rDe0wa9QU"),
+     settingsManager?.getString("key_live_name","sk_live_QglH8V7Fw6NPAom4qRcynDK2"),
+     settingsManager?.getString("key_package_name","resources.gosell.io")
+  )*/
 
     }
 
@@ -271,7 +277,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate , CheckoutListener {
 
         // pass your activity as a session delegate to listen to SDK internal payment process follow
         sdkSession.addSessionDelegate(this) //** Required **
-        sdkSession.showCloseImage = settingsManager?.getBoolean("showImageKey",false)
+        sdkSession.showCloseImage = settingsManager?.getBoolean("showImageKey", false)
 
         // initiate PaymentDataSource
 
@@ -281,8 +287,9 @@ class MainActivity : AppCompatActivity(), SessionDelegate , CheckoutListener {
 
         // set transaction currency associated to your account
         //  if(settingsManager.getString("key_sdk_transaction_currency","KWD"))
-        settingsManager?.getString("key_sdk_transaction_currency","KWD")
-            ?.let { TapCurrency(it) }?.let { sdkSession.setTransactionCurrency(it) } //** Required **
+        settingsManager?.getString("key_sdk_transaction_currency", "KWD")
+            ?.let { TapCurrency(it) }
+            ?.let { sdkSession.setTransactionCurrency(it) } //** Required **
         // sdkSession.setTransactionCurrency(TapCurrency("KWD"))
 
         // Using static CustomerBuilder method available inside TAP TapCustomer Class you can populate TAP TapCustomer object and pass it to SDK
@@ -310,12 +317,12 @@ class MainActivity : AppCompatActivity(), SessionDelegate , CheckoutListener {
 
 
         // Set Taxes array list
-      //  sdkSession.setTaxes(ArrayList()) // ** Optional ** you can pass empty array list
+        //  sdkSession.setTaxes(ArrayList()) // ** Optional ** you can pass empty array list
         // sdkSession.setTaxes(settingsManager?.getTaxes()) // ** Optional ** you can pass empty array list
 
 
         // Set Shipping array list
-       // sdkSession.setShipping(ArrayList()) // ** Optional ** you can pass empty array list
+        // sdkSession.setShipping(ArrayList()) // ** Optional ** you can pass empty array list
         //   sdkSession.setShipping(settingsManager?.getShippingList()) // ** Optional ** you can pass empty array list
 
         // Post URL
@@ -359,9 +366,14 @@ class MainActivity : AppCompatActivity(), SessionDelegate , CheckoutListener {
         sdkSession.setDestination(null) // ** Optional ** you can pass Destinations object or null
 
 
-         sdkSession.setMerchantID(settingsManager?.getString("key_merchant_id", "1124340")) // ** Optional ** you can pass merchant id or null
-       // sdkSession.setMerchantID("599424") // ** Optional ** you can pass merchant id or null
-       // sdkSession.setMerchantID("1124340") // ** Optional ** you can pass merchant id or null
+        sdkSession.setMerchantID(
+            settingsManager?.getString(
+                "key_merchant_id",
+                "1124340"
+            )
+        ) // ** Optional ** you can pass merchant id or null
+        // sdkSession.setMerchantID("599424") // ** Optional ** you can pass merchant id or null
+        // sdkSession.setMerchantID("1124340") // ** Optional ** you can pass merchant id or null
 
 
         sdkSession.setCardType(CardType.ALL) // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
@@ -373,20 +385,25 @@ class MainActivity : AppCompatActivity(), SessionDelegate , CheckoutListener {
         }
         // sdkSession.setTransactionMode(TransactionMode.PURCHASE)
 
-        sdkSession.setDefaultCardHolderName(settingsManager?.getString("key_default_holder_name","Tap Test")); // ** Optional ** you can pass default CardHolderName of the user .So you don't need to type it.
-        settingsManager?.getBoolean("enableHolderName",false)
+        sdkSession.setDefaultCardHolderName(
+            settingsManager?.getString(
+                "key_default_holder_name",
+                "Tap Test"
+            )
+        ); // ** Optional ** you can pass default CardHolderName of the user .So you don't need to type it.
+        settingsManager?.getBoolean("enableHolderName", false)
             ?.let { sdkSession.isUserAllowedToEnableCardHolderName(it) } // ** Optional ** you can enable/ disable  default CardHolderName .
 
         sdkSession.setSdkMode(SdkMode.SAND_BOX) //** Pass your SDK MODE
 
         //    sdkSession.setCardType(CardType.CREDIT); // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
-        val useShippingEnableKey = settingsManager?.getBoolean("useShippingEnableKey",false)
-        val enableLoyaltyProgram = settingsManager?.getBoolean("enableLoyaltyProgram",false)
+        val useShippingEnableKey = settingsManager?.getBoolean("useShippingEnableKey", false)
+        val enableLoyaltyProgram = settingsManager?.getBoolean("enableLoyaltyProgram", false)
 
         println("useShippingEnableKey value>>>$useShippingEnableKey")
-        if(useShippingEnableKey == true){
-                 sdkSession.setOrderObject(getOrder())
-        }else {
+        if (useShippingEnableKey == true) {
+            sdkSession.setOrderObject(getOrder())
+        } else {
             sdkSession.setOrderObject(getOrderWithoutAdd())
         }
 
@@ -408,10 +425,10 @@ class MainActivity : AppCompatActivity(), SessionDelegate , CheckoutListener {
         val metrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(metrics)
         val displayMetrics = metrics.densityDpi
-        if(displayMetrics == DisplayMetrics.DENSITY_450 ||displayMetrics == DisplayMetrics.DENSITY_420 ||displayMetrics == DisplayMetrics.DENSITY_400||displayMetrics == DisplayMetrics.DENSITY_440||displayMetrics == DisplayMetrics.DENSITY_XXHIGH){
+        if (displayMetrics == DisplayMetrics.DENSITY_450 || displayMetrics == DisplayMetrics.DENSITY_420 || displayMetrics == DisplayMetrics.DENSITY_400 || displayMetrics == DisplayMetrics.DENSITY_440 || displayMetrics == DisplayMetrics.DENSITY_XXHIGH) {
 
             arguments.putFloatArray(DialogConfigurations.Corners, floatArrayOf(25f, 25f, 0f, 0f))
-        }else if (displayMetrics == DisplayMetrics.DENSITY_260||displayMetrics == DisplayMetrics.DENSITY_280||displayMetrics == DisplayMetrics.DENSITY_300||displayMetrics == DisplayMetrics.DENSITY_XHIGH || displayMetrics == DisplayMetrics.DENSITY_340||displayMetrics == DisplayMetrics.DENSITY_360){
+        } else if (displayMetrics == DisplayMetrics.DENSITY_260 || displayMetrics == DisplayMetrics.DENSITY_280 || displayMetrics == DisplayMetrics.DENSITY_300 || displayMetrics == DisplayMetrics.DENSITY_XHIGH || displayMetrics == DisplayMetrics.DENSITY_340 || displayMetrics == DisplayMetrics.DENSITY_360) {
             arguments.putFloatArray(DialogConfigurations.Corners, floatArrayOf(5f, 5f, 0f, 0f))
         }
         arguments.putInt(DialogConfigurations.Color, Color.TRANSPARENT)
@@ -511,8 +528,6 @@ class MainActivity : AppCompatActivity(), SessionDelegate , CheckoutListener {
             sdkSession.setButtonView(payButton, this, supportFragmentManager, this)
 
         }
-
-
 
 
     }
@@ -654,7 +669,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate , CheckoutListener {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun sdkError(goSellError: GoSellError?) {
         println("sdkError>>>>>" + goSellError)
-        Toast.makeText(this, "sdkError" +  goSellError?.errorBody, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "sdkError" + goSellError?.errorBody, Toast.LENGTH_SHORT).show()
         payButton?.setOnClickListener {
             sdkSession.setButtonView(payButton, this, supportFragmentManager, this)
         }
@@ -785,7 +800,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate , CheckoutListener {
                     0.5, "IN", 1.0, 1.0, 1.0
                 ),
                 "",
-                MetaData("udf1","udf2")
+                MetaData("udf1", "udf2")
             )
         )
         return itemsList
@@ -795,7 +810,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate , CheckoutListener {
     private fun getOrder(): OrderObject {
         return OrderObject(
             BigDecimal.valueOf(38),
-            settingsManager?.getString("key_sdk_transaction_currency","KWD").toString(),
+            settingsManager?.getString("key_sdk_transaction_currency", "KWD").toString(),
             settingsManager?.getCustomer(),
             settingsManager?.getDynamicPaymentItems(),
             ArrayList(
@@ -808,8 +823,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate , CheckoutListener {
                 )
             ),
             settingsManager?.getShippingObject(),
-             settingsManager?.getString("key_merchant_id", "1124340")?.let { Merchant(it) },
-            MetaData("udf1","udf2"),
+            settingsManager?.getString("key_merchant_id", "1124340")?.let { Merchant(it) },
+            MetaData("udf1", "udf2"),
             ReferId("")
         )
     }
@@ -817,7 +832,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate , CheckoutListener {
     private fun getOrderWithoutAdd(): OrderObject {
         return OrderObject(
             BigDecimal.valueOf(38),
-            settingsManager?.getString("key_sdk_transaction_currency","KWD").toString(),
+            settingsManager?.getString("key_sdk_transaction_currency", "KWD").toString(),
             settingsManager?.getCustomer(),
             settingsManager?.getDynamicPaymentItems(),
             ArrayList(
@@ -831,7 +846,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate , CheckoutListener {
             ),
             null,
             settingsManager?.getString("key_merchant_id", "1124340")?.let { Merchant(it) },
-            MetaData("udf1","udf2"),
+            MetaData("udf1", "udf2"),
             ReferId("")
         )
     }
@@ -876,11 +891,11 @@ class MainActivity : AppCompatActivity(), SessionDelegate , CheckoutListener {
     }
 
     override fun onTransactionSuccess(p0: Transaction?) {
-        Toast.makeText(this, "onTransactionSuccess"+p0, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "onTransactionSuccess" + p0, Toast.LENGTH_SHORT).show()
     }
 
     override fun onTransactionFail(p0: Transaction?) {
-        Toast.makeText(this, "onTransactionFail"+p0, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "onTransactionFail" + p0, Toast.LENGTH_SHORT).show()
 
     }
 
