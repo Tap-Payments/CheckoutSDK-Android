@@ -401,7 +401,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         tabAnimatedActionButtonViewHolder = TabAnimatedActionButtonViewHolder(context)
         cardViewHolder = CardViewHolder(context, this)
         goPaySavedCardHolder = GoPaySavedCardHolder(context, this, this)
-        saveCardSwitchHolder = SwitchViewHolder(context ,this)
+        saveCardSwitchHolder = SwitchViewHolder(context, this)
         loyaltyViewHolder = LoyaltyViewHolder(context, this, this)
 
         paymentInputViewHolder = PaymentInputViewHolder(
@@ -2060,12 +2060,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
         val totalAmount: String
         if (selectedTotalAmount != null) {
-            totalAmount = CurrencyFormatter.currencyFormat(fee?.add(
-                selectedTotalAmount?.toDouble()?.let { BigDecimal.valueOf(it) }).toString()
+            totalAmount = CurrencyFormatter.currencyFormat(
+                fee?.add(
+                    selectedTotalAmount?.toDouble()?.let { BigDecimal.valueOf(it) }).toString()
             )
         } else {
-            totalAmount = CurrencyFormatter.currencyFormat(fee?.add(
-                amountedCurrency?.amount?.toDouble()?.let { BigDecimal.valueOf(it) }).toString()
+            totalAmount = CurrencyFormatter.currencyFormat(
+                fee?.add(
+                    amountedCurrency?.amount?.toDouble()?.let { BigDecimal.valueOf(it) }).toString()
             )
         }
 
@@ -2096,7 +2098,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun payActionSavedCard(savedCardsModel: SavedCard?) {
-        println("payActionSavedCard"+savedCardsModel)
+        println("payActionSavedCard" + savedCardsModel)
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
             ActionButtonState.LOADING
         )

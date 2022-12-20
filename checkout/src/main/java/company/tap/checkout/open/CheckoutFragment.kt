@@ -48,27 +48,31 @@ import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
 // * Use the [CheckoutFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, InlineViewCallback {
+class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, InlineViewCallback {
 
     private var _Context: Context? = null
+
     @JvmField
-     var _viewModel: CheckoutViewModel?=null
+    var _viewModel: CheckoutViewModel? = null
     private lateinit var cardViewModel: CardViewModel
     var _activity: Activity? = null
     var checkOutActivity: CheckOutActivity? = null
     lateinit var closeText: TapTextView
     lateinit var closeImage: TapImageView
-    var hideAllView =false
-    lateinit var status :ChargeStatus
-    private  var _resetFragment :Boolean = true
+    var hideAllView = false
+    lateinit var status: ChargeStatus
+    private var _resetFragment: Boolean = true
+
     @JvmField
-      var scrollView :NestedScrollView ?= null
+    var scrollView: NestedScrollView? = null
+
     @JvmField
-    var isNfcOpened:Boolean=false
+    var isNfcOpened: Boolean = false
+
     @JvmField
-     var isFullscreen = false
-    var heightIn :Int=0
-   private var inLineCardLayout: FrameLayout?=null
+    var isFullscreen = false
+    var heightIn: Int = 0
+    private var inLineCardLayout: FrameLayout? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,10 +82,10 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
 
     }
 
-  /*  @RequiresApi(Build.VERSION_CODES.N)
-    override fun onDestroyView() {
-        println("onDestroyView>>>")
-        *//*if (view?.parent != null) {
+    /*  @RequiresApi(Build.VERSION_CODES.N)
+      override fun onDestroyView() {
+          println("onDestroyView>>>")
+          *//*if (view?.parent != null) {
             (view?.parent as ViewGroup).removeView(view)
         }*//*
         resetTabAnimatedButton()
@@ -92,9 +96,9 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
     override fun onDestroy() {
         super.onDestroy()
 
-       // if (!this.isDestroyed()) {
-            Glide.with(this).pauseRequests()
-       // }
+        // if (!this.isDestroyed()) {
+        Glide.with(this).pauseRequests()
+        // }
         resetTabAnimatedButton()
 
     }
@@ -116,24 +120,24 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
         val cardViewModel: CardViewModel by viewModels()
         this._viewModel = viewModel
         _Context?.let { cardViewModel.getContext(it) }
-        backgroundColor =  (Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.clear")))
+        backgroundColor = (Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.clear")))
         setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
-        bottomSheetDialog.behavior.isDraggable= true
+        bottomSheetDialog.behavior.isDraggable = true
         val checkoutLayout: LinearLayout? = view.findViewById(R.id.fragment_all)
         val frameLayout: FrameLayout? = view.findViewById(R.id.fragment_container_nfc_lib)
         val webFrameLayout: FrameLayout? = view.findViewById(R.id.webFrameLayout)
-       inLineCardLayout = view.findViewById(R.id.inline_container)
+        inLineCardLayout = view.findViewById(R.id.inline_container)
         val headerLayout: LinearLayout? = view.findViewById(R.id.headerLayout)
         bottomSheetLayout = bottomSheetDialog.findViewById(R.id.design_bottom_sheet)
-         closeText = view.findViewById(R.id.closeText)
-         closeImage= view.findViewById(R.id.closeImage)
+        closeText = view.findViewById(R.id.closeText)
+        closeImage = view.findViewById(R.id.closeImage)
         scrollView = view.findViewById(R.id.scrollView)
-        val  heightscreen: Int = Resources.getSystem().getDisplayMetrics().heightPixels;
-       // bottomSheetDialog.behavior.peekHeight = heightscreen
+        val heightscreen: Int = Resources.getSystem().getDisplayMetrics().heightPixels;
+        // bottomSheetDialog.behavior.peekHeight = heightscreen
 
-        println("heightscreen"+heightscreen)
-        println("sdkLayoutheight"+checkoutLayout?.height)
-        println("bottomSheetLayout"+bottomSheetLayout)
+        println("heightscreen" + heightscreen)
+        println("sdkLayoutheight" + checkoutLayout?.height)
+        println("bottomSheetLayout" + bottomSheetLayout)
 
 
 
@@ -141,9 +145,9 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
 
 
 
-        if (SDKSession.showCloseImage ==true) {
+        if (SDKSession.showCloseImage == true) {
 
-            if(!hideAllView) {
+            if (!hideAllView) {
                 Handler().postDelayed({
                     closeImage.visibility = View.GONE
 
@@ -151,7 +155,7 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
             }
 
         } else {
-            if(!hideAllView) {
+            if (!hideAllView) {
                 Handler().postDelayed({
                     closeText.visibility = View.GONE
 
@@ -198,7 +202,7 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
                                         inLineCardLayout!!,
                                         this,
                                         it2,
-                                        cardViewModel, this,headerLayout
+                                        cardViewModel, this, headerLayout
                                     )
                                 }
                             }
@@ -208,7 +212,7 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
                 }
             }
         }
-        inLineCardLayout?.minimumHeight= heightscreen - checkoutLayout?.height!!
+        inLineCardLayout?.minimumHeight = heightscreen - checkoutLayout?.height!!
 
         enableSections()
 
@@ -216,41 +220,42 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
 
         bottomSheetDialog.setOnShowListener {
             //Handler().postDelayed({
-                bottomSheetDialog.behavior.setState(BottomSheetBehavior.STATE_EXPANDED)
-          //  }, 0)
+            bottomSheetDialog.behavior.setState(BottomSheetBehavior.STATE_EXPANDED)
+            //  }, 0)
         }
 
 
-        bottomSheetDialog.behavior.setBottomSheetCallback(object:BottomSheetBehavior.BottomSheetCallback(){
+        bottomSheetDialog.behavior.setBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
 
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-              /*  println("111heightscreen>>>>"+heightscreen)
-                println("1111sdkLayoutheight>>>>>"+checkoutLayout?.height)
-                println("1111newState>>>>>"+newState)
-                println("1111difff>>>>>"+ checkoutLayout?.height?.let { heightscreen.minus(it) })
-                println("1111peek>>>>>"+bottomSheetDialog.behavior.peekHeight)
-                var diff = checkoutLayout?.height?.let { heightscreen.minus(it) }*/
+                /*  println("111heightscreen>>>>"+heightscreen)
+                  println("1111sdkLayoutheight>>>>>"+checkoutLayout?.height)
+                  println("1111newState>>>>>"+newState)
+                  println("1111difff>>>>>"+ checkoutLayout?.height?.let { heightscreen.minus(it) })
+                  println("1111peek>>>>>"+bottomSheetDialog.behavior.peekHeight)
+                  var diff = checkoutLayout?.height?.let { heightscreen.minus(it) }*/
 
 
                 if (newState == BottomSheetBehavior.STATE_HIDDEN) {
-                   resetTabAnimatedButton()
+                    resetTabAnimatedButton()
                     dismiss()
                 }
 
-                    if (newState == BottomSheetBehavior.STATE_EXPANDED) {
-                        bottomSheetDialog.behavior.peekHeight = heightscreen
+                if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+                    bottomSheetDialog.behavior.peekHeight = heightscreen
 
-                   bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
-                  // bottomSheetDialog.behavior.saveFlags = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
-                  scrollView?.smoothScrollTo(0, heightscreen)
-                   bottomSheetDialog.behavior.isDraggable = true
+                    bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                    // bottomSheetDialog.behavior.saveFlags = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
+                    scrollView?.smoothScrollTo(0, heightscreen)
+                    bottomSheetDialog.behavior.isDraggable = true
 
                 }
             }
 
             override fun onSlide(view: View, slideOffset: Float) {
-               // println("onSlide"+p1)
-              //  bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                // println("onSlide"+p1)
+                //  bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
                 scrollView?.smoothScrollTo(0, heightscreen)
             }
         })
@@ -269,23 +274,27 @@ class CheckoutFragment : TapBottomSheetDialog(),TapBottomDialogInterface, Inline
 
         println("_resetFragment>>" + _resetFragment)
         println("hideAllView>>" + hideAllView)
-if(_resetFragment) {
-    if (hideAllView) {
-        if (::status.isInitialized)
-            _viewModel?.showOnlyButtonView(status, checkOutActivity as CheckOutActivity?, this)
+        if (_resetFragment) {
+            if (hideAllView) {
+                if (::status.isInitialized)
+                    _viewModel?.showOnlyButtonView(
+                        status,
+                        checkOutActivity as CheckOutActivity?,
+                        this
+                    )
 
-    } else {
-        _viewModel?.displayStartupLayout(enabledSections)
-        _viewModel?.getDatasfromAPIs(
-            PaymentDataSource.getMerchantData(),
-            PaymentDataSource.getPaymentOptionsResponse()
-        )
+            } else {
+                _viewModel?.displayStartupLayout(enabledSections)
+                _viewModel?.getDatasfromAPIs(
+                    PaymentDataSource.getMerchantData(),
+                    PaymentDataSource.getPaymentOptionsResponse()
+                )
 
-    }
-}else{
-    if (::status.isInitialized)
-        _viewModel?.showOnlyButtonView(status, checkOutActivity as CheckOutActivity?, this)
-}
+            }
+        } else {
+            if (::status.isInitialized)
+                _viewModel?.showOnlyButtonView(status, checkOutActivity as CheckOutActivity?, this)
+        }
 
         setBottomSheetInterface(this)
 
@@ -293,38 +302,34 @@ if(_resetFragment) {
     }
 
 
-
-
-
     companion object {
         // TODO: Rename and change types and number of parameters
         const val RESET_FRAG = "resetFragment"
+
         @JvmStatic
         fun newInstance(context: Context, activity: Activity?, resetFragment: Boolean) =
             CheckoutFragment().apply {
                 arguments = Bundle().apply {}
                 _Context = context
                 _activity = activity
-                _resetFragment =resetFragment
-requireArguments().putBoolean(RESET_FRAG, resetFragment)
+                _resetFragment = resetFragment
+                requireArguments().putBoolean(RESET_FRAG, resetFragment)
             }
     }
 
     override fun onScanCardFailed(e: Exception?) {
         println("onScanCardFailed")
-       // _viewModel?.handleScanFailedResult()
+        // _viewModel?.handleScanFailedResult()
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onScanCardFinished(card: Card?, cardImage: ByteArray?) {
         if (card != null) {
             println("scanned card is$card")
-          //  _viewModel?.handleScanSuccessResult(card)
+            //  _viewModel?.handleScanSuccessResult(card)
 
         }
     }
-
-
 
 
     private fun consumeResponse(response: Resource<CardViewState>) {
@@ -341,6 +346,7 @@ requireArguments().putBoolean(RESET_FRAG, resetFragment)
     private fun renderView(data: CardViewState?) {
 
     }
+
     @SuppressLint("SetTextI18n")
     private fun concatText(newText: String) {
         println("newText respoonse$newText")
@@ -348,14 +354,13 @@ requireArguments().putBoolean(RESET_FRAG, resetFragment)
     }
 
 
-
     override fun onDetach() {
         super.onDetach()
-     if (view == null) {
+        if (view == null) {
             return
         }
-        if(isNfcOpened){
-        }else {
+        if (isNfcOpened) {
+        } else {
             checkOutActivity?.onBackPressed()
         }
 
@@ -363,14 +368,14 @@ requireArguments().putBoolean(RESET_FRAG, resetFragment)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-     fun resetTabAnimatedButton(){
+    fun resetTabAnimatedButton() {
         checkOutActivity?.displayMetrics?.let { tabAnimatedActionButton?.setDisplayMetrics(it) }
         SDKSession.sessionActive = false
         //tabAnimatedActionButton?.changeButtonState(ActionButtonState.RESET)
-if(checkOutActivity?.isGooglePayClicked == false){
-    checkOutActivity?.finish()
-}
-      //  checkOutActivity?.finish()
+        if (checkOutActivity?.isGooglePayClicked == false) {
+            checkOutActivity?.finish()
+        }
+        //  checkOutActivity?.finish()
 
         val payString: String = LocalizationManager.getValue("pay", "ActionButton")
         tabAnimatedActionButton?.setButtonDataSource(
@@ -380,47 +385,47 @@ if(checkOutActivity?.isGooglePayClicked == false){
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             null,
         )
-      /*  tabAnimatedActionButton?.setOnClickListener {
-            requireActivity().supportFragmentManager.let { it1 -> SDKSession.contextSDK?.let { it2 ->
-                SDKSession.startSDK(it1,
-                    it2,SDKSession.contextSDK as Activity)
-            } }
-        }*/
-        tabAnimatedActionButton?.isClickable=true
+        /*  tabAnimatedActionButton?.setOnClickListener {
+              requireActivity().supportFragmentManager.let { it1 -> SDKSession.contextSDK?.let { it2 ->
+                  SDKSession.startSDK(it1,
+                      it2,SDKSession.contextSDK as Activity)
+              } }
+          }*/
+        tabAnimatedActionButton?.isClickable = true
     }
 
 
-  /*  private fun initKeyBoardListener() {
-        // Минимальное значение клавиатуры.
-        // Threshold for minimal keyboard height.
-        val MIN_KEYBOARD_HEIGHT_PX = 150
-        // Окно верхнего уровня view.
-        // Top-level window decor view.
-            // val decorView: View = netscape.javascript.JSObject.getWindow().getDecorView()
-        // Регистрируем глобальный слушатель. Register global layout listener.
-        decorView.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
-            // Видимый прямоугольник внутри окна.
-            // Retrieve visible rectangle inside window.
-            private val windowVisibleDisplayFrame: Rect = Rect()
-            private var lastVisibleDecorViewHeight = 0
-            override fun onGlobalLayout() {
-                decorView.getWindowVisibleDisplayFrame(windowVisibleDisplayFrame)
-                val visibleDecorViewHeight: Int = windowVisibleDisplayFrame.height()
-                if (lastVisibleDecorViewHeight != 0) {
-                    if (lastVisibleDecorViewHeight > visibleDecorViewHeight + MIN_KEYBOARD_HEIGHT_PX) {
+    /*  private fun initKeyBoardListener() {
+          // Минимальное значение клавиатуры.
+          // Threshold for minimal keyboard height.
+          val MIN_KEYBOARD_HEIGHT_PX = 150
+          // Окно верхнего уровня view.
+          // Top-level window decor view.
+              // val decorView: View = netscape.javascript.JSObject.getWindow().getDecorView()
+          // Регистрируем глобальный слушатель. Register global layout listener.
+          decorView.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
+              // Видимый прямоугольник внутри окна.
+              // Retrieve visible rectangle inside window.
+              private val windowVisibleDisplayFrame: Rect = Rect()
+              private var lastVisibleDecorViewHeight = 0
+              override fun onGlobalLayout() {
+                  decorView.getWindowVisibleDisplayFrame(windowVisibleDisplayFrame)
+                  val visibleDecorViewHeight: Int = windowVisibleDisplayFrame.height()
+                  if (lastVisibleDecorViewHeight != 0) {
+                      if (lastVisibleDecorViewHeight > visibleDecorViewHeight + MIN_KEYBOARD_HEIGHT_PX) {
 
-                    } else if (lastVisibleDecorViewHeight + MIN_KEYBOARD_HEIGHT_PX < visibleDecorViewHeight) {
+                      } else if (lastVisibleDecorViewHeight + MIN_KEYBOARD_HEIGHT_PX < visibleDecorViewHeight) {
 
-                    }
-                }
-                // Сохраняем текущую высоту view до следующего вызова.
-                // Save current decor view height for the next call.
-                lastVisibleDecorViewHeight = visibleDecorViewHeight
-            }
-        })
-    }*/
+                      }
+                  }
+                  // Сохраняем текущую высоту view до следующего вызова.
+                  // Save current decor view height for the next call.
+                  lastVisibleDecorViewHeight = visibleDecorViewHeight
+              }
+          })
+      }*/
 
-    fun  dismissBottomSheetDialog(){
+    fun dismissBottomSheetDialog() {
         bottomSheetDialog.dismissWithAnimation
         bottomSheetDialog.hide()
         bottomSheetDialog.dismiss()
