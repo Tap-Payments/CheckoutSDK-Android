@@ -179,7 +179,6 @@ class MainActivity : AppCompatActivity(), SessionDelegate, CheckoutListener {
                 .show()
         }
         // These are deprecated
-        // These are deprecated
         val display = (getSystemService(Context.WINDOW_SERVICE) as WindowManager)
             .defaultDisplay
         val width = display.width
