@@ -141,7 +141,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
 
 
-        closeText?.text = LocalizationManager.getValue("close", "Common")
+        closeText.text = LocalizationManager.getValue("close", "Common")
 
 
 
