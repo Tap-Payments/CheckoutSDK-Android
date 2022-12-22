@@ -4,7 +4,7 @@
     <PreferenceCategory android:title="General">
 
         <ListPreference
-            android:defaultValue="0"
+            android:defaultValue="en"
             android:dialogTitle="Select SDK Language"
             android:entries="@array/pref_array_sdk_language_entries"
             android:entryValues="@array/pref_array_sdk_language_entries"
@@ -16,7 +16,7 @@
     <PreferenceCategory android:title="Session data source">
 
         <ListPreference
-            android:defaultValue="0"
+            android:defaultValue="SANDBOX"
             android:dialogTitle="Select sdk mode"
             android:entries="@array/pref_array_sdk_mode_entries"
             android:entryValues="@array/pref_array_sdk_mode_values"
