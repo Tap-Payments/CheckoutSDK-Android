@@ -278,7 +278,6 @@ class MainActivity : AppCompatActivity(), SessionDelegate, CheckoutListener {
         sdkSession.addSessionDelegate(this) //** Required **
         sdkSession.showCloseImage = settingsManager?.getBoolean("showImageKey", false)
 
-        // initiate PaymentDataSource
 
         // initiate PaymentDataSource
         sdkSession.instantiatePaymentDataSource() //** Required **
@@ -460,14 +459,18 @@ class MainActivity : AppCompatActivity(), SessionDelegate, CheckoutListener {
             true
         }
         R.id.change_language -> {
-            if (LocalizationManager.getLocale(this).language == "en") {
-                LocalizationManager.setLocale(this, Locale("ar"))
+
+           if (settingsManager?.getSDKLanguage("sdk_language") == "en") {
+                LocalizationManager.setLocale(this, Locale(settingsManager?.getSDKLanguage("sdk_language")))
                 setLocale(this, "ar")
-            } else if (LocalizationManager.getLocale(this).language == "ar") {
-                LocalizationManager.setLocale(this, Locale("en"))
+
+            } else if (settingsManager?.getSDKLanguage("sdk_language") == "ar") {
+                LocalizationManager.setLocale(this, Locale(settingsManager?.getSDKLanguage("sdk_language")))
                 setLocale(this, "en")
+
             }
             recreate()
+
             true
         }
 
