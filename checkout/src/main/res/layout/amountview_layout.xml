@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layoutDirection="locale"
     android:orientation="vertical">
     <company.tap.tapuilibrary.uikit.views.TapAmountSectionView
         android:id="@+id/amount_section"

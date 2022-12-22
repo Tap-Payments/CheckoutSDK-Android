@@ -5,9 +5,15 @@
       <map>
         <entry key="app/src/main/res/xml/root_preferences.xml" value="0.10067567567567567" />
         <entry key="checkout/src/main/res/layout/amountview_layout.xml" value="0.11925675675675676" />
+        <entry key="checkout/src/main/res/layout/asynchronous_layout.xml" value="0.13648648648648648" />
+        <entry key="checkout/src/main/res/layout/businessview_layout.xml" value="0.1284153005464481" />
         <entry key="checkout/src/main/res/layout/cardviewholder_layout1.xml" value="0.779443359375" />
+        <entry key="checkout/src/main/res/layout/currency_fragment_layout.xml" value="0.13648648648648648" />
         <entry key="checkout/src/main/res/layout/fragment_checkouttaps.xml" value="0.1858108108108108" />
         <entry key="checkout/src/main/res/layout/fragment_checkouttaps_full.xml" value="0.12837837837837837" />
+        <entry key="checkout/src/main/res/layout/fragment_web.xml" value="0.1284153005464481" />
+        <entry key="checkout/src/main/res/layout/itemviewholder_layout.xml" value="0.1284153005464481" />
+        <entry key="checkout/src/main/res/layout/otpview_layout.xml" value="0.1284153005464481" />
         <entry key="checkout/src/main/res/layout/payment_inputt_layout.xml" value="0.12263513513513513" />
         <entry key="checkout/src/main/res/layout/switch_layout.xml" value="0.1" />
       </map>

@@ -238,6 +238,11 @@ class MainActivity : AppCompatActivity(), SessionDelegate, CheckoutListener {
          */
 
         LocalizationManager.loadTapLocale(resources, R.raw.lang)
+        settingsManager?.getSDKLanguage("sdk_language")?.let { Locale(it) }?.let {
+            LocalizationManager.setLocale(this,
+                it
+            )
+        }
     }
 
     private fun initializeSDK() {

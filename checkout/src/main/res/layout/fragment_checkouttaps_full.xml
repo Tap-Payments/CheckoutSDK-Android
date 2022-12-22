@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
   android:background="@drawable/layout_bb"
     android:orientation="vertical"
+    android:layoutDirection="locale"
     tools:context=".open.CheckoutFragment">
 
 

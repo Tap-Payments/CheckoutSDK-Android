@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardLinearLayout"
+    android:layoutDirection="locale"
     android:orientation="vertical">
     <company.tap.tapuilibrary.uikit.atoms.TapChipGroup
         android:id="@+id/mainChipgroup"
