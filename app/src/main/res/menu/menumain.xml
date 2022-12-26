@@ -9,11 +9,7 @@
         android:id="@+id/action_light"
         android:title="Light Theme" />
 
-    <item
-        android:id="@+id/change_language"
-        android:title="Change Language" />
-
-    <item
+   <item
         android:id="@+id/action_settings"
         android:title="Settings"
         android:orderInCategory="0"/>

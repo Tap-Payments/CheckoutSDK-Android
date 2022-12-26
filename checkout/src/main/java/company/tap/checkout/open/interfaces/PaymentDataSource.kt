@@ -13,6 +13,9 @@ import company.tap.checkout.open.enums.SdkMode
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.models.*
 import java.math.BigDecimal
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 /**
  * Created by AhlaamK on 6/13/21.
@@ -185,4 +188,6 @@ interface PaymentDataSource {
      * Defines the OrderObject details. Optional. @return the default Order
      */
     fun getOrderObject():OrderObject ?
+
+    fun getSDKLocale():Locale?
 }

@@ -66,13 +66,15 @@ class MainActivity : AppCompatActivity(), SessionDelegate, CheckoutListener {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        settingsManager = SettingsManager
+        settingsManager?.setPref(this)
         //Loading the theme and localization files prior to loading the view to avoid crashes
         checkAndroidVersion()
         initializeLanguage()
-        settingsManager = SettingsManager
+
 
         initializeTheme()
-        settingsManager?.setPref(this)
+
 
         //displayMertrc()
 
@@ -83,7 +85,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate, CheckoutListener {
 
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
-            setLocale(this, LocalizationManager.getLocale(this).language)
+           LocalizationManager.setLocale(this, Locale( settingsManager?.getSDKLanguage("sdk_language")))
             // setLocale(this,"ar")
             println(
                 "LocalizationManager.getLocale(this).language is " + LocalizationManager.getLocale(
@@ -243,6 +245,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate, CheckoutListener {
                 it
             )
         }
+        settingsManager?.getSDKLanguage("sdk_language")?.let { setLocale(this, it) }
+        println("sdk_language init>>>"+ settingsManager?.getSDKLanguage("sdk_language"))
     }
 
     private fun initializeSDK() {
@@ -250,7 +254,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate, CheckoutListener {
             this,
             settingsManager?.getString("key_test_name", "sk_test_kovrMB0mupFJXfNZWx6Etg5y"),
             settingsManager?.getString("key_live_name", "sk_live_QglH8V7Fw6NPAom4qRcynDK2"),
-            settingsManager?.getString("key_package_name", "company.tap.goSellSDKExample")
+            settingsManager?.getString("key_package_name", "company.tap.goSellSDKExample"),
+           Locale(settingsManager?.getSDKLanguage("sdk_language"))
         )
         /*  settingsManager?.getString("key_test_name","sk_test_2kGVSuR6bKAXLF4rDe0wa9QU"),
      settingsManager?.getString("key_live_name","sk_live_QglH8V7Fw6NPAom4qRcynDK2"),
@@ -463,27 +468,13 @@ class MainActivity : AppCompatActivity(), SessionDelegate, CheckoutListener {
             recreate()
             true
         }
-        R.id.change_language -> {
-
-           if (settingsManager?.getSDKLanguage("sdk_language") == "en") {
-                LocalizationManager.setLocale(this, Locale(settingsManager?.getSDKLanguage("sdk_language")))
-                setLocale(this, "ar")
-
-            } else if (settingsManager?.getSDKLanguage("sdk_language") == "ar") {
-                LocalizationManager.setLocale(this, Locale(settingsManager?.getSDKLanguage("sdk_language")))
-                setLocale(this, "en")
-
-            }
-            recreate()
-
-            true
-        }
 
         R.id.action_settings -> {
             val intent = Intent(this, SettingsActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NO_HISTORY or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            recreate()
+           finish()
             startActivity(intent)
+
 
             true
 

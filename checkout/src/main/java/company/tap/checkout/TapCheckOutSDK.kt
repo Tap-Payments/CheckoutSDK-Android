@@ -10,6 +10,7 @@ import company.tap.checkout.open.enums.SdkMode
 import company.tap.checkout.open.exceptions.ErrorReport
 import company.tap.tapnetworkkit.connection.NetworkApp
 import java.io.File
+import java.util.*
 
 /**
  * Created by AhlaamK on 6/17/21.
@@ -25,7 +26,7 @@ class TapCheckOutSDK {
      * @param authToken the auth token
      * @param packageId registered id
      */
-    fun init(context: Context, secretKeyTest: String?,secretKeyLive: String? ,packageId: String?) {
+    fun init(context: Context, secretKeyTest: String?,secretKeyLive: String? ,packageId: String?,locale:Locale?) {
         if(packageId?.isEmpty() == true) {
             ErrorReport("Application must have packageId in order to use goSellSDK.")
         }else {
@@ -53,8 +54,10 @@ class TapCheckOutSDK {
                     )
                     PaymentDataSource.setInitializeKeys(secretKeyTest)
                 }
-
             }
+        }
+        if (locale != null) {
+            PaymentDataSource.setSDKLanguage(locale)
         }
 
     }

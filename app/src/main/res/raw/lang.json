@@ -161,9 +161,9 @@
       "cardExpiryPlaceHolder": "شهر/سنة",
       "cardSaveLabel": "إحفظ البطاقة،\n لدفع أسرع وأسهل.",
       "emailPlaceHolder": "email@email.com",
-      "cardUseNFCLabel":"لدفع أسرع وأسهل،\n إستخدم الماسح الضوئي للبطاقة أو خاصية الــ NFC. ",
-      "cardSaveLater":"إحفظ البطاقة، \n لدفع أسرع وأسهل لاحقاً. ",
-      "weSupport":"نحن ندعم",
+      "cardUseNFCLabel": "لدفع أسرع وأسهل،\n إستخدم الماسح الضوئي للبطاقة أو خاصية الــ NFC. ",
+      "cardSaveLater": "إحفظ البطاقة، \n لدفع أسرع وأسهل لاحقاً. ",
+      "weSupport": "نحن ندعم",
       "cardSectionTitle": "بيانات البطاقة",
       "savedCardSectionTitle": "البطاقة المحفوظة"
     },
@@ -172,16 +172,17 @@
       "mobileUseLabel": "إستخدم رقم هاتفك المحمول،\n لدفع أسرع وأسهل."
     },
     "TapMerchantSection": {
-      "paymentFor" : "إدفع لـ"
+      "paymentFor": "إدفع لـ"
     },
     "HorizontalHeaders": {
-      "GatewayHeader":{
+      "GatewayHeader": {
         "leftTitle": "إختار",
         "rightTitle": "تعديل"
-      },"SaveCardHeader": {
-        "shippingSectionTitle" : "العنوان",
-        "contactDetailsSectionTitle" : "بيانات الاتصال",
-        "contactCountryPickerHeader" : "إختر بلدك"
+      },
+      "SaveCardHeader": {
+        "shippingSectionTitle": "العنوان",
+        "contactDetailsSectionTitle": "بيانات الاتصال",
+        "contactCountryPickerHeader": "إختر بلدك"
       }
     },
     "ItemList": {
@@ -196,27 +197,21 @@
         "Expired": ""
       }
     },
-    "Hints":
-    {
-      "Warning":
-      {
+    "Hints": {
+      "Warning": {
         "missingExpiryCVV": "أدخل تاريخ الإنتهاء و الرمز الأمني.",
         "missingCVV": "الرمز الأمني مطلوب."
       },
-      "Error":
-      {
+      "Error": {
         "wrongCardNumber": "رقم البطاقة غير صحيح."
       },
-      "Default":
-      {
+      "Default": {
         "scan": "جاهز للمسح الضوئي."
       },
-      "Scanned":
-      {
-        "successFullScan" : "تم المسح الضوئي للبطاقة بنجاح."
+      "Scanned": {
+        "successFullScan": "تم المسح الضوئي للبطاقة بنجاح."
       },
-      "GoPayLogin":
-      {
+      "GoPayLogin": {
         "password": "كلمة السر غير صحيحة.",
         "otp": "تم إرسال رمز الـ OTP لـ"
       },
@@ -255,7 +250,7 @@
       "deletegoPayCard": "هل أنت متأكد أنك تريد حذف هذه البطاقة؟",
       "deleteMessage": "البطاقات التي تم حذفها مرة واحدة لا يمكن التراجع عنها."
     },
-    "ActionButton":{
+    "ActionButton": {
       "pay": "إدفع",
       "confirm": "تأكيد",
       "resend": " إعادة إرسال رمز الـ OTP",
@@ -275,7 +270,7 @@
       "scan": "جاهز للمسح الضوئي ، أضف البطاقة أسفل الجهاز لمسحها ضوئيًا.",
       "nfcDescription": "الاتصال قريب المدى عبارة عن مجموعة من بروتوكولات الاتصال للاتصال بين جهازين إلكترونيين على مسافة 4 سم أو أقل.",
       "nfcUnsupported": "NFC غير مدعوم!",
-      "enableNFC":"يرجى تمكين NFC",
+      "enableNFC": "يرجى تمكين NFC",
       "disabledNFC": "NFC غير ممكّن",
       "scanSuccess": "تم المسح بنجاح!"
     },
@@ -284,28 +279,28 @@
       "extraFeesAlertMessagePart1": "سوف تتم إضافة",
       "extraFeesAlertMessagePart2": " لهذه العملية، إجمالي المبلغ المطلوب ",
       "extraFeesAlertConfirm": "تأكيد",
-      "extraFeesAlertCancel":"إلغاء"
+      "extraFeesAlertCancel": "إلغاء"
     },
     "AlertBox": {
       "alertUnsupportedCardMessage": "نوع البطاقة غير مدعوم",
       "alertUnsupportedCardTitle": "تنبيه"
+    },
+    "TapLoyaltySection": {
+      "headerView": {
+        "tc": "شروط",
+        "redeem": "استخدام",
+        "balance": "الرصيد"
+      },
+      "amountView": {
+        "title": "المبلغ المستبدل"
+      },
+      "footerView": {
+        "points": "متبقي",
+        "amount": "متبقي القيمة للدفع"
+      },
+      "hintView": {
+        "minimumWarning": "أقل قيمة للإستبدال"
+      }
     }
-  },"TapLoyaltySection": {
-  "headerView": {
-    "tc": "شروط",
-    "redeem": "استخدام",
-    "balance": "الرصيد"
-  },
-  "amountView": {
-    "title" : "المبلغ المستبدل"
-  },
-  "footerView": {
-    "points": "متبقي",
-    "amount": "متبقي القيمة للدفع"
-  },
-  "hintView": {
-    "minimumWarning": "أقل قيمة للإستبدال"
   }
-}
-
 }

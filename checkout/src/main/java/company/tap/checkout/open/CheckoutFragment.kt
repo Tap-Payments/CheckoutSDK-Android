@@ -41,6 +41,8 @@ import company.tap.tapuilibrary.uikit.atoms.TapImageView
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 /**
@@ -261,6 +263,11 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         })
 
 
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        LocalizationManager.setLocale(context, PaymentDataSource.getSDKLocale())
     }
 
 

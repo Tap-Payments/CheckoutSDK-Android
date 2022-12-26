@@ -71,6 +71,7 @@ object PaymentDataSource :PaymentDataSource {
     private var binLookupResponse: BINLookupResponse? = null
     private var chargeOrAuthorize: Charge? = null
     private var sdkMode: SdkMode = SdkMode.SAND_BOX
+    private var sdkLocale: Locale = Locale("en")
     private var cardPaymentOption: ArrayList<PaymentOption> ?= null
     private var tokenConfig: String? = null
     private var authKeys: String? = null
@@ -340,6 +341,9 @@ object PaymentDataSource :PaymentDataSource {
         this.sdkMode = sdkMode
     }
 
+    fun setSDKLanguage(locale: Locale){
+        this.sdkLocale = locale
+    }
     /**
      * Set Order.
      *
@@ -488,6 +492,9 @@ object PaymentDataSource :PaymentDataSource {
 
     override fun getSDKMode(): SdkMode {
        return sdkMode
+    }
+ override fun getSDKLocale(): Locale {
+       return sdkLocale
     }
 
     override fun getAvailablePaymentOptionsCardBrands(): ArrayList<PaymentOption>? {
