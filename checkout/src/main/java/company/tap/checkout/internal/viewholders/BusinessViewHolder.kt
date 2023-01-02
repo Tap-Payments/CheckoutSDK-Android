@@ -13,7 +13,6 @@ import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.atoms.TapImageView
 import company.tap.tapuilibrary.uikit.datasource.HeaderDataSource
-import gotap.com.tapglkitandroid.gl.Views.TapLoadingView
 import kotlinx.android.synthetic.main.businessview_layout.view.*
 
 
