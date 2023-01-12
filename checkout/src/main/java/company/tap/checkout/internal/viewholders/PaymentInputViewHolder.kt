@@ -3,7 +3,6 @@ package company.tap.checkout.internal.viewholders
 
 import android.content.Context
 import android.content.res.Resources
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Build
 import android.text.Editable
@@ -13,11 +12,13 @@ import android.transition.TransitionManager
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.*
+import android.widget.CheckBox
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.widget.doAfterTextChanged
-import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import company.tap.cardinputwidget.Card
 import company.tap.cardinputwidget.CardBrandSingle
@@ -27,10 +28,7 @@ import company.tap.cardinputwidget.widget.inline.InlineCardInput
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.CardScheme
 import company.tap.checkout.internal.api.enums.PaymentType
-import company.tap.checkout.internal.api.models.BINLookupResponse
-import company.tap.checkout.internal.api.models.CreateTokenCard
-import company.tap.checkout.internal.api.models.PaymentOption
-import company.tap.checkout.internal.api.models.SavedCard
+import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.internal.apiresponse.CardViewEvent
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.enums.PaymentTypeEnum
@@ -60,8 +58,6 @@ import company.tap.tapuilibrary.uikit.organisms.TapPaymentInput
 import company.tap.tapuilibrary.uikit.views.*
 import kotlinx.android.synthetic.main.loyalty_view_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
-import java.io.InputStream
-import java.net.URL
 
 
 /**
@@ -96,6 +92,7 @@ class PaymentInputViewHolder(
     private var lastFocusField = CardInputListener.FocusField.FOCUS_CARD
     private var lastCardInput = ""
     private var cardScannerBtn: ImageView? = null
+    private var savedCardsModel: SavedCard? = null
 
     // private var nfcButton: ImageView? = null
     var tapCardInputView: InlineCardInput
@@ -142,7 +139,7 @@ class PaymentInputViewHolder(
         tapMobileInputView = TapMobilePaymentView(context, null)
         tapMobileInputView.setTapPaymentShowHideClearImage(this)
         tapCardInputView = InlineCardInput(context, null)
-       // tapAlertView = tapCardInputView.findViewById(R.id.alertView)
+        // tapAlertView = tapCardInputView.findViewById(R.id.alertView)
         nfcButton = tapCardInputView.findViewById(R.id.nfc_button)
         scannerButton = tapCardInputView.findViewById(R.id.card_scanner_button)
         closeButton = tapCardInputView.findViewById(R.id.clear_text)
@@ -177,7 +174,7 @@ class PaymentInputViewHolder(
         constraintt = view.findViewById(R.id.constraintt)
         constraintt.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
         acceptedCardText = view.findViewById(R.id.acceptedCardText)
-        acceptedCardText.text =  LocalizationManager.getValue("weSupport", "TapCardInputKit")
+        acceptedCardText.text = LocalizationManager.getValue("weSupport", "TapCardInputKit")
         saveForOtherCheckBox?.text = "Save For other stores powered by Tap"
         bindViewComponents()
 
@@ -218,8 +215,16 @@ class PaymentInputViewHolder(
     }
 
     private fun initCustomerDetailView() {
-        contactDetailsView?.cardDetailTitle?.text =  LocalizationManager.getValue("SaveCardHeader", "HorizontalHeaders","contactDetailsSectionTitle")
-        shippingDetailView?.shippingDetailTitle?.text =  LocalizationManager.getValue("SaveCardHeader", "HorizontalHeaders","shippingSectionTitle")
+        contactDetailsView?.cardDetailTitle?.text = LocalizationManager.getValue(
+            "SaveCardHeader",
+            "HorizontalHeaders",
+            "contactDetailsSectionTitle"
+        )
+        shippingDetailView?.shippingDetailTitle?.text = LocalizationManager.getValue(
+            "SaveCardHeader",
+            "HorizontalHeaders",
+            "shippingSectionTitle"
+        )
         tapInlineCardSwitch?.switchSaveCard?.isChecked = false
     }
 
@@ -307,7 +312,11 @@ class PaymentInputViewHolder(
             cardScannerBtn?.visibility = View.VISIBLE
             tapInlineCardSwitch?.visibility = View.GONE
             tapCardInputView.isSavedCard = false
-            tapCardInputView.updateIconCvc(false,"",company.tap.cardinputwidget.CardBrand.fromCardNumber(""))
+            tapCardInputView.updateIconCvc(
+                false,
+                "",
+                company.tap.cardinputwidget.CardBrand.fromCardNumber("")
+            )
         }
     }
 
@@ -331,7 +340,7 @@ class PaymentInputViewHolder(
         switchViewHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
             false,
             "en",
-            payString+" "+checkoutViewModel.currentCurrency+" "+checkoutViewModel.currentAmount ,
+            payString + " " + checkoutViewModel.currentCurrency + " " + checkoutViewModel.currentAmount,
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             null,
         )
@@ -367,8 +376,8 @@ class PaymentInputViewHolder(
 
     private fun initCardInput() {
         tapInlineCardSwitch?.visibility = View.GONE
-       // tapCardInputView.holderNameEnabled = true
-          //  PaymentDataSource.getEnableEditCardHolderName() != null && PaymentDataSource.getEnableEditCardHolderName()
+        // tapCardInputView.holderNameEnabled = true
+        //  PaymentDataSource.getEnableEditCardHolderName() != null && PaymentDataSource.getEnableEditCardHolderName()
         if (PaymentDataSource.getDefaultCardHolderName() != null) {
             tapCardInputView.setCardHolderName(PaymentDataSource.getDefaultCardHolderName())
         }
@@ -533,7 +542,7 @@ class PaymentInputViewHolder(
         tapCardInputView.setCvcNumberTextWatcher(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 //   checkoutFragment.scrollView?.scrollTo(0,height)
-               // tapCardInputView.requestFocus()
+                // tapCardInputView.requestFocus()
 
             }
 
@@ -572,12 +581,13 @@ class PaymentInputViewHolder(
                         }
                     }
                 }
-               tapCardInputView.holderNameEnabled= PaymentDataSource.getEnableEditCardHolderName() != null && PaymentDataSource.getEnableEditCardHolderName()
-              //  tapCardInputView.holderNameEnabled= true
-               if(tapCardInputView.holderNameEnabled){
-                   tapInlineCardSwitch?.setPaddingRelative(0,100,0,0)
+                tapCardInputView.holderNameEnabled =
+                    PaymentDataSource.getEnableEditCardHolderName() != null && PaymentDataSource.getEnableEditCardHolderName()
+                //  tapCardInputView.holderNameEnabled= true
+                if (tapCardInputView.holderNameEnabled) {
+                    tapInlineCardSwitch?.setPaddingRelative(0, 100, 0, 0)
 
-               }
+                }
             }
         })
     }
@@ -898,7 +908,7 @@ class PaymentInputViewHolder(
         val itemsMobilesList = ArrayList<SectionTabItem>()
         itemsCardsList = ArrayList<SectionTabItem>()
         intertabLayout.removeAllTabs()
-      //  intertabLayout.setPadding(-50, 0, 0, 0)
+        //  intertabLayout.setPadding(-50, 0, 0, 0)
         PaymentDataSource.setBinLookupResponse(null)
 //        tabLayout.changeTabItemAlphaValue(1f)
         decideTapSelection(imageURLApi, itemsMobilesList, itemsCardsList)
@@ -1082,47 +1092,78 @@ class PaymentInputViewHolder(
         return (cardInput).replaceRange(0, 6, "•••• ")
     }
 
-    fun setDataForSavedCard(savedCardsModel: SavedCard, cardInputUIStatus: CardInputUIStatus) {
-        println("firstSix>>"+company.tap.cardinputwidget.CardBrand.fromCardNumber(savedCardsModel.firstSix))
+    fun setDataForSavedCard(_savedCardsModel: SavedCard, cardInputUIStatus: CardInputUIStatus) {
+        println("firstSix>>" + company.tap.cardinputwidget.CardBrand.fromCardNumber(_savedCardsModel.firstSix))
         this.cardInputUIStatus = cardInputUIStatus
+        this.savedCardsModel = _savedCardsModel
         val cardModel = Card(
-            maskCardNumber2(savedCardsModel.firstSix + savedCardsModel.lastFour),
+            maskCardNumber2(_savedCardsModel.firstSix + _savedCardsModel.lastFour),
             null,
-            savedCardsModel.expiry?.month?.toInt(),
-            savedCardsModel.expiry?.year?.toInt(),
-            savedCardsModel.cardholderName,
-            null,
-            null,
+            _savedCardsModel.expiry?.month?.toInt(),
+            _savedCardsModel.expiry?.year?.toInt(),
+            _savedCardsModel.cardholderName,
             null,
             null,
             null,
             null,
             null,
             null,
-            savedCardsModel.lastFour,
-            company.tap.cardinputwidget.CardBrand.fromCardNumber(savedCardsModel.firstSix),
             null,
             null,
-            savedCardsModel.currency,
-            savedCardsModel.customer,
+            _savedCardsModel.lastFour,
+            company.tap.cardinputwidget.CardBrand.fromCardNumber(_savedCardsModel.firstSix),
+            null,
+            null,
+            _savedCardsModel.currency,
+            _savedCardsModel.customer,
             null,
             null
         )
+        expiryDate = _savedCardsModel.expiry?.month + "/" + _savedCardsModel.expiry?.year
+        println("expiryDate saved" + expiryDate)
         tapCardInputView.isSavedCard = true
-        tapCardInputView.updateIconCvc(false,cvvNumber,company.tap.cardinputwidget.CardBrand.fromCardNumber(savedCardsModel.firstSix))
+        tapCardInputView.updateIconCvc(
+            false,
+            cvvNumber,
+            company.tap.cardinputwidget.CardBrand.fromCardNumber(_savedCardsModel.firstSix)
+        )
         tapCardInputView.setSavedCardDetails(cardModel, cardInputUIStatus)
 
-        tapCardInputView.setSingleCardInput(CardBrandSingle.fromCode(company.tap.cardinputwidget.CardBrand.fromCardNumber(savedCardsModel.firstSix)
-            .toString()), savedCardsModel.image)
-       /* val bitmap = BitmapFactory.decodeStream(URL(savedCardsModel.image).content as InputStream)
-        tapCardInputView.cvvIcon.setImageBitmap(bitmap)*/
-        tapCardInputView.updateIconCvc(false,cvvNumber,company.tap.cardinputwidget.CardBrand.fromCardNumber(savedCardsModel.firstSix))
-      // Glide.with(context).load(savedCardsModel.image).into( tapCardInputView.cvvIcon)
+        tapCardInputView.setSingleCardInput(
+            CardBrandSingle.fromCode(
+                company.tap.cardinputwidget.CardBrand.fromCardNumber(_savedCardsModel.firstSix)
+                    .toString()
+            ), _savedCardsModel.image
+        )
+        /* val bitmap = BitmapFactory.decodeStream(URL(savedCardsModel.image).content as InputStream)
+         tapCardInputView.cvvIcon.setImageBitmap(bitmap)*/
+        tapCardInputView.updateIconCvc(
+            false,
+            cvvNumber,
+            company.tap.cardinputwidget.CardBrand.fromCardNumber(_savedCardsModel.firstSix)
+        )
+        // Glide.with(context).load(savedCardsModel.image).into( tapCardInputView.cvvIcon)
         tapCardInputView.onTouchView()
         tapInlineCardSwitch?.visibility = View.GONE
     }
 
+    fun getSavedCardData(): CreateTokenSavedCard? {
+        return if (savedCardsModel == null && PaymentDataSource.getCustomer().identifier != null) {
+            null
+        } else {
+            CreateTokenSavedCard(
+                savedCardsModel?.id,
+                PaymentDataSource.getCustomer().identifier
+            )
+
+
+        }
+
+    }
+
 }
+
+
 
 
 

@@ -8,7 +8,6 @@ All rights reserved.
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.KeyEvent
@@ -18,12 +17,9 @@ import android.view.ViewGroup
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
-import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import company.tap.checkout.R
-import company.tap.checkout.internal.api.enums.ChargeStatus
-import company.tap.checkout.internal.api.models.Authenticate
 import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.open.controller.SDKSession.contextSDK
@@ -33,8 +29,10 @@ import company.tap.tapuilibrary.uikit.ktx.setTopBorders
 import kotlinx.android.synthetic.main.fragment_web.*
 
 
-
-class WebFragment(private val webViewContract: WebViewContract?,private val cardViewModel: CardViewModel?) : Fragment(),
+class WebFragment(
+    private val webViewContract: WebViewContract?,
+    private val cardViewModel: CardViewModel?
+) : Fragment(),
     CustomWebViewClientContract {
 
     private var webViewUrl: String? = null
@@ -55,7 +53,8 @@ class WebFragment(private val webViewContract: WebViewContract?,private val card
 
         progressBar?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("merchantHeaderView.backgroundColor")))
         progressBar?.progressDrawable?.setColorFilter(
-            Color.RED, android.graphics.PorterDuff.Mode.SRC_IN);
+            Color.RED, android.graphics.PorterDuff.Mode.SRC_IN
+        );
         progressBar?.progressTintList = ColorStateList.valueOf(Color.RED);
 
         webViewUrl = arguments?.getString(KEY_URL)
@@ -136,10 +135,10 @@ class WebFragment(private val webViewContract: WebViewContract?,private val card
                 */
             override fun onProgressChanged(view: WebView?, newProgress: Int) {
                 // Update the progress bar with page loading progress
-                progressBar?.progress =newProgress
+                progressBar?.progress = newProgress
                 if (newProgress == 100) {
                     // Hide the progressbar
-                    progressBar?.visibility  =View.GONE
+                    progressBar?.visibility = View.GONE
                 }
             }
         }
@@ -158,34 +157,38 @@ class WebFragment(private val webViewContract: WebViewContract?,private val card
     if success == false show error gif of action button
      */
     override fun submitResponseStatus(success: Boolean) {
-      /*  val intent = Intent(activity, CheckoutFragment::class.java)
-        startActivity(intent)*/
+        /*  val intent = Intent(activity, CheckoutFragment::class.java)
+          startActivity(intent)*/
         webViewContract?.redirectLoadingFinished(success, chargeResponse, contextSDK)
     }
 
     override fun getRedirectedURL(url: String) {
-       // webViewContract.redirectLoadingFinished(url.contains("https://www.google.com/search?"))
-        if(url.contains("gosellsdk://return_url")){
+        // webViewContract.redirectLoadingFinished(url.contains("https://www.google.com/search?"))
+        if (url.contains("gosellsdk://return_url")) {
 
 //        webViewContract.redirectLoadingFinished(url.contains("gosellsdk://return_url"), chargeResponse)
-        }else{
+        } else {
 //            webViewContract.directLoadingFinished(true)
         }
     }
 
 
-
-
     companion object {
-         const val KEY_URL = "key:url"
-         const val CHARGE = "charge_response"
+        const val KEY_URL = "key:url"
+        const val CHARGE = "charge_response"
 
-        fun newInstance(url: String, webViewContract: WebViewContract, cardViewModel: CardViewModel, chargeResponse: Charge?): WebFragment {
-            val fragment = WebFragment(webViewContract,cardViewModel)
+        fun newInstance(
+            url: String,
+            webViewContract: WebViewContract,
+            cardViewModel: CardViewModel,
+            chargeResponse: Charge?
+        ): WebFragment {
+            val fragment = WebFragment(webViewContract, cardViewModel)
             val args = Bundle()
             args.putString(KEY_URL, url)
             args.putSerializable(CHARGE, chargeResponse)
             fragment.arguments = args
+            println("fragment is"+fragment)
             return fragment
         }
     }

@@ -437,6 +437,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         bottomSheetDialog.hide()
         bottomSheetDialog.dismiss()
         resetTabAnimatedButton()
+        sessionDelegate?.sessionCancelled()
 
     }
 

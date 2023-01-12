@@ -164,7 +164,7 @@ class CardViewModel : ViewModel() {
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun createTokenWithEncryptedCard(viewModel: CheckoutViewModel, createTokenWithEncryptedDataRequest: CreateTokenCard?) {
-      //  println("createTokenWithEncryptedDataRequest>>."+createTokenWithEncryptedDataRequest)
+        println("createTokenWithEncryptedDataRequest>>."+createTokenWithEncryptedDataRequest)
         if (createTokenWithEncryptedDataRequest != null) {
             repository.createTokenWithEncryptedCard(context,viewModel,createTokenWithEncryptedDataRequest)
         }

@@ -9,7 +9,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
-import androidx.core.widget.doOnTextChanged
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.models.LoyaltySupportedCurrency
 import company.tap.checkout.internal.api.models.TapLoyaltyModel
@@ -24,9 +23,6 @@ import company.tap.tapuilibrary.uikit.atoms.TextInputEditText
 import company.tap.tapuilibrary.uikit.datasource.LoyaltyHeaderDataSource
 import company.tap.tapuilibrary.uikit.ktx.makeLinks
 import company.tap.tapuilibrary.uikit.organisms.TapLoyaltyView
-import kotlinx.android.synthetic.main.alertdialog_view_layout.view.*
-import kotlinx.android.synthetic.main.loyalty_view_layout.view.*
-import kotlinx.android.synthetic.main.switch_layout.view.*
 import java.math.BigDecimal
 
 class LoyaltyViewHolder(private val context: Context, checkoutViewModel: CheckoutViewModel,

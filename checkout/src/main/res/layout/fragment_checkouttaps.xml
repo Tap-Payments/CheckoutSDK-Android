@@ -34,12 +34,7 @@
         android:windowSoftInputMode="adjustResize|adjustPan"
         tools:context=".open.CheckoutFragment">
 
-        <FrameLayout
-            android:id="@+id/webFrameLayout"
-            android:layout_width="match_parent"
-            android:visibility="gone"
-            android:layout_marginTop="12dp"
-            android:layout_height="match_parent" />
+
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -73,7 +68,12 @@
             >
          </LinearLayout>-->
 
-
+        <FrameLayout
+            android:id="@+id/webFrameLayout"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:layout_height="match_parent" />
         <FrameLayout
             android:id="@+id/fragment_container_nfc_lib"
             android:layout_width="match_parent"
