@@ -242,6 +242,7 @@ class PaymentInputViewHolder(
             loyaltyViewHolder?.view?.loyaltyView?.constraintLayout?.visibility = View.GONE
             tabLayout.visibility = View.VISIBLE
             closeButton?.visibility = View.GONE
+
         }
     }
 
@@ -308,8 +309,9 @@ class PaymentInputViewHolder(
             // clearView.visibility =View.GONE
             closeButton?.visibility = View.GONE
             tapAlertView?.visibility = View.GONE
-            nfcButton?.visibility = View.VISIBLE
-            cardScannerBtn?.visibility = View.VISIBLE
+           // nfcButton?.visibility = View.VISIBLE
+            controlScannerOptions()
+          //  cardScannerBtn?.visibility = View.VISIBLE
             tapInlineCardSwitch?.visibility = View.GONE
             tapCardInputView.isSavedCard = false
 
@@ -849,7 +851,7 @@ class PaymentInputViewHolder(
             switchViewHolder.view.cardSwitch?.switchGoPayCheckout?.visibility = View.VISIBLE
         } else switchViewHolder?.view?.cardSwitch?.switchGoPayCheckout?.visibility = View.GONE
 
-        nfcButton?.visibility = View.VISIBLE
+        controlScannerOptions()
         cardScannerBtn?.visibility = View.VISIBLE
         closeButton?.visibility = View.GONE
         paymentInputContainer.addView(tapCardInputView)
