@@ -354,6 +354,7 @@ class PaymentInputViewHolder(
         if (PaymentDataSource.getBinLookupResponse() != null) {
             PaymentDataSource.setBinLookupResponse(null)
         }
+        controlScannerOptions()
         tapInlineCardSwitch?.switchSaveCard?.isChecked = true
         tapInlineCardSwitch?.visibility = View.GONE
         tapCardInputView.setVisibilityOfHolderField(false)
