@@ -312,10 +312,14 @@ class PaymentInputViewHolder(
             cardScannerBtn?.visibility = View.VISIBLE
             tapInlineCardSwitch?.visibility = View.GONE
             tapCardInputView.isSavedCard = false
+
             tapCardInputView.updateIconCvc(
                 false,
                 "",
-                company.tap.cardinputwidget.CardBrand.fromCardNumber("")
+              company.tap.cardinputwidget.CardBrand.Unknown
+            )
+
+            tapCardInputView.setSingleCardInput(CardBrandSingle.Unknown, null
             )
         }
     }
