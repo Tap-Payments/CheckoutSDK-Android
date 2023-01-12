@@ -90,7 +90,7 @@
         android:windowSoftInputMode="adjustResize|adjustPan"
         android:orientation="vertical"
         android:fillViewport="true"
-        app:cardCornerRadius="2dp"
+        app:cardCornerRadius="4dp"
         app:cardBackgroundColor="#ffffff"
         android:layout_margin="@dimen/margin_basic_15dp">
     <RelativeLayout
