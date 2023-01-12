@@ -81,7 +81,7 @@ dependencies {
     implementation 'com.github.Tap-Payments:TapNFCCardReaderKit-Android:0.0.1.6.1'
     implementation "io.reactivex.rxjava2:rxjava:2.2.19"
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    api 'com.github.Tap-Payments:TapNetwrok-Android:0.2.2.14'
+    api 'com.github.Tap-Payments:TapNetwrok-Android:0.2.2.15'
     api 'com.github.Tap-Payments:CommonDataModelsKit-Android:0.1.5'
     api 'com.google.code.gson:gson:2.8.9'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
@@ -93,8 +93,8 @@ dependencies {
     implementation 'com.koushikdutta.ion:ion:3.1.0'
     implementation "com.google.android.gms:play-services-wallet:19.1.0"
 
-    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.358.103'
-    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.358.103'
+    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.358.104'
+    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.358.104'
     implementation 'com.github.2coffees1team:GlideToVectorYou:v2.0.0'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.11.1'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.1'

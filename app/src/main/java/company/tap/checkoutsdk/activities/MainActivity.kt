@@ -11,6 +11,7 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.util.DisplayMetrics
 import android.view.Menu
 import android.view.MenuItem
@@ -55,9 +56,9 @@ class MainActivity : AppCompatActivity(), SessionDelegate, CheckoutListener {
 
     private val modalBottomSheet = CheckoutFragment()
     var urlStrDark: String =
-        "https://gist.githubusercontent.com/AhlaamK-tap/2ca0cbeaf430c6d40baa4d0700024848/raw/2e23f76a6d323c9e154b63083e5a5a84f73a1994/darktheme.json"
+        "https://gist.githubusercontent.com/AhlaamK-tap/2ca0cbeaf430c6d40baa4d0700024848/raw/b5b9862e3600b6905bd530ed1dac2e030eb0a96f/darktheme.json"
     var urlStrLight: String =
-        "https://gist.githubusercontent.com/AhlaamK-tap/9862436dff3b3ca222243dad3705ec6a/raw/1f553408e0f1f7e0a1e15987f987b6033d64a90d/lighttheme.json"
+        "https://gist.githubusercontent.com/AhlaamK-tap/9862436dff3b3ca222243dad3705ec6a/raw/aadbb3c3531f8c58aa706ff1ea1cf9bfae691f6b/lighttheme.json"
     var urlLocalisation: String =
         "https://gist.githubusercontent.com/AhlaamK-tap/4285f9b4e10fb9a5c51a58f5064d470e/raw/5769a9ddc5ea74020f406d729afba2b0cf29db6c/lang.json"
     var itemsList = ArrayList<ItemsModel>()
@@ -72,9 +73,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate, CheckoutListener {
         checkAndroidVersion()
         initializeLanguage()
 
-
+       // ThemeManager.loadTapTheme(this, urlStrLight,"lighttheme")
         initializeTheme()
-
 
         //displayMertrc()
 
@@ -111,18 +111,6 @@ class MainActivity : AppCompatActivity(), SessionDelegate, CheckoutListener {
             initActionButton()
             initializeBottomSheet()
 
-
-            /* if (ThemeManager.currentTheme.isNotEmpty() && (ThemeManager.currentTheme.contains("dark") || ThemeManager.currentTheme.contains("light"))){
-                  setContentView(R.layout.activity_main)
-                  initializeSDK()
-                  configureSDKSession()
-                  initActionButton()
-
-                  if (modalBottomSheet.isHidden || modalBottomSheet.isDetached) {
-                      println("paybutton hidden")
-                      payButton.changeButtonState(ActionButtonState.IDLE)
-                  }
-              }*/
 
         }
     }
@@ -219,12 +207,12 @@ class MainActivity : AppCompatActivity(), SessionDelegate, CheckoutListener {
 
 
 
-/*
-  if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))
-                ThemeManager.loadTapTheme(this, urlStrDark)
+
+ /* if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))
+                ThemeManager.loadTapTheme(this, urlStrDark,"darktheme")
             else if (ThemeManager.currentTheme.isNotEmpty() && !ThemeManager.currentTheme.contains("dark"))
-                ThemeManager.loadTapTheme(this, urlStrLight)
-            else ThemeManager.loadTapTheme(this, urlStrLight)
+                ThemeManager.loadTapTheme(this, urlStrLight,"lighttheme")
+            else ThemeManager.loadTapTheme(this, urlStrLight,"lighttheme")
 */
 
 
