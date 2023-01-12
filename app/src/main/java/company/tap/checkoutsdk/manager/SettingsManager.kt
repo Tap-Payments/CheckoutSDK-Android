@@ -478,7 +478,7 @@ object SettingsManager {
                     2
                 ),null,
                 AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO),
-                null,null,false,null,null,null,
+                null,null,false,null,null,"Item is on sale",
                 null,null,null,null,null
             ))
 
