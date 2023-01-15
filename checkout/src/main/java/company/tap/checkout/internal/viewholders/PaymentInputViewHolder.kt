@@ -761,9 +761,9 @@ class PaymentInputViewHolder(
                 // checkoutFragment.scrollView?.smoothScrollTo(0,height)
             }
             CardValidationState.incomplete -> {
-                tapAlertView?.visibility = View.VISIBLE
-                tapAlertView?.alertMessage?.text =
-                    (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
+                //tapAlertView?.visibility = View.VISIBLE
+               // tapAlertView?.alertMessage?.text =
+                //    (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
                 // checkoutFragment.scrollView?.smoothScrollTo(0,height)
                 //checkoutFragment.scrollView?.smoothScrollTo(0,0)
             }
