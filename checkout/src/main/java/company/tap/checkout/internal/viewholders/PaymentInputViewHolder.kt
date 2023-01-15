@@ -357,6 +357,7 @@ class PaymentInputViewHolder(
         controlScannerOptions()
         tapInlineCardSwitch?.switchSaveCard?.isChecked = true
         tapInlineCardSwitch?.visibility = View.GONE
+        closeButton?.visibility = View.GONE
         tapCardInputView.setVisibilityOfHolderField(false)
     }
 
