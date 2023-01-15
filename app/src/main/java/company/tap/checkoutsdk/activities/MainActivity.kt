@@ -13,6 +13,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -678,17 +679,17 @@ class MainActivity : AppCompatActivity(), SessionDelegate, CheckoutListener {
    }
 
    override fun sessionIsStarting() {
-       println("sessionIsStarting>>>>>")
+       Log.e("MainActivity", "sessionIsStarting: " )
 
    }
 
    override fun sessionHasStarted() {
-       println("sessionHasStarted>>>>>")
+       Log.e("MainActivity", "sessionHasStarted>>>>>")
 
    }
 
    override fun sessionCancelled() {
-       println("sessionCancelled>>>>>")
+       Log.e("MainActivity", "sessionCancelled>>>>>")
        //CLose the bottomsheet and keep buttonto old state
 
        Toast.makeText(this, "Your sessionCancelled>>!", Toast.LENGTH_SHORT).show()
@@ -701,7 +702,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate, CheckoutListener {
    }
 
    override fun invalidCardDetails() {
-       println("invalidCardDetails>>>>>")
+       Log.e("MainActivity", "invalidCardDetails>>>>>")
    }
 
    @RequiresApi(Build.VERSION_CODES.N)
