@@ -22,7 +22,8 @@
     "HorizontalHeaders": {
       "GatewayHeader":{
         "leftTitle": "SELECT",
-        "rightTitle": "EDIT"
+        "rightTitle": "EDIT",
+        "webViewTitle": "APPROVE PAYMENT"
       },"SaveCardHeader": {
         "shippingSectionTitle" : "SHIPPING",
         "contactDetailsSectionTitle" : "CONTACT DETAILS",
@@ -177,7 +178,8 @@
     "HorizontalHeaders": {
       "GatewayHeader": {
         "leftTitle": "إختار",
-        "rightTitle": "تعديل"
+        "rightTitle": "تعديل",
+        "webViewTitle": "توثيق الدفع"
       },
       "SaveCardHeader": {
         "shippingSectionTitle": "العنوان",

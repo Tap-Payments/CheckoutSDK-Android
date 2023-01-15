@@ -18,16 +18,20 @@
         android:gravity="start|end"
         android:layout_marginStart="@dimen/margin_basic_15dp"
         android:layout_marginEnd="@dimen/margin_basic_15dp"
+        android:layoutDirection="locale"
 
         android:paddingTop="@dimen/margin_basic_10dp">
 
         <company.tap.tapuilibrary.uikit.atoms.TapTextView
+            android:id="@+id/webView_Header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|end"
             android:textSize="@dimen/font_size_11sp"
             android:textAllCaps="true"
             android:textColor="#9F9F9F"
+            android:layoutDirection="locale"
+            android:textDirection="locale"
             android:text="Approve Payment"/>
     </LinearLayout>
     <LinearLayout
@@ -110,7 +114,6 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:indeterminate="true"
-
             android:indeterminateDrawable="@drawable/loader_grey" />
 
         <WebView

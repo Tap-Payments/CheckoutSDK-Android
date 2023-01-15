@@ -13,6 +13,7 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.widget.ProgressBar
 import androidx.fragment.app.FragmentManager
+import com.bumptech.glide.Glide
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.apiresponse.CardViewModel
@@ -22,7 +23,9 @@ import company.tap.checkout.internal.webview.TapCustomWebViewClient
 import company.tap.checkout.internal.webview.WebFragment
 import company.tap.checkout.internal.webview.WebViewContract
 import company.tap.checkout.open.controller.SDKSession
+import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.organisms.TapLoyaltyView
 import kotlinx.android.synthetic.main.fragment_web.*
 
@@ -41,6 +44,7 @@ class WebViewHolder(
     //private var chargeResponse: Charge? = null
     val progressBar by lazy { view.findViewById<ProgressBar>(R.id.progressBar) }
     val web_view by lazy { view.findViewById<WebView>(R.id.web_view) }
+    val webViewTextTitle by lazy { view.findViewById<TapTextView>(R.id.webView_Header) }
 
 
     init {
@@ -48,7 +52,7 @@ class WebViewHolder(
         progressBar?.progressDrawable?.setColorFilter(
             Color.RED, android.graphics.PorterDuff.Mode.SRC_IN
         );
-        progressBar?.progressTintList = ColorStateList.valueOf(Color.RED);
+        progressBar?.progressTintList = ColorStateList.valueOf(Color.RED)
 
         // webViewUrl = arguments?.getString(WebFragment.KEY_URL)
         //  webViewUrl = redirectURL
@@ -58,8 +62,10 @@ class WebViewHolder(
         if (TextUtils.isEmpty(redirectURL)) {
             throw IllegalArgumentException("Empty URL passed to WebViewFragment!")
         }
+        val webViewTitleText :String= LocalizationManager.getValue("GatewayHeader", "HorizontalHeaders", "webViewTitle")
+        webViewTextTitle.text = webViewTitleText
         println("redirectURL in holdre"+redirectURL)
-        redirectURL?.let { setUpWebView(it) }
+        setUpWebView(redirectURL)
     }
     override fun bindViewComponents() {
 
