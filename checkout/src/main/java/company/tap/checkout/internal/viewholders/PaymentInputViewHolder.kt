@@ -175,7 +175,7 @@ class PaymentInputViewHolder(
         constraintt.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
         acceptedCardText = view.findViewById(R.id.acceptedCardText)
         acceptedCardText.text = LocalizationManager.getValue("weSupport", "TapCardInputKit")
-        saveForOtherCheckBox?.text = "Save For other stores powered by Tap"
+        saveForOtherCheckBox?.text = LocalizationManager.getValue("cardSaveForTapLabel", "TapCardInputKit")
         bindViewComponents()
 
     }
