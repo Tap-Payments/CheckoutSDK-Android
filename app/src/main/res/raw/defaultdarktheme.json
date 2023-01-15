@@ -761,7 +761,7 @@
             "font":"Roboto-Light,14",
             "countryCodeLabelFont":"Roboto,14",
             "color":"greyishBrown",
-            "placeHolderColor":"##9F9F9F"
+            "placeHolderColor":"#9F9F9F"
         },
         "countryPicker": {
             "countryCell":{
