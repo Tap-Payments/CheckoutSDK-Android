@@ -39,6 +39,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import company.tap.cardinputwidget.CardBrandSingle
 import company.tap.cardinputwidget.CardInputUIStatus
 import company.tap.cardscanner.*
 import company.tap.checkout.R
@@ -1142,6 +1143,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             setMainChipGroupActionListener()
             paymentInputViewHolder.clearCardInputAction()
             paymentInputViewHolder.onFocusChange("")
+            paymentInputViewHolder.tapCardInputView.setSingleCardInput(
+                CardBrandSingle.Unknown, null
+            )
             CustomUtils.hideKeyboardFrom(context, paymentInputViewHolder.view)
         }
 
