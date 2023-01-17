@@ -14,6 +14,7 @@
         <entry key="checkout/src/main/res/layout/fragment_checkouttaps.xml" value="0.1858108108108108" />
         <entry key="checkout/src/main/res/layout/fragment_checkouttaps_full.xml" value="0.12837837837837837" />
         <entry key="checkout/src/main/res/layout/fragment_web.xml" value="0.1284153005464481" />
+        <entry key="checkout/src/main/res/layout/item_currency_rows.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/itemviewholder_layout.xml" value="0.1284153005464481" />
         <entry key="checkout/src/main/res/layout/otpview_layout.xml" value="0.1284153005464481" />
         <entry key="checkout/src/main/res/layout/payment_inputt_layout.xml" value="0.105" />

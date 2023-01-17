@@ -18,6 +18,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -54,6 +55,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate, CheckoutListener {
     private var settingsManager: SettingsManager? = null
     var sdkSession: SDKSession = SDKSession
     private val payButton by lazy { findViewById<TabAnimatedActionButton>(R.id.payButton) }
+    private val linearLayout by lazy { findViewById<LinearLayout>(R.id.linearLayout) }
 
     private val modalBottomSheet = CheckoutFragment()
     var urlStrDark: String =

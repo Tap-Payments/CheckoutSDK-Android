@@ -1079,7 +1079,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
             }
 
-        PaymentDataSource.setSelectedCurrency(currentCurrency, null)
+        //PaymentDataSource.setSelectedCurrency(currentCurrency, null)
+        PaymentDataSource.setSelectedCurrency(currentCurrency, currentCurrencySymbol)
         PaymentDataSource.setSelectedAmount(currentAmount.toBigDecimal())
 
         if (::loyaltyViewHolder.isInitialized) {
@@ -1091,7 +1092,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 )
             supportedLoyalCards.value =
                 tapLoyaltyModel.supportedCurrencies as List<LoyaltySupportedCurrency>
-            println("tapLoyaltyModel>>>" + tapLoyaltyModel.bankLogo)
+            //println("tapLoyaltyModel>>>" + tapLoyaltyModel.bankLogo)
             tapLoyaltyModel.bankLogo?.let {
                 tapLoyaltyModel.bankName?.let { it1 ->
                     loyaltyViewHolder.setDataFromAPI(
@@ -1956,9 +1957,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             amountViewHolder.updateSelectedCurrency(
                 displayItemsOpen,
                 selectedAmount, selectedCurrency,
-                currentAmount, currentCurrency
+                currentAmount, currentCurrency,selectedCurrencySymbol
             )
-            PaymentDataSource.setSelectedCurrency(selectedCurrency = selectedCurrency, null)
+           // PaymentDataSource.setSelectedCurrency(selectedCurrency = selectedCurrency, null)  changed from null to symbol
+            PaymentDataSource.setSelectedCurrency(selectedCurrency = selectedCurrencySymbol, selectedCurrencySymbol)
 
         } else {
             amountViewHolder.updateSelectedCurrency(

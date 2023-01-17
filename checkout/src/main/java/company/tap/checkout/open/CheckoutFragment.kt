@@ -137,9 +137,9 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         val heightscreen: Int = Resources.getSystem().getDisplayMetrics().heightPixels;
         // bottomSheetDialog.behavior.peekHeight = heightscreen
 
-        println("heightscreen" + heightscreen)
-        println("sdkLayoutheight" + checkoutLayout?.height)
-        println("bottomSheetLayout" + bottomSheetLayout)
+       // println("heightscreen" + heightscreen)
+     //   println("sdkLayoutheight" + checkoutLayout?.height)
+     //   println("bottomSheetLayout" + bottomSheetLayout)
 
 
 

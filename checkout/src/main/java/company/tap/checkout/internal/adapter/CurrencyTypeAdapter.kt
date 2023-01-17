@@ -122,7 +122,8 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
             .with(holder.itemView.context)
             .load( adapterContentCurrencies[position]?.flag?.toUri(), imageViewCard)
         val itemCurrencyText = holder.itemView.findViewById<TapTextView>(R.id.textView_currency)
-        itemCurrencyText.text = adapterContentCurrencies[position].currency
+       //Replaced itemCurrencyText.text = adapterContentCurrencies[position].currency
+        itemCurrencyText.text = adapterContentCurrencies[position].symbol
         currencyRate = adapterContentCurrencies[position].amount
     }
 

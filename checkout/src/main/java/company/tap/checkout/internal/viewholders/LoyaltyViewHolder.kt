@@ -215,8 +215,8 @@ class LoyaltyViewHolder(private val context: Context, checkoutViewModel: Checkou
     }
 
     private fun reCalculateTouchPoints(previousTouchPoints:Int?,reflectedTouchPoints:Int){
-        println("previousTouchPoints>>"+previousTouchPoints)
-        println("newTouchPoints>>"+newTouchPoints)
+      //  println("previousTouchPoints>>"+previousTouchPoints)
+     //   println("newTouchPoints>>"+newTouchPoints)
         if (previousTouchPoints != null) {
             newTouchPoints = previousTouchPoints-reflectedTouchPoints
 

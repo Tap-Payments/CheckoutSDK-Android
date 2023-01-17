@@ -497,6 +497,10 @@ object PaymentDataSource :PaymentDataSource {
        return sdkLocale
     }
 
+    override fun getSelectedCurrencySymbol(): String? {
+       return selectedCurrencySymbol
+    }
+
     override fun getAvailablePaymentOptionsCardBrands(): ArrayList<PaymentOption>? {
     return cardPaymentOption
     }

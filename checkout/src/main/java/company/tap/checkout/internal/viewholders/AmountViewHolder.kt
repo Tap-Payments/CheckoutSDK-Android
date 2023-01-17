@@ -113,7 +113,7 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
 
 
     fun setOnItemsClickListener(onItemsClickListener: () -> Unit) {
-        view.amount_section.itemAmountText.setOnClickListener {
+        view.amount_section.itemAmountLayout.setOnClickListener {
             onItemsClickListener()
             baseLayoutManager?.controlCurrency(isOpenedList)
         }

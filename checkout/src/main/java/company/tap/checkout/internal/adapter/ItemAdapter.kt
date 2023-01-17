@@ -95,9 +95,10 @@ class ItemAdapter :
                     getItemViewDataSource(null, CurrencyFormatter.currencyFormat(adapterContentItems[position].totalAmount.toString()),adapterContentItems[position].currency ,  CurrencyFormatter.currencyFormat(adapterContentItems[position].totalAmount.toString()), adapterContentItems[position].currency, adapterContentItems[position].quantity.toString())
                 )*/
 
-
-                PaymentDataSource.getSelectedCurrency()?.let {
-                    PaymentDataSource.getSelectedCurrency()?.let { it1 ->
+//replaced PaymentDataSource.getSelectedCurrency with PaymentDataSource.getSelectedCurrencySymbol
+              //  println("PaymentDataSource.getSelectedCurrencySymbol()"+PaymentDataSource.getSelectedCurrencySymbol())
+                PaymentDataSource.getSelectedCurrencySymbol()?.let {
+                    PaymentDataSource.getSelectedCurrencySymbol()?.let { it1 ->
                         adapterContentItems[position].quantity?.toString()?.let { it2 ->
                             getItemViewDataSource(adapterContentItems[position]?.name.toString().toUpperCase(), CurrencyFormatter.currencyFormat(adapterContentItems[position].getPlainAmount().toString() ),
                                 it,CurrencyFormatter.currencyFormat(adapterContentItems[position].amount.toString() ),

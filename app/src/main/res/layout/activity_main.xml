@@ -28,6 +28,7 @@
         android:textColor="@color/white" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="91dp"
         android:layout_alignBottom="@+id/launchSDK"

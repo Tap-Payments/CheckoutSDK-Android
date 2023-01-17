@@ -141,7 +141,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
       //  println("totalArraySize value are>>>" + totalArraySize)
         if(position < adapterContent.size){
             if(adapterContent[position].paymentType==PaymentType.WEB){
-                println("adapterContent value are>>>" + adapterContent[position].brand?.name)
+             //   println("adapterContent value are>>>" + adapterContent[position].brand?.name)
                 //BenefitPay condition for native removed
                /* if(adapterContent[position].brand?.name?.equals("benefit") == true){
                         return TYPE_3PPG

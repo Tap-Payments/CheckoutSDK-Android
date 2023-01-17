@@ -190,4 +190,5 @@ interface PaymentDataSource {
     fun getOrderObject():OrderObject ?
 
     fun getSDKLocale():Locale?
+    fun getSelectedCurrencySymbol():String?
 }
