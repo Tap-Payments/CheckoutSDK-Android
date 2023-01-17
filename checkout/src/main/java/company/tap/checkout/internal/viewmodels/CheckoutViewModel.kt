@@ -330,7 +330,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
                         false,
                         "en",
-                        "$payString $currentCurrency $currentAmount",
+                        "$payString $currentCurrencySymbol $currentAmount",
                         Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
                         null,
                     )
@@ -623,7 +623,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
                 false,
                 "en",
-                "$payString $currentCurrency $currentAmount",
+                "$payString $currentCurrencySymbol $currentAmount",
                 Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
                 null,
             )
@@ -1005,7 +1005,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         paymentOptionsResponse.supportedCurrencies[i].symbol.toString()
                     println("currentCurrency currency value>>" + currentCurrency)
 
-                    if (currentCurrency.length == 2) {
+                   /* if (currentCurrency.length == 2) {
                         currentCurrency =
                             paymentOptionsResponse.supportedCurrencies[i].currency.toString()
                     } else {
@@ -1013,14 +1013,21 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                             paymentOptionsResponse.supportedCurrencies[i].symbol.toString()
                         currentCurrencySymbol =
                             paymentOptionsResponse.supportedCurrencies[i].symbol.toString()
-                    }
+                    }*/
+                    currentCurrency =
+                        paymentOptionsResponse.supportedCurrencies[i].currency.toString()
+                    currentCurrencySymbol =
+                        paymentOptionsResponse.supportedCurrencies[i].symbol.toString()
                     currencyAdapter.updateSelectedPosition(i)
                 }
 
             }
+            /**
+           *Note replacing all currency to be currency symbol as per ali 17jan23
+            * **/
             amountViewHolder.setDataFromAPI(
                 currentAmount,
-                currentCurrency,
+                currentCurrencySymbol,
                 PaymentDataSource.getItems()?.size.toString()
             )
         }
@@ -1101,7 +1108,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
             false,
             "en",
-            "$payString $currentCurrency $currentAmount",
+            "$payString $currentCurrencySymbol $currentAmount",
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             null,
         )
@@ -1538,7 +1545,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
             false,
             "en",
-            "$payString $currentCurrency $currentAmount",
+            "$payString $currentCurrencySymbol $currentAmount",
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             null,
         )
@@ -1607,7 +1614,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
             true,
             "en",
-            "$payString $currentCurrency $currentAmount",
+            "$payString $currentCurrencySymbol $currentAmount",
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             null,
         )
@@ -2688,7 +2695,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
             false,
             "en",
-            "$payString $currentCurrency $currentAmount",
+            "$payString $currentCurrencySymbol $currentAmount",
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             null,
         )
@@ -2707,7 +2714,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
             false,
             "en",
-            "$payString $currentCurrency $currentAmount",
+            "$payString $currentCurrencySymbol $currentAmount",
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             null,
         )

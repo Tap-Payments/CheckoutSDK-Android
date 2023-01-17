@@ -349,7 +349,7 @@ class PaymentInputViewHolder(
         switchViewHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
             false,
             "en",
-            payString + " " + checkoutViewModel.currentCurrency + " " + checkoutViewModel.currentAmount,
+            payString + " " + checkoutViewModel.currentCurrencySymbol + " " + checkoutViewModel.currentAmount,
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             null,
         )
@@ -527,12 +527,17 @@ class PaymentInputViewHolder(
              */
             expiryDate = s.toString()
             if (s.length >= 5) {
+                if(cardInputUIStatus?.equals(CardInputUIStatus.SavedCard) == true){
+                    tapAlertView?.visibility = View.GONE
+                }else{
+                    tapAlertView?.visibility = View.VISIBLE
+                }
                 tapAlertView?.alertMessage?.text = (LocalizationManager.getValue(
                     "Warning",
                     "Hints",
                     "missingCVV"
                 ))
-                tapAlertView?.visibility = View.VISIBLE
+               // tapAlertView?.visibility = View.VISIBLE
                 lastFocusField = CardInputListener.FocusField.FOCUS_CVC
                 // checkoutFragment.scrollView?.scrollTo(0,height)
                 tapInlineCardSwitch?.switchSaveCard?.isChecked = true
@@ -554,6 +559,7 @@ class PaymentInputViewHolder(
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 //   checkoutFragment.scrollView?.scrollTo(0,height)
                 // tapCardInputView.requestFocus()
+
 
             }
 
@@ -780,7 +786,12 @@ class PaymentInputViewHolder(
                 // lastFocusField =CardInputListener.FocusField.FOCUS_EXPIRY
             }
             else -> {
-                tapAlertView?.visibility = View.VISIBLE
+                if(cardInputUIStatus?.equals(CardInputUIStatus.SavedCard) == true){
+                    tapAlertView?.visibility = View.GONE
+                }else{
+                    tapAlertView?.visibility = View.VISIBLE
+                }
+               // tapAlertView?.visibility = View.VISIBLE
                 tapAlertView?.alertMessage?.text =
                     (LocalizationManager.getValue("Warning", "Hints", "missingExpiryCVV"))
             }
@@ -1104,7 +1115,7 @@ class PaymentInputViewHolder(
     }
 
     fun setDataForSavedCard(_savedCardsModel: SavedCard, cardInputUIStatus: CardInputUIStatus) {
-        println("firstSix>>" + company.tap.cardinputwidget.CardBrand.fromCardNumber(_savedCardsModel.firstSix))
+        println("cardInputUIStatus>>" +cardInputUIStatus)
         this.cardInputUIStatus = cardInputUIStatus
         this.savedCardsModel = _savedCardsModel
         val cardModel = Card(
