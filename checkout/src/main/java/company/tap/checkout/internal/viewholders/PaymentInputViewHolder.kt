@@ -328,6 +328,7 @@ class PaymentInputViewHolder(
 
 
     fun clearCardInputAction() {
+
         if (selectedType == PaymentTypeEnum.card) {
             tapCardInputView.clear()
             tapCardInputView.clearFocus()
@@ -336,6 +337,8 @@ class PaymentInputViewHolder(
             tapMobileInputView.clearNumber()
             switchViewHolder?.setSwitchLocals(PaymentTypeEnum.telecom)
         }
+        tapCardInputView.setSingleCardInput(CardBrandSingle.Unknown, null
+        )
 //        switchViewHolder11?.view?.cardSwitch?.switchesLayout?.visibility = View.VISIBLE
         switchViewHolder?.view?.mainSwitch?.mainSwitchLinear?.visibility = View.VISIBLE
         tapAlertView?.visibility = View.GONE
