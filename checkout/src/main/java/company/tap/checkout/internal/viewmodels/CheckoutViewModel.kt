@@ -62,6 +62,7 @@ import company.tap.checkout.internal.apiresponse.testmodels.GoPaySavedCards
 import company.tap.checkout.internal.apiresponse.testmodels.TapCardPhoneListDataSource
 import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.SectionType
+import company.tap.checkout.internal.enums.WebViewType
 import company.tap.checkout.internal.interfaces.*
 import company.tap.checkout.internal.utils.AmountCalculator.calculateExtraFeesAmount
 import company.tap.checkout.internal.utils.AnimationEngine
@@ -883,55 +884,76 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 )
             }
             setSlideAnimation()
-            //businessViewHolder.view.headerView.constraint.visibility = View.GONE
-            //businessViewHolder.view.topSeparatorLinear.visibility = View.GONE
-            //checkoutFragment.closeText.visibility = View.GONE
-            webViewHolder = WebViewHolder(context, fragmentManager,url,this,cardViewModel,authenticate)
+            if(PaymentDataSource?.getWebViewType()!=null && PaymentDataSource.getWebViewType() ==WebViewType.REDIRECT){
+                businessViewHolder.view.headerView.constraint.visibility = View.GONE
+                businessViewHolder.view.topSeparatorLinear.visibility = View.GONE
+                checkoutFragment.closeText.visibility = View.VISIBLE
+                removeViews(
+                    businessViewHolder,
+                    amountViewHolder,
+                    cardViewHolder,
+                    saveCardSwitchHolder,
+                    paymentInputViewHolder,
+                    otpViewHolder,
+                    goPaySavedCardHolder,
+                    goPayViewsHolder
+                )
+                val bottomSheet: FrameLayout? =
+                    bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet)
+                BottomSheetBehavior.from(bottomSheet as View).state = BottomSheetBehavior.STATE_EXPANDED
+                Handler(Looper.getMainLooper()).postDelayed({
+                    fragmentManager.beginTransaction()
+                        .replace(
+                            R.id.webFrameLayout, WebFragment.newInstance(
+                                redirectURL,
+                                this, cardViewModel, authenticate
+                            )
+                        ).commitNow()
+                    //  checkoutFragment.closeText.visibility = View.VISIBLE
+                    webFrameLayout.visibility = View.VISIBLE
+
+
+                }, 1500)
+                saveCardSwitchHolder?.view?.visibility = View.VISIBLE
+            }else   if(PaymentDataSource?.getWebViewType()!=null && PaymentDataSource.getWebViewType() ==WebViewType.THREE_DS_WEBVIEW){
+                  webViewHolder = WebViewHolder(context, fragmentManager,url,this,cardViewModel,authenticate)
+                removeViews(
+                    //  businessViewHolder,
+                    //   amountViewHolder,
+                    cardViewHolder,
+                    saveCardSwitchHolder,
+                    paymentInputViewHolder,
+                    otpViewHolder,
+                    goPaySavedCardHolder,
+                    goPayViewsHolder
+                )
+                addViews(webViewHolder,saveCardSwitchHolder)
+                 Handler(Looper.getMainLooper()).postDelayed({
+
+           webFrameLayout.visibility = View.VISIBLE
+           }, 1800)
+
+                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
+              true,
+              LocalizationManager.getLocale(context).toString(),LocalizationManager.getValue("deleteSavedCardButtonCancel", "SavedCardTitle"),  Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.white")),Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.greyishBrown")))
+
+          saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.RESET)
+
+          saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setOnClickListener {
+              this.dismissBottomSheet()
+
+          }
+            }
+
             // removeViews(amountViewHolder)
-            removeViews(
-                //businessViewHolder,
-                //  amountViewHolder,
-                cardViewHolder,
-                saveCardSwitchHolder,
-                paymentInputViewHolder,
-                otpViewHolder,
-                goPaySavedCardHolder,
-                goPayViewsHolder
-            )
-         /*   val bottomSheet: FrameLayout? =
-                bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet)
-            BottomSheetBehavior.from(bottomSheet as View).state = BottomSheetBehavior.STATE_EXPANDED
-            Handler(Looper.getMainLooper()).postDelayed({
-                fragmentManager.beginTransaction()
-                    .replace(
-                        R.id.webFrameLayout, WebFragment.newInstance(
-                            redirectURL,
-                            this, cardViewModel, authenticate
-                        )
-                    ).commitNow()
-              //  checkoutFragment.closeText.visibility = View.VISIBLE
-                webFrameLayout.visibility = View.VISIBLE
 
 
-            }, 1500)*/
-            addViews(webViewHolder,saveCardSwitchHolder)
-            Handler(Looper.getMainLooper()).postDelayed({
+         //
 
-            webFrameLayout.visibility = View.VISIBLE
-            }, 1800)
 
             //addViews(saveCardSwitchHolder)
-            saveCardSwitchHolder?.view?.visibility = View.VISIBLE
-            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
-                true,
-                LocalizationManager.getLocale(context).toString(),LocalizationManager.getValue("deleteSavedCardButtonCancel", "SavedCardTitle"),  Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.white")),Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.greyishBrown")))
+           // saveCardSwitchHolder?.view?.visibility = View.VISIBLE
 
-            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.RESET)
-
-            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setOnClickListener {
-                this.dismissBottomSheet()
-
-            }
         }
 
 
@@ -1588,6 +1610,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             else -> {
                 if (savedCardsModel != null) {
                     if ((savedCardsModel as PaymentOption).paymentType == PaymentType.WEB) {
+                        PaymentDataSource.setWebViewType(WebViewType.REDIRECT)
                         activateActionButton()
                         setPayButtonAction(PaymentType.WEB, savedCardsModel)
                     }
@@ -2044,6 +2067,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     // setDifferentPaymentsAction(paymentTypeEnum,savedCardsModel)
                 }
                 PaymentType.WEB -> {
+                    PaymentDataSource.setWebViewType(WebViewType.REDIRECT)
                     if (savedCardsModel != null) {
                         if (::selectedAmount.isInitialized && ::selectedCurrency.isInitialized) {
                             checkForExtraFees(
@@ -2638,10 +2662,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         when {
             paymentType === PaymentType.WEB -> {
                 if (savedCardsModel != null) {
+                    PaymentDataSource.setWebViewType(WebViewType.REDIRECT)
                     onClickRedirect(savedCardsModel)
                 }
             }
             paymentType === PaymentType.CARD -> {
+                PaymentDataSource.setWebViewType(WebViewType.THREE_DS_WEBVIEW)
                 onClickCardPayment()
             }
             paymentType === PaymentType.SavedCard -> {

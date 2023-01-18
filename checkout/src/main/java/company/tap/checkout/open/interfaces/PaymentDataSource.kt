@@ -8,6 +8,7 @@ import company.tap.checkout.internal.api.models.PaymentOption
 import company.tap.checkout.internal.api.responses.InitResponseModel
 import company.tap.checkout.internal.api.responses.MerchantData
 import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
+import company.tap.checkout.internal.enums.WebViewType
 import company.tap.checkout.open.enums.CardType
 import company.tap.checkout.open.enums.SdkMode
 import company.tap.checkout.open.enums.TransactionMode
@@ -191,4 +192,6 @@ interface PaymentDataSource {
 
     fun getSDKLocale():Locale?
     fun getSelectedCurrencySymbol():String?
+
+    fun getWebViewType():WebViewType?
 }

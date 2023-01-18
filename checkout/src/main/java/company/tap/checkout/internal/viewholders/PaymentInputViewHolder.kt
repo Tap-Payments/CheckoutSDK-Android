@@ -467,9 +467,13 @@ class PaymentInputViewHolder(
             intertabLayout?.visibility = View.GONE
             tapInlineCardSwitch?.saveForOtherCheckBox?.isChecked = isChecked
             if(isChecked){
-               contactDetailsView?.visibility = View.VISIBLE
+                if (cardInputUIStatus == CardInputUIStatus.SavedCard) {
+                    contactDetailsView?.visibility = View.GONE
+                }else {contactDetailsView?.visibility = View.VISIBLE
+
                 tapInlineCardSwitch?.switchSaveCard?.isChecked = true
                 tapInlineCardSwitch?.saveForOtherCheckBox?.visibility = View.VISIBLE
+                }
             }else {
                 contactDetailsView?.visibility = View.GONE
                 tapInlineCardSwitch?.switchSaveCard?.isChecked = false

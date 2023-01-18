@@ -6,6 +6,7 @@ import company.tap.checkout.internal.api.responses.InitResponseModel
 import company.tap.checkout.internal.api.responses.MerchantData
 import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
 import company.tap.checkout.internal.api.responses.SDKSettings
+import company.tap.checkout.internal.enums.WebViewType
 import company.tap.checkout.open.enums.CardType
 import company.tap.checkout.open.enums.SdkMode
 import company.tap.checkout.open.enums.TransactionMode
@@ -47,6 +48,7 @@ object PaymentDataSource :PaymentDataSource {
     private  var authorizeAction: AuthorizeAction?=null
     private var destination: Destinations? = null
     private var merchant: Merchant? = null
+    private var webViewType: WebViewType? = null
 
 
     private var cardType: CardType? = null
@@ -297,6 +299,9 @@ object PaymentDataSource :PaymentDataSource {
     fun setTokenConfig(_tokenConfig: String?) {
         this.tokenConfig = _tokenConfig
     }
+    fun setWebViewType(webViewType: WebViewType) {
+        this.webViewType = webViewType
+    }
 
     /**
      * Set merchantData.
@@ -499,6 +504,10 @@ object PaymentDataSource :PaymentDataSource {
 
     override fun getSelectedCurrencySymbol(): String? {
        return selectedCurrencySymbol
+    }
+
+    override fun getWebViewType(): WebViewType? {
+        return webViewType
     }
 
     override fun getAvailablePaymentOptionsCardBrands(): ArrayList<PaymentOption>? {

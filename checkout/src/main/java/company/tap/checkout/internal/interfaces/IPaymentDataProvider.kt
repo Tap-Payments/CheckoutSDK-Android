@@ -6,6 +6,7 @@ import company.tap.checkout.internal.api.models.CardIssuer
 
 import company.tap.checkout.open.models.Merchant
 import company.tap.checkout.internal.api.models.SupportedCurrencies
+import company.tap.checkout.internal.enums.WebViewType
 
 import company.tap.checkout.open.enums.TransactionMode
 
@@ -148,4 +149,6 @@ interface IPaymentDataProvider {
      * get TopUp object
      */
     fun getTopUp(): TopUp?
+
+   fun getWebViewType(): WebViewType?
 }

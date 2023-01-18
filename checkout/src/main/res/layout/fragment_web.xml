@@ -17,7 +17,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:background="@drawable/corner_radius_top"
-        android:visibility="gone"
+        android:visibility="visible"
         android:paddingTop="@dimen/margin_basic_10dp">
 
         <View
