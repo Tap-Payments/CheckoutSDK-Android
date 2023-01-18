@@ -307,7 +307,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate, CheckoutListener {
        //    )
        // }//** Required **
        sdkSession.setAmount(
-           BigDecimal.valueOf(60)
+           BigDecimal.valueOf(10)
        )
 
        // Set Payment ItemsModel array list

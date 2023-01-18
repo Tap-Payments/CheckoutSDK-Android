@@ -472,7 +472,7 @@ object SettingsManager {
             paymentitems.add(ItemsModel(
                 "",
                 "Items1",
-                BigDecimal.valueOf(30),
+                BigDecimal.valueOf(5),
                "KWD",
                 BigDecimal.valueOf(
                     2

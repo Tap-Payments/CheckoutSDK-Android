@@ -89,6 +89,7 @@ class WebViewHolder(
         web_view.settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
         web_view.webViewClient = cardViewModel?.let { TapCustomWebViewClient(this, it) }!!
         web_view.settings.loadWithOverviewMode = true
+        web_view.scrollBarStyle = View.SCROLLBARS_INSIDE_OVERLAY
         println("redirectURL val is>>"+mUrl)
         redirectURL?.let { web_view.loadUrl(it) }
         web_view.setOnKeyListener { _, keyCode, event ->

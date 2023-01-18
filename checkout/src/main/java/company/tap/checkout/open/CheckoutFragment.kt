@@ -171,6 +171,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             bottomSheetDialog.dismiss()
             resetTabAnimatedButton()
 
+
         }
         closeImage.setOnClickListener {
             bottomSheetDialog.dismissWithAnimation
