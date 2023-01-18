@@ -2378,6 +2378,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         removeNFCViewFragment()
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun setNfcCardDetails(emvCard: TapEmvCard) {
         paymentInputViewHolder.tapCardInputView.setCardNumber(emvCard.cardNumber)
         convertDateString(emvCard)
@@ -2416,6 +2417,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         return
                     } else {
                         paymentInputViewHolder.tapCardInputView.setExpiryDate(month, year.toInt())
+                       // paymentInputViewHolder.tapCardInputVie
 
                     }
 

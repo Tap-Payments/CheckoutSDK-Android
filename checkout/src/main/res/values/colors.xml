@@ -11,4 +11,5 @@
     <!--<color name="separator_color">#dfdfdf</color>-->
     <color name="separator_color">#404043</color>
     <color name="black_27">#45000000</color>
+    <color name="white">#ffffff</color>
 </resources>

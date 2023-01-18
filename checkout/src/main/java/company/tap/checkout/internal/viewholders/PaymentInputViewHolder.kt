@@ -181,18 +181,18 @@ class PaymentInputViewHolder(
     }
 
     private fun initToolsTip() {
-
+        val toolsTipText:String = LocalizationManager.getValue("cardSaveForTapInfo","TapCardInputKit")
         toolstipImageView?.setOnClickListener {
             TooltipCompat.setTooltipText(
                 toolstipImageView!!,
-                "Checkout everywhere in just one click. Tap is a better and secure way to pay locally across 100k+ stores. Your details are encrypted and can only be accessed by you. You’ll receive an email to get started and manage your details."
+                 toolsTipText
             )
 
         }
         toolstipImageView?.let {
             TooltipCompat.setTooltipText(
                 it,
-                "Checkout everywhere in just one click. Tap is a better and secure way to pay locally across 100k+ stores. Your details are encrypted and can only be accessed by you. You’ll receive an email to get started and manage your details."
+                toolsTipText
             )
         }
 
@@ -226,6 +226,8 @@ class PaymentInputViewHolder(
             "shippingSectionTitle"
         )
         tapInlineCardSwitch?.switchSaveCard?.isChecked = false
+        contactDetailsView?.contactEmailET?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("customerDataCollection.backgroundColor")))
+        contactDetailsView?.contactEmailET?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("customerDataCollection.backgroundColor")))
     }
 
     private fun initializeIcons() {
@@ -439,7 +441,13 @@ class PaymentInputViewHolder(
 
         }*/
 
-        tapInlineCardSwitch?.switchSaveCard?.setOnCheckedChangeListener { buttonView, isChecked ->
+        tapInlineCardSwitch?.switchSaveCard?.setOnCheckedChangeListener {
+                buttonView, isChecked ->
+            secondaryLayout?.visibility = View.GONE
+            intertabLayout?.visibility = View.GONE
+            tapAlertView?.visibility = View.GONE
+            tabLayout?.visibility = View.GONE
+            intertabLayout?.visibility = View.GONE
             if(isChecked){
                 tapInlineCardSwitch?.saveForOtherCheckBox?.isChecked = true
                 tapInlineCardSwitch?.saveForOtherCheckBox?.visibility = View.VISIBLE
@@ -453,6 +461,10 @@ class PaymentInputViewHolder(
 
         }
         tapInlineCardSwitch?.saveForOtherCheckBox?.setOnCheckedChangeListener{ buttonView, isChecked ->
+            secondaryLayout?.visibility = View.GONE
+            tapAlertView?.visibility = View.GONE
+            tabLayout?.visibility = View.GONE
+            intertabLayout?.visibility = View.GONE
             tapInlineCardSwitch?.saveForOtherCheckBox?.isChecked = isChecked
             if(isChecked){
                contactDetailsView?.visibility = View.VISIBLE
