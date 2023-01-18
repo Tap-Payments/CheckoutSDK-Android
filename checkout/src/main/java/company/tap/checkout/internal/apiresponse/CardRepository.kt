@@ -414,7 +414,7 @@ class CardRepository : APIRequestCallback {
                                 it1
                             )
                         }?.let { it2 -> tabAnimatedActionButton?.setDisplayMetrics(it2) }
-                       // tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
+                        tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
                     }
                 }
 
