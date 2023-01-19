@@ -41,6 +41,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import company.tap.cardinputwidget.CardBrandSingle
 import company.tap.cardinputwidget.CardInputUIStatus
+import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardscanner.*
 import company.tap.checkout.R
 import company.tap.checkout.internal.PaymentDataProvider
@@ -1244,7 +1245,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun filterCardTypes(list: ArrayList<PaymentOption>) {
+     fun filterCardTypes(list: ArrayList<PaymentOption>) {
         var filteredCardList: List<PaymentOption> =
             list.filter { items -> items.paymentType == PaymentType.CARD }
 
@@ -1877,7 +1878,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     // Override function to open card Scanner and scan the card.
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onClickCardScanner(scannerClicked: Boolean) {
-        // setSlideAnimation()
+         setSlideAnimation()
         removeViews(
             //businessViewHolder,
             //  amountViewHolder,
@@ -1896,13 +1897,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         //  val bottomSheet: FrameLayout? = bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet)
         //  BottomSheetBehavior.from(bottomSheet as View).state = BottomSheetBehavior.STATE_EXPANDED
         //   bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        inLineCardLayout.visibility = View.VISIBLE
         fragmentManager
             .beginTransaction()
             .replace(R.id.inline_container, inlineCamerFragment)
             .commit()
 
         isInlineOpened = true
-        inLineCardLayout.visibility = View.VISIBLE
+
+
         amountViewHolder.changeGroupAction(false)
 
         checkSelectedAmountInitiated()
@@ -2310,7 +2313,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun handleScanSuccessResult(card: TapCard) {
-        removeInlineScanner()
+
         //  removeViews(amountViewHolder, businessViewHolder)
         addViews(
             // businessViewHolder,
@@ -2342,12 +2345,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         paymentInputViewHolder.tapCardInputView.setCardHolderName(card.cardHolder)
         // inlineCamerFragment.onDestroy()
+        removeInlineScanner()
 
 
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun setScannedCardDetails(card: TapCard) {
+        paymentInputViewHolder.tapCardInputView.onTouchView()
         println("scanned card holder is${card.cardHolder}")
         println("scanned card number is${card.cardNumber}")
         paymentInputViewHolder.tapCardInputView.setCardNumber(card.cardNumber)
@@ -2359,6 +2364,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 paymentInputViewHolder.tapCardInputView.setExpiryDate(month, year)
             }
         }
+
 
     }
 
@@ -2404,9 +2410,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun setNfcCardDetails(emvCard: TapEmvCard) {
+        // auto slide added on scan to prevent overlap
+        paymentInputViewHolder.tapCardInputView.onTouchView()
         paymentInputViewHolder.tapCardInputView.setCardNumber(emvCard.cardNumber)
         convertDateString(emvCard)
-
+        paymentInputViewHolder.onFocusChange( CardInputListener.FocusField.FOCUS_CVC)
 
     }
 
@@ -2568,6 +2576,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 adapter.updateAdapterData(webPaymentOptions)
                 if (!cardPaymentOptions.isEmpty()) {
                     paymentInputViewHolder.setDataFromAPI(cardPaymentOptions)
+
 
                 } else {
                     saveCardSwitchHolder?.mainTextSave?.visibility = View.GONE

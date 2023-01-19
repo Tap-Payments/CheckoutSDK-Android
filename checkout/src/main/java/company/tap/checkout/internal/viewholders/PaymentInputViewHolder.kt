@@ -53,6 +53,7 @@ import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
 import company.tap.tapuilibrary.uikit.interfaces.TapPaymentShowHideClearImage
 import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
+import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import company.tap.tapuilibrary.uikit.models.SectionTabItem
 import company.tap.tapuilibrary.uikit.organisms.TapPaymentInput
 import company.tap.tapuilibrary.uikit.views.*
@@ -144,6 +145,25 @@ class PaymentInputViewHolder(
         scannerButton = tapCardInputView.findViewById(R.id.card_scanner_button)
         closeButton = tapCardInputView.findViewById(R.id.clear_text)
         tapPaymentInput = view.findViewById(R.id.tap_payment_input)
+      //  tapCardInputView.separatorcard2.visibility = View.INVISIBLE
+
+       /* if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))tapPaymentInput?.cardInputCardView?.setBackgroundResource(
+            R.drawable.border_unclick_black
+        )
+        else  {
+            tapPaymentInput?.cardInputCardView?.setBackgroundResource(R.drawable.border_unclick)
+        }*/
+
+        tapPaymentInput?.cardInputCardView?.let {
+            setBorderedView(
+                it,
+                (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
+                0.0f,
+                Color.parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
+                Color.parseColor(ThemeManager.getValue("horizontalList.chips.gatewayChip.backgroundColor")),// tint color
+                Color.parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
+            )
+        }// shadow color
         tapAlertView = tapPaymentInput?.findViewById(R.id.alertView)
         //cardSwitchLayout = tapCardInputView.findViewById(R.id.mainSwitchInline)
         paymentInputContainer = view.findViewById(R.id.payment_input_layout)
@@ -243,7 +263,10 @@ class PaymentInputViewHolder(
             CustomUtils.hideKeyboardFrom(context, it)
             loyaltyViewHolder?.view?.loyaltyView?.constraintLayout?.visibility = View.GONE
             tabLayout.visibility = View.VISIBLE
+            contactDetailsView?.visibility = View.GONE
             closeButton?.visibility = View.GONE
+            tapCardInputView.separatorcard2.visibility= View.VISIBLE
+            tabLayout.resetBehaviour()
 
         }
     }
@@ -444,10 +467,10 @@ class PaymentInputViewHolder(
         tapInlineCardSwitch?.switchSaveCard?.setOnCheckedChangeListener {
                 buttonView, isChecked ->
             secondaryLayout?.visibility = View.GONE
-            intertabLayout?.visibility = View.GONE
+           // intertabLayout?.visibility = View.GONE
             tapAlertView?.visibility = View.GONE
-            tabLayout?.visibility = View.GONE
-            intertabLayout?.visibility = View.GONE
+          //  tabLayout?.visibility = View.GONE
+           // intertabLayout?.visibility = View.GONE
             if(isChecked){
                 tapInlineCardSwitch?.saveForOtherCheckBox?.isChecked = true
                 tapInlineCardSwitch?.saveForOtherCheckBox?.visibility = View.VISIBLE
@@ -463,8 +486,8 @@ class PaymentInputViewHolder(
         tapInlineCardSwitch?.saveForOtherCheckBox?.setOnCheckedChangeListener{ buttonView, isChecked ->
             secondaryLayout?.visibility = View.GONE
             tapAlertView?.visibility = View.GONE
-            tabLayout?.visibility = View.GONE
-            intertabLayout?.visibility = View.GONE
+           // tabLayout?.visibility = View.GONE
+           // intertabLayout?.visibility = View.GONE
             tapInlineCardSwitch?.saveForOtherCheckBox?.isChecked = isChecked
             if(isChecked){
                 if (cardInputUIStatus == CardInputUIStatus.SavedCard) {
@@ -643,8 +666,7 @@ class PaymentInputViewHolder(
                         }
                     }
                 }
-                tapCardInputView.holderNameEnabled =
-                    PaymentDataSource.getEnableEditCardHolderName() != null && PaymentDataSource.getEnableEditCardHolderName()
+                tapCardInputView.holderNameEnabled = PaymentDataSource.getEnableEditCardHolderName() != null && PaymentDataSource.getEnableEditCardHolderName()
                 //  tapCardInputView.holderNameEnabled= true
                 if (tapCardInputView.holderNameEnabled) {
                     tapInlineCardSwitch?.setPaddingRelative(0, 100, 0, 0)
@@ -718,6 +740,7 @@ class PaymentInputViewHolder(
         /* if(resetView){
              resetTouchView()
          }*/
+
     }
 
     private fun setTabLayoutBasedOnApiResponse(
@@ -943,6 +966,7 @@ class PaymentInputViewHolder(
 
     override fun onFocusChange(focusField: String) {
         lastFocusField = focusField
+
         println("lastFocusField>>>>" + lastFocusField)
         /* if(resetView){
              tapCardInputView.onTouchView()
@@ -970,6 +994,7 @@ class PaymentInputViewHolder(
      * */
     @RequiresApi(Build.VERSION_CODES.N)
     fun setDataFromAPI(imageURLApi: List<PaymentOption>) {
+        println("imageURLApi>>"+imageURLApi)
 //        tabLayout.resetBehaviour()
 
         val itemsMobilesList = ArrayList<SectionTabItem>()
@@ -1212,6 +1237,7 @@ class PaymentInputViewHolder(
         // Glide.with(context).load(savedCardsModel.image).into( tapCardInputView.cvvIcon)
         tapCardInputView.onTouchView()
         tapInlineCardSwitch?.visibility = View.GONE
+        intertabLayout.visibility = View.GONE
     }
 
     fun getSavedCardData(): CreateTokenSavedCard? {

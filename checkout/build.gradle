@@ -62,9 +62,9 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.7.0'
     api 'com.github.Tap-Payments:LocalisationManager-Android:0.0.1.32'
   //  implementation 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.25'
-    implementation 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.36.100'
+    implementation 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.36.106'
  //   api 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.25'
-    api 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.36.100'
+    api 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.36.106'
     implementation "com.hbb20:ccp:2.5.0"
     api 'androidx.activity:activity-ktx:1.4.0'
     testImplementation 'junit:junit:4.13.2'
@@ -73,7 +73,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     kapt 'com.github.bumptech.glide:compiler:4.12.0'
-    implementation 'com.github.Tap-Payments:TapCardScannerKit-Android:0.0.1.18.2'
+    implementation 'com.github.Tap-Payments:TapCardScannerKit-Android:0.0.1.18.4'
     implementation 'company.tap:PayCards-Tap-Android:0.1.6.4'
     api 'company.tap:PayCards-Tap-Android:0.1.6.4'
     implementation("io.coil-kt:coil:1.2.0")
@@ -93,8 +93,8 @@ dependencies {
     implementation 'com.koushikdutta.ion:ion:3.1.0'
     implementation "com.google.android.gms:play-services-wallet:19.1.0"
 
-    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.358.122'
-    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.358.122'
+    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.358.124'
+    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.358.124'
     implementation 'com.github.2coffees1team:GlideToVectorYou:v2.0.0'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.11.1'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.1'
