@@ -826,6 +826,11 @@ class PaymentInputViewHolder(
         }
     }
 
+    fun checkValidateStateFromScanNFC(card: String){
+        val cardVal = CardValidator.validate(card)
+        checkValidationState(cardVal)
+
+    }
 
     private fun checkValidationState(card: DefinedCardBrand) {
 

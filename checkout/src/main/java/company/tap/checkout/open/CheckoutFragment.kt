@@ -72,6 +72,9 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     var isNfcOpened: Boolean = false
 
     @JvmField
+    var isScannerOpened: Boolean = false
+
+    @JvmField
     var isFullscreen = false
     var heightIn: Int = 0
     private var inLineCardLayout: FrameLayout? = null
@@ -369,6 +372,13 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         }
         if (isNfcOpened) {
         } else {
+            checkOutActivity?.onBackPressed()
+        }
+
+        if (isScannerOpened){
+
+        } else {
+            //_viewModel?.incrementalCount =0
             checkOutActivity?.onBackPressed()
         }
 

@@ -232,7 +232,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     val seceret: String = "3l5e0cstdim11skgwoha8x9vx9zo0kxxi4droryjp4eqd"
     val countrycode: String = "1001"
     val mcc: String = "4816"
-
+    @JvmField
+    var incrementalCount:Int = 0
     @RequiresApi(Build.VERSION_CODES.N)
     fun initLayoutManager(
         bottomSheetDialog: BottomSheetDialog,
@@ -1848,7 +1849,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             //businessViewHolder,
             // amountViewHolder,
             cardViewHolder,
-
             saveCardSwitchHolder,
             paymentInputViewHolder,
             otpViewHolder,
@@ -1881,7 +1881,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
          setSlideAnimation()
         removeViews(
             //businessViewHolder,
-            //  amountViewHolder,
+            // amountViewHolder,
             cardViewHolder,
             saveCardSwitchHolder,
             paymentInputViewHolder,
@@ -1891,23 +1891,25 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
         amountViewHolder.readyToScanVisibility(scannerClicked)
         // addViews(businessViewHolder, amountViewHolder)
-
+        inLineCardLayout.visibility = View.VISIBLE
         FrameManager.getInstance().frameColor = Color.WHITE
         // Use
         //  val bottomSheet: FrameLayout? = bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet)
         //  BottomSheetBehavior.from(bottomSheet as View).state = BottomSheetBehavior.STATE_EXPANDED
         //   bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
-        inLineCardLayout.visibility = View.VISIBLE
+
         fragmentManager
             .beginTransaction()
             .replace(R.id.inline_container, inlineCamerFragment)
             .commit()
 
         isInlineOpened = true
-
+        checkoutFragment.isScannerOpened = true
 
         amountViewHolder.changeGroupAction(false)
-
+        val bottomSheet: FrameLayout? =
+            bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet)
+        BottomSheetBehavior.from(bottomSheet as View).state = BottomSheetBehavior.STATE_EXPANDED
         checkSelectedAmountInitiated()
     }
 
@@ -2273,6 +2275,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
              }
          }*/
 
+        println("are you called here!!")
+
 
     }
 
@@ -2290,6 +2294,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
             // inlineCamerFragment.onDestroy()
             isInlineOpened = false
+            checkoutFragment.isScannerOpened = false
             inLineCardLayout.visibility = View.GONE
             amountViewHolder.readyToScanVisibility(false)
 
@@ -2343,7 +2348,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }, 300)
 
 
-        paymentInputViewHolder.tapCardInputView.setCardHolderName(card.cardHolder)
+
         // inlineCamerFragment.onDestroy()
         removeInlineScanner()
 
@@ -2355,6 +2360,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         paymentInputViewHolder.tapCardInputView.onTouchView()
         println("scanned card holder is${card.cardHolder}")
         println("scanned card number is${card.cardNumber}")
+        paymentInputViewHolder.checkValidateStateFromScanNFC(card.cardNumber)
         paymentInputViewHolder.tapCardInputView.setCardNumber(card.cardNumber)
         val dateParts: List<String>? = card.expirationDate?.split("/")
         val month = dateParts?.get(0)?.toInt()
@@ -2364,7 +2370,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 paymentInputViewHolder.tapCardInputView.setExpiryDate(month, year)
             }
         }
-
+       // paymentInputViewHolder.tapCardInputView.setCardHolderName(card.cardHolder)
 
     }
 
@@ -2874,6 +2880,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onReadSuccess(card: TapCard?) {
+        incrementalCount += 1
+
+        println("incrementalCount val>>>>>"+incrementalCount)
         /*   if (card != null) {
                if(card.cardNumber!=null)
               handleScanSuccessResult(card)
@@ -2882,10 +2891,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             Log.d("checkOutViewModel", "onRecognitionSuccess: " + card.cardHolder)*//*
 
         }*/
-        if (card != null) {
+        if (card != null && incrementalCount==3) {
+
             if (card.cardNumber != null && card.cardHolder != null && card.expirationDate != null) {
                 handleScanSuccessResult(card)
             }
+            return
         }
     }
 
