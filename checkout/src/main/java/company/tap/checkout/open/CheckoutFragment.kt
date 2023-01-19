@@ -172,6 +172,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             bottomSheetDialog.dismissWithAnimation
             bottomSheetDialog.hide()
             bottomSheetDialog.dismiss()
+            viewModel.incrementalCount = 0
             resetTabAnimatedButton()
 
 
@@ -181,6 +182,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             bottomSheetDialog.hide()
             bottomSheetDialog.dismiss()
             resetTabAnimatedButton()
+            viewModel.incrementalCount = 0
 
         }
 

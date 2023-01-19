@@ -390,6 +390,7 @@ class PaymentInputViewHolder(
         tapInlineCardSwitch?.visibility = View.GONE
         closeButton?.visibility = View.GONE
         tapCardInputView.setVisibilityOfHolderField(false)
+        checkoutViewModel.incrementalCount=0
     }
 
     private fun initMobileInput() {

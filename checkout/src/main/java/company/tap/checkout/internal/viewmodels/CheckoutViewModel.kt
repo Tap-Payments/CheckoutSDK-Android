@@ -2358,7 +2358,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun setScannedCardDetails(card: TapCard) {
-        paymentInputViewHolder.tapCardInputView.onTouchView()
+       /* if(CardUtils.isValidCardNumber(card.cardNumber)){
+            paymentInputViewHolder.tapCardInputView.onTouchView()
+        }else {
+            paymentInputViewHolder.tapCardInputView.onTouchCardField()
+        }*/
+        paymentInputViewHolder.tapCardInputView.onTouchCardField()
         println("scanned card holder is${card.cardHolder}")
         println("scanned card number is${card.cardNumber}")
 
