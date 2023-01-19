@@ -41,6 +41,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import company.tap.cardinputwidget.CardBrandSingle
 import company.tap.cardinputwidget.CardInputUIStatus
+import company.tap.cardinputwidget.utils.CardUtils
 import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardscanner.*
 import company.tap.checkout.R
@@ -2360,16 +2361,18 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         paymentInputViewHolder.tapCardInputView.onTouchView()
         println("scanned card holder is${card.cardHolder}")
         println("scanned card number is${card.cardNumber}")
-        paymentInputViewHolder.checkValidateStateFromScanNFC(card.cardNumber)
+
         paymentInputViewHolder.tapCardInputView.setCardNumber(card.cardNumber)
-        val dateParts: List<String>? = card.expirationDate?.split("/")
-        val month = dateParts?.get(0)?.toInt()
-        val year = dateParts?.get(1)?.toInt()
-        if (month != null) {
-            if (year != null) {
-                paymentInputViewHolder.tapCardInputView.setExpiryDate(month, year)
+            val dateParts: List<String>? = card.expirationDate?.split("/")
+            val month = dateParts?.get(0)?.toInt()
+            val year = dateParts?.get(1)?.toInt()
+            if (month != null) {
+                if (year != null) {
+                    paymentInputViewHolder.tapCardInputView.setExpiryDate(month, year)
+                }
             }
-        }
+
+
        // paymentInputViewHolder.tapCardInputView.setCardHolderName(card.cardHolder)
 
     }

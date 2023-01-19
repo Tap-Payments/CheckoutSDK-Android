@@ -277,6 +277,7 @@ class PaymentInputViewHolder(
             tabLayout.changeTabItemMarginBottomValue(15)
             tabLayout.changeTabItemMarginTopValue(15)
             tabLayout.changeTabItemMarginLeftValue(-15)
+           //chck tabLayout.changeTabItemMarginRightValue(15)
 
         } else {
             tabLayout.changeTabItemMarginBottomValue(20)
@@ -826,11 +827,7 @@ class PaymentInputViewHolder(
         }
     }
 
-    fun checkValidateStateFromScanNFC(card: String){
-        val cardVal = CardValidator.validate(card)
-        checkValidationState(cardVal)
 
-    }
 
     private fun checkValidationState(card: DefinedCardBrand) {
 
