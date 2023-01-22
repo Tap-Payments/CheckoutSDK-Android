@@ -12,10 +12,7 @@ import android.transition.TransitionManager
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.LinearLayout
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.widget.doAfterTextChanged
@@ -145,25 +142,9 @@ class PaymentInputViewHolder(
         scannerButton = tapCardInputView.findViewById(R.id.card_scanner_button)
         closeButton = tapCardInputView.findViewById(R.id.clear_text)
         tapPaymentInput = view.findViewById(R.id.tap_payment_input)
-      //  tapCardInputView.separatorcard2.visibility = View.INVISIBLE
+        tapCardInputView.separatorcard2.visibility = View.INVISIBLE
 
-       /* if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))tapPaymentInput?.cardInputCardView?.setBackgroundResource(
-            R.drawable.border_unclick_black
-        )
-        else  {
-            tapPaymentInput?.cardInputCardView?.setBackgroundResource(R.drawable.border_unclick)
-        }*/
 
-        tapPaymentInput?.cardInputCardView?.let {
-            setBorderedView(
-                it,
-                (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
-                0.0f,
-                Color.parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
-                Color.parseColor(ThemeManager.getValue("horizontalList.chips.gatewayChip.backgroundColor")),// tint color
-                Color.parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
-            )
-        }// shadow color
         tapAlertView = tapPaymentInput?.findViewById(R.id.alertView)
         //cardSwitchLayout = tapCardInputView.findViewById(R.id.mainSwitchInline)
         paymentInputContainer = view.findViewById(R.id.payment_input_layout)
@@ -171,6 +152,8 @@ class PaymentInputViewHolder(
         backArrow = tapCardInputView.findViewById(R.id.backView)
         contactDetailsView = view.findViewById(R.id.contactDetailsView)
         tapInlineCardSwitch = tapPaymentInput?.findViewById(R.id.switch_Inline_card)
+        tapPaymentInput?.separator?.visibility= View.GONE
+       // tapCardInputView?.separatorcard2
         secondaryLayout = tapCardInputView.findViewById(R.id.secondary_Layout)
         textViewPowered = tapCardInputView.findViewById(R.id.textViewPowered)
         saveForOtherCheckBox = tapCardInputView.findViewById(R.id.saveForOtherCheckBox)
@@ -186,16 +169,17 @@ class PaymentInputViewHolder(
             )
         )
 
-        tapSeparatorViewLinear = view.findViewById(R.id.tapSeparatorViewLinear)
-        tapSeparatorViewLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
+       // tapSeparatorViewLinear = view.findViewById(R.id.tapSeparatorViewLinear)
+       // tapSeparatorViewLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
         // tabLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.backgroundColor")))
-        tabLayout.changeTabItemMarginBottomValue(10)
-        tabLayout.changeTabItemMarginTopValue(10)
+       tabLayout.changeTabItemMarginBottomValue(10)
+       tabLayout.changeTabItemMarginTopValue(10)
         constraintt = view.findViewById(R.id.constraintt)
         constraintt.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
         acceptedCardText = view.findViewById(R.id.acceptedCardText)
         acceptedCardText.text = LocalizationManager.getValue("weSupport", "TapCardInputKit")
         saveForOtherCheckBox?.text = LocalizationManager.getValue("cardSaveForTapLabel", "TapCardInputKit")
+
         bindViewComponents()
 
     }
@@ -265,8 +249,9 @@ class PaymentInputViewHolder(
             tabLayout.visibility = View.VISIBLE
             contactDetailsView?.visibility = View.GONE
             closeButton?.visibility = View.GONE
-            tapCardInputView.separatorcard2.visibility= View.VISIBLE
+
             tabLayout.resetBehaviour()
+            tapCardInputView.separatorcard2.visibility = View.INVISIBLE
 
         }
     }
@@ -416,6 +401,7 @@ class PaymentInputViewHolder(
 
     private fun initCardInput() {
         tapInlineCardSwitch?.visibility = View.GONE
+        tapPaymentInput?.separator?.visibility = View.GONE
         // tapCardInputView.holderNameEnabled = true
         //  PaymentDataSource.getEnableEditCardHolderName() != null && PaymentDataSource.getEnableEditCardHolderName()
         if (PaymentDataSource.getDefaultCardHolderName() != null) {
@@ -477,7 +463,9 @@ class PaymentInputViewHolder(
                 tapInlineCardSwitch?.saveForOtherCheckBox?.isChecked = true
                 tapInlineCardSwitch?.saveForOtherCheckBox?.visibility = View.VISIBLE
                 tapInlineCardSwitch?.toolsTipImageView?.visibility = View.VISIBLE
+                tapPaymentInput?.separator?.visibility = View.VISIBLE
             }else {
+                tapPaymentInput?.separator?.visibility = View.GONE
                 tapInlineCardSwitch?.saveForOtherCheckBox?.isChecked = false
                 tapInlineCardSwitch?.saveForOtherCheckBox?.visibility = View.GONE
              tapInlineCardSwitch?.toolsTipImageView?.visibility = View.GONE
