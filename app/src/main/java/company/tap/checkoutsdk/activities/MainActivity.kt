@@ -11,14 +11,10 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.util.DisplayMetrics
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.view.WindowManager
-import android.widget.LinearLayout
+import android.view.*
+import android.view.View.OnTouchListener
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -55,7 +51,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate, CheckoutListener {
     private var settingsManager: SettingsManager? = null
     var sdkSession: SDKSession = SDKSession
     private val payButton by lazy { findViewById<TabAnimatedActionButton>(R.id.payButton) }
-    private val linearLayout by lazy { findViewById<LinearLayout>(R.id.linearLayout) }
+ //  private val linearLayout by lazy { findViewById<LinearLayout>(R.id.linearLayout) }
 
     private val modalBottomSheet = CheckoutFragment()
     var urlStrDark: String =
@@ -516,12 +512,21 @@ class MainActivity : AppCompatActivity(), SessionDelegate, CheckoutListener {
            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
        )
 
-       payButton.setOnClickListener {
-           payButton.clearAnimation()
+      /* payButton.setOnClickListener {
+           println("payButton clickccc"+payButton)
+          //  payButton.clearAnimation()
            sdkSession.setButtonView(payButton, this, supportFragmentManager, this)
 
-       }
-
+       }*/
+       payButton.setOnTouchListener(OnTouchListener { v, event ->
+           if (event.action == MotionEvent.ACTION_DOWN) {
+               println("payButton clickccc"+payButton)
+               //  payButton.clearAnimation()
+               sdkSession.setButtonView(payButton, this, supportFragmentManager, this)
+               // Do what you want
+               true
+           } else false
+       })
 
    }
 

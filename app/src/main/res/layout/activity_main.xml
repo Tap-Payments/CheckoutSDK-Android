@@ -45,6 +45,8 @@
             android:visibility="visible"
             android:layout_gravity="center"
             android:layout_marginBottom="22dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:layout_marginStart="@dimen/margin_basic_20dp"
             android:layout_marginEnd="@dimen/margin_basic_20dp"/>
 

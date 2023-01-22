@@ -393,12 +393,20 @@ object  SDKSession : APIRequestCallback {
         supportFragmentManager: FragmentManager,
         activity: Activity
     ) {
-        payButtonView.setOnClickListener {
-            if (sessionActive) return@setOnClickListener
+
+        payButtonView.isFocusableInTouchMode = true
+      //  payButtonView.setOnClickListener {
+           // if (sessionActive) return@setOnClickListener
+            if (sessionActive){
+                tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
+                return
+            }
 
             if (PaymentDataSource?.getTransactionMode() == null) {
                 sessionDelegate?.invalidTransactionMode()
-                return@setOnClickListener
+                tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
+               // return@setOnClickListener
+                return
             } else {
                 sessionActive = true
                 startSDK(supportFragmentManager, context,activity)
@@ -409,7 +417,7 @@ object  SDKSession : APIRequestCallback {
                 }
 
             }
-        }
+      //  }
 
     }
 
