@@ -14,6 +14,16 @@
       "weSupport":"WE ACCEPT",
       "cardSectionTitle": "CARD INFORMATION"
     },
+    "TapAsyncSection": {
+      "paymentProgressLabel": "Payment in progress",
+      "paymentRecieptLabel": "An email has been sent to",
+      "paymentRecieptEmail": "email",
+      "paymentRecieptSms": "sms",
+      "paymentReferenceTitleLabel": "With your Fawry reference",
+      "paymentCodeTitleLabel" : "Order code",
+      "paymentExpiryTitleLabel": "Code expires on",
+      "paymentVisitBranchesLabel" : "Please visit Fawry branches using the link below to complete your order"
+    },
     "TapMobileInput": {
       "mobileSaveLabel": "For faster and easier checkout,\nsave your mobile number.",
       "mobileUseLabel": "For faster and easier checkout,\nuse your mobile number."
@@ -171,6 +181,17 @@
       "weSupport": "نحن ندعم",
       "cardSectionTitle": "بيانات البطاقة",
       "savedCardSectionTitle": "البطاقة المحفوظة"
+    },
+
+    "TapAsyncSection": {
+      "paymentProgressLabel": "العملية قد التنفيذ",
+      "paymentRecieptLabel": "تم إرسال %@",
+      "paymentRecieptEmail": "بريد إلكتروني",
+      "paymentRecieptSms": "رسالة نصية",
+      "paymentReferenceTitleLabel": "لكود العملية الخاصة بـ %@",
+      "paymentCodeTitleLabel" : "كود العملية",
+      "paymentExpiryTitleLabel": "ينتهي الكود في",
+      "paymentVisitBranchesLabel" : "برجاء زيارة أحد فروع %@ من خلال الرابط أدناه لاكمال العملية"
     },
     "TapMobileInput": {
       "mobileSaveLabel": "إحفظ رقم هاتفك،\n لدفع أسرع وأسهل.",

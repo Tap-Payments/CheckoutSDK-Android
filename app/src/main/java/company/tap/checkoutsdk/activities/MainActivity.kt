@@ -196,8 +196,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate, CheckoutListener {
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))
             ThemeManager.loadTapTheme(resources, R.raw.defaultdarktheme, "darktheme")
         else if (ThemeManager.currentTheme.isNotEmpty() && !ThemeManager.currentTheme.contains("dark"))
-            ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "lighttheme")
-        else ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "lighttheme")
+            ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme2, "lighttheme")
+        else ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme2, "lighttheme")
 
 
         /** Configures the theme manager by passing the provided custom theme url
@@ -230,6 +230,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate, CheckoutListener {
        - Parameter localiseFile: Please pass the name of the custom localisation file if needed. If not set, the normal and default TAP localisations will be used
         */
 
+     //  LocalizationManager.loadTapLocale(resources, R.raw.lang)
        LocalizationManager.loadTapLocale(resources, R.raw.lang)
        settingsManager?.getSDKLanguage("sdk_language")?.let { Locale(it) }?.let {
            LocalizationManager.setLocale(this,

@@ -1477,16 +1477,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         if (chargeResponse != null) {
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
             removeViews(
-                businessViewHolder,
+               // businessViewHolder,
                 amountViewHolder,
                 cardViewHolder,
                 paymentInputViewHolder,
                 saveCardSwitchHolder
             )
-            businessViewHolder.setDataFromAPI(
+          /*  businessViewHolder.setDataFromAPI(
                 selectedPaymentOption.image,
                 selectedPaymentOption.brand?.name
-            )
+            )*/
             addViews(businessViewHolder, asynchronousPaymentViewHolder)
             asynchronousPaymentViewHolder.setDataFromAPI(chargeResponse)
         }

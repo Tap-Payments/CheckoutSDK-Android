@@ -1,5 +1,6 @@
 package company.tap.checkout.internal.viewholders
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.text.util.Linkify
@@ -39,9 +40,16 @@ class AsynchronousPaymentViewHolder(private val context: Context,private  val vi
         bindViewComponents()
     }
 
+    @SuppressLint("SetTextI18n")
     override fun bindViewComponents() {
        fawryView = view.findViewById(R.id.fawry_payment_view)
-        fawryView.titleText?.text = "An SMS and email has been sent"
+        val firstString:String = LocalizationManager.getValue("paymentProgressLabel","TapAsyncSection")
+        val secondString:String = LocalizationManager.getValue("paymentRecieptLabel","TapAsyncSection")
+        fawryView.titleText?.text = firstString+"\n"+secondString
+        fawryView.descText?.text = LocalizationManager.getValue("paymentReferenceTitleLabel","TapAsyncSection")
+        fawryView.orderCodeText?.text = LocalizationManager.getValue("paymentCodeTitleLabel","TapAsyncSection")
+        fawryView.codeExpireText?.text = LocalizationManager.getValue("paymentExpiryTitleLabel","TapAsyncSection")
+        fawryView.linkDescText?.text = LocalizationManager.getValue("paymentVisitBranchesLabel","TapAsyncSection")
         fawryView.payButton?.setButtonDataSource(
             true, context?.let { LocalizationManager.getLocale(it).language },
             LocalizationManager.getValue(
