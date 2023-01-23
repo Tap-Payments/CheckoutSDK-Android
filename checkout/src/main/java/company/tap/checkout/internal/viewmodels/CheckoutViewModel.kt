@@ -1879,7 +1879,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     // Override function to open card Scanner and scan the card.
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onClickCardScanner(scannerClicked: Boolean) {
-         setSlideAnimation()
+         //setSlideAnimation()
         removeViews(
             //businessViewHolder,
             // amountViewHolder,
