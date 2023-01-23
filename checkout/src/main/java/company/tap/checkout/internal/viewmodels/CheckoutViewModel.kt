@@ -2298,6 +2298,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             checkoutFragment.isScannerOpened = false
             inLineCardLayout.visibility = View.GONE
             amountViewHolder.readyToScanVisibility(false)
+            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
+                ActionButtonState.RESET
+            )
 
         }
 

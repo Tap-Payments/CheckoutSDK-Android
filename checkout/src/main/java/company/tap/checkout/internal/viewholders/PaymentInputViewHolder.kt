@@ -261,8 +261,8 @@ class PaymentInputViewHolder(
 
             tabLayout.changeTabItemMarginBottomValue(15)
             tabLayout.changeTabItemMarginTopValue(15)
-            tabLayout.changeTabItemMarginLeftValue(-15)
-           //chck tabLayout.changeTabItemMarginRightValue(15)
+         //   tabLayout.changeTabItemMarginLeftValue(-5)
+          //  tabLayout.changeTabItemMarginRightValue(45)
 
         } else {
             tabLayout.changeTabItemMarginBottomValue(20)
