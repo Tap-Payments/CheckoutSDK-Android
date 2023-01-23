@@ -52,6 +52,7 @@ class SettingsActivity : AppCompatActivity() {
             bindPreferenceSummaryToValue(findPreference("useShippingEnableKey"))
             bindPreferenceSummaryToValue(findPreference("enableLoyaltyProgram"))
             bindPreferenceSummaryToValue(findPreference("enableHolderName"))
+            bindPreferenceSummaryToValue(findPreference("cardHolderNameEditable"))
 
         }
     }
@@ -130,6 +131,8 @@ class SettingsActivity : AppCompatActivity() {
                 }else  if (preference.getKey().equals("enableLoyaltyProgram")){
 
                 }else  if (preference.getKey().equals("enableHolderName")){
+
+                }else  if (preference.getKey().equals("cardHolderNameEditable")){
 
                 }
             }

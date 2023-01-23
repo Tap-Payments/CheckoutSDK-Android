@@ -87,6 +87,10 @@
             android:defaultValue="false"
             android:key="enableHolderName"
             android:title="Enable Cardholder name" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="cardHolderNameEditable"
+            android:title="Cardholder name Editable" />
         <EditTextPreference
             android:defaultValue="1.00"
             android:inputType="numberDecimal"
