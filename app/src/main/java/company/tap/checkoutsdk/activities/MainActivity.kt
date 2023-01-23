@@ -385,13 +385,17 @@ class MainActivity : AppCompatActivity(), SessionDelegate, CheckoutListener {
        }
        // sdkSession.setTransactionMode(TransactionMode.PURCHASE)
 
+       settingsManager?.getBoolean("showHideHolderName", false)
+           ?.let { sdkSession.showHideCardHolderName(it) } // ** Optional ** you can show/hide CardHolderName .
+
        sdkSession.setDefaultCardHolderName(
            settingsManager?.getString(
                "key_default_holder_name",
                "Tap Test"
            )
        ); // ** Optional ** you can pass default CardHolderName of the user .So you don't need to type it.
-       settingsManager?.getBoolean("enableHolderName", false)
+
+       settingsManager?.getBoolean("cardHolderNameEditable", false)
            ?.let { sdkSession.isUserAllowedToEnableCardHolderName(it) } // ** Optional ** you can enable/ disable  default CardHolderName .
 
        sdkSession.setSdkMode(SdkMode.SAND_BOX) //** Pass your SDK MODE

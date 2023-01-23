@@ -346,7 +346,15 @@ object  SDKSession : APIRequestCallback {
         println("isUserAllowedToEnableCardHolderName >>> $enableCardHolderName")
         paymentDataSource?.isUserAllowedToEditCardHolderName(enableCardHolderName)
     }
-    
+
+    /**
+     * show or hide  cardholdername.
+     * @param showHideCardHolderName
+     */
+    fun showHideCardHolderName(showHideCardHolderName: Boolean) {
+        println("showHideCardHolderName >>> $showHideCardHolderName")
+        paymentDataSource?.showHideCardHolderName(showHideCardHolderName)
+    }
     /**
      * set default sdkMode
      *

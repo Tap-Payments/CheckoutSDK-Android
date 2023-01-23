@@ -402,8 +402,7 @@ class PaymentInputViewHolder(
     private fun initCardInput() {
         tapInlineCardSwitch?.visibility = View.GONE
         tapPaymentInput?.separator?.visibility = View.GONE
-        // tapCardInputView.holderNameEnabled = true
-        //  PaymentDataSource.getEnableEditCardHolderName() != null && PaymentDataSource.getEnableEditCardHolderName()
+         tapCardInputView.holderNameEnabled = PaymentDataSource.getCardHolderNameShowHide() != null && PaymentDataSource.getCardHolderNameShowHide()
         if (PaymentDataSource.getDefaultCardHolderName() != null) {
             tapCardInputView.setCardHolderName(PaymentDataSource.getDefaultCardHolderName())
         }
@@ -656,7 +655,9 @@ class PaymentInputViewHolder(
                         }
                     }
                 }
-                tapCardInputView.holderNameEnabled = PaymentDataSource.getEnableEditCardHolderName() != null && PaymentDataSource.getEnableEditCardHolderName()
+                println("getCardHolderNameShowHide"+PaymentDataSource.getCardHolderNameShowHide())
+                tapCardInputView.setVisibilityOfHolderField(PaymentDataSource.getCardHolderNameShowHide())
+            //    tapCardInputView.holderNameEnabled = PaymentDataSource.getCardHolderNameShowHide() != null && PaymentDataSource.getCardHolderNameShowHide()
                 //  tapCardInputView.holderNameEnabled= true
                 if (tapCardInputView.holderNameEnabled) {
                     tapInlineCardSwitch?.setPaddingRelative(0, 100, 0, 0)

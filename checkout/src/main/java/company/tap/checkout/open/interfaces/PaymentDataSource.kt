@@ -194,4 +194,6 @@ interface PaymentDataSource {
     fun getSelectedCurrencySymbol():String?
 
     fun getWebViewType():WebViewType?
+
+    fun getCardHolderNameShowHide():Boolean
 }

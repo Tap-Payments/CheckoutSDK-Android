@@ -51,8 +51,9 @@ class SettingsActivity : AppCompatActivity() {
             bindPreferenceSummaryToValue(findPreference("showImageKey"))
             bindPreferenceSummaryToValue(findPreference("useShippingEnableKey"))
             bindPreferenceSummaryToValue(findPreference("enableLoyaltyProgram"))
-            bindPreferenceSummaryToValue(findPreference("enableHolderName"))
+            bindPreferenceSummaryToValue(findPreference("showHideHolderName"))
             bindPreferenceSummaryToValue(findPreference("cardHolderNameEditable"))
+          //  bindPreferenceSummaryToValue(findPreference("cardHolderNameEditable"))
 
         }
     }

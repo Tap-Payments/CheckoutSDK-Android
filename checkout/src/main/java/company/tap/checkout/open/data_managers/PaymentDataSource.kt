@@ -60,6 +60,7 @@ object PaymentDataSource :PaymentDataSource {
     private var defaultCardHolderName: String? = null
 
     private var enableEditCardHolderName = false
+    private var showHideCardHolderName = false
 
     private val cardIssuer: CardIssuer? = null
 
@@ -283,7 +284,14 @@ object PaymentDataSource :PaymentDataSource {
         this.enableEditCardHolderName = enableEditCardHolderName
     }
 
-    fun setSelectedCurrency(selectedCurrency: String , selectedCurrencySymbol: String?){
+    /**
+     *  user wants to show/hide cardHolderName
+     * @param showHideCardHolderName
+     */
+    fun showHideCardHolderName(showHideCardHolderName: Boolean) {
+        this.showHideCardHolderName = showHideCardHolderName
+    }
+        fun setSelectedCurrency(selectedCurrency: String , selectedCurrencySymbol: String?){
         this.selectedCurrency =selectedCurrency
         this.selectedCurrencySymbol =selectedCurrencySymbol
     }
@@ -508,6 +516,10 @@ object PaymentDataSource :PaymentDataSource {
 
     override fun getWebViewType(): WebViewType? {
         return webViewType
+    }
+
+    override fun getCardHolderNameShowHide(): Boolean {
+       return showHideCardHolderName
     }
 
     override fun getAvailablePaymentOptionsCardBrands(): ArrayList<PaymentOption>? {

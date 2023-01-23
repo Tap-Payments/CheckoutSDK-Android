@@ -85,8 +85,8 @@
             android:title="Enter the Default Holder Name" />
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="enableHolderName"
-            android:title="Enable Cardholder name" />
+            android:key="showHideHolderName"
+            android:title="Show-Hide Cardholder name" />
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="cardHolderNameEditable"
