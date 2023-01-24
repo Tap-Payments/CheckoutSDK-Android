@@ -14,7 +14,7 @@ import android.text.format.DateFormat
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
+import android.view.animation.*
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.Nullable
@@ -77,6 +77,7 @@ import company.tap.checkout.internal.webview.WebViewContract
 import company.tap.checkout.open.CheckOutActivity
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession
+import company.tap.checkout.open.controller.SDKSession.activity
 import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
 import company.tap.checkout.open.controller.SessionManager
 import company.tap.checkout.open.data_managers.PaymentDataSource
@@ -561,9 +562,24 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     private fun setSlideAnimation() {
-        if (this::bottomSheetLayout.isInitialized)
-        // AnimationUtils.loadAnimation(bottomSheetLayout.context,R.anim.slide_down)
-            AnimationEngine.applyTransition(bottomSheetLayout, AnimationEngine.Type.SLIDE, 1000)
+        if (this::bottomSheetLayout.isInitialized) {
+            // AnimationUtils.loadAnimation(bottomSheetLayout.context,R.anim.slide_down)
+            // AnimationEngine.applyTransition(bottomSheetLayout, AnimationEngine.Type.SLIDE, 1200)
+
+        /*    val fadeIn = AlphaAnimation(0f, 1f)
+            fadeIn.interpolator = DecelerateInterpolator() //add this
+            fadeIn.duration = 1000
+
+            val fadeOut = AlphaAnimation(1f, 0f)
+            fadeOut.interpolator = AccelerateInterpolator() //and this
+            fadeOut.startOffset = 1000
+            fadeOut.duration = 1000
+
+            val animation = AnimationSet(false) //change to false
+            animation.addAnimation(fadeIn)
+       //     animation.addAnimation(fadeOut)
+            this.bottomSheetLayout.animation = animation*/
+        }
     }
 
     override fun displayGoPay() {
@@ -643,21 +659,24 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
     private fun caseDisplayControlCurrency() {
-        removeViews(
-            //  businessViewHolder,
-            // amountViewHolder,
-            cardViewHolder,
-            paymentInputViewHolder,
-            saveCardSwitchHolder,
-            goPayViewsHolder,
-            otpViewHolder,
-            itemsViewHolder
-        )
+      /*  val newHeight = activity?.window?.decorView?.measuredHeight
+        val viewGroupLayoutParams = bottomSheetLayout.layoutParams
+        viewGroupLayoutParams.height = newHeight ?: 0
+        bottomSheetLayout.layoutParams = viewGroupLayoutParams
+*/
+            removeViews(
+                //  businessViewHolder,
+                // amountViewHolder,
+                cardViewHolder,
+                paymentInputViewHolder,
+                )
+
 
         // removeAllViews()
         addViews(
             itemsViewHolder
         )
+
 
 
         // checkoutFragment?.isFullscreen =true
@@ -672,6 +691,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         frameLayout.visibility = View.VISIBLE
         itemsViewHolder.itemsdisplayed = true
+
+        removeViews(
+            saveCardSwitchHolder,
+            goPayViewsHolder,
+            otpViewHolder,
+           // itemsViewHolder
+        )
     }
 
     private fun caseNotDisplayControlCurrency() {
@@ -1366,6 +1392,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun handleSuccessFailureResponseButton(
         response: String,
         authenticate: Authenticate?,
@@ -1501,16 +1528,24 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         viewHolders.forEach {
             Handler(Looper.getMainLooper()).postDelayed(Runnable {
-                if (::sdkLayout.isInitialized) {
-                    sdkLayout.removeView(it?.view)
-
-                }
 
                 if (::context.isInitialized) {
-                    val animation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
+
+                    val fadeOut = AlphaAnimation(1f, 0f)
+                    fadeOut.interpolator = AccelerateInterpolator() //and this
+                    fadeOut.startOffset = 100
+                  //  fadeOut.duration = 10
+                    val animation = AnimationSet(false) //change to false
+                    animation.addAnimation(fadeOut)
+                    //     animation.addAnimation(fadeOut)
+                  //  val animation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
                     it?.view?.startAnimation(animation)
                 }
 
+                if (::sdkLayout.isInitialized) {
+                    bottomSheetLayout
+                    sdkLayout.removeView(it?.view)
+                }
 
             }, 0)
 
@@ -1520,18 +1555,23 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
     private fun addViews(vararg viewHolders: TapBaseViewHolder?) {
+
         viewHolders.forEach {
             Handler(Looper.getMainLooper()).postDelayed(Runnable {
 
-                // checkoutFragment?.scrollView?.post(Runnable { checkoutFragment?.scrollView?.scrollBy(0,sdkLayout.height) })
-                //  val animati1on = AnimationUtils.loadAnimation(context, R.anim.slide_down)
                 if (::context.isInitialized) {
-                    //   val animation = AnimationUtils.loadAnimation(context, R.anim.slide_down)
-                    //   it?.view?.startAnimation(animation)
-                    val animati1on = AnimationUtils.loadAnimation(context, R.anim.fade_in)
+
+                    val fadeIn = AlphaAnimation(0f, 1f)
+                    fadeIn.interpolator = DecelerateInterpolator() //add this
+                    fadeIn.duration = 2500
+
+                    val animation = AnimationSet(false) //change to false
+                    animation.addAnimation(fadeIn)
+
+
+                  //  val animati1on = AnimationUtils.loadAnimation(context, R.anim.fade_in)
                     // animati1on.duration = 500L
-                    it?.view?.startAnimation(animati1on)
-                    // AnimationEngine.applyTransition(it?.view as ViewGroup,AnimationEngine.Type.FADE_IN,500)
+                    it?.view?.startAnimation(animation)
 
                 }
 
@@ -1549,6 +1589,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 // AnimationEngine.applyTransition(sdkLayout,SLIDE,1500)
 
             }, 0)
+            BottomSheetBehavior.STATE_HALF_EXPANDED
         }
 
     }

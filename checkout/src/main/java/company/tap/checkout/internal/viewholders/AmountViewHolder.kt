@@ -95,7 +95,9 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
                     itemCount = itemCountt + "  " + LocalizationManager.getValue("items", "Common")
                 )
             )
-
+            view.amount_section.itemAmountText.visibility =View.VISIBLE
+            view.amount_section.viewSeparator.visibility =View.VISIBLE
+            view.amount_section.amountImageView.visibility =View.VISIBLE
         } else {
 //            if (::originalAmount?.isInitialized)
             changeDataSource(
@@ -107,6 +109,11 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
             )
             view.amount_section.itemCountButton.text =
                 LocalizationManager.getValue("close", "Common")
+
+            view.amount_section.itemAmountText.visibility =View.GONE
+            view.amount_section.viewSeparator.visibility =View.GONE
+            view.amount_section.amountImageView.visibility =View.GONE
+
 
         }
     }
