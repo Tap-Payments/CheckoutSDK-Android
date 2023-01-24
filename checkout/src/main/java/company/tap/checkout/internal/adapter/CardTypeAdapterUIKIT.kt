@@ -372,7 +372,8 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         }
         setBorderedView(
                 holder.itemView.tapCardChip2Constraints,
-                (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
+               // (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
+               15.0f,// corner raduis
                 0.0f,
                 parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
                 Color.parseColor(ThemeManager.getValue("horizontalList.chips.savedCardChip.backgroundColor")),// tint color
@@ -390,7 +391,8 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
         setBorderedView(
                 holder.itemView.tapCardChip2Constraints,
-                (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
+              //  (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
+               15.0f,// corner raduis
                 0.0f,
                 parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
                 Color.parseColor(ThemeManager.getValue("horizontalList.chips.savedCardChip.backgroundColor")),// tint color
@@ -491,7 +493,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
         setBorderedView(
                 holder.itemView.tapCardChip3Linear,
-                (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
+                15.0f,// corner raduis
                 0.0f,
                 parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
                 parseColor(ThemeManager.getValue("horizontalList.chips.gatewayChip.backgroundColor")),// tint color
@@ -506,7 +508,8 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         else holder.itemView.setBackgroundResource(R.drawable.border_unclick)
         setBorderedView(
                 holder.itemView.tapCardChip3Linear,
-                (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
+               // (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
+                15.0f,// corner raduis
                 0.0f,
                 parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
                 parseColor(ThemeManager.getValue("horizontalList.chips.gatewayChip.backgroundColor")),// tint color

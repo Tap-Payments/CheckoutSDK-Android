@@ -481,18 +481,7 @@ object SettingsManager {
                 null,null,false,null,null,"Item is on sale",
                 null,null,null,null,null
             ))
-            paymentitems.add(ItemsModel(
-                "",
-                "Items2",
-                BigDecimal.valueOf(5),
-                "KWD",
-                BigDecimal.valueOf(
-                    2
-                ),null,
-                AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO),
-                null,null,false,null,null,"Item is on sale",
-                null,null,null,null,null
-            ))
+
 
         }
         return paymentitems

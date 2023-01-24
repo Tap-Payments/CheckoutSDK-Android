@@ -1514,7 +1514,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 selectedPaymentOption.image,
                 selectedPaymentOption.brand?.name
             )*/
-            addViews(businessViewHolder, asynchronousPaymentViewHolder)
+            addViews(asynchronousPaymentViewHolder)
             asynchronousPaymentViewHolder.setDataFromAPI(chargeResponse)
         }
     }

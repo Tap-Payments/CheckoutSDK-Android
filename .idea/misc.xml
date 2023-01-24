@@ -9,10 +9,15 @@
         <entry key="../../../../.gradle/caches/transforms-2/files-2.1/004106dba6c66e6155ff519b99e14fb0/jetified-TapUIKit-Android-1.1.1.358.132/res/drawable/border_unclick_black.xml" value="0.176" />
         <entry key="../../../../.gradle/caches/transforms-2/files-2.1/1105a6dae06b0087daf58d2e4ce1a63d/jetified-TapUIKit-Android-1.1.1.358.134/res/drawable/border_unclick_black.xml" value="0.176" />
         <entry key="../../../../.gradle/caches/transforms-2/files-2.1/18aa0e39182fe2e70055a68cf7f7ea47/jetified-TapUIKit-Android-1.1.1.358.135/res/layout/item_view_adapter.xml" value="0.1" />
+        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/c653b79d4d92ae685b54fd33a350151d/jetified-TapUIKit-Android-1.1.1.358.150/res/drawable-hdpi-v4/border_shadow_black.xml" value="0.2035" />
+        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/c653b79d4d92ae685b54fd33a350151d/jetified-TapUIKit-Android-1.1.1.358.150/res/drawable/border_shadow.xml" value="0.2035" />
+        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/c653b79d4d92ae685b54fd33a350151d/jetified-TapUIKit-Android-1.1.1.358.150/res/drawable/border_unclick.xml" value="0.2035" />
+        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/c653b79d4d92ae685b54fd33a350151d/jetified-TapUIKit-Android-1.1.1.358.150/res/drawable/border_unclick_black.xml" value="0.2035" />
         <entry key="../../../../.gradle/caches/transforms-2/files-2.1/fcc37c90019b8ed5744d101274c8585d/jetified-TapUIKit-Android-1.1.1.358.133/res/drawable/border_unclick_black.xml" value="0.161" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/menu/menumain.xml" value="0.17297297297297298" />
         <entry key="app/src/main/res/xml/root_preferences.xml" value="0.10067567567567567" />
+        <entry key="checkout/src/main/res/drawable-xxhdpi/googlepay_button_no_shadow_background.xml" value="0.196" />
         <entry key="checkout/src/main/res/layout/action_button_animation.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/amountview_layout.xml" value="0.11925675675675676" />
         <entry key="checkout/src/main/res/layout/asynchronous_layout.xml" value="0.13648648648648648" />
@@ -22,8 +27,11 @@
         <entry key="checkout/src/main/res/layout/fragment_checkouttaps.xml" value="0.1858108108108108" />
         <entry key="checkout/src/main/res/layout/fragment_checkouttaps_full.xml" value="0.12837837837837837" />
         <entry key="checkout/src/main/res/layout/fragment_web.xml" value="0.1284153005464481" />
+        <entry key="checkout/src/main/res/layout/googlepay_button.xml" value="0.128693039559339" />
         <entry key="checkout/src/main/res/layout/item_currency_rows.xml" value="0.1" />
-        <entry key="checkout/src/main/res/layout/item_save_cards.xml" value="0.1" />
+        <entry key="checkout/src/main/res/layout/item_googlepay.xml" value="0.7701158265809755" />
+        <entry key="checkout/src/main/res/layout/item_save_cards.xml" value="0.7169117647058824" />
+        <entry key="checkout/src/main/res/layout/item_saved_card.xml" value="0.12432432432432433" />
         <entry key="checkout/src/main/res/layout/itemviewholder_layout.xml" value="0.1284153005464481" />
         <entry key="checkout/src/main/res/layout/otpview_layout.xml" value="0.1284153005464481" />
         <entry key="checkout/src/main/res/layout/payment_inputt_layout.xml" value="0.105" />

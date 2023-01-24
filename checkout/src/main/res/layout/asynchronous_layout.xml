@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<company.tap.tapuilibrary.uikit.organisms.FawryPaymentView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@color/white">
-<company.tap.tapuilibrary.uikit.organisms.FawryPaymentView
     android:id="@+id/fawry_payment_view"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
+   >
 
 
 
-</LinearLayout>
+</company.tap.tapuilibrary.uikit.organisms.FawryPaymentView>
