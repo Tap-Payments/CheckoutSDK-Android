@@ -43,6 +43,7 @@ import company.tap.tapuilibrary.uikit.models.DialogConfigurations
 import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
 import mobi.foo.benefitinapp.data.Transaction
 import mobi.foo.benefitinapp.listener.CheckoutListener
+import org.json.JSONObject
 import java.math.BigDecimal
 import java.util.*
 
@@ -671,8 +672,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate, CheckoutListener {
 
    @RequiresApi(Build.VERSION_CODES.N)
    override fun sdkError(goSellError: GoSellError?) {
-       println("sdkError>>>>>" + goSellError)
-       Toast.makeText(this, "sdkError" + goSellError?.errorBody, Toast.LENGTH_SHORT).show()
+       println("sdkError>>>>>" + goSellError?.errorBody)
+       Toast.makeText(this, "sdkError>>" +goSellError?.reasonString, Toast.LENGTH_LONG).show()
        payButton?.setOnClickListener {
            sdkSession.setButtonView(payButton, this, supportFragmentManager, this)
        }

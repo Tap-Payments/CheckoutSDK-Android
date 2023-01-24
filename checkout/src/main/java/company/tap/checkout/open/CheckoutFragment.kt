@@ -178,6 +178,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
         }
         closeImage.setOnClickListener {
+
             bottomSheetDialog.dismissWithAnimation
             bottomSheetDialog.hide()
             bottomSheetDialog.dismiss()
