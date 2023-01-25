@@ -2293,7 +2293,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             Color.parseColor(ThemeManager.getValue("tapSeparationLine.backgroundColor"))
         separatorViewTheme.strokeHeight = ThemeManager.getValue("tapSeparationLine.height")
         businessViewHolder.view.topSeparatorLinear.topSeparator.setTheme(separatorViewTheme)
-        amountViewHolder.view.separator.setTheme(separatorViewTheme)
+        amountViewHolder.view.amountView_separator.setTheme(separatorViewTheme)
         cardViewHolder.view.tapSeparatorViewLinear1.separator_1.setTheme(separatorViewTheme)
         goPaySavedCardHolder.view.tapSeparatorViewLinear.separator_.setTheme(separatorViewTheme)
         /**

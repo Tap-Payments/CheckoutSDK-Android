@@ -21,6 +21,7 @@ import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener
 import company.tap.checkout.open.models.ItemsModel
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.atoms.TapChipGroup
+import company.tap.tapuilibrary.uikit.atoms.TapSeparatorView
 
 /**
  *
@@ -44,6 +45,7 @@ class ItemsViewHolder(private val context: Context, private val onCurrencyChange
      var itemsRecyclerView:RecyclerView
      var currencyRecyclerView:RecyclerView
      var headerview:ConstraintLayout
+     var itemSeparatorView: TapSeparatorView
     private val adapterItems by lazy { ItemAdapter() }
     private val adapterCurrency by lazy { CurrencyTypeAdapter(onCurrencyChangedActionListener) }
 
@@ -55,6 +57,7 @@ class ItemsViewHolder(private val context: Context, private val onCurrencyChange
         itemsRecyclerView = view.findViewById(R.id.itemRecylerView)
         currencyRecyclerView = mainCurrencyChip.findViewById<View>(R.id.chip_recycler) as RecyclerView
         headerview = view.findViewById<View>(R.id.header_view) as ConstraintLayout
+        itemSeparatorView = view.findViewById<View>(R.id.item_Separator) as TapSeparatorView
         headerview.visibility = View.GONE
         itemsRecyclerViewAction(itemsRecyclerView)
         setRecyclerViewDivider(currencyRecyclerView)
@@ -64,6 +67,10 @@ class ItemsViewHolder(private val context: Context, private val onCurrencyChange
         // currencyRecyclerView.adapter = adapterCurrency
         mainCurrencyChip.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
         itemsRecyclerView.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
+        itemSeparatorView.setBackgroundColor(Color.parseColor(ThemeManager.getValue("itemsList.separatorColor")))
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")){
+            itemSeparatorView.visibility = View.GONE
+        }else itemSeparatorView.visibility = View.VISIBLE
     }
 
     private fun itemsRecyclerViewAction(itemsRecyclerView: RecyclerView) {

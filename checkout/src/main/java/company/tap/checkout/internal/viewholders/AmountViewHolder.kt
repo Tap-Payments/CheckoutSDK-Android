@@ -1,6 +1,7 @@
 package company.tap.checkout.internal.viewholders
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
@@ -10,6 +11,8 @@ import company.tap.checkout.internal.interfaces.AmountInterface
 import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.checkout.internal.utils.CurrencyFormatter
 import company.tap.taplocalizationkit.LocalizationManager
+import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.atoms.TapSeparatorView
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.datasource.AmountViewDataSource
 import kotlinx.android.synthetic.main.amountview_layout.view.*
@@ -43,7 +46,6 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
 
     override fun bindViewComponents() {
         view.amount_section.setAmountViewDataSource(getAmountDataSourceFromAPIs())
-
     }
 
     fun readyToScanVisibility(scannerClicked: Boolean) {
