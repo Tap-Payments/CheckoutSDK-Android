@@ -404,7 +404,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             context?.let { LocalizationManager.getLocale(it).language },
             payString,
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-            null,
+            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
         )
         /*  tabAnimatedActionButton?.setOnClickListener {
               requireActivity().supportFragmentManager.let { it1 -> SDKSession.contextSDK?.let { it2 ->

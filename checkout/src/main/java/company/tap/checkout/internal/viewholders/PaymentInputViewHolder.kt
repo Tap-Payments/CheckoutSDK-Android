@@ -363,7 +363,7 @@ class PaymentInputViewHolder(
             "en",
             payString + " " + checkoutViewModel.currentCurrencySymbol + " " + checkoutViewModel.currentAmount,
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-            null,
+            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
         )
         tabLayout.resetBehaviour()
         if (PaymentDataSource.getBinLookupResponse() != null) {

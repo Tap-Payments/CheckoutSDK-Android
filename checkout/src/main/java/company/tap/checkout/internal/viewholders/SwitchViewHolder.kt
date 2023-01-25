@@ -180,7 +180,7 @@ class SwitchViewHolder(private val context: Context , private val checkoutViewMo
                     "en",
                     payString+" "+checkoutViewModel.currentCurrencySymbol+" "+checkoutViewModel.currentAmount,
                     Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-                    null,
+                    Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
                 )
                 /**
                  * Here we will check if there is saving options if NOT ----> We will just activate action button
@@ -295,7 +295,7 @@ class SwitchViewHolder(private val context: Context , private val checkoutViewMo
             "en",
             payString+" "+checkoutViewModel.currentCurrencySymbol+" "+checkoutViewModel.currentAmount,
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-            null,
+            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
         )
         view.cardSwitch.switchesLayout?.visibility = View.VISIBLE
         view.cardSwitch.switchSaveMerchant?.visibility = View.VISIBLE

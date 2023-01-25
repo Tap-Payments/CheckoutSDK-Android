@@ -93,11 +93,13 @@ import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
 import company.tap.tapuilibrary.uikit.ktx.makeLinks
+import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.businessview_layout.view.*
 import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
 import kotlinx.android.synthetic.main.gopaysavedcard_layout.view.*
+import kotlinx.android.synthetic.main.item_currency_rows.view.*
 import kotlinx.android.synthetic.main.itemviewholder_layout.view.*
 import kotlinx.android.synthetic.main.loyalty_view_layout.view.*
 import kotlinx.android.synthetic.main.otpview_layout.view.*
@@ -337,7 +339,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         "en",
                         "$payString $currentCurrencySymbol $currentAmount",
                         Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-                        null,
+                        Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
                     )
                     saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = View.VISIBLE
                     saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
@@ -645,7 +647,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 "en",
                 "$payString $currentCurrencySymbol $currentAmount",
                 Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-                null,
+                Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
             )
 //            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated = false
         }
@@ -898,6 +900,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun displayRedirect(url: String, authenticate: Charge?) {
         this.redirectURL = url
 
@@ -964,8 +967,20 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
                  saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
               true,
-              LocalizationManager.getLocale(context).toString(),LocalizationManager.getValue("deleteSavedCardButtonCancel", "SavedCardTitle"),  Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.white")),Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.greyishBrown")))
+              LocalizationManager.getLocale(context).toString(),LocalizationManager.getValue("deleteSavedCardButtonCancel", "SavedCardTitle"),
+                     Color.parseColor(ThemeManager.getValue("actionButton.Cancel.backgroundColor")),
+                     Color.parseColor(ThemeManager.getValue("actionButton.Cancel.titleLabelColor")))
 
+                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.let {
+                    setBorderedView(
+                        it,
+                        100.0f,
+                        2.0f,
+                        Color.parseColor(ThemeManager.getValue("actionButton.Cancel.borderColor")),
+                        Color.parseColor(ThemeManager.getValue("actionButton.Cancel.backgroundColor")),
+                        Color.parseColor(ThemeManager.getValue("actionButton.Cancel.backgroundColor"))
+                    )
+                }
           saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.RESET)
 
           saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setOnClickListener {
@@ -1162,7 +1177,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             "en",
             "$payString $currentCurrencySymbol $currentAmount",
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-            null,
+            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
         )
 
     }
@@ -1614,7 +1629,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             "en",
             "$payString $currentCurrencySymbol $currentAmount",
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-            null,
+            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
         )
 
         // saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.IDLE)
@@ -1684,7 +1699,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             "en",
             "$payString $currentCurrencySymbol $currentAmount",
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-            null,
+            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
         )
 
         saveCardSwitchHolder?.view?.cardSwitch?.showOnlyPayButton()
@@ -2794,7 +2809,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             "en",
             "$payString $currentCurrencySymbol $currentAmount",
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-            null,
+            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
         )
     }
 
@@ -2813,7 +2828,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             "en",
             "$payString $currentCurrencySymbol $currentAmount",
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-            null,
+            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
         )
 
 
