@@ -2,18 +2,17 @@
 <company.tap.tapuilibrary.uikit.atoms.TapChip xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
-android:id="@+id/tapCardChip5"
+android:id="@+id/tapCardChip6"
 android:layout_width="110dp"
-android:layout_height="40dp"
+android:layout_height="50dp"
 app:cardCornerRadius="8dp"
 app:cardElevation="8dp"
-    android:layout_marginTop="5dp"
+
 android:layout_gravity="center">
 <LinearLayout
-    android:id="@+id/tapCardChip5Linear"
+    android:id="@+id/tapCardChip6Linear"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:orientation="horizontal">
     <include
         android:id="@+id/googlePayButton"

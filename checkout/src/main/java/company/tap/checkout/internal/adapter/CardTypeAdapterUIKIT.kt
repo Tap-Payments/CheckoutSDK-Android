@@ -34,6 +34,7 @@ import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
 import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.utils.PaymentsUtil
 import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.themekit.theme.TextViewTheme
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import kotlinx.android.synthetic.main.item_benefit_pay.view.*
 import kotlinx.android.synthetic.main.item_googlepay.view.*
@@ -353,6 +354,13 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
             }
 
         }
+        val saveCardTextViewTheme = TextViewTheme()
+        saveCardTextViewTheme.textColor = Color.parseColor(ThemeManager.getValue("horizontalList.chips.savedCardChip.labelTextColor"))
+        saveCardTextViewTheme.textSize =
+            ThemeManager.getFontSize("horizontalList.chips.savedCardChip.labelTextFont")
+        saveCardTextViewTheme.font = ThemeManager.getFontName("horizontalList.chips.savedCardChip.labelTextFont")
+        holder.itemView.textViewCardDetails.setTheme(saveCardTextViewTheme)
+
     }
 
     private fun setSavedCardShakingAnimation(holder: RecyclerView.ViewHolder) {
@@ -450,15 +458,16 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     }
 
     private fun typeGooglePay(holder: RecyclerView.ViewHolder, position: Int) {
-       // if (selectedPosition == position) setSelectedCardTypeRedirectShadowAndBackground(holder)
-       // else setUnSelectedCardTypeRedirectShadowAndBackground(holder)
+        if (selectedPosition == position) setSelectedGoogleShadowAndBackground(holder)
+        else setUnSelectedCardTypeGoogleShadowAndBackground(holder)
         (holder as GooglePayViewHolder)
         // Initialize a Google Pay API client for an environment suitable for testing.
         // It's recommended to create the PaymentsClient object inside of the onCreate method.
       //  paymentsClient = PaymentsUtil().createPaymentsClient(holder.itemView.context as Activity)
        // possiblyShowGooglePayButton()
-
+       // setUnSelectedCardTypeGoogleShadowAndBackground(holder)
         holder.itemView.googlePayButton.setOnClickListener {
+         //   setSelectedGoogleShadowAndBackground(holder)
            // if (!isShaking) {
               //  selectedPosition = position
                 println("typeGooglePay is clicked")
@@ -516,8 +525,36 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                 parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
         )// shadow color
     }
+    private fun setUnSelectedCardTypeGoogleShadowAndBackground(holder: RecyclerView.ViewHolder) {
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) holder.itemView.setBackgroundResource(
+            R.drawable.border_unclick_black
+        )
+        else holder.itemView.setBackgroundResource(R.drawable.border_unclick)
+        setBorderedView(
+            holder.itemView.tapCardChip6Linear,
+            // (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
+            15.0f,// corner raduis
+            0.0f,
+            parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
+            parseColor(ThemeManager.getValue("horizontalList.chips.gatewayChip.backgroundColor")),// tint color
+            parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
+        )// shadow color
+    }
+    private fun setSelectedGoogleShadowAndBackground(holder: RecyclerView.ViewHolder) {
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) (holder.itemView.setBackgroundResource(
+            R.drawable.border_shadow_black
+        ))
+        else holder.itemView.setBackgroundResource(R.drawable.border_shadow)
 
-
+        setBorderedView(
+            holder.itemView.tapCardChip6Linear,
+            15.0f,// corner raduis
+            0.0f,
+            parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
+            parseColor(ThemeManager.getValue("horizontalList.chips.gatewayChip.backgroundColor")),// tint color
+            parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
+        )// shadow color
+    }
     internal class SavedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     internal class SingleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
