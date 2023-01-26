@@ -7,6 +7,7 @@ import android.text.util.Linkify
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.LinearLayout
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.enums.SectionType
@@ -27,6 +28,7 @@ All rights reserved.
 class AsynchronousPaymentViewHolder(private val context: Context,private  val viewModel: CheckoutViewModel) : TapBaseViewHolder {
 
     private lateinit var fawryView :FawryPaymentView
+    private lateinit var linearAsynch :LinearLayout
     private lateinit var dateTimestr :String
     override val view: View =
         LayoutInflater.from(context).inflate(R.layout.asynchronous_layout, null)
@@ -43,6 +45,7 @@ class AsynchronousPaymentViewHolder(private val context: Context,private  val vi
     @SuppressLint("SetTextI18n")
     override fun bindViewComponents() {
        fawryView = view.findViewById(R.id.fawry_payment_view)
+
         val firstString:String = LocalizationManager.getValue("paymentProgressLabel","TapAsyncSection")
         val secondString:String = LocalizationManager.getValue("paymentRecieptLabel","TapAsyncSection")
         fawryView.titleText?.text = firstString+"\n"+secondString
@@ -59,6 +62,7 @@ class AsynchronousPaymentViewHolder(private val context: Context,private  val vi
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.goLoginBackgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
         )
+
         fawryView?.payButton?.setOnClickListener {
            viewModel.closeAsynchView()
         }
