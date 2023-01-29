@@ -164,7 +164,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
                 "dummy"
             )
         )
-
+        tabLayout.visibility=View.VISIBLE
         // tapSeparatorViewLinear = view.findViewById(R.id.tapSeparatorViewLinear)
         // tapSeparatorViewLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
         // tabLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.backgroundColor")))
@@ -249,7 +249,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
             closeButton?.visibility = View.GONE
 
             tabLayout.resetBehaviour()
-            tapCardInputView.separatorcard2.visibility = View.INVISIBLE
+            tapCardInputView.separatorcard2.visibility = View.GONE
 
         }
     }
@@ -362,8 +362,8 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
             false,
             "en",
             payString + " " + checkoutViewModel.currentCurrencySymbol + " " + checkoutViewModel.currentAmount,
-            Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
+            Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
+            Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
         )
         tabLayout.resetBehaviour()
         if (PaymentDataSource.getBinLookupResponse() != null) {
@@ -677,10 +677,10 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
                 tapCardInputView.setVisibilityOfHolderField(PaymentDataSource.getCardHolderNameShowHide())
                 //    tapCardInputView.holderNameEnabled = PaymentDataSource.getCardHolderNameShowHide() != null && PaymentDataSource.getCardHolderNameShowHide()
                 //  tapCardInputView.holderNameEnabled= true
-                if (tapCardInputView.holderNameEnabled) {
+               /* if (tapCardInputView.holderNameEnabled) {
                     tapInlineCardSwitch?.setPaddingRelative(0, 100, 0, 0)
 
-                }
+                }*/
             }
         })
     }

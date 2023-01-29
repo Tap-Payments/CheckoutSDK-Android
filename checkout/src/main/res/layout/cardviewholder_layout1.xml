@@ -15,7 +15,8 @@
     <LinearLayout
         android:id="@+id/tapSeparatorViewLinear1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-5dp">
 
         <company.tap.tapuilibrary.uikit.atoms.TapSeparatorView
             android:id="@+id/separator_1"
@@ -28,8 +29,8 @@
             android:id="@+id/cardInfoHeaderText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/default_padding"
-            android:layout_marginEnd="@dimen/default_padding"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
             android:textAllCaps="true"
             android:textSize="@dimen/font_size_10sp"
             android:textColor="#9F9F9F"

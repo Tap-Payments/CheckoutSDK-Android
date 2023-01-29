@@ -5,7 +5,7 @@
       "cardNamePlaceHolder": "Card Holder name",
       "cardCVVPlaceHolder": "CVV",
       "cardExpiryPlaceHolder": "MM/YY",
-      "cardSaveLabel": "Save For Later",
+      "cardSaveLabel": "Save Card For Later",
       "cardSaveForTapLabel": "Save for other stores powered by Tap",
       "cardSaveForTapInfo":"Checkout everywhere in just one click.\nTap is a better and secure way to pay locally across 100k+ stores. Your details are encrypted and can only be accessed by you. You’ll receive an email to get started and manage your details.",
       "emailPlaceHolder": "email@email.com",
@@ -302,7 +302,7 @@
       "scanSuccess": "تم المسح بنجاح!"
     },
     "ExtraFees": {
-      "extraFeesAlertTitle": "تأكيد الرسوم الإضافية",
+      "title": "تأكيد الرسوم الإضافية",
       "extraFeesAlertMessagePart1": "سوف تتم إضافة",
       "extraFeesAlertMessagePart2": " لهذه العملية، إجمالي المبلغ المطلوب ",
       "extraFeesAlertConfirm": "تأكيد",

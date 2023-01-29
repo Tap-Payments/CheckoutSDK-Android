@@ -2311,7 +2311,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             amountViewHolder.view.amountView_separator.visibility =View.GONE
         }else  amountViewHolder.view.amountView_separator.visibility =View.VISIBLE
         amountViewHolder.view.amountView_separator.setTheme(separatorViewTheme)
-        cardViewHolder.view.tapSeparatorViewLinear1.separator_1.setTheme(separatorViewTheme)
+      //  cardViewHolder.view.tapSeparatorViewLinear1.separator_1.setTheme(separatorViewTheme)
         goPaySavedCardHolder.view.tapSeparatorViewLinear.separator_.setTheme(separatorViewTheme)
         /**
          * set separator background
