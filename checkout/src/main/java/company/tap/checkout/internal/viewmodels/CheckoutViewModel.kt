@@ -643,8 +643,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 false,
                 "en",
                 "$payString $currentCurrencySymbol $currentAmount",
-                Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-                Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
+                Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
+                Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
             )
 //            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated = false
         }
@@ -1171,10 +1171,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         val payString: String = LocalizationManager.getValue("pay", "ActionButton")
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
             false,
-            "en",
+            LocalizationManager.getLocale(context).toString(),
             "$payString $currentCurrencySymbol $currentAmount",
-            Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
+            Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
+            Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
         )
 
     }
@@ -1575,7 +1575,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
                     val fadeIn = AlphaAnimation(0f, 1f)
                     fadeIn.interpolator = DecelerateInterpolator() //add this
-                    fadeIn.duration = 500
+                    fadeIn.duration = 2500
 
                     val animation = AnimationSet(false) //change to false
                     animation.addAnimation(fadeIn)
@@ -1599,10 +1599,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 // checkoutFragment.scrollView?.fullScroll(View.FOCUS_DOWN)
 
                 // AnimationEngine.applyTransition(sdkLayout,SLIDE,1500)
-
+                bottomSheetLayout.startAnimation(AnimationUtils.loadAnimation(context,R.anim.slide_up))
             }, 0)
             BottomSheetBehavior.STATE_HALF_EXPANDED
         }
+
+
 
     }
 
@@ -1623,10 +1625,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
             false,
-            "en",
+            LocalizationManager.getLocale(context).toString(),
             "$payString $currentCurrencySymbol $currentAmount",
-            Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
+            Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
+            Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
         )
 
         // saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.IDLE)
@@ -2807,8 +2809,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             false,
             "en",
             "$payString $currentCurrencySymbol $currentAmount",
-            Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
+            Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
+            Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
         )
     }
 

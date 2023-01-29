@@ -195,7 +195,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         - Parameter customTheme: Please pass the tap checkout theme object with the names of your custom theme files if needed. If not set, the normal and default TAP theme will be used
          */
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))
-            ThemeManager.loadTapTheme(resources, R.raw.defaultdarktheme, "darktheme")
+            ThemeManager.loadTapTheme(resources, R.raw.defaultdarktheme1, "darktheme")
         else if (ThemeManager.currentTheme.isNotEmpty() && !ThemeManager.currentTheme.contains("dark"))
             ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme2, "lighttheme")
         else ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme2, "lighttheme")
