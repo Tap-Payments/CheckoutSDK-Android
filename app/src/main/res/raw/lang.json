@@ -51,7 +51,7 @@
       "Warning":
       {
         "missingExpiryCVV": "Expiry date & CVV number are missing.",
-        "missingCVV": "CVV number is missing."
+        "missingCVV": "Enter the %i-digits CVV (usually at the back of the card.)"
       },
       "Error":
       {
@@ -130,7 +130,7 @@
 
     },
     "ExtraFees": {
-      "extraFeesAlertTitle": "Confirm extra charges",
+      "title": "Confirm extra charges",
       "extraFeesAlertMessagePart1": "You will be charged an additional fee of",
       "extraFeesAlertMessagePart2": "for this type of payment, totaling an amount of",
       "extraFeesAlertConfirm": "Confirm",
@@ -172,7 +172,7 @@
       "cardNamePlaceHolder": "إسم صاحب البطاقة",
       "cardCVVPlaceHolder": "الرمز الأمني",
       "cardExpiryPlaceHolder": "شهر/سنة",
-      "cardSaveLabel": "إحفظ البطاقة،\n لدفع أسرع وأسهل.",
+      "cardSaveLabel": "لشراء أسرع إحفظ البطاقة",
       "cardSaveForTapLabel": "إحفظ للإستعمال في كل متاجر Tap",
       "cardSaveForTapInfo":"يمكنك الدفع في كل مكان بنقرة واحدة فقط\n.يعد النقر طريقة أفضل وآمنة للدفع محليًا عبر أكثر من 100 ألف متجر. يتم تشفير بياناتك ولا يمكن الوصول إليها إلا بواسطتك. ستتلقى بريدًا إلكترونيًا للبدء وإدارة التفاصيل الخاصة بك.",
       "emailPlaceHolder": "email@email.com",

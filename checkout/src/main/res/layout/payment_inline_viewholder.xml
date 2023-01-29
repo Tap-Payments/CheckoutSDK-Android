@@ -10,19 +10,19 @@
 
     <company.tap.tapuilibrary.uikit.organisms.TapPaymentInput
 
-        android:id="@+id/tap_payment_input"
+        android:id="@+id/tap_payment_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layoutDirection="locale" />
 
-  <company.tap.tapuilibrary.uikit.views.TapContactDetailsView
-        android:id="@+id/contactDetailsView"
+    <company.tap.tapuilibrary.uikit.views.TapContactDetailsView
+        android:id="@+id/contact_detailsView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-      android:visibility="gone"/>
+        android:visibility="gone"/>
 
     <company.tap.tapuilibrary.uikit.views.TapShippingDetailView
-        android:id="@+id/shipDetailsView"
+        android:id="@+id/ship_detailsView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"/>

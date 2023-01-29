@@ -3,48 +3,23 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/004106dba6c66e6155ff519b99e14fb0/jetified-TapUIKit-Android-1.1.1.358.132/res/drawable-hdpi-v4/border_shadow_black.xml" value="0.176" />
-        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/004106dba6c66e6155ff519b99e14fb0/jetified-TapUIKit-Android-1.1.1.358.132/res/drawable/border_shadow.xml" value="0.176" />
-        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/004106dba6c66e6155ff519b99e14fb0/jetified-TapUIKit-Android-1.1.1.358.132/res/drawable/border_unclick.xml" value="0.176" />
-        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/004106dba6c66e6155ff519b99e14fb0/jetified-TapUIKit-Android-1.1.1.358.132/res/drawable/border_unclick_black.xml" value="0.176" />
-        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/071045fc3dd0656253976b77cc98ed7f/jetified-TapUIKit-Android-1.1.1.358.164/res/layout/item_view_adapter.xml" value="0.2687801516195727" />
-        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/1105a6dae06b0087daf58d2e4ce1a63d/jetified-TapUIKit-Android-1.1.1.358.134/res/drawable/border_unclick_black.xml" value="0.176" />
-        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/18aa0e39182fe2e70055a68cf7f7ea47/jetified-TapUIKit-Android-1.1.1.358.135/res/layout/item_view_adapter.xml" value="0.1" />
-        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/1aafafedf52d653c1cf5103dd931e200/jetified-TapUIKit-Android-1.1.1.358.169/res/layout/item_view_adapter.xml" value="0.12094594594594595" />
-        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/79fa082508f6e4e838dbd20ee28c5aca/jetified-TapUIKit-Android-1.1.1.358.167/res/layout/item_view_adapter.xml" value="0.1125" />
-        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/88a55c1073f3a91c0bf7048fed4a4fa0/jetified-TapUIKit-Android-1.1.1.358.158/res/drawable/border_unclick.xml" value="0.169" />
-        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/c653b79d4d92ae685b54fd33a350151d/jetified-TapUIKit-Android-1.1.1.358.150/res/drawable-hdpi-v4/border_shadow_black.xml" value="0.2035" />
-        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/c653b79d4d92ae685b54fd33a350151d/jetified-TapUIKit-Android-1.1.1.358.150/res/drawable/border_shadow.xml" value="0.2035" />
-        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/c653b79d4d92ae685b54fd33a350151d/jetified-TapUIKit-Android-1.1.1.358.150/res/drawable/border_unclick.xml" value="0.2035" />
-        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/c653b79d4d92ae685b54fd33a350151d/jetified-TapUIKit-Android-1.1.1.358.150/res/drawable/border_unclick_black.xml" value="0.2035" />
-        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/fcc37c90019b8ed5744d101274c8585d/jetified-TapUIKit-Android-1.1.1.358.133/res/drawable/border_unclick_black.xml" value="0.161" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="app/src/main/res/menu/menumain.xml" value="0.17297297297297298" />
-        <entry key="app/src/main/res/xml/root_preferences.xml" value="0.10067567567567567" />
-        <entry key="checkout/src/main/res/drawable-xxhdpi/googlepay_button_no_shadow_background.xml" value="0.196" />
-        <entry key="checkout/src/main/res/layout/action_button_animation.xml" value="0.1" />
-        <entry key="checkout/src/main/res/layout/amountview_layout.xml" value="0.11925675675675676" />
-        <entry key="checkout/src/main/res/layout/asynchronous_layout.xml" value="0.13648648648648648" />
-        <entry key="checkout/src/main/res/layout/businessview_layout.xml" value="0.1284153005464481" />
-        <entry key="checkout/src/main/res/layout/cardviewholder_layout1.xml" value="0.32174688057041" />
-        <entry key="checkout/src/main/res/layout/currency_fragment_layout.xml" value="0.13648648648648648" />
-        <entry key="checkout/src/main/res/layout/fragment_checkouttaps.xml" value="0.1858108108108108" />
-        <entry key="checkout/src/main/res/layout/fragment_checkouttaps_full.xml" value="0.12837837837837837" />
-        <entry key="checkout/src/main/res/layout/fragment_web.xml" value="0.1284153005464481" />
-        <entry key="checkout/src/main/res/layout/google_pay_button_assets.xml" value="0.11418918918918919" />
-        <entry key="checkout/src/main/res/layout/googlepay_button.xml" value="0.17488789237668162" />
-        <entry key="checkout/src/main/res/layout/item_currency_rows.xml" value="0.4540054321289063" />
-        <entry key="checkout/src/main/res/layout/item_googlepay.xml" value="0.13939126599029555" />
-        <entry key="checkout/src/main/res/layout/item_knet.xml" value="0.11385135135135135" />
-        <entry key="checkout/src/main/res/layout/item_save_cards.xml" value="0.7169117647058824" />
-        <entry key="checkout/src/main/res/layout/item_saved_card.xml" value="0.12432432432432433" />
-        <entry key="checkout/src/main/res/layout/itemviewholder_layout.xml" value="0.1284153005464481" />
-        <entry key="checkout/src/main/res/layout/otpview_layout.xml" value="0.1284153005464481" />
-        <entry key="checkout/src/main/res/layout/payment_inputt_layout.xml" value="0.105" />
+        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/9fae93776ecf8857e9762930d10c0eab/jetified-TapUIKit-Android-1.1.1.358.187/res/drawable/border_unclick.xml" value="0.1565" />
+        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/9fae93776ecf8857e9762930d10c0eab/jetified-TapUIKit-Android-1.1.1.358.187/res/drawable/border_unclick_black.xml" value="0.1565" />
+        <entry key="checkout/src/main/res/drawable/border_unclick_cardinput.xml" value="0.1565" />
+        <entry key="checkout/src/main/res/layout/amountview_layout.xml" value="0.12128378378378378" />
+        <entry key="checkout/src/main/res/layout/businessview_layout.xml" value="0.12128378378378378" />
+        <entry key="checkout/src/main/res/layout/cardviewholder_layout1.xml" value="0.12128378378378378" />
+        <entry key="checkout/src/main/res/layout/fragment_checkouttaps.xml" value="0.1" />
+        <entry key="checkout/src/main/res/layout/fragment_checkouttaps_full.xml" value="0.13319672131147542" />
+        <entry key="checkout/src/main/res/layout/item_currency_rows.xml" value="0.1" />
+        <entry key="checkout/src/main/res/layout/item_knet.xml" value="0.6431015014648438" />
+        <entry key="checkout/src/main/res/layout/item_save_cards.xml" value="0.10540540540540541" />
+        <entry key="checkout/src/main/res/layout/payment_inline_viewholder.xml" value="0.16047297297297297" />
+        <entry key="checkout/src/main/res/layout/payment_inputt_layout.xml" value="0.13319672131147542" />
         <entry key="checkout/src/main/res/layout/switch_layout.xml" value="0.1" />
-        <entry key="checkout/src/main/res/layout/web_view_layout.xml" value="0.1858108108108108" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK" />
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
 </project>

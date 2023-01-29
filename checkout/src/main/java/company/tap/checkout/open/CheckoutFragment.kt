@@ -125,7 +125,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         val cardViewModel: CardViewModel by viewModels()
         this._viewModel = viewModel
         _Context?.let { cardViewModel.getContext(it) }
-        backgroundColor = (Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.clear")))
+        backgroundColor = (Color.parseColor(ThemeManager.getValue("tapBottomSheet.dimmedColor")))
         setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
         bottomSheetDialog.behavior.isDraggable = true
         val checkoutLayout: LinearLayout? = view.findViewById(R.id.fragment_all)

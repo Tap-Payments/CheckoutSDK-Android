@@ -340,7 +340,8 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                     .init()
                     .with(holder.itemView.context)
                     .load(arrayListCards[position.minus(adapterContent.size).minus(adapterGooglePay.size)].image.toUri(), holder.itemView.imageView_amex)
-                holder.itemView.textViewCardDetails.text = maskCardNumber(arrayListCards[position.minus(adapterContent.size).minus(adapterGooglePay.size)].firstSix + arrayListCards[position.minus(adapterContent.size).minus(adapterGooglePay.size)].lastFour)
+             //RemoveMask   holder.itemView.textViewCardDetails.text = maskCardNumber(arrayListCards[position.minus(adapterContent.size).minus(adapterGooglePay.size)].firstSix + arrayListCards[position.minus(adapterContent.size).minus(adapterGooglePay.size)].lastFour)
+                holder.itemView.textViewCardDetails.text = "   " +arrayListCards[position.minus(adapterContent.size).minus(adapterGooglePay.size)].lastFour
                 //holder.itemView.textViewCardDetails.text = adapterContent[holder.adapterPosition].chip1.title
             }else{
                 // arrayListCards [position.minus(adapterContent.size)].image.let { holder.itemView.imageView_amex.loadSvg(it) }
@@ -349,7 +350,8 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                     .init()
                     .with(holder.itemView.context)
                     .load(arrayListCards[position.minus(adapterContent.size)].image.toUri(), holder.itemView.imageView_amex)
-                holder.itemView.textViewCardDetails.text = maskCardNumber(arrayListCards[position.minus(adapterContent.size)].firstSix + arrayListCards[position.minus(adapterContent.size)].lastFour)
+             //Remove Mask   holder.itemView.textViewCardDetails.text = maskCardNumber(arrayListCards[position.minus(adapterContent.size)].firstSix + arrayListCards[position.minus(adapterContent.size)].lastFour)
+                holder.itemView.textViewCardDetails.text = "   " +arrayListCards[position.minus(adapterContent.size)].lastFour
                 //holder.itemView.textViewCardDetails.text = adapterContent[holder.adapterPosition].chip1.title
             }
 

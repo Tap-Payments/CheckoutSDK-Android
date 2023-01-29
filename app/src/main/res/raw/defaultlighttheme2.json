@@ -612,7 +612,7 @@
         {
             "textFont": "Roboto-Light,12",
             "textColor": "#EA611C",
-            "backgroundColor": "#EA611C33",
+            "backgroundColor": "#20EA611C",
             "borderColor": "clear",
             "actionButtonTextColor" : "clear",
             "actionButtonTextFont" : "Roboto-Regular,12"
@@ -805,6 +805,15 @@
                 "textFont": "Roboto-Light,12",
                 "textColor": "greyishBrown"
             }
+        }
+    },
+    "TapAlertMessage": {
+        "backgroundColor": "#f8e5c8",
+        "separatorColor" : "#eac6a3",
+        "separatorHeight" : 1,
+        "textField": {
+            "textFont": "Roboto-Light,12",
+            "textColor": "#ea611c"
         }
     }
 }
