@@ -1543,15 +1543,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
                 if (::context.isInitialized) {
 
-                    val fadeOut = AlphaAnimation(1f, 0f)
+                  /*  val fadeOut = AlphaAnimation(1f, 0f)
                     fadeOut.interpolator = AccelerateInterpolator() //and this
-                    fadeOut.startOffset = 100
+                    fadeOut.startOffset = 100*/
                   //  fadeOut.duration = 10
-                    val animation = AnimationSet(false) //change to false
-                    animation.addAnimation(fadeOut)
+                   // val animation = AnimationSet(false) //change to false
+                //    animation.addAnimation(fadeOut)
                     //     animation.addAnimation(fadeOut)
                   //  val animation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
-                    it?.view?.startAnimation(animation)
+                   // it?.view?.startAnimation(animation)
                 }
 
                 if (::sdkLayout.isInitialized) {
@@ -1575,7 +1575,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
                     val fadeIn = AlphaAnimation(0f, 1f)
                     fadeIn.interpolator = DecelerateInterpolator() //add this
-                    fadeIn.duration = 2500
+                    fadeIn.duration = 500
 
                     val animation = AnimationSet(false) //change to false
                     animation.addAnimation(fadeIn)
