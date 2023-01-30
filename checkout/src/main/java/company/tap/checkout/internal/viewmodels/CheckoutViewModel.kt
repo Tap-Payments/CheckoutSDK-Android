@@ -712,9 +712,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             paymentInlineViewHolder,
             saveCardSwitchHolder,
             goPayViewsHolder,
+
             otpViewHolder,
             itemsViewHolder
         )
+        if(:: webViewHolder.isInitialized){
+            removeViews( webViewHolder)
+        }
         addViews(
             cardViewHolder,
             paymentInlineViewHolder,
@@ -732,6 +736,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
                 cardViewHolder,
                 paymentInlineViewHolder,
+                webViewHolder,
                 it,
                 itemsViewHolder
             )

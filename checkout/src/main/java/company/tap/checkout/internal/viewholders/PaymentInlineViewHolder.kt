@@ -203,7 +203,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
 
     override fun bindViewComponents() {
         initCardInput()
-        initMobileInput()
+       // initMobileInput()
         initializeCardForm()
         initializeIcons()
        // tapMobileInputViewWatcher()
@@ -1092,9 +1092,9 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
 
     override fun showHideClearImage(show: Boolean) {
         if (show) {
-            closeButton?.visibility = View.VISIBLE
+           // closeButton?.visibility = View.VISIBLE hiding for mobile view
         } else {
-            closeButton?.visibility = View.GONE
+          //  closeButton?.visibility = View.GONE
             tapAlertView?.visibility = View.GONE
         }
     }

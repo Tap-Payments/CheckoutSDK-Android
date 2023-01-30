@@ -11,6 +11,7 @@ import android.view.View
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.fragment.app.FragmentManager
 import com.bumptech.glide.Glide
@@ -45,10 +46,12 @@ class WebViewHolder(
     val progressBar by lazy { view.findViewById<ProgressBar>(R.id.progressBar) }
     val web_view by lazy { view.findViewById<WebView>(R.id.web_view) }
     val webViewTextTitle by lazy { view.findViewById<TapTextView>(R.id.webView_Header) }
+    val webViewLinear by lazy { view.findViewById<LinearLayout>(R.id.webViewLinear) }
 
 
     init {
         progressBar?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("merchantHeaderView.backgroundColor")))
+        webViewLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.whiteTwo")))
         progressBar?.progressDrawable?.setColorFilter(
             Color.RED, android.graphics.PorterDuff.Mode.SRC_IN
         );

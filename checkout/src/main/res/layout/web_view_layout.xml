@@ -2,10 +2,11 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/webViewLinear"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#f4f4f4"
+
     android:orientation="vertical">
     <LinearLayout
         android:id="@+id/topLinear1"
@@ -34,44 +35,7 @@
             android:textDirection="locale"
             android:text="Approve Payment"/>
     </LinearLayout>
-    <LinearLayout
-        android:id="@+id/topLinear"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:background="@drawable/corner_radius_top"
-        android:visibility="gone"
-        android:paddingTop="@dimen/margin_basic_10dp">
 
-        <View
-            android:id="@+id/draggerView"
-            android:layout_width="75dp"
-            android:layout_height="4dp"
-            android:layout_gravity="center" />
-        <company.tap.tapuilibrary.uikit.atoms.TapDragIndicator
-            android:layout_width="75dp"
-            android:layout_height="4dp"
-            android:visibility="gone"
-            android:layout_marginStart="150dp"
-            android:layout_marginEnd="150dp"
-            android:background="@drawable/corner_radius"
-            app:cardElevation="@dimen/margin_basic_0dp">
-
-            <company.tap.tapuilibrary.uikit.atoms.TapSeparatorView
-                android:id="@+id/indicatorSeparator"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="5dp"
-                android:layout_gravity="center_horizontal"
-                android:background="@color/gray" />
-
-        </company.tap.tapuilibrary.uikit.atoms.TapDragIndicator>
-
-    </LinearLayout>
 
 
 <!--    <ProgressBar
@@ -90,18 +54,18 @@
         android:indeterminate="true" />-->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="600dp"
+        android:layout_height="530dp"
         android:windowSoftInputMode="adjustResize|adjustPan"
         android:orientation="vertical"
         android:fillViewport="true"
-        app:cardCornerRadius="4dp"
-        app:cardBackgroundColor="#ffffff"
-        android:layout_margin="@dimen/margin_basic_15dp">
+        app:cardCornerRadius="8dp"
+
+        android:layout_margin="16dp">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:ignore="WebViewLayout"
-        android:background="#ffffff"
+
 
       >
 

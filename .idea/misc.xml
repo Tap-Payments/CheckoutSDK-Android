@@ -7,6 +7,7 @@
         <entry key="../../../../.gradle/caches/transforms-2/files-2.1/9fae93776ecf8857e9762930d10c0eab/jetified-TapUIKit-Android-1.1.1.358.187/res/drawable/border_unclick_black.xml" value="0.1565" />
         <entry key="checkout/src/main/res/drawable/border_unclick_cardinput.xml" value="0.1565" />
         <entry key="checkout/src/main/res/layout/amountview_layout.xml" value="0.12128378378378378" />
+        <entry key="checkout/src/main/res/layout/asynchronous_layout.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/businessview_layout.xml" value="0.12128378378378378" />
         <entry key="checkout/src/main/res/layout/cardviewholder_layout1.xml" value="0.12128378378378378" />
         <entry key="checkout/src/main/res/layout/fragment_checkouttaps.xml" value="0.1" />
