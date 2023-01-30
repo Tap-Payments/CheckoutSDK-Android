@@ -1,5 +1,6 @@
 package company.tap.checkout.internal.viewholders
 
+import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
@@ -206,7 +207,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
         initializeCardForm()
         initializeIcons()
        // tapMobileInputViewWatcher()
-       // initializeCardBrandView()
+        initializeCardBrandView()
         initCustomerDetailView()
         /**
          * set separator background
@@ -255,18 +256,19 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
     }
 
     private fun initializeCardBrandView() {
+        println("displayMetrics"+displayMetrics)
         if (displayMetrics == DisplayMetrics.DENSITY_260 || displayMetrics == DisplayMetrics.DENSITY_280 || displayMetrics == DisplayMetrics.DENSITY_300 || displayMetrics == DisplayMetrics.DENSITY_XHIGH || displayMetrics == DisplayMetrics.DENSITY_340 || displayMetrics == DisplayMetrics.DENSITY_360) {
 
-            tabLayout.changeTabItemMarginBottomValue(15)
-            tabLayout.changeTabItemMarginTopValue(15)
-            //   tabLayout.changeTabItemMarginLeftValue(-5)
-            //  tabLayout.changeTabItemMarginRightValue(45)
+          //  tabLayout.changeTabItemMarginBottomValue(15)
+          //  tabLayout.changeTabItemMarginTopValue(15)
+               tabLayout.changeTabItemMarginLeftValue(-15)
+              tabLayout.changeTabItemMarginRightValue(-15)
 
         } else {
-            tabLayout.changeTabItemMarginBottomValue(20)
-            tabLayout.changeTabItemMarginTopValue(30)
-            tabLayout.changeTabItemMarginLeftValue(-30)
-            //  tabLayout.changeTabItemMarginRightValue(10)
+            tabLayout.changeTabItemMarginBottomValue(12)
+            tabLayout.changeTabItemMarginTopValue(18)
+            tabLayout.changeTabItemMarginLeftValue(-25)
+            tabLayout.changeTabItemMarginRightValue(-25)
         }
 
 
@@ -496,6 +498,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
     }
 
     private fun addViewsToPaymentViewContainer() {
+        displayMetrics = CustomUtils.getDeviceDisplayMetrics(context as Activity)
         /*  val layoutParams = RelativeLayout.LayoutParams(
               RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT
           )

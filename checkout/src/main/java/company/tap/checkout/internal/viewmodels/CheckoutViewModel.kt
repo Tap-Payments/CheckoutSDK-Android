@@ -1573,15 +1573,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
                 if (::context.isInitialized) {
 
+
                     val fadeIn = AlphaAnimation(0f, 1f)
                     fadeIn.interpolator = DecelerateInterpolator() //add this
-                    fadeIn.duration = 2500
+                    fadeIn.duration = 1000
 
                     val animation = AnimationSet(false) //change to false
                     animation.addAnimation(fadeIn)
 
 
-                  //  val animati1on = AnimationUtils.loadAnimation(context, R.anim.fade_in)
+                   // val animati1on = AnimationUtils.loadAnimation(context, R.anim.fade_in)
                     // animati1on.duration = 500L
                     it?.view?.startAnimation(animation)
 
