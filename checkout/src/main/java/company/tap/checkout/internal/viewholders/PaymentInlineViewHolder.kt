@@ -18,6 +18,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.TooltipCompat
+import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import com.google.android.material.tabs.TabLayout
 import company.tap.cardinputwidget.Card
@@ -57,6 +58,7 @@ import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import company.tap.tapuilibrary.uikit.models.SectionTabItem
 import company.tap.tapuilibrary.uikit.organisms.TapPaymentInput
 import company.tap.tapuilibrary.uikit.views.*
+import kotlinx.android.synthetic.main.item_currency_rows.view.*
 import kotlinx.android.synthetic.main.loyalty_view_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 
@@ -251,6 +253,8 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
 
             tabLayout.resetBehaviour()
             tapCardInputView.separatorcard2.visibility = View.GONE
+            tapCardInputView.separator_1.visibility = View.INVISIBLE
+            tapPaymentInput?.separator?.visibility = View.GONE
 
         }
     }
@@ -529,11 +533,29 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
                 it,
                 15.0f,// corner raduis
                 0.0f,
-                Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.borderColor")),
-                Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.borderColor")),
-                Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.borderColor"))
+                Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.shadow.color")),
+                Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.shadow.color")),
+                Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.shadow.color"))
+
             )
         }
+        tapPaymentInput?.cardInputChipView?.cardElevation= 1.0f
+      /*  if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
+            tapPaymentInput?.cardInputChipView?.setBackgroundResource(R.drawable.border_unclick_black)
+        } else {
+            tapPaymentInput?.cardInputChipView?.setBackgroundResource(R.drawable.border_unclick_cardinput)
+        }
+        tapPaymentInput?.cardInputChipView?.let {
+            setBorderedView(
+                it,
+                15.0f,// corner raduis
+                //(ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),
+                0.0f,
+                Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.unSelected.shadow.color")),
+                Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.backgroundColor")),
+                Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.unSelected.shadow.color"))
+            )
+        }*/
         paymentInputContainer.addView(tapCardInputView)
 
     }
@@ -671,6 +693,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
                                 tapCardInputView.separatorcard2.setBackgroundColor(Color.parseColor(ThemeManager.getValue("tapSeparationLine.backgroundColor")))
                                 tapCardInputView.separatorcard2.visibility=View.VISIBLE
                                 tapInlineCardSwitch?.switchSaveCard?.isChecked = true
+
 
                             }
                         }
@@ -865,7 +888,9 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
                     schema?.cardBrand?.let { tabLayout.selectTab(it, true) }
                 else tabLayout.selectTab(card.cardBrand, true)
 
-                tapAlertView?.visibility = View.GONE
+                tapAlertView?.visibility = View.VISIBLE
+                tapAlertView?.alertMessage?.text =
+                    (LocalizationManager.getValue("Warning", "Hints", "missingExpiryCVV"))
                 // lastFocusField =CardInputListener.FocusField.FOCUS_EXPIRY
             }
             else -> {

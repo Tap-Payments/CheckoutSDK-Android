@@ -65,7 +65,13 @@ class CardViewHolder(private val context: Context, private val onCardSelectedAct
          */
         view.tapSeparatorViewLinear1?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
         cardInfoHeaderText = view.findViewById(R.id.cardInfoHeaderText)
-        cardInfoHeaderText.text =  LocalizationManager.getValue("cardSectionTitle", "TapCardInputKit")
+        if(paymentCardsList?.isEmpty() == true){
+            cardInfoHeaderText.text =  LocalizationManager.getValue("cardSectionTitle", "TapCardInputKit")
+
+        }else{
+       // cardInfoHeaderText.text =  LocalizationManager.getValue("cardSectionTitle", "TapCardInputKit")
+        cardInfoHeaderText.text =  "OR ENTER CARD"
+        }
        /* var cardInfoTextTheme = TextViewTheme()
         cardInfoTextTheme.textColor =
             Color.parseColor(ThemeManager.getValue("horizontalList.headers.labelTextColor"))
