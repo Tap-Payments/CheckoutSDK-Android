@@ -219,6 +219,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
        // tapMobileInputViewWatcher()
         initializeCardBrandView()
         initCustomerDetailView()
+      tapCardInputView?.updateIconCvc(false,"",company.tap.cardinputwidget.CardBrand.Unknown)
         /**
          * set separator background
          */

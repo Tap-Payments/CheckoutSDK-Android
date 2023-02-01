@@ -12,6 +12,8 @@ import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.checkout.internal.utils.CurrencyFormatter
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.themekit.theme.TextViewTheme
+import company.tap.tapuilibrary.uikit.atoms.TapChip
 import company.tap.tapuilibrary.uikit.atoms.TapSeparatorView
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.datasource.AmountViewDataSource
@@ -37,6 +39,7 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
     private var isOpenedList: Boolean = true
     private var transactionCurrency: String? = null
     private var scannerLinearView: LinearLayout = view.findViewById(R.id.scannerLinearView)
+    private var CustomCardViewStyle: TapChip = view.findViewById(R.id.CustomCardViewStyle)
     private var readyToScanText: TapTextView = view.findViewById(R.id.cardscan_ready)
     var scannerClicked: Boolean? = false
 
@@ -46,6 +49,20 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
 
     override fun bindViewComponents() {
         view.amount_section.setAmountViewDataSource(getAmountDataSourceFromAPIs())
+        scanTextTheme()
+    }
+
+    private fun scanTextTheme() {
+        val readyToScanTextViewTheme = TextViewTheme()
+        readyToScanTextViewTheme.textColor =
+            Color.parseColor(ThemeManager.getValue("Hints.Default.textColor"))
+        readyToScanTextViewTheme.textSize =
+            ThemeManager.getFontSize("Hints.Default.textFont")
+        readyToScanTextViewTheme.font =
+            ThemeManager.getFontName("Hints.Default.textFont")
+        readyToScanText.setTheme(readyToScanTextViewTheme)
+        scannerLinearView.setBackgroundColor( Color.parseColor(ThemeManager.getValue("Hints.Default.backgroundColor")))
+        CustomCardViewStyle.setBackgroundColor( Color.parseColor(ThemeManager.getValue("Hints.Default.backgroundColor")))
     }
 
     fun readyToScanVisibility(scannerClicked: Boolean) {
