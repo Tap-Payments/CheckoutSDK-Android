@@ -314,7 +314,9 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
        //  sdkSession.setPaymentItems(getPaymentItems()) // ** Optional ** you can pass empty array list
 
 
-       sdkSession.setPaymentType("ALL")  //** Merchant can pass paymentType
+      // sdkSession.setPaymentType("ALL")  //** Merchant can pass paymentType
+       settingsManager?.getString("key_sdk_payment_type", "ALL")
+           ?.let { sdkSession.setPaymentType(it) }  //** Merchant can pass paymentType
 
 
        // Set Taxes array list

@@ -486,6 +486,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
             else -> {
 
+
                 if (PaymentDataSource.getPaymentDataType() == "WEB") {
                     addViews(
                         businessViewHolder,
@@ -493,7 +494,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         cardViewHolder,
                         saveCardSwitchHolder
                     )
-                } else
+                    cardViewHolder.cardInfoHeaderText?.visibility = View.GONE
+                } else  if (PaymentDataSource.getPaymentDataType() == "CARD") {
+                    addViews(
+                        businessViewHolder,
+                        paymentInlineViewHolder,saveCardSwitchHolder
+                    )
+                    cardViewHolder.cardInfoHeaderText.visibility = View.VISIBLE
+                }else
                 //Checkimg to be removed once loyalty enabled form api level onluy else will be there
                     if (SDKSession.enableLoyalty == true) {
                         addViews(
@@ -513,6 +521,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                             saveCardSwitchHolder
                         )
                     }
+
+
             }
         }
 
@@ -1655,8 +1665,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         /**
          * Clear card input text
          */
-
+        println("focussss"+paymentInlineViewHolder.tapCardInputView.hasFocus())
+        println("isSelected"+isSelected)
         if (paymentInlineViewHolder.tapCardInputView.hasFocus()) {
+
             paymentInlineViewHolder.clearCardInputAction()
             paymentInlineViewHolder.onFocusChange("")
             CustomUtils.hideKeyboardFrom(context, paymentInlineViewHolder.view)

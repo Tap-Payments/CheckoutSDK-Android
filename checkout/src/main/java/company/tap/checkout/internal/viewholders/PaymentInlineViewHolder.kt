@@ -723,12 +723,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
                     tapInlineCardSwitch?.visibility = View.GONE
                 }else {
                     tapCardInputView.setVisibilityOfHolderField(PaymentDataSource.getCardHolderNameShowHide())
-                }  //    tapCardInputView.holderNameEnabled = PaymentDataSource.getCardHolderNameShowHide() != null && PaymentDataSource.getCardHolderNameShowHide()
-                //  tapCardInputView.holderNameEnabled= true
-               /* if (tapCardInputView.holderNameEnabled) {
-                    tapInlineCardSwitch?.setPaddingRelative(0, 100, 0, 0)
-
-                }*/
+                }
             }
         })
     }

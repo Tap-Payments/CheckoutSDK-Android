@@ -16,6 +16,7 @@ import company.tap.checkout.internal.api.models.SavedCard
 
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
+import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.fontskit.enums.TapFont
 import company.tap.tapuilibrary.themekit.ThemeManager
@@ -79,7 +80,7 @@ class CardViewHolder(private val context: Context, private val onCardSelectedAct
 
         if (context?.let { LocalizationManager.getLocale(it).language } == "en") setFontsEnglish() else setFontsArabic()
 
-        if(paymentCardsList?.isEmpty() == true){
+        if(paymentCardsList?.isEmpty() == true || PaymentDataSource.getPaymentDataType() == "CARD"){
             cardInfoHeaderText.text =  LocalizationManager.getValue("cardSectionTitle", "TapCardInputKit")
 
         }else{
