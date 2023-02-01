@@ -24,6 +24,7 @@ import com.google.android.material.tabs.TabLayout
 import company.tap.cardinputwidget.Card
 import company.tap.cardinputwidget.CardBrandSingle
 import company.tap.cardinputwidget.CardInputUIStatus
+import company.tap.cardinputwidget.databinding.CardBrandViewBinding
 import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardinputwidget.widget.inline.InlineCardInput
 import company.tap.checkout.R
@@ -122,6 +123,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
     var toolstipImageView: TapImageView? = null
     var nfcButton: ImageView? = null
     var scannerButton: ImageView? = null
+    var cardBrandView: CardBrandViewBinding? = null
     var closeButton: ImageView? = null
     var cardInputUIStatus: CardInputUIStatus? = null
     var backArrow: TapImageView? = null
@@ -130,6 +132,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
     var tapPaymentInput: TapPaymentInput? = null
 
     init {
+
         tabLayout.setTabLayoutInterface(this)
         tapMobileInputView = TapMobilePaymentView(context, null)
         tapMobileInputView.setTapPaymentShowHideClearImage(this)
@@ -141,6 +144,11 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
         tapPaymentInput = view.findViewById(R.id.tap_payment_input_layout)
         tapCardInputView.separatorcard2.visibility = View.INVISIBLE
 
+        tapCardInputView.updateIconCvc(
+            false,
+            "",
+            company.tap.cardinputwidget.CardBrand.Unknown
+        )
 
         tapAlertView = tapPaymentInput?.findViewById(R.id.alertView)
         //cardSwitchLayout = tapCardInputView.findViewById(R.id.mainSwitchInline)
@@ -236,6 +244,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun initializeIcons() {
+
         nfcButton?.setOnClickListener {
             checkoutViewModel.onClickNFC()
         }
@@ -523,11 +532,11 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
           }*/
         //   layoutParams.setMargins(0, -10, 50, 0)
         // paymentInputContainer.layoutParams = layoutParams
-       /* if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
          //   tapPaymentInput?.cardInputChipView?.setBackgroundResource(R.drawable.border_unclick_black)
         } else {
             tapPaymentInput?.cardInputChipView?.setBackgroundResource(R.drawable.border_unclick_cardinput)
-        }*/
+        }
         tapPaymentInput?.cardInputChipView?.let {
             setBorderedView(
                 it,
@@ -539,7 +548,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
 
             )
         }
-        tapPaymentInput?.cardInputChipView?.cardElevation= 1.0f
+        tapPaymentInput?.cardInputChipView?.cardElevation= 0.2f
       /*  if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
             tapPaymentInput?.cardInputChipView?.setBackgroundResource(R.drawable.border_unclick_black)
         } else {

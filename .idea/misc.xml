@@ -7,7 +7,7 @@
         <entry key="../../../../.gradle/caches/transforms-2/files-2.1/9fae93776ecf8857e9762930d10c0eab/jetified-TapUIKit-Android-1.1.1.358.187/res/drawable/border_unclick_black.xml" value="0.1565" />
         <entry key="../../../../.gradle/caches/transforms-2/files-2.1/b8c6904767f0d2d929cdcc0696919bf2/jetified-TapUIKit-Android-1.1.1.358.204/res/drawable/border_unclick.xml" value="0.1605" />
         <entry key="../../../../.gradle/caches/transforms-2/files-2.1/ce874d546d88b676e434d7c53c355ad9/jetified-TapUIKit-Android-1.1.1.358.203/res/drawable/border_unclick.xml" value="0.1145" />
-        <entry key="checkout/src/main/res/drawable/border_unclick_cardinput.xml" value="0.625" />
+        <entry key="checkout/src/main/res/drawable/border_unclick_cardinput.xml" value="1.4162617187500002" />
         <entry key="checkout/src/main/res/layout/amountview_layout.xml" value="0.12128378378378378" />
         <entry key="checkout/src/main/res/layout/asynchronous_layout.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/businessview_layout.xml" value="0.12128378378378378" />
