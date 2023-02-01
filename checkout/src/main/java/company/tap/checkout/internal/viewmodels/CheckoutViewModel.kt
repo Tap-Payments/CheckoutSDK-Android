@@ -724,6 +724,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             paymentInlineViewHolder,
             saveCardSwitchHolder
         )
+        paymentInlineViewHolder.resetPaymentCardView()
         //itemsViewHolder.resetView()
         //I comment   itemsViewHolder.setItemsRecylerView()
         //  itemsViewHolder?.view?.itemRecylerView?.adapter = itemAdapter
@@ -1391,6 +1392,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             if (cardTypeDialog == true) {
                 paymentInlineViewHolder.tapCardInputView.clear()
                 paymentInlineViewHolder.tabLayout.resetBehaviour()
+                paymentInlineViewHolder.resetPaymentCardView()
             } else {
                 bottomSheetDialog.dismissWithAnimation
                 bottomSheetDialog.dismiss()
@@ -3044,6 +3046,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     fun dismissBottomSheet() {
         checkoutFragment?.dismissBottomSheetDialog()
     }
+
+
 
 
 }

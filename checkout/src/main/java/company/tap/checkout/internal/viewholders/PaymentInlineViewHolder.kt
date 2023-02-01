@@ -165,7 +165,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
         textViewPowered = tapCardInputView.findViewById(R.id.textViewPowered)
         saveForOtherCheckBox = tapCardInputView.findViewById(R.id.saveForOtherCheckBox)
         toolstipImageView = tapCardInputView.findViewById(R.id.toolsTipImageView)
-        initToolsTip()
+      //  initToolsTip()
         tapInlineCardSwitch?.setSwitchDataSource(
             TapSwitchDataSource(
                 "dummy",
@@ -349,6 +349,8 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
             tapCardInputView.setSingleCardInput(
                 CardBrandSingle.Unknown, null
             )
+            resetPaymentCardView()
+
         }
 
     }
@@ -391,6 +393,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
         tapInlineCardSwitch?.visibility = View.GONE
         closeButton?.visibility = View.GONE
         tapCardInputView.setVisibilityOfHolderField(false)
+        tapCardInputView.holderNameEnabled = false
         checkoutViewModel.incrementalCount=0
     }
 
@@ -710,9 +713,17 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
                         }
                     }
                 }
-                println("getCardHolderNameShowHide"+ PaymentDataSource.getCardHolderNameShowHide())
-                tapCardInputView.setVisibilityOfHolderField(PaymentDataSource.getCardHolderNameShowHide())
-                //    tapCardInputView.holderNameEnabled = PaymentDataSource.getCardHolderNameShowHide() != null && PaymentDataSource.getCardHolderNameShowHide()
+               // println("getCardHolderNameShowHide"+ PaymentDataSource.getCardHolderNameShowHide())
+                if(cardInputUIStatus!=null && cardInputUIStatus==CardInputUIStatus.SavedCard){
+                    tapCardInputView.setVisibilityOfHolderField(false)
+                    tapCardInputView.holderNameEnabled = false
+                    tapCardInputView.separator_1.visibility = View.INVISIBLE
+                    tapCardInputView.separatorcard2.visibility = View.GONE
+                    tapInlineCardSwitch?.visibility = View.GONE
+                    tapInlineCardSwitch?.visibility = View.GONE
+                }else {
+                    tapCardInputView.setVisibilityOfHolderField(PaymentDataSource.getCardHolderNameShowHide())
+                }  //    tapCardInputView.holderNameEnabled = PaymentDataSource.getCardHolderNameShowHide() != null && PaymentDataSource.getCardHolderNameShowHide()
                 //  tapCardInputView.holderNameEnabled= true
                /* if (tapCardInputView.holderNameEnabled) {
                     tapInlineCardSwitch?.setPaddingRelative(0, 100, 0, 0)
@@ -1237,6 +1248,8 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
 
     fun setDataForSavedCard(_savedCardsModel: SavedCard, cardInputUIStatus: CardInputUIStatus) {
         println("cardInputUIStatus>>" +cardInputUIStatus)
+        tapCardInputView.holderNameEnabled = false
+        tapCardInputView.setVisibilityOfHolderField(false)
         this.cardInputUIStatus = cardInputUIStatus
         this.savedCardsModel = _savedCardsModel
         val cardModel = Card(
@@ -1262,6 +1275,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
             null,
             null
         )
+
         expiryDate = _savedCardsModel.expiry?.month + "/" + _savedCardsModel.expiry?.year
         println("expiryDate saved" + expiryDate)
         tapCardInputView.isSavedCard = true
@@ -1306,5 +1320,14 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
 
         }
 
+    }
+    fun resetPaymentCardView(){
+       tapCardInputView.clear()
+        clearCardInputAction()
+        tapCardInputView.setVisibilityOfHolderField(false)
+        tapInlineCardSwitch?.visibility =View.GONE
+        tabLayout.resetBehaviour()
+        tabLayout.visibility=View.VISIBLE
+        tapCardInputView.holderNameEnabled = false
     }
 }
