@@ -12,7 +12,8 @@
       "cardUseNFCLabel": "For faster and easier checkout,\nuse card scanner or NFC.",
       "cardSaveLater": "For faster and easier checkout,\nsave the card for later.",
       "weSupport":"WE ACCEPT",
-      "cardSectionTitle": "CARD INFORMATION"
+      "cardSectionTitle": "ENTER CARD",
+      "cardSectionTitleOr": "OR ENTER CARD"
     },
     "TapAsyncSection": {
       "paymentProgressLabel": "Payment in progress",
@@ -179,7 +180,8 @@
       "cardUseNFCLabel": "لدفع أسرع وأسهل،\n إستخدم الماسح الضوئي للبطاقة أو خاصية الــ NFC. ",
       "cardSaveLater": "إحفظ البطاقة، \n لدفع أسرع وأسهل لاحقاً. ",
       "weSupport": "نحن ندعم",
-      "cardSectionTitle": "بيانات البطاقة",
+      "cardSectionTitle": "أدخل بيانات البطاقة",
+      "cardSectionTitleOr": "أو أدخل بيانات البطاقة",
       "savedCardSectionTitle": "البطاقة المحفوظة"
     },
 

@@ -496,7 +496,8 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
             if(isChecked){
                 if (cardInputUIStatus == CardInputUIStatus.SavedCard) {
                     contactDetailsView?.visibility = View.GONE
-                }else {contactDetailsView?.visibility = View.VISIBLE
+                }else {
+                    contactDetailsView?.visibility = View.VISIBLE
 
                     tapInlineCardSwitch?.switchSaveCard?.isChecked = true
                     tapInlineCardSwitch?.saveForOtherCheckBox?.visibility = View.VISIBLE

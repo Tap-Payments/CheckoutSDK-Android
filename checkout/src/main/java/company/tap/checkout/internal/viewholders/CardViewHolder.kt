@@ -2,6 +2,7 @@ package company.tap.checkout.internal.viewholders
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
@@ -16,6 +17,7 @@ import company.tap.checkout.internal.api.models.SavedCard
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
 import company.tap.taplocalizationkit.LocalizationManager
+import company.tap.tapuilibrary.fontskit.enums.TapFont
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.TextViewTheme
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
@@ -65,12 +67,23 @@ class CardViewHolder(private val context: Context, private val onCardSelectedAct
          */
         view.tapSeparatorViewLinear1?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
         cardInfoHeaderText = view.findViewById(R.id.cardInfoHeaderText)
+
+        val cardInfoHeaderTextViewTheme = TextViewTheme()
+        cardInfoHeaderTextViewTheme.textColor =
+            Color.parseColor(ThemeManager.getValue("horizontalList.headers.gatewayHeader.leftButton.labelTextColor"))
+        cardInfoHeaderTextViewTheme.textSize =
+            ThemeManager.getFontSize("horizontalList.headers.gatewayHeader.leftButton.labelTextFont")
+        cardInfoHeaderTextViewTheme.font =
+            ThemeManager.getFontName("horizontalList.headers.gatewayHeader.leftButton.labelTextFont")
+        cardInfoHeaderText.setTheme(cardInfoHeaderTextViewTheme)
+
+        if (context?.let { LocalizationManager.getLocale(it).language } == "en") setFontsEnglish() else setFontsArabic()
+
         if(paymentCardsList?.isEmpty() == true){
             cardInfoHeaderText.text =  LocalizationManager.getValue("cardSectionTitle", "TapCardInputKit")
 
         }else{
-       // cardInfoHeaderText.text =  LocalizationManager.getValue("cardSectionTitle", "TapCardInputKit")
-        cardInfoHeaderText.text =  "OR ENTER CARD"
+        cardInfoHeaderText.text =  LocalizationManager.getValue("cardSectionTitleOr", "TapCardInputKit")
         }
        /* var cardInfoTextTheme = TextViewTheme()
         cardInfoTextTheme.textColor =
@@ -79,6 +92,22 @@ class CardViewHolder(private val context: Context, private val onCardSelectedAct
             ThemeManager.getFontSize("horizontalList.headers.labelTextFont")
         cardInfoTextTheme.font = ThemeManager.getFontName("horizontalList.headers.labelTextFont")
         cardInfoHeaderText.setTheme(cardInfoTextTheme)*/
+    }
+
+    private fun setFontsArabic() {
+        cardInfoHeaderText?.typeface = Typeface.createFromAsset(
+            context?.assets, TapFont.tapFontType(
+                TapFont.TajawalMedium
+            )
+        )
+    }
+
+    private fun setFontsEnglish() {
+        cardInfoHeaderText?.typeface = Typeface.createFromAsset(
+            context?.assets, TapFont.tapFontType(
+                TapFont.RobotoRegular
+            )
+        )
     }
 
     /**
