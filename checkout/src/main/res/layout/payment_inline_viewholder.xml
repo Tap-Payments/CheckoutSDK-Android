@@ -16,7 +16,13 @@
         android:layout_marginStart="6dp"
         android:layout_marginEnd="6dp"
         android:layoutDirection="locale" />
-
+    <TextView
+        android:id="@+id/tt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="dfadsfdaF"
+        android:visibility="gone"
+/>
     <company.tap.tapuilibrary.uikit.views.TapContactDetailsView
         android:id="@+id/contact_detailsView"
         android:layout_width="match_parent"

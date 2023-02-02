@@ -127,6 +127,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
     var contactDetailsView: TapContactDetailsView? = null
     var shippingDetailView: TapShippingDetailView? = null
     var tapPaymentInput: TapPaymentInput? = null
+    var tt: TextView? = null
 
     init {
 
@@ -154,6 +155,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
         backArrow = tapCardInputView.findViewById(R.id.backView)
         backArrow?.visibility =View.GONE
         contactDetailsView = view.findViewById(R.id.contactDetails_textView)
+        tt = view.findViewById(R.id.tt)
         tapInlineCardSwitch = tapPaymentInput?.findViewById(R.id.switch_Inline_card)
         tapInlineCardSwitch?.brandingLayout?.visibility = View.GONE
         tapPaymentInput?.separator?.visibility= View.GONE
@@ -236,8 +238,9 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
             "shippingSectionTitle"
         )
         tapInlineCardSwitch?.switchSaveCard?.isChecked = false
+        contactDetailsView?.visibility = View.GONE
         contactDetailsView?.contactEmailET?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("customerDataCollection.backgroundColor")))
-        contactDetailsView?.contactEmailET?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("customerDataCollection.backgroundColor")))
+       // contactDetailsView?.contactEmailET?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("customerDataCollection.backgroundColor")))
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -471,9 +474,9 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
              tapCardInputView.switchCardEnabled = isChecked
 
          }*/
-        if(tapInlineCardSwitch?.saveForOtherCheckBox?.isChecked == true){
+       /* if(tapInlineCardSwitch?.switchSaveCard?.isChecked == true && tapInlineCardSwitch?.saveForOtherCheckBox?.isChecked == true){
             contactDetailsView?.visibility = View.VISIBLE
-        }
+        }*/
 
         tapInlineCardSwitch?.switchSaveCard?.setOnCheckedChangeListener {
                 buttonView, isChecked ->
@@ -486,12 +489,17 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
                 tapInlineCardSwitch?.toolsTipImageView?.visibility = View.VISIBLE
                 tapPaymentInput?.separator?.visibility = View.VISIBLE
                 tapInlineCardSwitch?.saveForOtherTextView?.visibility = View.VISIBLE
+                contactDetailsView?.visibility = View.VISIBLE
+                shippingDetailView?.visibility = View.VISIBLE
+                tt?.visibility = View.VISIBLE
             }else {
                 tapPaymentInput?.separator?.visibility = View.GONE
                 tapInlineCardSwitch?.saveForOtherCheckBox?.isChecked = false
                 tapInlineCardSwitch?.saveForOtherCheckBox?.visibility = View.GONE
                 tapInlineCardSwitch?.saveForOtherTextView?.visibility = View.GONE
                 tapInlineCardSwitch?.toolsTipImageView?.visibility = View.GONE
+                contactDetailsView?.visibility = View.GONE
+                shippingDetailView?.visibility = View.GONE
             }
 
 
@@ -505,19 +513,26 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
                 // tabLayout?.visibility = View.GONE
                 // intertabLayout?.visibility = View.GONE
                 //tapInlineCardSwitch?.saveForOtherCheckBox?.isChecked = isChecked
+
                 if(isChecked){
-                    if (cardInputUIStatus == CardInputUIStatus.SavedCard) {
+                    println("saveForOtherCheckBox "+isChecked)
+                    contactDetailsView?.visibility = View.VISIBLE
+                    tt?.visibility = View.VISIBLE
+                    tapInlineCardSwitch?.switchSaveCard?.isChecked = true
+                    tapInlineCardSwitch?.saveForOtherCheckBox?.visibility = View.VISIBLE
+                   /* if (cardInputUIStatus == CardInputUIStatus.SavedCard) {
                         contactDetailsView?.visibility = View.GONE
                     }else {
                         contactDetailsView?.visibility = View.VISIBLE
 
                         tapInlineCardSwitch?.switchSaveCard?.isChecked = true
                         tapInlineCardSwitch?.saveForOtherCheckBox?.visibility = View.VISIBLE
-                    }
+                    }*/
                 }else {
                     contactDetailsView?.visibility = View.GONE
+                    shippingDetailView?.visibility = View.GONE
                    // tapInlineCardSwitch?.switchSaveCard?.isChecked = false
-                    tapInlineCardSwitch?.saveForOtherCheckBox?.visibility = View.GONE
+                    tapInlineCardSwitch?.saveForOtherCheckBox?.isChecked= false
                 }
 
             }
