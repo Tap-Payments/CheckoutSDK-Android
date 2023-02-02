@@ -12,10 +12,7 @@ import android.transition.TransitionManager
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.LinearLayout
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.view.isVisible
@@ -474,50 +471,59 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
              tapCardInputView.switchCardEnabled = isChecked
 
          }*/
+        if(tapInlineCardSwitch?.saveForOtherCheckBox?.isChecked == true){
+            contactDetailsView?.visibility = View.VISIBLE
+        }
 
         tapInlineCardSwitch?.switchSaveCard?.setOnCheckedChangeListener {
                 buttonView, isChecked ->
             secondaryLayout?.visibility = View.GONE
-            // intertabLayout?.visibility = View.GONE
             tapAlertView?.visibility = View.GONE
-            //  tabLayout?.visibility = View.GONE
-            // intertabLayout?.visibility = View.GONE
+
             if(isChecked){
                 tapInlineCardSwitch?.saveForOtherCheckBox?.isChecked = true
                 tapInlineCardSwitch?.saveForOtherCheckBox?.visibility = View.VISIBLE
                 tapInlineCardSwitch?.toolsTipImageView?.visibility = View.VISIBLE
                 tapPaymentInput?.separator?.visibility = View.VISIBLE
+                tapInlineCardSwitch?.saveForOtherTextView?.visibility = View.VISIBLE
             }else {
                 tapPaymentInput?.separator?.visibility = View.GONE
                 tapInlineCardSwitch?.saveForOtherCheckBox?.isChecked = false
                 tapInlineCardSwitch?.saveForOtherCheckBox?.visibility = View.GONE
+                tapInlineCardSwitch?.saveForOtherTextView?.visibility = View.GONE
                 tapInlineCardSwitch?.toolsTipImageView?.visibility = View.GONE
             }
 
 
         }
-        tapInlineCardSwitch?.saveForOtherCheckBox?.setOnCheckedChangeListener{ buttonView, isChecked ->
-            secondaryLayout?.visibility = View.GONE
-            tapAlertView?.visibility = View.GONE
-            // tabLayout?.visibility = View.GONE
-            // intertabLayout?.visibility = View.GONE
-            tapInlineCardSwitch?.saveForOtherCheckBox?.isChecked = isChecked
-            if(isChecked){
-                if (cardInputUIStatus == CardInputUIStatus.SavedCard) {
-                    contactDetailsView?.visibility = View.GONE
-                }else {
-                    contactDetailsView?.visibility = View.VISIBLE
 
-                    tapInlineCardSwitch?.switchSaveCard?.isChecked = true
-                    tapInlineCardSwitch?.saveForOtherCheckBox?.visibility = View.VISIBLE
+
+        tapInlineCardSwitch?.saveForOtherCheckBox?.setOnCheckedChangeListener(object :CompoundButton.OnCheckedChangeListener{
+            override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
+                secondaryLayout?.visibility = View.GONE
+                tapAlertView?.visibility = View.GONE
+                // tabLayout?.visibility = View.GONE
+                // intertabLayout?.visibility = View.GONE
+                //tapInlineCardSwitch?.saveForOtherCheckBox?.isChecked = isChecked
+                if(isChecked){
+                    if (cardInputUIStatus == CardInputUIStatus.SavedCard) {
+                        contactDetailsView?.visibility = View.GONE
+                    }else {
+                        contactDetailsView?.visibility = View.VISIBLE
+
+                        tapInlineCardSwitch?.switchSaveCard?.isChecked = true
+                        tapInlineCardSwitch?.saveForOtherCheckBox?.visibility = View.VISIBLE
+                    }
+                }else {
+                    contactDetailsView?.visibility = View.GONE
+                   // tapInlineCardSwitch?.switchSaveCard?.isChecked = false
+                    tapInlineCardSwitch?.saveForOtherCheckBox?.visibility = View.GONE
                 }
-            }else {
-                contactDetailsView?.visibility = View.GONE
-                tapInlineCardSwitch?.switchSaveCard?.isChecked = false
-                tapInlineCardSwitch?.saveForOtherCheckBox?.visibility = View.GONE
+
             }
 
-        }
+        })
+
     }
 
     private fun addViewsToPaymentViewContainer() {
