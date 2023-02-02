@@ -247,6 +247,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
             loyaltyViewHolder?.view?.loyaltyView?.constraintLayout?.visibility = View.GONE
             tabLayout.visibility = View.VISIBLE
             contactDetailsView?.visibility = View.GONE
+            shippingDetailView?.visibility = View.GONE
             closeButton?.visibility = View.GONE
 
             tabLayout.resetBehaviour()
@@ -1347,5 +1348,9 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
         tabLayout.resetBehaviour()
         tabLayout.visibility=View.VISIBLE
         tapCardInputView.holderNameEnabled = false
+        contactDetailsView?.visibility =View.GONE
+        shippingDetailView?.visibility =View.GONE
+        tapCardInputView.separatorcard2.visibility = View.INVISIBLE
+
     }
 }

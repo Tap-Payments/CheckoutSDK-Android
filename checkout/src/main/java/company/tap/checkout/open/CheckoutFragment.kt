@@ -413,6 +413,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
               } }
           }*/
         tabAnimatedActionButton?.isClickable = true
+        tabAnimatedActionButton?.isEnabled = true
     }
 
 

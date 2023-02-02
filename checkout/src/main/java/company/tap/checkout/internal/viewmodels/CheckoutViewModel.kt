@@ -334,7 +334,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
                         false,
                         "en",
-                        "$payString $currentCurrencySymbol $currentAmount",
+                        if (::selectedAmount.isInitialized && ::selectedCurrency.isInitialized) {
+                            "$payString $selectedCurrency $selectedAmount"
+                        }else{ "$payString $currentCurrencySymbol $currentAmount"},
                         Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
                         Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
                     )
@@ -652,7 +654,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
                 false,
                 "en",
-                "$payString $currentCurrencySymbol $currentAmount",
+                if (::selectedAmount.isInitialized && ::selectedCurrency.isInitialized) {
+                    "$payString $selectedCurrency $selectedAmount"
+                }else{ "$payString $currentCurrencySymbol $currentAmount"},
                 Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
                 Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
             )
@@ -1188,7 +1192,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
             false,
             LocalizationManager.getLocale(context).toString(),
-            "$payString $currentCurrencySymbol $currentAmount",
+            if (::selectedAmount.isInitialized && ::selectedCurrency.isInitialized) {
+                "$payString $selectedCurrency $selectedAmount"
+            }else{ "$payString $currentCurrencySymbol $currentAmount"},
             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
         )
@@ -1644,7 +1650,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
             false,
             LocalizationManager.getLocale(context).toString(),
-            "$payString $currentCurrencySymbol $currentAmount",
+            if (::selectedAmount.isInitialized && ::selectedCurrency.isInitialized) {
+                "$payString $selectedCurrency $selectedAmount"
+            }else{ "$payString $currentCurrencySymbol $currentAmount"},
             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
         )
@@ -1717,7 +1725,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
             true,
             "en",
-            "$payString $currentCurrencySymbol $currentAmount",
+            if (::selectedAmount.isInitialized && ::selectedCurrency.isInitialized) {
+                "$payString $selectedCurrency $selectedAmount"
+            }else{ "$payString $currentCurrencySymbol $currentAmount"},
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
         )
@@ -2828,7 +2838,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
             false,
             "en",
-            "$payString $currentCurrencySymbol $currentAmount",
+            if (::selectedAmount.isInitialized && ::selectedCurrency.isInitialized) {
+                "$payString $selectedCurrency $selectedAmount"
+            }else{ "$payString $currentCurrencySymbol $currentAmount"},
             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
         )
@@ -2847,7 +2859,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
             false,
             "en",
-            "$payString $currentCurrencySymbol $currentAmount",
+            if (::selectedAmount.isInitialized && ::selectedCurrency.isInitialized) {
+                "$payString $selectedCurrency $selectedAmount"
+            }else{ "$payString $currentCurrencySymbol $currentAmount"},
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
         )

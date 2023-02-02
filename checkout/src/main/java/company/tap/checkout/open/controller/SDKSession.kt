@@ -407,12 +407,14 @@ object  SDKSession : APIRequestCallback {
            // if (sessionActive) return@setOnClickListener
             if (sessionActive){
                 tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
+                tabAnimatedActionButton?.isEnabled= true
                 return
             }
 
             if (PaymentDataSource?.getTransactionMode() == null) {
                 sessionDelegate?.invalidTransactionMode()
                 tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
+                tabAnimatedActionButton?.isEnabled= true
                // return@setOnClickListener
                 return
             } else {
@@ -422,6 +424,7 @@ object  SDKSession : APIRequestCallback {
                if (tabAnimatedActionButton != null) {
                      tabAnimatedActionButton?.setDisplayMetrics(CustomUtils.getDeviceDisplayMetrics(activity))
                     tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
+                   tabAnimatedActionButton?.isEnabled= false
                 }
 
             }
