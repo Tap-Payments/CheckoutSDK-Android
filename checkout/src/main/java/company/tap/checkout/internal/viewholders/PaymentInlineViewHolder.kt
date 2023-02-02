@@ -192,23 +192,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
 
     }
 
-    private fun initToolsTip() {
-        val toolsTipText:String = LocalizationManager.getValue("cardSaveForTapInfo","TapCardInputKit")
-        toolstipImageView?.setOnClickListener {
-            TooltipCompat.setTooltipText(
-                toolstipImageView!!,
-                toolsTipText
-            )
 
-        }
-        toolstipImageView?.let {
-            TooltipCompat.setTooltipText(
-                it,
-                toolsTipText
-            )
-        }
-
-    }
 
 
     override fun bindViewComponents() {
@@ -241,6 +225,9 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
         tapInlineCardSwitch?.switchSaveCard?.isChecked = false
         contactDetailsView?.visibility = View.GONE
         contactDetailsView?.contactEmailET?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("customerDataCollection.backgroundColor")))
+        shippingDetailView?.flatEditText?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("customerDataCollection.backgroundColor")))
+        shippingDetailView?.additionalLineEditText?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("customerDataCollection.backgroundColor")))
+        shippingDetailView?.cityEditText?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("customerDataCollection.backgroundColor")))
        // contactDetailsView?.contactEmailET?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("customerDataCollection.backgroundColor")))
     }
 
@@ -491,7 +478,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
                 tapPaymentInput?.separator?.visibility = View.VISIBLE
                 tapInlineCardSwitch?.saveForOtherTextView?.visibility = View.VISIBLE
                 contactDetailsView?.visibility = View.VISIBLE
-                shippingDetailView?.visibility = View.VISIBLE
+              shippingDetailView?.visibility = View.VISIBLE
 
             }else {
                 tapPaymentInput?.separator?.visibility = View.GONE
@@ -524,7 +511,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
                         shippingDetailView?.visibility = View.GONE
                     }else {
                         contactDetailsView?.visibility = View.VISIBLE
-                        shippingDetailView?.visibility = View.VISIBLE
+                      shippingDetailView?.visibility = View.VISIBLE
 
                         tapInlineCardSwitch?.switchSaveCard?.isChecked = true
                         tapInlineCardSwitch?.saveForOtherCheckBox?.visibility = View.VISIBLE
