@@ -444,7 +444,9 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
         )
         tapCardInputView.setHolderNameTextWatcher(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
+                if(s.toString().length>3){
+                    tapInlineCardSwitch?.visibility = View.VISIBLE
+                }
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -452,6 +454,9 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
             }
 
             override fun afterTextChanged(s: Editable?) {
+                if(s.toString().length>3){
+                    tapInlineCardSwitch?.visibility = View.VISIBLE
+                }
 
             }
 
@@ -691,7 +696,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
 
             override fun afterTextChanged(s: Editable?) {
                 tapPaymentInput?.visibility = View.VISIBLE
-                tapInlineCardSwitch?.visibility = View.VISIBLE
+
                 /**
                  * we will get cvv number
                  */
@@ -713,6 +718,12 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
                             }
                         }
                     }
+                    if(!PaymentDataSource.getCardHolderNameShowHide()){
+                        tapInlineCardSwitch?.visibility = View.VISIBLE
+                    }else {
+                        tapInlineCardSwitch?.visibility = View.GONE
+                    }
+
                 }
                // println("getCardHolderNameShowHide"+ PaymentDataSource.getCardHolderNameShowHide())
                 if(cardInputUIStatus!=null && cardInputUIStatus==CardInputUIStatus.SavedCard){
