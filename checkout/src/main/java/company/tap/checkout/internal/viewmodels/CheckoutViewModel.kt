@@ -1907,7 +1907,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         paymentType: PaymentType,
         cardNumber: String,
         expiryDate: String,
-        cvvNumber: String
+        cvvNumber: String,holderName:String?
     ) {
         activateActionButton()
         setPayButtonAction(paymentType, null)

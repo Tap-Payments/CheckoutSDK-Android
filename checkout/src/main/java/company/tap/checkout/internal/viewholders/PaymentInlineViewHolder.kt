@@ -589,6 +589,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            @RequiresApi(Build.VERSION_CODES.N)
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (cardInputUIStatus != CardInputUIStatus.SavedCard) {
                     onCardTextChange(s)
@@ -701,7 +702,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
                             cvvNumber?.let { it2 ->
                                 onPaymentCardComplete.onPayCardCompleteAction(
                                     true, PaymentType.CARD,
-                                    it, it1, it2
+                                    it, it1, it2,null
                                 )
 
                                 tapCardInputView.separatorcard2.setBackgroundColor(Color.parseColor(ThemeManager.getValue("tapSeparationLine.backgroundColor")))
@@ -1300,6 +1301,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
         // Glide.with(context).load(savedCardsModel.image).into( tapCardInputView.cvvIcon)
         // tapCardInputView.onTouchView()
         tapInlineCardSwitch?.visibility = View.GONE
+        acceptedCardText?.visibility = View.GONE
         intertabLayout.visibility = View.GONE
     }
 
