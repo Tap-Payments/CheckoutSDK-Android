@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../../../layout/custom_preview.xml" value="0.13125" />
         <entry key="../../../../.gradle/caches/transforms-2/files-2.1/9fae93776ecf8857e9762930d10c0eab/jetified-TapUIKit-Android-1.1.1.358.187/res/drawable/border_unclick.xml" value="0.1565" />
         <entry key="../../../../.gradle/caches/transforms-2/files-2.1/9fae93776ecf8857e9762930d10c0eab/jetified-TapUIKit-Android-1.1.1.358.187/res/drawable/border_unclick_black.xml" value="0.1565" />
         <entry key="../../../../.gradle/caches/transforms-2/files-2.1/b8c6904767f0d2d929cdcc0696919bf2/jetified-TapUIKit-Android-1.1.1.358.204/res/drawable/border_unclick.xml" value="0.1605" />
