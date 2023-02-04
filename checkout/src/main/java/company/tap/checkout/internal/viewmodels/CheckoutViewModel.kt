@@ -1675,6 +1675,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
          */
         println("focussss"+paymentInlineViewHolder.tapCardInputView.hasFocus())
         println("isSelected"+isSelected)
+
         if (paymentInlineViewHolder.tapCardInputView.hasFocus()) {
 
             paymentInlineViewHolder.clearCardInputAction()

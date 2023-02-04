@@ -445,6 +445,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
             override fun afterTextChanged(s: Editable?) {
                 if(s.toString().length>3){
                     tapInlineCardSwitch?.visibility = View.VISIBLE
+
                 }
 
             }
@@ -604,11 +605,16 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
 
             }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                checkoutViewModel.resetViewHolder()
+
+            }
             @RequiresApi(Build.VERSION_CODES.N)
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
                 if (cardInputUIStatus != CardInputUIStatus.SavedCard) {
                     onCardTextChange(s)
+
                     cardNumAfterTextChangeListener(s, this)
 
                 }
@@ -713,19 +719,25 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
                  */
                 cvvNumber = s.toString()
                 if (s?.trim()?.length == 3 || s?.trim()?.length == 4) {
-                    maskCardNumber(cardNumber.toString()).let {
-                        expiryDate?.let { it1 ->
-                            cvvNumber?.let { it2 ->
-                                onPaymentCardComplete.onPayCardCompleteAction(
-                                    true, PaymentType.CARD,
-                                    it, it1, it2,null
-                                )
+                    if(!PaymentDataSource.getCardHolderNameShowHide()) {
+                        maskCardNumber(cardNumber.toString()).let {
+                            expiryDate?.let { it1 ->
+                                cvvNumber?.let { it2 ->
+                                    onPaymentCardComplete.onPayCardCompleteAction(
+                                        true, PaymentType.CARD,
+                                        it, it1, it2, null
+                                    )
 
-                                tapCardInputView.separatorcard2.setBackgroundColor(Color.parseColor(ThemeManager.getValue("tapSeparationLine.backgroundColor")))
-                                tapCardInputView.separatorcard2.visibility=View.VISIBLE
-                                tapInlineCardSwitch?.switchSaveCard?.isChecked = true
+                                    tapCardInputView.separatorcard2.setBackgroundColor(
+                                        Color.parseColor(
+                                            ThemeManager.getValue("tapSeparationLine.backgroundColor")
+                                        )
+                                    )
+                                    tapCardInputView.separatorcard2.visibility = View.VISIBLE
+                                    tapInlineCardSwitch?.switchSaveCard?.isChecked = true
 
 
+                                }
                             }
                         }
                     }
@@ -1165,7 +1177,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
     }
 
     fun getCard(): CreateTokenCard? {
-        val number: String? = cardNumber
+        val number: String? = tapCardInputView.card?.number
         val expiryDate: String? = expiryDate
         val cvc: String? = cvvNumber
         //temporrary    val cardholderName: String? = cardholderName
@@ -1324,6 +1336,8 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
         // tapCardInputView.onTouchView()
         tapInlineCardSwitch?.visibility = View.GONE
         acceptedCardText?.visibility = View.GONE
+        contactDetailsView?.visibility = View.GONE
+        shippingDetailView?.visibility = View.GONE
         intertabLayout.visibility = View.GONE
     }
 
