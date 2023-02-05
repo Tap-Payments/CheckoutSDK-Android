@@ -335,8 +335,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
             onCardNFCCallListener.onClickCardScanner(true)
         }
         backArrow?.setOnClickListener {
-            tabLayout.resetBehaviour()
-            tapCardInputView.clear()
+
             baseLayoutManager.resetViewHolder()
             // clearView.visibility =View.GONE
             closeButton?.visibility = View.GONE
@@ -358,6 +357,9 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
             )
             checkoutViewModel.isSavedCardSelected = false
             resetPaymentCardView()
+            intertabLayout.visibility = View.VISIBLE
+            tabLayout.visibility = View.VISIBLE
+            acceptedCardText.visibility =View.VISIBLE
 
         }
 
@@ -1383,7 +1385,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
         tapCardInputView.holderNameEnabled = false
         contactDetailsView?.visibility =View.GONE
         shippingDetailView?.visibility =View.GONE
-        tapCardInputView.separatorcard2.visibility = View.INVISIBLE
+        tapCardInputView.separatorcard2.visibility = View.GONE
 
     }
 }

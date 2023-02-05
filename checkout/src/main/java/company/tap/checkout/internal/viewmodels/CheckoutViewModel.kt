@@ -748,14 +748,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private fun setActionNotGoPayOpenedNotItemsDisplayed() {
         saveCardSwitchHolder?.let {
             removeViews(
-
                 cardViewHolder,
                 paymentInlineViewHolder,
-                webViewHolder,
                 it,
                 itemsViewHolder
             )
         }
+
+        if(::webViewHolder.isInitialized) removeViews(webViewHolder)
+
         saveCardSwitchHolder?.let {
             addViews(
 
