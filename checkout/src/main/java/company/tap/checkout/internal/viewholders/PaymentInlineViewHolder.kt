@@ -13,6 +13,7 @@ import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
+import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.view.isVisible
@@ -22,6 +23,7 @@ import company.tap.cardinputwidget.Card
 import company.tap.cardinputwidget.CardBrandSingle
 import company.tap.cardinputwidget.CardInputUIStatus
 import company.tap.cardinputwidget.databinding.CardBrandViewBinding
+import company.tap.cardinputwidget.views.CardBrandView
 import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardinputwidget.widget.inline.InlineCardInput
 import company.tap.checkout.R
@@ -120,14 +122,23 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
     var toolstipImageView: TapImageView? = null
     var nfcButton: ImageView? = null
     var scannerButton: ImageView? = null
-    var cardBrandView: CardBrandViewBinding? = null
+    var cardBrandView: CardBrandView? = null
     var closeButton: ImageView? = null
     var cardInputUIStatus: CardInputUIStatus? = null
     var backArrow: TapImageView? = null
     var contactDetailsView: TapContactDetailsView? = null
     var shippingDetailView: TapShippingDetailView? = null
     var tapPaymentInput: TapPaymentInput? = null
-    var tt: TextView? = null
+
+    @DrawableRes
+    val iconViewRes1: Int =
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
+            company.tap.cardinputwidget.R.drawable.card_icon_dark
+        }else if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("light")) {
+            company.tap.cardinputwidget.R.drawable.card_icon_light
+        }else  {
+            company.tap.cardinputwidget.R.drawable.card_icon_light
+        }
 
     init {
 
@@ -137,16 +148,17 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
         tapCardInputView = InlineCardInput(context, null)
         // tapAlertView = tapCardInputView.findViewById(R.id.alertView)
         nfcButton = tapCardInputView.findViewById(R.id.nfc_button)
+        cardBrandView = tapCardInputView.findViewById(R.id.card_brand_view)
         scannerButton = tapCardInputView.findViewById(R.id.card_scanner_button)
         closeButton = tapCardInputView.findViewById(R.id.clear_text)
         tapPaymentInput = view.findViewById(R.id.tap_payment_input_layout)
         tapCardInputView.separatorcard2.visibility = View.INVISIBLE
 
-        tapCardInputView.updateIconCvc(
+     /*   tapCardInputView.updateIconCvc(
             false,
             "",
             company.tap.cardinputwidget.CardBrand.Unknown
-        )
+        )*/
 
         tapAlertView = tapPaymentInput?.findViewById(R.id.alertView)
         //cardSwitchLayout = tapCardInputView.findViewById(R.id.mainSwitchInline)
@@ -187,7 +199,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
         acceptedCardText = view.findViewById(R.id.acceptedCardText)
         acceptedCardText.text = LocalizationManager.getValue("weSupport", "TapCardInputKit")
         saveForOtherCheckBox?.text = LocalizationManager.getValue("cardSaveForTapLabel", "TapCardInputKit")
-
+        cardBrandView?.iconView?.setImageResource(iconViewRes1)
         bindViewComponents()
 
     }
@@ -195,6 +207,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
 
 
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun bindViewComponents() {
         initCardInput()
        // initMobileInput()
@@ -203,7 +216,12 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
        // tapMobileInputViewWatcher()
         initializeCardBrandView()
         initCustomerDetailView()
-      tapCardInputView?.updateIconCvc(false,"",company.tap.cardinputwidget.CardBrand.Unknown)
+      //  tapCardInputView?.cardBrandView?.iconView?.setImageResource()
+   //   tapCardInputView?.updateIconCvc(false,"",company.tap.cardinputwidget.CardBrand.Unknown)
+       // println("are cakkwed")
+
+
+
         /**
          * set separator background
          */
@@ -338,6 +356,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
             tapCardInputView.setSingleCardInput(
                 CardBrandSingle.Unknown, null
             )
+            checkoutViewModel.isSavedCardSelected = false
             resetPaymentCardView()
 
         }

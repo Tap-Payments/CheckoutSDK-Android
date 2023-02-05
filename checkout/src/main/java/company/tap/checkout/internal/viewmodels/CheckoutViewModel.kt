@@ -211,7 +211,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     var currentCalculatedAmount: BigDecimal? = null
     var lastSelectedCurrency: String? = null
     var loyatFlag: Boolean? = false
-    var isSavedCardSelected: Boolean? = false
+   @JvmField var isSavedCardSelected: Boolean? = false
 
     @JvmField
     var selectedTotalAmount: String? = null
@@ -2785,8 +2785,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 onClickCardPayment()
             }
             paymentType === PaymentType.SavedCard -> {
+                if(isSavedCardSelected== true){
+                    payActionSavedCard(savedCardsModel as SavedCard)
 
-                payActionSavedCard(savedCardsModel as SavedCard)
+                }
             }
         }
     }
