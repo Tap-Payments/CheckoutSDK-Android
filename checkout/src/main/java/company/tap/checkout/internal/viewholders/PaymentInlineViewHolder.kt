@@ -741,7 +741,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
                 cvvNumber = s.toString()
                 if (s?.trim()?.length == 3 || s?.trim()?.length == 4) {
                     if(!PaymentDataSource.getCardHolderNameShowHide()) {
-                        maskCardNumber(cardNumber.toString()).let {
+                        cardNumber.toString().let {
                             expiryDate?.let { it1 ->
                                 cvvNumber?.let { it2 ->
                                     onPaymentCardComplete.onPayCardCompleteAction(
@@ -1198,7 +1198,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
     }
 
     fun getCard(): CreateTokenCard? {
-        val number: String? = tapCardInputView.card?.number
+        val number: String? = tapCardInputView?.fullCardNumber
         val expiryDate: String? = expiryDate
         val cvc: String? = cvvNumber
         //temporrary    val cardholderName: String? = cardholderName
