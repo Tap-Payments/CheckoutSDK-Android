@@ -125,7 +125,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
     var scannerButton: ImageView? = null
     var cardBrandView: CardBrandView? = null
     var closeButton: ImageView? = null
-    var cardInputUIStatus: CardInputUIStatus? = null
+    var cardInputUIStatus: CardInputUIStatus? = CardInputUIStatus.NormalCard
     var backArrow: TapImageView? = null
     var contactDetailsView: TapContactDetailsView? = null
     var shippingDetailView: TapShippingDetailView? = null
@@ -164,7 +164,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
         tapInlineCardSwitch = tapPaymentInput?.findViewById(R.id.switch_Inline_card)
         tapInlineCardSwitch?.brandingLayout?.visibility = View.GONE
         tapPaymentInput?.separator?.visibility= View.GONE
-        // tapCardInputView?.separatorcard2
+
         secondaryLayout = tapCardInputView.findViewById(R.id.secondary_Layout)
         textViewPowered = tapCardInputView.findViewById(R.id.textViewPowered)
         saveForOtherCheckBox = tapCardInputView.findViewById(R.id.saveForOtherCheckBox)
@@ -257,6 +257,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
             )
             tapInlineCardSwitch?.visibility = View.GONE
             tapCardInputView.separatorcard2.visibility = View.INVISIBLE
+            tapCardInputView.separator_1.visibility = View.GONE
             resetCardBrandIcon()
             if(PaymentDataSource.getBinLookupResponse()!=null){
                 PaymentDataSource.setBinLookupResponse(null)
@@ -432,10 +433,10 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
         resetCardBrandIcon()
         tapInlineCardSwitch?.visibility = View.GONE
         tapPaymentInput?.separator?.visibility = View.GONE
-        tapCardInputView.holderNameEnabled = PaymentDataSource.getCardHolderNameShowHide() != null && PaymentDataSource.getCardHolderNameShowHide()
+      /*  tapCardInputView.holderNameEnabled = PaymentDataSource.getCardHolderNameShowHide() != null && PaymentDataSource.getCardHolderNameShowHide()
         if (PaymentDataSource.getDefaultCardHolderName() != null) {
             tapCardInputView.setCardHolderName(PaymentDataSource.getDefaultCardHolderName())
-        }
+        }*/
         height = Resources.getSystem().displayMetrics.heightPixels
         addViewsToPaymentViewContainer()
         tapCardInputView.clearFocus()
@@ -768,32 +769,43 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
                                     )
                                     tapCardInputView.separatorcard2.visibility = View.VISIBLE
                                     tapInlineCardSwitch?.switchSaveCard?.isChecked = true
-
+                                    tapInlineCardSwitch?.visibility = View.VISIBLE
 
                                 }
                             }
                         }
-                    }
-                    if(!PaymentDataSource.getCardHolderNameShowHide()){
-                        tapInlineCardSwitch?.visibility = View.VISIBLE
                     }else {
                         tapInlineCardSwitch?.visibility = View.GONE
                     }
 
                     tapAlertView?.visibility = View.GONE
+                   
+                    if(cardInputUIStatus!=null && cardInputUIStatus==CardInputUIStatus.SavedCard){
+                        tapCardInputView.setVisibilityOfHolderField(false)
+                        tapCardInputView.holderNameEnabled = false
+                        tapCardInputView.separator_1.visibility = View.GONE
+                        tapCardInputView.separatorcard2.visibility = View.INVISIBLE
+                        tapInlineCardSwitch?.visibility = View.GONE
+                        tapInlineCardSwitch?.visibility = View.GONE
+                    }else if(cardInputUIStatus!=null && cardInputUIStatus==CardInputUIStatus.NormalCard){
+                        if(PaymentDataSource.getCardHolderNameShowHide()) {
+                            tapCardInputView.setVisibilityOfHolderField(PaymentDataSource.getCardHolderNameShowHide())
+                            tapCardInputView.separatorcard2.setBackgroundColor(
+                                Color.parseColor(
+                                    ThemeManager.getValue("tapSeparationLine.backgroundColor")
+                                )
+                            )
+                            tapCardInputView.separatorcard2.visibility = View.VISIBLE
+                            tapCardInputView.separator_1.visibility = View.VISIBLE
+                            if (PaymentDataSource.getDefaultCardHolderName() != null) {
+                                tapCardInputView.setCardHolderName(PaymentDataSource.getDefaultCardHolderName())
+                            }
+                        }
+                    }
 
                 }
                // println("getCardHolderNameShowHide"+ PaymentDataSource.getCardHolderNameShowHide())
-                if(cardInputUIStatus!=null && cardInputUIStatus==CardInputUIStatus.SavedCard){
-                    tapCardInputView.setVisibilityOfHolderField(false)
-                    tapCardInputView.holderNameEnabled = false
-                    tapCardInputView.separator_1.visibility = View.GONE
-                    tapCardInputView.separatorcard2.visibility = View.INVISIBLE
-                    tapInlineCardSwitch?.visibility = View.GONE
-                    tapInlineCardSwitch?.visibility = View.GONE
-                }else {
-                    tapCardInputView.setVisibilityOfHolderField(PaymentDataSource.getCardHolderNameShowHide())
-                }
+
             }
         })
     }
