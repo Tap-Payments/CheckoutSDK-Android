@@ -779,7 +779,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
                     }
 
                     tapAlertView?.visibility = View.GONE
-                   
+
                     if(cardInputUIStatus!=null && cardInputUIStatus==CardInputUIStatus.SavedCard){
                         tapCardInputView.setVisibilityOfHolderField(false)
                         tapCardInputView.holderNameEnabled = false
@@ -787,6 +787,14 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
                         tapCardInputView.separatorcard2.visibility = View.INVISIBLE
                         tapInlineCardSwitch?.visibility = View.GONE
                         tapInlineCardSwitch?.visibility = View.GONE
+                        if (s.trim().length == 3 || s.trim().length == 4) {
+                            onPaymentCardComplete.onPayCardSwitchAction(
+                                true, PaymentType.CARD
+                            )
+                            tapAlertView?.visibility = View.GONE
+                            CustomUtils.hideKeyboardFrom(context, view)
+                        }
+
                     }else if(cardInputUIStatus!=null && cardInputUIStatus==CardInputUIStatus.NormalCard){
                         if(PaymentDataSource.getCardHolderNameShowHide()) {
                             tapCardInputView.setVisibilityOfHolderField(PaymentDataSource.getCardHolderNameShowHide())
