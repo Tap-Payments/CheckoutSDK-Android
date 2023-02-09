@@ -1235,7 +1235,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         cardViewHolder.view.mainChipgroup.groupAction?.visibility = View.VISIBLE
         cardViewHolder.view.mainChipgroup.groupAction?.setOnClickListener {
             setMainChipGroupActionListener()
-            paymentInlineViewHolder.clearCardInputAction()
+            paymentInlineViewHolder.tapCardInputView?.clear()
             paymentInlineViewHolder.onFocusChange("")
             paymentInlineViewHolder.tapCardInputView.setSingleCardInput(
                 CardBrandSingle.Unknown, null
@@ -1678,9 +1678,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         println("isSelected"+isSelected)
 
         if (paymentInlineViewHolder.tapCardInputView.hasFocus()) {
-
-            paymentInlineViewHolder.clearCardInputAction()
-            paymentInlineViewHolder.onFocusChange("")
+            paymentInlineViewHolder.tapCardInputView.clear()
+           // paymentInlineViewHolder.clearCardInputAction()
+            //paymentInlineViewHolder.onFocusChange("")
             CustomUtils.hideKeyboardFrom(context, paymentInlineViewHolder.view)
         }
         println("savedCardsModel" + savedCardsModel)

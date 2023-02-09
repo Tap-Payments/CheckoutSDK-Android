@@ -33,6 +33,7 @@ import company.tap.checkout.internal.api.models.SavedCard
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
 import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.utils.PaymentsUtil
+import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.TextViewTheme
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
@@ -304,8 +305,9 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
 
     private fun setOnSavedCardOnClickAction(holder: RecyclerView.ViewHolder, position: Int) {
+
         holder.itemView.setOnClickListener {
-            if (!isShaking) {
+            if (!isShaking) {  resetSelection()
                 onCardSelectedActionListener.onCardSelectedAction(true, arrayListCards[position.minus(adapterContent.size)])
                 selectedPosition = position
                 notifyDataSetChanged()

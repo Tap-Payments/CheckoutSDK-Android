@@ -58,6 +58,7 @@ import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import company.tap.tapuilibrary.uikit.models.SectionTabItem
 import company.tap.tapuilibrary.uikit.organisms.TapPaymentInput
 import company.tap.tapuilibrary.uikit.views.*
+import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.item_currency_rows.view.*
 import kotlinx.android.synthetic.main.loyalty_view_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
@@ -130,15 +131,6 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
     var shippingDetailView: TapShippingDetailView? = null
     var tapPaymentInput: TapPaymentInput? = null
 
-    @DrawableRes
-    val iconViewRes1: Int =
-        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
-            company.tap.cardinputwidget.R.drawable.card_icon_dark
-        }else if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("light")) {
-            company.tap.cardinputwidget.R.drawable.card_icon_light
-        }else  {
-            company.tap.cardinputwidget.R.drawable.card_icon_light
-        }
 
     init {
 
@@ -199,7 +191,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
         acceptedCardText = view.findViewById(R.id.acceptedCardText)
         acceptedCardText.text = LocalizationManager.getValue("weSupport", "TapCardInputKit")
         saveForOtherCheckBox?.text = LocalizationManager.getValue("cardSaveForTapLabel", "TapCardInputKit")
-        cardBrandView?.iconView?.setImageResource(iconViewRes1)
+        //cardBrandView?.iconView?.setImageResource(iconViewRes1)
         bindViewComponents()
 
     }
@@ -216,10 +208,6 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
        // tapMobileInputViewWatcher()
         initializeCardBrandView()
         initCustomerDetailView()
-      //  tapCardInputView?.cardBrandView?.iconView?.setImageResource()
-   //   tapCardInputView?.updateIconCvc(false,"",company.tap.cardinputwidget.CardBrand.Unknown)
-       // println("are cakkwed")
-
 
 
         /**
@@ -259,19 +247,34 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
             checkoutViewModel.onClickCardScanner(true)
         }
         closeButton?.setOnClickListener {
-            tapCardInputView.clear()
-            clearCardInputAction()
-            CustomUtils.hideKeyboardFrom(context, it)
-            loyaltyViewHolder?.view?.loyaltyView?.constraintLayout?.visibility = View.GONE
-            tabLayout.visibility = View.VISIBLE
-            contactDetailsView?.visibility = View.GONE
-            shippingDetailView?.visibility = View.GONE
-            closeButton?.visibility = View.GONE
 
-            tabLayout.resetBehaviour()
-            tapCardInputView.separatorcard2.visibility = View.GONE
-            tapCardInputView.separator_1.visibility = View.INVISIBLE
-            tapPaymentInput?.separator?.visibility = View.GONE
+            tapCardInputView.clear()
+            closeButton?.visibility = View.GONE
+            controlScannerOptions()
+          cardInputUIStatus = CardInputUIStatus.NormalCard
+          tapCardInputView.setSingleCardInput(
+                CardBrandSingle.Unknown, null
+            )
+            tapInlineCardSwitch?.visibility = View.GONE
+            tapCardInputView.separatorcard2.visibility = View.INVISIBLE
+            resetCardBrandIcon()
+            if(PaymentDataSource.getBinLookupResponse()!=null){
+                PaymentDataSource.setBinLookupResponse(null)
+
+            }
+
+            if(tapCardInputView.fullCardNumber!=null){
+                tapCardInputView.fullCardNumber= null
+                tabLayout.resetBehaviour()
+            }
+
+            tapInlineCardSwitch?.saveForOtherCheckBox?.isChecked = false
+            tapInlineCardSwitch?.switchSaveCard?.isChecked = false
+            closeButton?.visibility = View.GONE
+            tapCardInputView.setVisibilityOfHolderField(false)
+            tapCardInputView.holderNameEnabled = false
+            checkoutViewModel.incrementalCount=0
+            tabLayout.visibility =View.VISIBLE
 
         }
     }
@@ -336,27 +339,24 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
         }
         backArrow?.setOnClickListener {
 
-            baseLayoutManager.resetViewHolder()
-            // clearView.visibility =View.GONE
-            closeButton?.visibility = View.GONE
-            tapAlertView?.visibility = View.GONE
-            // nfcButton?.visibility = View.VISIBLE
-            controlScannerOptions()
-            //  cardScannerBtn?.visibility = View.VISIBLE
-            tapInlineCardSwitch?.visibility = View.GONE
+
             tapCardInputView.isSavedCard = false
-
-            tapCardInputView.updateIconCvc(
-                false,
-                "",
-                company.tap.cardinputwidget.CardBrand.Unknown
-            )
-
+            cardInputUIStatus = CardInputUIStatus.NormalCard
+            tabLayout.resetBehaviour()
+            tapCardInputView.clear()
+            closeButton?.visibility = View.GONE
+            controlScannerOptions()
+            cardInputUIStatus = CardInputUIStatus.NormalCard
             tapCardInputView.setSingleCardInput(
                 CardBrandSingle.Unknown, null
             )
+            tapInlineCardSwitch?.visibility = View.GONE
+            tapCardInputView.separatorcard2.visibility = View.INVISIBLE
+            resetCardBrandIcon()
+
+
             checkoutViewModel.isSavedCardSelected = false
-            resetPaymentCardView()
+            //resetPaymentCardView()
             intertabLayout.visibility = View.VISIBLE
             tabLayout.visibility = View.VISIBLE
             acceptedCardText.visibility =View.VISIBLE
@@ -429,6 +429,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
     }
 
     private fun initCardInput() {
+        resetCardBrandIcon()
         tapInlineCardSwitch?.visibility = View.GONE
         tapPaymentInput?.separator?.visibility = View.GONE
         tapCardInputView.holderNameEnabled = PaymentDataSource.getCardHolderNameShowHide() != null && PaymentDataSource.getCardHolderNameShowHide()
@@ -443,6 +444,15 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
         cvcNumberWatcher()
         cardHolderNameWatcher()
         switchCheckedState()
+
+    }
+
+    private fun resetCardBrandIcon() {
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")){
+            cardBrandView?.iconView?.setImageResource(R.drawable.card_icon_dark)
+        }else if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("light")){
+            cardBrandView?.iconView?.setImageResource(R.drawable.card_icon_light)
+        }
     }
 
     private fun cardHolderNameWatcher() {
@@ -575,7 +585,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
           }*/
         //   layoutParams.setMargins(0, -10, 50, 0)
         // paymentInputContainer.layoutParams = layoutParams
-        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
+       /* if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
          //   tapPaymentInput?.cardInputChipView?.setBackgroundResource(R.drawable.border_unclick_black)
         } else {
             tapPaymentInput?.cardInputChipView?.setBackgroundResource(R.drawable.border_unclick_cardinput)
@@ -591,7 +601,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
 
             )
         }
-        tapPaymentInput?.cardInputChipView?.cardElevation= 0.2f
+        tapPaymentInput?.cardInputChipView?.cardElevation= 0.2f*/
       /*  if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
             tapPaymentInput?.cardInputChipView?.setBackgroundResource(R.drawable.border_unclick_black)
         } else {
@@ -609,6 +619,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
             )
         }*/
         paymentInputContainer.addView(tapCardInputView)
+
 
     }
 
@@ -632,6 +643,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
             }
             @RequiresApi(Build.VERSION_CODES.N)
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                println("cardInputUIStatus"+cardInputUIStatus)
 
                 if (cardInputUIStatus != CardInputUIStatus.SavedCard) {
                     onCardTextChange(s)
@@ -718,7 +730,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s?.trim()?.length == 3 || s?.trim()?.length == 4) {
+              /*  if (s?.trim()?.length == 3 || s?.trim()?.length == 4) {
                     onPaymentCardComplete.onPayCardSwitchAction(
                         true, PaymentType.CARD
                     )
@@ -729,7 +741,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
                         false, PaymentType.CARD
                     )
                     //     tapAlertView?.visibility = View.VISIBLE
-                }
+                }*/
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -768,13 +780,15 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
                         tapInlineCardSwitch?.visibility = View.GONE
                     }
 
+                    tapAlertView?.visibility = View.GONE
+
                 }
                // println("getCardHolderNameShowHide"+ PaymentDataSource.getCardHolderNameShowHide())
                 if(cardInputUIStatus!=null && cardInputUIStatus==CardInputUIStatus.SavedCard){
                     tapCardInputView.setVisibilityOfHolderField(false)
                     tapCardInputView.holderNameEnabled = false
-                    tapCardInputView.separator_1.visibility = View.INVISIBLE
-                    tapCardInputView.separatorcard2.visibility = View.GONE
+                    tapCardInputView.separator_1.visibility = View.GONE
+                    tapCardInputView.separatorcard2.visibility = View.INVISIBLE
                     tapInlineCardSwitch?.visibility = View.GONE
                     tapInlineCardSwitch?.visibility = View.GONE
                 }else {
@@ -798,6 +812,9 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
     @RequiresApi(Build.VERSION_CODES.N)
     fun cardNumAfterTextChangeListener(charSequence: CharSequence?, textWatcher: TextWatcher) {
         val card = CardValidator.validate(charSequence.toString())
+       // var card:DefinedCardBrand?=null
+       // if(tapCardInputView.fullCardNumber!=null)
+        //  card  = CardValidator.validate(tapCardInputView.fullCardNumber)
 
         if (charSequence != null) {
             baseLayoutManager.resetViewHolder()
@@ -877,13 +894,15 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
                         selectedImageURL = itemsCardsList[i].selectedImageURL
                         tapCardInputView.setSingleCardInput(
                             CardBrandSingle.fromCode(
-                                binLookupResponse?.cardBrand.toString()
+                                binLookupResponse.cardBrand.toString()
                             ), selectedImageURL
                         )
-
+                        tabLayout?.visibility =View.GONE
+                        tapAlertView?.visibility =View.GONE
                     }
                 }
             }
+
 
 //            tabLayout.setUnselectedAlphaLevel(0.5f)
         } else {
@@ -907,6 +926,8 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
                                 binLookupResponse?.scheme?.cardBrand.toString()
                             ), selectedImageURL
                         )
+                        tabLayout?.visibility =View.GONE
+                        tapAlertView?.visibility =View.GONE
                         return
                     }
                 }
@@ -915,7 +936,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
 //            tabLayout.setUnselectedAlphaLevel(0.5f)
 
         }
-        tabLayout.visibility = View.GONE
+
         // PaymentDataSource.setBinLookupResponse(null)
     }
 
@@ -939,7 +960,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
 
 
     private fun checkValidationState(card: DefinedCardBrand) {
-
+        if(card.cardBrand!=null)
         when (card.validationState) {
             CardValidationState.invalid -> {
                 if (card.cardBrand != null)
@@ -1010,7 +1031,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
 
     override fun onTabSelected(position: Int?) {
         tabPosition = position
-        position?.let { swapInputViews(it) }
+      //  position?.let { swapInputViews(it) }
     }
 
     private fun swapInputViews(position: Int) {
@@ -1129,6 +1150,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
 //        tabLayout.
 
         if (itemsMobilesList.size != 0) tabLayout.addSection(itemsMobilesList)
+
 
     }
 
@@ -1330,11 +1352,11 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
         expiryDate = _savedCardsModel.expiry?.month + "/" + _savedCardsModel.expiry?.year
         println("expiryDate saved" + expiryDate)
         tapCardInputView.isSavedCard = true
-        tapCardInputView.updateIconCvc(
+       /* tapCardInputView.updateIconCvc(
             false,
             cvvNumber,
             company.tap.cardinputwidget.CardBrand.fromCardNumber(_savedCardsModel.firstSix)
-        )
+        )*/
         tapCardInputView.setSavedCardDetails(cardModel, cardInputUIStatus)
         val alertMessage:String = LocalizationManager.getValue("Warning", "Hints", "missingCVV")
         tapAlertView?.alertMessage?.text =alertMessage.replace("%i","3")
@@ -1346,17 +1368,9 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
                     .toString()
             ), _savedCardsModel.image
         )
-        /* val bitmap = BitmapFactory.decodeStream(URL(savedCardsModel.image).content as InputStream)
-         tapCardInputView.cvvIcon.setImageBitmap(bitmap)*/
-        /*  tapCardInputView.updateIconCvc(
-              false,
-              cvvNumber,
-              company.tap.cardinputwidget.CardBrand.fromCardNumber(_savedCardsModel.firstSix)
-          )*/
-        // Glide.with(context).load(savedCardsModel.image).into( tapCardInputView.cvvIcon)
-        // tapCardInputView.onTouchView()
         tapInlineCardSwitch?.visibility = View.GONE
-        acceptedCardText?.visibility = View.GONE
+        tapCardInputView.separator_1.visibility = View.GONE
+        acceptedCardText.visibility = View.GONE
         contactDetailsView?.visibility = View.GONE
         shippingDetailView?.visibility = View.GONE
         intertabLayout.visibility = View.GONE
@@ -1376,8 +1390,8 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
 
     }
     fun resetPaymentCardView(){
-       tapCardInputView.clear()
-        clearCardInputAction()
+        tapCardInputView.clear()
+       // clearCardInputAction()
         tapCardInputView.setVisibilityOfHolderField(false)
         tapInlineCardSwitch?.visibility =View.GONE
         tabLayout.resetBehaviour()
@@ -1385,7 +1399,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
         tapCardInputView.holderNameEnabled = false
         contactDetailsView?.visibility =View.GONE
         shippingDetailView?.visibility =View.GONE
-        tapCardInputView.separatorcard2.visibility = View.GONE
+        tapCardInputView.separatorcard2.visibility = View.INVISIBLE
 
     }
 }
