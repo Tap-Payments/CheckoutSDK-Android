@@ -284,10 +284,10 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
         println("displayMetrics"+displayMetrics)
         if (displayMetrics == DisplayMetrics.DENSITY_260 || displayMetrics == DisplayMetrics.DENSITY_280 || displayMetrics == DisplayMetrics.DENSITY_300 || displayMetrics == DisplayMetrics.DENSITY_XHIGH || displayMetrics == DisplayMetrics.DENSITY_340 || displayMetrics == DisplayMetrics.DENSITY_360) {
 
-          //  tabLayout.changeTabItemMarginBottomValue(15)
-          //  tabLayout.changeTabItemMarginTopValue(15)
-               tabLayout.changeTabItemMarginLeftValue(-15)
-              tabLayout.changeTabItemMarginRightValue(-15)
+            tabLayout.changeTabItemMarginBottomValue(18)
+            tabLayout.changeTabItemMarginTopValue(18)
+               tabLayout.changeTabItemMarginLeftValue(-22)
+              tabLayout.changeTabItemMarginRightValue(-22)
 
         } else {
             tabLayout.changeTabItemMarginBottomValue(12)
@@ -850,10 +850,12 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
                 tapAlertView?.visibility = View.GONE
             }
             if (card?.cardBrand != null) {
+
                 tabLayout.selectTab(
                     card.cardBrand,
                     card.validationState == CardValidationState.valid
                 )
+
 
                 println("card brand value is>>>" + card.cardBrand)
 
