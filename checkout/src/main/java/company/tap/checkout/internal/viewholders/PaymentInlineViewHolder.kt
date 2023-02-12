@@ -13,16 +13,12 @@ import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
-import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
-import androidx.appcompat.widget.TooltipCompat
-import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import com.google.android.material.tabs.TabLayout
 import company.tap.cardinputwidget.Card
 import company.tap.cardinputwidget.CardBrandSingle
 import company.tap.cardinputwidget.CardInputUIStatus
-import company.tap.cardinputwidget.databinding.CardBrandViewBinding
 import company.tap.cardinputwidget.views.CardBrandView
 import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardinputwidget.widget.inline.InlineCardInput
@@ -63,15 +59,16 @@ import kotlinx.android.synthetic.main.item_currency_rows.view.*
 import kotlinx.android.synthetic.main.loyalty_view_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 
+@RequiresApi(Build.VERSION_CODES.N)
 class PaymentInlineViewHolder (private val context: Context,
-private val checkoutViewModel: CheckoutViewModel,
-private val onPaymentCardComplete: PaymentCardComplete,
-private val onCardNFCCallListener: onCardNFCCallListener,
-private val switchViewHolder: SwitchViewHolder?,
-private val baseLayoutManager: BaseLayoutManager,
-private val cardViewModel: CardViewModel,
-private val checkoutFragment: CheckoutFragment,
-private val loyaltyViewHolder: LoyaltyViewHolder?,
+                               private val checkoutViewModel: CheckoutViewModel,
+                               private val onPaymentCardComplete: PaymentCardComplete,
+                               private val onCardNFCCallListener: onCardNFCCallListener,
+                               private val switchViewHolder: SwitchViewHolder?,
+                               private val baseLayoutManager: BaseLayoutManager,
+                               private val cardViewModel: CardViewModel,
+                               private val checkoutFragment: CheckoutFragment,
+                               private val loyaltyViewHolder: LoyaltyViewHolder?,
 ) : TapBaseViewHolder,
     TapSelectionTabLayoutInterface, CardInputListener, TapPaymentShowHideClearImage {
     override val view: View =
@@ -281,7 +278,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
     }
 
     private fun initializeCardBrandView() {
-        println("displayMetrics"+displayMetrics)
+       // println("displayMetrics"+displayMetrics)
         if (displayMetrics == DisplayMetrics.DENSITY_260 || displayMetrics == DisplayMetrics.DENSITY_280 || displayMetrics == DisplayMetrics.DENSITY_300 || displayMetrics == DisplayMetrics.DENSITY_XHIGH || displayMetrics == DisplayMetrics.DENSITY_340 || displayMetrics == DisplayMetrics.DENSITY_360) {
 
             tabLayout.changeTabItemMarginBottomValue(18)
@@ -289,7 +286,13 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
                tabLayout.changeTabItemMarginLeftValue(-22)
               tabLayout.changeTabItemMarginRightValue(-22)
 
-        } else {
+        }   else     if (displayMetrics == DisplayMetrics.DENSITY_XXHIGH || displayMetrics == DisplayMetrics.DENSITY_450) {
+            tabLayout.changeTabItemMarginBottomValue(26)
+            tabLayout.changeTabItemMarginTopValue(26)
+            tabLayout.changeTabItemMarginLeftValue(-30)
+            tabLayout.changeTabItemMarginRightValue(-30)
+        }
+            else {
             tabLayout.changeTabItemMarginBottomValue(12)
             tabLayout.changeTabItemMarginTopValue(18)
             tabLayout.changeTabItemMarginLeftValue(-25)
@@ -839,7 +842,16 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
         if (charSequence != null) {
             baseLayoutManager.resetViewHolder()
 
-            if (charSequence.length > 2) callCardBinNumberApi(charSequence, textWatcher)
+
+            if(charSequence.length<=2) {
+                if(card.cardBrand!=null)
+                    logicTosetImageDynamic(card.cardBrand,charSequence.toString())
+            }
+
+            if (charSequence.length > 2){
+                callCardBinNumberApi(charSequence, textWatcher)
+
+            }
             else {
                 tabLayout.resetBehaviour()
                 PaymentDataSource.setBinLookupResponse(null)
@@ -1174,6 +1186,7 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
         if (itemsMobilesList.size != 0) tabLayout.addSection(itemsMobilesList)
 
 
+
     }
 
     private fun hideTabLayoutWhenOnlyOnePayment(
@@ -1424,4 +1437,17 @@ private val loyaltyViewHolder: LoyaltyViewHolder?,
         tapCardInputView.separatorcard2.visibility = View.INVISIBLE
 
     }
-}
+
+    fun logicTosetImageDynamic(card:CardBrand,cardCharSeq:String){
+        for (i in itemsCardsList.indices) {
+            val iconStr = itemsCardsList[i].selectedImageURL.replace("https://back-end.b-cdn.net/payment_methods/","")
+            if(iconStr.replace(".svg","").toLowerCase().contains(card.name.toLowerCase())) {
+                tapCardInputView.setSingleCardInput(
+                   CardBrandSingle.fromCode(card.name)
+                    , itemsCardsList[i].selectedImageURL
+                )
+
+            }
+        }
+        }
+    }
