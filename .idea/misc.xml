@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="checkout/src/main/res/layout/cardviewholder_layout1.xml" value="0.1" />
+        <entry key="checkout/src/main/res/layout/payment_inline_viewholder.xml" value="0.16013513513513514" />
       </map>
     </option>
   </component>

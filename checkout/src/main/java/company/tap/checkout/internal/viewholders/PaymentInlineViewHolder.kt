@@ -127,6 +127,7 @@ class PaymentInlineViewHolder (private val context: Context,
     var contactDetailsView: TapContactDetailsView? = null
     var shippingDetailView: TapShippingDetailView? = null
     var tapPaymentInput: TapPaymentInput? = null
+    var allFieldsValid: Boolean? = false
 
 
     init {
@@ -165,8 +166,7 @@ class PaymentInlineViewHolder (private val context: Context,
         secondaryLayout = tapCardInputView.findViewById(R.id.secondary_Layout)
         textViewPowered = tapCardInputView.findViewById(R.id.textViewPowered)
         saveForOtherCheckBox = tapCardInputView.findViewById(R.id.saveForOtherCheckBox)
-        toolstipImageView = tapCardInputView.findViewById(R.id.toolsTipImageView)
-      //  initToolsTip()
+
         tapInlineCardSwitch?.setSwitchDataSource(
             TapSwitchDataSource(
                 "dummy",
@@ -268,12 +268,14 @@ class PaymentInlineViewHolder (private val context: Context,
 
             tapInlineCardSwitch?.saveForOtherCheckBox?.isChecked = false
             tapInlineCardSwitch?.switchSaveCard?.isChecked = false
+            contactDetailsView?.visibility =View.GONE
+            shippingDetailView?.visibility =View.GONE
             closeButton?.visibility = View.GONE
             tapCardInputView.setVisibilityOfHolderField(false)
             tapCardInputView.holderNameEnabled = false
             checkoutViewModel.incrementalCount=0
             tabLayout.visibility =View.VISIBLE
-
+            allFieldsValid = false
         }
     }
 
@@ -351,9 +353,9 @@ class PaymentInlineViewHolder (private val context: Context,
             closeButton?.visibility = View.GONE
             controlScannerOptions()
             cardInputUIStatus = CardInputUIStatus.NormalCard
-            tapCardInputView.setSingleCardInput(
+           /* tapCardInputView.setSingleCardInput(
                 CardBrandSingle.Unknown, null
-            )
+            )*/
             tapInlineCardSwitch?.visibility = View.GONE
             tapCardInputView.separatorcard2.visibility = View.INVISIBLE
             resetCardBrandIcon()
@@ -468,9 +470,7 @@ class PaymentInlineViewHolder (private val context: Context,
         )
         tapCardInputView.setHolderNameTextWatcher(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                if(s.toString().length>3){
-                    tapInlineCardSwitch?.visibility = View.VISIBLE
-                }
+
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -479,7 +479,15 @@ class PaymentInlineViewHolder (private val context: Context,
 
             override fun afterTextChanged(s: Editable?) {
                 if(s.toString().length>3){
-                    tapInlineCardSwitch?.visibility = View.VISIBLE
+                    if(PaymentDataSource.getCardHolderNameShowHide()){
+                        tapInlineCardSwitch?.visibility = View.VISIBLE
+                        contactDetailsView?.visibility = View.VISIBLE
+                        shippingDetailView?.visibility = View.VISIBLE
+                        allFieldsValid = true
+                    }else {
+                        contactDetailsView?.visibility = View.GONE
+                        shippingDetailView?.visibility = View.GONE
+                    }
 
                 }
 
@@ -508,16 +516,18 @@ class PaymentInlineViewHolder (private val context: Context,
             secondaryLayout?.visibility = View.GONE
             tapAlertView?.visibility = View.GONE
 
+
             if(isChecked){
                 tapInlineCardSwitch?.saveForOtherCheckBox?.isChecked = true
                 tapInlineCardSwitch?.saveForOtherCheckBox?.visibility = View.VISIBLE
                 tapInlineCardSwitch?.toolsTipImageView?.visibility = View.VISIBLE
                 tapPaymentInput?.separator?.visibility = View.VISIBLE
                 tapInlineCardSwitch?.saveForOtherTextView?.visibility = View.VISIBLE
-                if(PaymentDataSource.getCardHolderNameShowHide()){
-                    contactDetailsView?.visibility = View.VISIBLE
-                    shippingDetailView?.visibility = View.VISIBLE
+                if(!PaymentDataSource.getCardHolderNameShowHide()){
+                    shippingDetailView?.visibility =View.GONE
+                    contactDetailsView?.visibility =View.GONE
                 }
+
 
 
             }else {
@@ -526,10 +536,7 @@ class PaymentInlineViewHolder (private val context: Context,
                 tapInlineCardSwitch?.saveForOtherCheckBox?.visibility = View.GONE
                 tapInlineCardSwitch?.saveForOtherTextView?.visibility = View.GONE
                 tapInlineCardSwitch?.toolsTipImageView?.visibility = View.GONE
-                if(!PaymentDataSource.getCardHolderNameShowHide()){
-                    contactDetailsView?.visibility = View.GONE
-                    shippingDetailView?.visibility = View.GONE
-                }
+
 
 
             }
@@ -552,13 +559,16 @@ class PaymentInlineViewHolder (private val context: Context,
                     if (cardInputUIStatus == CardInputUIStatus.SavedCard) {
                         contactDetailsView?.visibility = View.GONE
                         shippingDetailView?.visibility = View.GONE
-                    }else {
-                        contactDetailsView?.visibility = View.VISIBLE
-                        shippingDetailView?.visibility = View.VISIBLE
-
-                        tapInlineCardSwitch?.switchSaveCard?.isChecked = true
-                        tapInlineCardSwitch?.saveForOtherCheckBox?.visibility = View.VISIBLE
+                    }else if(allFieldsValid == true){
+                        if(!PaymentDataSource.getCardHolderNameShowHide()){
+                            shippingDetailView?.visibility =View.GONE
+                            contactDetailsView?.visibility =View.GONE
+                        }else {
+                            contactDetailsView?.visibility = View.VISIBLE
+                            shippingDetailView?.visibility = View.VISIBLE
+                        }
                     }
+
                 }else {
                     contactDetailsView?.visibility = View.GONE
                     shippingDetailView?.visibility = View.GONE
@@ -783,6 +793,9 @@ class PaymentInlineViewHolder (private val context: Context,
                                 }
                             }
                         }
+                        allFieldsValid = true
+                        /*if(tapCardInputView.fullCardNumber!=null)
+                            logicTosetImageDynamic(CardValidator.validate(tapCardInputView.fullCardNumber).cardBrand,cardNumber.toString())*/
                     }else {
                         tapInlineCardSwitch?.visibility = View.GONE
                     }
@@ -851,7 +864,7 @@ class PaymentInlineViewHolder (private val context: Context,
             baseLayoutManager.resetViewHolder()
 
 
-            if(charSequence.length<=2) {
+            if(charSequence.length<=6) {
                 if(card.cardBrand!=null)
                     logicTosetImageDynamic(card.cardBrand,charSequence.toString())
             }
@@ -1448,6 +1461,7 @@ class PaymentInlineViewHolder (private val context: Context,
 
     fun logicTosetImageDynamic(card:CardBrand,cardCharSeq:String){
         for (i in itemsCardsList.indices) {
+            println("itemsCardsList[i].selectedImageUR"+itemsCardsList[i].selectedImageURL)
             val iconStr = itemsCardsList[i].selectedImageURL.replace("https://back-end.b-cdn.net/payment_methods/","")
             if(iconStr.replace(".svg","").toLowerCase().contains(card.name.toLowerCase())) {
                 tapCardInputView.setSingleCardInput(
