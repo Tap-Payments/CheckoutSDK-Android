@@ -514,8 +514,11 @@ class PaymentInlineViewHolder (private val context: Context,
                 tapInlineCardSwitch?.toolsTipImageView?.visibility = View.VISIBLE
                 tapPaymentInput?.separator?.visibility = View.VISIBLE
                 tapInlineCardSwitch?.saveForOtherTextView?.visibility = View.VISIBLE
-                contactDetailsView?.visibility = View.VISIBLE
-              shippingDetailView?.visibility = View.VISIBLE
+                if(PaymentDataSource.getCardHolderNameShowHide()){
+                    contactDetailsView?.visibility = View.VISIBLE
+                    shippingDetailView?.visibility = View.VISIBLE
+                }
+
 
             }else {
                 tapPaymentInput?.separator?.visibility = View.GONE
@@ -523,8 +526,11 @@ class PaymentInlineViewHolder (private val context: Context,
                 tapInlineCardSwitch?.saveForOtherCheckBox?.visibility = View.GONE
                 tapInlineCardSwitch?.saveForOtherTextView?.visibility = View.GONE
                 tapInlineCardSwitch?.toolsTipImageView?.visibility = View.GONE
-                contactDetailsView?.visibility = View.GONE
-                shippingDetailView?.visibility = View.GONE
+                if(!PaymentDataSource.getCardHolderNameShowHide()){
+                    contactDetailsView?.visibility = View.GONE
+                    shippingDetailView?.visibility = View.GONE
+                }
+
 
             }
 
@@ -548,7 +554,7 @@ class PaymentInlineViewHolder (private val context: Context,
                         shippingDetailView?.visibility = View.GONE
                     }else {
                         contactDetailsView?.visibility = View.VISIBLE
-                      shippingDetailView?.visibility = View.VISIBLE
+                        shippingDetailView?.visibility = View.VISIBLE
 
                         tapInlineCardSwitch?.switchSaveCard?.isChecked = true
                         tapInlineCardSwitch?.saveForOtherCheckBox?.visibility = View.VISIBLE
