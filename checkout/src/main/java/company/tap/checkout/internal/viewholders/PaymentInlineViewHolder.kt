@@ -286,7 +286,7 @@ class PaymentInlineViewHolder (private val context: Context,
                tabLayout.changeTabItemMarginLeftValue(-22)
               tabLayout.changeTabItemMarginRightValue(-22)
 
-        }   else     if (displayMetrics == DisplayMetrics.DENSITY_XXHIGH || displayMetrics == DisplayMetrics.DENSITY_450) {
+        }   else if (displayMetrics == DisplayMetrics.DENSITY_400 ||displayMetrics == DisplayMetrics.DENSITY_XXHIGH || displayMetrics == DisplayMetrics.DENSITY_450 || displayMetrics == DisplayMetrics.DENSITY_440) {
             tabLayout.changeTabItemMarginBottomValue(26)
             tabLayout.changeTabItemMarginTopValue(26)
             tabLayout.changeTabItemMarginLeftValue(-30)
