@@ -819,6 +819,8 @@ class PaymentInlineViewHolder (private val context: Context,
                             }
                         }
                     }
+                  /*  cardNumber
+                        ?.let { logicTosetImageDynamic(CardBrand.fromString(cardNumber), it) }*/
 
                 }
                // println("getCardHolderNameShowHide"+ PaymentDataSource.getCardHolderNameShowHide())
