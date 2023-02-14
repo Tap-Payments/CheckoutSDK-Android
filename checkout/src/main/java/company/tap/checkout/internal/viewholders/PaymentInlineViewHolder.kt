@@ -117,7 +117,6 @@ class PaymentInlineViewHolder (private val context: Context,
     var secondaryLayout: LinearLayout? = null
     var textViewPowered: TapTextView? = null
     var saveForOtherCheckBox: CheckBox? = null
-    var toolstipImageView: TapImageView? = null
     var nfcButton: ImageView? = null
     var scannerButton: ImageView? = null
     var cardBrandView: CardBrandView? = null
@@ -143,12 +142,6 @@ class PaymentInlineViewHolder (private val context: Context,
         closeButton = tapCardInputView.findViewById(R.id.clear_text)
         tapPaymentInput = view.findViewById(R.id.tap_payment_input_layout)
         tapCardInputView.separatorcard2.visibility = View.INVISIBLE
-
-     /*   tapCardInputView.updateIconCvc(
-            false,
-            "",
-            company.tap.cardinputwidget.CardBrand.Unknown
-        )*/
 
         tapAlertView = tapPaymentInput?.findViewById(R.id.alertView)
         //cardSwitchLayout = tapCardInputView.findViewById(R.id.mainSwitchInline)
@@ -249,13 +242,13 @@ class PaymentInlineViewHolder (private val context: Context,
             closeButton?.visibility = View.GONE
             controlScannerOptions()
           cardInputUIStatus = CardInputUIStatus.NormalCard
-          tapCardInputView.setSingleCardInput(
+          /*tapCardInputView.setSingleCardInput(
                 CardBrandSingle.Unknown, null
-            )
+            )*/
             tapInlineCardSwitch?.visibility = View.GONE
             tapCardInputView.separatorcard2.visibility = View.INVISIBLE
             tapCardInputView.separator_1.visibility = View.GONE
-            resetCardBrandIcon()
+           // resetCardBrandIcon()
             if(PaymentDataSource.getBinLookupResponse()!=null){
                 PaymentDataSource.setBinLookupResponse(null)
 
@@ -358,7 +351,7 @@ class PaymentInlineViewHolder (private val context: Context,
             )*/
             tapInlineCardSwitch?.visibility = View.GONE
             tapCardInputView.separatorcard2.visibility = View.INVISIBLE
-            resetCardBrandIcon()
+           // resetCardBrandIcon()
 
 
             checkoutViewModel.isSavedCardSelected = false
@@ -794,8 +787,7 @@ class PaymentInlineViewHolder (private val context: Context,
                             }
                         }
                         allFieldsValid = true
-                        /*if(tapCardInputView.fullCardNumber!=null)
-                            logicTosetImageDynamic(CardValidator.validate(tapCardInputView.fullCardNumber).cardBrand,cardNumber.toString())*/
+
                     }else {
                         tapInlineCardSwitch?.visibility = View.GONE
                     }
@@ -1024,6 +1016,22 @@ class PaymentInlineViewHolder (private val context: Context,
                 tapAlertView?.alertMessage?.text =
                     (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
                 // checkoutFragment.scrollView?.smoothScrollTo(0,height)
+               /* if(cardNumber?.length!! >=19) {
+
+                    if (tapCardInputView.isDeleting == true) {
+
+                    } else {
+                        println("full no" + cardNumber)
+
+                            tapCardInputView.setCardNumberMasked(cardNumber?.let {
+                                maskCardNumber(
+                                    it
+                                )
+                            })
+                    }
+                    tapCardInputView.removeCardNumberTextWatcher(this)
+                    tapCardInputView.setCardNumberTextWatcher(this)
+                }*/
             }
             CardValidationState.incomplete -> {
                 //tapAlertView?.visibility = View.VISIBLE
@@ -1041,6 +1049,11 @@ class PaymentInlineViewHolder (private val context: Context,
                 tapAlertView?.alertMessage?.text =
                     (LocalizationManager.getValue("Warning", "Hints", "missingExpiryCVV"))
                 // lastFocusField =CardInputListener.FocusField.FOCUS_EXPIRY
+                tapCardInputView.setCardNumberMasked(cardNumber?.let {
+                    maskCardNumber(
+                        it
+                    )
+                })
             }
             else -> {
                 if(cardInputUIStatus?.equals(CardInputUIStatus.SavedCard) == true){
@@ -1128,7 +1141,7 @@ class PaymentInlineViewHolder (private val context: Context,
         cardScannerBtn?.visibility = View.VISIBLE
         closeButton?.visibility = View.GONE
         paymentInputContainer.addView(tapCardInputView)
-        checkForFocus()
+       // checkForFocus()
     }
 
     private fun checkForFocus() {
@@ -1276,7 +1289,7 @@ class PaymentInlineViewHolder (private val context: Context,
     }
 
     fun getCard(): CreateTokenCard? {
-        val number: String? = tapCardInputView?.fullCardNumber
+        val number: String? = cardNumber
         val expiryDate: String? = expiryDate
         val cvc: String? = cvvNumber
         //temporrary    val cardholderName: String? = cardholderName
