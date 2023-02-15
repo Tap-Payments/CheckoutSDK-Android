@@ -2526,9 +2526,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private fun setNfcCardDetails(emvCard: TapEmvCard) {
         // auto slide added on scan to prevent overlap
         paymentInlineViewHolder.tapCardInputView.onTouchView()
-        paymentInlineViewHolder.tapCardInputView.setCardNumber(emvCard.cardNumber)
+        paymentInlineViewHolder.tapCardInputView.setCardNumberMasked(paymentInlineViewHolder.maskCardNumber(emvCard.cardNumber))
         convertDateString(emvCard)
-        paymentInlineViewHolder.onFocusChange( CardInputListener.FocusField.FOCUS_CVC)
+        paymentInlineViewHolder.onFocusChange(CardInputListener.FocusField.FOCUS_CVC)
 
     }
 
