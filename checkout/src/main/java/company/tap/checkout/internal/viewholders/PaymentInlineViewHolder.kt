@@ -269,6 +269,7 @@ class PaymentInlineViewHolder (private val context: Context,
             checkoutViewModel.incrementalCount=0
             tabLayout.visibility =View.VISIBLE
             allFieldsValid = false
+            tapAlertView?.visibility = View.GONE
         }
     }
 
@@ -352,13 +353,15 @@ class PaymentInlineViewHolder (private val context: Context,
             tapInlineCardSwitch?.visibility = View.GONE
             tapCardInputView.separatorcard2.visibility = View.INVISIBLE
            // resetCardBrandIcon()
-
+            tapAlertView?.visibility =View.GONE
+            checkoutViewModel.resetCardSelection()
 
             checkoutViewModel.isSavedCardSelected = false
             //resetPaymentCardView()
             intertabLayout.visibility = View.VISIBLE
             tabLayout.visibility = View.VISIBLE
             acceptedCardText.visibility =View.VISIBLE
+
 
         }
 
@@ -646,6 +649,7 @@ class PaymentInlineViewHolder (private val context: Context,
         tapCardInputView.setCardNumberTextWatcher(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
 //                cardNumAfterTextChangeListener(s, this)
+                if(cardNumber?.length!=null)
                 if(cardNumber?.length!! >=19) {
                     println("tapCardInputView no" + tapCardInputView.isDeleting)
                     if (tapCardInputView.isDeleting == true) {
@@ -1476,16 +1480,41 @@ class PaymentInlineViewHolder (private val context: Context,
 
     }
     fun resetPaymentCardView(){
+
         tapCardInputView.clear()
-       // clearCardInputAction()
-        tapCardInputView.setVisibilityOfHolderField(false)
-        tapInlineCardSwitch?.visibility =View.GONE
-        tabLayout.resetBehaviour()
-        tabLayout.visibility=View.VISIBLE
-        tapCardInputView.holderNameEnabled = false
+        closeButton?.visibility = View.GONE
+        controlScannerOptions()
+        cardInputUIStatus = CardInputUIStatus.NormalCard
+        /*tapCardInputView.setSingleCardInput(
+              CardBrandSingle.Unknown, null
+          )*/
+        tapInlineCardSwitch?.visibility = View.GONE
+        tapCardInputView.separatorcard2.visibility = View.INVISIBLE
+        tapCardInputView.separator_1.visibility = View.GONE
+        // resetCardBrandIcon()
+        if(PaymentDataSource.getBinLookupResponse()!=null){
+            PaymentDataSource.setBinLookupResponse(null)
+
+        }
+
+        if(tapCardInputView.fullCardNumber!=null){
+            tapCardInputView.fullCardNumber= null
+            tabLayout.resetBehaviour()
+        }
+
+        tapInlineCardSwitch?.saveForOtherCheckBox?.isChecked = false
+        tapInlineCardSwitch?.switchSaveCard?.isChecked = false
         contactDetailsView?.visibility =View.GONE
         shippingDetailView?.visibility =View.GONE
-        tapCardInputView.separatorcard2.visibility = View.INVISIBLE
+        closeButton?.visibility = View.GONE
+        tapCardInputView.setVisibilityOfHolderField(false)
+        tapCardInputView.holderNameEnabled = false
+        checkoutViewModel.incrementalCount=0
+        tabLayout.visibility =View.VISIBLE
+        intertabLayout.visibility =View.VISIBLE
+        allFieldsValid = false
+        tapAlertView?.visibility = View.GONE
+        acceptedCardText.visibility = View.VISIBLE
 
     }
 

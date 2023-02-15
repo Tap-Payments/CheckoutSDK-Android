@@ -1676,7 +1676,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
          */
         println("focussss"+paymentInlineViewHolder.tapCardInputView.hasFocus())
         println("isSelected"+isSelected)
-
+        paymentInlineViewHolder.resetPaymentCardView()
         if (paymentInlineViewHolder.tapCardInputView.hasFocus()) {
             paymentInlineViewHolder.tapCardInputView.clear()
            // paymentInlineViewHolder.clearCardInputAction()
@@ -1698,11 +1698,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
             else -> {
                 if (savedCardsModel != null) {
+                    println("paymentType"+(savedCardsModel as PaymentOption).paymentType)
                     if ((savedCardsModel as PaymentOption).paymentType == PaymentType.WEB) {
                         PaymentDataSource.setWebViewType(WebViewType.REDIRECT)
                         activateActionButton()
                         setPayButtonAction(PaymentType.WEB, savedCardsModel)
                     }
+
                 } else
 
                     displayGoPayLogin()
