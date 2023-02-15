@@ -127,7 +127,7 @@ class PaymentInlineViewHolder (private val context: Context,
     var shippingDetailView: TapShippingDetailView? = null
     var tapPaymentInput: TapPaymentInput? = null
     var allFieldsValid: Boolean? = false
-
+    var watcherRemoved:Boolean ?=false
 
     init {
 
@@ -646,6 +646,22 @@ class PaymentInlineViewHolder (private val context: Context,
         tapCardInputView.setCardNumberTextWatcher(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
 //                cardNumAfterTextChangeListener(s, this)
+                if(cardNumber?.length!! >=19) {
+                    println("tapCardInputView no" + tapCardInputView.isDeleting)
+                    if (tapCardInputView.isDeleting == true) {
+
+                    } else {
+                        println("full no" + cardNumber)
+
+                        tapCardInputView.setCardNumberMasked(cardNumber?.let {
+                            maskCardNumber(
+                                it
+                            )
+                        })
+                    }
+                    tapCardInputView.removeCardNumberTextWatcher(this)
+                  //  tapCardInputView.setCardNumberTextWatcher(this)
+                }
 
 
             }
@@ -664,6 +680,7 @@ class PaymentInlineViewHolder (private val context: Context,
                     cardNumAfterTextChangeListener(s, this)
 
                 }
+
             }
         })
     }
@@ -1049,11 +1066,11 @@ class PaymentInlineViewHolder (private val context: Context,
                 tapAlertView?.alertMessage?.text =
                     (LocalizationManager.getValue("Warning", "Hints", "missingExpiryCVV"))
                 // lastFocusField =CardInputListener.FocusField.FOCUS_EXPIRY
-                tapCardInputView.setCardNumberMasked(cardNumber?.let {
+                /*tapCardInputView.setCardNumberMasked(cardNumber?.let {
                     maskCardNumber(
                         it
                     )
-                })
+                })*/
             }
             else -> {
                 if(cardInputUIStatus?.equals(CardInputUIStatus.SavedCard) == true){
@@ -1289,7 +1306,7 @@ class PaymentInlineViewHolder (private val context: Context,
     }
 
     fun getCard(): CreateTokenCard? {
-        val number: String? = cardNumber
+        val number: String? = tapCardInputView?.fullCardNumber
         val expiryDate: String? = expiryDate
         val cvc: String? = cvvNumber
         //temporrary    val cardholderName: String? = cardholderName
