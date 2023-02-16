@@ -1669,7 +1669,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
 
         // saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.IDLE)
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated = false
+           saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated = false
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isClickable = false
     }
 
 

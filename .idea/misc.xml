@@ -7,6 +7,8 @@
         <entry key="app/src/main/res/xml/root_preferences.xml" value="0.12837837837837837" />
         <entry key="checkout/src/main/res/drawable/googlepay_button_background_shape.xml" value="0.1435" />
         <entry key="checkout/src/main/res/layout/cardviewholder_layout1.xml" value="0.1" />
+        <entry key="checkout/src/main/res/layout/fragment_checkouttaps.xml" value="0.1" />
+        <entry key="checkout/src/main/res/layout/fragment_checkouttaps_full.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/fragment_web.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/googlepay_button.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/item_googlepay.xml" value="0.11689189189189189" />

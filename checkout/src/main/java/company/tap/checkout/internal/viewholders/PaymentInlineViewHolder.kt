@@ -866,6 +866,15 @@ class PaymentInlineViewHolder (private val context: Context,
                   /*  cardNumber
                         ?.let { logicTosetImageDynamic(CardBrand.fromString(cardNumber), it) }*/
 
+                }else {
+
+                    onPaymentCardComplete.onPayCardSwitchAction(
+                            false, PaymentType.CARD
+                        )
+                        tapAlertView?.visibility = View.VISIBLE
+
+
+
                 }
                // println("getCardHolderNameShowHide"+ PaymentDataSource.getCardHolderNameShowHide())
 
