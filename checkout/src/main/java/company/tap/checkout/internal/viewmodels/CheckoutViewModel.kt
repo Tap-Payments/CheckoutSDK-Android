@@ -2473,7 +2473,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         println("scanned card holder is${card.cardHolder}")
         println("scanned card number is${card.cardNumber}")
 
-        paymentInlineViewHolder.tapCardInputView.setCardNumber(card.cardNumber)
+        paymentInlineViewHolder.tapCardInputView.setCardNumberMasked(paymentInlineViewHolder.maskCardNumber(card.cardNumber))
             val dateParts: List<String>? = card.expirationDate?.split("/")
             val month = dateParts?.get(0)?.toInt()
             val year = dateParts?.get(1)?.toInt()
