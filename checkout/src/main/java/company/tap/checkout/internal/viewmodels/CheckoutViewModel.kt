@@ -655,8 +655,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 false,
                 "en",
                 if (::selectedAmount.isInitialized && ::selectedCurrency.isInitialized) {
-                    "$payString ${provider.getSelectedCurrency()?.symbol} $selectedAmount"
-                }else{ "$payString ${provider.getSelectedCurrency()?.symbol} $currentAmount"},
+                    "$payString ${provider.getSelectedCurrency()?.currency} $selectedAmount"
+                }else{ "$payString ${provider.getSelectedCurrency()?.currency} $currentAmount"},
                 Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
                 Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
             )
