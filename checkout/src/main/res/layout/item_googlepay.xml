@@ -4,7 +4,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
 android:id="@+id/tapCardChip6"
 android:layout_width="110dp"
-android:layout_height="50dp"
+android:layout_height="45dp"
 app:cardCornerRadius="8dp"
 app:cardElevation="8dp"
 

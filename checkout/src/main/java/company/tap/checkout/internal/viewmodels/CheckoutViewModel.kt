@@ -1501,6 +1501,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         ActionButtonState.SUCCESS
                     )
                 } else {
+                   removeAllViews()
+                    addViews(businessViewHolder, saveCardSwitchHolder)
+                    businessViewHolder.view.headerView.constraint.visibility = View.GONE
+                    businessViewHolder.view.topSeparatorLinear.visibility = View.GONE
+                    saveCardSwitchHolder?.view?.visibility = View.VISIBLE
+                    saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
                     saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                         ActionButtonState.ERROR
                     )
