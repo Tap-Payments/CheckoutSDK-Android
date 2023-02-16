@@ -137,7 +137,8 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
             previousIndex = selectedPosition
            // selectedPosition = position
             println("position of adapter"+ adapterContentCurrencies[position].amount)
-            println("previous position of adapter"+ position)
+
+
             adapterContentCurrencies[position].rate?.let { it1 ->
                 onCurrencyChangedActionListener.onCurrencyClicked(
                         adapterContentCurrencies[position].currency.toString(),
