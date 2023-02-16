@@ -213,10 +213,27 @@ class PaymentInlineViewHolder (private val context: Context,
             "HorizontalHeaders",
             "contactDetailsSectionTitle"
         )
+
+        contactDetailsView?.contactEmailET?.hint = LocalizationManager.getValue(
+            "email",
+            "Common"
+        )
         shippingDetailView?.shippingDetailTitle?.text = LocalizationManager.getValue(
             "SaveCardHeader",
             "HorizontalHeaders",
             "shippingSectionTitle"
+        )
+        shippingDetailView?.flatEditText?.hint = LocalizationManager.getValue(
+            "flatPlaceHolder",
+            "TapCardInputKit"
+        )
+        shippingDetailView?.additionalLineEditText?.hint = LocalizationManager.getValue(
+            "additionalLinePlaceHolder",
+            "TapCardInputKit"
+        )
+        shippingDetailView?.cityEditText?.hint = LocalizationManager.getValue(
+            "cityPlaceHolder",
+            "TapCardInputKit"
         )
         tapInlineCardSwitch?.switchSaveCard?.isChecked = false
         contactDetailsView?.visibility = View.GONE

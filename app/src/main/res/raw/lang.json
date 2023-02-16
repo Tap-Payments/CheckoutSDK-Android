@@ -13,7 +13,10 @@
       "cardSaveLater": "For faster and easier checkout,\nsave the card for later.",
       "weSupport":"WE ACCEPT",
       "cardSectionTitle": "ENTER CARD",
-      "cardSectionTitleOr": "OR ENTER CARD"
+      "cardSectionTitleOr": "OR ENTER CARD",
+      "flatPlaceHolder": "Flat or building number",
+      "additionalLinePlaceHolder": "Additional line",
+      "cityPlaceHolder": "City"
     },
     "TapAsyncSection": {
       "paymentProgressLabel": "Payment in progress",
@@ -182,7 +185,10 @@
       "weSupport": "نحن ندعم",
       "cardSectionTitle": "أدخل بيانات البطاقة",
       "cardSectionTitleOr": "أو أدخل بيانات البطاقة",
-      "savedCardSectionTitle": "البطاقة المحفوظة"
+      "savedCardSectionTitle": "البطاقة المحفوظة",
+      "flatPlaceHolder": "رقم الشقة أو المبنى",
+      "additionalLinePlaceHolder": "بيانات إضافية",
+      "cityPlaceHolder": "المدينة"
     },
 
     "TapAsyncSection": {
