@@ -1505,6 +1505,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     )
                 } else {
                    removeAllViews()
+                    if(::businessViewHolder.isInitialized && saveCardSwitchHolder !=null)
                     addViews(businessViewHolder, saveCardSwitchHolder)
                     businessViewHolder.view.headerView.constraint.visibility = View.GONE
                     businessViewHolder.view.topSeparatorLinear.visibility = View.GONE
@@ -2328,17 +2329,19 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
             ActionButtonState.LOADING
         )
+        startSavedCardPaymentProcess(savedCardsModel as SavedCard)
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.getImageView(
             R.drawable.loader,
-            1
+            8
         ) {
 
-            startSavedCardPaymentProcess(savedCardsModel as SavedCard)
+
         }?.let { it1 ->
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.addChildView(
                 it1
             )
         }
+
     }
 
     @RequiresApi(Build.VERSION_CODES.N)

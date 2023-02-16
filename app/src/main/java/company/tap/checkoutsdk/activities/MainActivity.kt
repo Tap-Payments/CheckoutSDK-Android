@@ -675,7 +675,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
    @RequiresApi(Build.VERSION_CODES.N)
    override fun sdkError(goSellError: GoSellError?) {
        println("sdkError>>>>>" + goSellError?.errorBody)
-       Toast.makeText(this, "sdkError>>" +goSellError?.reasonString, Toast.LENGTH_LONG).show()
+//       Toast.makeText(this, "sdkError>>" +goSellError?.reasonString, Toast.LENGTH_LONG).show()
        payButton?.setOnClickListener {
            sdkSession.setButtonView(payButton, this, supportFragmentManager, this)
        }
