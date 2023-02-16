@@ -475,7 +475,9 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
            // if (!isShaking) {
               //  selectedPosition = position
                 println("typeGooglePay is clicked")
-            onCardSelectedActionListener.onGooglePayClicked(true)
+            onCardSelectedActionListener.onCardSelectedAction(true, adapterGooglePay[position-1])
+
+           // onCardSelectedActionListener.onGooglePayClicked(true)
               //  goPayOpenedfromMain(goPayOpened)
                 notifyDataSetChanged()
            // }

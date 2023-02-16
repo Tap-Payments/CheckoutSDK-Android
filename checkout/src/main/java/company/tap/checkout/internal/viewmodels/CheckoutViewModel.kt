@@ -935,7 +935,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     otpViewHolder
                 )
             }
-            setSlideAnimation()
+           // setSlideAnimation()
             if(PaymentDataSource?.getWebViewType()!=null && PaymentDataSource.getWebViewType() ==WebViewType.REDIRECT){
                 businessViewHolder.view.headerView.constraint.visibility = View.GONE
                 businessViewHolder.view.topSeparatorLinear.visibility = View.GONE
@@ -952,7 +952,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 )
                 val bottomSheet: FrameLayout? =
                     bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet)
-                BottomSheetBehavior.from(bottomSheet as View).state = BottomSheetBehavior.STATE_EXPANDED
+              //  BottomSheetBehavior.from(bottomSheet as View).state = BottomSheetBehavior.STATE_EXPANDED
                 Handler(Looper.getMainLooper()).postDelayed({
                     fragmentManager.beginTransaction()
                         .replace(
@@ -1452,6 +1452,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
          * WRONG OTP scenario also handled here as similar to old sdk show user error button and
          * close the sdk.
          * **/
+
         tabAnimatedActionButton?.clearAnimation()
         if (::webFrameLayout.isInitialized) {
             if (fragmentManager.findFragmentById(R.id.webFrameLayout) != null)
@@ -1711,6 +1712,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         PaymentDataSource.setWebViewType(WebViewType.REDIRECT)
                         activateActionButton()
                         setPayButtonAction(PaymentType.WEB, savedCardsModel)
+                    } else if ((savedCardsModel as PaymentOption).paymentType == PaymentType.GOOGLE_PAY) {
+                        removeViews(amountViewHolder,cardViewHolder,paymentInlineViewHolder)
+                        checkoutFragment.checkOutActivity?.handleGooglePayApiCall()
+                        activateActionButtonForGPay()
+                        //setPayButtonAction(PaymentType.WEB, savedCardsModel)
+                        PaymentDataSource.setWebViewType(WebViewType.REDIRECT)
                     }
 
                 } else
@@ -1718,6 +1725,24 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     displayGoPayLogin()
             }
         }
+    }
+
+    private fun activateActionButtonForGPay() {
+       val payString:String = LocalizationManager.getValue("pay", "ActionButton")
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
+            true,
+            "en",
+            if (::selectedAmount.isInitialized && ::selectedCurrency.isInitialized) {
+                payString+" "+currentCurrencySymbol+" "+selectedAmount
+            }else{ payString+" "+currentCurrencySymbol+" "+currentAmount},
+            Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
+            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
+        )
+
+        saveCardSwitchHolder?.view?.cardSwitch?.showOnlyPayButton()
+
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
     }
 
 
@@ -2129,6 +2154,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     ) {
         println("done val" + done + "chargeResponse status" + chargeResponse?.status)
         println("saveCardSwitchHolder val" + saveCardSwitchHolder)
+        removeViews(businessViewHolder,saveCardSwitchHolder)
         if (::webFrameLayout.isInitialized) {
             if (fragmentManager.findFragmentById(R.id.webFrameLayout) != null)
                 fragmentManager.beginTransaction()
@@ -2137,9 +2163,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             webFrameLayout.visibility = View.GONE
 
         }
+         addViews(businessViewHolder,saveCardSwitchHolder)
+        saveCardSwitchHolder?.view?.cardSwitch?.switchesLayout?.visibility= View.GONE
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility= View.VISIBLE
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)
 
-        if (::bottomSheetDialog.isInitialized)
-            bottomSheetDialog.dismiss()
+       /* if (::bottomSheetDialog.isInitialized)
+            bottomSheetDialog.dismiss()*/
 
     }
 
@@ -2942,6 +2972,20 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
      * **/
     @RequiresApi(Build.VERSION_CODES.N)
     fun handlePaymentSuccess(paymentData: PaymentData) {
+        removeViews(
+            //businessViewHolder,
+             amountViewHolder,
+            cardViewHolder,
+           // saveCardSwitchHolder,
+            paymentInlineViewHolder,
+            otpViewHolder,
+            goPaySavedCardHolder,
+            goPayViewsHolder
+        )
+        saveCardSwitchHolder?.view?.cardSwitch?.switchesLayout?.visibility = View.GONE
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = View.VISIBLE
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
+
         val paymentInformation = paymentData.toJson() ?: return
 
         try {

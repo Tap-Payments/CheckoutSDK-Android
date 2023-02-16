@@ -448,12 +448,13 @@ class CardRepository : APIRequestCallback {
             handleChargeResponse(chargeResponse)
         }
         else if(requestCode == CHARGE_RETRIEVE_CODE) {
+            println("CHARGE_RETRIEVE_CODE")
             response?.body().let {
                 chargeResponse = Gson().fromJson(it, Charge::class.java)
                 if(chargeResponse.status?.name == ChargeStatus.CAPTURED.name){
                     fireWebPaymentCallBack(chargeResponse)
-                    //  chargeResponse?.transaction?.url?.let { it1 -> viewModel?.displayRedirect(it1) }
-                    //  viewModel?.redirectLoadingFinished(true)
+                     //chargeResponse?.transaction?.url?.let { it1 -> viewModel?.displayRedirect(it1,chargeResponse) }
+                    //  viewModel?.redirectLoadingFinished(true,chargeResponse, contextSDK)
                 }else handleChargeResponse(chargeResponse)
             }
 
