@@ -378,6 +378,7 @@ class PaymentInlineViewHolder (private val context: Context,
             intertabLayout.visibility = View.VISIBLE
             tabLayout.visibility = View.VISIBLE
             acceptedCardText.visibility =View.VISIBLE
+            checkoutViewModel.resetViewHolder()
 
 
         }
