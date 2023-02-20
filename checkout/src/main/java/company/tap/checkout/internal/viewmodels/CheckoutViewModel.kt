@@ -2506,7 +2506,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }else {
             paymentInlineViewHolder.tapCardInputView.onTouchCardField()
         }*/
-        paymentInlineViewHolder.tapCardInputView.onTouchCardField()
+        //paymentInlineViewHolder.tapCardInputView.onTouchCardField()
         println("scanned card holder is${card.cardHolder}")
         println("scanned card number is${card.cardNumber}")
 

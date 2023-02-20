@@ -62,9 +62,9 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.7.0'
     api 'com.github.Tap-Payments:LocalisationManager-Android:0.0.1.32'
   //  implementation 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.25'
-    implementation 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.36.172'
+    implementation 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.36.174'
  //   api 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.25'
-    api 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.36.172'
+    api 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.36.174'
     implementation "com.hbb20:ccp:2.5.0"
     api 'androidx.activity:activity-ktx:1.4.0'
     testImplementation 'junit:junit:4.13.2'
