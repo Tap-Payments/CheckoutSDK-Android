@@ -175,7 +175,7 @@
       "cardNumberPlaceHolder": "رقم البطاقة",
       "cardNamePlaceHolder": "إسم صاحب البطاقة",
       "cardCVVPlaceHolder": "الرمزالأمني",
-      "cardExpiryPlaceHolder": "شش/سس",
+      "cardExpiryPlaceHolder": "ش/س",
       "cardSaveLabel": "لشراء أسرع إحفظ البطاقة",
       "cardSaveForTapLabel": "إحفظ للإستعمال في كل متاجر Tap",
       "cardSaveForTapInfo":"يمكنك الدفع في كل مكان بنقرة واحدة فقط\n.يعد النقر طريقة أفضل وآمنة للدفع محليًا عبر أكثر من 100 ألف متجر. يتم تشفير بياناتك ولا يمكن الوصول إليها إلا بواسطتك. ستتلقى بريدًا إلكترونيًا للبدء وإدارة التفاصيل الخاصة بك.",

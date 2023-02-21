@@ -104,6 +104,7 @@ class PaymentInlineViewHolder (private val context: Context,
     private var paymentType: PaymentType? = null
     private lateinit var cardBrandType: String
     private var cardNumber: String? = null
+    private var fullCardNumber: String? = null
     private var expiryDate: String? = null
     private var cvvNumber: String? = null
     private var cardHolderName: String? = null
@@ -507,6 +508,11 @@ class PaymentInlineViewHolder (private val context: Context,
                         shippingDetailView?.visibility = View.GONE
                     }
 
+                }else {
+                    contactDetailsView?.visibility = View.GONE
+                    shippingDetailView?.visibility = View.GONE
+                    tapInlineCardSwitch?.visibility = View.GONE
+
                 }
 
             }
@@ -694,6 +700,7 @@ class PaymentInlineViewHolder (private val context: Context,
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 checkoutViewModel.resetViewHolder()
+                tapAlertView?.visibility = View.GONE
 
             }
             @RequiresApi(Build.VERSION_CODES.N)
@@ -785,6 +792,12 @@ class PaymentInlineViewHolder (private val context: Context,
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+                if(s?.trim()?.length == 3 || s?.trim()?.length == 4){
+                    if (cardInputUIStatus==CardInputUIStatus.NormalCard)
+                    logicForImageOnCVV(CardValidator.validate(fullCardNumber).cardBrand,s.toString())
+                    else  logicForImageOnCVV(CardValidator.validate(savedCardsModel?.firstSix).cardBrand,s.toString())
+                }
               /*  if (s?.trim()?.length == 3 || s?.trim()?.length == 4) {
                     onPaymentCardComplete.onPayCardSwitchAction(
                         true, PaymentType.CARD
@@ -806,6 +819,8 @@ class PaymentInlineViewHolder (private val context: Context,
                  * we will get cvv number
                  */
                 cvvNumber = s.toString()
+
+
                 if (s?.trim()?.length == 3 || s?.trim()?.length == 4) {
                     if(!PaymentDataSource.getCardHolderNameShowHide()) {
                         cardNumber.toString().let {
@@ -831,6 +846,22 @@ class PaymentInlineViewHolder (private val context: Context,
                         allFieldsValid = true
 
                     }else {
+                        if(cardInputUIStatus!=null && cardInputUIStatus==CardInputUIStatus.NormalCard){
+                            if(PaymentDataSource.getCardHolderNameShowHide()) {
+                                tapCardInputView.holderNameEnabled = true
+                                tapCardInputView.setVisibilityOfHolderField(PaymentDataSource.getCardHolderNameShowHide())
+                                /* tapCardInputView.separatorcard2.setBackgroundColor(
+                                     Color.parseColor(
+                                         ThemeManager.getValue("tapSeparationLine.backgroundColor")
+                                     )
+                                 )*/
+                                // tapCardInputView.separatorcard2.visibility = View.VISIBLE
+                                separator1?.visibility = View.VISIBLE
+                                if (PaymentDataSource.getDefaultCardHolderName() != null) {
+                                    tapCardInputView.setCardHolderName(PaymentDataSource.getDefaultCardHolderName())
+                                }
+                            }
+                        }
                         tapInlineCardSwitch?.visibility = View.GONE
                     }
 
@@ -851,20 +882,6 @@ class PaymentInlineViewHolder (private val context: Context,
                             CustomUtils.hideKeyboardFrom(context, view)
                         }
 
-                    }else if(cardInputUIStatus!=null && cardInputUIStatus==CardInputUIStatus.NormalCard){
-                        if(PaymentDataSource.getCardHolderNameShowHide()) {
-                            tapCardInputView.setVisibilityOfHolderField(PaymentDataSource.getCardHolderNameShowHide())
-                           /* tapCardInputView.separatorcard2.setBackgroundColor(
-                                Color.parseColor(
-                                    ThemeManager.getValue("tapSeparationLine.backgroundColor")
-                                )
-                            )*/
-                           // tapCardInputView.separatorcard2.visibility = View.VISIBLE
-                            separator1?.visibility = View.VISIBLE
-                            if (PaymentDataSource.getDefaultCardHolderName() != null) {
-                                tapCardInputView.setCardHolderName(PaymentDataSource.getDefaultCardHolderName())
-                            }
-                        }
                     }
                   /*  cardNumber
                         ?.let { logicTosetImageDynamic(CardBrand.fromString(cardNumber), it) }*/
@@ -948,6 +965,9 @@ class PaymentInlineViewHolder (private val context: Context,
                 }
             }
 
+            if(charSequence.length ==19){
+                fullCardNumber = charSequence.toString()
+            }
             /**
              * we will get the full card number
              */
@@ -1340,7 +1360,7 @@ class PaymentInlineViewHolder (private val context: Context,
     }
 
     fun getCard(): CreateTokenCard? {
-        val number: String? = cardNumber
+        val number: String? = fullCardNumber
         val expiryDate: String? = expiryDate
         val cvc: String? = cvvNumber
         //temporrary    val cardholderName: String? = cardholderName
@@ -1558,7 +1578,20 @@ class PaymentInlineViewHolder (private val context: Context,
                     , itemsCardsList[i].selectedImageURL
                 )
 
+
             }
         }
         }
+
+    fun logicForImageOnCVV(card:CardBrand,cardCharSeq:String){
+        for (i in itemsCardsList.indices) {
+            println("itemsCardsList[i].selectedImageUR"+itemsCardsList[i].selectedImageURL)
+            println("card"+card.name)
+            val iconStr = itemsCardsList[i].selectedImageURL.replace("https://back-end.b-cdn.net/payment_methods/","")
+            if(iconStr.replace(".svg","").toLowerCase().contains(card.name.toLowerCase())) {
+           tapCardInputView.setCardBrandUrl( itemsCardsList[i].selectedImageURL)
+
+            }
+        }
+    }
     }
