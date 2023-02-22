@@ -500,8 +500,8 @@ class PaymentInlineViewHolder (private val context: Context,
                 if(s.toString().length>3){
                     if(PaymentDataSource.getCardHolderNameShowHide()){
                         tapInlineCardSwitch?.visibility = View.VISIBLE
-                        contactDetailsView?.visibility = View.VISIBLE
-                        shippingDetailView?.visibility = View.VISIBLE
+                        contactDetailsView?.visibility = View.GONE //temp visibel to gone
+                        shippingDetailView?.visibility = View.GONE //temp visibel to gone
                         allFieldsValid = true
                     }else {
                         contactDetailsView?.visibility = View.GONE
@@ -588,8 +588,8 @@ class PaymentInlineViewHolder (private val context: Context,
                             shippingDetailView?.visibility =View.GONE
                             contactDetailsView?.visibility =View.GONE
                         }else {
-                            contactDetailsView?.visibility = View.VISIBLE
-                            shippingDetailView?.visibility = View.VISIBLE
+                            contactDetailsView?.visibility = View.GONE //temp visibel to gone
+                            shippingDetailView?.visibility = View.GONE //temp visibel to gone
                         }
                     }
 
