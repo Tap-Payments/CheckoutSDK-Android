@@ -134,6 +134,7 @@ class PaymentInlineViewHolder (private val context: Context,
     var allFieldsValid: Boolean? = false
     var watcherRemoved:Boolean ?=false
     var separator1: TapSeparatorView? = null
+    var cardNumValidation: Boolean = false
     init {
 
         tabLayout.setTabLayoutInterface(this)
@@ -748,8 +749,7 @@ class PaymentInlineViewHolder (private val context: Context,
     }
 
     private fun afterValidation() {
-        if (!fullCardNumber.isNullOrBlank() || !fullCardNumber.isNullOrEmpty()
-            || !expiryDate.isNullOrBlank() || !expiryDate.isNullOrEmpty() || !cvvNumber.isNullOrBlank() || !cvvNumber.isNullOrEmpty()
+        if (!fullCardNumber.isNullOrBlank() && !fullCardNumber.isNullOrEmpty() && cardNumValidation && !expiryDate.isNullOrBlank() && !expiryDate.isNullOrEmpty() && !cvvNumber.isNullOrBlank() && !cvvNumber.isNullOrEmpty()
         ) {
 
             if (PaymentDataSource?.getCardHolderNameShowHide()) {
@@ -1151,6 +1151,7 @@ class PaymentInlineViewHolder (private val context: Context,
                     tapCardInputView.removeCardNumberTextWatcher(this)
                     tapCardInputView.setCardNumberTextWatcher(this)
                 }*/
+                cardNumValidation = false
             }
             CardValidationState.incomplete -> {
                 //tapAlertView?.visibility = View.VISIBLE
@@ -1158,6 +1159,7 @@ class PaymentInlineViewHolder (private val context: Context,
                 //    (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
                 // checkoutFragment.scrollView?.smoothScrollTo(0,height)
                 //checkoutFragment.scrollView?.smoothScrollTo(0,0)
+                cardNumValidation = false
             }
             CardValidationState.valid -> {
                 if (schema != null)
@@ -1173,6 +1175,7 @@ class PaymentInlineViewHolder (private val context: Context,
                         it
                     )
                 })*/
+                cardNumValidation = true
             }
             else -> {
                 if(cardInputUIStatus?.equals(CardInputUIStatus.SavedCard) == true){
