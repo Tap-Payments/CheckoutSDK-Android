@@ -394,7 +394,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
        sdkSession.setDefaultCardHolderName(
            settingsManager?.getString(
                "key_default_holder_name",
-               "Tap Test"
+               ""
            )
        ); // ** Optional ** you can pass default CardHolderName of the user .So you don't need to type it.
 

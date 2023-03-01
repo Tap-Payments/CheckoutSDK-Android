@@ -530,8 +530,8 @@ class PaymentInlineViewHolder (private val context: Context,
                 if(s.toString().length>3){
                     if(PaymentDataSource.getCardHolderNameShowHide()){
                         tapInlineCardSwitch?.visibility = View.VISIBLE
-                        contactDetailsView?.visibility = View.GONE //temp visibel to gone
-                        shippingDetailView?.visibility = View.GONE //temp visibel to gone
+                        contactDetailsView?.visibility = View.GONE //temp visible to gone
+                        shippingDetailView?.visibility = View.GONE //temp visible to gone
                         allFieldsValid = true
                     }else {
                         contactDetailsView?.visibility = View.GONE
@@ -724,7 +724,15 @@ class PaymentInlineViewHolder (private val context: Context,
                     tapCardInputView.removeCardNumberTextWatcher(this)
                   //  tapCardInputView.setCardNumberTextWatcher(this)
                 }*/
-                if(s?.length!! >=19) afterValidation()
+
+                if (s != null) {
+                   /* if(s.isEmpty() || s.length!!  < 19 || s.length > 10 ){
+                        acceptedCardText.visibility = View.VISIBLE
+                        intertabLayout.visibility = View.VISIBLE
+                        tabLayout.visibility = View.VISIBLE
+                    }*/
+                        if(s?.length!! >=19) afterValidation()
+                }
 
 
             }
@@ -755,6 +763,7 @@ class PaymentInlineViewHolder (private val context: Context,
             if (PaymentDataSource?.getCardHolderNameShowHide()) {
                 tapCardInputView.setVisibilityOfHolderField(PaymentDataSource?.getCardHolderNameShowHide())
                 tapCardInputView.holderNameEnabled = true
+                tapInlineCardSwitch?.visibility = View.VISIBLE
             }
 
         }
@@ -767,6 +776,7 @@ class PaymentInlineViewHolder (private val context: Context,
         } else {
             closeButton?.visibility = View.VISIBLE
         }
+        tapInlineCardSwitch?.visibility = View.GONE
 
     }
 
@@ -904,7 +914,7 @@ class PaymentInlineViewHolder (private val context: Context,
                                  )*/
                                 // tapCardInputView.separatorcard2.visibility = View.VISIBLE
                                 separator1?.visibility = View.VISIBLE
-                                if (PaymentDataSource.getDefaultCardHolderName() != null) {
+                                if (PaymentDataSource.getDefaultCardHolderName()?.isNotEmpty() == true || PaymentDataSource.getDefaultCardHolderName()?.isNotBlank() == true) {
                                     tapCardInputView.setCardHolderName(PaymentDataSource.getDefaultCardHolderName())
                                     tapInlineCardSwitch?.visibility = View.VISIBLE
                                     // tapCardInputView.separatorcard2.visibility = View.VISIBLE

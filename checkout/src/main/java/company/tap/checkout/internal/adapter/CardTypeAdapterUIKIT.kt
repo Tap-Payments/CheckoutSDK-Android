@@ -15,6 +15,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
@@ -74,6 +75,9 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     val seceret:String="3l5e0cstdim11skgwoha8x9vx9zo0kxxi4droryjp4eqd"
     val countrycode:String="1001"
     val mcc:String="4816"
+    @DrawableRes
+    val deleteIcon: Int =
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) R.drawable.dark_icon_delete else R.drawable.light_icon_delete
 
     // A client for interacting with the Google Pay API.
     private var paymentsClient: PaymentsClient? = null
@@ -342,8 +346,8 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                     .init()
                     .with(holder.itemView.context)
                     .load(arrayListCards[position.minus(adapterContent.size).minus(adapterGooglePay.size)].image.toUri(), holder.itemView.imageView_amex)
-             //RemoveMask   holder.itemView.textViewCardDetails.text = maskCardNumber(arrayListCards[position.minus(adapterContent.size).minus(adapterGooglePay.size)].firstSix + arrayListCards[position.minus(adapterContent.size).minus(adapterGooglePay.size)].lastFour)
-                holder.itemView.textViewCardDetails.text = "   " +arrayListCards[position.minus(adapterContent.size).minus(adapterGooglePay.size)].lastFour
+              holder.itemView.textViewCardDetails.text = maskCardNumber(arrayListCards[position.minus(adapterContent.size).minus(adapterGooglePay.size)].firstSix + arrayListCards[position.minus(adapterContent.size).minus(adapterGooglePay.size)].lastFour)
+              //Remove no  holder.itemView.textViewCardDetails.text = "   " +arrayListCards[position.minus(adapterContent.size).minus(adapterGooglePay.size)].lastFour
                 //holder.itemView.textViewCardDetails.text = adapterContent[holder.adapterPosition].chip1.title
             }else{
                 // arrayListCards [position.minus(adapterContent.size)].image.let { holder.itemView.imageView_amex.loadSvg(it) }
@@ -352,8 +356,8 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                     .init()
                     .with(holder.itemView.context)
                     .load(arrayListCards[position.minus(adapterContent.size)].image.toUri(), holder.itemView.imageView_amex)
-             //Remove Mask   holder.itemView.textViewCardDetails.text = maskCardNumber(arrayListCards[position.minus(adapterContent.size)].firstSix + arrayListCards[position.minus(adapterContent.size)].lastFour)
-                holder.itemView.textViewCardDetails.text = "   " +arrayListCards[position.minus(adapterContent.size)].lastFour
+              holder.itemView.textViewCardDetails.text = maskCardNumber(arrayListCards[position.minus(adapterContent.size)].firstSix + arrayListCards[position.minus(adapterContent.size)].lastFour)
+               //REmove no holder.itemView.textViewCardDetails.text = "   " +arrayListCards[position.minus(adapterContent.size)].lastFour
                 //holder.itemView.textViewCardDetails.text = adapterContent[holder.adapterPosition].chip1.title
             }
 
@@ -368,6 +372,8 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     }
 
     private fun setSavedCardShakingAnimation(holder: RecyclerView.ViewHolder) {
+
+        holder.itemView.deleteImageViewSaved.setImageResource(deleteIcon)
         if (isShaking) {
             Log.d("isShaking", isShaking.toString())
             val animShake: Animation = AnimationUtils.loadAnimation(holder.itemView.context, R.anim.shake)
@@ -572,7 +578,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     private fun maskCardNumber(cardInput: String): String {
         val maskLen: Int = cardInput.length - 4
         if (maskLen <= 0) return cardInput // Nothing to mask
-        return (cardInput).replaceRange(0, 6, "•••• ")
+        return (cardInput).replaceRange(0, 6, "••• ")
     }
     /**
      * Determine the viewer's ability to pay with a payment method supported by your app and display a

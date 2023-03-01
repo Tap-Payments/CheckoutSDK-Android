@@ -15,7 +15,7 @@
 
     <LinearLayout
         android:id="@+id/tapCardChip3Linear"
-        android:layout_width="94dp"
+        android:layout_width="100dp"
         android:layout_height="40dp"
         android:orientation="horizontal">
 

@@ -23,7 +23,7 @@
         android:layout_marginRight="0dp"
         android:layout_alignParentEnd="true"
         android:elevation="15dp"
-        android:src="@drawable/close_icon"
+
         android:visibility="gone"
         android:layout_above="@+id/tapCardChip2"
         android:layout_alignParentRight="true" />
@@ -44,7 +44,7 @@
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="94dp"
+            android:layout_width="100dp"
             android:layout_height="40dp"
             android:id="@+id/tapCardChip2Constraints"
             android:orientation="horizontal"
