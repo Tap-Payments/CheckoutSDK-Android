@@ -520,6 +520,7 @@ class PaymentInlineViewHolder (private val context: Context,
         )
         tapCardInputView.setHolderNameTextWatcher(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                if(allFieldsValid == true)
                 intertabLayout.visibility = View.GONE
                 tabLayout.visibility = View.GONE
                 acceptedCardText.visibility =View.GONE
@@ -900,7 +901,7 @@ class PaymentInlineViewHolder (private val context: Context,
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 //   checkoutFragment.scrollView?.scrollTo(0,height)
                 // tapCardInputView.requestFocus()
-
+                CustomUtils.showKeyboard(context)
 
             }
 
@@ -927,6 +928,7 @@ class PaymentInlineViewHolder (private val context: Context,
 
             override fun afterTextChanged(s: Editable?) {
                 tapPaymentInput?.visibility = View.VISIBLE
+                if(cardInputUIStatus == CardInputUIStatus.SavedCard) tapAlertView?.visibility = View.GONE
 
                 /**
                  * we will get cvv number
@@ -982,6 +984,7 @@ class PaymentInlineViewHolder (private val context: Context,
                     tapAlertView?.visibility = View.GONE
 
                     if(cardInputUIStatus!=null && cardInputUIStatus==CardInputUIStatus.SavedCard){
+                        tapAlertView?.visibility = View.GONE
                         tapCardInputView.setVisibilityOfHolderField(false)
                         tapCardInputView.holderNameEnabled = false
                         separator1?.visibility = View.GONE
@@ -1005,7 +1008,7 @@ class PaymentInlineViewHolder (private val context: Context,
                     onPaymentCardComplete.onPayCardSwitchAction(
                             false, PaymentType.CARD
                         )
-                        tapAlertView?.visibility = View.VISIBLE
+                      //  tapAlertView?.visibility = View.VISIBLE
 
 
 
@@ -1622,10 +1625,10 @@ class PaymentInlineViewHolder (private val context: Context,
             company.tap.cardinputwidget.CardBrand.fromCardNumber(_savedCardsModel.firstSix)
         )*/
         tapCardInputView.setSavedCardDetails(cardModel, cardInputUIStatus)
-        val alertMessage:String = LocalizationManager.getValue("Warning", "Hints", "missingCVV")
+     /*  val alertMessage:String = LocalizationManager.getValue("Warning", "Hints", "missingCVV")
         tapAlertView?.alertMessage?.text =alertMessage.replace("%i","3")
 
-        tapAlertView?.visibility =View.VISIBLE
+        tapAlertView?.visibility =View.VISIBLE*/
         tapCardInputView.setSingleCardInput(
             CardBrandSingle.fromCode(
                 company.tap.cardinputwidget.CardBrand.fromCardNumber(_savedCardsModel.firstSix)
