@@ -135,6 +135,7 @@ class PaymentInlineViewHolder (private val context: Context,
     var watcherRemoved:Boolean ?=false
     var separator1: TapSeparatorView? = null
     var cardNumValidation: Boolean = false
+    var mPreviousCount:Int=0
     init {
 
         tabLayout.setTabLayoutInterface(this)
@@ -519,14 +520,12 @@ class PaymentInlineViewHolder (private val context: Context,
         )
         tapCardInputView.setHolderNameTextWatcher(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
+                intertabLayout.visibility = View.GONE
+                tabLayout.visibility = View.GONE
+                acceptedCardText.visibility =View.GONE
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-            }
-
-            override fun afterTextChanged(s: Editable?) {
                 if(s.toString().length>3){
                     if(PaymentDataSource.getCardHolderNameShowHide()){
                         tapInlineCardSwitch?.visibility = View.VISIBLE
@@ -544,6 +543,26 @@ class PaymentInlineViewHolder (private val context: Context,
                     tapInlineCardSwitch?.visibility = View.GONE
 
                 }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+               /* if(s.toString().length>3){
+                    if(PaymentDataSource.getCardHolderNameShowHide()){
+                        tapInlineCardSwitch?.visibility = View.VISIBLE
+                        contactDetailsView?.visibility = View.GONE //temp visible to gone
+                        shippingDetailView?.visibility = View.GONE //temp visible to gone
+                        allFieldsValid = true
+                    }else {
+                        contactDetailsView?.visibility = View.GONE
+                        shippingDetailView?.visibility = View.GONE
+                    }
+
+                }else {
+                    contactDetailsView?.visibility = View.GONE
+                    shippingDetailView?.visibility = View.GONE
+                    tapInlineCardSwitch?.visibility = View.GONE
+
+                }*/
 
             }
 
@@ -725,7 +744,24 @@ class PaymentInlineViewHolder (private val context: Context,
                   //  tapCardInputView.setCardNumberTextWatcher(this)
                 }*/
 
-                if (s != null) {
+               var  length: Int? =s?.length;
+
+                //mPreviousLength is a field
+                var mPreviousLength=0
+                if (mPreviousLength> length!!)
+                {
+                    // delete character action have done
+                    // do what ever you want
+                   // Log.d("MainActivityTag", "Character deleted");
+                    intertabLayout.visibility = View.VISIBLE
+                    tabLayout.visibility = View.VISIBLE
+                    acceptedCardText.visibility = View.VISIBLE
+                }
+                mPreviousLength=length;
+
+
+
+            if (s != null) {
                    /* if(s.isEmpty() || s.length!!  < 19 || s.length > 10 ){
                         acceptedCardText.visibility = View.VISIBLE
                         intertabLayout.visibility = View.VISIBLE
@@ -738,13 +774,33 @@ class PaymentInlineViewHolder (private val context: Context,
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                checkoutViewModel.resetViewHolder()
-                tapAlertView?.visibility = View.GONE
-
+            checkoutViewModel.resetViewHolder()
+            tapAlertView?.visibility = View.GONE
+            if (after < count) {
+                // delete character action have done
+                // do what ever you want
+               /* intertabLayout.visibility = View.VISIBLE
+                tabLayout.visibility = View.VISIBLE
+                acceptedCardText.visibility = View.VISIBLE*/
             }
+
+        }
             @RequiresApi(Build.VERSION_CODES.N)
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                println("cardInputUIStatus"+cardInputUIStatus)
+                println("cardInputUIStatus>>"+cardInputUIStatus)
+                println("start>>"+start)
+                println("before>>"+before)
+                println("count>>"+count)
+                if (mPreviousCount > count) {
+                    // delete character action have done
+                    // do what ever you want
+                   // Log.d("MainActivityTag", "Character deleted");
+                    intertabLayout.visibility = View.VISIBLE
+                    tabLayout.visibility = View.VISIBLE
+                    acceptedCardText.visibility = View.VISIBLE
+                }
+                mPreviousCount=count;
+
 
                 if (cardInputUIStatus != CardInputUIStatus.SavedCard) {
                     onCardTextChange(s)
@@ -1139,6 +1195,7 @@ class PaymentInlineViewHolder (private val context: Context,
         if(card.cardBrand!=null)
         when (card.validationState) {
             CardValidationState.invalid -> {
+                println("cardBrand val"+card.cardBrand)
                 if (card.cardBrand != null)
                     tabLayout.selectTab(card.cardBrand, false)
                 tapAlertView?.visibility = View.VISIBLE
@@ -1169,6 +1226,9 @@ class PaymentInlineViewHolder (private val context: Context,
                 //    (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
                 // checkoutFragment.scrollView?.smoothScrollTo(0,height)
                 //checkoutFragment.scrollView?.smoothScrollTo(0,0)
+                intertabLayout.visibility = View.VISIBLE
+                tabLayout.visibility = View.VISIBLE
+                acceptedCardText.visibility =View.VISIBLE
                 cardNumValidation = false
             }
             CardValidationState.valid -> {
@@ -1185,6 +1245,9 @@ class PaymentInlineViewHolder (private val context: Context,
                         it
                     )
                 })*/
+                intertabLayout.visibility = View.GONE
+                tabLayout.visibility = View.GONE
+                acceptedCardText.visibility =View.GONE
                 cardNumValidation = true
             }
             else -> {
