@@ -564,7 +564,16 @@ class PaymentInlineViewHolder (private val context: Context,
                     tapInlineCardSwitch?.visibility = View.GONE
 
                 }*/
-
+                if(s.toString().length>3) {
+                    cardNumber?.let {
+                        expiryDate?.let { it1 ->
+                            onPaymentCardComplete.onPayCardCompleteAction(
+                                true, PaymentType.CARD,
+                                it, it1, cvvNumber!!, cardHolderName
+                            )
+                        }
+                    }
+                }
             }
 
         })
@@ -995,6 +1004,14 @@ class PaymentInlineViewHolder (private val context: Context,
                             onPaymentCardComplete.onPayCardSwitchAction(
                                 true, PaymentType.CARD
                             )
+                            cardNumber?.let {
+                                expiryDate?.let { it1 ->
+                                    onPaymentCardComplete.onPayCardCompleteAction(
+                                        true, PaymentType.CARD,
+                                        it, it1, cvvNumber!!, cardHolderName
+                                    )
+                                }
+                            }
                             tapAlertView?.visibility = View.GONE
                             CustomUtils.hideKeyboardFrom(context, view)
                         }
