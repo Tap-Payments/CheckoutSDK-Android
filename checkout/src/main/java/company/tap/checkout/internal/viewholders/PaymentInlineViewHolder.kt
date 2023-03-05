@@ -21,7 +21,6 @@ import company.tap.cardinputwidget.CardBrandSingle
 import company.tap.cardinputwidget.CardInputUIStatus
 import company.tap.cardinputwidget.views.CardBrandView
 import company.tap.cardinputwidget.widget.CardInputListener
-import company.tap.cardinputwidget.widget.inline.InlineCardInput
 import company.tap.cardinputwidget.widget.inline.InlineCardInput2
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.CardScheme
@@ -52,13 +51,9 @@ import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
 import company.tap.tapuilibrary.uikit.interfaces.TapPaymentShowHideClearImage
 import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
-import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import company.tap.tapuilibrary.uikit.models.SectionTabItem
 import company.tap.tapuilibrary.uikit.organisms.TapPaymentInput
 import company.tap.tapuilibrary.uikit.views.*
-import kotlinx.android.synthetic.*
-import kotlinx.android.synthetic.main.item_currency_rows.view.*
-import kotlinx.android.synthetic.main.loyalty_view_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 
 @RequiresApi(Build.VERSION_CODES.N)
@@ -389,6 +384,10 @@ class PaymentInlineViewHolder (private val context: Context,
             acceptedCardText.visibility =View.VISIBLE
             checkoutViewModel.resetViewHolder()
 
+         /*  if(fullCardNumber!=null && !fullCardNumber.isNullOrEmpty()){
+                tapCardInputView.setCardNumberMasked(maskCardNumber(fullCardNumber!!))
+
+            }*/
 
         }
 
@@ -1521,6 +1520,7 @@ class PaymentInlineViewHolder (private val context: Context,
             null
         } else {
             val dateParts: List<String> = expiryDate.split("/")
+
             return dateParts.get(0).let {
                 CreateTokenCard(
                     number.replace(" ", ""),
@@ -1533,6 +1533,7 @@ class PaymentInlineViewHolder (private val context: Context,
         }
         // TODO: Add address handling here.
     }
+
 
     fun setCurrentBinData(binLookupResponse: BINLookupResponse?) {
         //  cardNumberWatcher()

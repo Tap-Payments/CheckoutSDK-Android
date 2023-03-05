@@ -110,8 +110,9 @@ data class ItemsModel(
      */
     fun getPlainAmount(): BigDecimal? {
         println("  #### getPlainAmount : " + amount)
+        println("  #### quantity : " + quantity)
         assert(amount != null)
-        totalAmount = amount!!?.multiply(quantity)
+        totalAmount = amount!!.multiply(quantity)
         return totalAmount
     }
 
