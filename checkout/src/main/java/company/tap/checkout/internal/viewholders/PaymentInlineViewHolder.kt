@@ -564,6 +564,7 @@ class PaymentInlineViewHolder (private val context: Context,
                     tapInlineCardSwitch?.visibility = View.GONE
 
                 }*/
+                //On Details complete
                 if(s.toString().length>3) {
                     cardNumber?.let {
                         expiryDate?.let { it1 ->
