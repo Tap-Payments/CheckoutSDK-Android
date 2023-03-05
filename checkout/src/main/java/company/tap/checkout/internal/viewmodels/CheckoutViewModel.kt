@@ -2171,8 +2171,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility= View.VISIBLE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)
 
-       /* if (::bottomSheetDialog.isInitialized)
-            bottomSheetDialog.dismiss()*/
+      if (::bottomSheetDialog.isInitialized)
+            bottomSheetDialog.dismiss()
 
     }
 

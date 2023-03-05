@@ -166,7 +166,8 @@ class WebFragment(
         // webViewContract.redirectLoadingFinished(url.contains("https://www.google.com/search?"))
         if (url.contains("gosellsdk://return_url")) {
 
-//        webViewContract.redirectLoadingFinished(url.contains("gosellsdk://return_url"), chargeResponse)
+        webViewContract?.redirectLoadingFinished(url.contains("gosellsdk://return_url"), chargeResponse,
+            contextSDK)
         } else {
 //            webViewContract.directLoadingFinished(true)
         }
