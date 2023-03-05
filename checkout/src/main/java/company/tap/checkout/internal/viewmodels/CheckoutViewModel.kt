@@ -836,7 +836,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             paymentInlineViewHolder, saveCardSwitchHolder, otpViewHolder, amountViewHolder
         )
         // bottomSheetDialog.dismissWithAnimation
-        otpViewHolder = OTPViewHolder(context)
+        //start counter on open otpview
+        otpViewHolder?.otpView?.startCounter()
         addViews(amountViewHolder, otpViewHolder)
         otpViewHolder.otpView.visibility = View.VISIBLE
         CustomUtils.showKeyboard(context)
