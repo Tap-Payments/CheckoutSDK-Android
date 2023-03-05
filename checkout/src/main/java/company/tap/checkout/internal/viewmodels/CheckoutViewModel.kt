@@ -1485,6 +1485,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         when (chargeResponse?.status) {
             ChargeStatus.CAPTURED, ChargeStatus.AUTHORIZED, ChargeStatus.VALID, ChargeStatus.IN_PROGRESS -> {
+                println("is this called> CAPTURED>>")
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                     ActionButtonState.SUCCESS
                 )
@@ -1492,11 +1493,33 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
             ChargeStatus.CANCELLED, ChargeStatus.TIMEDOUT, ChargeStatus.FAILED, ChargeStatus.DECLINED, ChargeStatus.UNKNOWN,
             ChargeStatus.RESTRICTED, ChargeStatus.ABANDONED, ChargeStatus.VOID, ChargeStatus.INVALID -> {
+                println("is this called> CANCELLED>>")
+             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
+                    ActionButtonState.LOADING
+                )
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                     ActionButtonState.ERROR
                 )
+                val payString: String = LocalizationManager.getValue("pay", "ActionButton")
+                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
+                    false,
+                    "en",
+                   "",
+                    Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
+                    Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
+                )
 
                 tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
+               tabAnimatedActionButton?.setButtonDataSource(
+                    false,
+                    "en",
+                    if (::selectedAmount.isInitialized && ::selectedCurrency.isInitialized) {
+                        payString+" "+currentCurrencySymbol+" "+selectedAmount
+                    }else{ payString+" "+currentCurrencySymbol+" "+currentAmount},
+                    Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
+                    Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
+                )
+
             }
             else -> {
 
@@ -1505,6 +1528,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         ActionButtonState.SUCCESS
                     )
                 } else {
+                    println("is this called>>>")
                    removeAllViews()
                     if(::businessViewHolder.isInitialized && saveCardSwitchHolder !=null)
                     addViews(businessViewHolder, saveCardSwitchHolder)
@@ -2166,13 +2190,27 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             webFrameLayout.visibility = View.GONE
 
         }
+        removeViews(businessViewHolder,amountViewHolder,cardViewHolder,paymentInlineViewHolder)
+        if(::webViewHolder.isInitialized)removeViews(webViewHolder)
          addViews(businessViewHolder,saveCardSwitchHolder)
+        businessViewHolder.view.headerView.constraint.visibility = View.GONE
+        businessViewHolder.view.topSeparatorLinear.visibility = View.GONE
         saveCardSwitchHolder?.view?.cardSwitch?.switchesLayout?.visibility= View.GONE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility= View.VISIBLE
+        val payString: String = LocalizationManager.getValue("pay", "ActionButton")
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
+            true,"en","",
+            Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
+            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")))
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)
+    /*  if (::bottomSheetDialog.isInitialized)
+            bottomSheetDialog.dismiss()*/
+        Handler().postDelayed({
+            if (::bottomSheetDialog.isInitialized)
+                bottomSheetDialog.dismiss()
 
-      if (::bottomSheetDialog.isInitialized)
-            bottomSheetDialog.dismiss()
+        }, 2500)
 
     }
 
