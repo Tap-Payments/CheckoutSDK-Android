@@ -981,6 +981,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     goPaySavedCardHolder,
                     goPayViewsHolder
                 )
+                //Added to hide the Items-Amount button when 3ds is opened within
+                amountViewHolder?.view?.amount_section?.itemAmountLayout?.visibility = View.GONE
                 addViews(webViewHolder,saveCardSwitchHolder)
                  Handler(Looper.getMainLooper()).postDelayed({
 
