@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="checkout/src/main/res/layout/amountview_layout.xml" value="0.17162162162162162" />
         <entry key="checkout/src/main/res/layout/cardviewholder_layout1.xml" value="0.16047297297297297" />
         <entry key="checkout/src/main/res/layout/googlepay_button.xml" value="0.11182432432432432" />
         <entry key="checkout/src/main/res/layout/item_benefit_pay.xml" value="0.11182432432432432" />

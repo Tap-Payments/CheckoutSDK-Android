@@ -1829,6 +1829,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             paymentInlineViewHolder,
             tabAnimatedActionButtonViewHolder
         )
+        amountViewHolder.view.amount_section?.itemAmountLayout?.isEnabled = false
+        amountViewHolder.view.amount_section?.itemAmountLayout?.isClickable = false
 
 
     }
