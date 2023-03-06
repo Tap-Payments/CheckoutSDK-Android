@@ -16,6 +16,7 @@ import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.models.SupportedCurrencies
 import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener
+import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.TextViewTheme
@@ -104,7 +105,6 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
         }
         if (selectedPosition == position) drawSelectedBorder(holder)
          else drawUnSelectedBorder(holder)
-
         onItemClickListener(holder, position)
 
     }
@@ -128,7 +128,8 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
     }
 
     private fun onItemClickListener(holder: CurrencyHolders, position:   Int) {
-        holder.itemView.setOnClickListener(null)
+        //holder.itemView.setOnClickListener(null)
+        CustomUtils.hideKeyboardFrom(holder.itemView.context,holder.itemView.rootView)
 
         holder.itemView.setOnClickListener {
             notifyItemChanged(selectedPosition)
@@ -138,8 +139,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
            // selectedPosition = position
             println("position of adapter"+ adapterContentCurrencies[position].amount)
 
-
-            adapterContentCurrencies[position].rate?.let { it1 ->
+               adapterContentCurrencies[position].rate?.let { it1 ->
                 onCurrencyChangedActionListener.onCurrencyClicked(
                         adapterContentCurrencies[position].currency.toString(),
                         it1.toBigDecimal(),
@@ -149,6 +149,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
              CheckoutViewModel().selectedCurrencyPos = adapterContentCurrencies[position].currency.toString()
              CheckoutViewModel().selectedAmountPos = adapterContentCurrencies[position].amount
 
+            CustomUtils.hideKeyboardFrom(holder.itemView.context,holder.itemView.rootView)
 
 
             }

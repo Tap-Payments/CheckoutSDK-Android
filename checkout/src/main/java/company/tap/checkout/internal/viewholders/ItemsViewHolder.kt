@@ -18,6 +18,7 @@ import company.tap.checkout.internal.api.models.SupportedCurrencies
 
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener
+import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.open.models.ItemsModel
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.atoms.TapChipGroup
@@ -71,6 +72,9 @@ class ItemsViewHolder(private val context: Context, private val onCurrencyChange
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")){
             itemSeparatorView.visibility = View.GONE
         }else itemSeparatorView.visibility = View.VISIBLE
+
+
+
     }
 
     private fun itemsRecyclerViewAction(itemsRecyclerView: RecyclerView) {

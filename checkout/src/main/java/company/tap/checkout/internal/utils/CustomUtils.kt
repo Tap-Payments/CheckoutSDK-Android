@@ -88,6 +88,8 @@ object CustomUtils {
     fun hideKeyboardFrom(context: Context, view: View) {
         val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(view.windowToken, 0)
+        view.clearFocus()
+
     }
     /**
      * Show keyboard from.

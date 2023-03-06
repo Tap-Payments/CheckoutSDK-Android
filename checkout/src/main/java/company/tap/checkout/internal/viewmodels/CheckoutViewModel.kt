@@ -2087,6 +2087,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         previousSelectedCurrency: String,
         selectedCurrencySymbol: String
     ) {
+
         currencyOldRate = currencyRate
         lastSelectedCurrency = previousSelectedCurrency
         if (::unModifiedItemList.isInitialized)
