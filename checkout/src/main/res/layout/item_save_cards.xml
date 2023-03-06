@@ -18,15 +18,16 @@
         android:layout_height="24dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="-12dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginRight="0dp"
+        android:layout_marginEnd="4.5dp"
+        android:layout_marginStart="4.5dp"
         android:layout_alignParentEnd="true"
         android:elevation="15dp"
-
-        android:visibility="gone"
-        android:layout_above="@+id/tapCardChip2"
-        android:layout_alignParentRight="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="-8dp"
+        android:clipToOutline="true"
+        android:visibility="visible"
+        android:layout_above="@+id/tapCardChip2" />
 
     <FrameLayout
         android:id="@+id/tapCardChip2"
