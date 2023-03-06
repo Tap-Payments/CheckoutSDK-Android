@@ -6,7 +6,7 @@
     android:id="@+id/tapCardChip6"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="8dp"
+    app:cardCornerRadius="12dp"
     android:elevation="0dp"
     android:hardwareAccelerated="true"
     card_view:cardElevation="10dp"
