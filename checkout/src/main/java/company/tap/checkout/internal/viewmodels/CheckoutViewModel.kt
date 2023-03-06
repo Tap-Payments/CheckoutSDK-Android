@@ -1829,6 +1829,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             paymentInlineViewHolder,
             tabAnimatedActionButtonViewHolder
         )
+        //Added to disable click when button loading
         amountViewHolder.view.amount_section?.itemAmountLayout?.isEnabled = false
         amountViewHolder.view.amount_section?.itemAmountLayout?.isClickable = false
 
