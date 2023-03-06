@@ -123,11 +123,11 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
                 AmountViewDataSource(
                     selectedCurr = originalAmount,
                     selectedCurrText = transactionCurrency,
-                    itemCount = LocalizationManager.getValue("close", "Common")
+                    itemCount = LocalizationManager.getValue<String?>("confirm", "Common")
                 )
             )
             view.amount_section.itemCountButton.text =
-                LocalizationManager.getValue("close", "Common")
+                LocalizationManager.getValue("confirm", "Common")
 
             view.amount_section.itemAmountText.visibility =View.GONE
             view.amount_section.viewSeparator.visibility =View.GONE
@@ -228,7 +228,7 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
                         selectedCurrText = selectedCurrencySymbol,
                         currentCurr = currentAmount,
                         currentCurrText = currentCurrency,
-                        itemCount = LocalizationManager.getValue("close", "Common")
+                        itemCount = LocalizationManager.getValue("confirm", "Common")
                     )
                 )
             } else
@@ -238,7 +238,7 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
                         selectedCurrText = selectedCurrency,
                         currentCurr = currentAmount,
                         currentCurrText = currentCurrency,
-                        itemCount = LocalizationManager.getValue("close", "Common")
+                        itemCount = LocalizationManager.getValue("confirm", "Common")
                     )
                 )
         }

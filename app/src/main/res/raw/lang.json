@@ -105,7 +105,8 @@
       "no": "No",
       "ok": "OK",
       "saveFor": "Save For",
-      "checkouts": "Checkouts"
+      "checkouts": "Checkouts",
+      "confirm": "Confirm"
     },
     "GoPay": {
       "HintLabel": "You can access your saved cards from anywhere with goPay.",
@@ -275,7 +276,8 @@
       "no": "لا",
       "ok": "حسنا",
       "saveFor": "حفظ لعمليات دفع",
-      "checkouts": "Checkouts"
+      "checkouts": "Checkouts",
+      "confirm": "تأكيد"
     },
     "GoPay": {
       "HintLabel": "يمكنك الوصول لبطاقات الدفع الخاصة بك من أي مكان مع goPay.",
