@@ -983,13 +983,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 )
                 //Added to hide the Items-Amount button when 3ds is opened within
                 amountViewHolder?.view?.amount_section?.itemAmountLayout?.visibility = View.GONE
-                addViews(webViewHolder,saveCardSwitchHolder)
+                addViews(webViewHolder)
                  Handler(Looper.getMainLooper()).postDelayed({
 
            webFrameLayout.visibility = View.VISIBLE
            }, 1800)
 
-                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
+
+                //Stopped showing cancel button and poweredby for 3ds
+             /*    saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
               true,
               LocalizationManager.getLocale(context).toString(),LocalizationManager.getValue("deleteSavedCardButtonCancel", "SavedCardTitle"),
                      Color.parseColor(ThemeManager.getValue("actionButton.Cancel.backgroundColor")),
@@ -1010,17 +1012,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
           saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setOnClickListener {
               this.dismissBottomSheet()
 
-          }
+          }*/
             }
 
-            // removeViews(amountViewHolder)
 
 
-         //
-
-
-            //addViews(saveCardSwitchHolder)
-           // saveCardSwitchHolder?.view?.visibility = View.VISIBLE
 
         }
 
