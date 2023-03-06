@@ -19,10 +19,6 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
-import coil.ImageLoader
-import coil.decode.SvgDecoder
-import coil.request.ImageRequest
-import com.bumptech.glide.Glide
 import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.wallet.IsReadyToPayRequest
@@ -34,7 +30,6 @@ import company.tap.checkout.internal.api.models.SavedCard
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
 import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.utils.PaymentsUtil
-import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.TextViewTheme
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
@@ -143,8 +138,8 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     }
 
     override fun getItemViewType(position: Int): Int {
-      //  println("position value are>>>" + position)
-      //  println("totalArraySize value are>>>" + totalArraySize)
+      /*  println("position value are>>>" + position)
+        println("totalArraySize value are>>>" + totalArraySize)*/
         if(position < adapterContent.size){
             if(adapterContent[position].paymentType==PaymentType.WEB){
              //   println("adapterContent value are>>>" + adapterContent[position].brand?.name)
@@ -159,7 +154,8 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
         }
 
-        if(adapterGooglePay.isNotEmpty())
+       // println("gpay paymentType"+adapterGooglePay[0].paymentType)
+        if(adapterGooglePay.isNotEmpty() && adapterGooglePay[0].paymentType== PaymentType.GOOGLE_PAY )
         if(position - adapterContent.size < adapterGooglePay.size){
             return TYPE_GOOGLE_PAY
         }
@@ -267,7 +263,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
     fun resetSelection (){
         selectedPosition = -1
-        adapterGooglePay =ArrayList()
+       // adapterGooglePay =ArrayList()
        //onCardSelectedActionListener.onCardSelectedAction(false, null)
 //        goPayOpenedfromMain(goPayOpened)
         notifyDataSetChanged()
@@ -470,11 +466,12 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     private fun typeGooglePay(holder: RecyclerView.ViewHolder, position: Int) {
         if (selectedPosition == position) setSelectedGoogleShadowAndBackground(holder)
         else setUnSelectedCardTypeGoogleShadowAndBackground(holder)
+        println("typeGooglePay is called?????"+position)
         (holder as GooglePayViewHolder)
         // Initialize a Google Pay API client for an environment suitable for testing.
         // It's recommended to create the PaymentsClient object inside of the onCreate method.
       //  paymentsClient = PaymentsUtil().createPaymentsClient(holder.itemView.context as Activity)
-       // possiblyShowGooglePayButton()
+        possiblyShowGooglePayButton(holder)
        // setUnSelectedCardTypeGoogleShadowAndBackground(holder)
         holder.itemView.googlePayButton.setOnClickListener {
          //   setSelectedGoogleShadowAndBackground(holder)
@@ -589,17 +586,18 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     PaymentsClient.html.isReadyToPay
     ) */
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private fun possiblyShowGooglePayButton() {
+    private fun possiblyShowGooglePayButton(holder: GooglePayViewHolder) {
 
         val isReadyToPayJson = PaymentsUtil.isReadyToPayRequest() ?: return
         val request = IsReadyToPayRequest.fromJson(isReadyToPayJson.toString()) ?: return
-
+        println("isReadyToPayJson"+request.toJson())
         // The call to isReadyToPay is asynchronous and returns a Task. We need to provide an
         // OnCompleteListener to be triggered when the result of the call is known.
         val task = paymentsClient?.isReadyToPay(request)
         task?.addOnCompleteListener { completedTask ->
             try {
-                completedTask.getResult(ApiException::class.java)?.let(::setGooglePayAvailable)
+              //  completedTask.getResult(ApiException::class.java)?.let(::setGooglePayAvailable)
+                setGooglePayAvailable( completedTask.getResult(ApiException::class.java),holder)
             } catch (exception: ApiException) {
                 // Process error
                 Log.w("isReadyToPay failed", exception)
@@ -614,11 +612,12 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
      *
      * @param available isReadyToPay API response.
      */
-    private fun setGooglePayAvailable(available: Boolean) {
+    private fun setGooglePayAvailable(available: Boolean,holder: RecyclerView.ViewHolder) {
         println("available$available")
         if (available) {
-           // googlePayButton.setVisibility(View.VISIBLE)
+            holder.itemView.googlePayButton.setVisibility(View.VISIBLE)
         } else {
+            holder.itemView.googlePayButton.setVisibility(View.GONE)
            // Toast.makeText(holder.itemView.getContext(), R.string.googlepay_button_not_supported, Toast.LENGTH_LONG).show()
         }
     }

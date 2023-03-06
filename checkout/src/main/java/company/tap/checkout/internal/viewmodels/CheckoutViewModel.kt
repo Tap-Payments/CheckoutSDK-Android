@@ -1533,20 +1533,20 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     )
                 } else {
                     println("is this called>>>")
-                   removeAllViews()
-                    if(::businessViewHolder.isInitialized && saveCardSwitchHolder !=null)
-                    addViews(businessViewHolder, saveCardSwitchHolder)
-                    businessViewHolder.view.headerView.constraint.visibility = View.GONE
-                    businessViewHolder.view.topSeparatorLinear.visibility = View.GONE
-                    saveCardSwitchHolder?.view?.visibility = View.VISIBLE
-                    saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
-                    saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
-                        ActionButtonState.ERROR
-                    )
-                    saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isEnabled = true
-                    saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isClickable = true
+                    removeAllViews()
+                    if (::businessViewHolder.isInitialized && saveCardSwitchHolder != null) {
+                        addViews(businessViewHolder, saveCardSwitchHolder)
+                        businessViewHolder.view.headerView.constraint.visibility = View.GONE
+                        businessViewHolder.view.topSeparatorLinear.visibility = View.GONE
+                        saveCardSwitchHolder?.view?.visibility = View.VISIBLE
+                        saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
+                        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
+                            ActionButtonState.ERROR
+                        )
+                        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isEnabled = true
+                        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isClickable = true
+                    }
                 }
-
             }
         }
         Handler().postDelayed({
@@ -2741,12 +2741,19 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             filteredByPaymentTypeAndCurrencyAndSortedList(
                 paymentOptionsWorker, PaymentType.GOOGLE_PAY, currency
             )
+      //  println("googlePaymentOptions"+googlePaymentOptions)
         val hasWebPaymentOptions = webPaymentOptions.size > 0
         val hasCardPaymentOptions = cardPaymentOptions.size > 0
         val hasGooglePaymentOptions = googlePaymentOptions.size > 0
-        if (hasGooglePaymentOptions) {
+       // println("hasGooglePaymentOptions"+hasGooglePaymentOptions)
+
+        //Added if else to update showing GooglePay button based on api
+        if (hasGooglePaymentOptions && googlePaymentOptions.isNotEmpty()) {
             adapter.updateAdapterGooglePay(googlePaymentOptions)
             PaymentDataSource.setGoogleCardPay(googlePaymentOptions)
+        }else {
+            adapter.updateAdapterGooglePay(googlePaymentOptions)
+        PaymentDataSource.setGoogleCardPay(googlePaymentOptions)
         }
         logicToHandlePaymentDataType(webPaymentOptions, cardPaymentOptions)
 
