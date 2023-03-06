@@ -493,6 +493,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         onCardSelectedActionListener.onCardSelectedAction(true, adapterContent[holder.adapterPosition])
         selectedPosition = position
         notifyDataSetChanged()
+        CustomUtils.hideKeyboardFrom(holder.itemView.context, holder.itemView)
     }
 
     private fun bindRedirectCardImage(holder: RecyclerView.ViewHolder) {

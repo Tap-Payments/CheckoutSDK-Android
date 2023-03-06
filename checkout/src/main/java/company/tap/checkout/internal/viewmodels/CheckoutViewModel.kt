@@ -75,6 +75,7 @@ import company.tap.checkout.internal.webview.WebViewContract
 import company.tap.checkout.open.CheckOutActivity
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession
+import company.tap.checkout.open.controller.SDKSession.activity
 import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
 import company.tap.checkout.open.controller.SessionManager
 import company.tap.checkout.open.data_managers.PaymentDataSource
