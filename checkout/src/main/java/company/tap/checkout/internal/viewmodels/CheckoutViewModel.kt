@@ -714,6 +714,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             otpViewHolder,
            // itemsViewHolder
         )
+        //Hide keyboard of any open
+        CustomUtils.hideKeyboardFrom(paymentInlineViewHolder.view.context, paymentInlineViewHolder.view)
     }
 
     private fun caseNotDisplayControlCurrency() {

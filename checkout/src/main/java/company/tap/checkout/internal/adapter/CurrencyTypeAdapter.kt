@@ -59,6 +59,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
         //println("list of currencies$adapterContentCurrencies")
         this.adapterContentCurrencies = adapterContentCurrencies
         notifyDataSetChanged()
+
     }
 
     fun updateSelectedPosition(selectedPos:Int){
@@ -107,6 +108,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
          else drawUnSelectedBorder(holder)
         onItemClickListener(holder, position)
 
+
     }
 
     private fun bindItemData(holder: CurrencyHolders, position: Int) {
@@ -128,8 +130,8 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
     }
 
     private fun onItemClickListener(holder: CurrencyHolders, position:   Int) {
-        //holder.itemView.setOnClickListener(null)
-        CustomUtils.hideKeyboardFrom(holder.itemView.context,holder.itemView.rootView)
+        holder.itemView.setOnClickListener(null)
+
 
         holder.itemView.setOnClickListener {
             notifyItemChanged(selectedPosition)
@@ -149,7 +151,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
              CheckoutViewModel().selectedCurrencyPos = adapterContentCurrencies[position].currency.toString()
              CheckoutViewModel().selectedAmountPos = adapterContentCurrencies[position].amount
 
-            CustomUtils.hideKeyboardFrom(holder.itemView.context,holder.itemView.rootView)
+
 
 
             }
