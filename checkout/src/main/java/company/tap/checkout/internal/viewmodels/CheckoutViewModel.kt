@@ -1760,12 +1760,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun activateActionButtonForGPay() {
        val payString:String = LocalizationManager.getValue("pay", "ActionButton")
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
             true,
             "en",
-            if (::selectedAmount.isInitialized && ::selectedCurrency.isInitialized) {
-                payString+" "+currentCurrencySymbol+" "+selectedAmount
-            }else{ payString+" "+currentCurrencySymbol+" "+currentAmount},
+           "",
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
         )

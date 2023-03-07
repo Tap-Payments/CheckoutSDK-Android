@@ -192,7 +192,10 @@ object PaymentsUtil {
             }
             capCardBrandList.add(i, newValue)
         }
-        parameters.put("allowedCardNetworks", JSONArray(capCardBrandList))
+        //parameters.put("allowedCardNetworks", JSONArray(capCardBrandList))
+        //Todo:Temporary replaced AMERICANEXPRRSS with AMEX for GPayAPI Call
+        parameters.put("allowedCardNetworks", allowedCardNetworks)
+        //parameters.put("allowedCardNetworks", JSONArray(capCardBrandList))
         cardPaymentMethod.put("parameters", parameters)
         return cardPaymentMethod
     }
