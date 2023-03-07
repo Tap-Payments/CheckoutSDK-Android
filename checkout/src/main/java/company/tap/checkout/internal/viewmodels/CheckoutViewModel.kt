@@ -1715,12 +1715,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         println("focussss"+paymentInlineViewHolder.tapCardInputView.hasFocus())
         println("isSelected"+isSelected)
         paymentInlineViewHolder.resetPaymentCardView()
-        if (paymentInlineViewHolder.tapCardInputView.hasFocus()) {
+       /* if (paymentInlineViewHolder.tapCardInputView.hasFocus()) {
             paymentInlineViewHolder.tapCardInputView.clear()
            // paymentInlineViewHolder.clearCardInputAction()
             //paymentInlineViewHolder.onFocusChange("")
-            CustomUtils.hideKeyboardFrom(context, paymentInlineViewHolder.view)
-        }
+           // CustomUtils.hideKeyboardFrom(context, paymentInlineViewHolder.view)
+        }*/
         println("savedCardsModel" + savedCardsModel)
         unActivateActionButton()
         when (savedCardsModel) {

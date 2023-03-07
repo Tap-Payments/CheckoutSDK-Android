@@ -490,6 +490,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         onCardSelectedActionListener.onCardSelectedAction(true, adapterContent[holder.adapterPosition])
         selectedPosition = position
         notifyDataSetChanged()
+        //Hide keyboard of any open
         CustomUtils.hideKeyboardFrom(holder.itemView.context, holder.itemView)
     }
 

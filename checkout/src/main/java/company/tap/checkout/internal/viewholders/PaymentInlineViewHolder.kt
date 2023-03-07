@@ -910,7 +910,7 @@ class PaymentInlineViewHolder (private val context: Context,
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 //   checkoutFragment.scrollView?.scrollTo(0,height)
                 // tapCardInputView.requestFocus()
-                CustomUtils.showKeyboard(context)
+              //  CustomUtils.showKeyboard(context)
 
             }
 
@@ -1660,6 +1660,8 @@ class PaymentInlineViewHolder (private val context: Context,
         contactDetailsView?.visibility = View.GONE
         shippingDetailView?.visibility = View.GONE
         intertabLayout.visibility = View.GONE
+        //Added for opening as soon as cvv focus
+        CustomUtils.showKeyboard(context)
     }
 
     fun getSavedCardData(): CreateTokenSavedCard? {
@@ -1678,6 +1680,7 @@ class PaymentInlineViewHolder (private val context: Context,
     fun resetPaymentCardView(){
 
         tapCardInputView.clear()
+        tapCardInputView.clearFocus()
         closeButton?.visibility = View.GONE
         controlScannerOptions()
         cardInputUIStatus = CardInputUIStatus.NormalCard
