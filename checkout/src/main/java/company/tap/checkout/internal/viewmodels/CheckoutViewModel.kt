@@ -1480,7 +1480,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             businessViewHolder.view.headerView.constraint.visibility = View.GONE
             businessViewHolder.view.topSeparatorLinear.visibility = View.GONE
             saveCardSwitchHolder?.view?.visibility = View.VISIBLE
-            saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
+            saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.INVISIBLE
         }
 
 
@@ -1539,7 +1539,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         businessViewHolder.view.headerView.constraint.visibility = View.GONE
                         businessViewHolder.view.topSeparatorLinear.visibility = View.GONE
                         saveCardSwitchHolder?.view?.visibility = View.VISIBLE
-                        saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
+                        saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.INVISIBLE
                         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                             ActionButtonState.ERROR
                         )
@@ -1829,9 +1829,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             paymentInlineViewHolder,
             tabAnimatedActionButtonViewHolder
         )
-        //Added to disable click when button loading
-        amountViewHolder.view.amount_section?.itemAmountLayout?.isEnabled = false
-        amountViewHolder.view.amount_section?.itemAmountLayout?.isClickable = false
 
 
     }
@@ -2880,6 +2877,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             paymentType === PaymentType.WEB -> {
                 if (savedCardsModel != null) {
                     PaymentDataSource.setWebViewType(WebViewType.REDIRECT)
+                    //Added to disable click when button loading
+                    amountViewHolder.view.amount_section?.itemAmountLayout?.isEnabled = false
+                    amountViewHolder.view.amount_section?.itemAmountLayout?.isClickable = false
                     onClickRedirect(savedCardsModel)
                 }
             }
