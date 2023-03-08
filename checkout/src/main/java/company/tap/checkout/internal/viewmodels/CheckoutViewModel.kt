@@ -2885,10 +2885,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
             paymentType === PaymentType.CARD -> {
                 PaymentDataSource.setWebViewType(WebViewType.THREE_DS_WEBVIEW)
+                //Added to disable click when button loading
+                amountViewHolder.view.amount_section?.itemAmountLayout?.isEnabled = false
+                amountViewHolder.view.amount_section?.itemAmountLayout?.isClickable = false
                 onClickCardPayment()
             }
             paymentType === PaymentType.SavedCard -> {
                 if(isSavedCardSelected== true){
+                    //Added to disable click when button loading
+                    amountViewHolder.view.amount_section?.itemAmountLayout?.isEnabled = false
+                    amountViewHolder.view.amount_section?.itemAmountLayout?.isClickable = false
                     payActionSavedCard(savedCardsModel as SavedCard)
 
                 }
