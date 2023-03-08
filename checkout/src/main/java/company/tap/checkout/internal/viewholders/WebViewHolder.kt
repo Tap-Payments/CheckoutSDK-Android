@@ -61,7 +61,7 @@ class WebViewHolder(
         //  webViewUrl = redirectURL
         //  chargeResponse = authenticate
         progressBar?.max = 100
-        progressBar?.progress = 20
+        progressBar?.progress = 10
         if (TextUtils.isEmpty(redirectURL)) {
             throw IllegalArgumentException("Empty URL passed to WebViewFragment!")
         }
@@ -88,7 +88,31 @@ class WebViewHolder(
     @SuppressLint("SetJavaScriptEnabled")
     private fun setUpWebView(mUrl: String) {
         web_view.settings.javaScriptEnabled = true
-        web_view.webChromeClient = WebChromeClient()
+        progressBar?.visibility = View.VISIBLE
+        web_view.setVisibility(View.INVISIBLE)
+        web_view.webChromeClient = object : WebChromeClient() {
+            /*
+                    public void onProgressChanged (WebView view, int newProgress)
+                        Tell the host application the current progress of loading a page.
+
+                    Parameters
+                        view : The WebView that initiated the callback.
+                        newProgress : Current page loading progress, represented by an integer
+                            between 0 and 100.
+                */
+            override fun onProgressChanged(view: WebView?, newProgress: Int) {
+                // Update the progress bar with page loading progress
+                progressBar?.progress = newProgress
+                println("progressBar?.progress"+progressBar?.progress)
+                println("progressBar?.progress"+newProgress)
+                if (newProgress == 100) {
+                     // Hide the progressbar
+                     progressBar?.visibility = View.GONE
+                    web_view.setVisibility(View.VISIBLE)
+                 }
+
+            }
+        }
         web_view.settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
         web_view.webViewClient = cardViewModel?.let { TapCustomWebViewClient(this, it) }!!
         web_view.settings.loadWithOverviewMode = true
@@ -113,25 +137,7 @@ class WebViewHolder(
 
 
 
-        web_view.webChromeClient = object : WebChromeClient() {
-            /*
-                    public void onProgressChanged (WebView view, int newProgress)
-                        Tell the host application the current progress of loading a page.
 
-                    Parameters
-                        view : The WebView that initiated the callback.
-                        newProgress : Current page loading progress, represented by an integer
-                            between 0 and 100.
-                */
-            override fun onProgressChanged(view: WebView?, newProgress: Int) {
-                // Update the progress bar with page loading progress
-                progressBar?.progress = newProgress
-                if (newProgress == 100) {
-                    // Hide the progressbar
-                    progressBar?.visibility = View.GONE
-                }
-            }
-        }
     }
 
 }
