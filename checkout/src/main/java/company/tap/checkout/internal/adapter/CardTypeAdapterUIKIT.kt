@@ -380,7 +380,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
     private fun setSelectedCardTypeSavedShadowAndBackground(holder: RecyclerView.ViewHolder) {
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
-            holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.border_shadow_black)
+            holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.border_shadow_white)
         } else {
             holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.border_shadow)
         }
@@ -507,7 +507,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
     private fun setSelectedCardTypeRedirectShadowAndBackground(holder: RecyclerView.ViewHolder) {
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) (holder.itemView.setBackgroundResource(
-                R.drawable.border_shadow_black
+                R.drawable.border_shadow_white
         ))
         else holder.itemView.setBackgroundResource(R.drawable.border_shadow)
 
@@ -555,7 +555,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     }
     private fun setSelectedGoogleShadowAndBackground(holder: RecyclerView.ViewHolder) {
        /* if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) (holder.itemView.setBackgroundResource(
-            R.drawable.border_shadow_black
+            R.drawable.border_shadow_white
         ))
         else holder.itemView.setBackgroundResource(R.drawable.border_shadow)
 

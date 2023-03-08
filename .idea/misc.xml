@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../.gradle/caches/transforms-2/files-2.1/b120a87aa1904a70788153632a6d4fb9/jetified-TapUIKit-Android-1.1.1.358.237/res/drawable/border_unclick_black.xml" value="0.2745" />
+        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/cf442cc5454b0a8aa00ff098a090e4ef/jetified-TapUIKit-Android-1.1.1.358.248/res/drawable/border_shadow_white.xml" value="0.2455" />
         <entry key="checkout/src/main/res/drawable-mdpi/checkout_with_googlepay_button_content.xml" value="0.125" />
         <entry key="checkout/src/main/res/drawable-mdpi/googlepay_button_background_shape.xml" value="0.125" />
         <entry key="checkout/src/main/res/drawable-xxhdpi/googlepay_button_overlay.xml" value="0.125" />

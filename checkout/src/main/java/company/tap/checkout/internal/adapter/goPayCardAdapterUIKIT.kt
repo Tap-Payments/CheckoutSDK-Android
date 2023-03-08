@@ -142,7 +142,7 @@ class GoPayCardAdapterUIKIT(
                     if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains(
                             "dark"
                         )) {
-                        holder.itemView.tapCardChip4.setBackgroundResource(R.drawable.border_shadow_black)
+                        holder.itemView.tapCardChip4.setBackgroundResource(R.drawable.border_shadow_white)
                     } else {
                         holder.itemView.tapCardChip4.setBackgroundResource(R.drawable.border_shadow)
                     }
@@ -199,7 +199,7 @@ class GoPayCardAdapterUIKIT(
         }
         if (selectedPosition == position) {
             if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
-                holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.border_shadow_black)
+                holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.border_shadow_white)
             } else {
                 holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.border_shadow)
             }
@@ -255,7 +255,7 @@ class GoPayCardAdapterUIKIT(
     private fun typeRedirect(holder: RecyclerView.ViewHolder, position: Int) {
         if (selectedPosition == position) {
             if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
-                holder.itemView.setBackgroundResource(R.drawable.border_shadow_black)
+                holder.itemView.setBackgroundResource(R.drawable.border_shadow_white)
             } else {
                 holder.itemView.setBackgroundResource(R.drawable.border_shadow)
             }

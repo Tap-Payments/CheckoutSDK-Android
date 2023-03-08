@@ -168,7 +168,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
          */
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) holder.itemView.setBackgroundResource(
                // R.drawable.border_currency_black
-                R.drawable.border_shadow_black
+                R.drawable.border_shadow_white
         )
         else holder.itemView.setBackgroundResource(R.drawable.border_shadow)
         setBorderedView(
