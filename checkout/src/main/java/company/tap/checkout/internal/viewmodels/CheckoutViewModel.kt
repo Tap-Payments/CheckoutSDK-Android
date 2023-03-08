@@ -1511,7 +1511,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
                     Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
                 )
-                //tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
+                tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
 
                 tabAnimatedActionButton?.changeButtonState(
                     ActionButtonState.ERROR
