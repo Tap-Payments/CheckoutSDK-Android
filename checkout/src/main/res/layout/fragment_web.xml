@@ -17,7 +17,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:background="@drawable/corner_radius_top"
-        android:visibility="visible"
+        android:visibility="gone"
         android:paddingTop="@dimen/margin_basic_10dp">
 
         <View
@@ -66,6 +66,6 @@
     android:id="@+id/web_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:ignore="MissingDefaultResource"
+    android:scrollbars="vertical|horizontal"
    />
 </LinearLayout>

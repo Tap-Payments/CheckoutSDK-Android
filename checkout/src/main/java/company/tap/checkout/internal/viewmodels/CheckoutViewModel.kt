@@ -943,17 +943,22 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             if(PaymentDataSource?.getWebViewType()!=null && PaymentDataSource.getWebViewType() ==WebViewType.REDIRECT){
                 businessViewHolder.view.headerView.constraint.visibility = View.GONE
                 businessViewHolder.view.topSeparatorLinear.visibility = View.GONE
+
                 checkoutFragment.closeText.visibility = View.VISIBLE
                 removeViews(
-                    businessViewHolder,
+                    //businessViewHolder,
                     amountViewHolder,
                     cardViewHolder,
-                    saveCardSwitchHolder,
+                   // saveCardSwitchHolder,
                     paymentInlineViewHolder,
                     otpViewHolder,
                     goPaySavedCardHolder,
                     goPayViewsHolder
                 )
+                saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
+                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
+
+                saveCardSwitchHolder?.view?.cardSwitch?.tapLogoImage?.visibility = View.INVISIBLE
                 val bottomSheet: FrameLayout? =
                     bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet)
               //  BottomSheetBehavior.from(bottomSheet as View).state = BottomSheetBehavior.STATE_EXPANDED
@@ -969,8 +974,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     webFrameLayout.visibility = View.VISIBLE
 
 
-                }, 1500)
-                saveCardSwitchHolder?.view?.visibility = View.VISIBLE
+                }, 1000)
+                Handler(Looper.getMainLooper()).postDelayed({
+                   // saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = View.INVISIBLE
+                    removeViews(saveCardSwitchHolder)
+                }, 2000)
+
             }else   if(PaymentDataSource?.getWebViewType()!=null && PaymentDataSource.getWebViewType() ==WebViewType.THREE_DS_WEBVIEW){
                   webViewHolder = WebViewHolder(context, fragmentManager,url,this,cardViewModel,authenticate)
                 removeViews(
@@ -1824,13 +1833,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
         saveCardSwitchHolder?.view?.mainSwitch?.mainTextSave?.visibility = View.INVISIBLE
 
-        removeViews(
+        //Commented to try the flow of redirect
+      /*  removeViews(
             //    businessViewHolder,
             //    amountViewHolder,
             cardViewHolder,
             paymentInlineViewHolder,
             tabAnimatedActionButtonViewHolder
-        )
+        )*/
 
 
     }
