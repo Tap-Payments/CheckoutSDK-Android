@@ -974,11 +974,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     webFrameLayout.visibility = View.VISIBLE
 
 
-                }, 1000)
+                }, 100)
                 Handler(Looper.getMainLooper()).postDelayed({
                    // saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = View.INVISIBLE
                     removeViews(saveCardSwitchHolder)
-                }, 2000)
+                }, 2200)
 
             }else   if(PaymentDataSource?.getWebViewType()!=null && PaymentDataSource.getWebViewType() ==WebViewType.THREE_DS_WEBVIEW){
                   webViewHolder = WebViewHolder(context, fragmentManager,url,this,cardViewModel,authenticate)
@@ -1511,7 +1511,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
                     Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
                 )
-                tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
+                //tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
 
                 tabAnimatedActionButton?.changeButtonState(
                     ActionButtonState.ERROR
