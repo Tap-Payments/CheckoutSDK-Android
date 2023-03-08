@@ -18,6 +18,7 @@
         <entry key="checkout/src/main/res/layout/item_saved_card.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/itemviewholder_layout.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/payment_inline_viewholder.xml" value="0.1" />
+        <entry key="checkout/src/main/res/layout/switch_layout.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/web_view_layout.xml" value="0.21552604698672115" />
       </map>
     </option>
