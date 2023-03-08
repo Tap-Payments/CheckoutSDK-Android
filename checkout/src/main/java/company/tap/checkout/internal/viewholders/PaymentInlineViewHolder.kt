@@ -14,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.widget.doAfterTextChanged
 import com.google.android.material.tabs.TabLayout
 import company.tap.cardinputwidget.Card
@@ -121,8 +122,7 @@ class PaymentInlineViewHolder (private val context: Context,
     var cardBrandView: CardBrandView? = null
     var closeButton: ImageView? = null
     var cardInputUIStatus: CardInputUIStatus? = CardInputUIStatus.NormalCard
-    var backArrow: TapImageView? = null
-    var backArrowAr: TapImageView? = null
+    var backArrow: ImageView? = null
     var contactDetailsView: TapContactDetailsView? = null
     var shippingDetailView: TapShippingDetailView? = null
     var tapPaymentInput: TapPaymentInput? = null
@@ -151,7 +151,7 @@ class PaymentInlineViewHolder (private val context: Context,
         paymentInputContainer = view.findViewById(R.id.payment_input_layout)
         // clearView = view.findViewById(R.id.clear_text)
         backArrow = tapCardInputView.findViewById(R.id.backView)
-        backArrowAr = tapCardInputView.findViewById(R.id.backView_Ar)
+      //  backArrowAr = tapCardInputView.findViewById(R.id.backView_Ar)
         backArrow?.visibility =View.GONE
         contactDetailsView = view.findViewById(R.id.contact_detailsView)
         shippingDetailView = view.findViewById(R.id.ship_detailsView)
@@ -285,7 +285,7 @@ class PaymentInlineViewHolder (private val context: Context,
             contactDetailsView?.visibility =View.GONE
             shippingDetailView?.visibility =View.GONE
             closeButton?.visibility = View.GONE
-            tapCardInputView.setVisibilityOfHolderField(false)
+            //tapCardInputView.setVisibilityOfHolderField(false)
             tapCardInputView.holderNameEnabled = false
             checkoutViewModel.incrementalCount=0
             tabLayout.visibility =View.VISIBLE
@@ -358,7 +358,13 @@ class PaymentInlineViewHolder (private val context: Context,
         cardScannerBtn?.setOnClickListener {
             onCardNFCCallListener.onClickCardScanner(true)
         }
-        backArrow?.setOnClickListener {
+
+        if (LocalizationManager.getLocale(context).language == "ar") {
+           //   backArrow?.scaleX=-0.4f
+
+
+        }
+      /*  backArrow?.setOnClickListener {
 
 
           //  tapCardInputView.isSavedCard = false
@@ -368,9 +374,9 @@ class PaymentInlineViewHolder (private val context: Context,
             closeButton?.visibility = View.GONE
             controlScannerOptions()
             cardInputUIStatus = CardInputUIStatus.NormalCard
-           /* tapCardInputView.setSingleCardInput(
+           *//* tapCardInputView.setSingleCardInput(
                 CardBrandSingle.Unknown, null
-            )*/
+            )*//*
             tapInlineCardSwitch?.visibility = View.GONE
           //  tapCardInputView.separatorcard2.visibility = View.INVISIBLE
            // resetCardBrandIcon()
@@ -384,39 +390,14 @@ class PaymentInlineViewHolder (private val context: Context,
             acceptedCardText.visibility =View.VISIBLE
             checkoutViewModel.resetViewHolder()
 
-         /*  if(fullCardNumber!=null && !fullCardNumber.isNullOrEmpty()){
+         *//*  if(fullCardNumber!=null && !fullCardNumber.isNullOrEmpty()){
                 tapCardInputView.setCardNumberMasked(maskCardNumber(fullCardNumber!!))
 
-            }*/
+            }*//*
 
         }
+*/
 
-        backArrowAr?.setOnClickListener {
-            //  tapCardInputView.isSavedCard = false
-            cardInputUIStatus = CardInputUIStatus.NormalCard
-            tabLayout.resetBehaviour()
-            tapCardInputView.clear()
-            closeButton?.visibility = View.GONE
-            controlScannerOptions()
-            cardInputUIStatus = CardInputUIStatus.NormalCard
-            /* tapCardInputView.setSingleCardInput(
-                 CardBrandSingle.Unknown, null
-             )*/
-            tapInlineCardSwitch?.visibility = View.GONE
-            //  tapCardInputView.separatorcard2.visibility = View.INVISIBLE
-            // resetCardBrandIcon()
-            tapAlertView?.visibility =View.GONE
-            checkoutViewModel.resetCardSelection()
-
-            checkoutViewModel.isSavedCardSelected = false
-            //resetPaymentCardView()
-            intertabLayout.visibility = View.VISIBLE
-            tabLayout.visibility = View.VISIBLE
-            acceptedCardText.visibility =View.VISIBLE
-            checkoutViewModel.resetViewHolder()
-
-
-        }
 
     }
 
@@ -457,7 +438,7 @@ class PaymentInlineViewHolder (private val context: Context,
         tapInlineCardSwitch?.switchSaveCard?.isChecked = true
         tapInlineCardSwitch?.visibility = View.GONE
         closeButton?.visibility = View.GONE
-        tapCardInputView.setVisibilityOfHolderField(false)
+       // tapCardInputView.setVisibilityOfHolderField(false)
         tapCardInputView.holderNameEnabled = false
         checkoutViewModel.incrementalCount=0
     }
@@ -994,7 +975,7 @@ class PaymentInlineViewHolder (private val context: Context,
 
                     if(cardInputUIStatus!=null && cardInputUIStatus==CardInputUIStatus.SavedCard){
                         tapAlertView?.visibility = View.GONE
-                        tapCardInputView.setVisibilityOfHolderField(false)
+                      //  tapCardInputView.setVisibilityOfHolderField(false)
                         tapCardInputView.holderNameEnabled = false
                         separator1?.visibility = View.GONE
                         //tapCardInputView.separatorcard2.visibility = View.INVISIBLE
@@ -1608,7 +1589,7 @@ class PaymentInlineViewHolder (private val context: Context,
     fun setDataForSavedCard(_savedCardsModel: SavedCard, cardInputUIStatus: CardInputUIStatus) {
         println("cardInputUIStatus>>" +cardInputUIStatus)
         tapCardInputView.holderNameEnabled = false
-        tapCardInputView.setVisibilityOfHolderField(false)
+       // tapCardInputView.setVisibilityOfHolderField(false)
         this.cardInputUIStatus = cardInputUIStatus
         this.savedCardsModel = _savedCardsModel
         val cardModel = Card(
@@ -1706,7 +1687,7 @@ class PaymentInlineViewHolder (private val context: Context,
         contactDetailsView?.visibility =View.GONE
         shippingDetailView?.visibility =View.GONE
         closeButton?.visibility = View.GONE
-        tapCardInputView.setVisibilityOfHolderField(false)
+       // tapCardInputView.setVisibilityOfHolderField(false)
         tapCardInputView.holderNameEnabled = false
         checkoutViewModel.incrementalCount=0
         tabLayout.visibility =View.VISIBLE

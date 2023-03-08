@@ -1480,7 +1480,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             businessViewHolder.view.headerView.constraint.visibility = View.GONE
             businessViewHolder.view.topSeparatorLinear.visibility = View.GONE
             saveCardSwitchHolder?.view?.visibility = View.VISIBLE
-            saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.INVISIBLE
+            saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
         }
 
 
@@ -1494,15 +1494,17 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
             ChargeStatus.CANCELLED, ChargeStatus.TIMEDOUT, ChargeStatus.FAILED, ChargeStatus.DECLINED, ChargeStatus.UNKNOWN,
             ChargeStatus.RESTRICTED, ChargeStatus.ABANDONED, ChargeStatus.VOID, ChargeStatus.INVALID -> {
-                tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
-                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
+                println("CANCELLED>>>"+tabAnimatedActionButton)
+                tabAnimatedActionButton?.setButtonDataSource(
                     false,
                     "en",
-                    null,
+                    "",
                     Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
                     Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
                 )
-                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
+                tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
+
+                tabAnimatedActionButton?.changeButtonState(
                     ActionButtonState.ERROR
                 )
 
@@ -1539,7 +1541,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         businessViewHolder.view.headerView.constraint.visibility = View.GONE
                         businessViewHolder.view.topSeparatorLinear.visibility = View.GONE
                         saveCardSwitchHolder?.view?.visibility = View.VISIBLE
-                        saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.INVISIBLE
+                        saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
                         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                             ActionButtonState.ERROR
                         )
@@ -2995,6 +2997,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             ChargeStatus.CANCELLED, ChargeStatus.TIMEDOUT, ChargeStatus.FAILED, ChargeStatus.DECLINED, ChargeStatus.UNKNOWN,
             ChargeStatus.RESTRICTED, ChargeStatus.ABANDONED, ChargeStatus.VOID, ChargeStatus.INVALID -> {
                 Handler().postDelayed({
+                    tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
                     saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                         ActionButtonState.ERROR
                     )

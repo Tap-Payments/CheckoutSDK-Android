@@ -711,15 +711,16 @@ class CardRepository : APIRequestCallback {
                     //  viewModel.redirectLoadingFinished(true, chargeResponse, contextSDK)
                 }
                 ChargeStatus.ABANDONED, ChargeStatus.CANCELLED, ChargeStatus.DECLINED -> {
-                    SDKSession.getListener()?.paymentFailed(
-                        chargeResponse
-                    )
+
                     //  viewModel?.handleSuccessFailureResponseButton("failure",chargeResponse.authenticate,chargeResponse.status)
                     viewModel?.handleSuccessFailureResponseButton(
                         "failure",
                         chargeResponse.authenticate,
                         chargeResponse,
  tabAnimatedActionButton
+                    )
+                    SDKSession.getListener()?.paymentFailed(
+                        chargeResponse
                     )
                     //  viewModel.redirectLoadingFinished(true,chargeResponse, contextSDK)
 
