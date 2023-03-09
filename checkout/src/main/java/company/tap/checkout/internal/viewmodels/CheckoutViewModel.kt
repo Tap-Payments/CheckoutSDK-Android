@@ -1484,15 +1484,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 )
             }
         if (saveCardSwitchHolder != null) {
-            removeViews(businessViewHolder, amountViewHolder, saveCardSwitchHolder)
-            addViews(businessViewHolder, saveCardSwitchHolder)
+           // removeViews(businessViewHolder, amountViewHolder, saveCardSwitchHolder)
+           // addViews(businessViewHolder, saveCardSwitchHolder)
             businessViewHolder.view.headerView.constraint.visibility = View.GONE
             businessViewHolder.view.topSeparatorLinear.visibility = View.GONE
             saveCardSwitchHolder?.view?.visibility = View.VISIBLE
             saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
         }
 
-
+        println("chargeResponse are>>>>"+chargeResponse?.status)
         when (chargeResponse?.status) {
             ChargeStatus.CAPTURED, ChargeStatus.AUTHORIZED, ChargeStatus.VALID, ChargeStatus.IN_PROGRESS -> {
 
@@ -1504,6 +1504,20 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             ChargeStatus.CANCELLED, ChargeStatus.TIMEDOUT, ChargeStatus.FAILED, ChargeStatus.DECLINED, ChargeStatus.UNKNOWN,
             ChargeStatus.RESTRICTED, ChargeStatus.ABANDONED, ChargeStatus.VOID, ChargeStatus.INVALID -> {
                 println("CANCELLED>>>"+tabAnimatedActionButton)
+              //  saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(false,Color.MAGENTA)
+                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
+                    false,
+                    "en",
+                    null,
+                    Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
+                    Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
+                )
+
+                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
+                    ActionButtonState.ERROR
+                )
+                tabAnimatedActionButton?.setInValidBackground(false, Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")))
+
                 tabAnimatedActionButton?.setButtonDataSource(
                     false,
                     "en",
@@ -1511,7 +1525,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
                     Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
                 )
-                tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
+                //tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
 
                 tabAnimatedActionButton?.changeButtonState(
                     ActionButtonState.ERROR
@@ -1534,6 +1548,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
                     Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
                 )*/
+                tabAnimatedActionButton?.setInValidBackground(false, Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")))
 
             }
             else -> {
@@ -1551,6 +1566,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         businessViewHolder.view.topSeparatorLinear.visibility = View.GONE
                         saveCardSwitchHolder?.view?.visibility = View.VISIBLE
                         saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
+                     //   saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(false,Color.RED)
+
+                        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
+                            false,
+                            "en",
+                            null,
+                            Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
+                            Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
+
+                            )
                         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                             ActionButtonState.ERROR
                         )
@@ -1576,11 +1601,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 tabAnimatedActionButton.context as AppCompatActivity
             )
         }
-        Handler().postDelayed({
+       Handler().postDelayed({
             if (::bottomSheetDialog.isInitialized)
                 bottomSheetDialog.dismiss()
 
-        }, 15000)
+        }, 5000)
 
 
     }
@@ -2214,20 +2239,36 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         businessViewHolder.view.topSeparatorLinear.visibility = View.GONE
         saveCardSwitchHolder?.view?.cardSwitch?.switchesLayout?.visibility= View.GONE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility= View.VISIBLE
-        val payString: String = LocalizationManager.getValue("pay", "ActionButton")
+     /*   val payString: String = LocalizationManager.getValue("pay", "ActionButton")
+        if(chargeResponse?.status== ChargeStatus.CAPTURED||chargeResponse?.status ==ChargeStatus.INITIATED){
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
             true,"en","",
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")))
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)
+        }else {
+            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
+                false,
+                "en",
+                null,
+                Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
+                Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
+            )
+
+            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
+                ActionButtonState.ERROR
+            )
+        }*/
     /*  if (::bottomSheetDialog.isInitialized)
             bottomSheetDialog.dismiss()*/
+
         Handler().postDelayed({
             if (::bottomSheetDialog.isInitialized)
                 bottomSheetDialog.dismiss()
 
-        }, 2500)
+        }, 3000)
+
 
     }
 
@@ -3008,15 +3049,19 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             ChargeStatus.RESTRICTED, ChargeStatus.ABANDONED, ChargeStatus.VOID, ChargeStatus.INVALID -> {
                 Handler().postDelayed({
                     tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
-                    saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
-                        ActionButtonState.ERROR
-                    )
+                  //  saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
+                  //      false,Color.YELLOW
+                   // )
                     saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
                         false,
                         "en",
                         null,
                         Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
                         Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
+
+                    )
+                    saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
+                        ActionButtonState.ERROR
                     )
                 }, 500)
                 tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
@@ -3032,6 +3077,17 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
                 } else {
                     Handler().postDelayed({
+                       // saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(false,
+                       //    Color.BLUE
+                      //  )
+                        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
+                            false,
+                            "en",
+                            null,
+                            Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
+                            Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
+
+                            )
                         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                             ActionButtonState.ERROR
                         )
@@ -3047,7 +3103,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 bottomSheetDialog.dismiss()
             _checkoutFragment.activity?.onBackPressed()
 
-        }, 8000)
+        }, 12000)
     }
 
 
