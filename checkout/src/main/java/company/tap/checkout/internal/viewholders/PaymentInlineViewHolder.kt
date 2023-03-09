@@ -68,7 +68,8 @@ class PaymentInlineViewHolder (private val context: Context,
                                private val checkoutFragment: CheckoutFragment,
                                private val loyaltyViewHolder: LoyaltyViewHolder?,
 ) : TapBaseViewHolder,
-    TapSelectionTabLayoutInterface, CardInputListener, TapPaymentShowHideClearImage {
+    TapSelectionTabLayoutInterface, CardInputListener, TapPaymentShowHideClearImage,
+    View.OnClickListener {
     override val view: View =
         LayoutInflater.from(context).inflate(R.layout.payment_inline_viewholder,null)
     override val type = SectionType.PAYMENT_INPUT
@@ -122,7 +123,7 @@ class PaymentInlineViewHolder (private val context: Context,
     var cardBrandView: CardBrandView? = null
     var closeButton: ImageView? = null
     var cardInputUIStatus: CardInputUIStatus? = CardInputUIStatus.NormalCard
-    var backArrow: ImageView? = null
+   // var backArrow: ImageView? = null
     var contactDetailsView: TapContactDetailsView? = null
     var shippingDetailView: TapShippingDetailView? = null
     var tapPaymentInput: TapPaymentInput? = null
@@ -150,9 +151,9 @@ class PaymentInlineViewHolder (private val context: Context,
         //cardSwitchLayout = tapCardInputView.findViewById(R.id.mainSwitchInline)
         paymentInputContainer = view.findViewById(R.id.payment_input_layout)
         // clearView = view.findViewById(R.id.clear_text)
-        backArrow = tapCardInputView.findViewById(R.id.backView)
+     //   backArrow = tapCardInputView.findViewById(R.id.backView)
       //  backArrowAr = tapCardInputView.findViewById(R.id.backView_Ar)
-        backArrow?.visibility =View.GONE
+        tapCardInputView.backArrow?.visibility =View.GONE
         contactDetailsView = view.findViewById(R.id.contact_detailsView)
         shippingDetailView = view.findViewById(R.id.ship_detailsView)
 
@@ -359,27 +360,26 @@ class PaymentInlineViewHolder (private val context: Context,
             onCardNFCCallListener.onClickCardScanner(true)
         }
 
-        if (LocalizationManager.getLocale(context).language == "ar") {
-           //   backArrow?.scaleX=-0.4f
+        tapCardInputView.backArrow.setOnClickListener(this)
+        tapCardInputView.backArrow.isClickable= true
+        tapCardInputView.backArrow.isFocusable= true
+        tapCardInputView.backArrow.isEnabled= true
 
 
-        }
-      /*  backArrow?.setOnClickListener {
-
-
-          //  tapCardInputView.isSavedCard = false
+       /* tapCardInputView.backArrow.setOnClickListener {
+            //  tapCardInputView.isSavedCard = false
             cardInputUIStatus = CardInputUIStatus.NormalCard
             tabLayout.resetBehaviour()
             tapCardInputView.clear()
             closeButton?.visibility = View.GONE
             controlScannerOptions()
             cardInputUIStatus = CardInputUIStatus.NormalCard
-           *//* tapCardInputView.setSingleCardInput(
-                CardBrandSingle.Unknown, null
-            )*//*
+            *//* tapCardInputView.setSingleCardInput(
+                    CardBrandSingle.Unknown, null
+                )*//*
             tapInlineCardSwitch?.visibility = View.GONE
-          //  tapCardInputView.separatorcard2.visibility = View.INVISIBLE
-           // resetCardBrandIcon()
+            //  tapCardInputView.separatorcard2.visibility = View.INVISIBLE
+            // resetCardBrandIcon()
             tapAlertView?.visibility =View.GONE
             checkoutViewModel.resetCardSelection()
 
@@ -390,13 +390,13 @@ class PaymentInlineViewHolder (private val context: Context,
             acceptedCardText.visibility =View.VISIBLE
             checkoutViewModel.resetViewHolder()
 
-         *//*  if(fullCardNumber!=null && !fullCardNumber.isNullOrEmpty()){
-                tapCardInputView.setCardNumberMasked(maskCardNumber(fullCardNumber!!))
+            *//*  if(fullCardNumber!=null && !fullCardNumber.isNullOrEmpty()){
+                    tapCardInputView.setCardNumberMasked(maskCardNumber(fullCardNumber!!))
 
-            }*//*
+                }*//*
 
-        }
-*/
+        }*/
+
 
 
     }
@@ -1724,4 +1724,35 @@ class PaymentInlineViewHolder (private val context: Context,
             }
         }
     }
+
+    override fun onClick(v: View?) {
+
+
+        if(v?.id == R.id.backView) {
+
+            Toast.makeText(context, "clicking!!", Toast.LENGTH_SHORT).show()
+            cardInputUIStatus = CardInputUIStatus.NormalCard
+            tabLayout.resetBehaviour()
+            tapCardInputView.clear()
+            closeButton?.visibility = View.GONE
+            controlScannerOptions()
+            cardInputUIStatus = CardInputUIStatus.NormalCard
+            /* tapCardInputView.setSingleCardInput(
+                CardBrandSingle.Unknown, null
+            )*/
+            tapInlineCardSwitch?.visibility = View.GONE
+            //  tapCardInputView.separatorcard2.visibility = View.INVISIBLE
+            // resetCardBrandIcon()
+            tapAlertView?.visibility = View.GONE
+            checkoutViewModel.resetCardSelection()
+
+            checkoutViewModel.isSavedCardSelected = false
+            //resetPaymentCardView()
+            intertabLayout.visibility = View.VISIBLE
+            tabLayout.visibility = View.VISIBLE
+            acceptedCardText.visibility = View.VISIBLE
+            checkoutViewModel.resetViewHolder()
+
+        }
     }
+}
