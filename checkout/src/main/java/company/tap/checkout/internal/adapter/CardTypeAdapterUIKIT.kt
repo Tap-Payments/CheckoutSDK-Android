@@ -235,7 +235,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
              * GooglePay Type
              */
             getItemViewType(position) == TYPE_GOOGLE_PAY -> {
-             //   setAlphaWhenShaking(isShaking, holder)
+                setAlphaWhenShaking(isShaking, holder)
                 typeGooglePay(holder, position)
             }
             /**
