@@ -116,7 +116,7 @@ class ItemAdapter :
                 }
             }
 
-            descText?.text = "Static namr for noe"
+            descText?.text = "Static name for now"
             // This to be handled in ui kit
             totalAmount.text = PaymentDataSource.getSelectedCurrencySymbol()+CurrencyFormatter.currencyFormat(adapterContentItems[position].amount.toString())+"X"+adapterContentItems[position].quantity?.toString()
 
