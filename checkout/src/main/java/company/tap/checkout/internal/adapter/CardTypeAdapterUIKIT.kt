@@ -307,8 +307,10 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     private fun setOnSavedCardOnClickAction(holder: RecyclerView.ViewHolder, position: Int) {
 
         holder.itemView.setOnClickListener {
-            if (!isShaking) {  resetSelection()
-                onCardSelectedActionListener.onCardSelectedAction(true, arrayListCards[position.minus(adapterContent.size)])
+            if (!isShaking) {
+                resetSelection()
+                //minus one because of gopaychip
+                onCardSelectedActionListener.onCardSelectedAction(true, arrayListCards[position.minus(adapterContent.size).minus(1)])
                 selectedPosition = position
                 notifyDataSetChanged()
             }
