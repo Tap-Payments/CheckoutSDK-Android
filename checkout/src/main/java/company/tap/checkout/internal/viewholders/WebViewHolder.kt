@@ -13,22 +13,27 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
+import android.widget.RelativeLayout
+import androidx.cardview.widget.CardView
+import androidx.core.view.marginLeft
+import androidx.core.view.marginStart
 import androidx.fragment.app.FragmentManager
-import com.bumptech.glide.Glide
+import androidx.transition.ChangeBounds
+import androidx.transition.Transition
+import androidx.transition.TransitionManager
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.webview.CustomWebViewClientContract
 import company.tap.checkout.internal.webview.TapCustomWebViewClient
-import company.tap.checkout.internal.webview.WebFragment
 import company.tap.checkout.internal.webview.WebViewContract
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
-import company.tap.tapuilibrary.uikit.organisms.TapLoyaltyView
 import kotlinx.android.synthetic.main.fragment_web.*
+
 
 class WebViewHolder(
     private val context: Context,
@@ -47,6 +52,7 @@ class WebViewHolder(
     val web_view by lazy { view.findViewById<WebView>(R.id.web_view) }
     val webViewTextTitle by lazy { view.findViewById<TapTextView>(R.id.webView_Header) }
     val webViewLinear by lazy { view.findViewById<LinearLayout>(R.id.webViewLinear) }
+    val webCardview by lazy { view.findViewById<CardView>(R.id.webCardview) }
 
 
     init {
@@ -87,6 +93,8 @@ class WebViewHolder(
     }
     @SuppressLint("SetJavaScriptEnabled")
     private fun setUpWebView(mUrl: String) {
+        val transition: Transition = ChangeBounds()
+        TransitionManager.beginDelayedTransition(web_view, transition)
         web_view.settings.javaScriptEnabled = true
         progressBar?.visibility = View.VISIBLE
         web_view.setVisibility(View.INVISIBLE)
@@ -109,7 +117,14 @@ class WebViewHolder(
                      // Hide the progressbar
                      progressBar?.visibility = View.GONE
                     web_view.setVisibility(View.VISIBLE)
-                 }
+
+                    webCardview.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1400).also { it.setMargins(35, 20, 35, 20) }
+                    web_view.layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 1400).also { it.setMargins(35, 20, 35, 20) }
+
+
+
+
+                }
 
             }
         }
