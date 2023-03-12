@@ -93,10 +93,12 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         notifyDataSetChanged()
 
     }
+    @SuppressLint("NotifyDataSetChanged")
     fun updateAdapterDataSavedCard(adapterSavedCard: List<SavedCard>) {
         arrayListCards=java.util.ArrayList()
         this.arrayListCards = adapterSavedCard
         notifyDataSetChanged()
+
     }
 
 
@@ -197,7 +199,11 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         }else{holder.itemView.deleteImageViewSaved?.visibility = View.GONE}
 
         holder.itemView.deleteImageViewSaved?.setOnClickListener {
-            onCardSelectedActionListener.onDeleteIconClicked(true, position.minus(adapterContent.size), arrayListCards[position.minus(adapterContent.size)].id, maskCardNumber(arrayListCards[position.minus(adapterContent.size)].firstSix + arrayListCards[position.minus(adapterContent.size)].lastFour))
+            println("position>>>"+position)
+            println("adapterContent>>>"+adapterContent.size)
+            onCardSelectedActionListener.onDeleteIconClicked(true, position.minus(adapterContent.size).minus(1), arrayListCards[position.minus(adapterContent.size).minus(1)].id, maskCardNumber(arrayListCards[position.minus(adapterContent.size).minus(1)].firstSix + arrayListCards[position.minus(adapterContent.size).minus(1)].lastFour),
+                arrayListCards as ArrayList<SavedCard>
+            )
           //TODO  COMMENTED arrayListCards.removeAt(holder.itemView.id)
             holder.itemView.clearAnimation()
             it.animate().cancel()
@@ -318,14 +324,23 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         }
 
         }
+    @SuppressLint("NotifyDataSetChanged")
     fun deleteSelectedCard(position: Int){
-        (arrayListCards as java.util.List<String>).remove(position)
+        //(arrayListCards as java.util.List<String>).remove(position)
+        arrayListCards.toMutableList().removeAt(position)
+        this.updateAdapterDataSavedCard(arrayListCards)
         this.notifyDataSetChanged()
 
     }
     private fun deleteSelectedCard(holder: RecyclerView.ViewHolder, position: Int){
         holder.itemView.deleteImageViewSaved?.setOnClickListener {
-            onCardSelectedActionListener.onDeleteIconClicked(true, position.minus(adapterContent.size), arrayListCards[position.minus(adapterContent.size)].id, maskCardNumber(arrayListCards[position.minus(adapterContent.size)].firstSix + arrayListCards[position.minus(adapterContent.size)].lastFour))
+            onCardSelectedActionListener.onDeleteIconClicked(
+                true,
+                position.minus(adapterContent.size),
+                arrayListCards[position.minus(adapterContent.size)].id,
+                maskCardNumber(arrayListCards[position.minus(adapterContent.size)].firstSix + arrayListCards[position.minus(adapterContent.size)].lastFour),
+                arrayListCards as ArrayList<SavedCard>
+            )
            // arrayListSaveCard.removeAt(position.minus(adapterContent.size))
             holder.itemView.clearAnimation()
             it.animate().cancel()

@@ -75,7 +75,6 @@ import company.tap.checkout.internal.webview.WebViewContract
 import company.tap.checkout.open.CheckOutActivity
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession
-import company.tap.checkout.open.controller.SDKSession.activity
 import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
 import company.tap.checkout.open.controller.SessionManager
 import company.tap.checkout.open.data_managers.PaymentDataSource
@@ -91,7 +90,6 @@ import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
 import company.tap.tapuilibrary.uikit.ktx.makeLinks
-import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.businessview_layout.view.*
@@ -120,6 +118,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     PaymentCardComplete, onCardNFCCallListener, OnCurrencyChangedActionListener, WebViewContract,
     TapTextRecognitionCallBack, TapScannerCallback, CheckoutListener {
     private var savedCardList = MutableLiveData<List<SavedCard>>()
+    private var arrayListSavedCardSize = ArrayList<SavedCard>()
     private var supportedLoyalCards = MutableLiveData<List<LoyaltySupportedCurrency>>()
     private var paymentOptionsList = MutableLiveData<List<PaymentOption>>()
     private var goPayCardList = MutableLiveData<List<GoPaySavedCards>>()
@@ -1433,8 +1432,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     override fun deleteSelectedCardListener(delSelectedCard: DeleteCardResponse) {
         println("delSelectedCard value is" + delSelectedCard.deleted)
+        println("selectedItemsDel value is" +selectedItemsDel)
         if (delSelectedCard.deleted) {
             adapter.deleteSelectedCard(selectedItemsDel)
+            adapter.updateAdapterDataSavedCard(arrayListSavedCardSize)
             adapter.updateShaking(false)
             deleteCard = false
             //saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)
@@ -1929,11 +1930,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         stopAnimation: Boolean,
         itemId: Int,
         cardId: String,
-        maskedCardNumber: String
+        maskedCardNumber: String,
+        arrayListSavedCardSize: ArrayList<SavedCard>
     ) {
         this.cardId = cardId
         if (stopAnimation) {
-            stopDeleteActionAnimation(itemId, maskedCardNumber)
+            stopDeleteActionAnimation(itemId, maskedCardNumber,arrayListSavedCardSize)
         } else {
             cardViewHolder.view.mainChipgroup.groupAction?.text = LocalizationManager.getValue(
                 "close",
@@ -1944,7 +1946,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     }
 
-    private fun stopDeleteActionAnimation(itemId: Int, maskedCardNumber: String) {
+    private fun stopDeleteActionAnimation(
+        itemId: Int,
+        maskedCardNumber: String,
+        arrayListSavedCardSizes: ArrayList<SavedCard>
+    ) {
         isShaking.value = false
         cardViewHolder.view.mainChipgroup.groupAction?.text = LocalizationManager.getValue(
             "GatewayHeader",
@@ -1965,6 +1971,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
         selectedItemsDel = itemId
         deleteCard = true
+        this.arrayListSavedCardSize = arrayListSavedCardSizes
 
     }
 
