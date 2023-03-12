@@ -25,10 +25,12 @@ import company.tap.tapuilibrary.fontskit.enums.TapFont
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.SeparatorViewTheme
 import company.tap.tapuilibrary.themekit.theme.TextViewTheme
+import company.tap.tapuilibrary.uikit.atoms.TapImageView
 import company.tap.tapuilibrary.uikit.atoms.TapSeparatorView
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.datasource.ItemViewDataSource
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
+import company.tap.tapuilibrary.uikit.views.TapItemListView
 import company.tap.tapuilibrary.uikit.views.TapListItemView
 
 
@@ -40,7 +42,7 @@ class ItemAdapter :
     RecyclerView.Adapter<ItemAdapter.ItemHolder>() {
     private var previousExpandedPosition = -1
     private var mExpandedPosition = -1
-    private lateinit var itemViewAdapter: TapListItemView
+    private lateinit var itemViewAdapter: TapItemListView
     private lateinit var context: Context
     private var arrayModifiedItem : ArrayList<Any> = ArrayList()
     private var adapterContentItems: List<ItemsModel> = java.util.ArrayList()
@@ -75,11 +77,11 @@ class ItemAdapter :
 
     private fun initView(holder: ItemHolder, position: Int) {
         val descriptionTextView = holder.itemView.findViewById<TapTextView>(R.id.description_textView)
-        val descText = holder.itemView.findViewById<TapTextView>(R.id.show_description)
+        val descText = holder.itemView.findViewById<TapTextView>(R.id.brief_description)
         val itemSeparator = holder.itemView.findViewById<TapSeparatorView>(R.id.itemseparator)
         val totalQuantity = holder.itemView.findViewById<TapTextView>(R.id.total_quantity)
-        val discount = holder.itemView.findViewById<TapTextView>(R.id.discount_text)
-        val quantityRelative = holder.itemView.findViewById<RelativeLayout>(R.id.quantityRelative)
+      //  val discount = holder.itemView.findViewById<TapTextView>(R.id.discount_text)
+      //  val quantityRelative = holder.itemView.findViewById<RelativeLayout>(R.id.quantityRelative)
         val totalAmount = holder.itemView.findViewById<TapTextView>(R.id.total_amount)
         val mainViewLinear = holder.itemView.findViewById<LinearLayout>(R.id.mainViewLinear)
         val itemName = holder.itemView.findViewById<TapTextView>(R.id.item_title)
@@ -90,8 +92,8 @@ class ItemAdapter :
                 descriptionTextView.text = adapterContentItems[position].description
                 descriptionTextView.visibility = if (isExpanded) View.VISIBLE else View.GONE
                 holder.itemView.isActivated = isExpanded
-                totalQuantity.text = adapterContentItems[position].quantity?.toString()
-              /*  itemViewAdapter.setItemViewDataSource(
+               // totalQuantity.text = adapterContentItems[position].quantity?.toString()
+               /* itemViewAdapter.setItemViewDataSource(
                     getItemViewDataSource(null, CurrencyFormatter.currencyFormat(adapterContentItems[position].totalAmount.toString()),adapterContentItems[position].currency ,  CurrencyFormatter.currencyFormat(adapterContentItems[position].totalAmount.toString()), adapterContentItems[position].currency, adapterContentItems[position].quantity.toString())
                 )*/
 
@@ -114,6 +116,9 @@ class ItemAdapter :
                 }
             }
 
+            descText?.text = "Static namr for noe"
+            // This to be handled in ui kit
+            totalAmount.text = PaymentDataSource.getSelectedCurrencySymbol()+CurrencyFormatter.currencyFormat(adapterContentItems[position].amount.toString())+"X"+adapterContentItems[position].quantity?.toString()
 
         }else{
            // descriptionTextView.text = adapterContentItems[0].description
@@ -124,20 +129,25 @@ class ItemAdapter :
 
         onItemClickAction(holder, position, isExpanded)
         showHideDescText(isExpanded, position, descText)
-        setTheme(descriptionTextView, discount, descText, totalQuantity, totalAmount, itemName, itemSeparator, mainViewLinear, quantityRelative)
+        setTheme(descriptionTextView, descText, totalQuantity, totalAmount, itemName, itemSeparator, mainViewLinear,null)
       if(LocalizationManager.getLocale(context).language=="en"){
-          setFontsEnglish(itemName, totalAmount, discount, descText, descriptionTextView, totalQuantity)
-      }else setFontsArabic(itemName, totalAmount, discount, descText, descriptionTextView, totalQuantity)
+          setFontsEnglish(itemName, totalAmount, descText, descriptionTextView, totalQuantity)
+      }else setFontsArabic(itemName, totalAmount, descText, descriptionTextView, totalQuantity)
 
-        checkItemListPosition(position, discount, totalAmount, itemName)
+      //  checkItemListPosition(position, discount, totalAmount, itemName)
+        checkItemListPosition(position, totalAmount, itemName)
     }
 
     private fun showHideDescText(isExpanded: Boolean, position: Int, descText: TapTextView?) {
         if (isExpanded) {
             previousExpandedPosition = position
-            descText?.text = LocalizationManager.getValue("hideDesc", "ItemList")
+           // descText?.text = LocalizationManager.getValue("hideDesc", "ItemList")
+            itemViewAdapter.collapseImageView?.visibility= View.VISIBLE
+            itemViewAdapter.expandImageView?.visibility= View.GONE
         } else {
-            descText?.text = LocalizationManager.getValue("showDesc", "ItemList")
+           // descText?.text = LocalizationManager.getValue("showDesc", "ItemList")
+            itemViewAdapter.expandImageView?.visibility= View.VISIBLE
+            itemViewAdapter.collapseImageView?.visibility= View.GONE
         }
     }
 
@@ -154,18 +164,18 @@ class ItemAdapter :
     @SuppressLint("SetTextI18n")
     private fun checkItemListPosition(
         position: Int,
-        discount: TapTextView?,
+       // discount: TapTextView?,
         totalAmount: TapTextView?,
         itemName: TapTextView?
     ) {
         if(adapterContentItems.isEmpty()) {
             if (position % 2 == 0) {
-                discount?.visibility = View.VISIBLE
-                discount?.text = LocalizationManager.getValue("Discount", "ItemList")
+                //discount?.visibility = View.VISIBLE
+               // discount?.text = LocalizationManager.getValue("Discount", "ItemList")
                 totalAmount?.paintFlags = totalAmount?.paintFlags?.or(Paint.STRIKE_THRU_TEXT_FLAG)!!
                 itemName?.text = "ITEM TITLE " + adapterContentItems[position]
             } else {
-                discount?.visibility = View.INVISIBLE
+                //discount?.visibility = View.INVISIBLE
                 totalAmount?.paintFlags = totalAmount?.paintFlags?.and(Paint.STRIKE_THRU_TEXT_FLAG.inv())!!
                 itemName?.text =
                     "VERY LOOOONNGGGG ITEM TITLE ITEM TITLE TITLE ITEM TITLETITLE ITEM TITLETITLE ITEM TITLETITLE ITEM TITLETITLE ITEM TITLETITLE ITEM TITLE " + adapterContentItems[position]
@@ -174,15 +184,16 @@ class ItemAdapter :
             for (i in adapterContentItems.indices) {
                 itemName?.text = adapterContentItems[position].name
                 if(adapterContentItems[position].discount?.amnttype?.name == AmountModificatorType.PERCENTAGE.name){
-                    discount?.visibility = View.VISIBLE
-                   discount?.text = adapterContentItems[i].discount.toString()
-                    discount?.text = LocalizationManager.getValue("Discount", "ItemList")
+                 //   discount?.visibility = View.VISIBLE
+                 //  discount?.text = adapterContentItems[i].discount.toString()
+                //    discount?.text = LocalizationManager.getValue("Discount", "ItemList")
                     totalAmount?.paintFlags = totalAmount?.paintFlags?.or(Paint.STRIKE_THRU_TEXT_FLAG)!!
                     totalAmount.text = adapterContentItems[position].getPlainAmount().toString()
 
                 }else{
-                    discount?.visibility = View.INVISIBLE
-                    totalAmount?.paintFlags = totalAmount?.paintFlags?.and(Paint.STRIKE_THRU_TEXT_FLAG.inv())!!
+                   // discount?.visibility = View.INVISIBLE
+                    //totalAmount?.paintFlags = totalAmount?.paintFlags?.and(Paint.STRIKE_THRU_TEXT_FLAG.inv())!!
+                  //  totalAmount?.text = "KWD 4 x 3"
                 }
             }
 
@@ -191,7 +202,7 @@ class ItemAdapter :
 
     private fun setTheme(
         descriptionTextView: TapTextView?,
-        discount: TapTextView?,
+       // discount: TapTextView?,
         descText: TapTextView?,
         totalQuantity: TapTextView?,
         totalAmount: TapTextView?,
@@ -208,7 +219,7 @@ class ItemAdapter :
         descriptionTextViewTheme.textSize = ThemeManager.getFontSize("itemsList.item.descLabelFont")
         descriptionTextViewTheme.font = ThemeManager.getFontName("itemsList.item.descLabelFont")
         descriptionTextView?.setTheme(descriptionTextViewTheme)
-        discount?.setTheme(descriptionTextViewTheme)
+       // discount?.setTheme(descriptionTextViewTheme)
         descText?.setTheme(descriptionTextViewTheme)
 
         mainViewLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("itemsList.item.backgroundColor")))
@@ -261,7 +272,8 @@ class ItemAdapter :
 
     private fun setFontsEnglish(
         itemName: TapTextView?, totalAmount: TapTextView?,
-        discount: TapTextView?, descText: TapTextView?,
+       // discount: TapTextView?,
+        descText: TapTextView?,
         descriptionTextView: TapTextView?, totalQuantity: TapTextView?
     ) {
         itemName?.typeface = Typeface.createFromAsset(
@@ -274,11 +286,11 @@ class ItemAdapter :
                 TapFont.RobotoRegular
             )
         )
-        discount?.typeface = Typeface.createFromAsset(
+        /*discount?.typeface = Typeface.createFromAsset(
             context?.assets, TapFont.tapFontType(
                 TapFont.RobotoLight
             )
-        )
+        )*/
         descText?.typeface = Typeface.createFromAsset(
             context?.assets, TapFont.tapFontType(
                 TapFont.RobotoLight
@@ -299,7 +311,8 @@ class ItemAdapter :
 
     private fun setFontsArabic(
         itemName: TapTextView?, totalAmount: TapTextView?,
-        discount: TapTextView?, descText: TapTextView?,
+       // discount: TapTextView?,
+        descText: TapTextView?,
         descriptionTextView: TapTextView?, totalQuantity: TapTextView?
     ) {
         itemName?.typeface = Typeface.createFromAsset(
@@ -312,11 +325,11 @@ class ItemAdapter :
                 TapFont.TajawalMedium
             )
         )
-        discount?.typeface = Typeface.createFromAsset(
+       /* discount?.typeface = Typeface.createFromAsset(
             context?.assets, TapFont.tapFontType(
                 TapFont.TajawalLight
             )
-        )
+        )*/
         descText?.typeface = Typeface.createFromAsset(
             context?.assets, TapFont.tapFontType(
                 TapFont.TajawalLight
@@ -341,7 +354,7 @@ class ItemAdapter :
         itemAmountCurr:String, totalAmount: String,
         totalAmountCurr:String, totalQuantity: String): ItemViewDataSource {
         return ItemViewDataSource(
-            itemTitle = null,
+            itemTitle = itemTitle,
             itemAmount = itemAmount,
             itemAmountCurr = itemAmountCurr,
             totalAmount =totalAmount,

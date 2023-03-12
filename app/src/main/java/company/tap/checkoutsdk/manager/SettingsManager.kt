@@ -478,7 +478,7 @@ object SettingsManager {
                     2
                 ),null,
                 AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO),
-                null,null,false,null,null,"Item is on sale",
+                null,null,false,null,null,"High-quality, durable and stylish backpack, perfect for daily use and outdoor adventures. Made with waterproof material, multiple compartments and comfortable straps",
                 null,null,null,null,null
             ))
 
