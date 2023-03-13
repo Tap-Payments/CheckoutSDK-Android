@@ -445,16 +445,19 @@ class CardRepository : APIRequestCallback {
                 chargeResponse = Gson().fromJson(it, Charge::class.java)
 
             }
+            viewModel.globalChargeResponse = chargeResponse
             handleChargeResponse(chargeResponse)
         }
         else if(requestCode == CHARGE_RETRIEVE_CODE) {
             println("CHARGE_RETRIEVE_CODE")
             response?.body().let {
                 chargeResponse = Gson().fromJson(it, Charge::class.java)
+                viewModel.globalChargeResponse = chargeResponse
                 if(chargeResponse.status?.name == ChargeStatus.CAPTURED.name){
                     fireWebPaymentCallBack(chargeResponse)
                      //chargeResponse?.transaction?.url?.let { it1 -> viewModel?.displayRedirect(it1,chargeResponse) }
                     //  viewModel?.redirectLoadingFinished(true,chargeResponse, contextSDK)
+
                 }else handleChargeResponse(chargeResponse)
             }
 
@@ -693,7 +696,7 @@ class CardRepository : APIRequestCallback {
                         "success",
                         chargeResponse.authenticate,
                         chargeResponse,
- tabAnimatedActionButton
+                        tabAnimatedActionButton
                     )
 
                 }
@@ -701,19 +704,20 @@ class CardRepository : APIRequestCallback {
                     SDKSession.getListener()?.authorizationSucceed(chargeResponse as Authorize)
                 }
                 ChargeStatus.FAILED -> {
-                    SDKSession.getListener()?.paymentFailed(chargeResponse)
-                    /*viewModel?.handleSuccessFailureResponseButton(
+                    viewModel.handleSuccessFailureResponseButton(
                         "failure",
                         chargeResponse.authenticate,
-                        chargeResponse.status
-                    )*/
+                        chargeResponse,tabAnimatedActionButton
+                    )
+                    SDKSession.getListener()?.paymentFailed(chargeResponse)
+
                     SDKSession.sessionActive = false
                     //  viewModel.redirectLoadingFinished(true, chargeResponse, contextSDK)
                 }
                 ChargeStatus.ABANDONED, ChargeStatus.CANCELLED, ChargeStatus.DECLINED -> {
 
                     //  viewModel?.handleSuccessFailureResponseButton("failure",chargeResponse.authenticate,chargeResponse.status)
-                    viewModel?.handleSuccessFailureResponseButton(
+                     viewModel.handleSuccessFailureResponseButton(
                         "failure",
                         chargeResponse.authenticate,
                         chargeResponse,

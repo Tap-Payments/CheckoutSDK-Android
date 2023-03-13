@@ -27,6 +27,7 @@ import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.utils.CustomUtils
+import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.internal.webview.CustomWebViewClientContract
 import company.tap.checkout.internal.webview.TapCustomWebViewClient
 import company.tap.checkout.internal.webview.WebViewContract
@@ -61,10 +62,7 @@ class WebViewHolder(
     init {
         progressBar?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("merchantHeaderView.backgroundColor")))
         webViewLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.whiteTwo")))
-        progressBar?.progressDrawable?.setColorFilter(
-            Color.RED, android.graphics.PorterDuff.Mode.SRC_IN
-        );
-        progressBar?.progressTintList = ColorStateList.valueOf(Color.RED)
+
 
         // webViewUrl = arguments?.getString(WebFragment.KEY_URL)
         //  webViewUrl = redirectURL
@@ -90,7 +88,7 @@ class WebViewHolder(
     }
 
     override fun submitResponseStatus(success: Boolean) {
-        webViewContract.redirectLoadingFinished(success, authenticate, SDKSession.contextSDK)
+       // webViewContract.redirectLoadingFinished(success, authenticate, SDKSession.contextSDK)
     }
 
     override fun getRedirectedURL(url: String) {

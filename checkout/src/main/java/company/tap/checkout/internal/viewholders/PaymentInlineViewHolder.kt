@@ -1663,6 +1663,7 @@ class PaymentInlineViewHolder (private val context: Context,
 
 
         tapCardInputView.clearFocus()
+        tapCardInputView.clear()
         closeButton?.visibility = View.GONE
         controlScannerOptions()
         cardInputUIStatus = CardInputUIStatus.NormalCard

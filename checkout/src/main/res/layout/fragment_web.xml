@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#ffffff"
     android:orientation="vertical">
 
     <LinearLayout
@@ -47,7 +48,7 @@
     </LinearLayout>
 
 
-    <ProgressBar
+  <!--  <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
@@ -60,12 +61,29 @@
         android:paddingTop="5dp"
         android:progress="20"
         android:paddingBottom="5dp"
-        android:indeterminate="true" />
+        android:indeterminate="true" />-->
 
-<WebView
-    android:id="@+id/web_view"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:scrollbars="vertical|horizontal"
-   />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+
+       >
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerInParent="true"
+            android:indeterminate="true"
+            android:indeterminateDrawable="@drawable/output_black_loader_nobg" />
+
+        <WebView
+            android:id="@+id/web_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical|horizontal" />
+    </RelativeLayout>
+
+
 </LinearLayout>
