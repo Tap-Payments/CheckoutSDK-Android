@@ -5,9 +5,12 @@
       <map>
         <entry key="../../../../.gradle/caches/transforms-2/files-2.1/b120a87aa1904a70788153632a6d4fb9/jetified-TapUIKit-Android-1.1.1.358.237/res/drawable/border_unclick_black.xml" value="0.2745" />
         <entry key="../../../../.gradle/caches/transforms-2/files-2.1/cf442cc5454b0a8aa00ff098a090e4ef/jetified-TapUIKit-Android-1.1.1.358.248/res/drawable/border_shadow_white.xml" value="0.2455" />
+        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/e33628322437d9783711a06165169f52/jetified-TapUIKit-Android-1.1.1.358.254/res/layout/item_view_adapter.xml" value="0.1" />
+        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/ea844a6ddcb0f1848d7025be3c6f6cf4/jetified-TapUIKit-Android-1.1.1.358.255/res/layout/item_view_adapter.xml" value="0.1" />
         <entry key="checkout/src/main/res/drawable-mdpi/checkout_with_googlepay_button_content.xml" value="0.125" />
         <entry key="checkout/src/main/res/drawable-mdpi/googlepay_button_background_shape.xml" value="0.125" />
         <entry key="checkout/src/main/res/drawable-xxhdpi/googlepay_button_overlay.xml" value="0.125" />
+        <entry key="checkout/src/main/res/drawable/border_unclick_cardinput.xml" value="0.1425" />
         <entry key="checkout/src/main/res/drawable/loading_web_animation.xml" value="0.2145" />
         <entry key="checkout/src/main/res/layout/amountview_layout.xml" value="0.17162162162162162" />
         <entry key="checkout/src/main/res/layout/businessview_layout.xml" value="0.1" />
@@ -21,6 +24,7 @@
         <entry key="checkout/src/main/res/layout/item_knet.xml" value="0.6593234087969806" />
         <entry key="checkout/src/main/res/layout/item_save_cards.xml" value="1.2046404864336995" />
         <entry key="checkout/src/main/res/layout/item_saved_card.xml" value="0.1" />
+        <entry key="checkout/src/main/res/layout/item_view_adapter.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/itemviewholder_layout.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/payment_inline_viewholder.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/switch_layout.xml" value="0.1" />

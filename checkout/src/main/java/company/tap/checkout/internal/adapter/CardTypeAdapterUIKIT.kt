@@ -72,7 +72,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     val mcc:String="4816"
     @DrawableRes
     val deleteIcon: Int =
-        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) R.drawable.dark_icon_delete else R.drawable.light_icon_delete
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) R.drawable.icon_dark_closer else R.drawable.icon_light_closer
 
     // A client for interacting with the Google Pay API.
     private var paymentsClient: PaymentsClient? = null
