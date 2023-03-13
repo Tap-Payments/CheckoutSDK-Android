@@ -286,10 +286,11 @@ class PaymentInlineViewHolder (private val context: Context,
             contactDetailsView?.visibility =View.GONE
             shippingDetailView?.visibility =View.GONE
             closeButton?.visibility = View.GONE
-            //tapCardInputView.setVisibilityOfHolderField(false)
+            tapCardInputView.setVisibilityOfHolderField(false)
             tapCardInputView.holderNameEnabled = false
             checkoutViewModel.incrementalCount=0
             tabLayout.visibility =View.VISIBLE
+            intertabLayout.visibility =View.VISIBLE
             allFieldsValid = false
             tapAlertView?.visibility = View.GONE
         }
@@ -1660,7 +1661,7 @@ class PaymentInlineViewHolder (private val context: Context,
     }
     fun resetPaymentCardView(){
 
-        tapCardInputView.clear()
+
         tapCardInputView.clearFocus()
         closeButton?.visibility = View.GONE
         controlScannerOptions()
