@@ -42,7 +42,6 @@ import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 /**
@@ -131,6 +130,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         val checkoutLayout: LinearLayout? = view.findViewById(R.id.fragment_all)
         val frameLayout: FrameLayout? = view.findViewById(R.id.fragment_container_nfc_lib)
         val webFrameLayout: FrameLayout? = view.findViewById(R.id.webFrameLayout)
+        webFrameLayout?.setLayoutParams(LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,Resources.getSystem().displayMetrics.heightPixels))
         inLineCardLayout = view.findViewById(R.id.inline_container)
         val headerLayout: LinearLayout? = view.findViewById(R.id.headerLayout)
         bottomSheetLayout = bottomSheetDialog.findViewById(R.id.design_bottom_sheet)
@@ -189,7 +189,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
 
 
-        LocalizationManager.loadTapLocale(resources, R.raw.lang)
+        //LocalizationManager.loadTapLocale(resources, R.raw.lang)
         sessionDelegate?.sessionIsStarting()
         bottomSheetLayout?.let {
             viewModel.setBottomSheetLayout(it)

@@ -54,24 +54,25 @@ class SwitchViewHolder(private val context: Context , private val checkoutViewMo
     // Function / Logic is responsible for sett ing the data to switch based on user selection
     fun setSwitchLocals(payName: PaymentTypeEnum) {
 
-        goPayString = LocalizationManager.getValue("goPayTextLabel", "GoPay")
-        savegoPayString = LocalizationManager.getValue("savegoPayLabel", "GoPay")
-        alertgoPaySignupString = LocalizationManager.getValue("goPaySignupLabel", "GoPay")
+        goPayString = LocalizationManager.getValue( "goPay", "TapSwitchView", "notes")
+        savegoPayString =  LocalizationManager.getValue("goPay", "TapSwitchView", "notes")
+        alertgoPaySignupString = LocalizationManager.getValue("goPay", "TapSwitchView", "notes")
+
         println("payname in switch" + payName.name)
         if (payName.name == "card") {
             if (TapNfcUtils.isNfcAvailable(context)) {
-                switchString = LocalizationManager.getValue("cardUseNFCLabel", "TapCardInputKit")
+                switchString = LocalizationManager.getValue("mainCards", "TapSwitchView","titleEmpty")
 
             } else {
                 //Logic applied to  stop showing NFC on non supported devices
                 if (LocalizationManager.getLocale(context).language == "en") {
                     switchString =
-                        LocalizationManager.getValue<String?>("cardUseNFCLabel", "TapCardInputKit")
+                        LocalizationManager.getValue<String?>("mainCards", "TapSwitchView","titleEmpty")
                             ?.replace(" or NFC", "")
 
                 } else {
                     switchString =
-                        LocalizationManager.getValue<String?>("cardUseNFCLabel", "TapCardInputKit")
+                        LocalizationManager.getValue<String?>("mainCards", "TapSwitchView","titleEmpty")
                             ?.replace("الــ NFC", "")
 
                 }
@@ -90,7 +91,7 @@ class SwitchViewHolder(private val context: Context , private val checkoutViewMo
             )
 
         } else if (payName.name == "telecom") {
-            mobileString = LocalizationManager.getValue("mobileUseLabel", "TapMobileInput")
+            mobileString = LocalizationManager.getValue("mainTelecom", "TapSwitchView","titleValid")
             view.mainSwitch.setSwitchDataSource(getMainSwitchDataSource(mobileString))
             view.cardSwitch.setSwitchDataSource(
                 getTapSwitchDataSourceFromAPI(
@@ -110,9 +111,9 @@ class SwitchViewHolder(private val context: Context , private val checkoutViewMo
         savegoPayString: String?,
         alertgoPaySignupString: String?
     ): TapSwitchDataSource {
-        val saveForString: String = LocalizationManager.getValue("saveFor", "Common")
-        val saveForStringArabic: String = LocalizationManager.getValue("saveFor", "Common")
-        val checkoutsString: String = LocalizationManager.getValue("checkouts", "Common")
+        val saveForString: String = LocalizationManager.getValue("cardSaveForTapLabel", "TapCardInputKit")
+        val saveForStringArabic: String = LocalizationManager.getValue("cardSaveForTapLabel", "TapCardInputKit")
+        val checkoutsString: String = LocalizationManager.getValue("cardSaveForTapLabel", "TapCardInputKit")
         val switchSaveMerchantCheckout: String
         if (LocalizationManager.getLocale(context).language == "ar") {
             switchSaveMerchantCheckout = "$saveForStringArabic $merchantName"
@@ -222,8 +223,8 @@ class SwitchViewHolder(private val context: Context , private val checkoutViewMo
             view.mainSwitch.setSwitchDataSource(
                 getMainSwitchDataSource(
                     LocalizationManager.getValue(
-                        "cardSaveLater",
-                        "TapCardInputKit"
+                        "mainCards",
+                        "TapSwitchView","titleValid"
                     )
                 )
             )
@@ -231,8 +232,8 @@ class SwitchViewHolder(private val context: Context , private val checkoutViewMo
             view.mainSwitch.setSwitchDataSource(
                 getMainSwitchDataSource(
                     LocalizationManager.getValue(
-                        "mobileSaveLabel",
-                        "TapMobileInput"
+                        "mainTelecom",
+                        "TapSwitchView","titleValid"
                     )
                 )
             )

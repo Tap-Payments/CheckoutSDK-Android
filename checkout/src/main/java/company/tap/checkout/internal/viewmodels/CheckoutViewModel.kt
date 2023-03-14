@@ -717,7 +717,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
            // itemsViewHolder
         )
         //Hide keyboard of any open
-        CustomUtils.hideKeyboardFrom(paymentInlineViewHolder.view.context, paymentInlineViewHolder.view)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            CustomUtils.hideKeyboardFrom(paymentInlineViewHolder.view.context, paymentInlineViewHolder.view)
+        }
     }
 
     private fun caseNotDisplayControlCurrency() {
@@ -726,6 +728,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun setActionGoPayOpenedItemsDisplayed() {
         removeViews(
 
@@ -945,8 +948,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             if(PaymentDataSource?.getWebViewType()!=null && PaymentDataSource.getWebViewType() ==WebViewType.REDIRECT){
                 businessViewHolder.view.headerView.constraint.visibility = View.GONE
                 businessViewHolder.view.topSeparatorLinear.visibility = View.GONE
-
-                checkoutFragment.closeText.visibility = View.VISIBLE
+                //Stopped showing closetext as requested
+               // checkoutFragment.closeText.visibility = View.VISIBLE
                 removeViews(
                     //businessViewHolder,
                     amountViewHolder,
@@ -1003,7 +1006,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
            webFrameLayout.visibility = View.VISIBLE
            }, 1800)
 
-
+                checkoutFragment?.closeText?.visibility= View.GONE
                 //Stopped showing cancel button and poweredby for 3ds
              /*    saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
               true,
@@ -1451,12 +1454,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         response: String,
         authenticate: Authenticate?,
         chargeResponse: Charge?,
-        tabAnimatedActionButton: TabAnimatedActionButton?
+        tabAnimatedActionButton: TabAnimatedActionButton?,
+        contextSDK: Context?
     ) {
         SessionManager.setActiveSession(false)
         println("response val>>"+response)
         println("tabAnimatedActionButton val>>"+tabAnimatedActionButton)
-        println("tabAnimatedActionButton val>>"+tabAnimatedActionButton)
+        println("save val>>"+saveCardSwitchHolder)
+//        println("webViewHolder val>>"+webViewHolder)
+
         /* if(chargeResponse?.status == null && response == "tokenized"){
              //todo replaced authorized with chargeresponse
              SDKSession.getListener()?.getStatusSDK(response,chargeResponse)
@@ -1480,6 +1486,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     .commit()
             webFrameLayout.visibility = View.GONE
         }
+        if(::webViewHolder.isInitialized)
+            removeViews(webViewHolder)
+
+        saveCardSwitchHolder = contextSDK?.let { SwitchViewHolder(it,this) }
+        businessViewHolder = contextSDK?.let { BusinessViewHolder(it,this) }!!
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setDisplayMetrics(
+            CustomUtils.getDeviceDisplayMetrics(
+                contextSDK as Activity
+            )
+        )
 
         if (::otpViewHolder.isInitialized)
             if (otpViewHolder.otpView.isVisible) {
@@ -1499,6 +1515,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             saveCardSwitchHolder?.view?.visibility = View.VISIBLE
             saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
         }
+
         if(::checkoutFragment.isInitialized)
           checkoutFragment.closeText.visibility =View.GONE
         println("chargeResponse are>>>>"+chargeResponse?.status)
@@ -1513,14 +1530,24 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
             )
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.ERROR)
+        }else {
+            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)
         }
         when (chargeResponse?.status) {
             ChargeStatus.CAPTURED, ChargeStatus.AUTHORIZED, ChargeStatus.VALID, ChargeStatus.IN_PROGRESS -> {
-
+                tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                     ActionButtonState.SUCCESS
                 )
                 tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
+
+                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
+                    true,
+                    "en","",
+                    Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
+                    Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
+                )
+
             }
             ChargeStatus.CANCELLED, ChargeStatus.TIMEDOUT, ChargeStatus.FAILED, ChargeStatus.DECLINED, ChargeStatus.UNKNOWN,
             ChargeStatus.RESTRICTED, ChargeStatus.ABANDONED, ChargeStatus.VOID, ChargeStatus.INVALID -> {
@@ -1528,19 +1555,20 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 println("CANCELLED 2>>>"+saveCardSwitchHolder?.view?.cardSwitch?.payButton)
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(false,Color.MAGENTA)
                 tabAnimatedActionButton?.setInValidBackground(false,Color.MAGENTA)
+                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
+                    ActionButtonState.ERROR
+                )
                 tabAnimatedActionButton?.setInValidBackground(false, Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")))
 
-                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
+              /*  saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
                     false,
                     "en",
                     null,
                     Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
                     Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
-                )
+                )*/
+                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(false,Color.MAGENTA)
 
-                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
-                    ActionButtonState.ERROR
-                )
                 tabAnimatedActionButton?.setInValidBackground(false, Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")))
 
                 tabAnimatedActionButton?.setButtonDataSource(
@@ -1626,7 +1654,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 tabAnimatedActionButton.context as AppCompatActivity
             )
         }
-       Handler().postDelayed({
+
+     removeAllViews()
+      Handler().postDelayed({
             if (::bottomSheetDialog.isInitialized)
                 bottomSheetDialog.dismiss()
 
@@ -1724,6 +1754,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 // checkoutFragment.scrollView?.fullScroll(View.FOCUS_DOWN)
 
                 // AnimationEngine.applyTransition(sdkLayout,SLIDE,1500)
+                if(::bottomSheetLayout.isInitialized)
                 bottomSheetLayout.startAnimation(AnimationUtils.loadAnimation(context,R.anim.slide_up))
             }, 0)
             BottomSheetBehavior.STATE_HALF_EXPANDED
@@ -2249,17 +2280,24 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     }
 
+    fun cancelledCall(){
+        println("cancelledCall from webview")
+    }
+
     @SuppressLint("ResourceType")
     override fun redirectLoadingFinished(
         done: Boolean,
-        chargeResponse: Charge?,
+        charge: Charge?,
         contextSDK: Context?
     ) {
-
-        println("done val" + done + "chargeResponse status" + chargeResponse?.status)
+        checkoutFragment.dismiss()
+        println("done val" + done + "chargeResponse status" + charge?.status)
         println("saveCardSwitchHolder val" + saveCardSwitchHolder)
-        println("redirect val" + chargeResponse?.response)
-        println("gatewayResponse val" + chargeResponse?.gatewayResponse)
+        println("redirect val" + charge?.response)
+        println("gatewayResponse val" + charge?.gatewayResponse)
+
+        businessViewHolder = contextSDK?.let { BusinessViewHolder(it,this) }!!
+        saveCardSwitchHolder = contextSDK?.let { SwitchViewHolder(it,this) }
         removeViews(businessViewHolder,saveCardSwitchHolder)
         if (::webFrameLayout.isInitialized) {
             if (fragmentManager.findFragmentById(R.id.webFrameLayout) != null)
@@ -2269,6 +2307,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             webFrameLayout.visibility = View.GONE
 
         }
+        sdkLayout.visibility =View.VISIBLE
+        if(::amountViewHolder.isInitialized&& ::cardViewHolder.isInitialized &&:: cardViewHolder. isInitialized && ::paymentInlineViewHolder.isInitialized)
         removeViews(businessViewHolder,amountViewHolder,cardViewHolder,paymentInlineViewHolder)
         if(::webViewHolder.isInitialized)removeViews(webViewHolder)
          addViews(businessViewHolder,saveCardSwitchHolder)
@@ -2276,7 +2316,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         businessViewHolder.view.topSeparatorLinear.visibility = View.GONE
         saveCardSwitchHolder?.view?.cardSwitch?.switchesLayout?.visibility= View.GONE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility= View.VISIBLE
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setDisplayMetrics(CustomUtils.getDeviceDisplayMetrics(contextSDK as Activity))
+        removeAllViews()
+       /* saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
             ActionButtonState.ERROR
         )
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
@@ -2289,8 +2331,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
             ActionButtonState.ERROR
-        )
-        checkoutFragment.closeText.visibility =View.GONE
+        )*/
+       // checkoutFragment.closeText.visibility =View.GONE
      /*   val payString: String = LocalizationManager.getValue("pay", "ActionButton")
         if(chargeResponse?.status== ChargeStatus.CAPTURED||chargeResponse?.status ==ChargeStatus.INITIATED){
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
@@ -2316,11 +2358,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             bottomSheetDialog.dismiss()*/
 
         Handler().postDelayed({
-            if (::bottomSheetDialog.isInitialized)
-                bottomSheetDialog.dismiss()
+           // checkoutFragment.dismiss()
+            /*if (::bottomSheetDialog.isInitialized)
+                bottomSheetDialog.dismiss()*/
 
         }, 3000)
 
+
+    }
+
+    override fun resultObtained(done: Boolean, contextSDK: Context?) {
 
     }
 
@@ -2517,7 +2564,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun removeAllViews() {
         if (::businessViewHolder.isInitialized && ::amountViewHolder.isInitialized && ::cardViewHolder.isInitialized && ::paymentInlineViewHolder.isInitialized &&
-            ::goPayViewsHolder.isInitialized && ::otpViewHolder.isInitialized
+            ::goPayViewsHolder.isInitialized && ::otpViewHolder.isInitialized || ::webViewHolder.isInitialized
         )
             removeViews(
                 businessViewHolder,
@@ -2527,6 +2574,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 saveCardSwitchHolder,
                 goPayViewsHolder,
                 otpViewHolder,
+                webViewHolder,
                 tabAnimatedActionButtonViewHolder
             )
     }
@@ -2754,8 +2802,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         println("retuu>>" + year)
                         return
                     } else {
-                        paymentInlineViewHolder.tapCardInputView.setExpiryDate(month, year.toInt())
-                       // paymentInlineViewHolder.tapCardInputVie
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            paymentInlineViewHolder.tapCardInputView.setExpiryDate(month, year.toInt())
+                        }
+                        // paymentInlineViewHolder.tapCardInputVie
 
                     }
 
@@ -3153,14 +3203,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 }
             }
         }
-        Handler().postDelayed({
+     /*   Handler().postDelayed({
             checkOutActivity?.onBackPressed()
 
             if (::bottomSheetDialog.isInitialized)
                 bottomSheetDialog.dismiss()
             _checkoutFragment.activity?.onBackPressed()
 
-        }, 12000)
+        }, 12000)*/
     }
 
 

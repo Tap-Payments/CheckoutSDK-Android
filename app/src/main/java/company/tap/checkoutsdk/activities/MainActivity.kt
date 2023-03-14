@@ -11,6 +11,7 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
@@ -71,9 +72,10 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         settingsManager?.setPref(this)
         //Loading the theme and localization files prior to loading the view to avoid crashes
         checkAndroidVersion()
-        initializeLanguage()
+        //initializeLanguage()
 
        // ThemeManager.loadTapTheme(this, urlStrLight,"lighttheme")
+        initializeSDK()
         initializeTheme()
 
         //displayMertrc()
@@ -105,12 +107,12 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
             }
 
         }, 4000)*/
-            setContentView(R.layout.activity_main)
-            initializeSDK()
+            Handler().postDelayed({
             configureSDKSession()
+            setContentView(R.layout.activity_main)
             initActionButton()
             initializeBottomSheet()
-
+            }, 2500)
 
         }
     }

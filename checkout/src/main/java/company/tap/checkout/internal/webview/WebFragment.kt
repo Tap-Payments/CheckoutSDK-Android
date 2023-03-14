@@ -6,10 +6,12 @@ Copyright (c) 2020    Tap Payments.
 All rights reserved.
  **/
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.DisplayMetrics
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -22,11 +24,15 @@ import androidx.fragment.app.Fragment
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.apiresponse.CardViewModel
+import company.tap.checkout.internal.utils.CustomUtils
+import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.controller.SDKSession.contextSDK
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import company.tap.tapuilibrary.uikit.ktx.setTopBorders
 import kotlinx.android.synthetic.main.fragment_web.*
+import kotlinx.android.synthetic.main.fragment_web.web_view
+import kotlinx.android.synthetic.main.web_view_layout.*
 
 
 class WebFragment(
@@ -38,7 +44,7 @@ class WebFragment(
     private var webViewUrl: String? = null
     private var chargeResponse: Charge? = null
     val progressBar by lazy { view?.findViewById<ProgressBar>(R.id.progressBar) }
-
+    private var displayMetrics: Int? = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,10 +66,17 @@ class WebFragment(
         webViewUrl = arguments?.getString(KEY_URL)
         chargeResponse = arguments?.getSerializable(CHARGE) as Charge?
         progressBar?.max = 100
-        progressBar?.progress = 20
+        progressBar?.progress = 10
+        displayMetrics = CustomUtils.getDeviceDisplayMetrics(context as Activity)
         if (TextUtils.isEmpty(webViewUrl)) {
             throw IllegalArgumentException("Empty URL passed to WebViewFragment!")
         }
+        if (displayMetrics == DisplayMetrics.DENSITY_400 ||displayMetrics == DisplayMetrics.DENSITY_XXHIGH || displayMetrics == DisplayMetrics.DENSITY_450 || displayMetrics == DisplayMetrics.DENSITY_440) {
+            progressBar?.indeterminateDrawable = (context as Activity).resources.getDrawable( R.drawable.reduced_60)
+        }else  progressBar?.indeterminateDrawable = (context as Activity).resources.getDrawable( R.drawable.output_black_loader_nobg)
+
+        progressBar?.visibility = View.VISIBLE
+        web_view?.visibility = View.GONE
         webViewUrl?.let { setUpWebView(it) }
 
     }
@@ -106,16 +119,20 @@ class WebFragment(
         web_view.webChromeClient = WebChromeClient()
         web_view.settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
         web_view.webViewClient = cardViewModel?.let { TapCustomWebViewClient(this, it) }!!
+      //  web_view.webViewClient = cardViewModel?.let { TapCustomWebViewClient2(this, it) }!!
         web_view.settings.loadWithOverviewMode = true
         webViewUrl?.let { web_view.loadUrl(it) }
+
         web_view.setOnKeyListener { _, keyCode, event ->
             if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                if (web_view.canGoBack()) {
+
+                //if (web_view.canGoBack()) {
                     web_view.goBack()
+                    CheckoutViewModel().cancelledCall()
                     /**
                      * put here listener or delegate thT process cancelled **/
                     return@setOnKeyListener true
-                }
+              //  }
                 return@setOnKeyListener false
             }
             false
@@ -139,6 +156,7 @@ class WebFragment(
                 if (newProgress == 100) {
                     // Hide the progressbar
                     progressBar?.visibility = View.GONE
+                      web_view?.visibility = View.VISIBLE
                 }
             }
         }
@@ -159,16 +177,18 @@ class WebFragment(
     override fun submitResponseStatus(success: Boolean) {
         /*  val intent = Intent(activity, CheckoutFragment::class.java)
           startActivity(intent)*/
-        webViewContract?.redirectLoadingFinished(success, chargeResponse, contextSDK)
+    //    webViewContract?.redirectLoadingFinished(success, chargeResponse, contextSDK)
     }
 
     override fun getRedirectedURL(url: String) {
         // webViewContract.redirectLoadingFinished(url.contains("https://www.google.com/search?"))
         if (url.contains("gosellsdk://return_url")) {
+           // webViewContract?.resultObtained(true, contextSDK)
 
         webViewContract?.redirectLoadingFinished(url.contains("gosellsdk://return_url"), chargeResponse,
             contextSDK)
         } else {
+
 //            webViewContract.directLoadingFinished(true)
         }
     }

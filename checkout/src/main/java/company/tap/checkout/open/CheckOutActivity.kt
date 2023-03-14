@@ -14,7 +14,6 @@ import com.google.android.gms.wallet.AutoResolveHelper
 import com.google.android.gms.wallet.PaymentData
 import com.google.android.gms.wallet.PaymentDataRequest
 import com.google.android.gms.wallet.PaymentsClient
-import company.tap.cardscanner.*
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.utils.CustomUtils
@@ -405,7 +404,8 @@ class CheckOutActivity : AppCompatActivity()   {
                             "Cancelled Google Pay",
                             null,
                             null,
-                            tabAnimatedActionButton
+                            tabAnimatedActionButton,
+                            SDKSession.contextSDK
                         )
                         isGooglePayClicked = false
 

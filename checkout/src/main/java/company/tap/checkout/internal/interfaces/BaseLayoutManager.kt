@@ -34,7 +34,8 @@ interface BaseLayoutManager {
          response: String,
          authenticate: Authenticate?,
          chargeResponse: Charge?,
-         tabAnimatedActionButton: TabAnimatedActionButton?
+         tabAnimatedActionButton: TabAnimatedActionButton?,
+         contextSDK: Context?
      )
     fun displayAsynchronousPaymentView(chargeResponse:Charge)
 

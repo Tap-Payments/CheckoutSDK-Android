@@ -490,7 +490,8 @@ class CardRepository : APIRequestCallback {
                                 "tokenized",
                                 null,
                                 null,
-                                tabAnimatedActionButton
+                                tabAnimatedActionButton,
+ contextSDK
                             )
 
                         }
@@ -673,8 +674,8 @@ class CardRepository : APIRequestCallback {
                                         "cardRepose",
                                         " coming charge type is ...  caller setChargeOrAuthorize"
                                     );
-                                    PaymentDataSource?.setChargeOrAuthorize(chargeResponse)
-                                    viewModel?.displayOTPView(
+                                    PaymentDataSource.setChargeOrAuthorize(chargeResponse)
+                                    viewModel.displayOTPView(
                                         chargeResponse?.customer?.getPhone(),
                                         PaymentTypeEnum.SAVEDCARD.toString(),
                                         chargeResponse
@@ -696,7 +697,8 @@ class CardRepository : APIRequestCallback {
                         "success",
                         chargeResponse.authenticate,
                         chargeResponse,
-                        tabAnimatedActionButton
+                        tabAnimatedActionButton,
+ contextSDK
                     )
 
                 }
@@ -704,15 +706,16 @@ class CardRepository : APIRequestCallback {
                     SDKSession.getListener()?.authorizationSucceed(chargeResponse as Authorize)
                 }
                 ChargeStatus.FAILED -> {
+                    println("FAILED caleld")
                     viewModel.handleSuccessFailureResponseButton(
                         "failure",
                         chargeResponse.authenticate,
-                        chargeResponse,tabAnimatedActionButton
+                        chargeResponse,tabAnimatedActionButton, contextSDK
                     )
                     SDKSession.getListener()?.paymentFailed(chargeResponse)
 
                     SDKSession.sessionActive = false
-                    //  viewModel.redirectLoadingFinished(true, chargeResponse, contextSDK)
+                    //  viewModel.redirectLoadingFinished(false, chargeResponse, contextSDK)
                 }
                 ChargeStatus.ABANDONED, ChargeStatus.CANCELLED, ChargeStatus.DECLINED -> {
 
@@ -721,7 +724,7 @@ class CardRepository : APIRequestCallback {
                         "failure",
                         chargeResponse.authenticate,
                         chargeResponse,
- tabAnimatedActionButton
+ tabAnimatedActionButton, contextSDK
                     )
                     SDKSession.getListener()?.paymentFailed(
                         chargeResponse
@@ -771,7 +774,8 @@ class CardRepository : APIRequestCallback {
                     "success",
                     authorize.authenticate,
                     authorize,
- tabAnimatedActionButton
+                    tabAnimatedActionButton,
+ contextSDK
                 )
 
             } catch (e: java.lang.Exception) {
@@ -789,7 +793,8 @@ class CardRepository : APIRequestCallback {
                         "failure",
                         authorize.authenticate,
                         authorize,
- tabAnimatedActionButton
+                        tabAnimatedActionButton,
+ contextSDK
                     )
                 } catch (e: java.lang.Exception) {
                     Log.d(
@@ -822,11 +827,12 @@ class CardRepository : APIRequestCallback {
             }
             ChargeStatus.CAPTURED, ChargeStatus.AUTHORIZED, ChargeStatus.VALID -> try {
                 SDKSession.getListener()?.cardSaved(saveCard)
-                viewModel?.handleSuccessFailureResponseButton(
+                viewModel.handleSuccessFailureResponseButton(
                     "failure",
                     saveCard.authenticate,
                     saveCard,
- tabAnimatedActionButton
+                    tabAnimatedActionButton,
+ contextSDK
 
                 )
             } catch (e: java.lang.Exception) {
@@ -842,7 +848,8 @@ class CardRepository : APIRequestCallback {
                     "failure",
                     saveCard.authenticate,
                     saveCard,
- tabAnimatedActionButton
+                    tabAnimatedActionButton,
+ contextSDK
 
                 )
             } catch (e: java.lang.Exception) {
@@ -863,7 +870,7 @@ class CardRepository : APIRequestCallback {
             viewModel.handleSuccessFailureResponseButton(
                 "failure",
                 null,
-                null, tabAnimatedActionButton
+                null, tabAnimatedActionButton, contextSDK
 
             )
         }
@@ -880,7 +887,8 @@ class CardRepository : APIRequestCallback {
                     "failure",
                     null,
                     null,
- tabAnimatedActionButton
+                    tabAnimatedActionButton,
+ contextSDK
 
                 )
             }else
@@ -1110,7 +1118,8 @@ class CardRepository : APIRequestCallback {
                     "success",
                     chargeResponse.authenticate,
                     chargeResponse,
- tabAnimatedActionButton
+                    tabAnimatedActionButton,
+ contextSDK
                 )
 
                 sdkSession.getListener()?.paymentSucceed(charge)
@@ -1131,7 +1140,8 @@ class CardRepository : APIRequestCallback {
                     "failure",
                     chargeResponse.authenticate,
                     chargeResponse,
- tabAnimatedActionButton
+                    tabAnimatedActionButton,
+ contextSDK
                 )
 
                 SDKSession.getListener()?.paymentFailed(charge)

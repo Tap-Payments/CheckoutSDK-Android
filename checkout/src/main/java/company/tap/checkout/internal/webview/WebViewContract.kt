@@ -12,4 +12,5 @@ All rights reserved.
 
 interface WebViewContract {
     fun redirectLoadingFinished(done: Boolean, charge: Charge?, contextSDK: Context?)
+    fun resultObtained(done: Boolean, contextSDK: Context?)
 }

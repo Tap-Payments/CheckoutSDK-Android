@@ -121,6 +121,7 @@ class WebViewHolder(
                 progressBar?.progress = newProgress
                 println("progressBar?.progress"+progressBar?.progress)
                 println("progressBar?.progress"+newProgress)
+                println("mUrl?.progress"+mUrl)
                 if (newProgress == 100) {
                      // Hide the progressbar
                      progressBar?.visibility = View.GONE
