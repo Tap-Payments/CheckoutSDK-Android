@@ -60,8 +60,8 @@ class CardViewHolder(private val context: Context, private val onCardSelectedAct
         view.mainChipgroup.chipsRecycler.adapter = adapter
         view.mainChipgroup.chipsRecycler.elevation = 0F
         paymentCardsList?.let { adapter.updateAdapterData(it) }
-        println("saveCardsList in adapter"+saveCardsList)
-        println("paymentCardsList in adapter"+paymentCardsList)
+      //  println("saveCardsList in adapter"+saveCardsList)
+        //println("paymentCardsList in adapter"+paymentCardsList)
         saveCardsList?.let { adapter.updateAdapterDataSavedCard(it) }
         /**
          * set separator background

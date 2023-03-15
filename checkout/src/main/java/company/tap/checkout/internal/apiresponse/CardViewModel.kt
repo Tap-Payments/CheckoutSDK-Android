@@ -189,7 +189,7 @@ class CardViewModel : ViewModel() {
     }
     @RequiresApi(Build.VERSION_CODES.N)
     private fun authenticateChargeTransaction(viewModel: CheckoutViewModel, otpString: String?) {
-        println("otpString>>."+otpString)
+       // println("otpString>>."+otpString)
         if (otpString != null) {
                 repository.authenticate(context,viewModel,otpString)
         }

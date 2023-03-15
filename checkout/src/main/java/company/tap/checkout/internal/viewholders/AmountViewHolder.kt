@@ -257,7 +257,7 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
         transactionCurrencyApi: String,
         itemCountApi: String
     ) {
-        println("transactionCurrencyApi" + transactionCurrencyApi)
+       // println("transactionCurrencyApi" + transactionCurrencyApi)
         itemCountt = itemCountApi
         originalAmount = CurrencyFormatter.currencyFormat(originalAmountApi)
         transactionCurrency = transactionCurrencyApi

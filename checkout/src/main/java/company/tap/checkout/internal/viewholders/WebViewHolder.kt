@@ -128,9 +128,7 @@ class WebViewHolder(
             override fun onProgressChanged(view: WebView?, newProgress: Int) {
                 // Update the progress bar with page loading progress
                 progressBar?.progress = newProgress
-                println("progressBar?.progress"+progressBar?.progress)
-                println("progressBar?.progress"+newProgress)
-                println("mUrl?.progress"+mUrl)
+                
                 if (newProgress == 100) {
                      // Hide the progressbar
                      progressBar?.visibility = View.GONE

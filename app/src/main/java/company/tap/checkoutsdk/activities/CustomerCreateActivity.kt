@@ -62,7 +62,7 @@ open class CustomerCreateActivity : AppCompatActivity() {
             )
         ) {
             customer = intent.getSerializableExtra("customer") as CustomerViewModel?
-            println(" customer : " + customer?.getEmail())
+            //println(" customer : " + customer?.getEmail())
             populateCustomerFields(customer)
         }
 
@@ -91,7 +91,7 @@ open class CustomerCreateActivity : AppCompatActivity() {
             // do whatever you need to do when the switch is toggled here
             isAddressEnabled = isChecked
 
-            println("isAddressEnabled>>"+isAddressEnabled)
+            //println("isAddressEnabled>>"+isAddressEnabled)
 
         }
     }
@@ -119,7 +119,7 @@ open class CustomerCreateActivity : AppCompatActivity() {
                     ignoreCase = true
                 )
             ) {
-                println("inside: $operation")
+                //println("inside: $operation")
                 SettingsManager.saveCustomer(
                     customer_id?.text.toString().trim { it <= ' ' },
                     name?.text.toString().trim { it <= ' ' },

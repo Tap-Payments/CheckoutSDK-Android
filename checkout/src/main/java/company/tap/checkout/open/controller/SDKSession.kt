@@ -93,7 +93,7 @@ object  SDKSession : APIRequestCallback {
     private fun initPaymentDataSource() {
         this.paymentDataSource = PaymentDataSource
         if (paymentDataSource != null) {
-            println("paymentDataSource sdk ${paymentDataSource.toString()}")
+           // println("paymentDataSource sdk ${paymentDataSource.toString()}")
             PaymentDataProvider().setExternalDataSource(paymentDataSource!!)
         }
 
@@ -101,13 +101,13 @@ object  SDKSession : APIRequestCallback {
     }
 
     fun addSessionDelegate(_sessionDelegate: SessionDelegate) {
-        println("addSessionDelegate sdk ${_sessionDelegate}")
+        //println("addSessionDelegate sdk ${_sessionDelegate}")
         this.sessionDelegate = _sessionDelegate
 
 
     }
     fun addPluginSessionDelegate(_pluginSessionDelegate: PluginSessionDelegate) {
-        println("addPluginSessionDelegate sdk ${_pluginSessionDelegate}")
+       // println("addPluginSessionDelegate sdk ${_pluginSessionDelegate}")
         this.pluginSessionDelegate = _pluginSessionDelegate
 
 
@@ -131,7 +131,7 @@ object  SDKSession : APIRequestCallback {
     fun startSDK(supportFragmentManager: FragmentManager?, context: Context, activity:Activity) {
         println("is session enabled ${SessionManager.isSessionEnabled()}")
         if (SessionManager.isSessionEnabled()) {
-            println("Session already active!!!")
+           // println("Session already active!!!")
             sessionDelegate?.sessionFailedToStart()
             return
         }
@@ -150,7 +150,7 @@ object  SDKSession : APIRequestCallback {
      * set amount
      */
     fun setAmount(amount: BigDecimal) {
-        println("amount ... $amount")
+       // println("amount ... $amount")
         paymentDataSource?.setAmount(amount)
     }
 
@@ -159,7 +159,7 @@ object  SDKSession : APIRequestCallback {
      * set setPaymentType
      */
     fun setPaymentType(paymentType: String) {
-        println("paymentType ... $paymentType")
+      //  println("paymentType ... $paymentType")
         paymentDataSource?.setPaymentType(paymentType)
     }
 
@@ -269,7 +269,7 @@ object  SDKSession : APIRequestCallback {
      * @param saveCardStatus
      */
     fun isUserAllowedToSaveCard(saveCardStatus: Boolean) {
-        println("isUserAllowedToSaveCard >>> $saveCardStatus")
+        //println("isUserAllowedToSaveCard >>> $saveCardStatus")
         paymentDataSource?.isUserAllowedToSaveCard(saveCardStatus)
     }
 
@@ -279,7 +279,7 @@ object  SDKSession : APIRequestCallback {
      * @param is3DSecure the is 3 d secure
      */
     fun isRequires3DSecure(is3DSecure: Boolean) {
-        println("isRequires3DSecure >>> $is3DSecure")
+       // println("isRequires3DSecure >>> $is3DSecure")
         paymentDataSource?.isRequires3DSecure(is3DSecure)
     }
 
@@ -325,7 +325,7 @@ object  SDKSession : APIRequestCallback {
      * @param cardType the cardType
      */
     fun setCardType(cardType: CardType) {
-        println("cardType ... $cardType")
+       // println("cardType ... $cardType")
         paymentDataSource?.setcardType(cardType)
     }
 
@@ -343,7 +343,7 @@ object  SDKSession : APIRequestCallback {
      * @param enableCardHolderName
      */
     fun isUserAllowedToEnableCardHolderName(enableCardHolderName: Boolean) {
-        println("isUserAllowedToEnableCardHolderName >>> $enableCardHolderName")
+      //  println("isUserAllowedToEnableCardHolderName >>> $enableCardHolderName")
         paymentDataSource?.isUserAllowedToEditCardHolderName(enableCardHolderName)
     }
 
@@ -352,7 +352,7 @@ object  SDKSession : APIRequestCallback {
      * @param showHideCardHolderName
      */
     fun showHideCardHolderName(showHideCardHolderName: Boolean) {
-        println("showHideCardHolderName >>> $showHideCardHolderName")
+       // println("showHideCardHolderName >>> $showHideCardHolderName")
         paymentDataSource?.showHideCardHolderName(showHideCardHolderName)
     }
     /**

@@ -331,7 +331,7 @@ class PaymentInlineViewHolder (private val context: Context,
             override fun afterTextChanged(s: Editable?) {
                 if (s?.trim()?.length!! > 2) {
                     if (s.trim()[0].toInt() == 5) {
-                        println("is that called")
+
                         tabLayout.selectTab(CardBrand.ooredoo, true)
                     }
                 } else tabLayout.resetBehaviour()

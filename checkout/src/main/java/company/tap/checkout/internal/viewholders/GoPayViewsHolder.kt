@@ -89,7 +89,7 @@ class GoPayViewsHolder(private val context: Context, private val baseLayoutManag
             CustomUtils.showDialog(LocalizationManager.getValue("GoPayAlert", "Hints", "goPayTitle"),LocalizationManager.getValue("GoPayAlert", "Hints", "goPayphonealert"),context,null,baseLayoutManager,null,null,false)
             return
         }else{
-            println(" you clicked to display otp!!!")
+          //  println(" you clicked to display otp!!!")
             baseLayoutManager?.displayOTPView(PaymentDataSource.getCustomer().getPhone(), GOPAY.name)
         }
 

@@ -398,8 +398,8 @@ object SettingsManager {
         // check if customer id is in pref.
       //  customer =
         if (!customersList.isNullOrEmpty() && customersList.isNotEmpty()) {
-            println("preparing data source with customer ref :" + customersList[0].getRef())
-            println("preparing data source with isAdd ref :" + CustomerCreateActivity().isAddressEnabled)
+          //  println("preparing data source with customer ref :" + customersList[0].getRef())
+          //  println("preparing data source with isAdd ref :" + CustomerCreateActivity().isAddressEnabled)
             if(CustomerCreateActivity().isAddressEnabled == true){
                 customer= TapCustomer(
                     customersList[0].getRef(),
@@ -423,7 +423,7 @@ object SettingsManager {
             }
 
         } else {
-            println(" paymentResultDataManager.getCustomerRef(context) null")
+          //  println(" paymentResultDataManager.getCustomerRef(context) null")
             //65562630
             if(CustomerCreateActivity().isAddressEnabled == true){
                 customer= TapCustomer(
@@ -457,7 +457,7 @@ object SettingsManager {
         // check if customer id is in pref.
         //  customer =
         if (itemsList != null) {
-            println("preparing data source with itemsList ref :" + itemsList[0].getItemIsRequireShip())
+           // println("preparing data source with itemsList ref :" + itemsList[0].getItemIsRequireShip())
 
   ItemsModel(itemsList[0].getProductId(),itemsList[0].getItemsName(),
                     itemsList[0].getPricePUnit()?.let { BigDecimal.valueOf(it) },itemsList[0].getItemCurrency(),
@@ -468,7 +468,7 @@ object SettingsManager {
                     itemsList[0].getItemDimens(), itemsList[0].getItemTags(),  itemsList[0].getItemMetaData())
             .let { paymentitems.add(it) }
         } else {
-            println(" paymentResultDataManager.itemsList(context) null")
+          //  println(" paymentResultDataManager.itemsList(context) null")
             paymentitems.add(ItemsModel(
                 "",
                 "Items1",
@@ -609,7 +609,7 @@ object SettingsManager {
      */
     fun getTransactionsMode(key: String): TransactionMode {
         val trx_mode = pref?.getString(key, TransactionMode.PURCHASE.name)
-        println("trx_mode are" + trx_mode)
+        //println("trx_mode are" + trx_mode)
         if (trx_mode.equals(
                 TransactionMode.PURCHASE.name,
                 ignoreCase = true
@@ -677,7 +677,7 @@ object SettingsManager {
      * @return
      */
     fun getFont(key: String?, defaultFont: String?): String? {
-        println("pref: " + pref!!.getString(key, defaultFont))
+      //  println("pref: " + pref!!.getString(key, defaultFont))
         return pref!!.getString(key, defaultFont)
     }
 
@@ -739,7 +739,7 @@ object SettingsManager {
         val shippingList: ArrayList<Shipping> = ArrayList<Shipping>()
         // println(" get shippingLists: $shippingLists")
         if (shippingLists != null)
-            println("preparing data source with shipping ref :" + shippingLists[0].getshippingName())
+          //  println("preparing data source with shipping ref :" + shippingLists[0].getshippingName())
         if (shippingLists != null) {
 
             shippingLists[0].getshippingDecsription()?.let {

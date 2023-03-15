@@ -192,8 +192,8 @@ class LoyaltyViewHolder(private val context: Context, checkoutViewModel: Checkou
     }
 
     private fun reCalculateAmount(previousBalance:BigDecimal?,amountTypedInText:BigDecimal){
-        println("previousBalance>>"+previousBalance)
-        println("newBalance>>"+newBalance)
+       // println("previousBalance>>"+previousBalance)
+      //  println("newBalance>>"+newBalance)
         if (previousBalance != null) {
             newBalance = previousBalance.minus(amountTypedInText)
 

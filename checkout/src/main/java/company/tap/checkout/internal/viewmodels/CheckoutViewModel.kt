@@ -1093,20 +1093,20 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         savedCardList.value = paymentOptionsResponse?.cards
         currencyAdapter = CurrencyTypeAdapter(this)
 
-        println("savedCardList on get" + savedCardList.value)
-        println("paymentOptionsResponse?.supportedCurrencie on get" + paymentOptionsResponse?.supportedCurrencies)
+      //  println("savedCardList on get" + savedCardList.value)
+      //  println("paymentOptionsResponse?.supportedCurrencie on get" + paymentOptionsResponse?.supportedCurrencies)
         if (paymentOptionsResponse?.supportedCurrencies != null && ::amountViewHolder.isInitialized) {
             currentCurrency = paymentOptionsResponse.currency
             for (i in paymentOptionsResponse.supportedCurrencies.indices) {
 
                 if (paymentOptionsResponse.supportedCurrencies[i].currency == currentCurrency) {
                     println("current amount value>>" + paymentOptionsResponse.supportedCurrencies[i].amount)
-                    println("current currency value>>" + paymentOptionsResponse.supportedCurrencies[i].symbol)
+                    //println("current currency value>>" + paymentOptionsResponse.supportedCurrencies[i].symbol)
                     currentAmount =
                         CurrencyFormatter.currencyFormat(paymentOptionsResponse.supportedCurrencies[i].amount.toString())
                     currentCurrency =
                         paymentOptionsResponse.supportedCurrencies[i].symbol.toString()
-                    println("currentCurrency currency value>>" + currentCurrency)
+                  //  println("currentCurrency currency value>>" + currentCurrency)
 
                    /* if (currentCurrency.length == 2) {
                         currentCurrency =
@@ -1331,7 +1331,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         var filteredCardList: List<PaymentOption> =
             list.filter { items -> items.paymentType == PaymentType.CARD }
 
-        println("filteredCardList value " + filteredCardList.size)
+       // println("filteredCardList value " + filteredCardList.size)
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             paymentInlineViewHolder.setDataFromAPI(filteredCardList)
         }
@@ -1395,7 +1395,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     @SuppressLint("WrongConstant")
     override fun didDialogueExecute(response: String, cardTypeDialog: Boolean?) {
-        println("response are$response")
+       // println("response are$response")
         if (response == "YES") {
             if (deleteCard) {
                 //saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
@@ -1412,7 +1412,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 )
 
             } else {
-                println("else block is calle are")
+               // println("else block is calle are")
                 removeViews(goPaySavedCardHolder)
                 //  adapter.updateAdapterDataSavedCard(savedCardList.value as List<SavedCard>)
                 goPayViewsHolder.goPayopened = false
@@ -1439,7 +1439,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     override fun deleteSelectedCardListener(delSelectedCard: DeleteCardResponse) {
         println("delSelectedCard value is" + delSelectedCard.deleted)
-        println("selectedItemsDel value is" +selectedItemsDel)
+      //  println("selectedItemsDel value is" +selectedItemsDel)
         if (delSelectedCard.deleted) {
             adapter.deleteSelectedCard(selectedItemsDel)
             adapter.updateAdapterDataSavedCard(arrayListSavedCardSize)
@@ -1460,7 +1460,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         SessionManager.setActiveSession(false)
         println("response val>>"+response)
         println("tabAnimatedActionButton val>>"+tabAnimatedActionButton)
-        println("save val>>"+saveCardSwitchHolder)
+        //println("save val>>"+saveCardSwitchHolder)
         /* if(chargeResponse?.status == null && response == "tokenized"){
              //todo replaced authorized with chargeresponse
              SDKSession.getListener()?.getStatusSDK(response,chargeResponse)
@@ -1517,7 +1517,7 @@ removeAllViews()
         if(::checkoutFragment.isInitialized)
           checkoutFragment.closeText.visibility =View.GONE
         println("chargeResponse are>>>>"+chargeResponse?.status)
-        println("saveCardSwitchHolder are>>>>"+saveCardSwitchHolder)
+       // println("saveCardSwitchHolder are>>>>"+saveCardSwitchHolder)
         if(response.contains("failure")){
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(false,Color.MAGENTA)
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(

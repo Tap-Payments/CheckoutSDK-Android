@@ -42,7 +42,7 @@ class ShippingCreateActivity : AppCompatActivity() {
             )
         ) {
             shippingViewModel = intent.getSerializableExtra("shipping") as ShippingViewModel?
-            println("shippingViewModel : " + shippingViewModel?.getshippingName())
+           // println("shippingViewModel : " + shippingViewModel?.getshippingName())
             populateShippingFields(shippingViewModel)
         }
 

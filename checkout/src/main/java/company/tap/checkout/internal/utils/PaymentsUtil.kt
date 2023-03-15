@@ -279,7 +279,7 @@ object PaymentsUtil {
             put("totalPrice", price)
             put("totalPriceStatus", "FINAL")
             put("countryCode",PaymentDataSource.getGooglePaymentOptions()?.get(0)?.acquirerCountryCode)
-            println("getSelectedCurrency"+PaymentDataSource.getSelectedCurrency())
+          //  println("getSelectedCurrency"+PaymentDataSource.getSelectedCurrency())
             if(PaymentDataSource.getSelectedCurrency()!=null && PaymentDataSource.getSelectedCurrency()?.equals("$") == true){
                 put("currencyCode","USD")
             }else{

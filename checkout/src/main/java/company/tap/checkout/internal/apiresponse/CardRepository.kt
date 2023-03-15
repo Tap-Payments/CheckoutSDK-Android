@@ -612,7 +612,7 @@ class CardRepository : APIRequestCallback {
             response?.body().let {
                 listCardsResponse = Gson().fromJson(it, ListCardsResponse::class.java)
                 println("LIST_ALL_CARD_CODE >>>>" + listCardsResponse)
-                println("")
+
             }
         }
 
@@ -706,7 +706,7 @@ class CardRepository : APIRequestCallback {
                     SDKSession.getListener()?.authorizationSucceed(chargeResponse as Authorize)
                 }
                 ChargeStatus.FAILED -> {
-                    println("FAILED caleld")
+                  //  println("FAILED caleld")
                     viewModel.handleSuccessFailureResponseButton(
                         "failure",
                         chargeResponse.authenticate,
