@@ -179,9 +179,11 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         }
         closeImage.setOnClickListener {
 
-            bottomSheetDialog.dismissWithAnimation
+           // bottomSheetDialog.dismissWithAnimation
+            //bottomSheetDialog.hide()
+           // bottomSheetDialog.dismiss()
+            bottomSheetDialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
             bottomSheetDialog.hide()
-            bottomSheetDialog.dismiss()
             resetTabAnimatedButton()
             viewModel.incrementalCount = 0
 
