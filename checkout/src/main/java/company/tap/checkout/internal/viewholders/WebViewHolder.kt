@@ -92,7 +92,16 @@ class WebViewHolder(
     }
 
     override fun getRedirectedURL(url: String) {
+        if (url.contains("gosellsdk://return_url")) {
+            // webViewContract?.resultObtained(true, contextSDK)
 
+            webViewContract?.redirectLoadingFinished(url.contains("gosellsdk://return_url"), authenticate,
+                SDKSession.contextSDK
+            )
+        } else {
+
+//            webViewContract.directLoadingFinished(true)
+        }
     }
 
     override fun showLoading(showLoading: Boolean) {

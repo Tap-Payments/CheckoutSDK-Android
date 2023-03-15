@@ -1461,8 +1461,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         println("response val>>"+response)
         println("tabAnimatedActionButton val>>"+tabAnimatedActionButton)
         println("save val>>"+saveCardSwitchHolder)
-//        println("webViewHolder val>>"+webViewHolder)
-
         /* if(chargeResponse?.status == null && response == "tokenized"){
              //todo replaced authorized with chargeresponse
              SDKSession.getListener()?.getStatusSDK(response,chargeResponse)
@@ -1488,7 +1486,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
         if(::webViewHolder.isInitialized)
             removeViews(webViewHolder)
-
+removeAllViews()
         saveCardSwitchHolder = contextSDK?.let { SwitchViewHolder(it,this) }
         businessViewHolder = contextSDK?.let { BusinessViewHolder(it,this) }!!
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setDisplayMetrics(
@@ -1553,55 +1551,26 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             ChargeStatus.RESTRICTED, ChargeStatus.ABANDONED, ChargeStatus.VOID, ChargeStatus.INVALID -> {
                 println("CANCELLED>>>"+tabAnimatedActionButton)
                 println("CANCELLED 2>>>"+saveCardSwitchHolder?.view?.cardSwitch?.payButton)
-                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(false,Color.MAGENTA)
-                tabAnimatedActionButton?.setInValidBackground(false,Color.MAGENTA)
-                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
-                    ActionButtonState.ERROR
-                )
-                tabAnimatedActionButton?.setInValidBackground(false, Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")))
-
-              /*  saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
+                tabAnimatedActionButton?.setButtonDataSource(
                     false,
                     "en",
                     null,
                     Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
                     Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
-                )*/
+                )
+                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
+                    ActionButtonState.ERROR
+                )
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(false,Color.MAGENTA)
 
-                tabAnimatedActionButton?.setInValidBackground(false, Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")))
 
-                tabAnimatedActionButton?.setButtonDataSource(
-                    false,
-                    "en",
-                    "",
-                    Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
-                    Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
-                )
                 //tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
 
                 tabAnimatedActionButton?.changeButtonState(
                     ActionButtonState.ERROR
                 )
 
-                val payString: String = LocalizationManager.getValue("pay", "ActionButton")
-               /* saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
-                    false,
-                    "en",
-                   null,
-                    Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
-                    Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
-                )
-
-                tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
-               tabAnimatedActionButton?.setButtonDataSource(
-                    false,
-                    "en",
-                   "",
-                    Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
-                    Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
-                )*/
-                tabAnimatedActionButton?.setInValidBackground(false, Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")))
+              //  tabAnimatedActionButton?.setInValidBackground(false, Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")))
 
             }
             else -> {
@@ -1641,6 +1610,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         Handler().postDelayed({
             tabAnimatedActionButton?.onMorphAnimationReverted()
             tabAnimatedActionButton?.clearAnimation()
+            tabAnimatedActionButton?.setButtonDataSource(
+                true,
+                "en",
+                null,
+                Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
+                Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
+            )
             SDKSession.sessionActive = false
 
         }, 4000)
@@ -2564,7 +2540,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun removeAllViews() {
         if (::businessViewHolder.isInitialized && ::amountViewHolder.isInitialized && ::cardViewHolder.isInitialized && ::paymentInlineViewHolder.isInitialized &&
-            ::goPayViewsHolder.isInitialized && ::otpViewHolder.isInitialized || ::webViewHolder.isInitialized
+            ::goPayViewsHolder.isInitialized && ::otpViewHolder.isInitialized
         )
             removeViews(
                 businessViewHolder,
@@ -2574,9 +2550,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 saveCardSwitchHolder,
                 goPayViewsHolder,
                 otpViewHolder,
-                webViewHolder,
                 tabAnimatedActionButtonViewHolder
             )
+
+        if(::webViewHolder.isInitialized) removeViews(webViewHolder)
     }
 
     private fun setAllSeparatorTheme() {
