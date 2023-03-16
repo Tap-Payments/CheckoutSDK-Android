@@ -448,7 +448,7 @@ object SettingsManager {
         val paymentitems: ArrayList<ItemsModel> = ArrayList()
         val gson = Gson()
         val response = pref?.getString("paymentitems", "")
-        println(" get customer: $response")
+       // println(" get customer: $response")
         val itemsList = gson.fromJson<ArrayList<PaymentItemViewModel>>(
             response,
             object : TypeToken<List<PaymentItemViewModel?>?>() {}.type

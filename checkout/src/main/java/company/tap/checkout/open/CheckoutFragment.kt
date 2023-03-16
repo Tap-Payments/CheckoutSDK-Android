@@ -138,17 +138,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         closeImage = view.findViewById(R.id.closeImage)
         scrollView = view.findViewById(R.id.scrollView)
         val heightscreen: Int = Resources.getSystem().getDisplayMetrics().heightPixels;
-        // bottomSheetDialog.behavior.peekHeight = heightscreen
-
-       // println("heightscreen" + heightscreen)
-     //   println("sdkLayoutheight" + checkoutLayout?.height)
-     //   println("bottomSheetLayout" + bottomSheetLayout)
-
-
 
         closeText.text = LocalizationManager.getValue("close", "Common")
-
-
 
         if (SDKSession.showCloseImage == true) {
 
@@ -168,31 +159,10 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             }
 
         }
-        closeText.setOnClickListener {
-            bottomSheetDialog.dismissWithAnimation
-            bottomSheetDialog.hide()
-            bottomSheetDialog.dismiss()
-            viewModel.incrementalCount = 0
-            resetTabAnimatedButton()
-
-
-        }
-        closeImage.setOnClickListener {
-
-           // bottomSheetDialog.dismissWithAnimation
-            //bottomSheetDialog.hide()
-           // bottomSheetDialog.dismiss()
-            bottomSheetDialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
-            bottomSheetDialog.hide()
-            resetTabAnimatedButton()
-            viewModel.incrementalCount = 0
-
-        }
-
-
 
         //LocalizationManager.loadTapLocale(resources, R.raw.lang)
-        sessionDelegate?.sessionIsStarting()
+        sessionDelegate?.sessionHasStarted()
+
         bottomSheetLayout?.let {
             viewModel.setBottomSheetLayout(it)
         }
@@ -224,9 +194,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             }
         }
         inLineCardLayout?.minimumHeight = heightscreen - checkoutLayout?.height!!
-
-        enableSections()
-
         dialog?.window?.attributes?.windowAnimations = R.style.DialogAnimation
 
         bottomSheetDialog.setOnShowListener {
@@ -236,16 +203,16 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         }
 
 
-        bottomSheetDialog.behavior.setBottomSheetCallback(object :
+        /*bottomSheetDialog.behavior.setBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
 
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-                /*  println("111heightscreen>>>>"+heightscreen)
+                *//*  println("111heightscreen>>>>"+heightscreen)
                   println("1111sdkLayoutheight>>>>>"+checkoutLayout?.height)
                   println("1111newState>>>>>"+newState)
                   println("1111difff>>>>>"+ checkoutLayout?.height?.let { heightscreen.minus(it) })
                   println("1111peek>>>>>"+bottomSheetDialog.behavior.peekHeight)
-                  var diff = checkoutLayout?.height?.let { heightscreen.minus(it) }*/
+                  var diff = checkoutLayout?.height?.let { heightscreen.minus(it) }*//*
 
 
                 if (newState == BottomSheetBehavior.STATE_HIDDEN) {
@@ -270,13 +237,34 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                 scrollView?.smoothScrollTo(0, heightscreen)
             }
         })
+*/
+        closeText.setOnClickListener {
+            bottomSheetDialog.dismissWithAnimation
+            bottomSheetDialog.hide()
+            bottomSheetDialog.dismiss()
+            viewModel.incrementalCount = 0
+            resetTabAnimatedButton()
 
 
+        }
+        closeImage.setOnClickListener {
+
+            // bottomSheetDialog.dismissWithAnimation
+            //bottomSheetDialog.hide()
+            // bottomSheetDialog.dismiss()
+            bottomSheetDialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
+            bottomSheetDialog.hide()
+            resetTabAnimatedButton()
+            viewModel.incrementalCount = 0
+
+        }
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onAttach(context: Context) {
         super.onAttach(context)
         LocalizationManager.setLocale(context, PaymentDataSource.getSDKLocale())
+        enableSections()
     }
 
 
