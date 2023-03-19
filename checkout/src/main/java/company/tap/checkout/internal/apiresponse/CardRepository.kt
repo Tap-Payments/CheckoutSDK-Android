@@ -376,9 +376,9 @@ class CardRepository : APIRequestCallback {
                             PaymentDataSource.setMerchantData(merchantDataModel)
                             PaymentDataSource.setInitResponse(initResponseModel)
                             PaymentDataSource.setTokenConfig(initResponseModel?.session)
-                            /* if (tabAnimatedActionButton != null) {
+                             if (tabAnimatedActionButton != null) {
                                  tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
-                             }*/
+                             }
                         }
 
                     }else {
@@ -587,10 +587,10 @@ class CardRepository : APIRequestCallback {
                 configResponseModel = configResponse,
                     paymentOptionsResponse = paymentOptionsResponse
             )
-
+            tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
            /* val tapCheckoutFragment = CheckoutFragment()
             tapCheckoutFragment.show(supportFragmentManager.beginTransaction().addToBackStack(null), "CheckOutFragment")*/
-            tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
+
             val intent = Intent(SDKSession.activity, CheckOutActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
            contextSDK?.startActivity(intent)
