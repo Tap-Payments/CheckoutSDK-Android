@@ -1754,10 +1754,12 @@ removeAllViews()
                 "pay",
                 "ActionButton"
             )
-            TransactionMode.SAVE_CARD -> payString = LocalizationManager.getValue(
+            //TODO ASK OSAMA
+            /*TransactionMode.SAVE_CARD -> payString = ocalizationManager.getValue(
                 "savecard",
                 "ActionButton"
-            )
+            )*/
+            TransactionMode.SAVE_CARD -> payString = "SAVE CARD"
             else -> payString = LocalizationManager.getValue("pay", "ActionButton")
         }
 
@@ -1861,10 +1863,11 @@ removeAllViews()
                 "pay",
                 "ActionButton"
             )
-            TransactionMode.SAVE_CARD -> payString = LocalizationManager.getValue(
+            //TODO check OSAMA
+           /* TransactionMode.SAVE_CARD -> payString = LocalizationManager.getValue(
                 "savecard",
                 "ActionButton"
-            )
+            )*/  TransactionMode.SAVE_CARD -> payString = "SAVE CARD"
             else -> payString = LocalizationManager.getValue("pay", "ActionButton")
         }
 

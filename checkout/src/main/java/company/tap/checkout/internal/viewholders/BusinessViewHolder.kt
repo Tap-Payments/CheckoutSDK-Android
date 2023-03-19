@@ -45,6 +45,7 @@ class BusinessViewHolder( context: Context, private  val checkoutViewModel: Chec
 
             view.headerView.setHeaderDataSource(HeaderDataSource("Enter Card Details",null,null))
             view.headerView.businessIcon.visibility= View.GONE
+            view.headerView.tapChipIcon.visibility= View.GONE
         }else
             if (merchantName != null){
             view.headerView.setHeaderDataSource(getHeaderDataSourceFromAPI())
@@ -52,6 +53,7 @@ class BusinessViewHolder( context: Context, private  val checkoutViewModel: Chec
                     view.headerView.paymentFor.visibility = View.GONE
                 }
             view.headerView.businessIcon.visibility= View.VISIBLE
+                view.headerView.tapChipIcon.visibility= View.VISIBLE
             view.headerView.showHideLoading(false)
             view.headerView.constraint.visibility= View.VISIBLE
 

@@ -319,8 +319,10 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         holder.itemView.setOnClickListener {
             if (!isShaking) {
                 resetSelection()
+                println("adapterContent.size"+adapterContent.size)
                 //minus one because of gopaychip
-                onCardSelectedActionListener.onCardSelectedAction(true, arrayListCards[position.minus(adapterContent.size).minus(1)])
+                if(adapterContent.size>0) onCardSelectedActionListener.onCardSelectedAction(true, arrayListCards[position.minus(adapterContent.size).minus(1)])
+                else onCardSelectedActionListener.onCardSelectedAction(true, arrayListCards[position])
                 selectedPosition = position
                 notifyDataSetChanged()
             }

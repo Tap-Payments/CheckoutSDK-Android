@@ -1746,6 +1746,7 @@ class PaymentInlineViewHolder (private val context: Context,
         }
 
     fun logicForImageOnCVV(card:CardBrand,cardCharSeq:String){
+        //TODO 19MAR
         for (i in itemsCardsList.indices) {
             println("itemsCardsList[i].selectedImageUR"+itemsCardsList[i].selectedImageURL)
             println("card"+card.name)

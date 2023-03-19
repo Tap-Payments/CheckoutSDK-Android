@@ -369,11 +369,11 @@ class CardRepository : APIRequestCallback {
                             initResponseModel = Gson().fromJson(it, InitResponseModel::class.java)
                             paymentOptionsResponse = initResponseModel?.paymentOptionsResponse
                             merchantDataModel = initResponseModel?.merchant
+                            NetworkApp.initNetworkToken(initResponseModel?.session, contextSDK,ApiService.BASE_URL,true)
                             PaymentDataSource.setPaymentOptionsResponse(paymentOptionsResponse)
                             PaymentDataSource.setMerchantData(merchantDataModel)
                             PaymentDataSource.setInitResponse(initResponseModel)
                             PaymentDataSource.setTokenConfig(initResponseModel?.session)
-
                             /* if (tabAnimatedActionButton != null) {
                                  tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
                              }*/
