@@ -9,17 +9,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.internal.api.requests.CreateTokenGPayRequest
-import company.tap.checkout.internal.api.requests.TapConfigRequestModel
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import java.util.*
-import kotlin.random.Random
+
 
 
 /**
