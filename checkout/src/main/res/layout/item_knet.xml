@@ -21,13 +21,9 @@
 
         <company.tap.tapuilibrary.uikit.atoms.TapImageView
             android:id="@+id/imageView_knet"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/margin_basic_8dp"
-            android:layout_marginBottom="7dp"
-            android:layout_marginStart="35dp"
-            android:layout_marginEnd="35dp"
             android:src="@drawable/knet" />
 
         <company.tap.tapuilibrary.uikit.atoms.TapImageView

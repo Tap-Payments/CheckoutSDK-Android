@@ -19,6 +19,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.wallet.IsReadyToPayRequest
@@ -149,7 +150,10 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                /* if(adapterContent[position].brand?.name?.equals("benefit") == true){
                         return TYPE_3PPG
                     }else {*/
-                        (adapterContent[position]).image?.let { arrayListRedirect.add(it) }
+                            if(CustomUtils.getCurrentTheme()!=null && CustomUtils.getCurrentTheme().contains("dark")){
+                                (adapterContent[position]).logos?.dark?.png?.let { arrayListRedirect.add(it) }
+                            }else  (adapterContent[position]).logos?.light?.png?.let { arrayListRedirect.add(it) }
+                      //  (adapterContent[position]).image?.let { arrayListRedirect.add(it) }
                         return TYPE_REDIRECT
                    // }
             }
@@ -515,10 +519,13 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         for (i in 0 until arrayListRedirect.size) {
             val imageViewCard = holder.itemView.findViewById<ImageView>(R.id.imageView_knet)
           //  arrayListRedirect[i].let { imageViewCard.loadSvg(it) }
-            GlideToVectorYou
+            Glide.with(holder.itemView.context)
+                .load(arrayListRedirect[i].toUri())
+                .into(imageViewCard)
+           /* GlideToVectorYou
                 .init()
                 .with(holder.itemView.context)
-                .load(arrayListRedirect[i].toUri(), imageViewCard)
+                .load(arrayListRedirect[i].toUri(), imageViewCard)*/
         }
     }
 

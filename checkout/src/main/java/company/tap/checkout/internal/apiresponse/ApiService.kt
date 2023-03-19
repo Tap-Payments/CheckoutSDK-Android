@@ -13,19 +13,21 @@ object ApiService {
     //const val INIT = "e4718d85-554b-4d15-a883-3043d961c8e5"
    // const val BASE_URL = "https://api.tap.company/v2/"
   // const val BASE_URL = "https://checkout-mw.dev.tap.company/api/"
-    const val BASE_URL = "https://checkout-mw-java.dev.tap.company/api/"
-    const val INIT = "checkout/init"
+    const val BASE_URL = "https://checkout-mw-java.dev.tap.company/v2/"
+    const val INIT = "checkoutprofile"
     const val PAYMENT_TYPES = "checkout/payment/types"
-    const val CHARGES ="checkout/charge"
+    const val CHARGES ="charge"
     const val RETURN_URL ="gosellsdk://return_url"
     const val TAP_ID ="tap_id"
-    const val BIN ="card/bin"
-    const val CONFIG ="checkout/config"
+    const val BIN ="card/bin/"
+    const val BILLING_ADDRESS ="billing_address/"
+    //const val CONFIG ="checkout/config"
+    const val CONFIG ="checkoutprofile"
 
     /**
      * The Authorize.
      */
-    const val AUTHORIZE = "checkout/authorize"
+    const val AUTHORIZE = "authorize/"
 
     /**
      * The Tokens.
@@ -35,7 +37,7 @@ object ApiService {
     /**
      * The Token.
      */
-    const val TOKEN = "token"
+    const val TOKEN = "checkout/token/"
     /**
      * The Save card.
      */

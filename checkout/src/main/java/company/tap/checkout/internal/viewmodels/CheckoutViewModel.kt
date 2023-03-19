@@ -53,10 +53,7 @@ import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.internal.api.requests.CreateTokenGPayRequest
-import company.tap.checkout.internal.api.responses.DeleteCardResponse
-import company.tap.checkout.internal.api.responses.InitResponseModel
-import company.tap.checkout.internal.api.responses.MerchantData
-import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
+import company.tap.checkout.internal.api.responses.*
 import company.tap.checkout.internal.apiresponse.CardViewEvent
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.apiresponse.testmodels.GoPaySavedCards
@@ -271,9 +268,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             AnimationUtils.loadAnimation(context, R.anim.slide_down)
         }
 
-
-
-
         initializeScanner(this)
         initViewHolders()
         initAmountAction()
@@ -281,6 +275,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         initOtpActionButton()
         setAllSeparatorTheme()
         //  initLoyaltyView()
+      //  checkoutFragment.enableSections()
 
     }
 
@@ -386,7 +381,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             null,
             null,
             null,
-            null,
             otpCode
         )
     }
@@ -396,7 +390,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         cardViewModel.processEvent(
             CardViewEvent.AuthenticateChargeTransaction,
             this,
-            null,
             null,
             null,
             null,
@@ -1073,9 +1066,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         merchantData: MerchantData?,
         paymentOptionsResponse: PaymentOptionsResponse?
     ) {
-        //  println("if(::businessViewHolder.isInitialized getpay" + ::businessViewHolder.isInitialized)
-        //  println("merchantData name>>" + merchantData?.name)
-        //  println("merchantData logo>>" + merchantData?.logo)
+          println("if(::businessViewHolder.isInitialized getpay" + ::businessViewHolder.isInitialized)
+         println("merchantData name>>" + merchantData?.name)
+          println("merchantData logo>>" + merchantData?.logo)
         if (paymentOptionsResponse != null) {
             this.paymentOptionsResponse = paymentOptionsResponse
         }
@@ -1084,9 +1077,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 merchantData?.logo,
                 merchantData?.name
             )
-            if (merchantData?.verifiedApplication == true) {
+           // TODO check
+                    if (merchantData?.verifiedApplication == true) {
 
-            }
+                    }
         }
         // println("PaymentOptionsResponse on get$paymentOptionsResponse")
         allCurrencies.value = paymentOptionsResponse?.supportedCurrencies
@@ -1406,7 +1400,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     null,
                     null,
                     null,
-                    null,
                     PaymentDataSource.getCustomer().identifier,
                     cardId
                 )
@@ -1582,6 +1575,10 @@ removeAllViews()
                 } else {
                     println("is this called>>>")
                     removeAllViews()
+                    tabAnimatedActionButton?.changeButtonState(
+                        ActionButtonState.ERROR
+                    )
+
                     if (::businessViewHolder.isInitialized && saveCardSwitchHolder != null) {
                         addViews(businessViewHolder, saveCardSwitchHolder)
                         businessViewHolder.view.headerView.constraint.visibility = View.GONE
@@ -1594,6 +1591,15 @@ removeAllViews()
                             false,
                             "en",
                             null,
+                            Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
+                            Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
+
+                            )
+
+                       tabAnimatedActionButton?.setButtonDataSource(
+                            false,
+                            "en",
+                            "",
                             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
                             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
 
@@ -1883,7 +1889,6 @@ removeAllViews()
         cardViewModel.processEvent(
             CardViewEvent.ChargeEvent,
             this,
-            null,
             selectedPaymentOption,
             null,
             null,
@@ -1919,7 +1924,6 @@ removeAllViews()
                 null,
                 null,
                 null,
-                null,
                 paymentInlineViewHolder.getSavedCardData()
             )
 
@@ -1927,7 +1931,7 @@ removeAllViews()
             cardViewModel.processEvent(
                 CardViewEvent.CreateTokenEvent,
                 this,
-                null,
+
                 null,
                 null,
                 paymentInlineViewHolder.getCard(),
@@ -2530,7 +2534,6 @@ removeAllViews()
             null,
             null,
             null,
-            null,
             createTokenSavedCard
         )
     }
@@ -2703,7 +2706,7 @@ removeAllViews()
     private fun callBinLookupApi(binLookUpStr: String?) {
         cardViewModel.processEvent(
             CardViewEvent.RetreiveBinLookupEvent,
-            CheckoutViewModel(), null, null, binLookUpStr, null, null
+            CheckoutViewModel(),  null, binLookUpStr, null, null
         )
 
     }
@@ -3235,7 +3238,6 @@ removeAllViews()
             CardViewModel().processEvent(
                 CardViewEvent.CreateGoogleTokenEvent,
                 this,
-                null,
                 null,
                 null,
                 null,

@@ -11,6 +11,7 @@ import android.transition.Fade
 import android.transition.TransitionManager
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
@@ -361,10 +362,7 @@ class PaymentInlineViewHolder (private val context: Context,
             onCardNFCCallListener.onClickCardScanner(true)
         }
 
-        tapCardInputView.backArrow.setOnClickListener(this)
-        tapCardInputView.backArrow.isClickable= true
-        tapCardInputView.backArrow.isFocusable= true
-        tapCardInputView.backArrow.isEnabled= true
+
 
 
        /* tapCardInputView.backArrow.setOnClickListener {
@@ -481,6 +479,35 @@ class PaymentInlineViewHolder (private val context: Context,
         cvcNumberWatcher()
         cardHolderNameWatcher()
         switchCheckedState()
+
+        tapCardInputView.backArrow.setOnTouchListener(object : View.OnTouchListener {
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean { tabLayout.resetBehaviour()
+                cardInputUIStatus = CardInputUIStatus.NormalCard
+                tabLayout.resetBehaviour()
+                tapCardInputView.clear()
+                closeButton?.visibility = View.GONE
+                controlScannerOptions()
+                cardInputUIStatus = CardInputUIStatus.NormalCard
+                /* tapCardInputView.setSingleCardInput(
+                    CardBrandSingle.Unknown, null
+                    )*/
+                tapInlineCardSwitch?.visibility = View.GONE
+                //  tapCardInputView.separatorcard2.visibility = View.INVISIBLE
+                // resetCardBrandIcon()
+                tapAlertView?.visibility =View.GONE
+                checkoutViewModel.resetCardSelection()
+
+                checkoutViewModel.isSavedCardSelected = false
+                //resetPaymentCardView()
+                intertabLayout.visibility = View.VISIBLE
+                tabLayout.visibility = View.VISIBLE
+                acceptedCardText.visibility =View.VISIBLE
+                checkoutViewModel.resetViewHolder()
+
+
+                return false
+            }
+        })
 
     }
 
@@ -1184,7 +1211,7 @@ class PaymentInlineViewHolder (private val context: Context,
         if (s.trim().toString().replace(" ", "").length == BIN_NUMBER_LENGTH) {
             cardViewModel.processEvent(
                 CardViewEvent.RetreiveBinLookupEvent,
-                CheckoutViewModel(), null, null, s.trim().toString().replace(" ", ""), null, null
+                CheckoutViewModel(),  null, s.trim().toString().replace(" ", ""), null, null
             )
             tapCardInputView.removeCardNumberTextWatcher(textWatcher)
             tapCardInputView.setCardNumberTextWatcher(textWatcher)
@@ -1439,7 +1466,10 @@ class PaymentInlineViewHolder (private val context: Context,
         itemsCardsList: ArrayList<SectionTabItem>
     ) {
         for (i in imageURLApi.indices) {
-            imageURL = imageURLApi[i].image.toString()
+            if(CustomUtils.getCurrentTheme()!=null && CustomUtils.getCurrentTheme().contains("dark")){
+                imageURL = imageURLApi[i].logos?.dark?.svg.toString()
+            }else  imageURL = imageURLApi[i].logos?.light?.svg.toString()
+           // imageURL = imageURLApi[i].image.toString()
             paymentType = imageURLApi[i].paymentType
             cardBrandType = if (imageURLApi[i].brand?.name == null) {
                 "unknown"

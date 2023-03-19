@@ -193,6 +193,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                 }
             }
         }
+        enableSections()
         inLineCardLayout?.minimumHeight = heightscreen - checkoutLayout?.height!!
         dialog?.window?.attributes?.windowAnimations = R.style.DialogAnimation
 
@@ -264,7 +265,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     override fun onAttach(context: Context) {
         super.onAttach(context)
         LocalizationManager.setLocale(context, PaymentDataSource.getSDKLocale())
-        enableSections()
+
     }
 
 

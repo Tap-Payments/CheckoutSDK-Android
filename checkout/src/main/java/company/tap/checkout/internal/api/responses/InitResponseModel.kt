@@ -14,11 +14,16 @@ Copyright (c) 2022    Tap Payments.
 All rights reserved.
  **/
 data class InitResponseModel(@SerializedName("payment_options") @Expose
-                             @NonNull var paymentOptionsInit: PaymentOptionsInit,
-
+                             @NonNull var paymentOptionsResponse: PaymentOptionsResponse,
+                             @SerializedName("status")
+                             @Expose
+                             @NonNull val status: String,
                              @SerializedName("merchant")
                              @Expose
-                             @NonNull val merchant: MerchantData):Serializable
+                             @NonNull val merchant: MerchantData,
+                             @SerializedName("session")
+                             @Expose
+                             @NonNull val session: String,):Serializable
 data class MerchantData(
     @SerializedName("background")
     @Expose

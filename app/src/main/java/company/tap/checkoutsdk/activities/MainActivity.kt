@@ -247,7 +247,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
    private fun initializeSDK() {
        TapCheckOutSDK().init(
            this,
-           settingsManager?.getString("key_test_name", "sk_test_kovrMB0mupFJXfNZWx6Etg5y"),
+          // settingsManager?.getString("key_test_name", "sk_test_kovrMB0mupFJXfNZWx6Etg5y"),
+           settingsManager?.getString("key_test_name", "pk_test_Vlk842B1EA7tDN5QbrfGjYzh"),
            settingsManager?.getString("key_live_name", "sk_live_QglH8V7Fw6NPAom4qRcynDK2"),
            settingsManager?.getString("key_package_name", "company.tap.goSellSDKExample"),
           Locale(settingsManager?.getSDKLanguage("sdk_language"))

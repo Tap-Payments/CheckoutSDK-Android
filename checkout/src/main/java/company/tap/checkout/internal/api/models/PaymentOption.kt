@@ -18,9 +18,14 @@ data class PaymentOption(
     @SerializedName("id") @Expose
      var id: String? = null,
 
+
     @SerializedName("name")
     @Expose
      val brand: CardBrand? = null,
+
+    @SerializedName("name_ar")
+    @Expose
+    val nameAr: CardBrand? = null,
 
     @SerializedName("image")
     @Expose
@@ -88,7 +93,11 @@ data class PaymentOption(
 
 @SerializedName("acquirer_country")
 @Expose
- val acquirerCountryCode: String? = null
+ val acquirerCountryCode: String? = null,
+
+@SerializedName("logos")
+@Expose
+ val logos: Logos? = null
 
 ):Comparable<PaymentOption>, CurrenciesSupport, Serializable {
     override fun getSupportedCurrencies(): ArrayList<String>? {

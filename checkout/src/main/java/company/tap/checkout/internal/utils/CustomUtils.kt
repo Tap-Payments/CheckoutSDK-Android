@@ -9,6 +9,7 @@ import com.gdacciaro.iOSDialog.iOSDialogBuilder
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.taplocalizationkit.LocalizationManager
+import company.tap.tapuilibrary.themekit.ThemeManager
 
 
 /**
@@ -114,6 +115,11 @@ object CustomUtils {
                 0
             )
         }
+    }
+
+    fun getCurrentTheme (): String {
+
+           return ThemeManager.currentTheme
     }
 
 

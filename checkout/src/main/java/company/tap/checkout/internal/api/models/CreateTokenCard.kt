@@ -4,8 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import company.tap.checkout.internal.api.crypto.CryptoUtil
-import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
-import company.tap.checkout.internal.api.responses.SDKSettings
+
 import company.tap.checkout.internal.interfaces.SecureSerializable
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import java.io.Serializable

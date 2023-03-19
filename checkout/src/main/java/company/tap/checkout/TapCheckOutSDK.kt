@@ -38,7 +38,9 @@ class TapCheckOutSDK {
 
             when (PaymentDataSource.getSDKMode()) {
                 SdkMode.SAND_BOX -> {
-                    initNetworkCall(context, secretKeyTest, packageId ,SDKSession.sdkIdentifier)
+                    initNetworkCall(context, secretKeyTest, packageId ,SDKSession.sdkIdentifier,
+                        context.resources.getString(R.string.enryptkey)
+                    )
                     PaymentDataSource.setInitializeKeys(secretKeyTest)
                 }
                 SdkMode.PRODUCTION -> {
@@ -46,7 +48,7 @@ class TapCheckOutSDK {
                         context,
                         secretKeyLive,
                         packageId,
-                        SDKSession.sdkIdentifier
+                        SDKSession.sdkIdentifier,  context.resources.getString(R.string.enryptkey)
                     )
                     PaymentDataSource.setInitializeKeys(secretKeyLive)
                 }
@@ -55,7 +57,7 @@ class TapCheckOutSDK {
                         context,
                         secretKeyTest,
                         packageId,
-                        SDKSession.sdkIdentifier
+                        SDKSession.sdkIdentifier,    context.resources.getString(R.string.enryptkey)
                     )
                     PaymentDataSource.setInitializeKeys(secretKeyTest)
                 }
@@ -71,14 +73,15 @@ class TapCheckOutSDK {
         context: Context,
         secretKey: String?,
         packageId: String?,
-        sdkIdentifier: String?
+        sdkIdentifier: String?,
+        encryptKeys:String?
     ){
         NetworkApp.initNetwork(
             context,
             secretKey,
             packageId,
             ApiService.BASE_URL,
-         //   sdkIdentifier,BuildConfig.EncryptAPIKEY)
-            sdkIdentifier,true)
+            "android-checkout-sdk",true, encryptKeys
+        )
     }
 }

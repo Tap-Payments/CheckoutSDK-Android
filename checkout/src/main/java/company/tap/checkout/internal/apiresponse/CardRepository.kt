@@ -58,6 +58,7 @@ class CardRepository : APIRequestCallback {
     val resultObservable = BehaviorSubject.create<CardViewState>()
     @JvmField
     var paymentOptionsResponse :PaymentOptionsResponse?= null
+    var merchantDataModel :MerchantData?= null
 
     lateinit var chargeResponse:Charge
     lateinit var listCardsResponse: ListCardsResponse
@@ -81,29 +82,14 @@ class CardRepository : APIRequestCallback {
         return dataProvider
     }
 
+
     @RequiresApi(Build.VERSION_CODES.N)
-    fun getConfigData(_context: Context, viewModel: CheckoutViewModel, cardViewModel: CardViewModel?,tapConfigRequestModel:TapConfigRequestModel?,supportFragmentManagerdata: FragmentManager) {
+    fun getINITData(_context: Context, viewModel: CheckoutViewModel, cardViewModel: CardViewModel?,supportFragmentManagerdata: FragmentManager) {
         this.viewModel = viewModel
         if (cardViewModel != null) {
             this.cardViewModel = cardViewModel
         }
         this.supportFragmentManager =supportFragmentManagerdata
-      jsonString = Gson().toJson(tapConfigRequestModel)
-        NetworkController.getInstance().processRequest(
-            TapMethodType.POST,
-            ApiService.CONFIG,
-            jsonString,
-            this,
-            CONFIG_CODE
-        )
-        this.cardRepositoryContext = _context
-    }
-    @RequiresApi(Build.VERSION_CODES.N)
-    fun getPaymentOptions(
-        _context: Context,
-        viewModel: CheckoutViewModel,
-        supportFragmentManagerdata: FragmentManager
-    ) {
         this.viewModel = viewModel
         val requestBody = PaymentOptionsRequest(
             PaymentDataSource.getTransactionMode(),
@@ -122,22 +108,12 @@ class CardRepository : APIRequestCallback {
 
         val jsonString = Gson().toJson(requestBody)
         NetworkController.getInstance().processRequest(
-            TapMethodType.POST, ApiService.PAYMENT_TYPES, jsonString, this, PAYMENT_OPTIONS_CODE
+            TapMethodType.POST, ApiService.INIT, jsonString, this, INIT_CODE
         )
         this.supportFragmentManager = supportFragmentManagerdata
-        // this.cardRepositoryContext = _context
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
-    fun getInitData(viewModel: CheckoutViewModel, context: Context?) {
 
-
-        NetworkController.getInstance().processRequest(
-            TapMethodType.POST, ApiService.INIT, null, this, INIT_CODE
-        )
-
-        // this.cardRepositoryContext = _context
-    }
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun createChargeRequest(
@@ -384,30 +360,28 @@ class CardRepository : APIRequestCallback {
     }
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onSuccess(responseCode: Int, requestCode: Int, response: Response<JsonElement>?) {
-        if (requestCode == CONFIG_CODE) {
-            response?.body().let {
-                configResponse = Gson().fromJson(it, TapConfigResponseModel::class.java)
-
-                println("configResponse>>"+configResponse?.token)
-                PaymentDataSource.setTokenConfig(configResponse?.token)
-                NetworkApp.initNetworkToken(configResponse?.token, contextSDK,ApiService.BASE_URL,true)
-                val reqBody = EmptyBody()
-                jsonString =Gson().toJson(reqBody)
-                NetworkController.getInstance().processRequest(
-                    TapMethodType.POST, ApiService.INIT,  jsonString,
-                    this, INIT_CODE
-                )
-            }
-        }else if (requestCode == INIT_CODE) {
+       if (requestCode == INIT_CODE) {
             if (response?.body() != null) {
                 response.body().let {
-                    //println("INIT REsponse>>>>"+response.body())
-                    initResponseModel = Gson().fromJson(it, InitResponseModel::class.java)
-                    PaymentDataSource.setInitResponse(initResponseModel)
-                    PaymentDataSource.setMerchantData(initResponseModel?.merchant)
-                    println("supportFragmentManager val>>>>"+supportFragmentManager)
-                   CardViewModel().processEvent(CardViewEvent.PaymentEvent, CheckoutViewModel(),null,null,null,null,null,null,null,null,null,
-                            supportFragmentManager,contextSDK)
+                    println("INIT REsponse>>>>"+response.body())
+                    if (response?.body() != null) {
+                        response.body().let {
+                            initResponseModel = Gson().fromJson(it, InitResponseModel::class.java)
+                            paymentOptionsResponse = initResponseModel?.paymentOptionsResponse
+                            merchantDataModel = initResponseModel?.merchant
+                            PaymentDataSource.setPaymentOptionsResponse(paymentOptionsResponse)
+                            PaymentDataSource.setMerchantData(merchantDataModel)
+                            PaymentDataSource.setInitResponse(initResponseModel)
+                            PaymentDataSource.setTokenConfig(initResponseModel?.session)
+
+                            /* if (tabAnimatedActionButton != null) {
+                                 tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
+                             }*/
+                        }
+
+                    }else {
+                        sdkSession.sessionDelegate?.sessionFailedToStart()
+                    }
                     if (tabAnimatedActionButton != null) {
                         activity?.let { it1 ->
                             CustomUtils.getDeviceDisplayMetrics(
@@ -424,22 +398,7 @@ class CardRepository : APIRequestCallback {
             }
 
         }
-        else if (requestCode == PAYMENT_OPTIONS_CODE) {
-            if (response?.body() != null) {
-                response.body().let {
-                    paymentOptionsResponse = Gson().fromJson(it, PaymentOptionsResponse::class.java)
-                    PaymentDataSource.setPaymentOptionsResponse(paymentOptionsResponse)
-
-                   /* if (tabAnimatedActionButton != null) {
-                        tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
-                    }*/
-                }
-
-            }else {
-                sdkSession.sessionDelegate?.sessionFailedToStart()
-            }
-
-        }else if(requestCode == CHARGE_REQ_CODE) {
+        else if(requestCode == CHARGE_REQ_CODE) {
 
             response?.body().let {
                 chargeResponse = Gson().fromJson(it, Charge::class.java)

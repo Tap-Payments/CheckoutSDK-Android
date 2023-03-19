@@ -48,58 +48,24 @@ class CardViewModel : ViewModel() {
             ))
 
     }
-
-
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun getConfigData(
-        viewModel: CheckoutViewModel,
-        cardViewModel: CardViewModel?,
-        supportFragmentManagerdata: FragmentManager?,
-        _context: Context?,
-        tapConfigRequestModel: TapConfigRequestModel?
-    ) {
-        if (_context != null) {
-            this.context =_context
-            if (supportFragmentManagerdata != null) {
-                repository.getConfigData(_context,viewModel,cardViewModel,tapConfigRequestModel,supportFragmentManagerdata)
-            }
-        }
-
-
-    /* GlobalScope.launch(Dispatchers.Main) { // launch coroutine in the main thread
-            val apiResponseTime = Random.nextInt(1000,17000)
-            delay(apiResponseTime.toLong())
-            if (_context != null) {
-                if (supportFragmentManagerdata != null) {
-                    if(PaymentDataSource.getTokenConfig()!=null){
-                        repository.getPaymentOptions(_context,viewModel,supportFragmentManagerdata)
-
-                    }
-                }
-            }
-        }*/
-    }
-
-
-    @RequiresApi(Build.VERSION_CODES.N)
-    fun getPaymentOptionsData(_context: Context?, viewModel: CheckoutViewModel,
+  @RequiresApi(Build.VERSION_CODES.N)
+    fun getINITData(_context: Context?, viewModel: CheckoutViewModel,cardViewModel: CardViewModel?,
                               supportFragmentManagerdata: FragmentManager?){
         if (_context != null) {
             if (supportFragmentManagerdata != null) {
-                if(PaymentDataSource.getTokenConfig()!=null){
-                    repository.getPaymentOptions(_context,viewModel,supportFragmentManagerdata)
+               // if(PaymentDataSource.getTokenConfig()!=null){
+                    repository.getINITData(_context,viewModel,cardViewModel,supportFragmentManagerdata)
 
-                }
+               // }
             }
         }
     }
 
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun processEvent(event: CardViewEvent, viewModel: CheckoutViewModel,tapConfigRequestModel: TapConfigRequestModel?=null, selectedPaymentOption: PaymentOption?, binValue: String? = null, cardDataRequest: CreateTokenCard?, cardViewModel: CardViewModel? = null, customerId: String?=null, cardId: String?=null, createTokenWithExistingCardRequest: CreateTokenSavedCard?=null, otpString:String?=null, supportFragmentManager: FragmentManager?=null, context: Context?=null,createTokenGPayRequest: CreateTokenGPayRequest?=null) {
+    fun processEvent(event: CardViewEvent, viewModel: CheckoutViewModel, selectedPaymentOption: PaymentOption?, binValue: String? = null, cardDataRequest: CreateTokenCard?, cardViewModel: CardViewModel? = null, customerId: String?=null, cardId: String?=null, createTokenWithExistingCardRequest: CreateTokenSavedCard?=null, otpString:String?=null, supportFragmentManager: FragmentManager?=null, context: Context?=null,createTokenGPayRequest: CreateTokenGPayRequest?=null) {
         when (event) {
-            CardViewEvent.ConfigEvent -> getConfigData(viewModel,cardViewModel,supportFragmentManager,context,tapConfigRequestModel)
-           CardViewEvent.PaymentEvent -> getPaymentOptionsData(context,viewModel,supportFragmentManager)
+           CardViewEvent.InitEvent -> getINITData(context,viewModel,cardViewModel,supportFragmentManager)
             CardViewEvent.ChargeEvent -> createChargeRequest(viewModel,selectedPaymentOption,null)
             CardViewEvent.RetreiveChargeEvent -> retrieveChargeRequest(viewModel)
             CardViewEvent.RetreiveBinLookupEvent -> retrieveBinlookup(viewModel,binValue)
@@ -112,7 +78,6 @@ class CardViewModel : ViewModel() {
             CardViewEvent.AuthenticateChargeTransaction -> authenticateChargeTransaction(viewModel,otpString)
             CardViewEvent.AuthenticateAuthorizeTransaction -> authenticateAuthorizeTransaction(viewModel,otpString)
             CardViewEvent.ListAllCards -> listAllCards(viewModel,customerId)
-            CardViewEvent.InitEvent -> getInitData(viewModel,context)
             CardViewEvent.CreateGoogleTokenEvent -> context?.let {
                 createGoogleTokenRequest(viewModel,
                     it,createTokenGPayRequest)
@@ -124,10 +89,7 @@ class CardViewModel : ViewModel() {
     private fun listAllCards(viewModel: CheckoutViewModel, customerId: String?) {
         repository?.listAllCards(viewModel,customerId)
     }
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun getInitData(viewModel: CheckoutViewModel, context: Context?) {
-        repository?.getInitData(viewModel,context)
-    }
+
 
 
     @RequiresApi(Build.VERSION_CODES.N)
