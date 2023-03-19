@@ -301,16 +301,17 @@ class PaymentInlineViewHolder (private val context: Context,
        // println("displayMetrics"+displayMetrics)
         if (displayMetrics == DisplayMetrics.DENSITY_260 || displayMetrics == DisplayMetrics.DENSITY_280 || displayMetrics == DisplayMetrics.DENSITY_300 || displayMetrics == DisplayMetrics.DENSITY_XHIGH || displayMetrics == DisplayMetrics.DENSITY_340 || displayMetrics == DisplayMetrics.DENSITY_360) {
 
-            tabLayout.changeTabItemMarginBottomValue(18)
-            tabLayout.changeTabItemMarginTopValue(18)
-               tabLayout.changeTabItemMarginLeftValue(-22)
-              tabLayout.changeTabItemMarginRightValue(-22)
+           tabLayout.changeTabItemMarginBottomValue(22)
+           tabLayout.changeTabItemMarginTopValue(22)
+            //tabLayout.changeTabItemMarginBottomValue(30)
+               tabLayout.changeTabItemMarginLeftValue(-15)
+              tabLayout.changeTabItemMarginRightValue(-15)
 
         }   else if (displayMetrics == DisplayMetrics.DENSITY_400 ||displayMetrics == DisplayMetrics.DENSITY_XXHIGH || displayMetrics == DisplayMetrics.DENSITY_450 || displayMetrics == DisplayMetrics.DENSITY_440) {
-            tabLayout.changeTabItemMarginBottomValue(26)
-            tabLayout.changeTabItemMarginTopValue(26)
-            tabLayout.changeTabItemMarginLeftValue(-30)
-            tabLayout.changeTabItemMarginRightValue(-30)
+            tabLayout.changeTabItemMarginBottomValue(35)
+            tabLayout.changeTabItemMarginTopValue(35)
+            tabLayout.changeTabItemMarginLeftValue(-35)
+            tabLayout.changeTabItemMarginRightValue(-35)
         }
             else {
             tabLayout.changeTabItemMarginBottomValue(12)
@@ -1467,8 +1468,8 @@ class PaymentInlineViewHolder (private val context: Context,
     ) {
         for (i in imageURLApi.indices) {
             if(CustomUtils.getCurrentTheme()!=null && CustomUtils.getCurrentTheme().contains("dark")){
-                imageURL = imageURLApi[i].logos?.dark?.svg.toString()
-            }else  imageURL = imageURLApi[i].logos?.light?.svg.toString()
+                imageURL = imageURLApi[i].logos?.dark?.png.toString()
+            }else  imageURL = imageURLApi[i].logos?.light?.png.toString()
            // imageURL = imageURLApi[i].image.toString()
             paymentType = imageURLApi[i].paymentType
             cardBrandType = if (imageURLApi[i].brand?.name == null) {
@@ -1494,7 +1495,7 @@ class PaymentInlineViewHolder (private val context: Context,
                           )
                       )
                   }*/
-            // println("itemsCardsList are" + itemsCardsList)
+             println("imageURL are" + imageURL)
             itemsCardsList.add(
                 SectionTabItem(
                     imageURL,

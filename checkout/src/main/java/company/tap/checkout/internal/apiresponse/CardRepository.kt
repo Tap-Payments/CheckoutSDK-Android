@@ -111,6 +111,8 @@ class CardRepository : APIRequestCallback {
             TapMethodType.POST, ApiService.INIT, jsonString, this, INIT_CODE
         )
         this.supportFragmentManager = supportFragmentManagerdata
+
+        tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
     }
 
 

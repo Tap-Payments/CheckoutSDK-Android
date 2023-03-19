@@ -361,20 +361,18 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     private fun bindSavedCardData(holder: RecyclerView.ViewHolder, position: Int) {
         for (i in arrayListCards.indices) {
             if(adapterGooglePay.isNotEmpty()){
-                GlideToVectorYou
-                    .init()
-                    .with(holder.itemView.context)
-                    .load(arrayListCards[position.minus(adapterContent.size).minus(adapterGooglePay.size)].image.toUri(), holder.itemView.imageView_amex)
-              holder.itemView.textViewCardDetails.text = maskCardNumber(arrayListCards[position.minus(adapterContent.size).minus(adapterGooglePay.size)].firstSix + arrayListCards[position.minus(adapterContent.size).minus(adapterGooglePay.size)].lastFour)
+                Glide.with(holder.itemView.context)
+                    .load(arrayListCards[position.minus(adapterContent.size).minus(adapterGooglePay.size)].image.toUri())
+                    .into(holder.itemView.imageView_amex)
+                holder.itemView.textViewCardDetails.text = maskCardNumber(arrayListCards[position.minus(adapterContent.size).minus(adapterGooglePay.size)].firstSix + arrayListCards[position.minus(adapterContent.size).minus(adapterGooglePay.size)].lastFour)
               //Remove no  holder.itemView.textViewCardDetails.text = "   " +arrayListCards[position.minus(adapterContent.size).minus(adapterGooglePay.size)].lastFour
                 //holder.itemView.textViewCardDetails.text = adapterContent[holder.adapterPosition].chip1.title
             }else{
                 // arrayListCards [position.minus(adapterContent.size)].image.let { holder.itemView.imageView_amex.loadSvg(it) }
+                Glide.with(holder.itemView.context)
+                    .load(arrayListCards[position.minus(adapterContent.size)].image.toUri())
+                    .into(holder.itemView.imageView_amex)
 
-                GlideToVectorYou
-                    .init()
-                    .with(holder.itemView.context)
-                    .load(arrayListCards[position.minus(adapterContent.size)].image.toUri(), holder.itemView.imageView_amex)
               holder.itemView.textViewCardDetails.text = maskCardNumber(arrayListCards[position.minus(adapterContent.size)].firstSix + arrayListCards[position.minus(adapterContent.size)].lastFour)
                //REmove no holder.itemView.textViewCardDetails.text = "   " +arrayListCards[position.minus(adapterContent.size)].lastFour
                 //holder.itemView.textViewCardDetails.text = adapterContent[holder.adapterPosition].chip1.title
@@ -501,7 +499,9 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
            // if (!isShaking) {
               //  selectedPosition = position
                 println("typeGooglePay is clicked")
+            if(position>0)
             onCardSelectedActionListener.onCardSelectedAction(true, adapterGooglePay[position-1])
+            else onCardSelectedActionListener.onCardSelectedAction(true, adapterGooglePay[position])
 
            // onCardSelectedActionListener.onGooglePayClicked(true)
               //  goPayOpenedfromMain(goPayOpened)
