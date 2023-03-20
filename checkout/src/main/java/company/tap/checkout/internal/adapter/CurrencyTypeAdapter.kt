@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
+import com.bumptech.glide.Glide
 import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.models.SupportedCurrencies
@@ -114,15 +115,21 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
     private fun bindItemData(holder: CurrencyHolders, position: Int) {
         val imageViewCard = holder.itemView.findViewById<TapImageView>(R.id.imageView_currency)
 
-      /*  Glide.with(holder.itemView.context)
-            .load(adapterContentCurrencies[position].flag).into(
-                imageViewCard)*/
+        if(CustomUtils.getCurrentTheme()!=null && CustomUtils.getCurrentTheme().contains("dark")){
+            Glide.with(holder.itemView.context)
+                .load(adapterContentCurrencies[position].logos?.dark?.png).into(
+                    imageViewCard)
+        }else {
+            Glide.with(holder.itemView.context)
+            .load(adapterContentCurrencies[position].logos?.light?.png).into(
+                imageViewCard)
+        }
        // println("adapterContentCurrencies[position].amount" + adapterContentCurrencies[position].amount)
        // adapterContentCurrencies[position]?.flag?.let { imageViewCard.loadSvg(it) }
-        GlideToVectorYou
+       /* GlideToVectorYou
             .init()
             .with(holder.itemView.context)
-            .load( adapterContentCurrencies[position]?.flag?.toUri(), imageViewCard)
+            .load( adapterContentCurrencies[position]?.flag?.toUri(), imageViewCard)*/
         val itemCurrencyText = holder.itemView.findViewById<TapTextView>(R.id.textView_currency)
        //Replaced itemCurrencyText.text = adapterContentCurrencies[position].currency
         itemCurrencyText.text = adapterContentCurrencies[position].symbol

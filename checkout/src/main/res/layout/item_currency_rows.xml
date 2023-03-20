@@ -26,6 +26,7 @@
             android:layout_height="@dimen/margin_basic_23dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="7dp"
+            android:adjustViewBounds="true"
             android:layout_marginBottom="7dp" />
 
         <company.tap.tapuilibrary.uikit.atoms.TapTextView

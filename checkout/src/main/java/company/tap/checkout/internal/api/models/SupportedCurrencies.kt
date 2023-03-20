@@ -35,4 +35,7 @@ data class SupportedCurrencies(
     @SerializedName("amount")
     @Expose
     var amount: BigDecimal,
+    @SerializedName("logos")
+    @Expose
+    var logos: Logos? = null,
     )

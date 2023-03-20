@@ -1661,12 +1661,21 @@ class PaymentInlineViewHolder (private val context: Context,
         tapAlertView?.alertMessage?.text =alertMessage.replace("%i","3")
 
         tapAlertView?.visibility =View.VISIBLE*/
-        tapCardInputView.setSingleCardInput(
-            CardBrandSingle.fromCode(
-                company.tap.cardinputwidget.CardBrand.fromCardNumber(_savedCardsModel.firstSix)
-                    .toString()
-            ), _savedCardsModel.image
-        )
+        if(CustomUtils.getCurrentTheme()!=null && CustomUtils.getCurrentTheme().contains("dark")){
+            tapCardInputView.setSingleCardInput(
+                CardBrandSingle.fromCode(
+                    company.tap.cardinputwidget.CardBrand.fromCardNumber(_savedCardsModel.firstSix)
+                        .toString()
+                ), _savedCardsModel.logos?.dark?.png
+            )
+        }else {
+            tapCardInputView.setSingleCardInput(
+                CardBrandSingle.fromCode(
+                    company.tap.cardinputwidget.CardBrand.fromCardNumber(_savedCardsModel.firstSix)
+                        .toString()
+                ), _savedCardsModel.logos?.light?.png
+            )
+        }
         tapInlineCardSwitch?.visibility = View.GONE
         separator1?.visibility = View.GONE
         acceptedCardText.visibility = View.GONE
