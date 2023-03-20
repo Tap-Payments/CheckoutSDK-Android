@@ -13,7 +13,7 @@ object ApiService {
     //const val INIT = "e4718d85-554b-4d15-a883-3043d961c8e5"
    // const val BASE_URL = "https://api.tap.company/v2/"
   // const val BASE_URL = "https://checkout-mw.dev.tap.company/api/"
-    const val BASE_URL = "https://mw-sdk.dev.tap.company/v2/"
+    const val BASE_URL = "https://mw-sdk.dev.tap.company/v2/checkout/"
     const val INIT = "checkoutprofile"
     const val PAYMENT_TYPES = "checkout/payment/types"
     const val CHARGES ="charge"
