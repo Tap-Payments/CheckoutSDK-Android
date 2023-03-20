@@ -112,7 +112,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
             setContentView(R.layout.activity_main)
             initActionButton()
             initializeBottomSheet()
-            }, 2500)
+            }, 4000)
 
         }
     }

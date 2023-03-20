@@ -2759,10 +2759,12 @@ removeAllViews()
     @RequiresApi(Build.VERSION_CODES.N)
     private fun setNfcCardDetails(emvCard: TapEmvCard) {
         // auto slide added on scan to prevent overlap
-        paymentInlineViewHolder.tapCardInputView.onTouchView()
-        paymentInlineViewHolder.tapCardInputView.setCardNumberMasked(paymentInlineViewHolder.maskCardNumber(emvCard.cardNumber))
+
+        println("maskCardNumber"+paymentInlineViewHolder.maskCardNumber(emvCard.cardNumber))
+        paymentInlineViewHolder.tapCardInputView.setCardNumber(emvCard.cardNumber,true)
         convertDateString(emvCard)
         paymentInlineViewHolder.onFocusChange(CardInputListener.FocusField.FOCUS_CVC)
+        paymentInlineViewHolder.hideViewONScanNFC()
 
     }
 
@@ -2776,6 +2778,7 @@ removeAllViews()
         checkoutFragment.isNfcOpened = false
         //  webFrameLayout.visibility = View.GONE
         frameLayout.visibility = View.GONE
+
     }
 
 

@@ -1802,4 +1802,12 @@ class PaymentInlineViewHolder (private val context: Context,
 
         }
     }
+
+    fun hideViewONScanNFC(){
+       intertabLayout.visibility = View.GONE
+        tabLayout.visibility = View.GONE
+        acceptedCardText.visibility =View.GONE
+        tapCardInputView.onTouchView()
+
+    }
 }
