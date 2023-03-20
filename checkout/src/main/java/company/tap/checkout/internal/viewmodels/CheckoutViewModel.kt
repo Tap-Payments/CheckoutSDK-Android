@@ -33,6 +33,7 @@ import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import cards.pay.paycardsrecognizer.sdk.FrameManager
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
+import com.bugfender.sdk.Bugfender
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.android.gms.wallet.PaymentData
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -54,6 +55,7 @@ import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.internal.api.requests.CreateTokenGPayRequest
 import company.tap.checkout.internal.api.responses.*
+import company.tap.checkout.internal.apiresponse.ApiService
 import company.tap.checkout.internal.apiresponse.CardViewEvent
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.apiresponse.testmodels.GoPaySavedCards
@@ -63,6 +65,7 @@ import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.enums.WebViewType
 import company.tap.checkout.internal.interfaces.*
 import company.tap.checkout.internal.utils.AmountCalculator.calculateExtraFeesAmount
+import company.tap.checkout.internal.utils.App
 import company.tap.checkout.internal.utils.CurrencyFormatter
 import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.utils.Utils
@@ -1805,6 +1808,7 @@ removeAllViews()
         unActivateActionButton()
         when (savedCardsModel) {
             is SavedCard -> {
+                    Bugfender.d("Saved card selected :"+savedCardsModel.lastFour+"/n"+savedCardsModel.id ,CustomUtils.tagEvent)
               //  paymentInlineViewHolder.view.alpha = 1f
               paymentInlineViewHolder.setDataForSavedCard(
                     savedCardsModel,
@@ -1812,6 +1816,7 @@ removeAllViews()
                 )
                 setPayButtonAction(PaymentType.SavedCard, savedCardsModel)
                 isSavedCardSelected = true
+                Bugfender.d("Payment scheme selected: title :"+savedCardsModel?.brand+"& ID :"+savedCardsModel.paymentOptionIdentifier ,CustomUtils.tagEvent)
             }
             else -> {
                 if (savedCardsModel != null) {
@@ -1829,6 +1834,8 @@ removeAllViews()
                         //setPayButtonAction(PaymentType.WEB, savedCardsModel)
                         PaymentDataSource.setWebViewType(WebViewType.REDIRECT)
                     }
+                    Bugfender.d("Payment scheme selected: title :"+(savedCardsModel as PaymentOption).brand+"& ID :"+(savedCardsModel as PaymentOption).id ,CustomUtils.tagEvent)
+
 
                 } else
 
@@ -2076,7 +2083,6 @@ removeAllViews()
         activateActionButton()
         setPayButtonAction(paymentType, null)
 
-
     }
 
     override fun onPaymentCardIsLoyaltyCard(isLoyaltyCard: Boolean) {
@@ -2258,8 +2264,13 @@ removeAllViews()
         adapter.resetSelection()
 
         if (::selectedCurrency.isInitialized) {
+            Bugfender.d("Currency changed to : "+selectedCurrencySymbol ,CustomUtils.tagEvent)
             filterViewModels(selectedCurrency)
-        } else filterViewModels(currentCurrency)
+        } else {
+            filterViewModels(currentCurrency)
+            //Bugfender.d("Currency changed to : "+currentCurrency ,CustomUtils.tagEvent)
+
+        }
 
     }
 
@@ -3228,9 +3239,11 @@ removeAllViews()
             val tokenizationData = paymentMethodData.getJSONObject("tokenizationData")
 
             val token = tokenizationData.getString("token")
-
+            Bugfender.d("Google pay raw token :"+token ,CustomUtils.tagEvent)
             val gson = Gson()
             val jsonToken = gson.fromJson(token, JsonObject::class.java)
+
+
             /**
              * At this stage, Passing the googlePaylaod to Tap Backend TokenAPI call followed by chargeAPI.
              * ***/

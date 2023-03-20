@@ -1,6 +1,7 @@
 package company.tap.checkout
 
 import android.content.Context
+import com.bugfender.sdk.Bugfender
 import com.fasterxml.jackson.databind.ObjectMapper
 import company.tap.checkout.internal.api.models.TapLoyaltyModel
 import company.tap.checkout.internal.apiresponse.ApiService
@@ -83,5 +84,7 @@ class TapCheckOutSDK {
             ApiService.BASE_URL,
             "android-checkout-sdk",true, encryptKeys
         )
+
+        Bugfender.setDeviceString(NetworkApp.getApplicationInfo(),"Static Headers")
     }
 }

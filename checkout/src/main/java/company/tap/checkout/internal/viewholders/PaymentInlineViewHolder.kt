@@ -17,6 +17,7 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.widget.doAfterTextChanged
+import com.bugfender.sdk.Bugfender
 import com.google.android.material.tabs.TabLayout
 import company.tap.cardinputwidget.Card
 import company.tap.cardinputwidget.CardBrandSingle
@@ -583,6 +584,7 @@ class PaymentInlineViewHolder (private val context: Context,
                             )
                         }
                     }
+                    Bugfender.d("Finished valid raw card data for:"+PaymentType.CARD ,CustomUtils.tagEvent)
                 }
             }
 
@@ -973,6 +975,7 @@ class PaymentInlineViewHolder (private val context: Context,
                                   //  tapCardInputView.separatorcard2.visibility = View.VISIBLE
                                     tapInlineCardSwitch?.switchSaveCard?.isChecked = true
                                     tapInlineCardSwitch?.visibility = View.VISIBLE
+                                    Bugfender.d("Finished valid raw card data for:"+PaymentType.CARD ,CustomUtils.tagEvent)
 
                                 }
                             }
@@ -1024,6 +1027,7 @@ class PaymentInlineViewHolder (private val context: Context,
                             }
                             tapAlertView?.visibility = View.GONE
                             CustomUtils.hideKeyboardFrom(context, view)
+                            Bugfender.d("Finished valid raw card data for:"+PaymentType.CARD ,CustomUtils.tagEvent)
                         }
 
                     }

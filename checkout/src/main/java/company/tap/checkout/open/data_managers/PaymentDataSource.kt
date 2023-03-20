@@ -1,6 +1,7 @@
 package company.tap.checkout.open.data_managers
 
 import android.content.Context
+import com.bugfender.sdk.Bugfender
 import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.internal.api.responses.InitResponseModel
 import company.tap.checkout.internal.api.responses.MerchantData
@@ -387,7 +388,8 @@ object PaymentDataSource :PaymentDataSource {
     }
 
     override fun getCustomer(): TapCustomer {
-       return tapCustomer
+        Bugfender.setDeviceString("Customer ID :"+ tapCustomer.identifier+" | Customer name : "+ tapCustomer.firstName+"| Customer email :" + tapCustomer.email+"| Customer phone :"+ tapCustomer.getPhone()?.number, "Customer")
+         return tapCustomer
     }
 
     override fun getAmount(): BigDecimal? {

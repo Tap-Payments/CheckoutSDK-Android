@@ -20,6 +20,10 @@ All rights reserved.
  **/
 object CustomUtils {
 
+    @JvmField
+    val tagEvent :String = "EVENTS"
+    @JvmField
+    val tagAPI :String = "API"
     fun showDialog(title: String, messageString: String, context: Context, btnType: Int? = null, baseLayoutManager: BaseLayoutManager?, paymentType: PaymentType?=null, savedCardsModel: Any?= null, cardTypeDialog:Boolean) {
         val builder = iOSDialogBuilder(context)
         builder
