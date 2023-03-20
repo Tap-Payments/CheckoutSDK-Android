@@ -7,13 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import com.bumptech.glide.Glide
-import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.models.SupportedCurrencies
 import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener
@@ -27,7 +25,6 @@ import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import kotlinx.android.synthetic.main.item_currency_rows.view.*
 import kotlinx.android.synthetic.main.item_frame_currencies.view.*
 import kotlinx.android.synthetic.main.item_save_cards.view.*
-import okhttp3.internal.notify
 import java.math.BigDecimal
 
 
@@ -113,19 +110,8 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
     }
 
     private fun bindItemData(holder: CurrencyHolders, position: Int) {
-        val imageViewCard = holder.itemView.findViewById<TapImageView>(R.id.imageView_currency)
+        logicToLoadFlagIconsTheme(holder,position)
 
-        if(CustomUtils.getCurrentTheme()!=null && CustomUtils.getCurrentTheme().contains("dark")){
-            Glide.with(holder.itemView.context)
-                .load(adapterContentCurrencies[position].logos?.dark?.png).into(
-                    imageViewCard)
-        }else {
-            Glide.with(holder.itemView.context)
-            .load(adapterContentCurrencies[position].logos?.light?.png).into(
-                imageViewCard)
-        }
-       // println("adapterContentCurrencies[position].amount" + adapterContentCurrencies[position].amount)
-       // adapterContentCurrencies[position]?.flag?.let { imageViewCard.loadSvg(it) }
        /* GlideToVectorYou
             .init()
             .with(holder.itemView.context)
@@ -134,6 +120,31 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
        //Replaced itemCurrencyText.text = adapterContentCurrencies[position].currency
         itemCurrencyText.text = adapterContentCurrencies[position].symbol
         currencyRate = adapterContentCurrencies[position].amount
+    }
+
+    private fun logicToLoadFlagIconsTheme(holder: CurrencyHolders, position: Int) {
+        val imageViewCard = holder.itemView.findViewById<TapImageView>(R.id.imageView_currency)
+        if(adapterContentCurrencies[position].logos!=null) {
+            if (CustomUtils.getCurrentTheme() != null && CustomUtils.getCurrentTheme()
+                    .contains("dark")
+            ) {
+                Glide.with(holder.itemView.context)
+                    .load(adapterContentCurrencies[position].logos?.dark?.png).into(
+                        imageViewCard
+                    )
+            } else {
+                Glide.with(holder.itemView.context)
+                    .load(adapterContentCurrencies[position].logos?.light?.png).into(
+                        imageViewCard
+                    )
+            }
+        } else{
+            //fallback
+            Glide.with(holder.itemView.context)
+                .load(adapterContentCurrencies[position].flag).into(
+                    imageViewCard
+                )
+        }
     }
 
     private fun onItemClickListener(holder: CurrencyHolders, position:   Int) {
