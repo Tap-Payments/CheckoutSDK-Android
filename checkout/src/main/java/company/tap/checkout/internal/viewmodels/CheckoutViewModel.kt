@@ -1808,7 +1808,7 @@ removeAllViews()
         unActivateActionButton()
         when (savedCardsModel) {
             is SavedCard -> {
-                    Bugfender.d("Saved card selected :"+savedCardsModel.lastFour+"/n"+savedCardsModel.id ,CustomUtils.tagEvent)
+                    Bugfender.d(CustomUtils.tagEvent,"Saved card selected :"+savedCardsModel.lastFour+"&"+savedCardsModel.id )
               //  paymentInlineViewHolder.view.alpha = 1f
               paymentInlineViewHolder.setDataForSavedCard(
                     savedCardsModel,
@@ -1816,7 +1816,7 @@ removeAllViews()
                 )
                 setPayButtonAction(PaymentType.SavedCard, savedCardsModel)
                 isSavedCardSelected = true
-                Bugfender.d("Payment scheme selected: title :"+savedCardsModel?.brand+"& ID :"+savedCardsModel.paymentOptionIdentifier ,CustomUtils.tagEvent)
+                Bugfender.d(CustomUtils.tagEvent,"Payment scheme selected: title :"+savedCardsModel?.brand+"& ID :"+savedCardsModel.paymentOptionIdentifier )
             }
             else -> {
                 if (savedCardsModel != null) {
@@ -1834,7 +1834,7 @@ removeAllViews()
                         //setPayButtonAction(PaymentType.WEB, savedCardsModel)
                         PaymentDataSource.setWebViewType(WebViewType.REDIRECT)
                     }
-                    Bugfender.d("Payment scheme selected: title :"+(savedCardsModel as PaymentOption).brand+"& ID :"+(savedCardsModel as PaymentOption).id ,CustomUtils.tagEvent)
+                    Bugfender.d(CustomUtils.tagEvent,"Payment scheme selected: title :"+(savedCardsModel as PaymentOption).brand+"& ID :"+(savedCardsModel as PaymentOption).id )
 
 
                 } else
@@ -2264,7 +2264,7 @@ removeAllViews()
         adapter.resetSelection()
 
         if (::selectedCurrency.isInitialized) {
-            Bugfender.d("Currency changed to : "+selectedCurrencySymbol ,CustomUtils.tagEvent)
+            Bugfender.d(CustomUtils.tagEvent,"Currency changed to : "+selectedCurrencySymbol )
             filterViewModels(selectedCurrency)
         } else {
             filterViewModels(currentCurrency)
@@ -3242,7 +3242,7 @@ removeAllViews()
             val tokenizationData = paymentMethodData.getJSONObject("tokenizationData")
 
             val token = tokenizationData.getString("token")
-            Bugfender.d("Google pay raw token :"+token ,CustomUtils.tagEvent)
+            Bugfender.d(CustomUtils.tagEvent,"Google pay raw token :"+token )
             val gson = Gson()
             val jsonToken = gson.fromJson(token, JsonObject::class.java)
 
