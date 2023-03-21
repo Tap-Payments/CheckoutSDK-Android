@@ -1,18 +1,21 @@
 package company.tap.checkout
 
+import android.app.Activity
 import android.content.Context
+import androidx.appcompat.app.AppCompatActivity
 import com.bugfender.sdk.Bugfender
-import com.fasterxml.jackson.databind.ObjectMapper
-import company.tap.checkout.internal.api.models.TapLoyaltyModel
 import company.tap.checkout.internal.apiresponse.ApiService
+import company.tap.checkout.internal.utils.CustomUtils
+import company.tap.checkout.open.CheckOutActivity
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.SdkMode
 import company.tap.checkout.open.exceptions.ErrorReport
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapnetworkkit.connection.NetworkApp
-import java.io.File
+import company.tap.tapnetworkkit.interfaces.APILoggInterface
 import java.util.*
+
 
 /**
  * Created by AhlaamK on 6/17/21.
@@ -82,9 +85,9 @@ class TapCheckOutSDK {
             secretKey,
             packageId,
             ApiService.BASE_URL,
-            "android-checkout-sdk",true, encryptKeys
-        )
-
-        Bugfender.setDeviceString(NetworkApp.getApplicationInfo(),"Static Headers")
+            "android-checkout-sdk",true, encryptKeys,CheckOutActivity())
+        Bugfender.setDeviceString("Static Headers",NetworkApp.getApplicationInfo())
     }
+
+
 }

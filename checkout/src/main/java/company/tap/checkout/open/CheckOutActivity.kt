@@ -9,6 +9,7 @@ import android.util.DisplayMetrics
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.bugfender.sdk.Bugfender
 import com.bumptech.glide.Glide
 import com.google.android.gms.wallet.AutoResolveHelper
 import com.google.android.gms.wallet.PaymentData
@@ -23,6 +24,7 @@ import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.nfcreader.open.reader.TapEmvCard
 import company.tap.nfcreader.open.reader.TapNfcCardReader
+import company.tap.tapnetworkkit.interfaces.APILoggInterface
 import company.tap.tapuilibrary.uikit.models.DialogConfigurations
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -30,7 +32,7 @@ import io.reactivex.disposables.Disposables
 import kotlinx.android.synthetic.main.item_googlepay.*
 import org.json.JSONObject
 
-class CheckOutActivity : AppCompatActivity()   {
+class CheckOutActivity : AppCompatActivity()  , APILoggInterface {
     private val tapCheckoutFragment = CheckoutFragment()
     var hideAllViews:Boolean = false
     lateinit var chargeStatus:ChargeStatus
@@ -448,7 +450,10 @@ class CheckOutActivity : AppCompatActivity()   {
         }
     }
 
-
+    override fun onLoggingEvent(logs: String?) {
+        Bugfender.d(CustomUtils.tagAPI, logs)
+        println("logs"+logs)
+    }
 
 
 }

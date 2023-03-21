@@ -1,5 +1,6 @@
 package company.tap.checkout.internal.apiresponse
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -371,7 +372,7 @@ class CardRepository : APIRequestCallback {
                             initResponseModel = Gson().fromJson(it, InitResponseModel::class.java)
                             paymentOptionsResponse = initResponseModel?.paymentOptionsResponse
                             merchantDataModel = initResponseModel?.merchant
-                            NetworkApp.initNetworkToken(initResponseModel?.session, contextSDK,ApiService.BASE_URL,true)
+                            NetworkApp.initNetworkToken(initResponseModel?.session, contextSDK,ApiService.BASE_URL,true, CheckOutActivity())
                             PaymentDataSource.setPaymentOptionsResponse(paymentOptionsResponse)
                             PaymentDataSource.setMerchantData(merchantDataModel)
                             PaymentDataSource.setInitResponse(initResponseModel)
