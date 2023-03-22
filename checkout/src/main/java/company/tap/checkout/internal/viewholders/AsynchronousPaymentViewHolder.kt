@@ -30,6 +30,7 @@ class AsynchronousPaymentViewHolder(private val context: Context,private  val vi
     private lateinit var fawryView :FawryPaymentView
     private lateinit var linearAsynch :LinearLayout
     private lateinit var dateTimestr :String
+    private  var smsEnabled :Boolean = false
     override val view: View =
         LayoutInflater.from(context).inflate(R.layout.asynchronous_layout, null)
 
@@ -48,11 +49,13 @@ class AsynchronousPaymentViewHolder(private val context: Context,private  val vi
 
         val firstString:String = LocalizationManager.getValue("paymentProgressLabel","TapAsyncSection")
         val secondString:String = LocalizationManager.getValue("paymentRecieptLabel","TapAsyncSection")
-        fawryView.titleText?.text = firstString+"\n"+secondString
+        val emailString:String = LocalizationManager.getValue("paymentRecieptEmail","TapAsyncSection")
+        val smsString:String = LocalizationManager.getValue("paymentRecieptSms","TapAsyncSection")
+        fawryView.titleText?.text = firstString+"\n"+secondString.replace("%@",smsString)
         fawryView.descText?.text = LocalizationManager.getValue("paymentReferenceTitleLabel","TapAsyncSection")
         fawryView.orderCodeText?.text = LocalizationManager.getValue("paymentCodeTitleLabel","TapAsyncSection")
         fawryView.codeExpireText?.text = LocalizationManager.getValue("paymentExpiryTitleLabel","TapAsyncSection")
-        fawryView.linkDescText?.text = LocalizationManager.getValue("paymentVisitBranchesLabel","TapAsyncSection")
+        fawryView.linkDescText?.text = LocalizationManager.getValue<String?>("paymentVisitBranchesLabel","TapAsyncSection")?.replace("%@","Fawry")
         fawryView.payButton?.setButtonDataSource(
             true, context?.let { LocalizationManager.getLocale(it).language },
             LocalizationManager.getValue(

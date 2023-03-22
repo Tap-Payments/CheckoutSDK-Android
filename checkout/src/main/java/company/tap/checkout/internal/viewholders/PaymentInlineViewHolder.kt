@@ -976,7 +976,7 @@ class PaymentInlineViewHolder (private val context: Context,
                                   //  tapCardInputView.separatorcard2.visibility = View.VISIBLE
                                     tapInlineCardSwitch?.switchSaveCard?.isChecked = true
                                     tapInlineCardSwitch?.visibility = View.VISIBLE
-                                    Bugfender.d(LogsModel.EVENT.name,"Finished valid raw card data for:"+PaymentType.CARD )
+                                    Bugfender.d(CustomUtils.tagEvent,"Finished valid raw card data for:"+PaymentType.CARD )
 
                                 }
                             }
@@ -1028,7 +1028,7 @@ class PaymentInlineViewHolder (private val context: Context,
                             }
                             tapAlertView?.visibility = View.GONE
                             CustomUtils.hideKeyboardFrom(context, view)
-                            Bugfender.d(LogsModel.EVENT.name,"Finished valid raw card data for:"+PaymentType.CARD )
+                            Bugfender.d(CustomUtils.tagEvent,"Finished valid raw card data for:"+PaymentType.CARD )
                         }
 
                     }

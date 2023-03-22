@@ -983,11 +983,16 @@ class CardRepository : APIRequestCallback {
 
         var selectedTotalAmount :String
         if(viewModel.selectedTotalAmount?.isNotBlank() == true  &&  viewModel.selectedTotalAmount?.isNotEmpty() == true){
-            selectedTotalAmount = viewModel?.selectedTotalAmount!!
+            if(viewModel.selectedTotalAmount!!.contains(","))
+            selectedTotalAmount = viewModel.selectedTotalAmount!!.replace(",","")
+            else selectedTotalAmount = viewModel.selectedTotalAmount!!
         }else {
-            selectedTotalAmount = amountedCurrency?.amount.toString()
+            if(viewModel.selectedTotalAmount?.contains(",") == true)
+            selectedTotalAmount = amountedCurrency?.amount.toString().replace(",","")
+           else selectedTotalAmount = amountedCurrency?.amount.toString()
         }
 
+       // println("selectedTotalAmount in repo"+selectedTotalAmount)
         when (transactionMode) {
             TransactionMode.PURCHASE -> {
                 val chargeRequest = transactionCurrency?.amount?.let {

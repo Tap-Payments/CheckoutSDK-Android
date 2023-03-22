@@ -20,6 +20,7 @@ import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.widget.ProgressBar
+import androidx.annotation.DrawableRes
 import androidx.fragment.app.Fragment
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.models.Charge
@@ -45,6 +46,9 @@ class WebFragment(
     private var chargeResponse: Charge? = null
     val progressBar by lazy { view?.findViewById<ProgressBar>(R.id.progressBar) }
     private var displayMetrics: Int? = 0
+    @DrawableRes
+    val loaderGif: Int =
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) R.drawable.reduced_loader_white else R.drawable.reduced_loader_black
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,8 +76,8 @@ class WebFragment(
             throw IllegalArgumentException("Empty URL passed to WebViewFragment!")
         }
         if (displayMetrics == DisplayMetrics.DENSITY_400 ||displayMetrics == DisplayMetrics.DENSITY_XXHIGH || displayMetrics == DisplayMetrics.DENSITY_450 || displayMetrics == DisplayMetrics.DENSITY_440) {
-            progressBar?.indeterminateDrawable = (context as Activity).resources.getDrawable( R.drawable.reduced_60)
-        }else  progressBar?.indeterminateDrawable = (context as Activity).resources.getDrawable( R.drawable.output_black_loader_nobg)
+            progressBar?.indeterminateDrawable = (context as Activity).resources.getDrawable(loaderGif)
+        }else  progressBar?.indeterminateDrawable = (context as Activity).resources.getDrawable(loaderGif)
 
         progressBar?.visibility = View.VISIBLE
         web_view?.visibility = View.GONE

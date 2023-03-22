@@ -17,6 +17,7 @@ import android.webkit.WebView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
+import androidx.annotation.DrawableRes
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentManager
 import androidx.transition.ChangeBounds
@@ -58,12 +59,15 @@ class WebViewHolder(
     val webViewLinear by lazy { view.findViewById<LinearLayout>(R.id.webViewLinear) }
     val webCardview by lazy { view.findViewById<CardView>(R.id.webCardview) }
     private var displayMetrics: Int? = 0
+    @DrawableRes
+    val loaderGif: Int =
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) R.drawable.reduced_loader_white else R.drawable.reduced_loader_black
 
     init {
         progressBar?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("merchantHeaderView.backgroundColor")))
         webViewLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.whiteTwo")))
 
-
+       // progressBar.set(loaderGif)
         // webViewUrl = arguments?.getString(WebFragment.KEY_URL)
         //  webViewUrl = redirectURL
         //  chargeResponse = authenticate
@@ -72,8 +76,9 @@ class WebViewHolder(
         displayMetrics = CustomUtils.getDeviceDisplayMetrics(context as Activity)
 
         if (displayMetrics == DisplayMetrics.DENSITY_400 ||displayMetrics == DisplayMetrics.DENSITY_XXHIGH || displayMetrics == DisplayMetrics.DENSITY_450 || displayMetrics == DisplayMetrics.DENSITY_440) {
-            progressBar.indeterminateDrawable = context.resources.getDrawable( R.drawable.reduced_60)
-        }else  progressBar.indeterminateDrawable = context.resources.getDrawable( R.drawable.output_black_loader_nobg)
+          //  progressBar.indeterminateDrawable = context.resources.getDrawable( R.drawable.reduced_60)
+            progressBar.indeterminateDrawable = context.resources.getDrawable(loaderGif)
+        }else  progressBar.indeterminateDrawable = context.resources.getDrawable(loaderGif)
 
             if (TextUtils.isEmpty(redirectURL)) {
             throw IllegalArgumentException("Empty URL passed to WebViewFragment!")

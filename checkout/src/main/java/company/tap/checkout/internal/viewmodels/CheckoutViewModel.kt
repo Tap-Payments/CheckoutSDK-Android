@@ -1811,7 +1811,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         unActivateActionButton()
         when (savedCardsModel) {
             is SavedCard -> {
-                    Bugfender.d(LogsModel.EVENT.name,"Saved card selected :"+savedCardsModel.lastFour+"&"+savedCardsModel.id )
+                    Bugfender.d(CustomUtils.tagEvent,"Saved card selected :"+savedCardsModel.lastFour+"&"+savedCardsModel.id )
               //  paymentInlineViewHolder.view.alpha = 1f
               paymentInlineViewHolder.setDataForSavedCard(
                     savedCardsModel,
@@ -1819,7 +1819,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 )
                 setPayButtonAction(PaymentType.SavedCard, savedCardsModel)
                 isSavedCardSelected = true
-                Bugfender.d(LogsModel.EVENT.name,"Payment scheme selected: title :"+savedCardsModel?.brand+"& ID :"+savedCardsModel.paymentOptionIdentifier )
+                Bugfender.d(CustomUtils.tagEvent,"Payment scheme selected: title :"+savedCardsModel?.brand+"& ID :"+savedCardsModel.paymentOptionIdentifier )
             }
             else -> {
                 if (savedCardsModel != null) {
@@ -1837,7 +1837,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         //setPayButtonAction(PaymentType.WEB, savedCardsModel)
                         PaymentDataSource.setWebViewType(WebViewType.REDIRECT)
                     }
-                    Bugfender.d(LogsModel.EVENT.name,"Payment scheme selected: title :"+(savedCardsModel as PaymentOption).brand+"& ID :"+(savedCardsModel as PaymentOption).id )
+                    Bugfender.d(CustomUtils.tagEvent,"Payment scheme selected: title :"+(savedCardsModel as PaymentOption).brand+"& ID :"+(savedCardsModel as PaymentOption).id )
 
 
                 } else
@@ -2267,11 +2267,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         adapter.resetSelection()
 
         if (::selectedCurrency.isInitialized) {
-            Bugfender.d(LogsModel.EVENT.name,"Currency changed to : "+selectedCurrencySymbol )
+            Bugfender.d(CustomUtils.tagEvent,"Currency changed to : "+selectedCurrencySymbol )
             filterViewModels(selectedCurrency)
         } else {
             filterViewModels(currentCurrency)
-            //Bugfender.d("Currency changed to : "+currentCurrency ,LogsModel.EVENT.name)
+            //Bugfender.d("Currency changed to : "+currentCurrency ,CustomUtils.tagEvent)
 
         }
 
@@ -2481,6 +2481,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
         val totalAmount: String
         if (selectedTotalAmount != null) {
+            println("selectedTotalAmount is"+selectedTotalAmount)
+            if(selectedAmount.contains(",")){
+                totalAmount = CurrencyFormatter.currencyFormat(
+                    fee?.add(BigDecimal(selectedAmount.replace(",","").toDouble())).toString())
+
+            }else
             totalAmount = CurrencyFormatter.currencyFormat(
                 fee?.add(
                     selectedTotalAmount?.toDouble()?.let { BigDecimal.valueOf(it) }).toString()
@@ -3249,7 +3255,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             val tokenizationData = paymentMethodData.getJSONObject("tokenizationData")
 
             val token = tokenizationData.getString("token")
-            Bugfender.d(LogsModel.EVENT.name,"Google pay raw token :"+token )
+            Bugfender.d(CustomUtils.tagEvent,"Google pay raw token :"+token )
             val gson = Gson()
             val jsonToken = gson.fromJson(token, JsonObject::class.java)
 

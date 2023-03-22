@@ -122,7 +122,7 @@ object CurrencyFormatter {
         }
     fun currencyFormat(amount: String): String {
         val df: DecimalFormat
-      //  println("amount formar" + amount)
+        println("amount formar" + amount)
         if(amount.startsWith(",",1)){
             df = DecimalFormat("#,###,##0.00")
         }else if(amount.startsWith(",",2)){
