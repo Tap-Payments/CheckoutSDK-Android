@@ -303,11 +303,11 @@ class PaymentInlineViewHolder (private val context: Context,
        // println("displayMetrics"+displayMetrics)
         if (displayMetrics == DisplayMetrics.DENSITY_260 || displayMetrics == DisplayMetrics.DENSITY_280 || displayMetrics == DisplayMetrics.DENSITY_300 || displayMetrics == DisplayMetrics.DENSITY_XHIGH || displayMetrics == DisplayMetrics.DENSITY_340 || displayMetrics == DisplayMetrics.DENSITY_360) {
 
-           tabLayout.changeTabItemMarginBottomValue(22)
-           tabLayout.changeTabItemMarginTopValue(22)
+           tabLayout.changeTabItemMarginBottomValue(25)
+           tabLayout.changeTabItemMarginTopValue(25)
             //tabLayout.changeTabItemMarginBottomValue(30)
-               tabLayout.changeTabItemMarginLeftValue(-15)
-              tabLayout.changeTabItemMarginRightValue(-15)
+               tabLayout.changeTabItemMarginLeftValue(-21)
+              tabLayout.changeTabItemMarginRightValue(-21)
 
         }   else if (displayMetrics == DisplayMetrics.DENSITY_400 ||displayMetrics == DisplayMetrics.DENSITY_XXHIGH || displayMetrics == DisplayMetrics.DENSITY_450 || displayMetrics == DisplayMetrics.DENSITY_440) {
             tabLayout.changeTabItemMarginBottomValue(35)
