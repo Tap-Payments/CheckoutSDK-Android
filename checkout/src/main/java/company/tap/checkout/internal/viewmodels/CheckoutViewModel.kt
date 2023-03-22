@@ -2008,18 +2008,19 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             "HorizontalHeaders",
             "rightTitle"
         )
-        val title: String = LocalizationManager.getValue("deleteSavedCardTitle", "SavedCardTitle")
+        val title: String = LocalizationManager.getValue("title", "DeleteCard")
         val message: String = LocalizationManager.getValue(
-            "deleteSavedCardMsg",
-            "SavedCardTitle"
+            "message",
+            "DeleteCard"
         )
         CustomUtils.showDialog(
             "$title",
-            "$message $maskedCardNumber ?",
+            "${message.replace("%@",maskedCardNumber)} ",
             context,
             4,
             this, null, null, false
         )
+
         selectedItemsDel = itemId
         deleteCard = true
         this.arrayListSavedCardSize = arrayListSavedCardSizes
