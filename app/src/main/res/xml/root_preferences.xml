@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <PreferenceCategory android:title="General">
+    <PreferenceCategory android:title="SDK CONFIGURATION">
 
         <ListPreference
             android:defaultValue="en"
@@ -11,6 +11,25 @@
             android:key="sdk_language"
             android:summary="Choose your preferred language"
             android:title="SDK Language"/>
+
+        <ListPreference
+            android:defaultValue="default"
+            android:dialogTitle="SDK Localization"
+            android:entries="@array/pref_array_sdk_locale_entries"
+            android:entryValues="@array/pref_array_sdk_locale_values"
+            android:key="sdk_locale"
+            android:summary="Choose your preferred localization"
+            android:title="SDK Localization"/>
+
+        <ListPreference
+            android:defaultValue="default"
+            android:dialogTitle="SDK Theme"
+            android:entries="@array/pref_array_sdk_theme_entries"
+            android:entryValues="@array/pref_array_sdk_theme_values"
+            android:key="sdk_theme"
+            android:summary="Choose your preferred Theming"
+            android:title="SDK Theme"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Session data source">

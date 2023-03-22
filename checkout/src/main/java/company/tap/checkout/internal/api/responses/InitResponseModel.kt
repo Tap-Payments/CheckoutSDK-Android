@@ -3,7 +3,9 @@ package company.tap.checkout.internal.api.responses
 import androidx.annotation.NonNull
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import company.tap.checkout.internal.api.enums.LogsModel
 import company.tap.checkout.internal.api.enums.Permission
+import company.tap.checkout.internal.api.models.AssetsModel
 import java.io.Serializable
 import java.util.ArrayList
 
@@ -13,7 +15,8 @@ import java.util.ArrayList
 Copyright (c) 2022    Tap Payments.
 All rights reserved.
  **/
-data class InitResponseModel(@SerializedName("payment_options") @Expose
+data class InitResponseModel(@SerializedName("payment_options")
+                             @Expose
                              @NonNull var paymentOptionsResponse: PaymentOptionsResponse,
                              @SerializedName("status")
                              @Expose
@@ -21,13 +24,13 @@ data class InitResponseModel(@SerializedName("payment_options") @Expose
                              @SerializedName("merchant")
                              @Expose
                              @NonNull val merchant: MerchantData,
+                             @SerializedName("assests")
+                                @Expose
+                            @NonNull var assestsModel: AssetsModel,
                              @SerializedName("session")
                              @Expose
                              @NonNull val session: String,):Serializable
 data class MerchantData(
-    @SerializedName("background")
-    @Expose
-    var background: Object? = null,
 
     @SerializedName("encryption_key")
     @Expose
@@ -61,6 +64,13 @@ data class MerchantData(
     @SerializedName("device_id")
     @Expose
     val deviceId: String? = null,
+    @SerializedName("background")
+    @Expose
+    val backgroundModel: BackgroundModel? = null,
+
+    @SerializedName("logs")
+    @Expose
+    val logs: ArrayList<LogsModel>? = null,
 
     ): Serializable
 
@@ -73,4 +83,49 @@ data class SDKSettingsData(
     @SerializedName("otp_resend_attempts")
     @Expose
     var otpResendAttempts: Int,
+) : Serializable
+
+
+data class BackgroundModel(
+    @SerializedName("url")
+    @Expose
+    var urlBackground:String,
+
+    @SerializedName("mode")
+    @Expose
+    var mode: String,
+
+    @SerializedName("color")
+    @Expose
+    var color: ColorModel,
+) : Serializable
+
+data class ColorModel(
+    @SerializedName("dark")
+    @Expose
+    var dark:DarkModel,
+
+    @SerializedName("light")
+    @Expose
+    var light: LightModel
+) : Serializable
+
+data class DarkModel(
+    @SerializedName("color")
+    @Expose
+    var color:String,
+
+    @SerializedName("image")
+    @Expose
+    var image: String
+) : Serializable
+
+data class LightModel(
+    @SerializedName("color")
+    @Expose
+    var color:String,
+
+    @SerializedName("image")
+    @Expose
+    var image: String
 ) : Serializable

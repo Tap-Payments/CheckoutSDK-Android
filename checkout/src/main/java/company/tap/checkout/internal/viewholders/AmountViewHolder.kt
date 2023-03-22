@@ -81,12 +81,17 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
                 selectedCurrText = transactionCurrency,
                 itemCount = itemCountt + "  " + LocalizationManager.getValue("item", "Common")
             )
-        } else
+        } else {
+            var items: String=""
+            if(LocalizationManager.currentLocalized.length()!=0) {
+               items  = LocalizationManager.getValue("items", "Common")
+            }
             return AmountViewDataSource(
                 selectedCurr = originalAmount,
                 selectedCurrText = transactionCurrency,
-                itemCount = itemCountt + "  " + LocalizationManager.getValue("items", "Common")
+               itemCount = itemCountt + "  " +items
             )
+        }
     }
 
     private fun changeDataSource(amountViewDataSource: AmountViewDataSource) {

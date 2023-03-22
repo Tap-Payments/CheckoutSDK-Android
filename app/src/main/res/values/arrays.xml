@@ -9,7 +9,25 @@
         <item>Arabic</item>
 
     </string-array>
+    <string-array name="pref_array_sdk_locale_entries">
+        <item>default</item>
+        <item>custom</item>
+    </string-array>
+    <string-array name="pref_array_sdk_locale_values">
+        <item>default</item>
+        <item>custom</item>
 
+    </string-array>
+
+    <string-array name="pref_array_sdk_theme_entries">
+        <item>default</item>
+        <item>custom</item>
+    </string-array>
+    <string-array name="pref_array_sdk_theme_values">
+        <item>default</item>
+        <item>custom</item>
+
+    </string-array>
 
     <string-array name="pref_array_sdk_mode_entries">
         <item>SANDBOX</item>

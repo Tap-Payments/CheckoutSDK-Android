@@ -32,9 +32,6 @@ class TapCheckOutSDK {
      * @param packageId registered id
      */
     fun init(context: Context, secretKeyTest: String?,secretKeyLive: String? ,packageId: String?,locale:Locale?) {
-        if(LocalizationManager.currentLocalized.length()==0)
-            LocalizationManager.loadTapLocale(context,"https://tapcheckoutsdk.firebaseio.com/TapLocalisation.json")
-            LocalizationManager.setLocale(context,Locale("en"))
 
         if(packageId?.isEmpty() == true) {
             ErrorReport("Application must have packageId in order to use goSellSDK.")

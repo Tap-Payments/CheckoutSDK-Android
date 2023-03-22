@@ -3,17 +3,16 @@ package company.tap.checkout.internal.apiresponse
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Build
+import android.os.Handler
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentManager
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import company.tap.checkout.internal.PaymentDataProvider
-import company.tap.checkout.internal.api.enums.AuthenticationStatus
-import company.tap.checkout.internal.api.enums.AuthenticationType
-import company.tap.checkout.internal.api.enums.ChargeStatus
-import company.tap.checkout.internal.api.enums.URLStatus
+import company.tap.checkout.internal.api.enums.*
 import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.open.models.Merchant
 import company.tap.checkout.internal.api.requests.*
@@ -35,11 +34,13 @@ import company.tap.checkout.open.models.*
 import company.tap.checkout.open.models.AuthorizeAction
 import company.tap.checkout.open.models.Receipt
 import company.tap.checkout.open.models.Reference
+import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapnetworkkit.connection.NetworkApp
 import company.tap.tapnetworkkit.controller.NetworkController
 import company.tap.tapnetworkkit.enums.TapMethodType
 import company.tap.tapnetworkkit.exception.GoSellError
 import company.tap.tapnetworkkit.interfaces.APIRequestCallback
+import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog.Companion.TAG
 import io.reactivex.plugins.RxJavaPlugins
@@ -60,6 +61,7 @@ class CardRepository : APIRequestCallback {
     @JvmField
     var paymentOptionsResponse :PaymentOptionsResponse?= null
     var merchantDataModel :MerchantData?= null
+    var assetsModel :AssetsModel?= null
 
     lateinit var chargeResponse:Charge
     lateinit var listCardsResponse: ListCardsResponse
@@ -79,6 +81,7 @@ class CardRepository : APIRequestCallback {
     private var configResponse:TapConfigResponseModel?=null
     @JvmField
     var initResponseModel :InitResponseModel?= null
+    var logsModel :LogsModel?= null
     fun getDataProvider(): IPaymentDataProvider {
         return dataProvider
     }
@@ -87,6 +90,7 @@ class CardRepository : APIRequestCallback {
     @RequiresApi(Build.VERSION_CODES.N)
     fun getINITData(_context: Context, viewModel: CheckoutViewModel, cardViewModel: CardViewModel?,supportFragmentManagerdata: FragmentManager) {
         this.viewModel = viewModel
+        this.cardRepositoryContext = _context
         if (cardViewModel != null) {
             this.cardViewModel = cardViewModel
         }
@@ -366,13 +370,37 @@ class CardRepository : APIRequestCallback {
        if (requestCode == INIT_CODE) {
             if (response?.body() != null) {
                 response.body().let {
-                    println("INIT REsponse>>>>"+response.body())
+
                     if (response?.body() != null) {
                         response.body().let {
                             initResponseModel = Gson().fromJson(it, InitResponseModel::class.java)
                             paymentOptionsResponse = initResponseModel?.paymentOptionsResponse
                             merchantDataModel = initResponseModel?.merchant
-                            NetworkApp.initNetworkToken(initResponseModel?.session, contextSDK,ApiService.BASE_URL,true, CheckOutActivity())
+                            assetsModel = initResponseModel?.assestsModel
+                         //   logsModel = initResponseModel?.merchant?.logs?.name
+
+                            if(LocalizationManager.currentLocalized.length()==0) {
+                                LocalizationManager.setLocale(cardRepositoryContext, Locale("en"))
+                                LocalizationManager.loadTapLocale(cardRepositoryContext,assetsModel?.localisation?.urlLocale.toString())
+                            }
+
+                            if (ThemeManager.currentTheme.isNullOrEmpty()){
+                                when (cardRepositoryContext.resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                                    Configuration.UI_MODE_NIGHT_YES -> {
+
+                                        ThemeManager.loadTapTheme(cardRepositoryContext,assetsModel?.theme?.darkUrl.toString(),"darktheme")
+                                    }
+                                    Configuration.UI_MODE_NIGHT_NO -> {
+                                        ThemeManager.loadTapTheme(cardRepositoryContext,assetsModel?.theme?.lightUrl.toString(),"lighttheme")
+
+                                    }
+                                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+
+                                    }
+                                }
+                            }
+
+                            NetworkApp.initNetworkToken(initResponseModel?.session, cardRepositoryContext,ApiService.BASE_URL,true, CheckOutActivity())
                             PaymentDataSource.setPaymentOptionsResponse(paymentOptionsResponse)
                             PaymentDataSource.setMerchantData(merchantDataModel)
                             PaymentDataSource.setInitResponse(initResponseModel)
@@ -592,6 +620,7 @@ class CardRepository : APIRequestCallback {
            /* val tapCheckoutFragment = CheckoutFragment()
             tapCheckoutFragment.show(supportFragmentManager.beginTransaction().addToBackStack(null), "CheckOutFragment")*/
 
+            Handler().postDelayed({
             val intent = Intent(SDKSession.activity, CheckOutActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
            contextSDK?.startActivity(intent)
@@ -600,7 +629,7 @@ class CardRepository : APIRequestCallback {
             SDKSession.sessionDelegate?.sessionIsStarting()
             SessionManager.setActiveSession(false)
             resultObservable.onNext(viewState)
-
+            }, 4000)
         }
         if( ::chargeResponse.isInitialized && chargeResponse!=null){
             if(::viewModel.isInitialized && chargeResponse.status!=ChargeStatus.IN_PROGRESS && chargeResponse.status!= ChargeStatus.CANCELLED) {

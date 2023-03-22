@@ -76,13 +76,18 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
        // ThemeManager.loadTapTheme(this, urlStrLight,"lighttheme")
         initializeSDK()
-        initializeTheme()
+       // initializeTheme()
 
         //displayMertrc()
 
-        if (ThemeManager.currentTheme.isNotEmpty() && LocalizationManager.currentLocalized.toString()
-                .isNotEmpty()
-        ) {
+        if(settingsManager?.getString("sdk_locale", "default").equals("custom")){
+            initializeLanguage()
+        }
+
+        if(settingsManager?.getString("sdk_theme", "default").equals("custom")){
+            initializeTheme()
+        }
+
 
 
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
@@ -94,27 +99,15 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
                     this
                 ).language
             )
-            /* Handler().postDelayed({
-            //doSomethingHere()
-            setContentView(R.layout.activity_main)
-            initializeSDK()
-            configureSDKSession()
-            initActionButton()
 
-            if (modalBottomSheet.isHidden || modalBottomSheet.isDetached) {
-                println("paybutton hidden")
-                payButton.changeButtonState(ActionButtonState.IDLE)
-            }
-
-        }, 4000)*/
-            Handler().postDelayed({
+                // Handler().postDelayed({
             configureSDKSession()
-            setContentView(R.layout.activity_main)
-            initActionButton()
+           setContentView(R.layout.activity_main)
+             initActionButton()
             initializeBottomSheet()
-            }, 4000)
+           // }, 4000)
 
-        }
+
     }
 
     private fun displayMertrc() {
@@ -210,12 +203,6 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
 
 
- /* if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))
-                ThemeManager.loadTapTheme(this, urlStrDark,"darktheme")
-            else if (ThemeManager.currentTheme.isNotEmpty() && !ThemeManager.currentTheme.contains("dark"))
-                ThemeManager.loadTapTheme(this, urlStrLight,"lighttheme")
-            else ThemeManager.loadTapTheme(this, urlStrLight,"lighttheme")
-*/
 
 
    }
@@ -518,9 +505,9 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
        payButton.setButtonDataSource(
            true,
            this.let { LocalizationManager.getLocale(it).language },
-           LocalizationManager.getValue("pay", "ActionButton"),
-           Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-           Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
+           "Pay",
+           Color.parseColor("#2ace00"),
+           Color.parseColor("#ffffff")
        )
 
       /* payButton.setOnClickListener {

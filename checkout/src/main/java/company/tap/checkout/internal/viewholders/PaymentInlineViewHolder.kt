@@ -27,6 +27,7 @@ import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardinputwidget.widget.inline.InlineCardInput2
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.CardScheme
+import company.tap.checkout.internal.api.enums.LogsModel
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.internal.apiresponse.CardViewEvent
@@ -584,7 +585,7 @@ class PaymentInlineViewHolder (private val context: Context,
                             )
                         }
                     }
-                    Bugfender.d(CustomUtils.tagEvent,"Finished valid raw card data for:"+PaymentType.CARD )
+                    Bugfender.d(LogsModel.EVENT.name,"Finished valid raw card data for:"+PaymentType.CARD )
                 }
             }
 
@@ -975,7 +976,7 @@ class PaymentInlineViewHolder (private val context: Context,
                                   //  tapCardInputView.separatorcard2.visibility = View.VISIBLE
                                     tapInlineCardSwitch?.switchSaveCard?.isChecked = true
                                     tapInlineCardSwitch?.visibility = View.VISIBLE
-                                    Bugfender.d(CustomUtils.tagEvent,"Finished valid raw card data for:"+PaymentType.CARD )
+                                    Bugfender.d(LogsModel.EVENT.name,"Finished valid raw card data for:"+PaymentType.CARD )
 
                                 }
                             }
@@ -1027,7 +1028,7 @@ class PaymentInlineViewHolder (private val context: Context,
                             }
                             tapAlertView?.visibility = View.GONE
                             CustomUtils.hideKeyboardFrom(context, view)
-                            Bugfender.d(CustomUtils.tagEvent,"Finished valid raw card data for:"+PaymentType.CARD )
+                            Bugfender.d(LogsModel.EVENT.name,"Finished valid raw card data for:"+PaymentType.CARD )
                         }
 
                     }
@@ -1384,6 +1385,7 @@ class PaymentInlineViewHolder (private val context: Context,
         if (view.layoutDirection == View.LAYOUT_DIRECTION_RTL) {
             cardNumber = cardNumber?.reversed()
         }
+        hideViewONScanNFC()
 
     }
 

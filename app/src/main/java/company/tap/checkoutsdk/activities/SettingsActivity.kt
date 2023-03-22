@@ -37,6 +37,8 @@ class SettingsActivity : AppCompatActivity() {
 
 
             bindPreferenceSummaryToValue(findPreference("sdk_language"))
+            bindPreferenceSummaryToValue(findPreference("sdk_locale"))
+            bindPreferenceSummaryToValue(findPreference("sdk_theme"))
             bindPreferenceSummaryToValue(findPreference("key_sdkmode"))
             bindPreferenceSummaryToValue(findPreference("key_sdk_transaction_mode"))
             bindPreferenceSummaryToValue(findPreference("key_sdk_transaction_currency"))

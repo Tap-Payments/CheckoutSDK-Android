@@ -51,6 +51,7 @@ import company.tap.checkout.internal.adapter.CurrencyTypeAdapter
 import company.tap.checkout.internal.adapter.GoPayCardAdapterUIKIT
 import company.tap.checkout.internal.adapter.ItemAdapter
 import company.tap.checkout.internal.api.enums.ChargeStatus
+import company.tap.checkout.internal.api.enums.LogsModel
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.internal.api.requests.CreateTokenGPayRequest
@@ -130,7 +131,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private var displayItemsOpen: Boolean = false
     private var displayOtpIsOpen: Boolean = false
     private var saveCardSwitchHolder: SwitchViewHolder? = null
-   
+
+    private lateinit var  title :String
     private lateinit var paymentInlineViewHolder: PaymentInlineViewHolder
     private lateinit var goPaySavedCardHolder: GoPaySavedCardHolder
     private lateinit var businessViewHolder: BusinessViewHolder
@@ -1482,7 +1484,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
         if(::webViewHolder.isInitialized)
             removeViews(webViewHolder)
-removeAllViews()
+            removeAllViews()
+        if(LocalizationManager.currentLocalized.length()!=0)
         saveCardSwitchHolder = contextSDK?.let { SwitchViewHolder(it,this) }
         businessViewHolder = contextSDK?.let { BusinessViewHolder(it,this) }!!
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setDisplayMetrics(
@@ -1808,7 +1811,7 @@ removeAllViews()
         unActivateActionButton()
         when (savedCardsModel) {
             is SavedCard -> {
-                    Bugfender.d(CustomUtils.tagEvent,"Saved card selected :"+savedCardsModel.lastFour+"&"+savedCardsModel.id )
+                    Bugfender.d(LogsModel.EVENT.name,"Saved card selected :"+savedCardsModel.lastFour+"&"+savedCardsModel.id )
               //  paymentInlineViewHolder.view.alpha = 1f
               paymentInlineViewHolder.setDataForSavedCard(
                     savedCardsModel,
@@ -1816,7 +1819,7 @@ removeAllViews()
                 )
                 setPayButtonAction(PaymentType.SavedCard, savedCardsModel)
                 isSavedCardSelected = true
-                Bugfender.d(CustomUtils.tagEvent,"Payment scheme selected: title :"+savedCardsModel?.brand+"& ID :"+savedCardsModel.paymentOptionIdentifier )
+                Bugfender.d(LogsModel.EVENT.name,"Payment scheme selected: title :"+savedCardsModel?.brand+"& ID :"+savedCardsModel.paymentOptionIdentifier )
             }
             else -> {
                 if (savedCardsModel != null) {
@@ -1834,7 +1837,7 @@ removeAllViews()
                         //setPayButtonAction(PaymentType.WEB, savedCardsModel)
                         PaymentDataSource.setWebViewType(WebViewType.REDIRECT)
                     }
-                    Bugfender.d(CustomUtils.tagEvent,"Payment scheme selected: title :"+(savedCardsModel as PaymentOption).brand+"& ID :"+(savedCardsModel as PaymentOption).id )
+                    Bugfender.d(LogsModel.EVENT.name,"Payment scheme selected: title :"+(savedCardsModel as PaymentOption).brand+"& ID :"+(savedCardsModel as PaymentOption).id )
 
 
                 } else
@@ -2264,11 +2267,11 @@ removeAllViews()
         adapter.resetSelection()
 
         if (::selectedCurrency.isInitialized) {
-            Bugfender.d(CustomUtils.tagEvent,"Currency changed to : "+selectedCurrencySymbol )
+            Bugfender.d(LogsModel.EVENT.name,"Currency changed to : "+selectedCurrencySymbol )
             filterViewModels(selectedCurrency)
         } else {
             filterViewModels(currentCurrency)
-            //Bugfender.d("Currency changed to : "+currentCurrency ,CustomUtils.tagEvent)
+            //Bugfender.d("Currency changed to : "+currentCurrency ,LogsModel.EVENT.name)
 
         }
 
@@ -2759,12 +2762,12 @@ removeAllViews()
     @RequiresApi(Build.VERSION_CODES.N)
     private fun setNfcCardDetails(emvCard: TapEmvCard) {
         // auto slide added on scan to prevent overlap
-
+        paymentInlineViewHolder.hideViewONScanNFC()
         println("maskCardNumber"+paymentInlineViewHolder.maskCardNumber(emvCard.cardNumber))
-        paymentInlineViewHolder.tapCardInputView.setCardNumber(emvCard.cardNumber,true)
+        paymentInlineViewHolder.tapCardInputView.setCardNumber(emvCard.cardNumber,false)
         convertDateString(emvCard)
         paymentInlineViewHolder.onFocusChange(CardInputListener.FocusField.FOCUS_CVC)
-        paymentInlineViewHolder.hideViewONScanNFC()
+
 
     }
 
@@ -2945,9 +2948,12 @@ removeAllViews()
 
             }
         }
+        if(LocalizationManager.currentLocalized.length()!=0){
+            title=   LocalizationManager.getValue("title", "ExtraFees")
+
+        }
     }
 
-    var title: String = LocalizationManager.getValue("title", "ExtraFees")
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun showExtraFees(
@@ -2955,6 +2961,7 @@ removeAllViews()
         extraFeesAmount: String,
         paymentType: PaymentType, savedCardsModel: Any?, selectedCurrency: String
     ) {
+
         val extraFeesPart1: String = LocalizationManager.getValue<String>(
             "message",
             "ExtraFees"
@@ -3242,7 +3249,7 @@ removeAllViews()
             val tokenizationData = paymentMethodData.getJSONObject("tokenizationData")
 
             val token = tokenizationData.getString("token")
-            Bugfender.d(CustomUtils.tagEvent,"Google pay raw token :"+token )
+            Bugfender.d(LogsModel.EVENT.name,"Google pay raw token :"+token )
             val gson = Gson()
             val jsonToken = gson.fromJson(token, JsonObject::class.java)
 

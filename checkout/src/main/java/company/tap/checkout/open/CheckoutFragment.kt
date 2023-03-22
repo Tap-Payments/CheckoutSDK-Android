@@ -41,6 +41,7 @@ import company.tap.tapuilibrary.uikit.atoms.TapImageView
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
+import org.json.JSONObject
 import java.util.*
 
 
@@ -138,8 +139,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         closeImage = view.findViewById(R.id.closeImage)
         scrollView = view.findViewById(R.id.scrollView)
         val heightscreen: Int = Resources.getSystem().getDisplayMetrics().heightPixels;
-
-        closeText.text = LocalizationManager.getValue("close", "Common")
+            if(LocalizationManager.currentLocalized.length()!=0)
+            closeText.text = LocalizationManager.getValue("close", "Common")
 
         if (SDKSession.showCloseImage == true) {
 
@@ -166,6 +167,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         bottomSheetLayout?.let {
             viewModel.setBottomSheetLayout(it)
         }
+
         if (checkoutLayout != null) {
             context?.let {
                 if (frameLayout != null) {
@@ -192,8 +194,9 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                     }
                 }
             }
+            enableSections()
         }
-        enableSections()
+
         inLineCardLayout?.minimumHeight = heightscreen - checkoutLayout?.height!!
         dialog?.window?.attributes?.windowAnimations = R.style.DialogAnimation
 
@@ -289,6 +292,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                     )
 
             } else {
+
                 _viewModel?.displayStartupLayout(enabledSections)
                 _viewModel?.getDatasfromAPIs(
                     PaymentDataSource.getMerchantData(),
@@ -439,6 +443,9 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
       }*/
 
     fun dismissBottomSheetDialog() {
+        bottomSheetDialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
+        ThemeManager.currentTheme =""
+        LocalizationManager.currentLocalized= JSONObject()
         bottomSheetDialog.dismissWithAnimation
         bottomSheetDialog.hide()
         bottomSheetDialog.dismiss()

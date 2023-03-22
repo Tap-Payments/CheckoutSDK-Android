@@ -157,7 +157,7 @@
             "HintLabel": "You can access your saved cards from anywhere with goPay."
         },
         "ActionButton":{
-            "pay": "Pay",
+            "pay": "Custom Pay Text",
             "confirm": "Confirm",
             "resend": "Resend OTP",
             "next": "Next",

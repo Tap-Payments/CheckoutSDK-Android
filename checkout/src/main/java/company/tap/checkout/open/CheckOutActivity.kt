@@ -17,6 +17,7 @@ import com.google.android.gms.wallet.PaymentDataRequest
 import com.google.android.gms.wallet.PaymentsClient
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.ChargeStatus
+import company.tap.checkout.internal.api.enums.LogsModel
 import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.utils.PaymentsUtil
 import company.tap.checkout.open.controller.SDKSession
@@ -451,7 +452,7 @@ class CheckOutActivity : AppCompatActivity()  , APILoggInterface {
     }
 
     override fun onLoggingEvent(logs: String?) {
-        Bugfender.d(CustomUtils.tagAPI, logs)
+        Bugfender.d(LogsModel.API.name, logs)
         println("logs"+logs)
     }
 
