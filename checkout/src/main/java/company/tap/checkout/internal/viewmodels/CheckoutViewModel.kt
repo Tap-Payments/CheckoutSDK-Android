@@ -468,7 +468,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     private fun initAmountAction() {
-        amountViewHolder.setOnItemsClickListener {}
+        amountViewHolder.setOnItemsClickListener()
         amountViewHolder.view.amount_section.mainKDAmountValue.visibility = View.GONE
     }
 

@@ -1,10 +1,13 @@
 package company.tap.checkout.internal.viewholders
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
+import company.tap.cardinputwidget.CardInputUIStatus
 import company.tap.checkout.R
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.AmountInterface
@@ -143,11 +146,19 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
     }
 
 
-    fun setOnItemsClickListener(onItemsClickListener: () -> Unit) {
-        view.amount_section.itemAmountLayout.setOnClickListener {
+    @SuppressLint("ClickableViewAccessibility")
+    fun setOnItemsClickListener() {
+       /* view.amount_section.itemAmountLayout.setOnClickListener {
             //onItemsClickListener()
             baseLayoutManager?.controlCurrency(isOpenedList)
-        }
+        }*/
+
+        view.amount_section.itemAmountLayout.setOnTouchListener(object : View.OnTouchListener {
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                baseLayoutManager?.controlCurrency(isOpenedList)
+                return false
+            }
+        })
     }
 
     fun updateSelectedCurrency(
