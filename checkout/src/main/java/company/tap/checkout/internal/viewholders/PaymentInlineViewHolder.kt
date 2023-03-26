@@ -135,6 +135,7 @@ class PaymentInlineViewHolder (private val context: Context,
     var separator1: TapSeparatorView? = null
     var cardNumValidation: Boolean = false
     var mPreviousCount:Int=0
+    lateinit var cardBrandFromAPI:CardBrand
     init {
 
         tabLayout.setTabLayoutInterface(this)
@@ -930,9 +931,24 @@ class PaymentInlineViewHolder (private val context: Context,
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
 
                 if(s?.trim()?.length == 3 || s?.trim()?.length == 4){
-                    if (cardInputUIStatus==CardInputUIStatus.NormalCard)
-                    logicForImageOnCVV(CardValidator.validate(fullCardNumber).cardBrand,s.toString())
-                    else  logicForImageOnCVV(CardValidator.validate(savedCardsModel?.firstSix).cardBrand,s.toString())
+                    if (cardInputUIStatus==CardInputUIStatus.NormalCard) {
+
+                        if(PaymentDataSource.getBinLookupResponse()?.scheme!=null){
+                            PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.let {
+                                logicForImageOnCVV(
+                                    it,
+                                    s.toString()
+                                )
+                            }
+                        }else {
+                            logicForImageOnCVV(
+                                CardValidator.validate(fullCardNumber).cardBrand,
+                                s.toString()
+                            )
+                        }
+                        acceptedCardText.visibility =View.GONE
+                        tabLayout.visibility =View.GONE
+                    }else  logicForImageOnCVV(CardValidator.validate(savedCardsModel?.firstSix).cardBrand,s.toString())
                 }
               /*  if (s?.trim()?.length == 3 || s?.trim()?.length == 4) {
                     onPaymentCardComplete.onPayCardSwitchAction(
@@ -1076,6 +1092,7 @@ class PaymentInlineViewHolder (private val context: Context,
             if(charSequence.length<=6) {
                 if(card.cardBrand!=null)
                     logicTosetImageDynamic(card.cardBrand,charSequence.toString())
+
             }
 
             if (charSequence.length > 2){
@@ -1113,8 +1130,11 @@ class PaymentInlineViewHolder (private val context: Context,
                     setTabLayoutBasedOnApiResponse(binLookupResponse, card)
                 }
             }
-
+            println("charSequence.le"+charSequence.length)
             if(charSequence.length ==19){
+                fullCardNumber = charSequence.toString()
+            }
+            if( card!=null && card.cardBrand!=null && card.cardBrand.name == CardBrand.americanExpress.name){
                 fullCardNumber = charSequence.toString()
             }
             /**
@@ -1193,6 +1213,7 @@ class PaymentInlineViewHolder (private val context: Context,
                                 binLookupResponse?.scheme?.cardBrand.toString()
                             ), selectedImageURL
                         )
+
                         tabLayout?.visibility =View.GONE
                         tapAlertView?.visibility =View.GONE
                         return
@@ -1748,28 +1769,68 @@ class PaymentInlineViewHolder (private val context: Context,
 
     fun logicTosetImageDynamic(card:CardBrand,cardCharSeq:String){
         for (i in itemsCardsList.indices) {
-            println("itemsCardsList[i].selectedImageUR"+itemsCardsList[i].selectedImageURL)
-            val iconStr = itemsCardsList[i].selectedImageURL.replace("https://back-end.b-cdn.net/payment_methods/","")
-            if(iconStr.replace(".svg","").toLowerCase().contains(card.name.toLowerCase())) {
-                tapCardInputView.setSingleCardInput(
-                   CardBrandSingle.fromCode(card.name)
-                    , itemsCardsList[i].selectedImageURL
+
+            if (itemsCardsList[i].selectedImageURL != null && itemsCardsList[i].selectedImageURL.contentEquals(
+                    "dark"
                 )
+            ) {
+                val iconStr = itemsCardsList[i].selectedImageURL.replace(
+                    "https://tap-assets.b-cdn.net/payment-options/v2/dark/",
+                    ""
+                )
+                if (iconStr.replace(".png", "").toLowerCase().contains(card.name.toLowerCase())) {
+                    tapCardInputView.setSingleCardInput(
+                        CardBrandSingle.fromCode(card.name)
+                        , itemsCardsList[i].selectedImageURL
+                    )
 
+                }
+            } else {
+                println("itemsCardsList[i] light" + itemsCardsList[i].selectedImageURL)
+                val iconStr = itemsCardsList[i].selectedImageURL.replace(
+                    "https://tap-assets.b-cdn.net/payment-options/v2/light/",
+                    ""
+                )
+                if (iconStr.replace(".png", "").replace("_","").toLowerCase().contains(card.name.toLowerCase())) {
+                    tapCardInputView.setSingleCardInput(
+                        CardBrandSingle.fromCode(card.name)
+                        , itemsCardsList[i].selectedImageURL
+                    )
 
+                }
             }
+
         }
         }
 
     fun logicForImageOnCVV(card:CardBrand,cardCharSeq:String){
+
+            println("cardSchema is"+card.name)
         //TODO 19MAR
         for (i in itemsCardsList.indices) {
-            println("itemsCardsList[i].selectedImageUR"+itemsCardsList[i].selectedImageURL)
-            println("card"+card.name)
-            val iconStr = itemsCardsList[i].selectedImageURL.replace("https://back-end.b-cdn.net/payment_methods/","")
-            if(iconStr.replace(".svg","").toLowerCase().contains(card.name.toLowerCase())) {
-           tapCardInputView.setCardBrandUrl( itemsCardsList[i].selectedImageURL)
 
+            if (itemsCardsList[i].selectedImageURL != null && itemsCardsList[i].selectedImageURL.contentEquals(
+                    "dark")
+            ) {
+                val iconStr = itemsCardsList[i].selectedImageURL.replace(
+                    "https://tap-assets.b-cdn.net/payment-options/v2/dark/",
+                    ""
+                )
+
+                if (iconStr.replace(".png", "").replace("_","").toLowerCase().contains(card.name.toLowerCase())) {
+                    tapCardInputView.setCardBrandUrl(itemsCardsList[i].selectedImageURL)
+
+                }
+            } else {
+                println("itemsCardsList[i] light" + itemsCardsList[i].selectedImageURL)
+                val iconStr = itemsCardsList[i].selectedImageURL.replace(
+                    "https://tap-assets.b-cdn.net/payment-options/v2/light/",
+                    ""
+                )
+                if (iconStr.replace(".png", "").replace("_","").toLowerCase().contains(card.name.toLowerCase())) {
+                    tapCardInputView.setCardBrandUrl(itemsCardsList[i].selectedImageURL)
+
+                }
             }
         }
     }
