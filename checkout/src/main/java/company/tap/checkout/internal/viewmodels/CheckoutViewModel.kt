@@ -311,6 +311,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     private fun initOtpActionButton() {
         otpViewHolder.otpView.otpViewActionButton.setOnClickListener {
+            //Added to hide keyboard if open
+            CustomUtils.hideKeyboardFrom(context as Activity,otpViewHolder.view)
             when (otpTypeString) {
                 PaymentTypeEnum.GOPAY ->
                     goPayViewsHolder.onOtpButtonConfirmationClick(otpViewHolder.otpView.otpViewInput1.text.toString())
@@ -318,6 +320,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
                 PaymentTypeEnum.SAVEDCARD -> confirmOTPCode(otpViewHolder.otpView.otpViewInput1.text.toString())
                 else -> {
+
                     removeViews(
                         businessViewHolder,
                         amountViewHolder,
@@ -846,6 +849,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         otpViewHolder?.otpView?.startCounter()
         addViews(amountViewHolder, otpViewHolder)
         otpViewHolder.otpView.visibility = View.VISIBLE
+        //Added to hide the Items-Amount button when OTP is opened
+        amountViewHolder.view.amount_section?.itemAmountLayout?.visibility = View.GONE
         CustomUtils.showKeyboard(context)
         setOtpPhoneNumber(phoneNumber)
         otpViewHolder.otpView.changePhone.visibility = View.INVISIBLE
