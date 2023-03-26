@@ -12,6 +12,7 @@ import company.tap.checkout.R
 import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
+import company.tap.checkout.open.controller.SDKSession
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.organisms.FawryPaymentView
@@ -31,6 +32,9 @@ class AsynchronousPaymentViewHolder(private val context: Context,private  val vi
     private lateinit var linearAsynch :LinearLayout
     private lateinit var dateTimestr :String
     private  var smsEnabled :Boolean = false
+    private  lateinit var phoneNumber :String
+    private  lateinit var phoneCode :String
+    private  lateinit var emailId :String
     override val view: View =
         LayoutInflater.from(context).inflate(R.layout.asynchronous_layout, null)
 
@@ -47,12 +51,8 @@ class AsynchronousPaymentViewHolder(private val context: Context,private  val vi
     override fun bindViewComponents() {
        fawryView = view.findViewById(R.id.fawry_payment_view)
 
-        val firstString:String = LocalizationManager.getValue("paymentProgressLabel","TapAsyncSection")
-        val secondString:String = LocalizationManager.getValue("paymentRecieptLabel","TapAsyncSection")
-        val emailString:String = LocalizationManager.getValue("paymentRecieptEmail","TapAsyncSection")
-        val smsString:String = LocalizationManager.getValue("paymentRecieptSms","TapAsyncSection")
-        fawryView.titleText?.text = firstString+"\n"+secondString.replace("%@",smsString)
-        fawryView.descText?.text = LocalizationManager.getValue("paymentReferenceTitleLabel","TapAsyncSection")
+
+        fawryView.descText?.text = LocalizationManager.getValue<String?>("paymentReferenceTitleLabel","TapAsyncSection")?.replace("%@","Fawry")
         fawryView.orderCodeText?.text = LocalizationManager.getValue("paymentCodeTitleLabel","TapAsyncSection")
         fawryView.codeExpireText?.text = LocalizationManager.getValue("paymentExpiryTitleLabel","TapAsyncSection")
         fawryView.linkDescText?.text = LocalizationManager.getValue<String?>("paymentVisitBranchesLabel","TapAsyncSection")?.replace("%@","Fawry")
@@ -76,8 +76,9 @@ class AsynchronousPaymentViewHolder(private val context: Context,private  val vi
     }
 
     fun setDataFromAPI(chargeResponse: Charge){
-        //    phonNumber = chargeResponse?.customer?.getPhone()?.number
-        //    emailId = chargeResponse.customer.email
+           phoneNumber = chargeResponse.customer?.getPhone()?.number.toString()
+           phoneCode = chargeResponse.customer?.getPhone()?.countryCode.toString()
+            emailId = chargeResponse.customer.email.toString()
 
         val created: Long =
             chargeResponse.transaction.created
@@ -95,6 +96,12 @@ class AsynchronousPaymentViewHolder(private val context: Context,private  val vi
             chargeResponse.transaction.order?.store_url.toString()
         )
         Linkify.addLinks(fawryView.linkValue, Linkify.ALL)
+        val firstString:String = LocalizationManager.getValue("paymentProgressLabel","TapAsyncSection")
+        val secondString:String = LocalizationManager.getValue("paymentRecieptLabel","TapAsyncSection")
+        val emailString:String = LocalizationManager.getValue("paymentRecieptEmail","TapAsyncSection")
+        val smsString:String = LocalizationManager.getValue("paymentRecieptSms","TapAsyncSection")
+        fawryView.titleText?.text = firstString+"\n"+secondString.replace("%@",smsString)+"\n"+phoneCode+" "+phoneNumber
+        SDKSession.getListener()?.asyncPaymentStarted(chargeResponse)
 
     }
 

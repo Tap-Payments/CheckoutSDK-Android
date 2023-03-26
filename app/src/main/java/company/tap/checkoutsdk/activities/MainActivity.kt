@@ -697,7 +697,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
        Log.e("MainActivity", "sessionCancelled>>>>>")
        //CLose the bottomsheet and keep buttonto old state
 
-       Toast.makeText(this, "Your sessionCancelled>>!", Toast.LENGTH_SHORT).show()
+     //  Toast.makeText(this, "Your sessionCancelled>>!", Toast.LENGTH_SHORT).show()
 
    }
 
@@ -740,6 +740,11 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
    override fun userEnabledSaveCardOption(saveCardEnabled: Boolean) {
        println("userEnabledSaveCardOption>>>>>$saveCardEnabled")
    }
+
+    override fun asyncPaymentStarted(charge: Charge) {
+        println("asyncPaymentStarted>>>>>"+charge.status)
+        println("asyncPaymentStarted>>>>>"+charge.id)
+    }
 
 /*    @RequiresApi(Build.VERSION_CODES.N)
    override fun getStatusSDK(response :String ? ,charge: Charge?) {

@@ -3099,7 +3099,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     fun closeAsynchView() {
-        removeViews(businessViewHolder, asynchronousPaymentViewHolder)
+     /*   removeViews(businessViewHolder, asynchronousPaymentViewHolder)
         businessViewHolder.setDataFromAPI(
             PaymentDataSource.getMerchantData()?.logo,
             PaymentDataSource.getMerchantData()?.name
@@ -3122,7 +3122,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }else{ payString+" "+currentCurrencySymbol+" "+currentAmount},
             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
-        )
+        )*/
+      //  Stopped reset view and dismiss it.
+        checkoutFragment?.dismissBottomSheetDialog()
     }
 
     fun showOnlyButtonView(
