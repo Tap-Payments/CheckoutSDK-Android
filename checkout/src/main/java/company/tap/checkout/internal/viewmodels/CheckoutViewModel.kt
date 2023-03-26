@@ -2300,7 +2300,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         println("gatewayResponse val" + charge?.gatewayResponse)
 
         businessViewHolder = contextSDK?.let { BusinessViewHolder(it,this) }!!
-        saveCardSwitchHolder = contextSDK?.let { SwitchViewHolder(it,this) }
+        saveCardSwitchHolder = contextSDK.let { SwitchViewHolder(it,this) }
         removeViews(businessViewHolder,saveCardSwitchHolder)
         if (::webFrameLayout.isInitialized) {
             if (fragmentManager.findFragmentById(R.id.webFrameLayout) != null)
