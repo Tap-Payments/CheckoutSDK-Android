@@ -39,6 +39,7 @@ import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.atoms.TapImageView
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
+import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
 import org.json.JSONObject
@@ -387,9 +388,10 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     fun resetTabAnimatedButton() {
         checkOutActivity?.displayMetrics?.let { tabAnimatedActionButton?.setDisplayMetrics(it) }
         SDKSession.sessionActive = false
-        //tabAnimatedActionButton?.changeButtonState(ActionButtonState.RESET)
+        tabAnimatedActionButton?.changeButtonState(ActionButtonState.RESET)
         if (checkOutActivity?.isGooglePayClicked == false) {
             checkOutActivity?.finish()
+            checkOutActivity?.overridePendingTransition(0, R.anim.slide_down)
         }
         //  checkOutActivity?.finish()
 
@@ -443,7 +445,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
       }*/
 
     fun dismissBottomSheetDialog() {
-        bottomSheetDialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
+        //bottomSheetDialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
         ThemeManager.currentTheme =""
         LocalizationManager.currentLocalized= JSONObject()
         bottomSheetDialog.dismissWithAnimation

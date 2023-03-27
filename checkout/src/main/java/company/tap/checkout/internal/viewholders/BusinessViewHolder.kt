@@ -58,7 +58,7 @@ class BusinessViewHolder( context: Context, private  val checkoutViewModel: Chec
             view.headerView.constraint.visibility= View.VISIBLE
 
                 tapCloseIcon.setOnClickListener {
-                    checkoutViewModel?.dismissBottomSheet()
+                    checkoutViewModel.dismissBottomSheet()
                 }
 
         }
