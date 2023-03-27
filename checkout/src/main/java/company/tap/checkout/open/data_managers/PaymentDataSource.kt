@@ -524,6 +524,10 @@ object PaymentDataSource :PaymentDataSource {
        return showHideCardHolderName
     }
 
+    override fun getChargeOrAuthorize(): Charge ?{
+       return chargeOrAuthorize
+    }
+
     override fun getAvailablePaymentOptionsCardBrands(): ArrayList<PaymentOption>? {
     return cardPaymentOption
     }

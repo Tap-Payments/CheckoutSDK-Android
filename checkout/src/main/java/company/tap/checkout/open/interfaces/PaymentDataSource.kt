@@ -3,6 +3,7 @@ package company.tap.checkout.open.interfaces
 import androidx.annotation.RestrictTo
 import company.tap.checkout.internal.api.models.BINLookupResponse
 import company.tap.checkout.internal.api.models.CardIssuer
+import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.open.models.Merchant
 import company.tap.checkout.internal.api.models.PaymentOption
 import company.tap.checkout.internal.api.responses.InitResponseModel
@@ -196,4 +197,6 @@ interface PaymentDataSource {
     fun getWebViewType():WebViewType?
 
     fun getCardHolderNameShowHide():Boolean
+
+    fun getChargeOrAuthorize():Charge?
 }

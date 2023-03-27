@@ -28,6 +28,7 @@ import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.controller.SDKSession.contextSDK
+import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import company.tap.tapuilibrary.uikit.ktx.setTopBorders
@@ -185,6 +186,7 @@ class WebFragment(
     }
 
     override fun getRedirectedURL(url: String) {
+        println("url are>>"+PaymentDataSource.getChargeOrAuthorize())
         // webViewContract.redirectLoadingFinished(url.contains("https://www.google.com/search?"))
         if (url.contains("gosellsdk://return_url")) {
            // webViewContract?.resultObtained(true, contextSDK)

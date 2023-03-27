@@ -2298,7 +2298,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         contextSDK: Context?
     ) {
         checkoutFragment.dismiss()
-        println("done val" + done + "chargeResponse status" + charge?.status)
+        println("done val" + done + "chargeResponse status" + PaymentDataSource.getChargeOrAuthorize())
         println("saveCardSwitchHolder val" + saveCardSwitchHolder)
         println("redirect val" + charge?.response)
         println("gatewayResponse val" + charge?.gatewayResponse)
