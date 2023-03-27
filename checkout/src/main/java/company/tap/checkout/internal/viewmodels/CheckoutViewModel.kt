@@ -1479,6 +1479,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
          * close the sdk.
          * **/
 
+
         tabAnimatedActionButton?.clearAnimation()
         if (::webFrameLayout.isInitialized) {
             if (fragmentManager.findFragmentById(R.id.webFrameLayout) != null)
@@ -1523,6 +1524,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         println("chargeResponse are>>>>"+chargeResponse?.status)
        // println("saveCardSwitchHolder are>>>>"+saveCardSwitchHolder)
         if(response.contains("failure")){
+
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(false,Color.MAGENTA)
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
                 false,
@@ -1586,6 +1588,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 } else {
                     println("is this called>>>")
                     removeAllViews()
+                    tabAnimatedActionButton?.setInValidBackground(false, Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")))
+
                     tabAnimatedActionButton?.changeButtonState(
                         ActionButtonState.ERROR
                     )
@@ -1607,14 +1611,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
                             )
 
-                       tabAnimatedActionButton?.setButtonDataSource(
+                       /*tabAnimatedActionButton?.setButtonDataSource(
                             false,
                             "en",
-                            "",
+                            null,
                             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
                             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
 
-                            )
+                            )*/
                         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                             ActionButtonState.ERROR
                         )
