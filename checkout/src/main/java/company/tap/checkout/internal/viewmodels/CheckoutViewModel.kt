@@ -795,7 +795,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     ) {
         setSlideAnimation()
 
-        amountViewHolder.changeGroupAction(false)
+       // amountViewHolder.changeGroupAction(false)
         amountViewHolder.view.amount_section.itemCountButton.text = LocalizationManager.getValue(
             "close",
             "Common"
@@ -839,16 +839,25 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     private fun displayOtpCharge(phoneNumber: PhoneNumber?, chargeResponse: Charge?) {
         // otpTypeString = PaymentTypeEnum.GOPAY //temporray
-        println("mmmmmmmm" + amountViewHolder.view.amount_section.itemCountButton.text)
-
+        println("mmmmmmmm" + amountViewHolder?.originalAmount)
+        /*if(::selectedAmount.isInitialized && ::selectedCurrency.isInitialized) {
+            amountViewHolder.updateSelectedCurrency(
+                false,
+                selectedAmount,
+                selectedCurrency,
+                currentAmount,
+                currentCurrency
+            )
+            println("selectedAmount>>>>" + selectedAmount)
+        }*/
         removeViews(
             cardViewHolder,
-            paymentInlineViewHolder, saveCardSwitchHolder, otpViewHolder, amountViewHolder
+            paymentInlineViewHolder, saveCardSwitchHolder, otpViewHolder
         )
         // bottomSheetDialog.dismissWithAnimation
         //start counter on open otpview
         otpViewHolder?.otpView?.startCounter()
-        addViews(amountViewHolder, otpViewHolder)
+        addViews( otpViewHolder)
         otpViewHolder.otpView.visibility = View.VISIBLE
         //Added to hide the Items-Amount button when OTP is opened
         amountViewHolder.view.amount_section?.itemAmountLayout?.visibility = View.GONE
@@ -859,7 +868,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             resendOTPCode(chargeResponse)
             otpViewHolder.otpView.restartTimer()
         }
-        amountViewHolder.changeGroupAction(false)
+        amountViewHolder.view.amount_section.mainKDAmountValue.visibility = View.GONE
     }
 
     private fun setOtpPhoneNumber(phoneNumber: PhoneNumber?) {
@@ -1705,7 +1714,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     sdkLayout.removeView(it?.view)
 
                 }
-                }, 1500)
+                }, 200)
 
             }, 0)
 
@@ -1734,7 +1743,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     sdkLayout.addView(it?.view)
 
                 }
-                }, 1500)
+                }, 250)
 
 
 

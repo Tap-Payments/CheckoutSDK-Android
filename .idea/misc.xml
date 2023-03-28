@@ -10,9 +10,15 @@
         <entry key="../../../../.gradle/caches/transforms-2/files-2.1/ea844a6ddcb0f1848d7025be3c6f6cf4/jetified-TapUIKit-Android-1.1.1.358.255/res/layout/item_view_adapter.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/xml/root_preferences.xml" value="0.11317567567567567" />
+        <entry key="checkout/src/main/res/drawable-mdpi/buy_with_googlepay_button_content_w.xml" value="0.2285" />
         <entry key="checkout/src/main/res/drawable-mdpi/checkout_with_googlepay_button_content.xml" value="0.125" />
         <entry key="checkout/src/main/res/drawable-mdpi/googlepay_button_background_shape.xml" value="0.125" />
+        <entry key="checkout/src/main/res/drawable-mdpi/googlepay_button_background_w.xml" value="0.2285" />
+        <entry key="checkout/src/main/res/drawable-mdpi/googlepay_button_content_w.xml" value="0.2285" />
+        <entry key="checkout/src/main/res/drawable-mdpi/googlepay_button_no_shadow_background_w.xml" value="0.2285" />
+        <entry key="checkout/src/main/res/drawable-mdpi/googlepay_button_overlay_w.xml" value="0.2285" />
         <entry key="checkout/src/main/res/drawable-xxhdpi/googlepay_button_content.xml" value="0.112" />
+        <entry key="checkout/src/main/res/drawable-xxhdpi/googlepay_button_no_shadow_background.xml" value="0.1825" />
         <entry key="checkout/src/main/res/drawable-xxhdpi/googlepay_button_overlay.xml" value="0.125" />
         <entry key="checkout/src/main/res/drawable/border_unclick_cardinput.xml" value="0.1425" />
         <entry key="checkout/src/main/res/drawable/loading_web_animation.xml" value="0.2145" />
@@ -21,7 +27,9 @@
         <entry key="checkout/src/main/res/layout/cardviewholder_layout1.xml" value="0.16047297297297297" />
         <entry key="checkout/src/main/res/layout/fragment_checkouttaps.xml" value="0.25" />
         <entry key="checkout/src/main/res/layout/fragment_web.xml" value="0.24857685009487665" />
+        <entry key="checkout/src/main/res/layout/google_pay_button_assets.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/googlepay_button.xml" value="0.4055727554179567" />
+        <entry key="checkout/src/main/res/layout/googlepay_button_w.xml" value="0.14121621621621622" />
         <entry key="checkout/src/main/res/layout/item_benefit_pay.xml" value="0.11182432432432432" />
         <entry key="checkout/src/main/res/layout/item_currency_rows.xml" value="0.5507522583007813" />
         <entry key="checkout/src/main/res/layout/item_googlepay.xml" value="0.7891360308672931" />

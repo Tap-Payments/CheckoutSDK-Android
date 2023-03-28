@@ -169,6 +169,8 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
         currentCurrency: String,
         selectedCurrencySymbol: String? = null
     ) {
+
+
         isOpenedList = isOpen
         if (selectedAmount == currentAmount && selectedCurrency == currentCurrency) {
             view.amount_section.mainKDAmountValue.visibility = View.GONE
