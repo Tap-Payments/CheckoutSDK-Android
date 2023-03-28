@@ -390,8 +390,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         SDKSession.sessionActive = false
         tabAnimatedActionButton?.changeButtonState(ActionButtonState.RESET)
         if (checkOutActivity?.isGooglePayClicked == false) {
-            checkOutActivity?.finish()
-            checkOutActivity?.overridePendingTransition(0, R.anim.slide_down)
+            checkOutActivity?.overridePendingTransition(0, R.anim.slide_down_exit)
+            checkOutActivity?.finishAfterTransition()
         }
         //  checkOutActivity?.finish()
 

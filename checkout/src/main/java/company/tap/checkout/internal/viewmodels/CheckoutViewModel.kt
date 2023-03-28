@@ -683,6 +683,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         viewGroupLayoutParams.height = newHeight ?: 0
         bottomSheetLayout.layoutParams = viewGroupLayoutParams
 */
+        addViews(
+            itemsViewHolder
+        )
             removeViews(
                 //  businessViewHolder,
                 // amountViewHolder,
@@ -692,9 +695,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
         // removeAllViews()
-        addViews(
-            itemsViewHolder
-        )
+
 
 
 
@@ -1491,15 +1492,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         if(::webViewHolder.isInitialized)
             removeViews(webViewHolder)
             removeAllViews()
-        if(LocalizationManager.currentLocalized.length()!=0)
-        saveCardSwitchHolder = contextSDK?.let { SwitchViewHolder(it,this) }
-        businessViewHolder = contextSDK?.let { BusinessViewHolder(it,this) }!!
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setDisplayMetrics(
-            CustomUtils.getDeviceDisplayMetrics(
-                contextSDK as Activity
+        if(LocalizationManager.currentLocalized.length()!=0) {
+            saveCardSwitchHolder = contextSDK?.let { SwitchViewHolder(it, this) }
+            businessViewHolder = contextSDK?.let { BusinessViewHolder(it, this) }!!
+            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setDisplayMetrics(
+                CustomUtils.getDeviceDisplayMetrics(
+                    contextSDK as Activity
+                )
             )
-        )
-
+        }
         if (::otpViewHolder.isInitialized)
             if (otpViewHolder.otpView.isVisible) {
                 removeViews(
@@ -1588,6 +1589,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 } else {
                     println("is this called>>>")
                     removeAllViews()
+                    if(ThemeManager.currentTheme!=null)
                     tabAnimatedActionButton?.setInValidBackground(false, Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")))
 
                     tabAnimatedActionButton?.changeButtonState(
@@ -1691,24 +1693,19 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         viewHolders.forEach {
             Handler(Looper.getMainLooper()).postDelayed(Runnable {
-
+              //  it?.view?.visibility =View.INVISIBLE
                 if (::context.isInitialized) {
+                    val animation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
+                    it?.view?.startAnimation(animation)
 
-                  /*  val fadeOut = AlphaAnimation(1f, 0f)
-                    fadeOut.interpolator = AccelerateInterpolator() //and this
-                    fadeOut.startOffset = 100*/
-                  //  fadeOut.duration = 10
-                   // val animation = AnimationSet(false) //change to false
-                //    animation.addAnimation(fadeOut)
-                    //     animation.addAnimation(fadeOut)
-                  //  val animation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
-                   // it?.view?.startAnimation(animation)
                 }
-
+                Handler().postDelayed({
                 if (::sdkLayout.isInitialized) {
-                    bottomSheetLayout
+                    //it?.view?.visibility = View.INVISIBLE
                     sdkLayout.removeView(it?.view)
+
                 }
+                }, 1500)
 
             }, 0)
 
@@ -1721,28 +1718,25 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         viewHolders.forEach {
             Handler(Looper.getMainLooper()).postDelayed(Runnable {
-
+               // it?.view?.visibility =View.VISIBLE
                 if (::context.isInitialized) {
 
 
-                    val fadeIn = AlphaAnimation(0f, 1f)
-                    fadeIn.interpolator = DecelerateInterpolator() //add this
-                    fadeIn.duration = 1000
-
-                    val animation = AnimationSet(false) //change to false
-                    animation.addAnimation(fadeIn)
-
-
-                   // val animati1on = AnimationUtils.loadAnimation(context, R.anim.fade_in)
-                    // animati1on.duration = 500L
+                   val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
                     it?.view?.startAnimation(animation)
 
                 }
 
+                Handler().postDelayed({
                 if (::sdkLayout.isInitialized) {
+                   // it?.view?.visibility = View.VISIBLE
                     sdkLayout.removeView(it?.view)
                     sdkLayout.addView(it?.view)
+
                 }
+                }, 1500)
+
+
 
                 //   checkoutFragment?.scrollView?.fullScroll(View.FOCUS_DOWN)
                 // bottomSheetDialog.behavior.setPeekHeight(sdkLayout.height)
@@ -1751,8 +1745,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 // checkoutFragment.scrollView?.fullScroll(View.FOCUS_DOWN)
 
                 // AnimationEngine.applyTransition(sdkLayout,SLIDE,1500)
-                if(::bottomSheetLayout.isInitialized)
-                bottomSheetLayout.startAnimation(AnimationUtils.loadAnimation(context,R.anim.slide_up))
+                   //TODO Animation is stoped
+              //  if(::bottomSheetLayout.isInitialized)
+               // bottomSheetLayout.startAnimation(AnimationUtils.loadAnimation(context,R.anim.slide_up))
             }, 0)
             BottomSheetBehavior.STATE_HALF_EXPANDED
         }
