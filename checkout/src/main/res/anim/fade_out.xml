@@ -4,7 +4,7 @@
     <alpha
         android:fromAlpha="1.0"
         android:toAlpha="0.001"
-        android:duration="200"
+        android:duration="500"
         />
 </set>
 

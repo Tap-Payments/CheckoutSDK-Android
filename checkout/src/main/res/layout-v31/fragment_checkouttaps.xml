@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:clipToOutline="true"
             android:visibility="visible"
-
+            android:background="@drawable/layout_bg"
             android:orientation="vertical" />
 
         <!-- <LinearLayout
