@@ -33,8 +33,9 @@ import company.tap.checkout.internal.utils.PaymentsUtil
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.TextViewTheme
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
+import kotlinx.android.synthetic.main.googlepay_button.view.*
 import kotlinx.android.synthetic.main.item_benefit_pay.view.*
-import kotlinx.android.synthetic.main.item_googlepay.view.*
+import kotlinx.android.synthetic.main.item_googlepay_dark.view.*
 import kotlinx.android.synthetic.main.item_knet.view.*
 import kotlinx.android.synthetic.main.item_save_cards.view.*
 import mobi.foo.benefitinapp.data.Transaction
@@ -123,7 +124,15 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
             }
             TYPE_GOOGLE_PAY -> {
                 view =
-                        LayoutInflater.from(parent.context).inflate(R.layout.item_googlepay, parent, false)
+                    LayoutInflater.from(parent.context).inflate(R.layout.item_googlepay_dark, parent, false)
+                if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")){
+                  val  darkView :View = LayoutInflater.from(parent.context).inflate(R.layout.googlepay_button, parent, false)
+                    view.tapCardChip6Linear.addView(darkView)
+                }else {
+                    val lightView:View = LayoutInflater.from(parent.context).inflate(R.layout.googlepay_button_white,parent,false)
+                    view.tapCardChip6Linear.addView(lightView)
+                }
+
                 GooglePayViewHolder(view)
             }
             TYPE_3PPG -> {
@@ -504,7 +513,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         // It's recommended to create the PaymentsClient object inside of the onCreate method.
       //  paymentsClient = PaymentsUtil().createPaymentsClient(holder.itemView.context as Activity)
         possiblyShowGooglePayButton(holder)
-        bindGooglePayImageData(holder,position)
+      //  bindGooglePayImageData(holder,position)
 
        // setUnSelectedCardTypeGoogleShadowAndBackground(holder)
         holder.itemView.googlePayButton.setOnClickListener {
@@ -523,7 +532,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         }
     }
 
-    private fun bindGooglePayImageData(holder: GooglePayViewHolder ,position: Int) {
+   /* private fun bindGooglePayImageData(holder: GooglePayViewHolder ,position: Int) {
         if(position>0) {
             if (CustomUtils.getCurrentTheme() != null && CustomUtils.getCurrentTheme()
                     .contains("dark")
@@ -549,7 +558,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                     .into(holder.itemView.googlePayButton)
             }
         }
-    }
+    }*/
 
     private fun setOnRedirectCardOnClickAction(holder: RecyclerView.ViewHolder, position: Int) {
         onCardSelectedActionListener.onCardSelectedAction(true, adapterContent[holder.adapterPosition])

@@ -4,8 +4,10 @@
     android:focusable="true"
     android:layout_width="match_parent"
     android:layout_height="48sp"
+    android:id="@+id/googlePayButton"
+    android:background="@drawable/googlepay_button_background_shape_white"
     android:padding="2sp"
-    >
+   >
     <LinearLayout
         android:duplicateParentState="true"
         android:layout_width="match_parent"
@@ -19,12 +21,12 @@
             android:layout_height="0dp"
             android:scaleType="fitCenter"
             android:duplicateParentState="true"
-            android:src="@drawable/googlepay_button_content_w"/>
+            android:src="@drawable/googlepay_button_content_white"/>
     </LinearLayout>
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
         android:duplicateParentState="true"
-        android:src="@drawable/googlepay_button_overlay_w"/>
+        android:src="@drawable/googlepay_button_overlay"/>
 </RelativeLayout>

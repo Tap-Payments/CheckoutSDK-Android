@@ -21,16 +21,16 @@
     android:layout_width="100dp"
     android:layout_height="41dp"
     android:orientation="horizontal">
-    <ImageView
+   <!-- <ImageView
         android:id="@+id/googlePayButton"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible" />
-    <!--<include removed assets
-        android:id="@+id/googlePayButton"
-        layout="@layout/googlepay_button"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="visible" />-->
+    <include
+        android:id="@+id/googlePayButtonWhite"
+        layout="@layout/googlepay_button_white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible" />
 </LinearLayout>
 </company.tap.tapuilibrary.uikit.atoms.TapChip>

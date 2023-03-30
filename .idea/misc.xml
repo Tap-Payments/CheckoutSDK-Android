@@ -12,18 +12,22 @@
         <entry key="app/src/main/res/xml/root_preferences.xml" value="0.11317567567567567" />
         <entry key="checkout/src/main/res/drawable-mdpi/buy_with_googlepay_button_content_w.xml" value="0.2285" />
         <entry key="checkout/src/main/res/drawable-mdpi/checkout_with_googlepay_button_content.xml" value="0.125" />
+        <entry key="checkout/src/main/res/drawable-mdpi/googlepay_button_background.xml" value="0.144" />
         <entry key="checkout/src/main/res/drawable-mdpi/googlepay_button_background_shape.xml" value="0.125" />
         <entry key="checkout/src/main/res/drawable-mdpi/googlepay_button_background_w.xml" value="0.2285" />
         <entry key="checkout/src/main/res/drawable-mdpi/googlepay_button_content_w.xml" value="0.2285" />
+        <entry key="checkout/src/main/res/drawable-mdpi/googlepay_button_content_white.xml" value="0.144" />
         <entry key="checkout/src/main/res/drawable-mdpi/googlepay_button_no_shadow_background_w.xml" value="0.2285" />
         <entry key="checkout/src/main/res/drawable-mdpi/googlepay_button_overlay_w.xml" value="0.2285" />
         <entry key="checkout/src/main/res/drawable-xxhdpi/googlepay_button_content.xml" value="0.112" />
         <entry key="checkout/src/main/res/drawable-xxhdpi/googlepay_button_no_shadow_background.xml" value="0.1825" />
         <entry key="checkout/src/main/res/drawable-xxhdpi/googlepay_button_overlay.xml" value="0.125" />
+        <entry key="checkout/src/main/res/drawable-xxxhdpi/googlepay_button_background_shape_white.xml" value="0.144" />
         <entry key="checkout/src/main/res/drawable/border_unclick_cardinput.xml" value="0.1425" />
         <entry key="checkout/src/main/res/drawable/layout_bg.xml" value="0.2445" />
         <entry key="checkout/src/main/res/drawable/loading_web_animation.xml" value="0.2145" />
         <entry key="checkout/src/main/res/layout-v31/fragment_checkouttaps.xml" value="0.165" />
+        <entry key="checkout/src/main/res/layout-v31/item_googlepay_light.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/activity_check_out.xml" value="0.13243243243243244" />
         <entry key="checkout/src/main/res/layout/alertdialog_view_layout.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/amountview_layout.xml" value="0.17162162162162162" />
@@ -34,9 +38,11 @@
         <entry key="checkout/src/main/res/layout/google_pay_button_assets.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/googlepay_button.xml" value="0.4055727554179567" />
         <entry key="checkout/src/main/res/layout/googlepay_button_w.xml" value="0.14121621621621622" />
+        <entry key="checkout/src/main/res/layout/googlepay_button_white.xml" value="0.13648648648648648" />
         <entry key="checkout/src/main/res/layout/item_benefit_pay.xml" value="0.11182432432432432" />
         <entry key="checkout/src/main/res/layout/item_currency_rows.xml" value="0.5507522583007813" />
         <entry key="checkout/src/main/res/layout/item_googlepay.xml" value="0.7891360308672931" />
+        <entry key="checkout/src/main/res/layout/item_googlepay_light.xml" value="0.165" />
         <entry key="checkout/src/main/res/layout/item_gopay.xml" value="0.11182432432432432" />
         <entry key="checkout/src/main/res/layout/item_knet.xml" value="0.6593234087969806" />
         <entry key="checkout/src/main/res/layout/item_save_cards.xml" value="1.2046404864336995" />
@@ -45,6 +51,8 @@
         <entry key="checkout/src/main/res/layout/itemviewholder_layout.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/payment_inline_viewholder.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/switch_layout.xml" value="0.1" />
+        <entry key="checkout/src/main/res/layout/view_in_googlepay_button.xml" value="0.1" />
+        <entry key="checkout/src/main/res/layout/view_in_googlepay_button_no_shadow.xml" value="0.13648648648648648" />
         <entry key="checkout/src/main/res/layout/web_view_layout.xml" value="0.21552604698672115" />
       </map>
     </option>

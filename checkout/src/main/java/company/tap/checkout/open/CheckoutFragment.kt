@@ -15,7 +15,9 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import androidx.annotation.RequiresApi
+import androidx.cardview.widget.CardView
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -41,6 +43,7 @@ import company.tap.tapuilibrary.uikit.atoms.TapImageView
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
+import company.tap.tapuilibrary.uikit.ktx.setTopBorders
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
 import org.json.JSONObject
 import java.util.*
@@ -79,6 +82,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     var isFullscreen = false
     var heightIn: Int = 0
     private var inLineCardLayout: FrameLayout? = null
+    private var relativeLL: RelativeLayout? = null
+    private var mainCardLayout: CardView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -139,6 +144,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         closeText = view.findViewById(R.id.closeText)
         closeImage = view.findViewById(R.id.closeImage)
         scrollView = view.findViewById(R.id.scrollView)
+        relativeLL = view.findViewById(R.id.relativeLL)
+        mainCardLayout = view.findViewById(R.id.mainCardLayout)
         val heightscreen: Int = Resources.getSystem().getDisplayMetrics().heightPixels;
             if(LocalizationManager.currentLocalized.length()!=0)
             closeText.text = LocalizationManager.getValue("close", "Common")
@@ -207,6 +214,30 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             //  }, 0)
         }
 
+        relativeLL.let { it1 ->
+            if (it1 != null) {
+                setTopBorders(
+                    it1,
+                    35f,// corner raduis
+                    0.0f,
+                    Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),// stroke color
+                    Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),// tint color
+                    Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
+                )
+            }
+        }//
+        mainCardLayout.let { it1 ->
+            if (it1 != null) {
+                setTopBorders(
+                    it1,
+                    35f,// corner raduis
+                    0.0f,
+                    Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),// stroke color
+                    Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),// tint color
+                    Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
+                )
+            }
+        }//
 
         /*bottomSheetDialog.behavior.setBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
