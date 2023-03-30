@@ -731,18 +731,18 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 */
         val originalHeight :Int = sdkLayout.height
 
-        addViews(
-            itemsViewHolder
-        )
-            removeViews(
+        removeViews(
                 //  businessViewHolder,
                 // amountViewHolder,
                 cardViewHolder,
                 paymentInlineViewHolder,
                 )
-
+        addViews(
+            itemsViewHolder
+        )
+        //replaced original height with bottomSheetLayout height
         Handler().postDelayed({
-            translateViewToNewHeight(originalHeight,true)
+            translateViewToNewHeight(bottomSheetLayout.measuredHeight,true)
 
         },400)
 
@@ -1055,6 +1055,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility= View.GONE
 
                 saveCardSwitchHolder?.view?.cardSwitch?.tapLogoImage?.visibility = View.GONE
+
+
                 val bottomSheet: FrameLayout? =
                     bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet)
               //  BottomSheetBehavior.from(bottomSheet as View).state = BottomSheetBehavior.STATE_EXPANDED
@@ -1075,6 +1077,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                    // saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = View.INVISIBLE
                     removeViews(saveCardSwitchHolder)
                 }, 2200)
+
 
             }else   if(PaymentDataSource?.getWebViewType()!=null && PaymentDataSource.getWebViewType() ==WebViewType.THREE_DS_WEBVIEW){
 
@@ -1768,6 +1771,9 @@ else
                 selectedPaymentOption.brand?.name
             )*/
             addViews(asynchronousPaymentViewHolder)
+            Handler().postDelayed({
+                translateViewToNewHeight(bottomSheetLayout.measuredHeight,false)
+            },400)
             asynchronousPaymentViewHolder.setDataFromAPI(chargeResponse)
         }
     }
@@ -1998,15 +2004,14 @@ else
         saveCardSwitchHolder?.view?.mainSwitch?.mainTextSave?.visibility = View.INVISIBLE
 
         //Commented to try the flow of redirect
-      /*  removeViews(
+       /* removeViews(
             //    businessViewHolder,
             //    amountViewHolder,
             cardViewHolder,
             paymentInlineViewHolder,
             tabAnimatedActionButtonViewHolder
-        )*/
-
-
+        )
+*/
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
