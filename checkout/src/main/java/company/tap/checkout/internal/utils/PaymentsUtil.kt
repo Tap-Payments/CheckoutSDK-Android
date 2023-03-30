@@ -58,7 +58,7 @@ object PaymentsUtil {
      */
     @Throws(JSONException::class)
       fun getGatewayTokenizationSpecification(): JSONObject? {
-        //todo :25Jul22 replace value coming from API>>PENDING GATEWAY ID
+
         return object : JSONObject() {
             init {
                 put("type", "PAYMENT_GATEWAY")

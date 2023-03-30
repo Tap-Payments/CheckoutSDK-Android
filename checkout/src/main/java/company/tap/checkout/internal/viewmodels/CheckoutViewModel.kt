@@ -1823,31 +1823,12 @@ else
                     sdkLayout.addView(it?.view)
 
                 }
-                }, 250)
+                }, 1100)
 
 
 
-                //   checkoutFragment?.scrollView?.fullScroll(View.FOCUS_DOWN)
-                // bottomSheetDialog.behavior.setPeekHeight(sdkLayout.height)
-                //  bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
-                //bottomSheetDialog.behavior.saveFlags = BottomSheetBehavior.SAVE_FIT_TO_CONTENTS
-                // checkoutFragment.scrollView?.fullScroll(View.FOCUS_DOWN)
 
-                // AnimationEngine.applyTransition(sdkLayout,SLIDE,1500)
-                   //TODO Animation is stopped
 
-                  //  if(::bottomSheetLayout.isInitialized)
-                      // bottomSheetLayout.startAnimation(AnimationUtils.loadAnimation(context,R.anim.slide_up_bs))
-              //  bottomSheetLayout.animate().translationY(bottomSheetLayout.height.toFloat())
-               /* if(::bottomSheetLayout.isInitialized)
-                    bottomSheetLayout.animate()
-                        .translationY(0f)
-                        .setInterpolator(Slide().interpolator)
-                        .setDuration(1000L)
-                        .start()*/
-                   // bottomSheetLayout.startAnimation(AnimationUtils.loadAnimation(context,R.anim.slide_up))
-                   // bottomSheetLayout.animate()
-                    //    .translationY(bottomSheetLayout.getHeight().toFloat())
             }, 0)
             BottomSheetBehavior.STATE_HALF_EXPANDED
         }
@@ -1865,8 +1846,8 @@ else
                 "pay",
                 "ActionButton"
             )
-            //TODO ASK OSAMA
-            /*TransactionMode.SAVE_CARD -> payString = ocalizationManager.getValue(
+            //TODO stopped since checkout won't have SAVE_CARD -so not available in Localization
+            /*TransactionMode.SAVE_CARD -> payString = LocalizationManager.getValue(
                 "savecard",
                 "ActionButton"
             )*/
@@ -1978,7 +1959,7 @@ else
                 "pay",
                 "ActionButton"
             )
-            //TODO check OSAMA
+            //TODO stopped since checkout won't have SAVE_CARD -so not available in Localization
            /* TransactionMode.SAVE_CARD -> payString = LocalizationManager.getValue(
                 "savecard",
                 "ActionButton"
