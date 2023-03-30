@@ -717,9 +717,9 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
        payButton.setButtonDataSource(
            true,
            this.let { LocalizationManager.getLocale(it).language },
-           LocalizationManager.getValue("pay", "ActionButton"),
-           Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-           Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
+           this.resources.getString(R.string.payText),
+           Color.parseColor("#2ace00"),
+           Color.parseColor("#ffffff")
        )
        payButton?.setOnClickListener {
            sdkSession.setButtonView(payButton, this, supportFragmentManager, this)

@@ -90,6 +90,7 @@ import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
 import company.tap.tapuilibrary.uikit.ktx.makeLinks
+import company.tap.tapuilibrary.uikit.ktx.setTopBorders
 import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.businessview_layout.view.*
@@ -181,6 +182,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @SuppressLint("StaticFieldLeak")
     private lateinit var inLineCardLayout: FrameLayout
+    private lateinit var headerLayout: LinearLayout
 
     @SuppressLint("StaticFieldLeak")
     private lateinit var sdkLayout: LinearLayout
@@ -266,6 +268,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         this.intent = intent
         this.cardViewModel = cardViewModel
         this.checkoutFragment = checkoutFragment
+        this.headerLayout = headerLayout
 
         val aScene: Scene? = Scene.getCurrentScene(sdkLayout)
         aScene?.setEnterAction {
@@ -279,12 +282,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         initOtpActionButton()
         setAllSeparatorTheme()
         //sdkLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("tapBottomSheet.dimmedColor")))
-        sdkLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
-        bottomSheetLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
-        frameLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
+      //  sdkLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
+       // bottomSheetLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
+       // frameLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
 
-        sdkLayout.outlineProvider = ViewOutlineProvider.BACKGROUND
-        sdkLayout.clipToOutline = true
+      //  sdkLayout.outlineProvider = ViewOutlineProvider.BACKGROUND
+       // sdkLayout.clipToOutline = true
 
 
         //  initLoyaltyView()
@@ -426,7 +429,27 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         goPaySavedCardHolder = GoPaySavedCardHolder(context, this, this)
         saveCardSwitchHolder = SwitchViewHolder(context, this)
         loyaltyViewHolder = LoyaltyViewHolder(context, this, this)
-
+        sdkLayout.setBackgroundColor( Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
+        sdkLayout.let { it1 ->
+            setTopBorders(
+                it1,
+                35f,// corner raduis
+                0.0f,
+                Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),// stroke color
+                Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),// tint color
+                Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
+            )
+        }//
+         headerLayout.let { it1 ->
+            setTopBorders(
+                it1,
+                35f,// corner raduis
+                0.0f,
+                Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),// stroke color
+                Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),// tint color
+                Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
+            )
+        }//
         paymentInlineViewHolder = PaymentInlineViewHolder(
             context, this,
             this,
@@ -562,7 +585,21 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     fun setBottomSheetLayout(bottomSheetLayout: FrameLayout) {
         this.bottomSheetLayout = bottomSheetLayout
-        bottomSheetLayout.setBackgroundColor(Color.RED)
+        bottomSheetLayout.clipToOutline = true
+        bottomSheetLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
+        // bottomSheetLayout.setBackgroundColor(Color.RED)
+        bottomSheetLayout.let { it1 ->
+            setTopBorders(
+                it1,
+                40f,// corner raduis
+                0.0f,
+                Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),// stroke color
+                Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),// tint color
+                Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
+            )
+
+
+        }
     }
 
     override fun displayGoPayLogin() {
@@ -1639,9 +1676,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 } else {
                     println("is this called>>>")
                     removeAllViews()
-                    if(ThemeManager.currentTheme!=null)
+                    if(ThemeManager.currentTheme!=null&& chargeResponse!=null)
                     tabAnimatedActionButton?.setInValidBackground(false, Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")))
-
+else
                     tabAnimatedActionButton?.changeButtonState(
                         ActionButtonState.ERROR
                     )
@@ -1683,6 +1720,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         Handler().postDelayed({
             tabAnimatedActionButton?.onMorphAnimationReverted()
             tabAnimatedActionButton?.clearAnimation()
+            if(chargeResponse!=null)
             tabAnimatedActionButton?.setButtonDataSource(
                 true,
                 "en",

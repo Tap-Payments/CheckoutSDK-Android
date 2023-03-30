@@ -11,7 +11,7 @@
 
 
     app:cardCornerRadius="1.5dp"
-    app:cardBackgroundColor="#10ffffff"
+    app:cardBackgroundColor="@color/blue"
 
 
 
@@ -24,12 +24,12 @@
         android:clipToOutline="true"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         android:id="@+id/scrollView"
+        android:background="@color/blue"
        >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:orientation="vertical"
         android:windowSoftInputMode="adjustResize|adjustPan"
         tools:context=".open.CheckoutFragment">
@@ -39,7 +39,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clipToOutline="true"
-
+    android:background="@color/red_error"
     android:gravity="center">
   <!--  android:background="@drawable/layout_bg"-->
 

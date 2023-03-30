@@ -19,7 +19,7 @@
             android:windowSoftInputMode="adjustResize"
             android:supportsRtl="true"
             android:anyDensity = "false"
-            android:theme="@style/Theme.AppCompat.Translucent">
+          >
             <intent-filter>
                 <action android:name="android.nfc.action.TECH_DISCOVERED" />
                 <action android:name="android.nfc.action.TAG_DISCOVERED" />

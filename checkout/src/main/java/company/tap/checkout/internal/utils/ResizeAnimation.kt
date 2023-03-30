@@ -22,9 +22,7 @@ class ResizeAnimation(view: View?, targetHeight: Int, startHeight: Int, expandHe
 
 
     override fun applyTransformation(interpolatedTime: Float, t: Transformation?) {
-        println("targetHeight>>"+targetHeight)
-        println("startHeight>>"+startHeight)
-        println("expandHeight>>"+expandHeight)
+
         newtargetHeight = startHeight
         newstartHeight = targetHeight
         if(expandHeight){
@@ -34,9 +32,6 @@ class ResizeAnimation(view: View?, targetHeight: Int, startHeight: Int, expandHe
 
             view?.requestLayout()
         }else {
-            println("newtargetHeight>>"+newtargetHeight)
-            println("newstartHeight>>"+newstartHeight)
-          //  val newHeight2 = (startHeight + targetHeight * interpolatedTime).toInt()
             val newHeight2 = (newtargetHeight + (newstartHeight - newtargetHeight) * interpolatedTime)
            // val newHeight2 = (newtargetHeight - newstartHeight * interpolatedTime).toInt()
             view?.layoutParams?.height = newHeight2.toInt()
