@@ -42,6 +42,7 @@
         <entry key="checkout/src/main/res/layout/item_benefit_pay.xml" value="0.11182432432432432" />
         <entry key="checkout/src/main/res/layout/item_currency_rows.xml" value="0.5507522583007813" />
         <entry key="checkout/src/main/res/layout/item_googlepay.xml" value="0.7891360308672931" />
+        <entry key="checkout/src/main/res/layout/item_googlepay_dark.xml" value="0.17398648648648649" />
         <entry key="checkout/src/main/res/layout/item_googlepay_light.xml" value="0.165" />
         <entry key="checkout/src/main/res/layout/item_gopay.xml" value="0.11182432432432432" />
         <entry key="checkout/src/main/res/layout/item_knet.xml" value="0.6593234087969806" />

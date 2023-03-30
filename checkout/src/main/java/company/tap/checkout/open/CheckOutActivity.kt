@@ -31,7 +31,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
 import kotlinx.android.synthetic.main.googlepay_button.*
-import kotlinx.android.synthetic.main.item_googlepay_dark.*
 import org.json.JSONObject
 
 class CheckOutActivity : AppCompatActivity()  , APILoggInterface {

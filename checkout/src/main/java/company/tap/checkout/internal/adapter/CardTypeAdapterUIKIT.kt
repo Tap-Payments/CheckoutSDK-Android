@@ -35,7 +35,7 @@ import company.tap.tapuilibrary.themekit.theme.TextViewTheme
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import kotlinx.android.synthetic.main.googlepay_button.view.*
 import kotlinx.android.synthetic.main.item_benefit_pay.view.*
-import kotlinx.android.synthetic.main.item_googlepay_dark.view.*
+import kotlinx.android.synthetic.main.item_googlepay.view.*
 import kotlinx.android.synthetic.main.item_knet.view.*
 import kotlinx.android.synthetic.main.item_save_cards.view.*
 import mobi.foo.benefitinapp.data.Transaction
@@ -124,7 +124,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
             }
             TYPE_GOOGLE_PAY -> {
                 view =
-                    LayoutInflater.from(parent.context).inflate(R.layout.item_googlepay_dark, parent, false)
+                    LayoutInflater.from(parent.context).inflate(R.layout.item_googlepay, parent, false)
                 if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")){
                   val  darkView :View = LayoutInflater.from(parent.context).inflate(R.layout.googlepay_button, parent, false)
                     view.tapCardChip6Linear.addView(darkView)
@@ -227,7 +227,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
     @SuppressLint("ResourceAsColor")
     @RequiresApi(Build.VERSION_CODES.P)
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, @SuppressLint("RecyclerView") position: Int) {
         when {
             /**
              * Saved Cards Type
