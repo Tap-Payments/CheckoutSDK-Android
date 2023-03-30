@@ -1050,6 +1050,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     goPaySavedCardHolder,
                     goPayViewsHolder
                 )
+
                 saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility= View.GONE
@@ -1057,9 +1058,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 saveCardSwitchHolder?.view?.cardSwitch?.tapLogoImage?.visibility = View.GONE
 
 
-                val bottomSheet: FrameLayout? =
-                    bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet)
-              //  BottomSheetBehavior.from(bottomSheet as View).state = BottomSheetBehavior.STATE_EXPANDED
                 Handler(Looper.getMainLooper()).postDelayed({
                     fragmentManager.beginTransaction()
                         .replace(
@@ -1071,12 +1069,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     //  checkoutFragment.closeText.visibility = View.VISIBLE
                     webFrameLayout.visibility = View.VISIBLE
 
-
-                }, 100)
+                }, 500)
                 Handler(Looper.getMainLooper()).postDelayed({
+
                    // saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = View.INVISIBLE
                     removeViews(saveCardSwitchHolder)
-                }, 2200)
+                }, 700)
 
 
             }else   if(PaymentDataSource?.getWebViewType()!=null && PaymentDataSource.getWebViewType() ==WebViewType.THREE_DS_WEBVIEW){
@@ -1554,7 +1552,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         SessionManager.setActiveSession(false)
         println("response val>>"+response)
         println("tabAnimatedActionButton val>>"+tabAnimatedActionButton)
-        //println("save val>>"+saveCardSwitchHolder)
+        println("save val>>"+saveCardSwitchHolder)
         /* if(chargeResponse?.status == null && response == "tokenized"){
              //todo replaced authorized with chargeresponse
              SDKSession.getListener()?.getStatusSDK(response,chargeResponse)
@@ -1603,11 +1601,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
         if (saveCardSwitchHolder != null) {
            // removeViews(businessViewHolder, amountViewHolder, saveCardSwitchHolder)
-           // addViews(businessViewHolder, saveCardSwitchHolder)
+            addViews(businessViewHolder, saveCardSwitchHolder)
             businessViewHolder.view.headerView.constraint.visibility = View.GONE
             businessViewHolder.view.topSeparatorLinear.visibility = View.GONE
             saveCardSwitchHolder?.view?.visibility = View.VISIBLE
             saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
+
         }
 
         if(::checkoutFragment.isInitialized)
@@ -2004,14 +2003,15 @@ else
         saveCardSwitchHolder?.view?.mainSwitch?.mainTextSave?.visibility = View.INVISIBLE
 
         //Commented to try the flow of redirect
-       /* removeViews(
+       removeViews(
             //    businessViewHolder,
-            //    amountViewHolder,
+             amountViewHolder,
             cardViewHolder,
             paymentInlineViewHolder,
             tabAnimatedActionButtonViewHolder
         )
-*/
+        businessViewHolder.view.headerView.constraint.visibility= View.GONE
+
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -2213,6 +2213,9 @@ else
         val bottomSheet: FrameLayout? =
             bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet)
         BottomSheetBehavior.from(bottomSheet as View).state = BottomSheetBehavior.STATE_EXPANDED
+        Handler().postDelayed({
+            translateViewToNewHeight(bottomSheetLayout.measuredHeight,false)
+        },400)
         checkSelectedAmountInitiated()
     }
 
@@ -2252,6 +2255,9 @@ else
         val bottomSheet: FrameLayout? =
             bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet)
         BottomSheetBehavior.from(bottomSheet as View).state = BottomSheetBehavior.STATE_EXPANDED
+        Handler().postDelayed({
+            translateViewToNewHeight(bottomSheetLayout.measuredHeight,false)
+        },400)
         checkSelectedAmountInitiated()
     }
 
