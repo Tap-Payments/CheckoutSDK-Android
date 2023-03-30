@@ -795,7 +795,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             sdkLayoutHeight ,
             originalHeight , expandHeightBool
         )
-        resizeAnimation.duration = 500
+        resizeAnimation.duration = 350
         bottomSheetLayout.startAnimation(resizeAnimation)
 
 
@@ -1793,7 +1793,7 @@ else
                     sdkLayout.removeView(it?.view)
 
                 }
-                }, 200)
+                }, 150)
 
 
             }, 0)
@@ -1823,7 +1823,7 @@ else
                     sdkLayout.addView(it?.view)
 
                 }
-                }, 1100)
+                }, 200)
 
 
 
