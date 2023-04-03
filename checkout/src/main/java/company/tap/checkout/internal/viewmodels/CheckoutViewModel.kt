@@ -1097,7 +1097,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     //  businessViewHolder,
                     //   amountViewHolder,
                     cardViewHolder,
-                    saveCardSwitchHolder,
+                  //  saveCardSwitchHolder,
                     paymentInlineViewHolder,
                     otpViewHolder,
                     goPaySavedCardHolder,
@@ -1107,8 +1107,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 //Added to hide the Items-Amount button when 3ds is opened within
                 amountViewHolder?.view?.amount_section?.itemAmountLayout?.visibility = View.GONE
                 addViews(webViewHolder)
+                saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
+                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
+                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility= View.GONE
+
+                saveCardSwitchHolder?.view?.cardSwitch?.tapLogoImage?.visibility = View.GONE
                  Handler(Looper.getMainLooper()).postDelayed({
-                     webFrameLayout.visibility = View.VISIBLE
+                   //  webFrameLayout.visibility = View.VISIBLE
+
            }, 1800)
 
                 checkoutFragment?.closeText?.visibility= View.GONE
