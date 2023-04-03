@@ -45,6 +45,7 @@ import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.uikit.ktx.setTopBorders
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
+import company.tap.tapuilibrary.uikit.views.TapBrandView
 import org.json.JSONObject
 import java.util.*
 
@@ -84,6 +85,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     private var inLineCardLayout: FrameLayout? = null
     private var relativeLL: RelativeLayout? = null
     private var mainCardLayout: CardView? = null
+    private var  topHeaderView: TapBrandView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -146,6 +148,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         scrollView = view.findViewById(R.id.scrollView)
         relativeLL = view.findViewById(R.id.relativeLL)
         mainCardLayout = view.findViewById(R.id.mainCardLayout)
+        topHeaderView = view.findViewById(R.id.topHeaderView)
         val heightscreen: Int = Resources.getSystem().getDisplayMetrics().heightPixels;
             if(LocalizationManager.currentLocalized.length()!=0)
             closeText.text = LocalizationManager.getValue("close", "Common")
@@ -238,6 +241,32 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                 )
             }
         }//
+        val borderColor:String = ThemeManager.getValue<String>("poweredByTap.backgroundColor").toString()
+        var borderOpacityVal: String? = null
+        //Workaround since we don't have direct method for extraction
+        borderOpacityVal = borderColor.substring(borderColor.length - 2)
+        topHeaderView?.outerConstraint?.let {
+            setTopBorders(
+                it,
+                40f,// corner raduis
+                0.0f,
+                Color.parseColor("#"+borderOpacityVal+borderColor.substring(0, borderColor.length -2).replace("#","")),
+                Color.parseColor("#"+borderOpacityVal+borderColor.substring(0, borderColor.length -2).replace("#","")),// tint color
+                Color.parseColor("#"+borderOpacityVal+borderColor.substring(0, borderColor.length -2).replace("#",""))
+            )
+        }//
+        scrollView?.let {
+            setTopBorders(
+                it,
+                40f,// corner raduis
+                0.0f,
+                Color.parseColor("#"+borderOpacityVal+borderColor.substring(0, borderColor.length -2).replace("#","")),
+                Color.parseColor("#"+borderOpacityVal+borderColor.substring(0, borderColor.length -2).replace("#","")),// tint color
+                Color.parseColor("#"+borderOpacityVal+borderColor.substring(0, borderColor.length -2).replace("#",""))
+            )
+        }//
+
+        topHeaderView?.poweredByText?.text = "Powered by"
 
         /*bottomSheetDialog.behavior.setBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
