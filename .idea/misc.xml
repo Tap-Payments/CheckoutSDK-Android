@@ -34,6 +34,7 @@
         <entry key="checkout/src/main/res/layout/businessview_layout.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/cardviewholder_layout1.xml" value="0.16047297297297297" />
         <entry key="checkout/src/main/res/layout/fragment_checkouttaps.xml" value="0.25" />
+        <entry key="checkout/src/main/res/layout/fragment_checkouttaps_full.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/fragment_web.xml" value="0.24857685009487665" />
         <entry key="checkout/src/main/res/layout/google_pay_button_assets.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/googlepay_button.xml" value="0.4055727554179567" />

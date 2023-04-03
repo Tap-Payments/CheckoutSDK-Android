@@ -45,7 +45,7 @@ class WebViewHolder(
     private val fragmentManager: FragmentManager,
     val redirectURL: String, val webViewContract: WebViewContract,
     val cardViewModel: CardViewModel,
-    val authenticate: Charge?
+    val authenticate: Charge? , val checkoutViewModel: CheckoutViewModel
 ) :TapBaseViewHolder , CustomWebViewClientContract {
     override val view: View = LayoutInflater.from(context).inflate(R.layout.web_view_layout, null)
 
@@ -155,7 +155,7 @@ class WebViewHolder(
             }
         }
         web_view.settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
-        web_view.webViewClient = cardViewModel?.let { TapCustomWebViewClient(this, it) }!!
+        web_view.webViewClient = cardViewModel?.let { TapCustomWebViewClient(this, it,checkoutViewModel) }!!
         web_view.settings.loadWithOverviewMode = true
        // web_view.scrollBarStyle = View.
         web_view.isVerticalScrollBarEnabled = true

@@ -22,7 +22,7 @@ import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 Copyright (c) 2020    Tap Payments.
 All rights reserved.
  **/
-class TapCustomWebViewClient constructor(private val customWebViewClientContract: CustomWebViewClientContract,private val cardViewModel:CardViewModel) : WebViewClient() {
+class TapCustomWebViewClient constructor(private val customWebViewClientContract: CustomWebViewClientContract,private val cardViewModel:CardViewModel ,private val checkoutViewModel: CheckoutViewModel) : WebViewClient() {
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
@@ -114,15 +114,15 @@ class TapCustomWebViewClient constructor(private val customWebViewClientContract
             println("urlQuerySanitizer on checkpayment" + urlQuerySanitizer)
             when {
                 url.contains("auth_ts") -> {
-                    cardViewModel.processEvent(CardViewEvent.RetreiveAuthorizeEvent, CheckoutViewModel(), null, null, null, null)
+                    cardViewModel.processEvent(CardViewEvent.RetreiveAuthorizeEvent, checkoutViewModel, null, null, null, null)
 
                 }
                 url.contains("auth") -> {
-                    cardViewModel.processEvent(CardViewEvent.RetreiveSaveCardEvent, CheckoutViewModel(), null, null, null, null)
+                    cardViewModel.processEvent(CardViewEvent.RetreiveSaveCardEvent,checkoutViewModel, null, null, null, null)
 
                 }
                 else -> {
-                    cardViewModel.processEvent(CardViewEvent.RetreiveChargeEvent, CheckoutViewModel(), null, null, null, null)}
+                    cardViewModel.processEvent(CardViewEvent.RetreiveChargeEvent,checkoutViewModel, null, null, null, null)}
             }
             val status: String = urlQuerySanitizer.getQueryParameter("tap_id").toString()
             println("status on checkpayment" + status)

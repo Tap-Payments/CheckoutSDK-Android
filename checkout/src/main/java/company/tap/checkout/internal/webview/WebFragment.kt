@@ -7,6 +7,7 @@ All rights reserved.
  **/
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
@@ -21,12 +22,14 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.widget.ProgressBar
 import androidx.annotation.DrawableRes
-import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.DialogFragment
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
+import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession.contextSDK
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.tapuilibrary.themekit.ThemeManager
@@ -39,8 +42,9 @@ import kotlinx.android.synthetic.main.web_view_layout.*
 
 class WebFragment(
     private val webViewContract: WebViewContract?,
-    private val cardViewModel: CardViewModel?
-) : Fragment(),
+    private val cardViewModel: CardViewModel?,
+    private val checkoutViewModel: CheckoutViewModel
+) : DialogFragment(),
     CustomWebViewClientContract {
 
     private var webViewUrl: String? = null
@@ -51,6 +55,7 @@ class WebFragment(
     val loaderGif: Int =
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) R.drawable.reduced_loader_white else R.drawable.reduced_loader_black
 
+    override fun getTheme(): Int = R.style.DialogTheme
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -123,9 +128,11 @@ class WebFragment(
         web_view.settings.javaScriptEnabled = true
         web_view.webChromeClient = WebChromeClient()
         web_view.settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
-        web_view.webViewClient = cardViewModel?.let { TapCustomWebViewClient(this, it) }!!
+        web_view.webViewClient = cardViewModel?.let { TapCustomWebViewClient(this, it,checkoutViewModel) }!!
       //  web_view.webViewClient = cardViewModel?.let { TapCustomWebViewClient2(this, it) }!!
         web_view.settings.loadWithOverviewMode = true
+        web_view.settings.layoutAlgorithm = WebSettings.LayoutAlgorithm.NORMAL
+        web_view.settings.useWideViewPort = true
         webViewUrl?.let { web_view.loadUrl(it) }
 
         web_view.setOnKeyListener { _, keyCode, event ->
@@ -208,9 +215,10 @@ class WebFragment(
             url: String,
             webViewContract: WebViewContract,
             cardViewModel: CardViewModel,
-            chargeResponse: Charge?
+            chargeResponse: Charge?,
+            checkoutViewModel: CheckoutViewModel
         ): WebFragment {
-            val fragment = WebFragment(webViewContract, cardViewModel)
+            val fragment = WebFragment(webViewContract, cardViewModel,checkoutViewModel)
             val args = Bundle()
             args.putString(KEY_URL, url)
             args.putSerializable(CHARGE, chargeResponse)
@@ -219,5 +227,7 @@ class WebFragment(
             return fragment
         }
     }
+
+
 
 }
