@@ -16,13 +16,11 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.view.animation.TranslateAnimation
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
-import androidx.core.view.marginTop
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -382,14 +380,16 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             viewModel.incrementalCount = 0
 
         }
-    Handler().postDelayed({
-        checkoutLayout.addView(topHeaderView,0)
-        topHeaderView?.poweredByText?.text = "Powered by"
-        val animMoveToTop: Animation = AnimationUtils.loadAnimation(context, R.anim.slide_up_bs)
-        topHeaderView?.startAnimation(animMoveToTop)
-        topHeaderView?.visibility = View.VISIBLE
 
-    },1000)
+   Handler().postDelayed({
+        checkoutLayout.addView(topHeaderView,0)
+        topHeaderView?.visibility = View.VISIBLE
+        topHeaderView?.poweredByText?.text = "Powered by"
+        val animMoveToTop: Animation = AnimationUtils.loadAnimation(context, R.anim.slide_up_view)
+        topHeaderView?.startAnimation(animMoveToTop)
+
+
+    },500)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
