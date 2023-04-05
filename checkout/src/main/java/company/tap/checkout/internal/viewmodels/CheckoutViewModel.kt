@@ -435,17 +435,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         goPaySavedCardHolder = GoPaySavedCardHolder(context, this, this)
         saveCardSwitchHolder = SwitchViewHolder(context, this)
         loyaltyViewHolder = LoyaltyViewHolder(context, this, this)
-        sdkLayout.setBackgroundColor( Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
-        sdkLayout.let { it1 ->
-            setTopBorders(
-                it1,
-                35f,// corner raduis
-                0.0f,
-                Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),// stroke color
-                Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),// tint color
-                Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
-            )
-        }//
+
          headerLayout.let { it1 ->
             setTopBorders(
                 it1,
@@ -2718,6 +2708,41 @@ else
     }
 
     private fun setAllSeparatorTheme() {
+
+        val borderColor: String = ThemeManager.getValue("poweredByTap.backgroundColor")
+        var borderOpacityVal: String? = null
+        borderOpacityVal = borderColor.substring(borderColor.length - 2)
+        sdkLayout.setBackgroundColor(Color.parseColor(
+            "#" + borderOpacityVal + borderColor.substring(
+                0,
+                borderColor.length - 2
+            ).replace("#", "")
+        ))
+        sdkLayout.let { it1 ->
+            setTopBorders(
+                it1,
+                35f,// corner raduis
+                0.0f,
+                Color.parseColor(
+                    "#" + borderOpacityVal + borderColor.substring(
+                        0,
+                        borderColor.length - 2
+                    ).replace("#", "")
+                ),// stroke color
+                Color.parseColor(
+                    "#" + borderOpacityVal + borderColor.substring(
+                        0,
+                        borderColor.length - 2
+                    ).replace("#", "")
+                ),// tint color
+                Color.parseColor(
+                    "#" + borderOpacityVal + borderColor.substring(
+                        0,
+                        borderColor.length - 2
+                    ).replace("#", "")
+                )
+            )
+        }//
         val separatorViewTheme = SeparatorViewTheme()
         separatorViewTheme.strokeColor =
             Color.parseColor(ThemeManager.getValue("tapSeparationLine.backgroundColor"))

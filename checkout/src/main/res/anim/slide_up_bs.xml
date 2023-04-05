@@ -4,6 +4,6 @@
         android:duration="1000"
         android:fromYDelta="0%"
         android:interpolator="@android:anim/linear_interpolator"
-        android:toYDelta="100" />
+        android:toYDelta="-100" />
 
 </set>

@@ -6,6 +6,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -13,11 +14,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.view.animation.TranslateAnimation
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
+import androidx.core.view.marginTop
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -47,7 +52,6 @@ import company.tap.tapuilibrary.uikit.ktx.setTopBorders
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
 import company.tap.tapuilibrary.uikit.views.TapBrandView
 import org.json.JSONObject
-import java.util.*
 
 
 /**
@@ -86,6 +90,23 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     private var relativeLL: RelativeLayout? = null
     private var mainCardLayout: CardView? = null
     private var  topHeaderView: TapBrandView? = null
+
+    private val mBackgroundBlurRadius = 80
+    private val mBlurBehindRadius = 60
+
+    // We set a different dim amount depending on whether window blur is enabled or disabled
+    private val mDimAmountWithBlur = 0.1f
+    private val mDimAmountNoBlur = 0.4f
+
+    // We set a different alpha depending on whether window blur is enabled or disabled
+    private val mWindowBackgroundAlphaWithBlur = 170
+    private val mWindowBackgroundAlphaNoBlur = 255
+
+    // Use a rectangular shape drawable for the window background. The outline of this drawable
+    // dictates the shape and rounded corners for the window background blur area.
+    private var mWindowBackgroundDrawable: Drawable? = null
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -139,7 +160,12 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         val checkoutLayout: LinearLayout? = view.findViewById(R.id.fragment_all)
         val frameLayout: FrameLayout? = view.findViewById(R.id.fragment_container_nfc_lib)
         val webFrameLayout: FrameLayout? = view.findViewById(R.id.webFrameLayout)
-        webFrameLayout?.setLayoutParams(LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,Resources.getSystem().displayMetrics.heightPixels))
+        webFrameLayout?.setLayoutParams(
+            LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                Resources.getSystem().displayMetrics.heightPixels
+            )
+        )
         inLineCardLayout = view.findViewById(R.id.inline_container)
         val headerLayout: LinearLayout? = view.findViewById(R.id.headerLayout)
         bottomSheetLayout = bottomSheetDialog.findViewById(R.id.design_bottom_sheet)
@@ -148,9 +174,26 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         scrollView = view.findViewById(R.id.scrollView)
         relativeLL = view.findViewById(R.id.relativeLL)
         mainCardLayout = view.findViewById(R.id.mainCardLayout)
-        topHeaderView = view.findViewById(R.id.topHeaderView)
+       // topHeaderView = view.findViewById(R.id.topHeaderView)
+        mWindowBackgroundDrawable = context?.getDrawable(R.drawable.window_background)
+        activity?.getWindow()?.setBackgroundDrawable(mWindowBackgroundDrawable);
+         topHeaderView = context?.let { TapBrandView(it) }
+        if (buildIsAtLeastS()) {
+            // Enable blur behind. This can also be done in xml with R.attr#windowBlurBehindEnabled
+            activity?.getWindow()?.addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
+
+            // Register a listener to adjust window UI whenever window blurs are enabled/disabled
+            setupWindowBlurListener();
+        } else {
+            // Window blurs are not available prior to Android S
+            updateWindowForBlurs(false /* blursEnabled */);
+        }
+
+        // Enable dim. This can also be done in xml, see R.attr#backgroundDimEnabled
+        activity?.getWindow()?.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+
         val heightscreen: Int = Resources.getSystem().getDisplayMetrics().heightPixels;
-            if(LocalizationManager.currentLocalized.length()!=0)
+        if (LocalizationManager.currentLocalized.length() != 0)
             closeText.text = LocalizationManager.getValue("close", "Common")
 
         if (SDKSession.showCloseImage == true) {
@@ -216,6 +259,45 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             bottomSheetDialog.behavior.setState(BottomSheetBehavior.STATE_EXPANDED)
             //  }, 0)
         }
+        val borderColor: String = ThemeManager.getValue<String>("poweredByTap.backgroundColor").toString()
+        var borderOpacityVal: String? = null
+        //Workaround since we don't have direct method for extraction
+        borderOpacityVal = borderColor.substring(borderColor.length - 2)
+        var newColorVal: String? = "#" + borderOpacityVal + borderColor.substring(0, borderColor.length - 2).replace("#", "")
+        println("color iii>>"+newColorVal)
+        topHeaderView?.outerConstraint?.let {
+            setTopBorders(
+                it,
+                40f,// corner raduis
+                0.0f,
+                Color.parseColor(
+                    newColorVal
+                ),
+                Color.parseColor(
+                    newColorVal)
+                ,// tint color
+                Color.parseColor(
+                    newColorVal
+            ))
+        }//
+        // topHeaderView?.setBackgroundResource(R.drawable.blurviewnew)
+        scrollView?.let {
+            setTopBorders(
+                it,
+                40f,// corner raduis
+                0.0f,
+                Color.parseColor(
+                    newColorVal
+                ),
+                Color.parseColor(
+                    newColorVal
+                ),// tint color
+                Color.parseColor(
+                    newColorVal
+                )
+            )
+        }//
+
 
         relativeLL.let { it1 ->
             if (it1 != null) {
@@ -223,9 +305,11 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                     it1,
                     35f,// corner raduis
                     0.0f,
-                    Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),// stroke color
-                    Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),// tint color
-                    Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
+                    Color.parseColor(
+                        newColorVal
+                    ),// stroke color
+                    Color.parseColor(newColorVal),// tint color
+                    Color.parseColor(newColorVal)
                 )
             }
         }//
@@ -235,38 +319,13 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                     it1,
                     35f,// corner raduis
                     0.0f,
-                    Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),// stroke color
-                    Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),// tint color
-                    Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
+                    Color.parseColor(newColorVal),// stroke color
+                    Color.parseColor(newColorVal),// tint color
+                    Color.parseColor(newColorVal)
                 )
             }
         }//
-        val borderColor:String = ThemeManager.getValue<String>("poweredByTap.backgroundColor").toString()
-        var borderOpacityVal: String? = null
-        //Workaround since we don't have direct method for extraction
-        borderOpacityVal = borderColor.substring(borderColor.length - 2)
-        topHeaderView?.outerConstraint?.let {
-            setTopBorders(
-                it,
-                40f,// corner raduis
-                0.0f,
-                Color.parseColor("#"+borderOpacityVal+borderColor.substring(0, borderColor.length -2).replace("#","")),
-                Color.parseColor("#"+borderOpacityVal+borderColor.substring(0, borderColor.length -2).replace("#","")),// tint color
-                Color.parseColor("#"+borderOpacityVal+borderColor.substring(0, borderColor.length -2).replace("#",""))
-            )
-        }//
-        scrollView?.let {
-            setTopBorders(
-                it,
-                40f,// corner raduis
-                0.0f,
-                Color.parseColor("#"+borderOpacityVal+borderColor.substring(0, borderColor.length -2).replace("#","")),
-                Color.parseColor("#"+borderOpacityVal+borderColor.substring(0, borderColor.length -2).replace("#","")),// tint color
-                Color.parseColor("#"+borderOpacityVal+borderColor.substring(0, borderColor.length -2).replace("#",""))
-            )
-        }//
 
-        topHeaderView?.poweredByText?.text = "Powered by"
 
         /*bottomSheetDialog.behavior.setBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
@@ -323,6 +382,14 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             viewModel.incrementalCount = 0
 
         }
+    Handler().postDelayed({
+        checkoutLayout.addView(topHeaderView,0)
+        topHeaderView?.poweredByText?.text = "Powered by"
+        val animMoveToTop: Animation = AnimationUtils.loadAnimation(context, R.anim.slide_up_bs)
+        topHeaderView?.startAnimation(animMoveToTop)
+        topHeaderView?.visibility = View.VISIBLE
+
+    },1000)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -516,6 +583,44 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.S)
+    private fun setupWindowBlurListener() {
+        val windowBlurEnabledListener: (Boolean) -> Unit = this::updateWindowForBlurs
+            activity?.getWindow()?.getDecorView()?.addOnAttachStateChangeListener(
+            object : View.OnAttachStateChangeListener {
+                override fun onViewAttachedToWindow(v: View) {
+                    activity?.getWindowManager()?.addCrossWindowBlurEnabledListener(
+                        windowBlurEnabledListener
+                    )
+                }
+
+                override fun onViewDetachedFromWindow(v: View) {
+                    activity?.getWindowManager()?.removeCrossWindowBlurEnabledListener(
+                        windowBlurEnabledListener
+                    )
+                }
+            })
+    }
+    private fun updateWindowForBlurs(blursEnabled: Boolean) {
+        mWindowBackgroundDrawable?.alpha =
+            if (blursEnabled && mBackgroundBlurRadius > 0) mWindowBackgroundAlphaWithBlur else mWindowBackgroundAlphaNoBlur
+        activity?.getWindow()
+            ?.setDimAmount(if (blursEnabled && mBlurBehindRadius > 0) mDimAmountWithBlur else mDimAmountNoBlur)
+        if (buildIsAtLeastS()) {
+            // Set the window background blur and blur behind radii
+            activity?.getWindow()
+                ?.setBackgroundBlurRadius(mBackgroundBlurRadius)
+            activity?.getWindow()
+                ?.getAttributes()
+                ?.setBlurBehindRadius(mBlurBehindRadius)
+            activity?.getWindow()
+            ?.setAttributes(activity?.getWindow()
+                ?.getAttributes())
+        }
+    }
+    private fun buildIsAtLeastS(): Boolean {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+    }
 
 }
 

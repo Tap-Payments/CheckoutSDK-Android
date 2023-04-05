@@ -102,6 +102,6 @@ dependencies {
 //This is BungFender for logs
     implementation 'com.bugfender.sdk:android:3.+'
 
-
+    implementation 'com.github.Dimezis:BlurView:version-2.0.3'
 
 }

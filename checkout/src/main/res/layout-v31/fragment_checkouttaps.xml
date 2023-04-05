@@ -16,18 +16,16 @@
 
 
     tools:context=".open.CheckoutFragment">
-    <company.tap.tapuilibrary.uikit.views.TapBrandView
-        android:id="@+id/topHeaderView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" />
+
+
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:behavior_hideable="false"
         app:behavior_peekHeight="0dp"
+
         android:clipToOutline="true"
-        android:layout_marginTop="50dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         android:id="@+id/scrollView"
        >
@@ -35,7 +33,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
+        android:clipToOutline="true"
         android:orientation="vertical"
         android:windowSoftInputMode="adjustResize|adjustPan"
         tools:context=".open.CheckoutFragment">
@@ -54,7 +52,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/headerLayout"
-
+        android:clipToOutline="true"
         tools:context=".open.CheckoutFragment">
 
         <LinearLayout

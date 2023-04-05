@@ -34,7 +34,7 @@ class TapCheckOutSDK {
     fun init(context: Context, secretKeyTest: String?,secretKeyLive: String? ,packageId: String?,locale:Locale?) {
 
         if(packageId?.isEmpty() == true) {
-            ErrorReport("Application must have packageId in order to use goSellSDK.")
+            ErrorReport("Application must have packageId in order to use CheckoutSDK.")
         }else {
 
             when (PaymentDataSource.getSDKMode()) {

@@ -13,4 +13,5 @@
     <color name="black_27">#45000000</color>
     <color name="white">#ffffff</color>
     <color name="whitebg">#ffffff</color>
+    <color name="colorOverlay">#78ffffff</color>
 </resources>

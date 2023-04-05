@@ -18,6 +18,8 @@
             android:exported="true"
             android:windowSoftInputMode="adjustResize"
             android:supportsRtl="true"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"
             android:anyDensity = "false"
           >
             <intent-filter>
