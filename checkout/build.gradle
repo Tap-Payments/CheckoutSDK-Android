@@ -94,8 +94,8 @@ dependencies {
     implementation 'com.koushikdutta.ion:ion:3.1.0'
     implementation "com.google.android.gms:play-services-wallet:19.1.0"
 
-    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.358.284'
-    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.358.284'
+    implementation 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.358.289'
+    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.358.289'
     implementation 'com.github.2coffees1team:GlideToVectorYou:v2.0.0'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.11.1'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.1'
@@ -103,5 +103,7 @@ dependencies {
     implementation 'com.bugfender.sdk:android:3.+'
 
     implementation 'com.github.Dimezis:BlurView:version-2.0.3'
+     implementation 'io.alterac.blurkit:blurkit:1.1.0'
+
 
 }

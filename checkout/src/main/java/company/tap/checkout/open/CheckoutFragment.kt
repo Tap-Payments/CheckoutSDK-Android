@@ -10,11 +10,12 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.LinearLayout
@@ -35,6 +36,8 @@ import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.apiresponse.CardViewState
 import company.tap.checkout.internal.apiresponse.Resource
 import company.tap.checkout.internal.enums.SectionType
+import company.tap.checkout.internal.utils.CustomUtils
+import company.tap.checkout.internal.utils.ResizeAnimation
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.controller.SDKSession.sessionDelegate
@@ -49,6 +52,7 @@ import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.uikit.ktx.setTopBorders
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
 import company.tap.tapuilibrary.uikit.views.TapBrandView
+import io.alterac.blurkit.BlurKit
 import org.json.JSONObject
 
 
@@ -71,7 +75,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     var hideAllView = false
     lateinit var status: ChargeStatus
     private var _resetFragment: Boolean = true
-
+    var newColorVal: String? =null
     @JvmField
     var scrollView: NestedScrollView? = null
 
@@ -88,6 +92,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     private var relativeLL: RelativeLayout? = null
     private var mainCardLayout: CardView? = null
     private var  topHeaderView: TapBrandView? = null
+    private var displayMetrics: Int? = 0
+    private var targetHeight: Int? = 0
 
     private val mBackgroundBlurRadius = 80
     private val mBlurBehindRadius = 60
@@ -103,7 +109,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     // Use a rectangular shape drawable for the window background. The outline of this drawable
     // dictates the shape and rounded corners for the window background blur area.
     private var mWindowBackgroundDrawable: Drawable? = null
-
+  var originalHeight:Int?=0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -172,10 +178,16 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         scrollView = view.findViewById(R.id.scrollView)
         relativeLL = view.findViewById(R.id.relativeLL)
         mainCardLayout = view.findViewById(R.id.mainCardLayout)
-       // topHeaderView = view.findViewById(R.id.topHeaderView)
+
+
+        topHeaderView = context?.let { TapBrandView(it) }
+        topHeaderView?.visibility = View.GONE
+
+        displayMetrics= CustomUtils.getDeviceDisplayMetrics(context as Activity)
+     //   BlurKit.init(context)
+            //  blurLayout = BlurLayout(context)
         mWindowBackgroundDrawable = context?.getDrawable(R.drawable.window_background)
-        activity?.getWindow()?.setBackgroundDrawable(mWindowBackgroundDrawable);
-         topHeaderView = context?.let { TapBrandView(it) }
+
         if (buildIsAtLeastS()) {
             // Enable blur behind. This can also be done in xml with R.attr#windowBlurBehindEnabled
             activity?.getWindow()?.addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
@@ -247,8 +259,11 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                 }
             }
             enableSections()
-        }
+            originalHeight = checkoutLayout.measuredHeight
 
+            checkoutLayout.addView(topHeaderView,0)
+
+        }
         inLineCardLayout?.minimumHeight = heightscreen - checkoutLayout?.height!!
         dialog?.window?.attributes?.windowAnimations = R.style.DialogAnimation
 
@@ -261,23 +276,9 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         var borderOpacityVal: String? = null
         //Workaround since we don't have direct method for extraction
         borderOpacityVal = borderColor.substring(borderColor.length - 2)
-        var newColorVal: String? = "#" + borderOpacityVal + borderColor.substring(0, borderColor.length - 2).replace("#", "")
+        newColorVal = "#" + borderOpacityVal + borderColor.substring(0, borderColor.length - 2).replace("#", "")
         println("color iii>>"+newColorVal)
-        topHeaderView?.outerConstraint?.let {
-            setTopBorders(
-                it,
-                40f,// corner raduis
-                0.0f,
-                Color.parseColor(
-                    newColorVal
-                ),
-                Color.parseColor(
-                    newColorVal)
-                ,// tint color
-                Color.parseColor(
-                    newColorVal
-            ))
-        }//
+
         // topHeaderView?.setBackgroundResource(R.drawable.blurviewnew)
         scrollView?.let {
             setTopBorders(
@@ -381,17 +382,41 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
         }
 
-   Handler().postDelayed({
-        checkoutLayout.addView(topHeaderView,0)
-        topHeaderView?.visibility = View.VISIBLE
-        topHeaderView?.poweredByText?.text = "Powered by"
-        val animMoveToTop: Animation = AnimationUtils.loadAnimation(context, R.anim.slide_up_view)
-        topHeaderView?.startAnimation(animMoveToTop)
+        adjustHeightAccToDensity()
+
+        Handler(Looper.getMainLooper()).postDelayed( {
+            topHeaderView?.visibility =View.VISIBLE
+
+               }, 1000)
+             val resizeAnimation =
+                 targetHeight?.let {
+                     ResizeAnimation(
+                         topHeaderView,
+                         it,
+                         0, true
+                     )
+                 }
+
+            resizeAnimation?.duration = 1500
+            topHeaderView?.startAnimation(resizeAnimation)
 
 
-    },500)
+
+
+
+
+
+
+
+}
+
+    private fun adjustHeightAccToDensity() {
+        if (displayMetrics == DisplayMetrics.DENSITY_260 || displayMetrics == DisplayMetrics.DENSITY_280 || displayMetrics == DisplayMetrics.DENSITY_300 || displayMetrics == DisplayMetrics.DENSITY_XHIGH || displayMetrics == DisplayMetrics.DENSITY_340 || displayMetrics == DisplayMetrics.DENSITY_360) {
+            targetHeight = 90
+        } else if (displayMetrics == DisplayMetrics.DENSITY_450 || displayMetrics == DisplayMetrics.DENSITY_420 || displayMetrics == DisplayMetrics.DENSITY_400 ) {
+            targetHeight = 120
+        }else targetHeight = 140
     }
-
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onAttach(context: Context) {
         super.onAttach(context)

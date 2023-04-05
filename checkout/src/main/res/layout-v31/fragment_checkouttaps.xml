@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:blurkit="http://schemas.android.com/tools"
     android:windowSoftInputMode="adjustResize|adjustPan"
     android:orientation="vertical"
     android:fillViewport="true"
@@ -12,7 +13,6 @@
 
     app:cardCornerRadius="1.5dp"
     app:cardBackgroundColor="#10ffffff"
-
 
 
     tools:context=".open.CheckoutFragment">

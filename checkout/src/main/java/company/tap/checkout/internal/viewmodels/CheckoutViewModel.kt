@@ -1613,6 +1613,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             removeViews(webViewHolder)
             //removeAllViews()
         Handler().postDelayed({
+            if(::bottomSheetLayout.isInitialized)
             translateViewToNewHeight(bottomSheetLayout.measuredHeight,false)
         },300)
 

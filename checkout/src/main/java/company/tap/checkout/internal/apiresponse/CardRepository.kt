@@ -384,7 +384,7 @@ class CardRepository : APIRequestCallback {
                                 LocalizationManager.loadTapLocale(cardRepositoryContext,assetsModel?.localisation?.urlLocale.toString())
                             }
 
-                            if (ThemeManager.currentTheme.isNullOrEmpty()){
+                            if (ThemeManager.currentTheme.isEmpty()){
                                 when (cardRepositoryContext.resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)) {
                                     Configuration.UI_MODE_NIGHT_YES -> {
 
