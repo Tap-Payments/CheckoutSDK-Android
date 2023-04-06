@@ -5,7 +5,8 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
-import android.graphics.Color
+import android.graphics.*
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -16,7 +17,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
@@ -50,9 +50,12 @@ import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.uikit.ktx.setTopBorders
+import company.tap.tapuilibrary.uikit.utils.BlurBuilder
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
 import company.tap.tapuilibrary.uikit.views.TapBrandView
-import io.alterac.blurkit.BlurKit
+import eightbitlab.com.blurview.BlurView
+import eightbitlab.com.blurview.RenderEffectBlur
+import eightbitlab.com.blurview.RenderScriptBlur
 import org.json.JSONObject
 
 
@@ -111,6 +114,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     private var mWindowBackgroundDrawable: Drawable? = null
   var originalHeight:Int?=0
 
+    var blurView: BlurView?=null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -151,6 +156,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         return inflater.inflate(R.layout.fragment_checkouttaps, container, false)
     }
 
+    @SuppressLint("ResourceAsColor")
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -178,29 +184,15 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         scrollView = view.findViewById(R.id.scrollView)
         relativeLL = view.findViewById(R.id.relativeLL)
         mainCardLayout = view.findViewById(R.id.mainCardLayout)
-
+blurView = BlurView(context)
 
         topHeaderView = context?.let { TapBrandView(it) }
         topHeaderView?.visibility = View.GONE
 
         displayMetrics= CustomUtils.getDeviceDisplayMetrics(context as Activity)
-     
+
             //  blurLayout = BlurLayout(context)
-        mWindowBackgroundDrawable = context?.getDrawable(R.drawable.window_background)
-
-        if (buildIsAtLeastS()) {
-            // Enable blur behind. This can also be done in xml with R.attr#windowBlurBehindEnabled
-            activity?.getWindow()?.addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
-
-            // Register a listener to adjust window UI whenever window blurs are enabled/disabled
-            setupWindowBlurListener();
-        } else {
-            // Window blurs are not available prior to Android S
-            updateWindowForBlurs(false /* blursEnabled */);
-        }
-
-        // Enable dim. This can also be done in xml, see R.attr#backgroundDimEnabled
-        activity?.getWindow()?.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        blurBehindView()
 
         val heightscreen: Int = Resources.getSystem().getDisplayMetrics().heightPixels;
         if (LocalizationManager.currentLocalized.length() != 0)
@@ -263,6 +255,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
             checkoutLayout.addView(topHeaderView,0)
 
+
         }
         inLineCardLayout?.minimumHeight = heightscreen - checkoutLayout?.height!!
         dialog?.window?.attributes?.windowAnimations = R.style.DialogAnimation
@@ -279,7 +272,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         newColorVal = "#" + borderOpacityVal + borderColor.substring(0, borderColor.length - 2).replace("#", "")
         println("color iii>>"+newColorVal)
 
-        // topHeaderView?.setBackgroundResource(R.drawable.blurviewnew)
+       //  topHeaderView?.setBackgroundResource(R.drawable.blurviewnew)
+       //  topHeaderView?.setBackgroundColor(Color.parseColor(Color.TRANSPARENT.toString()))
         scrollView?.let {
             setTopBorders(
                 it,
@@ -295,7 +289,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                     newColorVal
                 )
             )
-        }//
+        }
 
 
         relativeLL.let { it1 ->
@@ -311,7 +305,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                     Color.parseColor(newColorVal)
                 )
             }
-        }//
+        }
         mainCardLayout.let { it1 ->
             if (it1 != null) {
                 setTopBorders(
@@ -323,7 +317,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                     Color.parseColor(newColorVal)
                 )
             }
-        }//
+        }
 
 
         /*bottomSheetDialog.behavior.setBottomSheetCallback(object :
@@ -386,7 +380,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
         Handler(Looper.getMainLooper()).postDelayed( {
             topHeaderView?.visibility =View.VISIBLE
-
+            topHeaderView?.setAlpha(0.8f)
                }, 1000)
              val resizeAnimation =
                  targetHeight?.let {
@@ -400,11 +394,73 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             resizeAnimation?.duration = 1500
             topHeaderView?.startAnimation(resizeAnimation)
 
+        Handler(Looper.getMainLooper()).postDelayed( {
+            topHeaderView?.visibility =View.VISIBLE
+            topHeaderView?.let {
+                blurView?.setupWith(it,RenderEffectBlur()) // or RenderEffectBlur
+                    ?.setBlurRadius(80F)
+            }
+
+        }, 3000)
+
+    }
+
+    private fun blurBehindView() {
+        mWindowBackgroundDrawable = context?.getDrawable(R.drawable.window_background)
+
+        if (buildIsAtLeastS()) {
+            // Enable blur behind. This can also be done in xml with R.attr#windowBlurBehindEnabled
+            activity?.getWindow()?.addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
+
+            // Register a listener to adjust window UI whenever window blurs are enabled/disabled
+            setupWindowBlurListener();
+        } else {
+            // Window blurs are not available prior to Android S
+            updateWindowForBlurs(false /* blursEnabled */);
+        }
+
+        // Enable dim. This can also be done in xml, see R.attr#backgroundDimEnabled
+        activity?.getWindow()?.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+    }
 
 
+    private fun getScreenshot(v: View): Bitmap? {
+        val b = Bitmap.createBitmap(v.width, v.height, Bitmap.Config.ARGB_4444)
+        v.draw(Canvas(b))
+        println("getScreenshot"+b)
+        return b
+    }
+    fun applyBlur(context: Context?, mainView: View?, blurView: View?) {
+        //this.context = context
+        if (blurView != null) {
+            getScreenshot(blurView)?.let {
+                if (mainView != null) {
+                    blur(it, mainView)
+                }
+            }
+        }
+    }
+    @SuppressLint("NewApi")
+    private fun blur(bitmap: Bitmap, view: View) {
+        val overlay = Bitmap.createBitmap(
+            (view.measuredWidth.toFloat() / 3.0f).toInt(),
+            (view.measuredHeight
+                .toFloat() / 3.0f).toInt(), Bitmap.Config.ARGB_4444
+        )
+        val canvas = Canvas(overlay)
+        canvas.translate((-view.left).toFloat() / 3.0f, (-view.top).toFloat() / 3.0f)
+        canvas.scale(1.0f / 3.0f, 1.0f / 3.0f)
+        val paint = Paint()
+        paint.setFlags(Paint.FILTER_BITMAP_FLAG)
+        canvas.drawBitmap(bitmap, 0.0f, 0.0f, paint)
+        view.background = BitmapDrawable(
+            this.context?.resources, company.tap.checkout.internal.utils.Blur.fastblur(
+                context, overlay,
+                20.0f.toInt(), true
+            )
+        )
+    }
 
-
-}
 
     private fun adjustHeightAccToDensity() {
         if (displayMetrics == DisplayMetrics.DENSITY_260 || displayMetrics == DisplayMetrics.DENSITY_280 || displayMetrics == DisplayMetrics.DENSITY_300 || displayMetrics == DisplayMetrics.DENSITY_XHIGH || displayMetrics == DisplayMetrics.DENSITY_340 || displayMetrics == DisplayMetrics.DENSITY_360) {
@@ -607,7 +663,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     @RequiresApi(api = Build.VERSION_CODES.S)
     private fun setupWindowBlurListener() {
         val windowBlurEnabledListener: (Boolean) -> Unit = this::updateWindowForBlurs
-            activity?.getWindow()?.getDecorView()?.addOnAttachStateChangeListener(
+            activity?.window?.decorView?.addOnAttachStateChangeListener(
             object : View.OnAttachStateChangeListener {
                 override fun onViewAttachedToWindow(v: View) {
                     activity?.getWindowManager()?.addCrossWindowBlurEnabledListener(
