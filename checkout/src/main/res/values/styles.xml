@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <style name="DialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="android:windowIsFloating">false</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
@@ -24,7 +24,13 @@
     <style name="CustomCardViewStyle" parent="@style/Widget.MaterialComponents.CardView">
         <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.MaterialCardView.Cut</item>
     </style>
-
+    <style name="TransparentCompat" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:statusBarColor" tools:ignore="NewApi">@color/french_gray</item>
+    </style>
     <style name="DialogTheme" parent="DialogStyle">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>

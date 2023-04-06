@@ -21,6 +21,7 @@
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden"
             android:anyDensity = "false"
+            android:theme="@style/TransparentCompat"
           >
             <intent-filter>
                 <action android:name="android.nfc.action.TECH_DISCOVERED" />

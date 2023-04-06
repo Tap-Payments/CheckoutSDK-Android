@@ -95,7 +95,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     private var displayMetrics: Int? = 0
     private var targetHeight: Int? = 0
 
-    private val mBackgroundBlurRadius = 80
+    private val mBackgroundBlurRadius = 30
     private val mBlurBehindRadius = 60
 
     // We set a different dim amount depending on whether window blur is enabled or disabled
@@ -184,7 +184,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         topHeaderView?.visibility = View.GONE
 
         displayMetrics= CustomUtils.getDeviceDisplayMetrics(context as Activity)
-     //   BlurKit.init(context)
+     
             //  blurLayout = BlurLayout(context)
         mWindowBackgroundDrawable = context?.getDrawable(R.drawable.window_background)
 
@@ -404,10 +404,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
 
 
-
-
-
-
 }
 
     private fun adjustHeightAccToDensity() {
@@ -617,6 +613,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                     activity?.getWindowManager()?.addCrossWindowBlurEnabledListener(
                         windowBlurEnabledListener
                     )
+
                 }
 
                 override fun onViewDetachedFromWindow(v: View) {
