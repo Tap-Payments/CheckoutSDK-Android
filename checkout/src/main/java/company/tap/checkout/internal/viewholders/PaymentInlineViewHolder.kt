@@ -168,7 +168,7 @@ class PaymentInlineViewHolder (private val context: Context,
         secondaryLayout = tapCardInputView.findViewById(R.id.secondary_Layout)
         textViewPowered = tapCardInputView.findViewById(R.id.textViewPowered)
         saveForOtherCheckBox = tapCardInputView.findViewById(R.id.saveForOtherCheckBox)
-
+        secondaryLayout?.visibility = View.GONE
         tapInlineCardSwitch?.setSwitchDataSource(
             TapSwitchDataSource(
                 "dummy",
