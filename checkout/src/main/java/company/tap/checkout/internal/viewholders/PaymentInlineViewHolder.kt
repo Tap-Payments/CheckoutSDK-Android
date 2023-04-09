@@ -109,6 +109,9 @@ class PaymentInlineViewHolder (private val context: Context,
     private var expiryDate: String? = null
     private var cvvNumber: String? = null
     private var cardHolderName: String? = null
+    private var cardHolderNamePrev: String? = null
+    private var cvvNumberPrev: String? = null
+    private var expiryDatePrev: String? = null
     private val BIN_NUMBER_LENGTH = 6
     private lateinit var cardSchema: String
     var schema: CardScheme? = null
@@ -297,6 +300,15 @@ class PaymentInlineViewHolder (private val context: Context,
             intertabLayout.visibility =View.VISIBLE
             allFieldsValid = false
             tapAlertView?.visibility = View.GONE
+            expiryDatePrev = null
+            cvvNumberPrev = null
+            if(getPreTypedCardData()!=null) {
+                getPreTypedCardData()?.cardNumber = null
+                getPreTypedCardData()?.cvc = null
+                getPreTypedCardData()?.cardholderName = null
+                getPreTypedCardData()?.expirationMonth = null
+                getPreTypedCardData()?.expirationYear = null
+            }
         }
     }
 
@@ -451,7 +463,7 @@ class PaymentInlineViewHolder (private val context: Context,
 
         tapCardInputView.backArrow.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                println("getPreTypedCardData data was there"+getPreTypedCardData()?.cardNumber)
+                println("getPreTypedCardData data was there"+getPreTypedCardData()?.cardholderName)
 
              if( getPreTypedCardData() != null ) setPrevTypedCard()
              else {
@@ -478,6 +490,10 @@ class PaymentInlineViewHolder (private val context: Context,
                  tabLayout.visibility = View.VISIBLE
                  acceptedCardText.visibility = View.VISIBLE
                  checkoutViewModel.resetViewHolder()
+                 expiryDate =null
+                 cvvNumber =null
+                 cardHolderName =null
+                 fullCardNumber = null
              }
 
                 return false
@@ -487,6 +503,8 @@ class PaymentInlineViewHolder (private val context: Context,
     }
 
     private fun setPrevTypedCard(){
+        println("cvc text"+getPreTypedCardData()?.cvc)
+        println("cardHolderName text"+getPreTypedCardData()?.cardholderName)
         val updateCardString :String = getPreTypedCardData()?.cardNumber?.trim().toString().substring(0,6) + getPreTypedCardData()?.cardNumber?.length?.minus(4)
             ?.let {
                 getPreTypedCardData()?.cardNumber?.trim().toString().substring(
@@ -517,7 +535,9 @@ class PaymentInlineViewHolder (private val context: Context,
             null,
             null
         )
-        println("cardModel"+updateCardString)
+        println("cardModel"+ getPreTypedCardData()?.expirationMonth)
+        println("cardModel"+ getPreTypedCardData()?.cardholderName)
+        if( getPreTypedCardData()?.cardholderName!=null) tapCardInputView.setVisibilityOfHolderField(true)
         tapCardInputView.setNormalCardDetails(cardModel, CardInputUIStatus.NormalCard)
         /*  val alertMessage:String = LocalizationManager.getValue("Warning", "Hints", "missingCVV")
            tapAlertView?.alertMessage?.text =alertMessage.replace("%i","3")
@@ -621,7 +641,10 @@ class PaymentInlineViewHolder (private val context: Context,
                         }
                     }
                     Bugfender.d(LogsModel.EVENT.name,"Finished valid raw card data for:"+PaymentType.CARD )
+                    println("ae we ssaving cardHolderName "+s.toString())
+                    cardHolderNamePrev = s.toString()
                 }
+
             }
 
         })
@@ -928,7 +951,7 @@ class PaymentInlineViewHolder (private val context: Context,
                 if(cardInputUIStatus?.equals(CardInputUIStatus.SavedCard) == true){
                     tapAlertView?.visibility = View.GONE
                 }else {
-
+                    expiryDatePrev = s.toString()
                  if(tapCardInputView.isExpDateValid) {
                      tapAlertView?.visibility = View.VISIBLE
                      val alertMessage: String =
@@ -975,6 +998,7 @@ class PaymentInlineViewHolder (private val context: Context,
                                 )
                             }
                         }else {
+                            if(fullCardNumber!=null)
                             logicForImageOnCVV(
                                 CardValidator.validate(fullCardNumber).cardBrand,
                                 s.toString()
@@ -1051,6 +1075,8 @@ class PaymentInlineViewHolder (private val context: Context,
                                     // tapCardInputView.separatorcard2.visibility = View.VISIBLE
                                 }
                             }
+                            println("cvvNumberPrev"+ cvvNumberPrev)
+                            cvvNumberPrev = s.toString()
                         }else tapInlineCardSwitch?.visibility = View.GONE
                     }
 
@@ -1095,7 +1121,6 @@ class PaymentInlineViewHolder (private val context: Context,
 
 
                 }
-               // println("getCardHolderNameShowHide"+ PaymentDataSource.getCardHolderNameShowHide())
 
             }
         })
@@ -1610,16 +1635,13 @@ class PaymentInlineViewHolder (private val context: Context,
 
     fun getPreTypedCardData(): NormalCardData? {
         val number: String? = fullCardNumber
-        val expiryDate: String? = expiryDate
-        val cvc: String? = cvvNumber
-        //temporrary    val cardholderName: String? = cardholderName
-        var cardholderName: String? = null
-        if (PaymentDataSource.getDefaultCardHolderName() != null) {
-            cardholderName = PaymentDataSource.getDefaultCardHolderName()
-            tapCardInputView.setCardHolderName(cardholderName)
-        } else {
-            cardholderName = "cardholderName"
-        }
+        val expiryDate: String? = expiryDatePrev
+        val cvc: String? = cvvNumberPrev
+        val holderName: String? = cardHolderNamePrev
+        println("expiryDatePrev"+expiryDatePrev)
+        println("cvvNumberPrev"+cvvNumberPrev)
+
+
         // val cardholderName: String = "cardholder"
         return if (number == null || expiryDate == null || cvc == null) {
             null
@@ -1627,13 +1649,15 @@ class PaymentInlineViewHolder (private val context: Context,
             val dateParts: List<String> = expiryDate.split("/")
 
             return dateParts.get(0).let {
-                NormalCardData(
-                    number.replace(" ", ""),
-                    it,
-                    dateParts[1],
-                    cvc,
-                    cardholderName
-                )
+                cvvNumberPrev?.let { it1 ->
+                    NormalCardData(
+                        number.replace(" ", ""),
+                        it,
+                        dateParts[1],
+                        it1,
+                        holderName
+                    )
+                }
             }
         }
 
