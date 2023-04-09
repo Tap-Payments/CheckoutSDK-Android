@@ -1,5 +1,6 @@
 package company.tap.checkout.internal.viewholders
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
@@ -126,7 +127,7 @@ class PaymentInlineViewHolder (private val context: Context,
     var cardBrandView: CardBrandView? = null
     var closeButton: ImageView? = null
     var cardInputUIStatus: CardInputUIStatus? = CardInputUIStatus.NormalCard
-   // var backArrow: ImageView? = null
+
     var contactDetailsView: TapContactDetailsView? = null
     var shippingDetailView: TapShippingDetailView? = null
     var tapPaymentInput: TapPaymentInput? = null
@@ -155,8 +156,7 @@ class PaymentInlineViewHolder (private val context: Context,
         //cardSwitchLayout = tapCardInputView.findViewById(R.id.mainSwitchInline)
         paymentInputContainer = view.findViewById(R.id.payment_input_layout)
         // clearView = view.findViewById(R.id.clear_text)
-     //   backArrow = tapCardInputView.findViewById(R.id.backView)
-      //  backArrowAr = tapCardInputView.findViewById(R.id.backView_Ar)
+
         tapCardInputView.backArrow?.visibility =View.GONE
         contactDetailsView = view.findViewById(R.id.contact_detailsView)
         shippingDetailView = view.findViewById(R.id.ship_detailsView)
@@ -366,42 +366,6 @@ class PaymentInlineViewHolder (private val context: Context,
             onCardNFCCallListener.onClickCardScanner(true)
         }
 
-
-
-
-       /* tapCardInputView.backArrow.setOnClickListener {
-            //  tapCardInputView.isSavedCard = false
-            cardInputUIStatus = CardInputUIStatus.NormalCard
-            tabLayout.resetBehaviour()
-            tapCardInputView.clear()
-            closeButton?.visibility = View.GONE
-            controlScannerOptions()
-            cardInputUIStatus = CardInputUIStatus.NormalCard
-            *//* tapCardInputView.setSingleCardInput(
-                    CardBrandSingle.Unknown, null
-                )*//*
-            tapInlineCardSwitch?.visibility = View.GONE
-            //  tapCardInputView.separatorcard2.visibility = View.INVISIBLE
-            // resetCardBrandIcon()
-            tapAlertView?.visibility =View.GONE
-            checkoutViewModel.resetCardSelection()
-
-            checkoutViewModel.isSavedCardSelected = false
-            //resetPaymentCardView()
-            intertabLayout.visibility = View.VISIBLE
-            tabLayout.visibility = View.VISIBLE
-            acceptedCardText.visibility =View.VISIBLE
-            checkoutViewModel.resetViewHolder()
-
-            *//*  if(fullCardNumber!=null && !fullCardNumber.isNullOrEmpty()){
-                    tapCardInputView.setCardNumberMasked(maskCardNumber(fullCardNumber!!))
-
-                }*//*
-
-        }*/
-
-
-
     }
 
 
@@ -467,6 +431,7 @@ class PaymentInlineViewHolder (private val context: Context,
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun initCardInput() {
         resetCardBrandIcon()
         tapInlineCardSwitch?.visibility = View.GONE
@@ -485,35 +450,104 @@ class PaymentInlineViewHolder (private val context: Context,
         switchCheckedState()
 
         tapCardInputView.backArrow.setOnTouchListener(object : View.OnTouchListener {
-            override fun onTouch(v: View?, event: MotionEvent?): Boolean { tabLayout.resetBehaviour()
-                cardInputUIStatus = CardInputUIStatus.NormalCard
-                tabLayout.resetBehaviour()
-                tapCardInputView.clear()
-                closeButton?.visibility = View.GONE
-                controlScannerOptions()
-                cardInputUIStatus = CardInputUIStatus.NormalCard
-                /* tapCardInputView.setSingleCardInput(
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                println("getPreTypedCardData data was there"+getPreTypedCardData()?.cardNumber)
+
+             if( getPreTypedCardData() != null ) setPrevTypedCard()
+             else {
+
+                 tabLayout.resetBehaviour()
+                 cardInputUIStatus = CardInputUIStatus.NormalCard
+                 tabLayout.resetBehaviour()
+                 tapCardInputView.clear()
+                 closeButton?.visibility = View.GONE
+                 controlScannerOptions()
+                 cardInputUIStatus = CardInputUIStatus.NormalCard
+                 /* tapCardInputView.setSingleCardInput(
                     CardBrandSingle.Unknown, null
                     )*/
-                tapInlineCardSwitch?.visibility = View.GONE
-                //  tapCardInputView.separatorcard2.visibility = View.INVISIBLE
-                // resetCardBrandIcon()
-                tapAlertView?.visibility =View.GONE
-                checkoutViewModel.resetCardSelection()
+                 tapInlineCardSwitch?.visibility = View.GONE
+                 //  tapCardInputView.separatorcard2.visibility = View.INVISIBLE
+                 // resetCardBrandIcon()
+                 tapAlertView?.visibility = View.GONE
+                 checkoutViewModel.resetCardSelection()
 
-                checkoutViewModel.isSavedCardSelected = false
-                //resetPaymentCardView()
-                intertabLayout.visibility = View.VISIBLE
-                tabLayout.visibility = View.VISIBLE
-                acceptedCardText.visibility =View.VISIBLE
-                checkoutViewModel.resetViewHolder()
-
+                 checkoutViewModel.isSavedCardSelected = false
+                 //resetPaymentCardView()
+                 intertabLayout.visibility = View.VISIBLE
+                 tabLayout.visibility = View.VISIBLE
+                 acceptedCardText.visibility = View.VISIBLE
+                 checkoutViewModel.resetViewHolder()
+             }
 
                 return false
             }
         })
 
     }
+
+    private fun setPrevTypedCard(){
+        val updateCardString :String = getPreTypedCardData()?.cardNumber?.trim().toString().substring(0,6) + getPreTypedCardData()?.cardNumber?.length?.minus(4)
+            ?.let {
+                getPreTypedCardData()?.cardNumber?.trim().toString().substring(
+                    it
+                )
+            }
+        val cardModel = Card(
+            updateCardString,
+            getPreTypedCardData()?.cvc,
+            getPreTypedCardData()?.expirationMonth?.toInt(),
+            getPreTypedCardData()?.expirationYear?.toInt(),
+            getPreTypedCardData()?.cardholderName,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            getPreTypedCardData()?.cardNumber?.length?.minus(4)
+                ?.let { getPreTypedCardData()?.cardNumber?.substring(it) },
+            company.tap.cardinputwidget.CardBrand.fromCardNumber(getPreTypedCardData()?.cardNumber),
+            null,
+            null,
+           null,
+            null,
+            null,
+            null
+        )
+        println("cardModel"+updateCardString)
+        tapCardInputView.setSavedCardDetails(cardModel, CardInputUIStatus.SavedCard)
+        /*  val alertMessage:String = LocalizationManager.getValue("Warning", "Hints", "missingCVV")
+           tapAlertView?.alertMessage?.text =alertMessage.replace("%i","3")
+
+           tapAlertView?.visibility =View.VISIBLE*/
+        if(CustomUtils.getCurrentTheme()!=null && CustomUtils.getCurrentTheme().contains("dark")){
+            /*tapCardInputView.setSingleCardInput(
+                CardBrandSingle.fromCode(
+                    company.tap.cardinputwidget.CardBrand.fromCardNumber(getPreTypedCardData()?.cardNumber?.trim()?.substring(0,6))
+                        .toString()
+                ), _savedCardsModel.logos?.dark?.png
+            )*/
+        }else {
+            /*tapCardInputView.setSingleCardInput(
+                CardBrandSingle.fromCode(
+                    company.tap.cardinputwidget.CardBrand.fromCardNumber(_savedCardsModel.firstSix)
+                        .toString()
+                ), _savedCardsModel.logos?.light?.png
+            )*/
+        }
+        tapInlineCardSwitch?.visibility = View.GONE
+        separator1?.visibility = View.GONE
+        acceptedCardText.visibility = View.GONE
+        contactDetailsView?.visibility = View.GONE
+        shippingDetailView?.visibility = View.GONE
+        intertabLayout.visibility = View.GONE
+        //Added for opening as soon as cvv focus
+        CustomUtils.showKeyboard(context)
+    }
+
 
     private fun resetCardBrandIcon() {
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")){
@@ -1572,6 +1606,37 @@ class PaymentInlineViewHolder (private val context: Context,
             }
         }
         // TODO: Add address handling here.
+    }
+
+    fun getPreTypedCardData(): NormalCardData? {
+        val number: String? = fullCardNumber
+        val expiryDate: String? = expiryDate
+        val cvc: String? = cvvNumber
+        //temporrary    val cardholderName: String? = cardholderName
+        var cardholderName: String? = null
+        if (PaymentDataSource.getDefaultCardHolderName() != null) {
+            cardholderName = PaymentDataSource.getDefaultCardHolderName()
+            tapCardInputView.setCardHolderName(cardholderName)
+        } else {
+            cardholderName = "cardholderName"
+        }
+        // val cardholderName: String = "cardholder"
+        return if (number == null || expiryDate == null || cvc == null) {
+            null
+        } else {
+            val dateParts: List<String> = expiryDate.split("/")
+
+            return dateParts.get(0).let {
+                NormalCardData(
+                    number.replace(" ", ""),
+                    it,
+                    dateParts[1],
+                    cvc,
+                    cardholderName
+                )
+            }
+        }
+
     }
 
 
