@@ -518,7 +518,7 @@ class PaymentInlineViewHolder (private val context: Context,
             null
         )
         println("cardModel"+updateCardString)
-        tapCardInputView.setSavedCardDetails(cardModel, CardInputUIStatus.SavedCard)
+        tapCardInputView.setNormalCardDetails(cardModel, CardInputUIStatus.NormalCard)
         /*  val alertMessage:String = LocalizationManager.getValue("Warning", "Hints", "missingCVV")
            tapAlertView?.alertMessage?.text =alertMessage.replace("%i","3")
 
