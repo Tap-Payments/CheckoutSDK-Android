@@ -396,10 +396,10 @@ blurView = BlurView(context)
 
         Handler(Looper.getMainLooper()).postDelayed( {
             topHeaderView?.visibility =View.VISIBLE
-            topHeaderView?.let {
+          /*  topHeaderView?.let {
                 blurView?.setupWith(it,RenderEffectBlur()) // or RenderEffectBlur
                     ?.setBlurRadius(80F)
-            }
+            }*/
 
         }, 3000)
 

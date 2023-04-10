@@ -9,11 +9,13 @@ import android.os.Build
 import android.text.Editable
 import android.text.TextWatcher
 import android.transition.Fade
+import android.transition.Transition
 import android.transition.TransitionManager
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatImageView
@@ -181,7 +183,8 @@ class PaymentInlineViewHolder (private val context: Context,
                 "dummy"
             )
         )
-        tabLayout.visibility=View.VISIBLE
+       // tabLayout.visibility=View.VISIBLE
+        tabLayout?.fadeVisibility(View.VISIBLE)
         // tapSeparatorViewLinear = view.findViewById(R.id.tapSeparatorViewLinear)
         // tapSeparatorViewLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
         // tabLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.backgroundColor")))
@@ -296,8 +299,11 @@ class PaymentInlineViewHolder (private val context: Context,
             tapCardInputView.setVisibilityOfHolderField(false)
             tapCardInputView.holderNameEnabled = false
             checkoutViewModel.incrementalCount=0
-            tabLayout.visibility =View.VISIBLE
-            intertabLayout.visibility =View.VISIBLE
+            //tabLayout.visibility =View.VISIBLE
+           // intertabLayout.visibility =View.VISIBLE
+            tabLayout.fadeVisibility(View.VISIBLE)
+            intertabLayout.fadeVisibility(View.VISIBLE)
+            acceptedCardText.fadeVisibility(View.VISIBLE)
             allFieldsValid = false
             tapAlertView?.visibility = View.GONE
             expiryDatePrev = null
@@ -485,9 +491,12 @@ class PaymentInlineViewHolder (private val context: Context,
 
                  checkoutViewModel.isSavedCardSelected = false
                  //resetPaymentCardView()
-                 intertabLayout.visibility = View.VISIBLE
-                 tabLayout.visibility = View.VISIBLE
-                 acceptedCardText.visibility = View.VISIBLE
+                // intertabLayout.visibility = View.VISIBLE
+                // tabLayout.visibility = View.VISIBLE
+                // acceptedCardText.visibility = View.VISIBLE
+                 tabLayout.fadeVisibility(View.VISIBLE)
+                 intertabLayout.fadeVisibility(View.VISIBLE)
+                 acceptedCardText.fadeVisibility(View.VISIBLE)
                  checkoutViewModel.resetViewHolder()
                  expiryDate =null
                  cvvNumber =null
@@ -577,7 +586,9 @@ class PaymentInlineViewHolder (private val context: Context,
 
         contactDetailsView?.visibility = View.GONE
         shippingDetailView?.visibility = View.GONE
-        intertabLayout.visibility = View.GONE
+      // intertabLayout.visibility = View.GONE
+        tabLayout?.fadeVisibility(View.GONE,2000)
+        intertabLayout?.fadeVisibility(View.GONE,2000)
         //Added for opening as soon as cvv focus
         CustomUtils.showKeyboard(context)
     }
@@ -612,7 +623,8 @@ class PaymentInlineViewHolder (private val context: Context,
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if(s.toString().length>3){
                     if(PaymentDataSource.getCardHolderNameShowHide()){
-                        tapInlineCardSwitch?.visibility = View.VISIBLE
+                       // tapInlineCardSwitch?.visibility = View.VISIBLE
+                        tapInlineCardSwitch?.fadeVisibility( View.VISIBLE)
                         contactDetailsView?.visibility = View.GONE //temp visible to gone
                         shippingDetailView?.visibility = View.GONE //temp visible to gone
                         allFieldsValid = true
@@ -624,8 +636,8 @@ class PaymentInlineViewHolder (private val context: Context,
                 }else {
                     contactDetailsView?.visibility = View.GONE
                     shippingDetailView?.visibility = View.GONE
-                    tapInlineCardSwitch?.visibility = View.GONE
-
+                   // tapInlineCardSwitch?.visibility = View.GONE
+                    tapInlineCardSwitch?.fadeVisibility( View.GONE,2000)
                 }
             }
 
@@ -852,9 +864,10 @@ class PaymentInlineViewHolder (private val context: Context,
                     // delete character action have done
                     // do what ever you want
                    // Log.d("MainActivityTag", "Character deleted");
-                    intertabLayout.visibility = View.VISIBLE
-                    tabLayout.visibility = View.VISIBLE
-                    acceptedCardText.visibility = View.VISIBLE
+                  //  intertabLayout.visibility = View.VISIBLE
+                  //  tabLayout.visibility = View.VISIBLE
+                   // acceptedCardText.visibility = View.VISIBLE
+                    tabLayout?.fadeVisibility( View.VISIBLE)
                 }
                 mPreviousLength=length;
 
@@ -894,9 +907,13 @@ class PaymentInlineViewHolder (private val context: Context,
                     // delete character action have done
                     // do what ever you want
                    // Log.d("MainActivityTag", "Character deleted");
-                    intertabLayout.visibility = View.VISIBLE
-                    tabLayout.visibility = View.VISIBLE
-                    acceptedCardText.visibility = View.VISIBLE
+                 //COmmented ToDO
+                  //  intertabLayout.visibility = View.VISIBLE
+                   // tabLayout.visibility = View.VISIBLE
+                  //  acceptedCardText.visibility = View.VISIBLE
+                    tabLayout?.fadeVisibility(View.VISIBLE)
+                    intertabLayout?.fadeVisibility(View.VISIBLE)
+                    acceptedCardText?.fadeVisibility(View.VISIBLE)
                 }
                 mPreviousCount=count;
 
@@ -918,7 +935,8 @@ class PaymentInlineViewHolder (private val context: Context,
             if (PaymentDataSource?.getCardHolderNameShowHide()) {
                 tapCardInputView.setVisibilityOfHolderField(PaymentDataSource?.getCardHolderNameShowHide())
                 tapCardInputView.holderNameEnabled = true
-                tapInlineCardSwitch?.visibility = View.VISIBLE
+              //  tapInlineCardSwitch?.visibility = View.VISIBLE
+                tapInlineCardSwitch?.fadeVisibility( View.VISIBLE)
             }
 
         }
@@ -1023,7 +1041,8 @@ class PaymentInlineViewHolder (private val context: Context,
                             )
                         }
                         acceptedCardText.visibility =View.GONE
-                        tabLayout.visibility =View.GONE
+                     //   tabLayout.visibility =View.GONE
+                       tabLayout.fadeVisibility(View.GONE,2000)
                     }else  logicForImageOnCVV(CardValidator.validate(savedCardsModel?.firstSix).cardBrand,s.toString())
                 }
               /*  if (s?.trim()?.length == 3 || s?.trim()?.length == 4) {
@@ -1067,7 +1086,8 @@ class PaymentInlineViewHolder (private val context: Context,
                                     )*/
                                   //  tapCardInputView.separatorcard2.visibility = View.VISIBLE
                                     tapInlineCardSwitch?.switchSaveCard?.isChecked = true
-                                    tapInlineCardSwitch?.visibility = View.VISIBLE
+                                  //  tapInlineCardSwitch?.visibility = View.VISIBLE
+                                    tapInlineCardSwitch?.fadeVisibility( View.VISIBLE)
                                     Bugfender.d(CustomUtils.tagEvent,"Finished valid raw card data for:"+PaymentType.CARD )
 
                                 }
@@ -1089,7 +1109,8 @@ class PaymentInlineViewHolder (private val context: Context,
                                 separator1?.visibility = View.VISIBLE
                                 if (PaymentDataSource.getDefaultCardHolderName()?.isNotEmpty() == true || PaymentDataSource.getDefaultCardHolderName()?.isNotBlank() == true) {
                                     tapCardInputView.setCardHolderName(PaymentDataSource.getDefaultCardHolderName())
-                                    tapInlineCardSwitch?.visibility = View.VISIBLE
+                                  //  tapInlineCardSwitch?.visibility = View.VISIBLE
+                                    tapInlineCardSwitch?.fadeVisibility( View.VISIBLE)
                                     // tapCardInputView.separatorcard2.visibility = View.VISIBLE
                                 }
                             }
@@ -1812,7 +1833,8 @@ class PaymentInlineViewHolder (private val context: Context,
         acceptedCardText.visibility = View.GONE
         contactDetailsView?.visibility = View.GONE
         shippingDetailView?.visibility = View.GONE
-        intertabLayout.visibility = View.GONE
+      //  intertabLayout.visibility = View.GONE
+        tabLayout.fadeVisibility(View.GONE,2000)
         //Added for opening as soon as cvv focus
         CustomUtils.showKeyboard(context)
     }
@@ -1877,11 +1899,14 @@ class PaymentInlineViewHolder (private val context: Context,
        // tapCardInputView.setVisibilityOfHolderField(false)
         tapCardInputView.holderNameEnabled = false
         checkoutViewModel.incrementalCount=0
-        tabLayout.visibility =View.VISIBLE
-        intertabLayout.visibility =View.VISIBLE
+      //  tabLayout.visibility =View.VISIBLE
+     //   intertabLayout.visibility =View.VISIBLE
         allFieldsValid = false
         tapAlertView?.visibility = View.GONE
-        acceptedCardText.visibility = View.VISIBLE
+      //  acceptedCardText.visibility = View.VISIBLE
+        tabLayout.fadeVisibility(View.VISIBLE)
+        acceptedCardText.fadeVisibility(View.VISIBLE)
+
 
     }
 
@@ -1991,4 +2016,12 @@ class PaymentInlineViewHolder (private val context: Context,
         tapCardInputView.onTouchView()
 
     }
+
+       fun View.fadeVisibility(visibility: Int, duration: Long = 400) {
+           val transition: Transition = Fade()
+           transition.duration = duration
+           transition.addTarget(this)
+           TransitionManager.beginDelayedTransition(this.parent as ViewGroup, transition)
+           this.visibility = visibility
+       }
 }
