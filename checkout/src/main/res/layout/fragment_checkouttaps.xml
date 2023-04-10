@@ -9,9 +9,8 @@
     android:fillViewport="true"
     android:clipToOutline="true"
     android:id="@+id/mainCardLayout"
-
-
     app:cardCornerRadius="1.5dp"
+    app:cardBackgroundColor="@android:color/transparent"
     android:background="@android:color/transparent"
 
 

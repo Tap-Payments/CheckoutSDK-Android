@@ -13,20 +13,19 @@ import android.os.Handler
 import android.os.Looper
 import android.text.format.DateFormat
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewOutlineProvider
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
 import androidx.annotation.RestrictTo
 import androidx.appcompat.app.AppCompatActivity
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -96,6 +95,7 @@ import company.tap.tapuilibrary.uikit.fragment.NFCFragment
 import company.tap.tapuilibrary.uikit.ktx.makeLinks
 import company.tap.tapuilibrary.uikit.ktx.setTopBorders
 import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
+import jp.wasabeef.blurry.Blurry
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.businessview_layout.view.*
 import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
@@ -436,14 +436,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         saveCardSwitchHolder = SwitchViewHolder(context, this)
         loyaltyViewHolder = LoyaltyViewHolder(context, this, this)
 
-         headerLayout.let { it1 ->
+
+        headerLayout.let { it1 ->
             setTopBorders(
                 it1,
                 35f,// corner raduis
                 0.0f,
-                Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),// stroke color
-                Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),// tint color
-                Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
+                Color.parseColor("#0F000000"),// stroke color
+                Color.parseColor("#0F000000"),// tint color
+                Color.parseColor("#0F000000")
             )
         }//
         paymentInlineViewHolder = PaymentInlineViewHolder(
@@ -743,6 +744,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
         //replaced original height with bottomSheetLayout height
         Handler().postDelayed({
+            if (::bottomSheetLayout.isInitialized)
             translateViewToNewHeight(bottomSheetLayout.measuredHeight,true)
 
         },400)
@@ -781,6 +783,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         if (goPayViewsHolder.goPayopened || itemsViewHolder.itemsdisplayed) setActionGoPayOpenedItemsDisplayed()
         else setActionNotGoPayOpenedNotItemsDisplayed()
         Handler().postDelayed({
+            if (::bottomSheetLayout.isInitialized)
             translateViewToNewHeight(bottomSheetLayout.measuredHeight,false)
         },400)
 
@@ -1795,6 +1798,7 @@ else
             )*/
             addViews(asynchronousPaymentViewHolder)
             Handler().postDelayed({
+                if(::bottomSheetLayout.isInitialized)
                 translateViewToNewHeight(bottomSheetLayout.measuredHeight,true)
             },400)
             asynchronousPaymentViewHolder.setDataFromAPI(chargeResponse)

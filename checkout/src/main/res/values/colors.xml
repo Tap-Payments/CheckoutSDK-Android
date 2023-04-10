@@ -2,7 +2,7 @@
 <resources>
     <color name="view_color">#dfdfdf</color>
     <color name="primary_color">#45000000</color>
-    <color name="secondary_color">#45000000</color>
+    <color name="secondary_color">#000000</color>
 
     <color name="glowingShadow">#2ACE00</color>
     <color name="gray_background">#f4f4f4</color>
