@@ -463,7 +463,7 @@ class PaymentInlineViewHolder (private val context: Context,
 
         tapCardInputView.backArrow.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                println("getPreTypedCardData data was there"+getPreTypedCardData())
+              //  println("getPreTypedCardData data was there"+getPreTypedCardData())
 
              if( getPreTypedCardData() != null ) setPrevTypedCard()
              else {
@@ -535,8 +535,7 @@ class PaymentInlineViewHolder (private val context: Context,
             null
         )
 
-        println("cardModel"+ getPreTypedCardData()?.expirationMonth)
-        println("cardModel"+ getPreTypedCardData()?.cardholderName)
+
         if(getPreTypedCardData()?.cardholderName!=null){
             tapInlineCardSwitch?.visibility = View.VISIBLE
             tapInlineCardSwitch?.switchesLayout?.visibility = View.VISIBLE
@@ -601,11 +600,12 @@ class PaymentInlineViewHolder (private val context: Context,
         )
         tapCardInputView.setHolderNameTextWatcher(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                if(allFieldsValid == true)
-                intertabLayout.visibility = View.GONE
-                tabLayout.visibility = View.GONE
-                acceptedCardText.visibility =View.GONE
+                if(allFieldsValid == true) {
+                    intertabLayout.visibility = View.GONE
+                    tabLayout.visibility = View.GONE
+                    acceptedCardText.visibility = View.GONE
 
+                }
 
             }
 
@@ -1094,6 +1094,7 @@ class PaymentInlineViewHolder (private val context: Context,
                                 }
                             }
                             println("cvvNumberPrev"+ cvvNumberPrev)
+                           
                             cvvNumberPrev = s.toString()
                         }else tapInlineCardSwitch?.visibility = View.GONE
                     }
@@ -1656,11 +1657,7 @@ class PaymentInlineViewHolder (private val context: Context,
         val expiryDate: String? = expiryDatePrev
         val cvc: String? = cvvNumberPrev
         val holderName: String? = cardHolderNamePrev
-        println("expiryDatePrev"+expiryDatePrev)
-        println("cvvNumberPrev"+cvvNumberPrev)
 
-
-        // val cardholderName: String = "cardholder"
         return if (number == null || expiryDate == null || cvc == null) {
             null
         } else {
