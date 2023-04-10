@@ -463,7 +463,7 @@ class PaymentInlineViewHolder (private val context: Context,
 
         tapCardInputView.backArrow.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                println("getPreTypedCardData data was there"+getPreTypedCardData()?.cardholderName)
+                println("getPreTypedCardData data was there"+getPreTypedCardData())
 
              if( getPreTypedCardData() != null ) setPrevTypedCard()
              else {
@@ -537,26 +537,40 @@ class PaymentInlineViewHolder (private val context: Context,
         )
         println("cardModel"+ getPreTypedCardData()?.expirationMonth)
         println("cardModel"+ getPreTypedCardData()?.cardholderName)
-        if( getPreTypedCardData()?.cardholderName!=null) tapCardInputView.setVisibilityOfHolderField(true)
+        if(getPreTypedCardData()?.cardholderName!=null){
+            tapCardInputView.setVisibilityOfHolderField(true)
+            tapCardInputView.holderNameEnabled = true
+            separator1?.visibility = View.VISIBLE
+            tapInlineCardSwitch?.switchSaveCard?.visibility= View.VISIBLE
+            tapInlineCardSwitch?.switchSaveCard?.isChecked = true
+
+        }
+
         tapCardInputView.setNormalCardDetails(cardModel, CardInputUIStatus.NormalCard)
         /*  val alertMessage:String = LocalizationManager.getValue("Warning", "Hints", "missingCVV")
            tapAlertView?.alertMessage?.text =alertMessage.replace("%i","3")
 
            tapAlertView?.visibility =View.VISIBLE*/
         if(CustomUtils.getCurrentTheme()!=null && CustomUtils.getCurrentTheme().contains("dark")){
-            /*tapCardInputView.setSingleCardInput(
+        /* tapCardInputView.setSingleCardInput(
                 CardBrandSingle.fromCode(
                     company.tap.cardinputwidget.CardBrand.fromCardNumber(getPreTypedCardData()?.cardNumber?.trim()?.substring(0,6))
                         .toString()
                 ), _savedCardsModel.logos?.dark?.png
             )*/
+            val card = CardValidator.validate(getPreTypedCardData()?.cardNumber)
+            getPreTypedCardData()?.cardNumber?.let {
+                logicTosetImageDynamic(card.cardBrand,
+                    it
+                )
+            }
         }else {
-            /*tapCardInputView.setSingleCardInput(
-                CardBrandSingle.fromCode(
-                    company.tap.cardinputwidget.CardBrand.fromCardNumber(_savedCardsModel.firstSix)
-                        .toString()
-                ), _savedCardsModel.logos?.light?.png
-            )*/
+            val card = CardValidator.validate(getPreTypedCardData()?.cardNumber)
+            getPreTypedCardData()?.cardNumber?.let {
+                logicTosetImageDynamic(card.cardBrand,
+                    it
+                )
+            }
         }
         tapInlineCardSwitch?.visibility = View.GONE
         separator1?.visibility = View.GONE
@@ -1110,7 +1124,7 @@ class PaymentInlineViewHolder (private val context: Context,
                     }
                   /*  cardNumber
                         ?.let { logicTosetImageDynamic(CardBrand.fromString(cardNumber), it) }*/
-
+                    cvvNumberPrev = s.toString()
                 }else {
 
                     onPaymentCardComplete.onPayCardSwitchAction(
@@ -1834,6 +1848,20 @@ class PaymentInlineViewHolder (private val context: Context,
             PaymentDataSource.setBinLookupResponse(null)
 
         }
+        if(getPreTypedCardData()?.cardholderName!=null){
+            tapCardInputView.setVisibilityOfHolderField(false)
+            tapCardInputView.holderNameEnabled= false
+        }
+        if(getPreTypedCardData()!=null){
+            getPreTypedCardData()?.cardholderName=null
+            getPreTypedCardData()?.cardNumber=null
+            getPreTypedCardData()?.expirationYear=null
+            getPreTypedCardData()?.expirationMonth=null
+            getPreTypedCardData()?.cvc=null
+
+        }
+
+
 
       /*  if(tapCardInputView.fullCardNumber!=null){
             tapCardInputView.fullCardNumber= null
