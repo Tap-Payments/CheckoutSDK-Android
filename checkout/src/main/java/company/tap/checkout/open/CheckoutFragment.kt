@@ -14,6 +14,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,6 +40,7 @@ import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.apiresponse.CardViewState
 import company.tap.checkout.internal.apiresponse.Resource
 import company.tap.checkout.internal.enums.SectionType
+import company.tap.checkout.internal.utils.AppColorTheme
 import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.utils.ResizeAnimation
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
@@ -52,6 +54,7 @@ import company.tap.tapuilibrary.uikit.atoms.TapImageView
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
+import company.tap.tapuilibrary.uikit.ktx.loadAppThemManagerFromPath
 import company.tap.tapuilibrary.uikit.ktx.setTopBorders
 import company.tap.tapuilibrary.uikit.utils.BlurBuilder
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
@@ -67,6 +70,8 @@ import org.json.JSONObject
 // * Use the [CheckoutFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+
+
 class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, InlineViewCallback {
 
     private var _Context: Context? = null
@@ -254,6 +259,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             }
             enableSections()
             originalHeight = checkoutLayout.measuredHeight
+            topHeaderView?.backgroundHeader?.alpha = 1f
 
             checkoutLayout.addView(topHeaderView, 0)
 
@@ -272,24 +278,26 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         var borderOpacityVal: String? = null
         //Workaround since we don't have direct method for extraction
         borderOpacityVal = borderColor.substring(borderColor.length - 2)
-        newColorVal = "#" + borderOpacityVal + borderColor.substring(0, borderColor.length - 2)
-            .replace("#", "")
-        println("color iii>>" + newColorVal)
+        newColorVal = "#" + borderOpacityVal + borderColor.substring(0, borderColor.length - 2).replace("#", "")
 
-        //  topHeaderView?.setBackgroundResource(R.drawable.blurviewnew)
-          topHeaderView?.setBackgroundColor(Color.TRANSPARENT)
+        topHeaderView?.apply {
+            setTopBorders(
+                this,
+                shadowColor = loadAppThemManagerFromPath(ThemeManager.getValue(AppColorTheme.PoweredByTapBackgroundColor)),
+                tintColor = loadAppThemManagerFromPath(ThemeManager.getValue(AppColorTheme.PoweredByTapBackgroundColor))
+            )
+        }
         scrollView?.let {
             setTopBorders(
                 it,
-                40f,// corner raduis
-                0.0f,
-                Color.parseColor(
+
+                strokeColor = Color.parseColor(
                     newColorVal
                 ),
-                Color.parseColor(
+                tintColor = Color.parseColor(
                     newColorVal
                 ),// tint color
-                Color.parseColor(
+                shadowColor = Color.parseColor(
                     newColorVal
                 )
             )
