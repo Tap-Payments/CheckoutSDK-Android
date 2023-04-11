@@ -2031,9 +2031,11 @@ else
           //  paymentInlineViewHolder,
             tabAnimatedActionButtonViewHolder
         )
-             cardViewHolder.view.mainChipgroup?.chipsRecycler?.fadeVisibility(View.GONE)
+        Handler().postDelayed({
+        cardViewHolder.view.mainChipgroup?.chipsRecycler?.fadeVisibility(View.GONE)
              cardViewHolder.view.mainChipgroup?.groupAction?.fadeVisibility(View.GONE)
              cardViewHolder.view.mainChipgroup?.groupName?.fadeVisibility(View.GONE)
+        }, 1500)
       //  cardViewHolder.view.tapSeparatorViewLinear1.fadeVisibility(View.GONE,2000)
             cardViewHolder.view.cardInfoHeaderText.visibility =View.VISIBLE
            cardViewHolder.view.cardInfoHeaderText.text =  LocalizationManager.getValue("savedCardSectionTitle", "TapCardInputKit")
@@ -3145,9 +3147,9 @@ else
                 amountViewHolder.view.amount_section?.itemAmountLayout?.isEnabled = false
                 amountViewHolder.view.amount_section?.itemAmountLayout?.isClickable = false
 
-                Handler().postDelayed({
+
                 onClickCardPayment()
-                 }, 1000)
+
 
             }
             paymentType === PaymentType.SavedCard -> {
