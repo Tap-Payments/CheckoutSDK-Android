@@ -33,7 +33,6 @@ class ResizeAnimation(view: View?, targetHeight: Int, startHeight: Int, expandHe
             view?.requestLayout()
         }else {
             val newHeight2 = (newtargetHeight + (newstartHeight - newtargetHeight) * interpolatedTime)
-           // val newHeight2 = (newtargetHeight - newstartHeight * interpolatedTime).toInt()
             view?.layoutParams?.height = newHeight2.toInt()
             view?.requestLayout()
         }

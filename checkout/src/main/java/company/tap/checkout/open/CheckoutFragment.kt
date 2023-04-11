@@ -40,9 +40,8 @@ import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.apiresponse.CardViewState
 import company.tap.checkout.internal.apiresponse.Resource
 import company.tap.checkout.internal.enums.SectionType
-import company.tap.checkout.internal.utils.AppColorTheme
-import company.tap.checkout.internal.utils.CustomUtils
-import company.tap.checkout.internal.utils.ResizeAnimation
+import company.tap.checkout.internal.utils.*
+import company.tap.checkout.internal.utils.Constants.PoweredByLayoutAnimationDelay
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.controller.SDKSession.sessionDelegate
@@ -78,7 +77,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     @JvmField
     var _viewModel: CheckoutViewModel? = null
-    private lateinit var cardViewModel: CardViewModel
     var _activity: Activity? = null
     var checkOutActivity: CheckOutActivity? = null
     lateinit var closeText: TapTextView
@@ -97,30 +95,12 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     @JvmField
     var isScannerOpened: Boolean = false
 
-    @JvmField
-    var isFullscreen = false
-    var heightIn: Int = 0
+
     private var inLineCardLayout: FrameLayout? = null
     private var relativeLL: RelativeLayout? = null
     private var mainCardLayout: CardView? = null
     private var topHeaderView: TapBrandView? = null
     private var displayMetrics: Int? = 0
-    private var targetHeight: Int? = 0
-
-    private val mBackgroundBlurRadius = 30
-    private val mBlurBehindRadius = 60
-
-    // We set a different dim amount depending on whether window blur is enabled or disabled
-    private val mDimAmountWithBlur = 0.1f
-    private val mDimAmountNoBlur = 0.4f
-
-    // We set a different alpha depending on whether window blur is enabled or disabled
-    private val mWindowBackgroundAlphaWithBlur = 170
-    private val mWindowBackgroundAlphaNoBlur = 255
-
-    // Use a rectangular shape drawable for the window background. The outline of this drawable
-    // dictates the shape and rounded corners for the window background blur area.
-    private var mWindowBackgroundDrawable: Drawable? = null
     var originalHeight: Int? = 0
 
     var blurView: BlurView? = null
@@ -134,23 +114,10 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     }
 
-    /*  @RequiresApi(Build.VERSION_CODES.N)
-      override fun onDestroyView() {
-          println("onDestroyView>>>")
-          *//*if (view?.parent != null) {
-            (view?.parent as ViewGroup).removeView(view)
-        }*//*
-        resetTabAnimatedButton()
-        super.onDestroyView()
-    }*/
-
 
     override fun onDestroy() {
         super.onDestroy()
-
-        // if (!this.isDestroyed()) {
         Glide.with(this).pauseRequests()
-        // }
         resetTabAnimatedButton()
 
     }
@@ -278,7 +245,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         var borderOpacityVal: String? = null
         //Workaround since we don't have direct method for extraction
         borderOpacityVal = borderColor.substring(borderColor.length - 2)
-        newColorVal = "#" + borderOpacityVal + borderColor.substring(0, borderColor.length - 2).replace("#", "")
+        newColorVal = "#" + borderOpacityVal + borderColor.substring(0, borderColor.length - 2)
+            .replace("#", "")
 
         topHeaderView?.apply {
             setTopBorders(
@@ -348,37 +316,15 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
         }
 
-        adjustHeightAccToDensity()
+        adjustHeightAccToDensity(displayMetrics)
+        topHeaderView?.startPoweredByAnimation(
+            delayTime = PoweredByLayoutAnimationDelay,
+            topHeaderView?.poweredByImage
+        )
 
-        Handler(Looper.getMainLooper()).postDelayed({
-            topHeaderView?.visibility = View.VISIBLE
-            topHeaderView?.setAlpha(0.8f)
-        }, 1000)
-        val resizeAnimation =
-            targetHeight?.let {
-                ResizeAnimation(
-                    topHeaderView,
-                    it,
-                    0, true
-                )
-            }
-
-        resizeAnimation?.duration = 1500
-        topHeaderView?.startAnimation(resizeAnimation)
-
-        Handler(Looper.getMainLooper()).postDelayed({
-            topHeaderView?.visibility = View.VISIBLE
-        }, 3000)
 
     }
 
-    private fun adjustHeightAccToDensity() {
-        if (displayMetrics == DisplayMetrics.DENSITY_260 || displayMetrics == DisplayMetrics.DENSITY_280 || displayMetrics == DisplayMetrics.DENSITY_300 || displayMetrics == DisplayMetrics.DENSITY_XHIGH || displayMetrics == DisplayMetrics.DENSITY_340 || displayMetrics == DisplayMetrics.DENSITY_360) {
-            targetHeight = 90
-        } else if (displayMetrics == DisplayMetrics.DENSITY_450 || displayMetrics == DisplayMetrics.DENSITY_420 || displayMetrics == DisplayMetrics.DENSITY_400) {
-            targetHeight = 120
-        } else targetHeight = 140
-    }
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onAttach(context: Context) {
@@ -529,36 +475,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     }
 
 
-    /*  private fun initKeyBoardListener() {
-          // Минимальное значение клавиатуры.
-          // Threshold for minimal keyboard height.
-          val MIN_KEYBOARD_HEIGHT_PX = 150
-          // Окно верхнего уровня view.
-          // Top-level window decor view.
-              // val decorView: View = netscape.javascript.JSObject.getWindow().getDecorView()
-          // Регистрируем глобальный слушатель. Register global layout listener.
-          decorView.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
-              // Видимый прямоугольник внутри окна.
-              // Retrieve visible rectangle inside window.
-              private val windowVisibleDisplayFrame: Rect = Rect()
-              private var lastVisibleDecorViewHeight = 0
-              override fun onGlobalLayout() {
-                  decorView.getWindowVisibleDisplayFrame(windowVisibleDisplayFrame)
-                  val visibleDecorViewHeight: Int = windowVisibleDisplayFrame.height()
-                  if (lastVisibleDecorViewHeight != 0) {
-                      if (lastVisibleDecorViewHeight > visibleDecorViewHeight + MIN_KEYBOARD_HEIGHT_PX) {
-
-                      } else if (lastVisibleDecorViewHeight + MIN_KEYBOARD_HEIGHT_PX < visibleDecorViewHeight) {
-
-                      }
-                  }
-                  // Сохраняем текущую высоту view до следующего вызова.
-                  // Save current decor view height for the next call.
-                  lastVisibleDecorViewHeight = visibleDecorViewHeight
-              }
-          })
-      }*/
-
     fun dismissBottomSheetDialog() {
         //bottomSheetDialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
         ThemeManager.currentTheme = ""
@@ -576,49 +492,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         return BottomSheetDialog(requireContext(), R.style.MyTransparentBottomSheetDialogTheme)
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.S)
-    private fun setupWindowBlurListener() {
-        val windowBlurEnabledListener: (Boolean) -> Unit = this::updateWindowForBlurs
-        activity?.window?.decorView?.addOnAttachStateChangeListener(
-            object : View.OnAttachStateChangeListener {
-                override fun onViewAttachedToWindow(v: View) {
-                    activity?.getWindowManager()?.addCrossWindowBlurEnabledListener(
-                        windowBlurEnabledListener
-                    )
-
-                }
-
-                override fun onViewDetachedFromWindow(v: View) {
-                    activity?.getWindowManager()?.removeCrossWindowBlurEnabledListener(
-                        windowBlurEnabledListener
-                    )
-                }
-            })
-    }
-
-    private fun updateWindowForBlurs(blursEnabled: Boolean) {
-        mWindowBackgroundDrawable?.alpha =
-            if (blursEnabled && mBackgroundBlurRadius > 0) mWindowBackgroundAlphaWithBlur else mWindowBackgroundAlphaNoBlur
-        activity?.getWindow()
-            ?.setDimAmount(if (blursEnabled && mBlurBehindRadius > 0) mDimAmountWithBlur else mDimAmountNoBlur)
-        if (buildIsAtLeastS()) {
-            // Set the window background blur and blur behind radii
-            activity?.getWindow()
-                ?.setBackgroundBlurRadius(mBackgroundBlurRadius)
-            activity?.getWindow()
-                ?.getAttributes()
-                ?.setBlurBehindRadius(mBlurBehindRadius)
-            activity?.getWindow()
-                ?.setAttributes(
-                    activity?.getWindow()
-                        ?.getAttributes()
-                )
-        }
-    }
-
-    private fun buildIsAtLeastS(): Boolean {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-    }
 
 }
 

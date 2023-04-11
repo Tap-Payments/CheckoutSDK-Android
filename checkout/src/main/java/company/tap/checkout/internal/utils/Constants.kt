@@ -10,7 +10,7 @@ import java.util.*
 Copyright (c) 2022    Tap Payments.
 All rights reserved.
  **/
- object Constants {
+object Constants {
     /**
      * Changing this to ENVIRONMENT_PRODUCTION will make the API return chargeable card information.
      * Please refer to the documentation to read about the required steps needed to enable
@@ -116,5 +116,8 @@ All rights reserved.
                 put("publicKey", DIRECT_TOKENIZATION_PUBLIC_KEY)
             }
         }
+
+
+    const val PoweredByLayoutAnimationDelay = 1500L
 
 }
