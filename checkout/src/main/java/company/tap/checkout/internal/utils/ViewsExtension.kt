@@ -5,18 +5,19 @@ import android.os.Looper
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.animation.AnimationUtils
-import android.widget.ImageView
 import androidx.core.os.postDelayed
 import company.tap.checkout.R
 
 private var targetHeight: Int? = 0
-private var animationDelayForResizeAnimation = 1500L
+private var animationDelayForResizeAnimation = 2000L
 
 
 fun View.startPoweredByAnimation(delayTime: Long, poweredByLogo: View?) {
     Handler(Looper.getMainLooper()).postDelayed({
+        poweredByLogo?.visibility = View.GONE
         this.visibility = View.VISIBLE
         doAftetSpecificTime(execute = {
+            poweredByLogo?.visibility = View.VISIBLE
             poweredByLogo?.addFadeInAnimation()
         })
     }, delayTime)
