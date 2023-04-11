@@ -446,9 +446,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             setTopBorders(
                 view = it1,
                 cornerRadius = 35f,
-                strokeColor = loadAppThemManagerFromPath(ThemeManager.getValue(AppColorTheme.PoweredByTapBackgroundColor)),// stroke color
-                tintColor = loadAppThemManagerFromPath(ThemeManager.getValue(AppColorTheme.PoweredByTapBackgroundColor)),// tint color
-                shadowColor = loadAppThemManagerFromPath(ThemeManager.getValue(AppColorTheme.PoweredByTapBackgroundColor))
+                strokeWidth=0.0f,
+                strokeColor = loadAppThemManagerFromPath(AppColorTheme.PoweredByTapBackgroundColor),// stroke color
+                tintColor = loadAppThemManagerFromPath(AppColorTheme.PoweredByTapBackgroundColor),// tint color
+                shadowColor = loadAppThemManagerFromPath(AppColorTheme.PoweredByTapBackgroundColor)
             )
 
         }//

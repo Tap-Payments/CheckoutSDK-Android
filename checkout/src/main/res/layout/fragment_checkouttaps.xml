@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -8,13 +9,14 @@
     android:orientation="vertical"
     android:fillViewport="true"
     android:clipToOutline="true"
+    app:cardElevation="0dp"
+    android:outlineProvider="none"
     android:id="@+id/mainCardLayout"
     app:cardCornerRadius="1.5dp"
+    app:cardPreventCornerOverlap="false"
+    app:cardUseCompatPadding="true"
     app:cardBackgroundColor="@android:color/transparent"
     android:background="@android:color/transparent"
-
-
-
     tools:context=".open.CheckoutFragment">
 
 

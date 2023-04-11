@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
@@ -15,6 +16,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.DisplayMetrics
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +26,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.annotation.RequiresApi
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.cardview.widget.CardView
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.DialogFragment
@@ -34,6 +37,7 @@ import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.card.MaterialCardView
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.apiresponse.CardViewModel
@@ -132,7 +136,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         return inflater.inflate(R.layout.fragment_checkouttaps, container, false)
     }
 
-    @SuppressLint("ResourceAsColor")
+    @SuppressLint("ResourceAsColor", "UseCompatLoadingForColorStateLists")
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -154,12 +158,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         )
         inLineCardLayout = view.findViewById(R.id.inline_container)
         val headerLayout: LinearLayout? = view.findViewById(R.id.headerLayout)
-        bottomSheetLayout = bottomSheetDialog.findViewById(R.id.design_bottom_sheet)
-        closeText = view.findViewById(R.id.closeText)
-        closeImage = view.findViewById(R.id.closeImage)
-        scrollView = view.findViewById(R.id.scrollView)
-        relativeLL = view.findViewById(R.id.relativeLL)
-        mainCardLayout = view.findViewById(R.id.mainCardLayout)
+        initViews(view)
         blurView = BlurView(context)
 
         topHeaderView = context?.let { TapBrandView(it) }
@@ -168,7 +167,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         displayMetrics = CustomUtils.getDeviceDisplayMetrics(context as Activity)
 
 
-        val heightscreen: Int = Resources.getSystem().getDisplayMetrics().heightPixels;
+        val heightscreen: Int = Resources.getSystem().displayMetrics.heightPixels;
         if (LocalizationManager.currentLocalized.length() != 0)
             closeText.text = LocalizationManager.getValue("close", "Common")
 
@@ -224,9 +223,31 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                     }
                 }
             }
+
+            val borderColor: String =
+                ThemeManager.getValue<String>("poweredByTap.backgroundColor").toString()
+            var borderOpacityVal: String? = null
+            //Workaround since we don't have direct method for extraction
+            borderOpacityVal = borderColor.substring(borderColor.length - 2)
+            newColorVal = "#" + borderOpacityVal + borderColor.substring(0, borderColor.length - 2)
+                .replace("#", "")
+            Log.e("color",newColorVal.toString())
             enableSections()
             originalHeight = checkoutLayout.measuredHeight
-            topHeaderView?.backgroundHeader?.alpha = 1f
+            topHeaderView?.backgroundHeader?.setBackgroundResource(R.drawable.border_blur)
+           // topHeaderView?.backgroundHeader?.setBa(R.drawable.border_blur)
+            topHeaderView?.backgroundHeader?.backgroundTintList = AppCompatResources.getColorStateList(requireContext(),R.color.test)
+
+            //  topHeaderView?.outerConstraint?.setBackgroundResource(R.drawable.border_blur)
+
+            topHeaderView?.outerConstraint?.apply {
+                val radius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10f, context.resources.displayMetrics)
+
+                this.setBackgroundColor(0)
+                this.radius=radius
+            }
+
+
 
             checkoutLayout.addView(topHeaderView, 0)
 
@@ -240,25 +261,12 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             bottomSheetDialog.behavior.setState(BottomSheetBehavior.STATE_EXPANDED)
             //  }, 0)
         }
-        val borderColor: String =
-            ThemeManager.getValue<String>("poweredByTap.backgroundColor").toString()
-        var borderOpacityVal: String? = null
-        //Workaround since we don't have direct method for extraction
-        borderOpacityVal = borderColor.substring(borderColor.length - 2)
-        newColorVal = "#" + borderOpacityVal + borderColor.substring(0, borderColor.length - 2)
-            .replace("#", "")
 
-        topHeaderView?.apply {
-            setTopBorders(
-                this,
-                shadowColor = loadAppThemManagerFromPath(ThemeManager.getValue(AppColorTheme.PoweredByTapBackgroundColor)),
-                tintColor = loadAppThemManagerFromPath(ThemeManager.getValue(AppColorTheme.PoweredByTapBackgroundColor))
-            )
-        }
+
+
         scrollView?.let {
             setTopBorders(
                 it,
-
                 strokeColor = Color.parseColor(
                     newColorVal
                 ),
@@ -286,10 +294,10 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                 )
             }
         }
-        mainCardLayout.let { it1 ->
-            if (it1 != null) {
+        mainCardLayout.let { card ->
+            if (card != null) {
                 setTopBorders(
-                    it1,
+                    card,
                     35f,// corner raduis
                     0.0f,
                     Color.parseColor(newColorVal),// stroke color
@@ -323,6 +331,15 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         )
 
 
+    }
+
+    private fun initViews(view: View) {
+        bottomSheetLayout = bottomSheetDialog.findViewById(R.id.design_bottom_sheet)
+        closeText = view.findViewById(R.id.closeText)
+        closeImage = view.findViewById(R.id.closeImage)
+        scrollView = view.findViewById(R.id.scrollView)
+        relativeLL = view.findViewById(R.id.relativeLL)
+        mainCardLayout = view.findViewById(R.id.mainCardLayout)
     }
 
 
