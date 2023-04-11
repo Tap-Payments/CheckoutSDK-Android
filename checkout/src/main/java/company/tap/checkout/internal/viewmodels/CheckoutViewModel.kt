@@ -1902,8 +1902,9 @@ else
         when (savedCardsModel) {
             is SavedCard -> {
                     Bugfender.d(CustomUtils.tagEvent,"Saved card selected :"+savedCardsModel.lastFour+"&"+savedCardsModel.id )
-              //  paymentInlineViewHolder.view.alpha = 1f
-              paymentInlineViewHolder.setDataForSavedCard(
+
+                cardViewHolder.view.cardInfoHeaderText.text =  LocalizationManager.getValue("savedCardSectionTitle", "TapCardInputKit")
+                paymentInlineViewHolder.setDataForSavedCard(
                     savedCardsModel,
                     CardInputUIStatus.SavedCard
                 )
@@ -3487,7 +3488,10 @@ else
     fun dismissBottomSheet() {
         checkoutFragment?.dismissBottomSheetDialog()
     }
+fun setTitleNormalCard(){
+    cardViewHolder.view.cardInfoHeaderText.text =  LocalizationManager.getValue("cardSectionTitleOr", "TapCardInputKit")
 
+}
 
 
 

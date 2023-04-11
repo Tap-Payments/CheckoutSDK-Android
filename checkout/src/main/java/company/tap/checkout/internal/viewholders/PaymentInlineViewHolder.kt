@@ -61,6 +61,7 @@ import company.tap.tapuilibrary.uikit.interfaces.TapSelectionTabLayoutInterface
 import company.tap.tapuilibrary.uikit.models.SectionTabItem
 import company.tap.tapuilibrary.uikit.organisms.TapPaymentInput
 import company.tap.tapuilibrary.uikit.views.*
+import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 
 @RequiresApi(Build.VERSION_CODES.N)
@@ -470,7 +471,7 @@ class PaymentInlineViewHolder (private val context: Context,
         tapCardInputView.backArrow.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
               //  println("getPreTypedCardData data was there"+getPreTypedCardData())
-
+                checkoutViewModel.setTitleNormalCard()
              if( getPreTypedCardData() != null ) setPrevTypedCard()
              else {
 
@@ -1860,6 +1861,7 @@ class PaymentInlineViewHolder (private val context: Context,
         closeButton?.visibility = View.GONE
         controlScannerOptions()
         cardInputUIStatus = CardInputUIStatus.NormalCard
+        checkoutViewModel.setTitleNormalCard()
         /*tapCardInputView.setSingleCardInput(
               CardBrandSingle.Unknown, null
           )*/
@@ -1906,6 +1908,7 @@ class PaymentInlineViewHolder (private val context: Context,
       //  acceptedCardText.visibility = View.VISIBLE
         tabLayout.fadeVisibility(View.VISIBLE)
         acceptedCardText.fadeVisibility(View.VISIBLE)
+        intertabLayout.fadeVisibility(View.VISIBLE)
 
 
     }
