@@ -601,7 +601,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     override fun displayGoPayLogin() {
-        setSlideAnimation()
+
         saveCardSwitchHolder?.let {
             removeViews(
                 businessViewHolder, amountViewHolder,
@@ -622,29 +622,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         goPayViewsHolder.goPayopened = true
     }
 
-    private fun setSlideAnimation() {
-        if (this::bottomSheetLayout.isInitialized) {
-            // AnimationUtils.loadAnimation(bottomSheetLayout.context,R.anim.slide_down)
-            // AnimationEngine.applyTransition(bottomSheetLayout, AnimationEngine.Type.SLIDE, 1200)
-
-        /*    val fadeIn = AlphaAnimation(0f, 1f)
-            fadeIn.interpolator = DecelerateInterpolator() //add this
-            fadeIn.duration = 1000
-
-            val fadeOut = AlphaAnimation(1f, 0f)
-            fadeOut.interpolator = AccelerateInterpolator() //and this
-            fadeOut.startOffset = 1000
-            fadeOut.duration = 1000
-
-            val animation = AnimationSet(false) //change to false
-            animation.addAnimation(fadeIn)
-       //     animation.addAnimation(fadeOut)
-            this.bottomSheetLayout.animation = animation*/
-        }
-    }
 
     override fun displayGoPay() {
-        setSlideAnimation()
+
         saveCardSwitchHolder?.let {
             removeViews(
                 businessViewHolder,
@@ -717,7 +697,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
         removeInlineScanner()
         removeNFCViewFragment()
-        setSlideAnimation()
+
       /*  Handler().postDelayed({
             translateViewToNewHeight(bottomSheetLayout.measuredHeight,false)
         },400)*/
@@ -873,7 +853,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         otpType: String,
         chargeResponse: Charge?
     ) {
-        setSlideAnimation()
+
 
        // amountViewHolder.changeGroupAction(false)
         amountViewHolder.view.amount_section.itemCountButton.text = LocalizationManager.getValue(
@@ -1916,12 +1896,7 @@ else
        // paymentInlineViewHolder.resetPaymentCardView()
         paymentInlineViewHolder.tapCardInputView.clear()
         paymentInlineViewHolder.clearCardInputAction()
-       /* if (paymentInlineViewHolder.tapCardInputView.hasFocus()) {
-            paymentInlineViewHolder.tapCardInputView.clear()
-           // paymentInlineViewHolder.clearCardInputAction()
-            //paymentInlineViewHolder.onFocusChange("")
-           // CustomUtils.hideKeyboardFrom(context, paymentInlineViewHolder.view)
-        }*/
+
         println("savedCardsModel" + savedCardsModel)
         unActivateActionButton()
         when (savedCardsModel) {
@@ -2044,7 +2019,23 @@ else
     @RequiresApi(Build.VERSION_CODES.N)
     private fun onClickCardPayment() {
         println("onClickCardPayment")
-        println("paymentInlineViewHolder val"+paymentInlineViewHolder.getCard())
+
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
+        saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
+
+        removeViews(
+          //  businessViewHolder,
+         //   amountViewHolder,
+           // cardViewHolder,
+          //  paymentInlineViewHolder,
+            tabAnimatedActionButtonViewHolder
+        )
+             cardViewHolder.view.mainChipgroup?.chipsRecycler?.fadeVisibility(View.GONE)
+             cardViewHolder.view.mainChipgroup?.groupAction?.fadeVisibility(View.GONE)
+             cardViewHolder.view.mainChipgroup?.groupName?.fadeVisibility(View.GONE)
+      //  cardViewHolder.view.tapSeparatorViewLinear1.fadeVisibility(View.GONE,2000)
+            cardViewHolder.view.cardInfoHeaderText.visibility =View.VISIBLE
+           cardViewHolder.view.cardInfoHeaderText.text =  LocalizationManager.getValue("savedCardSectionTitle", "TapCardInputKit")
         if(isSavedCardSelected == true){
             cardViewModel.processEvent(
                 CardViewEvent.CreateTokenExistingCardEvent,
@@ -2069,19 +2060,6 @@ else
                 null
             )
         }
-
-        setSlideAnimation()
-
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
-        saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
-
-        removeViews(
-          //  businessViewHolder,
-         //   amountViewHolder,
-            cardViewHolder,
-            paymentInlineViewHolder,
-            tabAnimatedActionButtonViewHolder
-        )
 
 
     }
@@ -2213,7 +2191,7 @@ else
 
     // Override function to open NFC fragment and scan the card via NFC.
     override fun onClickNFC() {
-        setSlideAnimation()
+
         removeViews(
             //businessViewHolder,
             // amountViewHolder,
@@ -2396,7 +2374,6 @@ else
             filterViewModels(selectedCurrency)
         } else {
             filterViewModels(currentCurrency)
-            //Bugfender.d("Currency changed to : "+currentCurrency ,CustomUtils.tagEvent)
 
         }
 
@@ -2435,52 +2412,6 @@ else
         if(::amountViewHolder.isInitialized&& ::cardViewHolder.isInitialized &&:: cardViewHolder. isInitialized && ::paymentInlineViewHolder.isInitialized)
         removeViews(businessViewHolder,amountViewHolder,cardViewHolder,paymentInlineViewHolder)
 
-       /* if(::webViewHolder.isInitialized)removeViews(webViewHolder)
-         addViews(businessViewHolder,saveCardSwitchHolder)
-        businessViewHolder.view.headerView.constraint.visibility = View.GONE
-        businessViewHolder.view.topSeparatorLinear.visibility = View.GONE
-        saveCardSwitchHolder?.view?.cardSwitch?.switchesLayout?.visibility= View.GONE
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility= View.VISIBLE
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setDisplayMetrics(CustomUtils.getDeviceDisplayMetrics(contextSDK as Activity))*/
-            // removeAllViews()
-       /* saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
-            ActionButtonState.ERROR
-        )
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
-            false,
-            "en",
-            null,
-            Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
-            Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
-        )
-
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
-            ActionButtonState.ERROR
-        )*/
-       // checkoutFragment.closeText.visibility =View.GONE
-     /*   val payString: String = LocalizationManager.getValue("pay", "ActionButton")
-        if(chargeResponse?.status== ChargeStatus.CAPTURED||chargeResponse?.status ==ChargeStatus.INITIATED){
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
-            true,"en","",
-            Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")))
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.SUCCESS)
-        }else {
-            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
-                false,
-                "en",
-                null,
-                Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
-                Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
-            )
-
-            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
-                ActionButtonState.ERROR
-            )
-        }*/
-    /*  if (::bottomSheetDialog.isInitialized)
-            bottomSheetDialog.dismiss()*/
 
         Handler().postDelayed({
            // checkoutFragment.dismiss()
