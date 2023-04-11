@@ -446,14 +446,14 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
        R.id.action_dark -> {
            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-           ThemeManager.loadTapTheme(resources, R.raw.defaultdarktheme, "defaultdarktheme")
+           ThemeManager.loadTapTheme(resources, R.raw.defaultdarktheme1, "defaultdarktheme")
 
            recreate()
            true
        }
        R.id.action_light -> {
            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-           ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "defaultlighttheme")
+           ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme2, "defaultlighttheme")
            recreate()
            true
        }
