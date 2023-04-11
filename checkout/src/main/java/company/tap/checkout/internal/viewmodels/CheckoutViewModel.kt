@@ -726,9 +726,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         removeInlineScanner()
         removeNFCViewFragment()
         setSlideAnimation()
-        /*  Handler().postDelayed({
-              translateViewToNewHeight(bottomSheetLayout.measuredHeight,false)
-          },400)*/
     }
 
 
@@ -869,9 +866,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         itemsViewHolder.view.mainCurrencyChip.chipsRecycler.adapter = currencyAdapter
         //  itemsViewHolder.view.itemRecylerView.adapter =itemAdapter
         frameLayout.visibility = View.GONE
-        /*  Handler().postDelayed({
-              translateViewToNewHeight(bottomSheetLayout.measuredHeight,false)
-          },400)*/
+
 
 
     }
@@ -1085,6 +1080,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     //  checkoutFragment.closeText.visibility = View.VISIBLE
                     webFrameLayout.visibility = View.VISIBLE
                     println("fragment hh" + Resources.getSystem().getDisplayMetrics().heightPixels)
+                    if (::bottomSheetLayout.isInitialized)
                     translateHeightRedirect(sdkLayout)
 
                 }, 500)
@@ -2079,6 +2075,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
         businessViewHolder.view.headerView.constraint.visibility = View.GONE
         Handler().postDelayed({
+            if (::bottomSheetLayout.isInitialized)
             translateViewToNewHeight(bottomSheetLayout.measuredHeight, true)
         }, 400)
 
@@ -2284,6 +2281,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet)
         BottomSheetBehavior.from(bottomSheet as View).state = BottomSheetBehavior.STATE_EXPANDED
         Handler().postDelayed({
+            if (::bottomSheetLayout.isInitialized)
             translateViewToNewHeight(bottomSheetLayout.measuredHeight, false)
         }, 400)
         checkSelectedAmountInitiated()
@@ -2326,6 +2324,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet)
         BottomSheetBehavior.from(bottomSheet as View).state = BottomSheetBehavior.STATE_EXPANDED
         Handler().postDelayed({
+            if (::bottomSheetLayout.isInitialized)
             translateViewToNewHeight(bottomSheetLayout.measuredHeight, false)
         }, 400)
         checkSelectedAmountInitiated()

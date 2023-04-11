@@ -5,28 +5,17 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
-import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.*
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.os.Looper
-import android.util.DisplayMetrics
 import android.util.Log
-import android.util.TypedValue
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
 import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.annotation.RequiresApi
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.cardview.widget.CardView
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.DialogFragment
@@ -37,7 +26,6 @@ import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.card.MaterialCardView
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.apiresponse.CardViewModel
@@ -57,14 +45,10 @@ import company.tap.tapuilibrary.uikit.atoms.TapImageView
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
-import company.tap.tapuilibrary.uikit.ktx.loadAppThemManagerFromPath
 import company.tap.tapuilibrary.uikit.ktx.setTopBorders
-import company.tap.tapuilibrary.uikit.utils.BlurBuilder
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
 import company.tap.tapuilibrary.uikit.views.TapBrandView
 import eightbitlab.com.blurview.BlurView
-import eightbitlab.com.blurview.RenderEffectBlur
-import eightbitlab.com.blurview.RenderScriptBlur
 import org.json.JSONObject
 
 
@@ -146,15 +130,15 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         _Context?.let { cardViewModel.getContext(it) }
         backgroundColor = (Color.parseColor(ThemeManager.getValue("tapBottomSheet.dimmedColor")))
         setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
+
+
         bottomSheetDialog.behavior.isDraggable = true
         val checkoutLayout: LinearLayout? = view.findViewById(R.id.fragment_all)
         val frameLayout: FrameLayout? = view.findViewById(R.id.fragment_container_nfc_lib)
         val webFrameLayout: FrameLayout? = view.findViewById(R.id.webFrameLayout)
-        webFrameLayout?.setLayoutParams(
-            LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                Resources.getSystem().displayMetrics.heightPixels
-            )
+        webFrameLayout?.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            Resources.getSystem().displayMetrics.heightPixels
         )
         inLineCardLayout = view.findViewById(R.id.inline_container)
         val headerLayout: LinearLayout? = view.findViewById(R.id.headerLayout)
@@ -167,7 +151,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         displayMetrics = CustomUtils.getDeviceDisplayMetrics(context as Activity)
 
 
-        val heightscreen: Int = Resources.getSystem().displayMetrics.heightPixels;
+        val heightscreen: Int = Resources.getSystem().displayMetrics.heightPixels
         if (LocalizationManager.currentLocalized.length() != 0)
             closeText.text = LocalizationManager.getValue("close", "Common")
 
@@ -231,35 +215,29 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             borderOpacityVal = borderColor.substring(borderColor.length - 2)
             newColorVal = "#" + borderOpacityVal + borderColor.substring(0, borderColor.length - 2)
                 .replace("#", "")
-            Log.e("color",newColorVal.toString())
+            Log.e("color", newColorVal.toString())
             enableSections()
             originalHeight = checkoutLayout.measuredHeight
-            topHeaderView?.backgroundHeader?.setBackgroundResource(R.drawable.border_blur)
-           // topHeaderView?.backgroundHeader?.setBa(R.drawable.border_blur)
-            topHeaderView?.backgroundHeader?.backgroundTintList = AppCompatResources.getColorStateList(requireContext(),R.color.test)
-
-            //  topHeaderView?.outerConstraint?.setBackgroundResource(R.drawable.border_blur)
-
-            topHeaderView?.outerConstraint?.apply {
-                val radius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10f, context.resources.displayMetrics)
-
-                this.setBackgroundColor(0)
-                this.radius=radius
-            }
 
 
+            topHeaderView?.backgroundHeader?.setBackgroundDrawable(
+                createDrawableGradientForBlurry(
+                    intArrayOf(
+                        Color.parseColor(newColorVal),
+                        Color.parseColor(context?.getString(R.color.black_blur_12)),
+                        Color.parseColor(newColorVal)
+                    )
+                )
+            )
 
             checkoutLayout.addView(topHeaderView, 0)
-
-
         }
         inLineCardLayout?.minimumHeight = heightscreen - checkoutLayout?.height!!
         dialog?.window?.attributes?.windowAnimations = R.style.DialogAnimation
 
         bottomSheetDialog.setOnShowListener {
-            //Handler().postDelayed({
             bottomSheetDialog.behavior.setState(BottomSheetBehavior.STATE_EXPANDED)
-            //  }, 0)
+
         }
 
 
@@ -366,7 +344,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                 if (::status.isInitialized)
                     _viewModel?.showOnlyButtonView(
                         status,
-                        checkOutActivity as CheckOutActivity?,
+                        checkOutActivity,
                         this
                     )
 
@@ -381,7 +359,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             }
         } else {
             if (::status.isInitialized)
-                _viewModel?.showOnlyButtonView(status, checkOutActivity as CheckOutActivity?, this)
+                _viewModel?.showOnlyButtonView(status, checkOutActivity, this)
         }
 
         setBottomSheetInterface(this)

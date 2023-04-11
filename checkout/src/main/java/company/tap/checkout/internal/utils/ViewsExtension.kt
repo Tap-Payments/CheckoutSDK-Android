@@ -1,5 +1,6 @@
 package company.tap.checkout.internal.utils
 
+import android.graphics.drawable.GradientDrawable
 import android.os.Handler
 import android.os.Looper
 import android.util.DisplayMetrics
@@ -53,4 +54,20 @@ fun adjustHeightAccToDensity(displayMetrics: Int?) {
     } else if (displayMetrics == DisplayMetrics.DENSITY_450 || displayMetrics == DisplayMetrics.DENSITY_420 || displayMetrics == DisplayMetrics.DENSITY_400) {
         targetHeight = 120
     } else targetHeight = 140
+}
+
+
+fun createDrawableGradientForBlurry(colorsArrayList: IntArray): GradientDrawable {
+    val gradientDrawable = GradientDrawable(
+        GradientDrawable.Orientation.BL_TR,
+        colorsArrayList
+    )
+    gradientDrawable.gradientRadius = 100f
+    gradientDrawable.cornerRadii = floatArrayOf(
+        35f, 35f,
+        35f, 35f,
+        0f, 0f,
+        0f, 0f
+    )
+    return gradientDrawable
 }

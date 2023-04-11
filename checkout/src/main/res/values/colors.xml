@@ -10,10 +10,12 @@
     <color name="text_color">#4b4847</color>
     <!--<color name="separator_color">#dfdfdf</color>-->
     <color name="separator_color">#404043</color>
+    <color name="black_blur_12">#4D3C3737</color>
     <color name="black_27">#45000000</color>
     <color name="white">#ffffff</color>
     <color name="whitebg">#ffffff</color>
     <color name="colorOverlay">#78ffffff</color>
     <color name="french_gray">#A8B5B5B5</color>
     <color name="test">#0F000000</color>
+
 </resources>
