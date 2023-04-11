@@ -11,7 +11,6 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
@@ -44,7 +43,6 @@ import company.tap.tapuilibrary.uikit.models.DialogConfigurations
 import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
 //import mobi.foo.benefitinapp.data.Transaction
 //import mobi.foo.benefitinapp.listener.CheckoutListener
-import org.json.JSONObject
 import java.math.BigDecimal
 import java.util.*
 
@@ -190,10 +188,10 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         - Parameter customTheme: Please pass the tap checkout theme object with the names of your custom theme files if needed. If not set, the normal and default TAP theme will be used
          */
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))
-            ThemeManager.loadTapTheme(resources, R.raw.defaultdarktheme1, "darktheme")
+            ThemeManager.loadTapTheme(resources, R.raw.defaultdarktheme, "darktheme")
         else if (ThemeManager.currentTheme.isNotEmpty() && !ThemeManager.currentTheme.contains("dark"))
-            ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme2, "lighttheme")
-        else ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme2, "lighttheme")
+            ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "lighttheme")
+        else ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "lighttheme")
 
 
         /** Configures the theme manager by passing the provided custom theme url
@@ -220,7 +218,6 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
        - Parameter localiseFile: Please pass the name of the custom localisation file if needed. If not set, the normal and default TAP localisations will be used
         */
 
-     //  LocalizationManager.loadTapLocale(resources, R.raw.lang)
        LocalizationManager.loadTapLocale(resources, R.raw.defaulttaplocalisation)
        settingsManager?.getSDKLanguage("sdk_language")?.let { Locale(it) }?.let {
            LocalizationManager.setLocale(this,
@@ -446,14 +443,14 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
        R.id.action_dark -> {
            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-           ThemeManager.loadTapTheme(resources, R.raw.defaultdarktheme1, "defaultdarktheme")
+           ThemeManager.loadTapTheme(resources, R.raw.defaultdarktheme, "defaultdarktheme")
 
            recreate()
            true
        }
        R.id.action_light -> {
            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-           ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme2, "defaultlighttheme")
+           ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "defaultlighttheme")
            recreate()
            true
        }
