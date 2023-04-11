@@ -397,6 +397,10 @@ class CardRepository : APIRequestCallback {
                                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
 
                                     }
+                                    else ->{
+                                        ThemeManager.loadTapTheme(cardRepositoryContext,assetsModel?.theme?.darkUrl.toString(),"darktheme")
+
+                                    }
                                 }
                             }
 
