@@ -13,7 +13,6 @@ import android.os.Handler
 import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.annotation.RequiresApi
@@ -25,9 +24,6 @@ import androidx.fragment.app.viewModels
 import cards.pay.paycardsrecognizer.sdk.Card
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.GranularRoundedCorners
-import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
-import com.github.twocoffeesoneteam.glidetovectoryou.GlideOptions.bitmapTransform
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import company.tap.checkout.R
@@ -53,7 +49,6 @@ import company.tap.tapuilibrary.uikit.ktx.setTopBorders
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
 import company.tap.tapuilibrary.uikit.views.TapBrandView
 import eightbitlab.com.blurview.BlurView
-import jp.wasabeef.glide.transformations.BlurTransformation
 import org.json.JSONObject
 
 
@@ -154,6 +149,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         topHeaderView?.visibility = View.GONE
 
         displayMetrics = CustomUtils.getDeviceDisplayMetrics(context as Activity)
+
 
 
         val heightscreen: Int = Resources.getSystem().displayMetrics.heightPixels
