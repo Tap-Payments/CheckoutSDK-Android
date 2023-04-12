@@ -503,8 +503,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
            true,
            this.let { LocalizationManager.getLocale(it).language },
            this.resources.getString(R.string.payText),
-           Color.parseColor("#2ace00"),
-           Color.parseColor("#ffffff")
+           resources.getColor(R.color.colorBackground),
+           resources.getColor(R.color.colorText)
        )
 
       /* payButton.setOnClickListener {
