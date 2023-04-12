@@ -10,7 +10,7 @@ import androidx.core.os.postDelayed
 import company.tap.checkout.R
 
 private var targetHeight: Int? = 0
-private var animationDelayForResizeAnimation = 2000L
+private var animationDelayForResizeAnimation = 1500L
 
 
 fun View.startPoweredByAnimation(delayTime: Long, poweredByLogo: View?) {

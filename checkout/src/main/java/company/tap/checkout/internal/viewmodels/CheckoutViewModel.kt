@@ -67,11 +67,8 @@ import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.enums.WebViewType
 import company.tap.checkout.internal.interfaces.*
+import company.tap.checkout.internal.utils.*
 import company.tap.checkout.internal.utils.AmountCalculator.calculateExtraFeesAmount
-import company.tap.checkout.internal.utils.CurrencyFormatter
-import company.tap.checkout.internal.utils.CustomUtils
-import company.tap.checkout.internal.utils.ResizeAnimation
-import company.tap.checkout.internal.utils.Utils
 import company.tap.checkout.internal.viewholders.*
 import company.tap.checkout.internal.webview.WebFragment
 import company.tap.checkout.internal.webview.WebViewContract
@@ -93,6 +90,7 @@ import company.tap.tapuilibrary.uikit.datasource.LoyaltyHeaderDataSource
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibrary.uikit.fragment.NFCFragment
+import company.tap.tapuilibrary.uikit.ktx.loadAppThemManagerFromPath
 import company.tap.tapuilibrary.uikit.ktx.makeLinks
 import company.tap.tapuilibrary.uikit.ktx.setTopBorders
 import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
@@ -609,7 +607,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     override fun displayGoPayLogin() {
-        setSlideAnimation()
         saveCardSwitchHolder?.let {
             removeViews(
                 businessViewHolder, amountViewHolder,
@@ -1060,6 +1057,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     //  checkoutFragment.closeText.visibility = View.VISIBLE
                     webFrameLayout.visibility = View.VISIBLE
                     println("fragment hh"+Resources.getSystem().getDisplayMetrics().heightPixels)
+                    if (::bottomSheetLayout.isInitialized)
                     translateHeightRedirect(sdkLayout)
 
                 }, 500)
@@ -2025,6 +2023,7 @@ else
         )
         businessViewHolder.view.headerView.constraint.visibility= View.GONE
   Handler().postDelayed({
+      if (::bottomSheetLayout.isInitialized)
          translateViewToNewHeight(bottomSheetLayout.measuredHeight,true)
         },400)
 
