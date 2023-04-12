@@ -48,7 +48,6 @@ import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibrary.uikit.ktx.setTopBorders
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
 import company.tap.tapuilibrary.uikit.views.TapBrandView
-import eightbitlab.com.blurview.BlurView
 import org.json.JSONObject
 
 
@@ -91,7 +90,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     private var displayMetrics: Int? = 0
     var originalHeight: Int? = 0
 
-    var blurView: BlurView? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -114,9 +112,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
         dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-
         return inflater.inflate(R.layout.fragment_checkouttaps, container, false)
     }
 
@@ -129,8 +125,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         this._viewModel = viewModel
         _Context?.let { cardViewModel.getContext(it) }
         backgroundColor = (Color.parseColor(ThemeManager.getValue("tapBottomSheet.dimmedColor")))
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
-
 
         bottomSheetDialog.behavior.isDraggable = true
         val checkoutLayout: LinearLayout? = view.findViewById(R.id.fragment_all)
@@ -143,7 +137,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         inLineCardLayout = view.findViewById(R.id.inline_container)
         val headerLayout: LinearLayout? = view.findViewById(R.id.headerLayout)
         initViews(view)
-        blurView = BlurView(context)
 
         topHeaderView = context?.let { TapBrandView(it) }
         topHeaderView?.visibility = View.GONE
