@@ -170,7 +170,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     var currentCurrencySymbol: String = ""
 
 
-
+    @JvmField
+    var finalCurrencySymbol: String = ""
     @JvmField
     var currentAmount: String = ""
     private lateinit var adapter: CardTypeAdapterUIKIT
@@ -675,7 +676,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 amountViewHolder.updateSelectedCurrency(
                     displayItemsOpen,
                     selectedAmount, selectedCurrency,
-                    currentAmount, currentCurrency, currentCurrencySymbol
+                    currentAmount, finalCurrencySymbol, currentCurrencySymbol
                 )
 
             }
@@ -1221,6 +1222,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         paymentOptionsResponse.supportedCurrencies[i].currency.toString()
                     currentCurrencySymbol =
                         paymentOptionsResponse.supportedCurrencies[i].symbol.toString()
+                    finalCurrencySymbol = paymentOptionsResponse.supportedCurrencies[i].symbol.toString()
                     currencyAdapter.updateSelectedPosition(i)
                 }
 
@@ -2353,6 +2355,7 @@ else
         println("currentAmount final>>" + currentAmount)
         println("currentCurrency final>>" + currentCurrency)
         println("selectedCurrencySymbol final>>" + selectedCurrencySymbol)
+        println("currentCurrencySymbol final>>" + currentCurrencySymbol)
         if (selectedCurrencySymbol.length == 2) {
             amountViewHolder.updateSelectedCurrency(
                 displayItemsOpen,
@@ -2367,7 +2370,7 @@ else
             amountViewHolder.updateSelectedCurrency(
                 displayItemsOpen,
                 selectedAmount, selectedCurrency,
-                currentAmount, currentCurrency, selectedCurrencySymbol
+                currentAmount, finalCurrencySymbol, selectedCurrencySymbol
             )
             PaymentDataSource.setSelectedCurrency(selectedCurrency, selectedCurrencySymbol)
 
