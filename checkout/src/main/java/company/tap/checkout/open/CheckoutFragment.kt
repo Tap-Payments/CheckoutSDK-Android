@@ -151,7 +151,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         displayMetrics = CustomUtils.getDeviceDisplayMetrics(context as Activity)
 
 
-
         val heightscreen: Int = Resources.getSystem().displayMetrics.heightPixels
         if (LocalizationManager.currentLocalized.length() != 0)
             closeText.text = LocalizationManager.getValue("close", "Common")
@@ -413,6 +412,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     }
 
+
+
     @SuppressLint("SetTextI18n")
     private fun concatText(newText: String) {
         println("newText respoonse$newText")
@@ -482,10 +483,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        bottomSheetDialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
-        return BottomSheetDialog(requireContext(), R.style.MyTransparentBottomSheetDialogTheme)
-    }
 
 
 }
