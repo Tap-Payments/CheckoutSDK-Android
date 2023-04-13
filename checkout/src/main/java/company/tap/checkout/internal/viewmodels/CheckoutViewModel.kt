@@ -293,6 +293,24 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     }
 
+    private fun initLoyaltyView() {
+        if (SDKSession.enableLoyalty == true) {
+            /*removeViews(saveCardSwitchHolder)
+            addViews(loyaltyViewHolder,saveCardSwitchHolder)*/
+            removeAllViews()
+            addViews(
+                businessViewHolder,
+                amountViewHolder,
+                cardViewHolder,
+                paymentInlineViewHolder,
+                loyaltyViewHolder,
+                saveCardSwitchHolder
+            )
+            loyaltyViewHolder.view.loyaltyView.constraintLayout?.visibility = View.VISIBLE
+
+        } else
+            loyaltyViewHolder.view.loyaltyView.constraintLayout?.visibility = View.GONE
+    }
 
     private fun initializeScanner(checkoutViewModel: CheckoutViewModel) {
         textRecognitionML = TapTextRecognitionML(checkoutViewModel)
@@ -1347,6 +1365,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             java.util.ArrayList<PaymentOption>(paymentOptionsResponse.paymentOptions)
 
         filterViewModels(currentCurrency)
+        // filterModels(PaymentDataSource.getCurrency()?.isoCode.toString())
+        //  filterCardTypes(PaymentDataSource.getCurrency()?.isoCode.toString(),paymentOptionsWorker)
+
+        //    goPaySavedCardHolder.view.goPayLoginView.groupAction.setOnClickListener {
+        //       setGoPayLoginViewGroupActionListener()
+        //   }
+        //paymentInlineViewHolder.tabLayout.setOnTouchListener { v, _ ->
         touchHandlingForCardView()
     }
 
@@ -1436,6 +1461,30 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             goPayAdapter.updateShaking(false)
             cardViewHolder.view.mainChipgroup.groupAction?.text =
                 LocalizationManager.getValue("close", "Common")
+        }
+    }
+
+    private fun setGoPayLoginViewGroupActionListener() {
+        if (goPaySavedCardHolder.view.goPayLoginView.groupAction?.text == LocalizationManager.getValue(
+                "close",
+                "Common"
+            )
+        ) {
+            isShaking.value = false
+            adapter.updateShaking(isShaking.value ?: false)
+            goPayAdapter.updateShaking(isShaking.value ?: false)
+            goPaySavedCardHolder.view.goPayLoginView.groupAction?.text =
+                LocalizationManager.getValue("edit", "Common")
+            goPayAdapter.updateSignOut(goPayCardList.value as List<GoPaySavedCards>, false)
+
+        } else {
+            isShaking.value = true
+            adapter.updateShaking(isShaking.value ?: true)
+            Log.d("isShaking.value", isShaking.value.toString())
+            goPayAdapter.updateShaking(false)
+            goPaySavedCardHolder.view.goPayLoginView.groupAction?.text =
+                LocalizationManager.getValue("close", "Common")
+            goPayAdapter.updateSignOut(goPayCardList.value as List<GoPaySavedCards>, true)
         }
     }
 
@@ -2008,6 +2057,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             //  paymentInlineViewHolder,
             tabAnimatedActionButtonViewHolder
         )
+
         doAfterSpecificTime(time = 500L) {
             with(cardViewHolder.view.mainChipgroup) {
                 mutableListOf<View>(
@@ -2149,6 +2199,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             saveCardSwitchHolder?.setSwitchToggleData(paymentType)
             loyaltyViewHolder.view.loyaltyView?.constraintLayout?.visibility = View.VISIBLE
             // loyatFlag = true
+            /**
+             * @TODO:  Will be enabled when coming from API directly
+             */
             //  initLoyaltyView() // Will be enabled when coming from API directly
             activateActionButton()
             paymentActionType = paymentType
