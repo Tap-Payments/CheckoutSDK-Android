@@ -772,36 +772,6 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
    }
 
-   private fun getOrderItemsList(): ArrayList<ItemsModel
-           > {
-       itemsList = ArrayList<ItemsModel>()
-       itemsList.add(
-           ItemsModel(
-               "",
-               "abcjuice",
-               BigDecimal.valueOf(12),
-               "kwd",
-               BigDecimal.valueOf(3),
-               Category.DIGITAL_GOODS,
-               AmountModificator(AmountModificatorType.FIXED, BigDecimal.valueOf(1)),
-               Vendor("id", "name"),
-               "ff",
-               true,
-               "items1",
-               "aac1",
-               "descr1",
-               "image1",
-               ReferenceItem("GTU", "SKI"),
-               ItemDimensions(
-                   "KG",
-                   0.5, "IN", 1.0, 1.0, 1.0
-               ),
-               "",
-               MetaData("udf1", "udf2")
-           )
-       )
-       return itemsList
-   }
 
    //Set Order object
    private fun getOrder(): OrderObject {

@@ -452,7 +452,8 @@ class CardRepository : APIRequestCallback {
                      //chargeResponse?.transaction?.url?.let { it1 -> viewModel?.displayRedirect(it1,chargeResponse) }
                     //  viewModel?.redirectLoadingFinished(true,chargeResponse, contextSDK)
 
-                }else handleChargeResponse(chargeResponse)
+                }else
+                    handleChargeResponse(chargeResponse)
             }
 
         }

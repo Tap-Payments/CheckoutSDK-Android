@@ -45,43 +45,7 @@ class TabAnimatedActionButtonViewHolder(context: Context) : TapBaseViewHolder {
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
         )
-//        view.actionButton.setButtonDataSource(true,
-//            LocalizationManager.getLocale(context).language,LocalizationManager.getValue("pay","ActionButton"),R.color.gray)
     }
 
-    fun activateBlueConfirmButton() {
-        actionButton.setButtonDataSource(
-            true, view.context.let { it?.let { it1 -> LocalizationManager.getLocale(it1).language } },
-            LocalizationManager.getValue(
-                "confirm",
-                "ActionButton"
-            ),
-            Color.parseColor(ThemeManager.getValue("actionButton.Valid.goLoginBackgroundColor")),
-            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
-        )}
-
-    fun getSuccessDataSource(
-        backgroundColor: Int,
-        text: String,
-        textColor: Int
-    ): ActionButtonDataSource {
-        return ActionButtonDataSource(
-            text = text,
-            textSize = 18f,
-            textColor = textColor,
-            cornerRadius = 100f,
-            successImageResources = R.drawable.checkmark,
-            backgroundColor = backgroundColor
-        )
-    }
-
-    fun setOnClickAction() {
-         /*view.actionButton.addChildView(
-             view.actionButton.getImageView(
-                 R.drawable.loader,
-                 1
-             ) {  })*/
-          view.actionButton.changeButtonState(ActionButtonState.LOADING)
-    }
 
 }

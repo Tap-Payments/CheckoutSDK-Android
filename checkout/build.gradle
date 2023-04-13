@@ -101,6 +101,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.1'
 //This is BungFender for logs
     implementation 'com.bugfender.sdk:android:3.+'
+    implementation 'jp.wasabeef:blurry:4.0.1'
 
 
 

@@ -156,13 +156,8 @@ class PaymentInlineViewHolder (private val context: Context,
         closeButton = tapCardInputView.findViewById(R.id.clear_text)
         tapPaymentInput = view.findViewById(R.id.tap_payment_input_layout)
         separator1 = tapCardInputView.findViewById(R.id.separator_1)
-       // tapCardInputView.separatorcard2.visibility = View.INVISIBLE
-
         tapAlertView = tapPaymentInput?.findViewById(R.id.alertView)
-        //cardSwitchLayout = tapCardInputView.findViewById(R.id.mainSwitchInline)
         paymentInputContainer = view.findViewById(R.id.payment_input_layout)
-        // clearView = view.findViewById(R.id.clear_text)
-
         tapCardInputView.backArrow?.visibility =View.GONE
         contactDetailsView = view.findViewById(R.id.contact_detailsView)
         shippingDetailView = view.findViewById(R.id.ship_detailsView)
@@ -429,26 +424,6 @@ class PaymentInlineViewHolder (private val context: Context,
         checkoutViewModel.incrementalCount=0
     }
 
-    private fun initMobileInput() {
-        tapMobileInputView.mobileNumber.doAfterTextChanged {
-            it?.let {
-                println("is this called")
-                if (it.isEmpty()) {
-                    closeButton?.visibility = View.INVISIBLE
-                } else {
-                    closeButton?.visibility = View.VISIBLE
-                }
-                //check if editable start with number of oridoo or zain etc
-                // onPaymentCardComplete.onPaycardSwitchAction(true, PaymentType.MOBILE)
-                if (tapMobileInputView.mobileNumber.text.length > 7)
-                    baseLayoutManager.displayOTPView(
-                        PaymentDataSource.getCustomer().getPhone(),
-                        PaymentTypeEnum.telecom.name
-                    )
-
-            }
-        }
-    }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initCardInput() {
@@ -1016,10 +991,6 @@ class PaymentInlineViewHolder (private val context: Context,
         )
         tapCardInputView.setCvcNumberTextWatcher(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                //   checkoutFragment.scrollView?.scrollTo(0,height)
-                // tapCardInputView.requestFocus()
-              //  CustomUtils.showKeyboard(context)
-
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -1042,22 +1013,9 @@ class PaymentInlineViewHolder (private val context: Context,
                             )
                         }
                         acceptedCardText.visibility =View.GONE
-                     //   tabLayout.visibility =View.GONE
                        tabLayout.fadeVisibility(View.GONE,2000)
                     }else  logicForImageOnCVV(CardValidator.validate(savedCardsModel?.firstSix).cardBrand,s.toString())
                 }
-              /*  if (s?.trim()?.length == 3 || s?.trim()?.length == 4) {
-                    onPaymentCardComplete.onPayCardSwitchAction(
-                        true, PaymentType.CARD
-                    )
-                    tapAlertView?.visibility = View.GONE
-                    CustomUtils.hideKeyboardFrom(context, view)
-                } else {
-                    onPaymentCardComplete.onPayCardSwitchAction(
-                        false, PaymentType.CARD
-                    )
-                    //     tapAlertView?.visibility = View.VISIBLE
-                }*/
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -1771,6 +1729,9 @@ class PaymentInlineViewHolder (private val context: Context,
         return (cardInput).replaceRange(0, 6, "•••• ")
     }
 
+       /**
+        * here when user enter CVV in input Credit Card
+        */
     fun setDataForSavedCard(_savedCardsModel: SavedCard, cardInputUIStatus: CardInputUIStatus) {
         println("cardInputUIStatus>>" +cardInputUIStatus)
         tapCardInputView.holderNameEnabled = false
