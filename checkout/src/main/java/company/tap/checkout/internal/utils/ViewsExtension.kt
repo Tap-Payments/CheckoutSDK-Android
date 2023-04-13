@@ -1,6 +1,13 @@
 package company.tap.checkout.internal.utils
 
+import android.graphics.BlendMode
+import android.graphics.BlendModeColorFilter
+import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.shapes.RoundRectShape
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.DisplayMetrics
@@ -9,13 +16,18 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
 import android.view.animation.AnimationUtils
+import androidx.annotation.RequiresApi
 import androidx.core.os.postDelayed
 import company.tap.checkout.R
+import company.tap.tapuilibrary.uikit.ktx.loadAppThemManagerFromPath
 import jp.wasabeef.blurry.Blurry
 
 private var targetHeight: Int? = 0
 private var animationDelayForResizeAnimation = 1500L
-
+private var topLeftCorner = 16f
+private var topRightCorner = 16f
+private var bottomRightCorner = 0f
+private var bottomLeftCorner = 0f
 
 fun View.startPoweredByAnimation(delayTime: Long, poweredByLogo: View?) {
     Handler(Looper.getMainLooper()).postDelayed({
@@ -50,6 +62,30 @@ fun View.addFadeInAnimation(durationTime: Long = 1000L) {
     val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
     animation.duration = durationTime
     this.startAnimation(animation)
+}
+
+fun getBackgroundDrawable(): Drawable {
+    val shape = ShapeDrawable(
+        RoundRectShape(
+            floatArrayOf(
+                topLeftCorner, topLeftCorner,
+                topRightCorner, topRightCorner,
+                bottomRightCorner, bottomRightCorner,
+                bottomLeftCorner, bottomLeftCorner
+            ),
+            null, null
+        )
+    )
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        shape.colorFilter = BlendModeColorFilter(
+            loadAppThemManagerFromPath(AppColorTheme.MerchantHeaderViewColor),
+            BlendMode.SRC_ATOP)
+    }else{
+
+    }
+
+
+    return shape
 }
 
 fun View.addFadeOutAnimation(durationTime: Long = 500L) {
@@ -118,10 +154,10 @@ fun createDrawableGradientForBlurry(colorsArrayList: IntArray): GradientDrawable
     )
     gradientDrawable.gradientRadius = 100f
     gradientDrawable.cornerRadii = floatArrayOf(
-        35f, 35f,
-        35f, 35f,
-        0f, 0f,
-        0f, 0f
+        topLeftCorner, topLeftCorner,
+        topRightCorner, topRightCorner,
+        bottomRightCorner, bottomRightCorner,
+        bottomLeftCorner, bottomLeftCorner
     )
     return gradientDrawable
 }

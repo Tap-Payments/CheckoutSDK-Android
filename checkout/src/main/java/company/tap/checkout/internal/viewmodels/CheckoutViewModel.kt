@@ -5,6 +5,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
+import android.graphics.BlendMode
+import android.graphics.BlendModeColorFilter
 import android.graphics.Color
 import android.graphics.drawable.ShapeDrawable
 import android.net.Uri
@@ -1013,7 +1015,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 //Stopped showing closetext as requested
                 // checkoutFragment.closeText.visibility = View.VISIBLE
                 removeViews(
-                    //businessViewHolder,
+                    // businessViewHolder,
                     amountViewHolder,
                     cardViewHolder,
                     // saveCardSwitchHolder,
@@ -1023,12 +1025,18 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     goPayViewsHolder
                 )
 
+                /**
+                 * apply Background Drawable to switchView
+                 */
+                    saveCardSwitchHolder?.view?.background = getBackgroundDrawable()
+
+
+
                 saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                     ActionButtonState.LOADING
                 )
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = View.GONE
-
                 saveCardSwitchHolder?.view?.cardSwitch?.tapLogoImage?.visibility = View.GONE
 
                 Handler(Looper.getMainLooper()).postDelayed({
@@ -1044,7 +1052,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         .commit()
                     //  checkoutFragment.closeText.visibility = View.VISIBLE
                     webFrameLayout.visibility = View.VISIBLE
-                    println("fragment hh" + Resources.getSystem().getDisplayMetrics().heightPixels)
+                    println("fragment hh" + Resources.getSystem().displayMetrics.heightPixels)
                     if (::bottomSheetLayout.isInitialized)
                         translateHeightRedirect(sdkLayout)
 
@@ -1130,7 +1138,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private fun translateHeightRedirect(sdkLayout: LinearLayout) {
         val resizeAnimation = ResizeAnimation(
             bottomSheetLayout,
-            Resources.getSystem().getDisplayMetrics().heightPixels,
+            Resources.getSystem().displayMetrics.heightPixels,
             sdkLayout.height, true
         )
         resizeAnimation.duration = 350
@@ -1594,9 +1602,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             webFrameLayout.visibility = View.GONE
             supportFragmentManager?.popBackStack()
         }
-        if (::webViewHolder.isInitialized)
+        if (::webViewHolder.isInitialized) {
             removeViews(webViewHolder)
-        //removeAllViews()
+        }
         Handler().postDelayed({
             if (::bottomSheetLayout.isInitialized)
                 translateViewToNewHeight(bottomSheetLayout.measuredHeight, false)

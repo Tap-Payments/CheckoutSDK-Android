@@ -91,7 +91,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     var originalHeight: Int? = 0
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _activity = activity?.parent
@@ -380,6 +379,9 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         // _viewModel?.handleScanFailedResult()
     }
 
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return super.onCreateDialog(savedInstanceState)
+    }
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onScanCardFinished(card: Card?, cardImage: ByteArray?) {
         if (card != null) {
@@ -404,7 +406,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     private fun renderView(data: CardViewState?) {
 
     }
-
 
 
     @SuppressLint("SetTextI18n")
@@ -475,7 +476,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         sessionDelegate?.sessionCancelled()
 
     }
-
 
 
 }
