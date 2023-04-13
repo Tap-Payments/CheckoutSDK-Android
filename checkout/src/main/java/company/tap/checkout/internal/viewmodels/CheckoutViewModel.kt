@@ -5,8 +5,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
-import android.graphics.BlendMode
-import android.graphics.BlendModeColorFilter
 import android.graphics.Color
 import android.graphics.drawable.ShapeDrawable
 import android.net.Uri
@@ -93,7 +91,6 @@ import company.tap.tapuilibrary.uikit.ktx.loadAppThemManagerFromPath
 import company.tap.tapuilibrary.uikit.ktx.makeLinks
 import company.tap.tapuilibrary.uikit.ktx.setTopBorders
 import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
-import jp.wasabeef.blurry.Blurry
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.businessview_layout.view.*
 import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
@@ -1028,7 +1025,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 /**
                  * apply Background Drawable to switchView
                  */
-                    saveCardSwitchHolder?.view?.background = getBackgroundDrawable()
+                    saveCardSwitchHolder?.view?.background = getViewShapeDrawable()
 
 
 
