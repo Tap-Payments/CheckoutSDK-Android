@@ -1573,7 +1573,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 contextSDK as Activity
             )
         )*/
-        saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.INVISIBLE
+        saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = View.VISIBLE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setDisplayMetrics(
             CustomUtils.getDeviceDisplayMetrics(
@@ -1621,7 +1621,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             // removeAllViews()
             //   addViews(saveCardSwitchHolder)
             saveCardSwitchHolder?.view?.visibility = View.VISIBLE
-            saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.INVISIBLE
+            saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = View.VISIBLE
         }
 
