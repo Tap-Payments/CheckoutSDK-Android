@@ -2068,17 +2068,20 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 mutableListOf<View>(
                     chipsRecycler,
                     groupAction,
-                    groupAction
+                    groupName
                 ).addFadeOutAnimationToViews()
             }
             doAfterSpecificTime {
                 paymentInlineViewHolder.tapCardInputView.applyBluryToView()
             }
         }
+        if(paymentInlineViewHolder.cardInputUIStatus == CardInputUIStatus.SavedCard){
+            cardViewHolder.view.cardInfoHeaderText.visibility = View.VISIBLE
+            cardViewHolder.view.cardInfoHeaderText.text =
+                LocalizationManager.getValue("savedCardSectionTitle", "TapCardInputKit")
+        }
 
-        cardViewHolder.view.cardInfoHeaderText.visibility = View.VISIBLE
-        cardViewHolder.view.cardInfoHeaderText.text =
-            LocalizationManager.getValue("savedCardSectionTitle", "TapCardInputKit")
+
         if (isSavedCardSelected == true) {
             cardViewModel.processEvent(
                 CardViewEvent.CreateTokenExistingCardEvent,
