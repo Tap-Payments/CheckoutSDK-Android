@@ -2072,7 +2072,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 ).addFadeOutAnimationToViews()
             }
             doAfterSpecificTime {
-                paymentInlineViewHolder.tapCardInputView.applyBluryToView()
+                paymentInlineViewHolder.paymentInputContainer.applyBluryToView()
             }
         }
         if(paymentInlineViewHolder.cardInputUIStatus == CardInputUIStatus.SavedCard){

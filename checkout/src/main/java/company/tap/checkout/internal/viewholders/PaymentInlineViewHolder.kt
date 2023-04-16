@@ -83,7 +83,7 @@ class PaymentInlineViewHolder(
     var tabLayout: TapSelectionTabLayout = view.findViewById(R.id.sections_tablayout)
     private var intertabLayout: TabLayout = tabLayout.findViewById(R.id.tab_layout)
 
-    private val paymentInputContainer: LinearLayout
+     val paymentInputContainer: LinearLayout
 
     // private val clearView: ImageView
     var selectedType = PaymentTypeEnum.card
