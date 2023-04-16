@@ -156,7 +156,7 @@ class WebViewHolder(
                     );
                     web_view.layoutParams = lp;
                     progressBar?.addFadeOutAnimation(2000)
-                    bottomSheetLayout.resizeAnimation(durationTime = 1500, startHeight = sdkLayout.height)
+                    bottomSheetLayout.resizeAnimation(durationTime = 1300, startHeight = sdkLayout.height)
                     web_view?.addFadeInAnimation(durationTime = 2000)
 
 //                    web_view.setVisibility(View.VISIBLE)
