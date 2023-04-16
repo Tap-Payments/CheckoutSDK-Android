@@ -328,6 +328,10 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
             if (!isShaking) {
                 resetSelection()
                 println("adapterContent.size"+adapterContent.size)
+                println("adapterGooglePay.size"+adapterGooglePay.size)
+                println("adapterposition.size"+ totalArraySize.minus(adapterContent.size).minus(adapterGooglePay.size))
+                println("adapterposition.size"+ position)
+                totalArraySize.minus(adapterContent.size).minus(adapterGooglePay.size)
                 //minus one because of gopaychip
                 if(adapterContent.size>0) onCardSelectedActionListener.onCardSelectedAction(true, arrayListCards[position.minus(adapterContent.size).minus(1)])
                 else onCardSelectedActionListener.onCardSelectedAction(true, arrayListCards[position])
@@ -531,7 +535,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
            // }
         }
     }
-
+/** Had kept if product team changes mind to get logos from api for device payments*/
    /* private fun bindGooglePayImageData(holder: GooglePayViewHolder ,position: Int) {
         if(position>0) {
             if (CustomUtils.getCurrentTheme() != null && CustomUtils.getCurrentTheme()

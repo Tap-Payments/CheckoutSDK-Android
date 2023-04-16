@@ -1903,21 +1903,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCardSelectedAction(isSelected: Boolean, savedCardsModel: Any?) {
 
-        // cardViewHolder.view.alpha = 0.95f
         /**
          * Clear card input text
          */
         println("focussss" + paymentInlineViewHolder.tapCardInputView.hasFocus())
         println("isSelected" + isSelected)
-        // paymentInlineViewHolder.resetPaymentCardView()
         paymentInlineViewHolder.tapCardInputView.clear()
         paymentInlineViewHolder.clearCardInputAction()
-        /* if (paymentInlineViewHolder.tapCardInputView.hasFocus()) {
-             paymentInlineViewHolder.tapCardInputView.clear()
-            // paymentInlineViewHolder.clearCardInputAction()
-             //paymentInlineViewHolder.onFocusChange("")
-            // CustomUtils.hideKeyboardFrom(context, paymentInlineViewHolder.view)
-         }*/
+
         println("savedCardsModel" + savedCardsModel)
         unActivateActionButton()
         when (savedCardsModel) {
@@ -1926,7 +1919,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     CustomUtils.tagEvent,
                     "Saved card selected :" + savedCardsModel.lastFour + "&" + savedCardsModel.id
                 )
-                //  paymentInlineViewHolder.view.alpha = 1f
                 paymentInlineViewHolder.setDataForSavedCard(
                     savedCardsModel,
                     CardInputUIStatus.SavedCard

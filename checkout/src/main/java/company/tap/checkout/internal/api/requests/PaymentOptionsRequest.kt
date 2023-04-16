@@ -24,7 +24,7 @@ open class PaymentOptionsRequest(
     taxes: ArrayList<Tax>?,
     destinations:Destinations?,
     currency: String?,
-    customer: String?,
+    customer: TapCustomer?,
     merchant_id: String?,
     payment_type: String,
     topup :TopUp?,
@@ -54,7 +54,7 @@ open class PaymentOptionsRequest(
 
     @SerializedName("customer")
     @Expose
-    private val customer: String? = customer
+    private val customer: TapCustomer? = customer
 
     @SerializedName("currency")
     @Expose

@@ -103,7 +103,7 @@ class CardRepository : APIRequestCallback {
             PaymentDataSource.getTaxes(),
             PaymentDataSource.getDestination(),
             PaymentDataSource.getCurrency()?.isoCode,
-            PaymentDataSource.getCustomer().identifier,
+            PaymentDataSource.getCustomer(),
             PaymentDataSource.getMerchant()?.id,
             PaymentDataSource.getPaymentDataType().toString(),
             PaymentDataSource.getTopup(),
