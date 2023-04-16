@@ -1100,7 +1100,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 }, 1800)
 
                 checkoutFragment?.closeText?.visibility = View.GONE
-                //Stopped showing cancel button and poweredby for 3ds
+
+                /**Stopped showing cancel button and poweredby for 3ds**/
                 /*    saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
                  true,
                  LocalizationManager.getLocale(context).toString(),LocalizationManager.getValue("deleteSavedCardButtonCancel", "SavedCardTitle"),
