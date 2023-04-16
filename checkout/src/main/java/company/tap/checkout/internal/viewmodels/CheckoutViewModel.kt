@@ -1077,7 +1077,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 )
                 removeViews(
                     //  businessViewHolder,
-                    //   amountViewHolder,
+                    amountViewHolder,
                     cardViewHolder,
                     //  saveCardSwitchHolder,
                     paymentInlineViewHolder,
