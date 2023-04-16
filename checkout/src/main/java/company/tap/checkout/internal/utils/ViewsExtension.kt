@@ -1,5 +1,8 @@
 package company.tap.checkout.internal.utils
 
+import android.app.Activity
+import android.content.Context
+import android.content.res.Resources
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.graphics.drawable.Drawable
@@ -15,6 +18,8 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
 import android.view.animation.AnimationUtils
+import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.core.os.postDelayed
 import company.tap.checkout.R
 import company.tap.tapuilibrary.uikit.ktx.loadAppThemManagerFromPath
@@ -60,6 +65,38 @@ fun View.addFadeInAnimation(durationTime: Long = 1000L) {
     val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
     animation.duration = durationTime
     this.startAnimation(animation)
+}
+
+fun View.resizeAnimation(
+    durationTime: Long = 1000L,
+    startHeight: Int = 1000
+) {
+    this.visibility = View.VISIBLE
+    val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
+    animation.duration = durationTime
+    this.startAnimation(animation)
+
+
+    val resizeAnimation = ResizeAnimation(
+        this,
+        Resources.getSystem().displayMetrics.heightPixels,
+        startHeight, false
+    )
+    resizeAnimation.duration = durationTime
+    this.startAnimation(resizeAnimation)
+}
+
+
+/**
+ * This function return specs of device height && width
+ */
+fun Context.getDeviceSpecs(): Pair<Int, Int> {
+    val displayMetrics = DisplayMetrics()
+    (this as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)
+    val height = displayMetrics.heightPixels
+    val width = displayMetrics.widthPixels
+    val pair: Pair<Int, Int> = Pair(height, width)
+    return pair
 }
 
 fun getViewShapeDrawable(
@@ -141,6 +178,10 @@ fun View.applyBluryToView(radiusNeeded: Int = 8, sampling: Int = 2, animationDur
             this@applyBluryToView.removeViewAt(0)
         }
 
+}
+
+fun Context.showToast(message: String) {
+    return Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
 
 fun adjustHeightAccToDensity(displayMetrics: Int?) {

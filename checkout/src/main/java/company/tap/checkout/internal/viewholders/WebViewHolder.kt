@@ -14,6 +14,7 @@ import android.view.View
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
@@ -23,11 +24,12 @@ import androidx.fragment.app.FragmentManager
 import androidx.transition.ChangeBounds
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.enums.SectionType
-import company.tap.checkout.internal.utils.CustomUtils
+import company.tap.checkout.internal.utils.*
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.internal.webview.CustomWebViewClientContract
 import company.tap.checkout.internal.webview.TapCustomWebViewClient
@@ -43,15 +45,19 @@ import kotlinx.android.synthetic.main.fragment_web.*
 class WebViewHolder(
     private val context: Context,
     private val fragmentManager: FragmentManager,
-    val redirectURL: String, val webViewContract: WebViewContract,
+    val redirectURL: String,
+    val webViewContract: WebViewContract,
     val cardViewModel: CardViewModel,
-    val authenticate: Charge? , val checkoutViewModel: CheckoutViewModel
-) :TapBaseViewHolder , CustomWebViewClientContract {
+    val authenticate: Charge?,
+    val checkoutViewModel: CheckoutViewModel,
+    val bottomSheetLayout: FrameLayout,
+    val sdkLayout: LinearLayout
+) : TapBaseViewHolder, CustomWebViewClientContract {
     override val view: View = LayoutInflater.from(context).inflate(R.layout.web_view_layout, null)
 
     override val type = SectionType.FRAGMENT
 
-   // private var webViewUrl: String? = null
+    // private var webViewUrl: String? = null
     //private var chargeResponse: Charge? = null
     val progressBar by lazy { view.findViewById<ProgressBar>(R.id.progressBar) }
     val web_view by lazy { view.findViewById<WebView>(R.id.web_view) }
@@ -59,6 +65,7 @@ class WebViewHolder(
     val webViewLinear by lazy { view.findViewById<LinearLayout>(R.id.webViewLinear) }
     val webCardview by lazy { view.findViewById<CardView>(R.id.webCardview) }
     private var displayMetrics: Int? = 0
+
     @DrawableRes
     val loaderGif: Int =
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) R.drawable.reduced_loader_white else R.drawable.reduced_loader_black
@@ -67,7 +74,7 @@ class WebViewHolder(
         progressBar?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("merchantHeaderView.backgroundColor")))
         webViewLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.whiteTwo")))
 
-       // progressBar.set(loaderGif)
+        // progressBar.set(loaderGif)
         // webViewUrl = arguments?.getString(WebFragment.KEY_URL)
         //  webViewUrl = redirectURL
         //  chargeResponse = authenticate
@@ -75,32 +82,35 @@ class WebViewHolder(
         progressBar?.progress = 10
         displayMetrics = CustomUtils.getDeviceDisplayMetrics(context as Activity)
 
-        if (displayMetrics == DisplayMetrics.DENSITY_400 ||displayMetrics == DisplayMetrics.DENSITY_XXHIGH || displayMetrics == DisplayMetrics.DENSITY_450 || displayMetrics == DisplayMetrics.DENSITY_440) {
-          //  progressBar.indeterminateDrawable = context.resources.getDrawable( R.drawable.reduced_60)
+        if (displayMetrics == DisplayMetrics.DENSITY_400 || displayMetrics == DisplayMetrics.DENSITY_XXHIGH || displayMetrics == DisplayMetrics.DENSITY_450 || displayMetrics == DisplayMetrics.DENSITY_440) {
+            //  progressBar.indeterminateDrawable = context.resources.getDrawable( R.drawable.reduced_60)
             progressBar.indeterminateDrawable = context.resources.getDrawable(loaderGif)
-        }else  progressBar.indeterminateDrawable = context.resources.getDrawable(loaderGif)
+        } else progressBar.indeterminateDrawable = context.resources.getDrawable(loaderGif)
 
-            if (TextUtils.isEmpty(redirectURL)) {
+        if (TextUtils.isEmpty(redirectURL)) {
             throw IllegalArgumentException("Empty URL passed to WebViewFragment!")
         }
-        val webViewTitleText :String= LocalizationManager.getValue("GatewayHeader", "HorizontalHeaders", "webViewTitle")
+        val webViewTitleText: String =
+            LocalizationManager.getValue("GatewayHeader", "HorizontalHeaders", "webViewTitle")
         webViewTextTitle.text = webViewTitleText
-        println("redirectURL in holdre"+redirectURL)
+        println("redirectURL in holdre" + redirectURL)
         setUpWebView(redirectURL)
     }
+
     override fun bindViewComponents() {
 
     }
 
     override fun submitResponseStatus(success: Boolean) {
-       // webViewContract.redirectLoadingFinished(success, authenticate, SDKSession.contextSDK)
+        // webViewContract.redirectLoadingFinished(success, authenticate, SDKSession.contextSDK)
     }
 
     override fun getRedirectedURL(url: String) {
         if (url.contains("gosellsdk://return_url")) {
             // webViewContract?.resultObtained(true, contextSDK)
 
-            webViewContract?.redirectLoadingFinished(url.contains("gosellsdk://return_url"), authenticate,
+            webViewContract?.redirectLoadingFinished(
+                url.contains("gosellsdk://return_url"), authenticate,
                 SDKSession.contextSDK
             )
         } else {
@@ -112,14 +122,15 @@ class WebViewHolder(
     override fun showLoading(showLoading: Boolean) {
 
     }
+
     @SuppressLint("SetJavaScriptEnabled")
     private fun setUpWebView(mUrl: String) {
-        val transition: Transition = ChangeBounds()
-        TransitionManager.beginDelayedTransition(web_view, transition)
+//        val transition: Transition = ChangeBounds()
+//        TransitionManager.beginDelayedTransition(web_view, transition)
         web_view.settings.javaScriptEnabled = true
 
         progressBar?.visibility = View.VISIBLE
-        web_view.setVisibility(View.INVISIBLE)
+        web_view.visibility = View.INVISIBLE
         web_view.webChromeClient = object : WebChromeClient() {
             /*
                     public void onProgressChanged (WebView view, int newProgress)
@@ -133,36 +144,49 @@ class WebViewHolder(
             override fun onProgressChanged(view: WebView?, newProgress: Int) {
                 // Update the progress bar with page loading progress
                 progressBar?.progress = newProgress
-                
+
                 if (newProgress == 100) {
-                     // Hide the progressbar
-                     progressBar?.visibility = View.GONE
-                    web_view.setVisibility(View.VISIBLE)
-                    if (displayMetrics == DisplayMetrics.DENSITY_400 ||displayMetrics == DisplayMetrics.DENSITY_XXHIGH || displayMetrics == DisplayMetrics.DENSITY_450 || displayMetrics == DisplayMetrics.DENSITY_440) {
-                        webCardview.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,1400).also { it.setMargins(35, 20, 35, 20) }
-                        web_view.layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 1400).also { it.setMargins(35, 20, 35, 20) }
+                    // Hide the progressbar
+                    val desired_height_params =
+                        (view?.context?.getDeviceSpecs()?.first?.times(2) ?: 1000) / 3
 
+                    val lp = RelativeLayout.LayoutParams(
+                        RelativeLayout.LayoutParams.WRAP_CONTENT,
+                        desired_height_params
+                    );
+                    web_view.layoutParams = lp;
+                    progressBar?.addFadeOutAnimation(2000)
+                    bottomSheetLayout.resizeAnimation(durationTime = 1500, startHeight = sdkLayout.height)
+                    web_view?.addFadeInAnimation(durationTime = 2000)
 
-                    }
-                    webCardview.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1250).also { it.setMargins(35, 20, 35, 20) }
-                    web_view.layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 1250).also { it.setMargins(35, 20, 35, 20) }
-
-
-
+//                    web_view.setVisibility(View.VISIBLE)
+//                    if (displayMetrics == DisplayMetrics.DENSITY_400 ||
+//                        displayMetrics == DisplayMetrics.DENSITY_XXHIGH ||
+//                        displayMetrics == DisplayMetrics.DENSITY_450 ||
+//                        displayMetrics == DisplayMetrics.DENSITY_440) {
+//                        webCardview.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,1400).also { it.setMargins(35, 20, 35, 20) }
+//                        web_view.layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 1400).also { it.setMargins(35, 20, 35, 20) }
+//
+//
+//                    }
+//                    webCardview.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1250).also { it.setMargins(35, 20, 35, 20) }
+//                    web_view.layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 1250).also { it.setMargins(35, 20, 35, 20) }
+//
 
                 }
 
             }
         }
         web_view.settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
-        web_view.webViewClient = cardViewModel?.let { TapCustomWebViewClient(this, it,checkoutViewModel) }!!
+        web_view.webViewClient =
+            cardViewModel?.let { TapCustomWebViewClient(this, it, checkoutViewModel) }!!
         web_view.settings.loadWithOverviewMode = true
-       // web_view.scrollBarStyle = View.
+        // web_view.scrollBarStyle = View.
         web_view.isVerticalScrollBarEnabled = true
         web_view.isHorizontalScrollBarEnabled = true
         web_view.settings.useWideViewPort = true
-        println("redirectURL val is>>"+mUrl)
-        redirectURL?.let { web_view.loadUrl(it) }
+        println("redirectURL val is>>" + mUrl)
+        redirectURL.let { web_view.loadUrl(it) }
         web_view.setOnKeyListener { _, keyCode, event ->
             if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                 if (web_view.canGoBack()) {
@@ -175,8 +199,6 @@ class WebViewHolder(
             }
             false
         }
-
-
 
 
     }
