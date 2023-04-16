@@ -1094,9 +1094,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     ActionButtonState.LOADING
                 )
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = View.GONE
-
                 saveCardSwitchHolder?.view?.cardSwitch?.tapLogoImage?.visibility = View.GONE
-
                 checkoutFragment?.closeText?.visibility = View.GONE
 
                 /**Stopped showing cancel button and poweredby for 3ds**/
@@ -2080,7 +2078,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             cardViewHolder.view.cardInfoHeaderText.text =
                 LocalizationManager.getValue("savedCardSectionTitle", "TapCardInputKit")
         }else{
-
+            removeViews(amountViewHolder)
         }
 
 

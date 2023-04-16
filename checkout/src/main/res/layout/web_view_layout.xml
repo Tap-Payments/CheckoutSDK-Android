@@ -52,6 +52,7 @@
         android:progress="20"
         android:paddingBottom="5dp"
         android:indeterminate="true" />-->
+
     <androidx.cardview.widget.CardView
         android:id="@+id/webCardview"
         android:layout_width="match_parent"
@@ -70,7 +71,7 @@
         >
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@color/whitebg"
       >
 
@@ -84,16 +85,21 @@
             android:indeterminate="true"
             android:indeterminateDrawable="@drawable/reduced_loader_black" />
 
+
+
+
+
         <WebView
             android:id="@+id/web_view"
             android:layout_width="match_parent"
             android:layout_height="100dp"
+            android:layout_centerInParent="true"
             android:scrollbars="vertical|horizontal"
-
             />
 
 
 
     </RelativeLayout>
     </androidx.cardview.widget.CardView>
+
 </LinearLayout>
