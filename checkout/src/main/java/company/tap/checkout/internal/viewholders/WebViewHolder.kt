@@ -210,8 +210,8 @@ class WebViewHolder(
 //                    "</html>\n"
 
         redirectURL.let {
-            web_view.loadData(html, "text/html", "UTF-8");
-            // web_view.loadUrl(it)
+          //  web_view.loadData(html, "text/html", "UTF-8");
+             web_view.loadUrl(it)
 
 
         }
