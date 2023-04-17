@@ -850,7 +850,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             "close",
             "Common"
         )
-
+        amountViewHolder.view.amount_section.itemAmountLayout?.visibility = View.GONE
+        amountViewHolder.view.amount_section.itemPopupLayout?.visibility = View.GONE
+        amountViewHolder.view.amount_section.tapChipAmount?.visibility = View.GONE
+        amountViewHolder.view.amount_section.tapChipPopup?.visibility = View.GONE
+        amountViewHolder.view.amount_section.itemAmountText.text = LocalizationManager.getValue(
+            "close",
+            "Common"
+        )
+      //  amountViewHolder.view.amount_section.itemCountButton?.visibility = View.GONE
 
         displayOtpIsOpen = true
         displayItemsOpen = false
@@ -910,7 +918,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         addViews(otpViewHolder)
         otpViewHolder.otpView.visibility = View.VISIBLE
         //Added to hide the Items-Amount button when OTP is opened
-        amountViewHolder.view.amount_section?.itemAmountLayout?.visibility = View.GONE
+        amountViewHolder.view.amount_section.itemAmountLayout?.visibility = View.GONE
+        amountViewHolder.view.amount_section.tapChipAmount?.visibility = View.GONE
         CustomUtils.showKeyboard(context)
         setOtpPhoneNumber(phoneNumber)
         otpViewHolder.otpView.changePhone.visibility = View.INVISIBLE
