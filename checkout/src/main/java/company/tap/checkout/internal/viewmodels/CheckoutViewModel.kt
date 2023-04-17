@@ -26,6 +26,7 @@ import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.transition.*
@@ -1047,8 +1048,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         .replace(R.id.webFrameLayout, fragment, "webFragment")
                         .addToBackStack("webFragment")
                         .commit()
-                    //  checkoutFragment.closeText.visibility = View.VISIBLE
-                    webFrameLayout.visibility = View.VISIBLE
+                      checkoutFragment.closeText.visibility = View.VISIBLE
                     println("fragment hh" + Resources.getSystem().displayMetrics.heightPixels)
                     if (::bottomSheetLayout.isInitialized)
                         translateHeightRedirect(sdkLayout)
@@ -1071,11 +1071,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     this,
                     cardViewModel,
                     authenticate,
-                    this
+                    this,
+                    bottomSheetLayout,
+                    sdkLayout
                 )
                 removeViews(
                     //  businessViewHolder,
-                    //   amountViewHolder,
+                    amountViewHolder,
                     cardViewHolder,
                     //  saveCardSwitchHolder,
                     paymentInlineViewHolder,
@@ -1085,20 +1087,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 )
 
                 //Added to hide the Items-Amount button when 3ds is opened within
-                amountViewHolder?.view?.amount_section?.itemAmountLayout?.visibility = View.GONE
+                amountViewHolder.view.amount_section?.itemAmountLayout?.visibility = View.GONE
                 addViews(webViewHolder)
                 saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                     ActionButtonState.LOADING
                 )
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = View.GONE
-
                 saveCardSwitchHolder?.view?.cardSwitch?.tapLogoImage?.visibility = View.GONE
-                Handler(Looper.getMainLooper()).postDelayed({
-                    //  webFrameLayout.visibility = View.VISIBLE
-
-                }, 1800)
-
                 checkoutFragment?.closeText?.visibility = View.GONE
 
                 /**Stopped showing cancel button and poweredby for 3ds**/
@@ -2068,10 +2064,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 paymentInlineViewHolder.paymentInputContainer.applyBluryToView()
             }
         }
+
         if(paymentInlineViewHolder.cardInputUIStatus == CardInputUIStatus.SavedCard){
             cardViewHolder.view.cardInfoHeaderText.visibility = View.VISIBLE
             cardViewHolder.view.cardInfoHeaderText.text =
                 LocalizationManager.getValue("savedCardSectionTitle", "TapCardInputKit")
+        }else{
+            removeViews(amountViewHolder)
         }
 
 
