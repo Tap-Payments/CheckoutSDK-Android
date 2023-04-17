@@ -60,6 +60,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     private var adapterContent: List<PaymentOption> = java.util.ArrayList()
     private var adapterGooglePay: List<PaymentOption> = java.util.ArrayList()
     private var arrayListGoogle:ArrayList<String> = ArrayList()
+    private var arrayListCombined:ArrayList<Any> = ArrayList()
     private var isShaking: Boolean = false
     private var goPayOpened: Boolean = false
     private var arrayModified : ArrayList<Any> = ArrayList()
@@ -146,6 +147,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                 GoPayViewHolder(view)
             }
         }
+
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -277,6 +279,11 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                 }
             }
         }
+        arrayListCombined= ArrayList()
+        if(adapterContent.isNotEmpty()) arrayListCombined.addAll(adapterContent)
+        if(adapterGooglePay.isNotEmpty()) arrayListCombined.addAll(adapterGooglePay)
+        if(arrayListCards.isNotEmpty()) arrayListCombined.addAll(arrayListCards)
+        arrayListCombined.add("goPay")
     }
 
     fun resetSelection (){
@@ -326,15 +333,9 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
         holder.itemView.setOnClickListener {
             if (!isShaking) {
-                resetSelection()
-                println("adapterContent.size"+adapterContent.size)
-                println("adapterGooglePay.size"+adapterGooglePay.size)
-                println("adapterposition.size"+ totalArraySize.minus(adapterContent.size).minus(adapterGooglePay.size))
-                println("adapterposition.size"+ position)
-                totalArraySize.minus(adapterContent.size).minus(adapterGooglePay.size)
-                //minus one because of gopaychip
-                if(adapterContent.size>0) onCardSelectedActionListener.onCardSelectedAction(true, arrayListCards[position.minus(adapterContent.size).minus(1)])
-                else onCardSelectedActionListener.onCardSelectedAction(true, arrayListCards[position])
+                //resetSelection()
+               val listArraySize :Int = itemCount.minus(adapterContent.size).minus(adapterGooglePay.size).minus(1)
+                onCardSelectedActionListener.onCardSelectedAction(true, arrayListCombined[position])
                 selectedPosition = position
                 notifyDataSetChanged()
             }
