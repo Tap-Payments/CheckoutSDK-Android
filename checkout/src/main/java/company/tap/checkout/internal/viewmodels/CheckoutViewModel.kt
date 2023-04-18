@@ -26,7 +26,6 @@ import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.transition.*
@@ -858,7 +857,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             "close",
             "Common"
         )
-      //  amountViewHolder.view.amount_section.itemCountButton?.visibility = View.GONE
+        //  amountViewHolder.view.amount_section.itemCountButton?.visibility = View.GONE
 
         displayOtpIsOpen = true
         displayItemsOpen = false
@@ -1035,7 +1034,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 /**
                  * apply Background Drawable to switchView
                  */
-                    saveCardSwitchHolder?.view?.background = getViewShapeDrawable()
+                saveCardSwitchHolder?.view?.background = getViewShapeDrawable()
 
 
 
@@ -1057,7 +1056,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         .replace(R.id.webFrameLayout, fragment, "webFragment")
                         .addToBackStack("webFragment")
                         .commit()
-                      checkoutFragment.closeText.visibility = View.VISIBLE
+                    checkoutFragment.closeText.visibility = View.VISIBLE
                     println("fragment hh" + Resources.getSystem().displayMetrics.heightPixels)
                     if (::bottomSheetLayout.isInitialized)
                         translateHeightRedirect(sdkLayout)
@@ -1075,21 +1074,22 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
                 webViewHolder = WebViewHolder(
                     context,
-                    fragmentManager,
                     url,
                     this,
                     cardViewModel,
                     authenticate,
                     this,
                     bottomSheetLayout,
-                    sdkLayout
+                    sdkLayout,
+                    saveCardSwitchHolder,
+                    paymentInlineViewHolder
                 )
                 removeViews(
                     //  businessViewHolder,
                     amountViewHolder,
                     cardViewHolder,
                     //  saveCardSwitchHolder,
-                    paymentInlineViewHolder,
+                   // paymentInlineViewHolder,
                     otpViewHolder,
                     goPaySavedCardHolder,
                     goPayViewsHolder
@@ -1098,11 +1098,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 //Added to hide the Items-Amount button when 3ds is opened within
                 amountViewHolder.view.amount_section?.itemAmountLayout?.visibility = View.GONE
                 addViews(webViewHolder)
-                saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
+               // saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                     ActionButtonState.LOADING
                 )
-                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = View.GONE
                 saveCardSwitchHolder?.view?.cardSwitch?.tapLogoImage?.visibility = View.GONE
                 checkoutFragment?.closeText?.visibility = View.GONE
 
@@ -2050,6 +2049,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private fun onClickCardPayment() {
         println("onClickCardPayment")
 
+        context.hideKeyboard()
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
         saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
 
@@ -2058,28 +2058,29 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             //   amountViewHolder,
             // cardViewHolder,
             //  paymentInlineViewHolder,
-            tabAnimatedActionButtonViewHolder
+         //   tabAnimatedActionButtonViewHolder
         )
 
-        doAfterSpecificTime(time = 500L) {
-            with(cardViewHolder.view.mainChipgroup) {
-                mutableListOf<View>(
-                    chipsRecycler,
-                    groupAction,
-                    groupName
-                ).addFadeOutAnimationToViews()
+
+        with(cardViewHolder.view.mainChipgroup) {
+            val viewsToFadeOut = mutableListOf<View>(chipsRecycler, groupAction, groupName)
+            if (paymentInlineViewHolder.cardInputUIStatus == CardInputUIStatus.NormalCard) {
+                viewsToFadeOut.add(amountViewHolder.view)
             }
-            doAfterSpecificTime {
-                paymentInlineViewHolder.paymentInputContainer.applyBluryToView()
+            doAfterSpecificTime(time = 500L) {
+                viewsToFadeOut.addFadeOutAnimationToViews()
+                doAfterSpecificTime {
+                    paymentInlineViewHolder.paymentInputContainer.applyBluryToView()
+                }
             }
+
         }
 
-        if(paymentInlineViewHolder.cardInputUIStatus == CardInputUIStatus.SavedCard){
+
+        if (paymentInlineViewHolder.cardInputUIStatus == CardInputUIStatus.SavedCard) {
             cardViewHolder.view.cardInfoHeaderText.visibility = View.VISIBLE
             cardViewHolder.view.cardInfoHeaderText.text =
                 LocalizationManager.getValue("savedCardSectionTitle", "TapCardInputKit")
-        }else{
-            removeViews(amountViewHolder)
         }
 
 

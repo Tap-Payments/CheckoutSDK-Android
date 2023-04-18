@@ -1,5 +1,6 @@
 package company.tap.checkout.internal.utils
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
@@ -13,17 +14,25 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.DisplayMetrics
+import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
 import android.view.animation.AnimationUtils
-import android.widget.FrameLayout
+import android.view.inputmethod.InputMethodManager
+import android.webkit.WebChromeClient
+import android.webkit.WebSettings
+import android.webkit.WebView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.os.postDelayed
 import company.tap.checkout.R
+import company.tap.checkout.internal.webview.TapCustomWebViewClient
 import company.tap.tapuilibrary.uikit.ktx.loadAppThemManagerFromPath
 import jp.wasabeef.blurry.Blurry
+import kotlinx.android.synthetic.main.switch_layout.view.*
+
 
 private var targetHeight: Int? = 0
 private var animationDelayForResizeAnimation = 1500L
@@ -65,6 +74,58 @@ fun View.addFadeInAnimation(durationTime: Long = 1000L) {
     val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
     animation.duration = durationTime
     this.startAnimation(animation)
+}
+
+fun MutableList<View>.addFadeInAnimationForViews(durationTime: Long = 1000L) {
+    this.forEachIndexed { index, view ->
+        view.visibility = View.VISIBLE
+        val animation = AnimationUtils.loadAnimation(view.context, R.anim.fade_in)
+        animation.duration = durationTime
+        view.startAnimation(animation)
+    }
+
+}
+
+fun Context.twoThirdHeightView(): Int {
+    return getDeviceSpecs().first.times(2) / 3
+}
+
+@SuppressLint("SetJavaScriptEnabled")
+fun WebView.applyConfigurationForWebView(url: String, onProgressWebViewFinished: () -> Unit) {
+    with(this) {
+        settings.javaScriptEnabled = true
+        settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+        settings.loadWithOverviewMode = true
+        isVerticalScrollBarEnabled = true
+        isHorizontalScrollBarEnabled = true
+        setInitialScale(1)
+        settings.defaultZoom = WebSettings.ZoomDensity.FAR;
+        settings.useWideViewPort = true
+        loadUrl(url)
+        setOnKeyListener { _, keyCode, event ->
+            if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                if (this.canGoBack()) {
+                    this.goBack()
+                    /**
+                     * put here listener or delegate thT process cancelled **/
+                    return@setOnKeyListener true
+                }
+                return@setOnKeyListener false
+            }
+            false
+        }
+
+        this.webChromeClient = object : WebChromeClient() {
+            override fun onProgressChanged(view: WebView?, newProgress: Int) {
+                if (newProgress == 100) {
+                    onProgressWebViewFinished.invoke()
+                }
+
+            }
+        }
+    }
+
+
 }
 
 fun View.resizeAnimation(
@@ -192,6 +253,14 @@ fun adjustHeightAccToDensity(displayMetrics: Int?) {
     } else targetHeight = 140
 }
 
+fun Context.hideKeyboard() {
+    val view = (this as Activity).currentFocus
+    if (view != null) {
+        val imm: InputMethodManager? =
+            this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+        imm?.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+}
 
 fun createDrawableGradientForBlurry(colorsArrayList: IntArray): GradientDrawable {
     val gradientDrawable = GradientDrawable(
