@@ -11,8 +11,6 @@ import android.webkit.WebView
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.Group
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.apiresponse.CardViewModel
@@ -30,7 +28,7 @@ import kotlinx.android.synthetic.main.fragment_web.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 
 
-const val resizeAnimationDuration = 1300L
+const val resizeAnimationDuration = 1400L
 const val fadeInAnimationDuration = 2000L
 
 @RequiresApi(Build.VERSION_CODES.N)
@@ -45,14 +43,15 @@ class WebViewHolder(
     val bottomSheetLayout: FrameLayout,
     val sdkLayout: LinearLayout,
     val switchViewHolder: SwitchViewHolder?,
-   val paymentInlineViewHolder: PaymentInlineViewHolder
+    val paymentInlineViewHolder: PaymentInlineViewHolder,
+    val cardViewHolder: CardViewHolder
 ) : TapBaseViewHolder, CustomWebViewClientContract {
     override val view: View = LayoutInflater.from(context).inflate(R.layout.web_view_layout, null)
     override val type = SectionType.FRAGMENT
     val web_view by lazy { view.findViewById<WebView>(R.id.web_view) }
     val webViewTextTitle by lazy { view.findViewById<TapTextView>(R.id.webView_Header) }
-    val webViewLinear by lazy { view.findViewById<ConstraintLayout>(R.id.webViewLinear) }
-    val linearGroup by lazy { view.findViewById<Group>(R.id.linearGroup) }
+    val webViewLinear by lazy { view.findViewById<LinearLayout>(R.id.webViewLinear) }
+    val topLinear by lazy { view.findViewById<LinearLayout>(R.id.topLinear1) }
 
     init {
         webViewLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.whiteTwo")))
@@ -89,20 +88,26 @@ class WebViewHolder(
     @RequiresApi(Build.VERSION_CODES.N)
     @SuppressLint("SetJavaScriptEnabled")
     private fun setUpWebView() {
-        linearGroup.visibility = View.GONE
         web_view.webViewClient = cardViewModel.let { TapCustomWebViewClient(this, it, checkoutViewModel) }
-        web_view.applyConfigurationForWebView(url = redirectURL, onProgressWebViewFinished = {
-            web_view.layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                context.twoThirdHeightView()
-            )
-            mutableListOf<View>(paymentInlineViewHolder.view,switchViewHolder?.view!!).addFadeOutAnimationToViews()
-            bottomSheetLayout.resizeAnimation(
-                durationTime = resizeAnimationDuration,
-                startHeight = sdkLayout.height
-            )
-            mutableListOf<View>(web_view, linearGroup).addFadeInAnimationForViews(fadeInAnimationDuration)
-
+        web_view.applyConfigurationForWebView(url = redirectURL, onProgressWebViewFinishedLoading = {
+            topLinear.visibility = View.VISIBLE
+            mutableListOf<View>(
+                paymentInlineViewHolder.view,
+                switchViewHolder?.view!!,
+                cardViewHolder.view
+            ).addFadeOutAnimationToViews(onAnimationEnd = {
+                web_view.layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    context.twoThirdHeightView()
+                )
+                bottomSheetLayout.resizeAnimation(
+                    durationTime = resizeAnimationDuration,
+                    startHeight = sdkLayout.height
+                )
+                mutableListOf<View>(web_view).addFadeInAnimationForViews(
+                    fadeInAnimationDuration
+                )
+            })
         })
 
 

@@ -1082,23 +1082,23 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     bottomSheetLayout,
                     sdkLayout,
                     saveCardSwitchHolder,
-                    paymentInlineViewHolder
+                    paymentInlineViewHolder,
+                    cardViewHolder
                 )
                 removeViews(
                     //  businessViewHolder,
                     amountViewHolder,
-                    cardViewHolder,
+                    //  cardViewHolder,
                     //  saveCardSwitchHolder,
-                   // paymentInlineViewHolder,
+                    // paymentInlineViewHolder,
                     otpViewHolder,
                     goPaySavedCardHolder,
                     goPayViewsHolder
                 )
 
                 //Added to hide the Items-Amount button when 3ds is opened within
-                amountViewHolder.view.amount_section?.itemAmountLayout?.visibility = View.GONE
                 addViews(webViewHolder)
-               // saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
+                saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                     ActionButtonState.LOADING
                 )
@@ -2049,17 +2049,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private fun onClickCardPayment() {
         println("onClickCardPayment")
 
-        context.hideKeyboard()
+
+        CustomUtils.hideKeyboardFrom(context, paymentInlineViewHolder.view)
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
         saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
-
-        removeViews(
-            //  businessViewHolder,
-            //   amountViewHolder,
-            // cardViewHolder,
-            //  paymentInlineViewHolder,
-         //   tabAnimatedActionButtonViewHolder
-        )
 
 
         with(cardViewHolder.view.mainChipgroup) {
@@ -2068,7 +2061,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 viewsToFadeOut.add(amountViewHolder.view)
             }
             doAfterSpecificTime(time = 500L) {
-                viewsToFadeOut.addFadeOutAnimationToViews()
+                viewsToFadeOut.addFadeOutAnimationToViews(onAnimationEnd = {})
                 doAfterSpecificTime {
                     paymentInlineViewHolder.paymentInputContainer.applyBluryToView()
                 }
@@ -2112,13 +2105,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     }
 
-    private fun changeBottomSheetTransition() {
-        bottomSheetLayout.let { layout ->
-            layout.post {
-                TransitionManager.beginDelayedTransition(layout)
-            }
-        }
-    }
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onDeleteIconClicked(

@@ -20,15 +20,12 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
 import android.view.animation.AnimationUtils
-import android.view.inputmethod.InputMethodManager
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.os.postDelayed
 import company.tap.checkout.R
-import company.tap.checkout.internal.webview.TapCustomWebViewClient
 import company.tap.tapuilibrary.uikit.ktx.loadAppThemManagerFromPath
 import jp.wasabeef.blurry.Blurry
 import kotlinx.android.synthetic.main.switch_layout.view.*
@@ -91,7 +88,7 @@ fun Context.twoThirdHeightView(): Int {
 }
 
 @SuppressLint("SetJavaScriptEnabled")
-fun WebView.applyConfigurationForWebView(url: String, onProgressWebViewFinished: () -> Unit) {
+fun WebView.applyConfigurationForWebView(url: String, onProgressWebViewFinishedLoading: () -> Unit) {
     with(this) {
         settings.javaScriptEnabled = true
         settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
@@ -118,7 +115,7 @@ fun WebView.applyConfigurationForWebView(url: String, onProgressWebViewFinished:
         this.webChromeClient = object : WebChromeClient() {
             override fun onProgressChanged(view: WebView?, newProgress: Int) {
                 if (newProgress == 100) {
-                    onProgressWebViewFinished.invoke()
+                    onProgressWebViewFinishedLoading.invoke()
                 }
 
             }
@@ -210,7 +207,10 @@ fun View.addFadeOutAnimation(durationTime: Long = 500L) {
 
 }
 
-fun MutableList<View>.addFadeOutAnimationToViews(durationTime: Long = 500L) {
+fun MutableList<View>.addFadeOutAnimationToViews(
+    durationTime: Long = 500L,
+    onAnimationEnd: () -> Unit?
+) {
     this.forEachIndexed { index, view ->
         val animation = AnimationUtils.loadAnimation(view.context, R.anim.fade_out)
         animation.duration = durationTime
@@ -221,6 +221,8 @@ fun MutableList<View>.addFadeOutAnimationToViews(durationTime: Long = 500L) {
 
             override fun onAnimationEnd(p0: Animation?) {
                 view.visibility = View.GONE
+                onAnimationEnd.invoke()
+
             }
 
             override fun onAnimationRepeat(p0: Animation?) {
@@ -253,14 +255,6 @@ fun adjustHeightAccToDensity(displayMetrics: Int?) {
     } else targetHeight = 140
 }
 
-fun Context.hideKeyboard() {
-    val view = (this as Activity).currentFocus
-    if (view != null) {
-        val imm: InputMethodManager? =
-            this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
-        imm?.hideSoftInputFromWindow(view.windowToken, 0)
-    }
-}
 
 fun createDrawableGradientForBlurry(colorsArrayList: IntArray): GradientDrawable {
     val gradientDrawable = GradientDrawable(

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/webViewLinear"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,6 +14,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_gravity="start|end"
+        android:visibility="gone"
         android:gravity="start|end"
         android:layout_marginStart="@dimen/margin_basic_15dp"
         android:layout_marginEnd="@dimen/margin_basic_15dp"
@@ -33,13 +34,6 @@
             android:text="Approve Payment"/>
     </LinearLayout>
 
-    <androidx.constraintlayout.widget.Group
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:constraint_referenced_ids="topLinear1"
-        android:id="@+id/linearGroup"
-        />
-
 
         <WebView
             android:id="@+id/web_view"
@@ -49,8 +43,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="20dp"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
             android:scrollbars="vertical|horizontal"
             />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
