@@ -11,6 +11,7 @@ import android.webkit.WebView
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
+import androidx.cardview.widget.CardView
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.apiresponse.CardViewModel
@@ -26,9 +27,10 @@ import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import kotlinx.android.synthetic.main.fragment_web.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
+import kotlin.math.roundToInt
 
 
-const val resizeAnimationDuration = 1400L
+const val resizeAnimationDuration = 1300L
 const val fadeInAnimationDuration = 2000L
 
 @RequiresApi(Build.VERSION_CODES.N)
@@ -52,6 +54,7 @@ class WebViewHolder(
     val webViewTextTitle by lazy { view.findViewById<TapTextView>(R.id.webView_Header) }
     val webViewLinear by lazy { view.findViewById<LinearLayout>(R.id.webViewLinear) }
     val topLinear by lazy { view.findViewById<LinearLayout>(R.id.topLinear1) }
+    val webCardview by lazy { view.findViewById<CardView>(R.id.webCardview) }
 
     init {
         webViewLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.whiteTwo")))
@@ -90,7 +93,7 @@ class WebViewHolder(
     private fun setUpWebView() {
         web_view.webViewClient = cardViewModel.let { TapCustomWebViewClient(this, it, checkoutViewModel) }
         web_view.applyConfigurationForWebView(url = redirectURL, onProgressWebViewFinishedLoading = {
-            topLinear.visibility = View.VISIBLE
+            showViewsRelatedToWebView()
             mutableListOf<View>(
                 paymentInlineViewHolder.view,
                 switchViewHolder?.view!!,
@@ -104,13 +107,19 @@ class WebViewHolder(
                     durationTime = resizeAnimationDuration,
                     startHeight = sdkLayout.height
                 )
-                mutableListOf<View>(web_view).addFadeInAnimationForViews(
+                web_view.addFadeInAnimation(
                     fadeInAnimationDuration
                 )
             })
         })
 
 
+    }
+
+    private fun showViewsRelatedToWebView() {
+        topLinear.visibility = View.VISIBLE
+        web_view.visibility = View.VISIBLE
+        webCardview.visibility = View.VISIBLE
     }
 
 }
