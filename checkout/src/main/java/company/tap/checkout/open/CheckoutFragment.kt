@@ -10,22 +10,22 @@ import android.graphics.*
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.telephony.TelephonyManager
 import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.widget.NestedScrollView
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import cards.pay.paycardsrecognizer.sdk.Card
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.apiresponse.CardViewModel
@@ -49,6 +49,8 @@ import company.tap.tapuilibrary.uikit.ktx.setTopBorders
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
 import company.tap.tapuilibrary.uikit.views.TapBrandView
 import org.json.JSONObject
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 /**
@@ -143,8 +145,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         topHeaderView?.visibility = View.GONE
 
         displayMetrics = CustomUtils.getDeviceDisplayMetrics(context as Activity)
-
-
+        getSimIsoCountry()
         val heightscreen: Int = Resources.getSystem().displayMetrics.heightPixels
         if (LocalizationManager.currentLocalized.length() != 0)
             closeText.text = LocalizationManager.getValue("close", "Common")
@@ -304,6 +305,37 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     }
 
+    /**
+     * Logic to obtain ISO country code **/
+    private fun getSimIsoCountry() {
+        val tm = (context as Activity).getSystemService(AppCompatActivity.TELEPHONY_SERVICE) as TelephonyManager
+        val countryCode = tm.simCountryIso
+
+        if(countryCode.isNullOrBlank()){
+            getCurrencySymbol(tm.networkCountryIso)
+
+        }else getCurrencySymbol(countryCode)
+
+    }
+
+    /**
+     * Logic to obtain currency code symbol
+     * **/
+    private fun getCurrencySymbol(countryCode: String?): String? {
+        var currencySymbol = ""
+        var locale: Locale? = null
+        var currency: Currency? = null
+        try {
+            locale = Locale("", countryCode)
+            currency = Currency.getInstance(locale)
+        } catch (e: IllegalArgumentException) {
+            e.printStackTrace()
+        }
+        if (currency != null) {
+            currencySymbol = currency.getCurrencyCode()
+        }
+        return currencySymbol
+    }
     private fun initViews(view: View) {
         bottomSheetLayout = bottomSheetDialog.findViewById(R.id.design_bottom_sheet)
         closeText = view.findViewById(R.id.closeText)

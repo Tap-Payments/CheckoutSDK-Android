@@ -149,9 +149,14 @@ fun View.addFadeOutAnimation(durationTime: Long = 500L) {
 
 }
 
-fun MutableList<View>.addFadeOutAnimationToViews(durationTime: Long = 500L) {
+fun MutableList<View>.addFadeAnimationToViews(durationTime: Long = 500L , showViewVisibility :Boolean = false) {
     this.forEachIndexed { index, view ->
-        val animation = AnimationUtils.loadAnimation(view.context, R.anim.fade_out)
+        var animation :Animation? =null
+        when(showViewVisibility){
+            true->   animation = AnimationUtils.loadAnimation(view.context, R.anim.fade_in)
+            false ->animation = AnimationUtils.loadAnimation(view.context, R.anim.fade_out)
+        }
+
         animation.duration = durationTime
         view.startAnimation(animation)
         view.animation.setAnimationListener(object : AnimationListener {
@@ -159,7 +164,11 @@ fun MutableList<View>.addFadeOutAnimationToViews(durationTime: Long = 500L) {
             }
 
             override fun onAnimationEnd(p0: Animation?) {
-                view.visibility = View.GONE
+                when(showViewVisibility){
+                    true->    view.visibility = View.VISIBLE
+                    false -> view.visibility = View.GONE
+                }
+
             }
 
             override fun onAnimationRepeat(p0: Animation?) {
@@ -172,10 +181,18 @@ fun MutableList<View>.addFadeOutAnimationToViews(durationTime: Long = 500L) {
 }
 
 
-fun View.applyBluryToView(radiusNeeded: Int = 8, sampling: Int = 2, animationDuration: Int = 1000) {
+
+
+
+
+fun View.applyBluryToView(radiusNeeded: Int = 8, sampling: Int = 2, animationDuration: Int = 1000 , showOriginalView:Boolean = false) {
     Blurry.with(context).radius(radiusNeeded).sampling(sampling).animate(animationDuration)
         .onto(this as ViewGroup).apply {
-            this@applyBluryToView.removeViewAt(0)
+            when(showOriginalView) {
+               true-> this@applyBluryToView.getChildAt(0).visibility = View.VISIBLE
+                false-> this@applyBluryToView.getChildAt(0).visibility = View.GONE
+            }
+
         }
 
 }
