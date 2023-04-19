@@ -83,8 +83,8 @@ fun MutableList<View>.addFadeInAnimationForViews(durationTime: Long = 1000L) {
 
 }
 
-fun Context.twoThirdHeightView(): Int {
-    return getDeviceSpecs().first.times(2) / 3
+fun Context.twoThirdHeightView(): Double {
+    return getDeviceSpecs().first.times(2.3) / 3
 }
 
 @SuppressLint("SetJavaScriptEnabled")
@@ -127,18 +127,13 @@ fun WebView.applyConfigurationForWebView(url: String, onProgressWebViewFinishedL
 
 fun View.resizeAnimation(
     durationTime: Long = 1000L,
-    startHeight: Int = 1000
+    startHeight: Int = 1000,
+    endHeight:Int=1000,isExpanding:Boolean=false
 ) {
-    this.visibility = View.VISIBLE
-    val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
-    animation.duration = durationTime
-    this.startAnimation(animation)
-
-
     val resizeAnimation = ResizeAnimation(
         this,
-        Resources.getSystem().displayMetrics.heightPixels,
-        startHeight, false
+        endHeight,
+        startHeight, isExpanding
     )
     resizeAnimation.duration = durationTime
     this.startAnimation(resizeAnimation)
@@ -212,23 +207,24 @@ fun MutableList<View>.addFadeOutAnimationToViews(
     onAnimationEnd: () -> Unit?
 ) {
     this.forEachIndexed { index, view ->
-        val animation = AnimationUtils.loadAnimation(view.context, R.anim.fade_out)
-        animation.duration = durationTime
-        view.startAnimation(animation)
-        view.animation.setAnimationListener(object : AnimationListener {
-            override fun onAnimationStart(p0: Animation?) {
-            }
-
-            override fun onAnimationEnd(p0: Animation?) {
-                view.visibility = View.GONE
-                onAnimationEnd.invoke()
-
-            }
-
-            override fun onAnimationRepeat(p0: Animation?) {
-            }
-
-        })
+//        val animation = AnimationUtils.loadAnimation(view.context, R.anim.fade_out)
+//        animation.duration = durationTime
+//        view.startAnimation(animation)
+        view.visibility = View.GONE
+//        view.animation.setAnimationListener(object : AnimationListener {
+//            override fun onAnimationStart(p0: Animation?) {
+//            }
+//
+//            override fun onAnimationEnd(p0: Animation?) {
+//                view.visibility = View.GONE
+//                onAnimationEnd.invoke()
+//
+//            }
+//
+//            override fun onAnimationRepeat(p0: Animation?) {
+//            }
+//
+//        })
     }
 
 
@@ -238,8 +234,9 @@ fun MutableList<View>.addFadeOutAnimationToViews(
 fun View.applyBluryToView(radiusNeeded: Int = 8, sampling: Int = 2, animationDuration: Int = 1000) {
     Blurry.with(context).radius(radiusNeeded).sampling(sampling).animate(animationDuration)
         .onto(this as ViewGroup).apply {
-            this@applyBluryToView.removeViewAt(0)
+            this@applyBluryToView.getChildAt(0).visibility = View.GONE
         }
+
 
 }
 

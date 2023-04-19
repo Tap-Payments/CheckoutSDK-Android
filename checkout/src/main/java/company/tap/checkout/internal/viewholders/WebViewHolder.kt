@@ -25,12 +25,13 @@ import company.tap.checkout.open.controller.SDKSession
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
+import company.tap.tapuilibrary.uikit.ktx.loadAppThemManagerFromPath
 import kotlinx.android.synthetic.main.fragment_web.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 import kotlin.math.roundToInt
 
 
-const val resizeAnimationDuration = 1300L
+const val resizeAnimationDuration = 1000L
 const val fadeInAnimationDuration = 2000L
 
 @RequiresApi(Build.VERSION_CODES.N)
@@ -57,7 +58,7 @@ class WebViewHolder(
     val webCardview by lazy { view.findViewById<CardView>(R.id.webCardview) }
 
     init {
-        webViewLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.whiteTwo")))
+        webViewLinear?.setBackgroundColor(loadAppThemManagerFromPath(AppColorTheme.GlobalValuesColor))
         if (TextUtils.isEmpty(redirectURL)) {
             throw IllegalArgumentException("Empty URL passed to WebViewFragment!")
         }
@@ -91,27 +92,29 @@ class WebViewHolder(
     @RequiresApi(Build.VERSION_CODES.N)
     @SuppressLint("SetJavaScriptEnabled")
     private fun setUpWebView() {
-        web_view.webViewClient = cardViewModel.let { TapCustomWebViewClient(this, it, checkoutViewModel) }
-        web_view.applyConfigurationForWebView(url = redirectURL, onProgressWebViewFinishedLoading = {
-            showViewsRelatedToWebView()
-            mutableListOf<View>(
-                paymentInlineViewHolder.view,
-                switchViewHolder?.view!!,
-                cardViewHolder.view
-            ).addFadeOutAnimationToViews(onAnimationEnd = {
-                web_view.layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    context.twoThirdHeightView()
-                )
-                bottomSheetLayout.resizeAnimation(
-                    durationTime = resizeAnimationDuration,
-                    startHeight = sdkLayout.height
-                )
-                web_view.addFadeInAnimation(
-                    fadeInAnimationDuration
-                )
+        web_view.webViewClient =
+            cardViewModel.let { TapCustomWebViewClient(this, it, checkoutViewModel) }
+        web_view.applyConfigurationForWebView(
+            url = redirectURL,
+            onProgressWebViewFinishedLoading = {
+                mutableListOf(
+                    paymentInlineViewHolder.view,
+                    switchViewHolder?.view!!,
+                    cardViewHolder.view
+                ).addFadeOutAnimationToViews(onAnimationEnd = {})
+              //  doAfterSpecificTime(50) {
+                    web_view.layoutParams = LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        context.twoThirdHeightView().roundToInt()
+                    )
+                    bottomSheetLayout.resizeAnimation(
+                        durationTime = resizeAnimationDuration,
+                        startHeight = sdkLayout.height,
+                        endHeight = context.getDeviceSpecs().first
+                    )
+                    showViewsRelatedToWebView()
+               // }
             })
-        })
 
 
     }

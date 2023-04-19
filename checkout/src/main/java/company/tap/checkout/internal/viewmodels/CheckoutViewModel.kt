@@ -1585,6 +1585,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 context as Activity
             )
         )
+
         //  addViews(saveCardSwitchHolder)
         /***
          * This function is  working fine as expected in case when 3ds is false
@@ -1605,12 +1606,20 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             supportFragmentManager?.popBackStack()
         }
         if (::webViewHolder.isInitialized) {
+            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
+                ActionButtonState.LOADING,100
+            )
             removeViews(webViewHolder)
         }
-        Handler().postDelayed({
-            if (::bottomSheetLayout.isInitialized)
-                translateViewToNewHeight(bottomSheetLayout.measuredHeight, false)
-        }, 300)
+        doAfterSpecificTime(250) {
+            if (::bottomSheetLayout.isInitialized) {
+                bottomSheetLayout.resizeAnimation(
+                    startHeight = bottomSheetLayout.measuredHeight,
+                    endHeight = sdkLayout.height,
+                    durationTime = 250, isExpanding = false
+                )
+            }
+        }
 
         if (::otpViewHolder.isInitialized)
             if (otpViewHolder.otpView.isVisible) {
@@ -1652,20 +1661,17 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         println("chargeResponse to handle" + chargeResponse?.status)
         when (chargeResponse?.status) {
             ChargeStatus.CAPTURED, ChargeStatus.AUTHORIZED, ChargeStatus.VALID, ChargeStatus.IN_PROGRESS -> {
-                tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
-                Handler().postDelayed({
+                doAfterSpecificTime(2000){
                     saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                         ActionButtonState.SUCCESS
                     )
-                }, 400)
-                tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
-
-                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
-                    true,
-                    "en", "",
-                    Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-                    Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
-                )
+                }
+//                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
+//                    true,
+//                    "en", "",
+//                    loadAppThemManagerFromPath(AppColorTheme.ActionButtonBackgroundColor),
+//                    loadAppThemManagerFromPath(AppColorTheme.ActionButtonValidTitleLabelColor),
+//                )
 
             }
             ChargeStatus.CANCELLED, ChargeStatus.TIMEDOUT, ChargeStatus.FAILED, ChargeStatus.DECLINED, ChargeStatus.UNKNOWN,
@@ -1746,20 +1752,18 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 }
             }
         }
-        Handler().postDelayed({
-            // tabAnimatedActionButton?.onMorphAnimationReverted()
-            // tabAnimatedActionButton?.clearAnimation()
+
+        doAfterSpecificTime(4000) {
             if (chargeResponse != null)
                 tabAnimatedActionButton?.setButtonDataSource(
                     true,
                     "en",
                     null,
-                    Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-                    Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
+                    loadAppThemManagerFromPath(AppColorTheme.ActionButtonBackgroundColor),
+                    loadAppThemManagerFromPath(AppColorTheme.ActionButtonValidTitleLabelColor),
                 )
             SDKSession.sessionActive = false
-
-        }, 4000)
+        }
         SessionManager.setActiveSession(false)
         tabAnimatedActionButton?.setOnClickListener {
             // if(::fragmentManager.isInitialized)
@@ -1771,11 +1775,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             )
         }
         //removeAllViews()
-        Handler().postDelayed({
+        doAfterSpecificTime(4500) {
             if (::bottomSheetDialog.isInitialized)
                 bottomSheetDialog.dismiss()
-
-        }, 5000)
+        }
 
 
     }
@@ -1828,7 +1831,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
             }, 0)
-
         }
 
     }
@@ -1840,11 +1842,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             Handler(Looper.getMainLooper()).postDelayed(Runnable {
                 // it?.view?.visibility =View.VISIBLE
                 if (::context.isInitialized) {
-
-
                     val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
                     it?.view?.startAnimation(animation)
-
                 }
 
                 Handler().postDelayed({
@@ -2062,9 +2061,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
             doAfterSpecificTime(time = 500L) {
                 viewsToFadeOut.addFadeOutAnimationToViews(onAnimationEnd = {})
-                doAfterSpecificTime {
+                //doAfterSpecificTime {
                     paymentInlineViewHolder.paymentInputContainer.applyBluryToView()
-                }
+              //  }
             }
 
         }
