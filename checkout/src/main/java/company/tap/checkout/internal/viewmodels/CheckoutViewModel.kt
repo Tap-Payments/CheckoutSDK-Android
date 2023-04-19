@@ -694,6 +694,36 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
           },400)*/
     }
 
+    override fun reOpenSDKState() {
+        //todo add back to sdk functionality
+       /* removeAllViews()
+        businessViewHolder.setDataFromAPI(
+            PaymentDataSource.getMerchantData()?.logo,
+            PaymentDataSource.getMerchantData()?.name
+        )
+
+        addViews(
+            businessViewHolder,
+            amountViewHolder,
+            cardViewHolder,
+            paymentInlineViewHolder,
+            saveCardSwitchHolder
+        )
+        paymentInlineViewHolder?.view?.addFadeOutAnimation()
+        saveCardSwitchHolder?.view?.visibility = View.VISIBLE
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.RESET)
+        val payString: String = LocalizationManager.getValue("pay", "ActionButton")
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
+            false,
+            "en",
+            if (::selectedAmount.isInitialized && ::selectedCurrency.isInitialized) {
+                payString+" "+currentCurrencySymbol+" "+selectedAmount
+            }else{ payString+" "+currentCurrencySymbol+" "+currentAmount},
+            Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
+            Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
+        )*/
+    }
+
 
     private fun caseDisplayControlCurrency() {
         /*  val newHeight = (context as Activity).window?.decorView?.measuredHeight
@@ -851,13 +881,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             "Common"
         )
         amountViewHolder.view.amount_section.itemAmountLayout?.visibility = View.GONE
-        amountViewHolder.view.amount_section.itemPopupLayout?.visibility = View.GONE
-        amountViewHolder.view.amount_section.tapChipAmount?.visibility = View.GONE
-        amountViewHolder.view.amount_section.tapChipPopup?.visibility = View.GONE
-        amountViewHolder.view.amount_section.itemAmountText.text = LocalizationManager.getValue(
+      //  amountViewHolder.view.amount_section.itemPopupLayout?.visibility = View.GONE
+        amountViewHolder.view.amount_section.flagImageView?.visibility = View.GONE
+        amountViewHolder.view.amount_section.popupTextView.text = LocalizationManager.getValue(
             "close",
             "Common"
         )
+
+
       //  amountViewHolder.view.amount_section.itemCountButton?.visibility = View.GONE
 
         displayOtpIsOpen = true
