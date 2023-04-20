@@ -723,14 +723,17 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
         addViews(
             amountViewHolder,
-            cardViewHolder,
             paymentInlineViewHolder,
             saveCardSwitchHolder
         )
         amountViewHolder.view.amount_section.itemAmountLayout?.visibility = View.VISIBLE
         amountViewHolder.view.amount_section.itemPopupLayout?.visibility = View.VISIBLE
-        amountViewHolder.view.amount_section.flagImageView?.visibility = View.VISIBLE
+        amountViewHolder.view.amount_section.tapChipAmount?.visibility = View.VISIBLE
+        checkSelectedAmountInitiated()
         amountViewHolder.changeGroupAction(false)
+        amountViewHolder.setOnItemsClickListener()
+        amountViewHolder.view.amount_section.flagImageView?.visibility = View.VISIBLE
+
         val currencyAlert:String =LocalizationManager.getValue("currencyAlert","Common")
         amountViewHolder.view.amount_section.popupTextView.text = currencyAlert + " " +checkoutFragment.getSimIsoCountry()
 
@@ -904,7 +907,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             "close",
             "Common"
         )
-        amountViewHolder.view.amount_section.itemAmountLayout?.visibility = View.GONE
+       // amountViewHolder.view.amount_section.itemAmountLayout?.visibility = View.GONE
       //  amountViewHolder.view.amount_section.itemPopupLayout?.visibility = View.GONE
         amountViewHolder.view.amount_section.flagImageView?.visibility = View.GONE
         amountViewHolder.view.amount_section.popupTextView.text = LocalizationManager.getValue(
@@ -974,7 +977,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         addViews(otpViewHolder)
         otpViewHolder.otpView.visibility = View.VISIBLE
         //Added to hide the Items-Amount button when OTP is opened
-        amountViewHolder.view.amount_section.itemAmountLayout?.visibility = View.GONE
+       // amountViewHolder.view.amount_section.itemAmountLayout?.visibility = View.GONE
         amountViewHolder.view.amount_section.tapChipAmount?.visibility = View.GONE
         CustomUtils.showKeyboard(context)
         setOtpPhoneNumber(phoneNumber)

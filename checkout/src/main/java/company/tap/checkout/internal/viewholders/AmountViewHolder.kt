@@ -153,7 +153,13 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
             baseLayoutManager?.controlCurrency(isOpenedList)
         }*/
 
-        view.amount_section.itemAmountLayout.setOnTouchListener(object : View.OnTouchListener {
+        /*view.amount_section.itemAmountLayout.setOnTouchListener(object : View.OnTouchListener {
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                baseLayoutManager?.controlCurrency(isOpenedList)
+                return false
+            }
+        })*/
+ view.amount_section.tapChipAmount.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
                 baseLayoutManager?.controlCurrency(isOpenedList)
                 return false
