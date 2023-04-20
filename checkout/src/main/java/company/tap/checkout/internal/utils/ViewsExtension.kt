@@ -149,14 +149,10 @@ fun View.addFadeOutAnimation(durationTime: Long = 500L) {
 
 }
 
-fun MutableList<View>.addFadeAnimationToViews(durationTime: Long = 500L , showViewVisibility :Boolean = false) {
+fun MutableList<View>.addFadeOutAnimationToViews(durationTime: Long = 500L) {
     this.forEachIndexed { index, view ->
-        var animation :Animation? =null
-        when(showViewVisibility){
-            true->   animation = AnimationUtils.loadAnimation(view.context, R.anim.fade_in)
-            false ->animation = AnimationUtils.loadAnimation(view.context, R.anim.fade_out)
-        }
 
+        val  animation = AnimationUtils.loadAnimation(view.context, R.anim.fade_out)
         animation.duration = durationTime
         view.startAnimation(animation)
         view.animation.setAnimationListener(object : AnimationListener {
@@ -164,10 +160,8 @@ fun MutableList<View>.addFadeAnimationToViews(durationTime: Long = 500L , showVi
             }
 
             override fun onAnimationEnd(p0: Animation?) {
-                when(showViewVisibility){
-                    true->    view.visibility = View.VISIBLE
-                    false -> view.visibility = View.GONE
-                }
+                view.visibility = View.GONE
+
 
             }
 
@@ -179,7 +173,30 @@ fun MutableList<View>.addFadeAnimationToViews(durationTime: Long = 500L , showVi
 
 
 }
+fun MutableList<View>.addFadeInAnimationToViews(durationTime: Long = 500L) {
+    this.forEachIndexed { index, view ->
 
+        val  animation = AnimationUtils.loadAnimation(view.context, R.anim.fade_in)
+        animation.duration = durationTime
+        view.startAnimation(animation)
+        view.animation.setAnimationListener(object : AnimationListener {
+            override fun onAnimationStart(p0: Animation?) {
+            }
+
+            override fun onAnimationEnd(p0: Animation?) {
+                view.visibility = View.VISIBLE
+
+
+            }
+
+            override fun onAnimationRepeat(p0: Animation?) {
+            }
+
+        })
+    }
+
+
+}
 
 
 

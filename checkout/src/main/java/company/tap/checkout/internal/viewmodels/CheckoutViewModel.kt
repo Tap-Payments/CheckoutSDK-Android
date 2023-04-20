@@ -708,7 +708,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     chipsRecycler,
                     groupAction,
                     groupName
-                ).addFadeAnimationToViews(showViewVisibility = true)
+                ).addFadeInAnimationToViews()
             }
 
         }
@@ -2118,7 +2118,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     chipsRecycler,
                     groupAction,
                     groupName
-                ).addFadeAnimationToViews(showViewVisibility = false)
+                ).addFadeOutAnimationToViews()
             }
             doAfterSpecificTime {
                 paymentInlineViewHolder.paymentInputContainer.applyBluryToView()
