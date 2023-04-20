@@ -24,6 +24,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import cards.pay.paycardsrecognizer.sdk.Card
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
+import com.blongho.country_data.World
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import company.tap.checkout.R
@@ -91,8 +92,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     private var topHeaderView: TapBrandView? = null
     private var displayMetrics: Int? = 0
     var originalHeight: Int? = 0
-
-
+        @JvmField
+    var countryCode :String?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _activity = activity?.parent
@@ -145,7 +146,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         topHeaderView?.visibility = View.GONE
 
         displayMetrics = CustomUtils.getDeviceDisplayMetrics(context as Activity)
-        getSimIsoCountry()
+        getSimIsoCountryCurrency()
         val heightscreen: Int = Resources.getSystem().displayMetrics.heightPixels
         if (LocalizationManager.currentLocalized.length() != 0)
             closeText.text = LocalizationManager.getValue("close", "Common")
@@ -307,11 +308,13 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     /**
      * Logic to obtain ISO country code **/
-     fun getSimIsoCountry()  : String ?{
+     fun getSimIsoCountryCurrency()  : String ?{
         val tm = (context as Activity).getSystemService(AppCompatActivity.TELEPHONY_SERVICE) as TelephonyManager
-        val countryCode = tm.simCountryIso
+         countryCode = tm.simCountryIso
 
         if(countryCode.isNullOrBlank()){
+            countryCode = tm.networkCountryIso
+
          return  getCurrencySymbol(tm.networkCountryIso)
 
         }else return getCurrencySymbol(countryCode)
@@ -343,6 +346,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         scrollView = view.findViewById(R.id.scrollView)
         relativeLL = view.findViewById(R.id.relativeLL)
         mainCardLayout = view.findViewById(R.id.mainCardLayout)
+        /**Added to init the lib of getting dynamic flags*/
+        World.init(context)
     }
 
 

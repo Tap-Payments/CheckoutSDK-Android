@@ -11,7 +11,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import android.telephony.TelephonyManager
 import android.text.format.DateFormat
 import android.util.Log
 import android.view.View
@@ -23,7 +22,6 @@ import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
 import androidx.annotation.RestrictTo
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
@@ -36,6 +34,7 @@ import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import cards.pay.paycardsrecognizer.sdk.FrameManager
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
+import com.blongho.country_data.World
 import com.bugfender.sdk.Bugfender
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.android.gms.wallet.PaymentData
@@ -96,7 +95,6 @@ import company.tap.tapuilibrary.uikit.ktx.loadAppThemManagerFromPath
 import company.tap.tapuilibrary.uikit.ktx.makeLinks
 import company.tap.tapuilibrary.uikit.ktx.setTopBorders
 import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
-import jp.wasabeef.blurry.Blurry
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.businessview_layout.view.*
 import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
@@ -480,8 +478,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         logicForLoyaltyProgram()
 
         val currencyAlert:String =LocalizationManager.getValue("currencyAlert","Common")
-        amountViewHolder.view.amount_section.popupTextView.text = currencyAlert + " " +checkoutFragment.getSimIsoCountry()
-
+        /**Added to get dynamic flags from lib*/
+        amountViewHolder.view.amount_section.popupTextView.text = currencyAlert + " " +checkoutFragment.getSimIsoCountryCurrency()
+        amountViewHolder.view.amount_section.flagImageView.setImageResource(World.getFlagOf(checkoutFragment.countryCode))
     }
 
     private fun initSwitchAction() {
@@ -735,7 +734,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         amountViewHolder.view.amount_section.flagImageView?.visibility = View.VISIBLE
 
         val currencyAlert:String =LocalizationManager.getValue("currencyAlert","Common")
-        amountViewHolder.view.amount_section.popupTextView.text = currencyAlert + " " +checkoutFragment.getSimIsoCountry()
+        /**Added to get dynamic flags from lib*/
+        amountViewHolder.view.amount_section.popupTextView.text = currencyAlert + " " +checkoutFragment.getSimIsoCountryCurrency()
+        amountViewHolder.view.amount_section.flagImageView.setImageResource(World.getFlagOf(checkoutFragment.countryCode))
 
         saveCardSwitchHolder?.view?.visibility = View.VISIBLE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.RESET)

@@ -102,7 +102,6 @@ dependencies {
 //This is BungFender for logs
     implementation 'com.bugfender.sdk:android:3.+'
     implementation 'jp.wasabeef:blurry:4.0.1'
-
-
+    implementation 'com.github.blongho:worldCountryData:v1.5.4-alpha'
 
 }
