@@ -977,11 +977,11 @@ class CardRepository : APIRequestCallback {
          * Condition added for 3Ds for merchant
          */
         if (paymentOption?.threeDS != null) {
-            if (paymentOption?.threeDS == "N") {
+            if (paymentOption.threeDS == "N") {
                 require3DSecure = false
-            } else if (paymentOption?.threeDS == "Y") {
+            } else if (paymentOption.threeDS == "Y") {
                 require3DSecure = true
-            } else if (paymentOption?.threeDS == "U") {
+            } else if (paymentOption.threeDS == "U") {
                 require3DSecure = provider?.getRequires3DSecure()
             }
         }
