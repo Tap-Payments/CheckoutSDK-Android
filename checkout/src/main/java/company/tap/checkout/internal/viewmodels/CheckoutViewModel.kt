@@ -11,6 +11,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.telephony.TelephonyManager
 import android.text.format.DateFormat
 import android.util.Log
 import android.view.View
@@ -22,13 +23,17 @@ import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
 import androidx.annotation.RestrictTo
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.transition.*
+import androidx.transition.Fade
+import androidx.transition.Scene
+import androidx.transition.Transition
+import androidx.transition.TransitionManager
 import cards.pay.paycardsrecognizer.sdk.FrameManager
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import com.bugfender.sdk.Bugfender
@@ -91,10 +96,10 @@ import company.tap.tapuilibrary.uikit.ktx.loadAppThemManagerFromPath
 import company.tap.tapuilibrary.uikit.ktx.makeLinks
 import company.tap.tapuilibrary.uikit.ktx.setTopBorders
 import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
+import jp.wasabeef.blurry.Blurry
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.businessview_layout.view.*
 import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
-import kotlinx.android.synthetic.main.fragment_web.*
 import kotlinx.android.synthetic.main.gopaysavedcard_layout.view.*
 import kotlinx.android.synthetic.main.itemviewholder_layout.view.*
 import kotlinx.android.synthetic.main.loyalty_view_layout.view.*
@@ -693,6 +698,51 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
           },400)*/
     }
 
+    override fun reOpenSDKState() {
+        //todo add back to sdk functionality
+
+        removeViews(otpViewHolder,amountViewHolder ,paymentInlineViewHolder,saveCardSwitchHolder)
+        doAfterSpecificTime(time = 500L) {
+            with(cardViewHolder.view.mainChipgroup) {
+                mutableListOf<View>(
+                    chipsRecycler,
+                    groupAction,
+                    groupName
+                ).addFadeInAnimationToViews()
+            }
+
+        }
+
+        businessViewHolder.setDataFromAPI(
+            PaymentDataSource.getMerchantData()?.logo,
+            PaymentDataSource.getMerchantData()?.name
+        )
+        addViews(
+
+            amountViewHolder,
+            cardViewHolder,
+            paymentInlineViewHolder,
+            saveCardSwitchHolder
+        )
+        amountViewHolder.view.amount_section.itemAmountLayout?.visibility = View.VISIBLE
+        amountViewHolder.view.amount_section.itemPopupLayout?.visibility = View.VISIBLE
+        amountViewHolder.view.amount_section.flagImageView?.visibility = View.VISIBLE
+        amountViewHolder.view.amount_section.popupTextView.text = "Pay in AED"
+
+        saveCardSwitchHolder?.view?.visibility = View.VISIBLE
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.RESET)
+        val payString: String = LocalizationManager.getValue("pay", "ActionButton")
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
+            false,
+            "en",
+            if (::selectedAmount.isInitialized && ::selectedCurrency.isInitialized) {
+                payString+" "+currentCurrencySymbol+" "+selectedAmount
+            }else{ payString+" "+currentCurrencySymbol+" "+currentAmount},
+            Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
+            Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
+        )
+    }
+
 
     private fun caseDisplayControlCurrency() {
         /*  val newHeight = (context as Activity).window?.decorView?.measuredHeight
@@ -850,14 +900,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             "Common"
         )
         amountViewHolder.view.amount_section.itemAmountLayout?.visibility = View.GONE
-        amountViewHolder.view.amount_section.itemPopupLayout?.visibility = View.GONE
-        amountViewHolder.view.amount_section.tapChipAmount?.visibility = View.GONE
-        amountViewHolder.view.amount_section.tapChipPopup?.visibility = View.GONE
-        amountViewHolder.view.amount_section.itemAmountText.text = LocalizationManager.getValue(
+      //  amountViewHolder.view.amount_section.itemPopupLayout?.visibility = View.GONE
+        amountViewHolder.view.amount_section.flagImageView?.visibility = View.GONE
+        amountViewHolder.view.amount_section.popupTextView.text = LocalizationManager.getValue(
             "close",
             "Common"
         )
-        //  amountViewHolder.view.amount_section.itemCountButton?.visibility = View.GONE
+
+
+      //  amountViewHolder.view.amount_section.itemCountButton?.visibility = View.GONE
 
         displayOtpIsOpen = true
         displayItemsOpen = false
@@ -911,6 +962,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             cardViewHolder,
             paymentInlineViewHolder, saveCardSwitchHolder, otpViewHolder
         )
+        paymentInlineViewHolder.paymentInputContainer.applyBluryToView(showOriginalView = true)
         // bottomSheetDialog.dismissWithAnimation
         //start counter on open otpview
         otpViewHolder?.otpView?.startCounter()

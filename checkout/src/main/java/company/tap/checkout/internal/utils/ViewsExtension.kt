@@ -229,12 +229,43 @@ fun MutableList<View>.addFadeOutAnimationToViews(
 
 
 }
+fun MutableList<View>.addFadeInAnimationToViews(durationTime: Long = 500L) {
+    this.forEachIndexed { index, view ->
+
+        val  animation = AnimationUtils.loadAnimation(view.context, R.anim.fade_in)
+        animation.duration = durationTime
+        view.startAnimation(animation)
+        view.animation.setAnimationListener(object : AnimationListener {
+            override fun onAnimationStart(p0: Animation?) {
+            }
+
+            override fun onAnimationEnd(p0: Animation?) {
+                view.visibility = View.VISIBLE
 
 
-fun View.applyBluryToView(radiusNeeded: Int = 8, sampling: Int = 2, animationDuration: Int = 1000) {
+            }
+
+            override fun onAnimationRepeat(p0: Animation?) {
+            }
+
+        })
+    }
+
+
+}
+
+
+
+
+
+fun View.applyBluryToView(radiusNeeded: Int = 8, sampling: Int = 2, animationDuration: Int = 1000 , showOriginalView:Boolean = false) {
     Blurry.with(context).radius(radiusNeeded).sampling(sampling).animate(animationDuration)
         .onto(this as ViewGroup).apply {
-            this@applyBluryToView.getChildAt(0).visibility = View.GONE
+            when(showOriginalView) {
+               true-> this@applyBluryToView.getChildAt(0).visibility = View.VISIBLE
+                false-> this@applyBluryToView.getChildAt(0).visibility = View.GONE
+            }
+
         }
 
 

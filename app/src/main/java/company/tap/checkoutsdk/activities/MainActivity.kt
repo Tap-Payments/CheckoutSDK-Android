@@ -1,6 +1,8 @@
 package company.tap.checkoutsdk.activities
 
 
+//import mobi.foo.benefitinapp.data.Transaction
+//import mobi.foo.benefitinapp.listener.CheckoutListener
 import android.Manifest
 import android.app.Activity
 import android.content.Context
@@ -11,6 +13,7 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.telephony.TelephonyManager
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
@@ -41,8 +44,6 @@ import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.models.DialogConfigurations
 import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
-//import mobi.foo.benefitinapp.data.Transaction
-//import mobi.foo.benefitinapp.listener.CheckoutListener
 import java.math.BigDecimal
 import java.util.*
 
