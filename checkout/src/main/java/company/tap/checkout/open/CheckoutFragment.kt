@@ -307,14 +307,14 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     /**
      * Logic to obtain ISO country code **/
-    private fun getSimIsoCountry() {
+     fun getSimIsoCountry()  : String ?{
         val tm = (context as Activity).getSystemService(AppCompatActivity.TELEPHONY_SERVICE) as TelephonyManager
         val countryCode = tm.simCountryIso
 
         if(countryCode.isNullOrBlank()){
-            getCurrencySymbol(tm.networkCountryIso)
+         return  getCurrencySymbol(tm.networkCountryIso)
 
-        }else getCurrencySymbol(countryCode)
+        }else return getCurrencySymbol(countryCode)
 
     }
 

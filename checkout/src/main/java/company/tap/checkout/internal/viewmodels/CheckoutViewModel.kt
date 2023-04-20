@@ -478,6 +478,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         goPayViewsHolder = GoPayViewsHolder(context, this, otpViewHolder)
         asynchronousPaymentViewHolder = AsynchronousPaymentViewHolder(context, this)
         logicForLoyaltyProgram()
+
+        val currencyAlert:String =LocalizationManager.getValue("currencyAlert","Common")
+        amountViewHolder.view.amount_section.popupTextView.text = currencyAlert + " " +checkoutFragment.getSimIsoCountry()
+
     }
 
     private fun initSwitchAction() {
@@ -718,7 +722,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             PaymentDataSource.getMerchantData()?.name
         )
         addViews(
-
             amountViewHolder,
             cardViewHolder,
             paymentInlineViewHolder,
@@ -727,7 +730,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         amountViewHolder.view.amount_section.itemAmountLayout?.visibility = View.VISIBLE
         amountViewHolder.view.amount_section.itemPopupLayout?.visibility = View.VISIBLE
         amountViewHolder.view.amount_section.flagImageView?.visibility = View.VISIBLE
-        amountViewHolder.view.amount_section.popupTextView.text = "Pay in AED"
+        amountViewHolder.changeGroupAction(false)
+        val currencyAlert:String =LocalizationManager.getValue("currencyAlert","Common")
+        amountViewHolder.view.amount_section.popupTextView.text = currencyAlert + " " +checkoutFragment.getSimIsoCountry()
 
         saveCardSwitchHolder?.view?.visibility = View.VISIBLE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.RESET)
