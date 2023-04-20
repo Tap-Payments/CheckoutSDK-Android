@@ -97,7 +97,15 @@ data class PaymentOption(
 
 @SerializedName("logos")
 @Expose
- val logos: Logos? = null
+ val logos: Logos? = null,
+
+    @SerializedName("payment_order_type")
+    @Expose
+    val paymentOrderType: String? = null,
+
+@SerializedName("button_style")
+@Expose
+val buttonStyle: ButtonStyle? = null
 
 ):Comparable<PaymentOption>, CurrenciesSupport, Serializable {
     override fun getSupportedCurrencies(): ArrayList<String>? {
