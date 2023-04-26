@@ -21,57 +21,79 @@ All rights reserved.
 object CustomUtils {
 
     @JvmField
-    val tagEvent :String = "EVENTS"
+    val tagEvent: String = "EVENTS"
+
     @JvmField
-    val tagAPI :String = "API"
-    fun showDialog(title: String, messageString: String, context: Context, btnType: Int? = null, baseLayoutManager: BaseLayoutManager?, paymentType: PaymentType?=null, savedCardsModel: Any?= null, cardTypeDialog:Boolean) {
+    val tagAPI: String = "API"
+    fun showDialog(
+        title: String,
+        messageString: String,
+        context: Context,
+        btnType: Int? = null,
+        baseLayoutManager: BaseLayoutManager?,
+        paymentType: PaymentType? = null,
+        savedCardsModel: Any? = null,
+        cardTypeDialog: Boolean
+    ) {
         val builder = iOSDialogBuilder(context)
+
         builder
             .setTitle(title)
             .setSubtitle(messageString)
-            .setBoldPositiveLabel(true)
+            .setBoldPositiveLabel(false)
             .setCancelable(false)
+
+
         if (btnType == 2) {
-            builder.setPositiveListener(LocalizationManager.getValue("yes","Common")) { dialog ->
+            builder.setPositiveListener(LocalizationManager.getValue("yes", "Common")) { dialog ->
                 dialog.dismiss()
                 baseLayoutManager?.didDialogueExecute("YES", cardTypeDialog)
 
             }
-            builder.setNegativeListener(LocalizationManager.getValue("no","Common")) { dialog ->
-                dialog.dismiss()
-                baseLayoutManager?.didDialogueExecute("NO", cardTypeDialog)
-            }
-                    .build().show()
-        } else if (btnType == 3) {
-            builder.setPositiveListener(LocalizationManager.getValue("yes","Common")) { dialog ->
-                dialog.dismiss()
-                if (paymentType != null) {
-                    baseLayoutManager?.dialogueExecuteExtraFees("YES",paymentType,savedCardsModel)
-                }
-
-            }
-            builder.setNegativeListener(LocalizationManager.getValue("no","Common")) { dialog ->
-                dialog.dismiss()
-                if (paymentType != null) {
-                    baseLayoutManager?.dialogueExecuteExtraFees("NO",paymentType,savedCardsModel)
-                }
-            }
-        }else if (btnType == 4) {
-            builder.setPositiveListener(LocalizationManager.getValue("confirm","DeleteCard")) { dialog ->
-                dialog.dismiss()
-                baseLayoutManager?.didDialogueExecute("YES", cardTypeDialog)
-
-            }
-            builder.setNegativeListener(LocalizationManager.getValue("cancel","DeleteCard")) { dialog ->
+            builder.setNegativeListener(LocalizationManager.getValue("no", "Common")) { dialog ->
                 dialog.dismiss()
                 baseLayoutManager?.didDialogueExecute("NO", cardTypeDialog)
             }
                 .build().show()
-        }
-        else {
-            builder.setPositiveListener(LocalizationManager.getValue("ok","Common")) { dialog ->
+        } else if (btnType == 3) {
+            builder.setPositiveListener(LocalizationManager.getValue("yes", "Common")) { dialog ->
                 dialog.dismiss()
-                baseLayoutManager?.didDialogueExecute("OK",cardTypeDialog)
+                if (paymentType != null) {
+                    baseLayoutManager?.dialogueExecuteExtraFees("YES", paymentType, savedCardsModel)
+                }
+
+            }
+            builder.setNegativeListener(LocalizationManager.getValue("no", "Common")) { dialog ->
+                dialog.dismiss()
+                if (paymentType != null) {
+                    baseLayoutManager?.dialogueExecuteExtraFees("NO", paymentType, savedCardsModel)
+                }
+            }
+        } else if (btnType == 4) {
+            builder.setPositiveListener(
+                LocalizationManager.getValue(
+                    "confirm",
+                    "DeleteCard"
+                )
+            ) { dialog ->
+                dialog.dismiss()
+                baseLayoutManager?.didDialogueExecute("YES", cardTypeDialog)
+
+            }
+            builder.setNegativeListener(
+                LocalizationManager.getValue(
+                    "cancel",
+                    "DeleteCard"
+                )
+            ) { dialog ->
+                dialog.dismiss()
+                baseLayoutManager?.didDialogueExecute("NO", cardTypeDialog)
+            }
+                .build().show()
+        } else {
+            builder.setPositiveListener(LocalizationManager.getValue("ok", "Common")) { dialog ->
+                dialog.dismiss()
+                baseLayoutManager?.didDialogueExecute("OK", cardTypeDialog)
             }
                 .build().show()
         }
@@ -91,24 +113,26 @@ object CustomUtils {
         view.clearFocus()
 
     }
+
     /**
      * Show keyboard from.
      *
      * @param context the context
      *
      */
-    fun showKeyboard(context: Context){
+    fun showKeyboard(context: Context) {
         val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
         imm?.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
     }
 
-    fun getDeviceDisplayMetrics(activity: Activity) : Int{
+    fun getDeviceDisplayMetrics(activity: Activity): Int {
         // Determine density
         val metrics = DisplayMetrics()
         activity.windowManager.defaultDisplay.getMetrics(metrics)
         val density = metrics.densityDpi
         return density
     }
+
     fun hideSoftKeyboard(activity: Activity) {
         val inputMethodManager = activity.getSystemService(
             Activity.INPUT_METHOD_SERVICE
@@ -121,9 +145,9 @@ object CustomUtils {
         }
     }
 
-    fun getCurrentTheme (): String {
+    fun getCurrentTheme(): String {
 
-           return ThemeManager.currentTheme
+        return ThemeManager.currentTheme
     }
 
 

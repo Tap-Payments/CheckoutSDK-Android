@@ -3,7 +3,6 @@ package company.tap.checkout.internal.utils
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.graphics.drawable.Drawable
@@ -14,18 +13,21 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.DisplayMetrics
-import android.view.KeyEvent
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
 import android.view.animation.AnimationUtils
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
+import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.annotation.DrawableRes
 import androidx.core.os.postDelayed
+import com.bumptech.glide.Glide
 import company.tap.checkout.R
+import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.ktx.loadAppThemManagerFromPath
 import jp.wasabeef.blurry.Blurry
 import kotlinx.android.synthetic.main.switch_layout.view.*
@@ -37,6 +39,7 @@ private var topLeftCorner = 16f
 private var topRightCorner = 16f
 private var bottomRightCorner = 0f
 private var bottomLeftCorner = 0f
+const val progressBarSize =45
 
 fun View.startPoweredByAnimation(delayTime: Long, poweredByLogo: View?) {
     Handler(Looper.getMainLooper()).postDelayed({
@@ -88,7 +91,10 @@ fun Context.twoThirdHeightView(): Double {
 }
 
 @SuppressLint("SetJavaScriptEnabled")
-fun WebView.applyConfigurationForWebView(url: String, onProgressWebViewFinishedLoading: () -> Unit) {
+fun WebView.applyConfigurationForWebView(
+    url: String,
+    onProgressWebViewFinishedLoading: () -> Unit
+) {
     with(this) {
         settings.javaScriptEnabled = true
         settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
@@ -128,7 +134,7 @@ fun WebView.applyConfigurationForWebView(url: String, onProgressWebViewFinishedL
 fun View.resizeAnimation(
     durationTime: Long = 1000L,
     startHeight: Int = 1000,
-    endHeight:Int=1000,isExpanding:Boolean=false
+    endHeight: Int = 1000, isExpanding: Boolean = false
 ) {
     val resizeAnimation = ResizeAnimation(
         this,
@@ -229,10 +235,11 @@ fun MutableList<View>.addFadeOutAnimationToViews(
 
 
 }
+
 fun MutableList<View>.addFadeInAnimationToViews(durationTime: Long = 500L) {
     this.forEachIndexed { index, view ->
 
-        val  animation = AnimationUtils.loadAnimation(view.context, R.anim.fade_in)
+        val animation = AnimationUtils.loadAnimation(view.context, R.anim.fade_in)
         animation.duration = durationTime
         view.startAnimation(animation)
         view.animation.setAnimationListener(object : AnimationListener {
@@ -255,19 +262,48 @@ fun MutableList<View>.addFadeInAnimationToViews(durationTime: Long = 500L) {
 }
 
 
-
-
-
-fun View.applyBluryToView(radiusNeeded: Int = 8, sampling: Int = 2, animationDuration: Int = 1000 , showOriginalView:Boolean = false) {
+fun View.applyBluryToView(
+    radiusNeeded: Int = 8,
+    sampling: Int = 2,
+    animationDuration: Int = 1000,
+    showOriginalView: Boolean = false
+) {
     Blurry.with(context).radius(radiusNeeded).sampling(sampling).animate(animationDuration)
         .onto(this as ViewGroup).apply {
-            when(showOriginalView) {
-               true-> this@applyBluryToView.getChildAt(0).visibility = View.VISIBLE
-                false-> this@applyBluryToView.getChildAt(0).visibility = View.GONE
+            when (showOriginalView) {
+                true -> this@applyBluryToView.getChildAt(0).visibility = View.VISIBLE
+                false -> this@applyBluryToView.getChildAt(0).visibility = View.GONE
             }
 
         }
 
+
+}
+
+
+
+fun ViewGroup.addLoaderWithBlurryToView(invokeAfterLoad: () -> Unit,viewToBeBLur:View?) {
+
+    @DrawableRes
+    val loaderGif: Int =
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
+            R.drawable.loader
+        } else if (ThemeManager.currentTheme.isNotEmpty() && !ThemeManager.currentTheme.contains("dark")) {
+            R.drawable.output_black_loader_nobg
+        } else R.drawable.loader
+
+
+
+    viewToBeBLur?.applyBluryToView()
+    val progressImage = ImageView(context)
+    val params = FrameLayout.LayoutParams(progressBarSize, progressBarSize)
+    params.gravity = Gravity.CENTER
+    progressImage.layoutParams = params
+    Glide.with(context).asGif().load(loaderGif).into(progressImage)
+    this.addView(progressImage)
+    doAfterSpecificTime(2000) {
+        invokeAfterLoad.invoke()
+    }
 
 }
 

@@ -1,7 +1,7 @@
 package company.tap.checkout.internal.interfaces
 
 import android.view.View
-import com.google.android.gms.wallet.PaymentsClient
+import android.view.ViewGroup
 import company.tap.checkout.internal.api.models.SavedCard
 
 /**
@@ -18,7 +18,10 @@ interface OnCardSelectedActionListener {
         itemId: Int,
         cardId: String,
         maskedCardNumber: String,
-        arrayListSavedCardSize: ArrayList<SavedCard>
+        arrayListSavedCardSize: ArrayList<SavedCard>,
+        selectedViewToBeDeleted: ViewGroup,
+        viewToBeBlurr: View,
+        position: Int
     )
     fun onGoPayLogoutClicked(isClicked:Boolean)
     fun onEditClicked(isClicked:Boolean)

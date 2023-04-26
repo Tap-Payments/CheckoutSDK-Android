@@ -37,6 +37,7 @@ class CardViewHolder(private val context: Context, private val onCardSelectedAct
     private var paymentCardsList: MutableList<PaymentOption>? = null
     private var saveCardsList: MutableList<SavedCard>? = null
     lateinit var cardInfoHeaderText: TapTextView
+    lateinit var cardTypeAdapterUIKIT: CardTypeAdapterUIKIT
 
     init { bindViewComponents() }
 
@@ -56,13 +57,14 @@ class CardViewHolder(private val context: Context, private val onCardSelectedAct
             RecyclerView.HORIZONTAL,
             false
         )
-        val adapter = CardTypeAdapterUIKIT(onCardSelectedActionListener )
-        view.mainChipgroup.chipsRecycler.adapter = adapter
+        cardTypeAdapterUIKIT = CardTypeAdapterUIKIT(onCardSelectedActionListener )
+        view.mainChipgroup.chipsRecycler.adapter = cardTypeAdapterUIKIT
         view.mainChipgroup.chipsRecycler.elevation = 0F
-        paymentCardsList?.let { adapter.updateAdapterData(it) }
+
+        paymentCardsList?.let { cardTypeAdapterUIKIT.updateAdapterData(it) }
       //  println("saveCardsList in adapter"+saveCardsList)
         //println("paymentCardsList in adapter"+paymentCardsList)
-        saveCardsList?.let { adapter.updateAdapterDataSavedCard(it) }
+        saveCardsList?.let { cardTypeAdapterUIKIT.updateAdapterDataSavedCard(it) }
         /**
          * set separator background
          */
@@ -104,8 +106,8 @@ class CardViewHolder(private val context: Context, private val onCardSelectedAct
     }
 
     private fun setFontsEnglish() {
-        cardInfoHeaderText?.typeface = Typeface.createFromAsset(
-            context?.assets, TapFont.tapFontType(
+        cardInfoHeaderText.typeface = Typeface.createFromAsset(
+            context.assets, TapFont.tapFontType(
                 TapFont.RobotoRegular
             )
         )

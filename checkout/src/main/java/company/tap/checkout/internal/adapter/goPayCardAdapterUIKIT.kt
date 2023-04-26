@@ -32,6 +32,7 @@ Copyright (c) 2020    Tap Payments.
 All rights reserved.
  **/
 
+const val shakeAnimationStrength= 0.2f
 @Suppress("PrivatePropertyName")
 class GoPayCardAdapterUIKIT(
     private val onCardSelectedActionListener: OnCardSelectedActionListener
@@ -119,7 +120,7 @@ class GoPayCardAdapterUIKIT(
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (isShaking) {
-            holder.itemView.alpha = 0.4f
+            holder.itemView.alpha = shakeAnimationStrength
         }else{
             holder.itemView.alpha = 1.0f
         }
@@ -136,7 +137,7 @@ class GoPayCardAdapterUIKIT(
              */
             else -> {
                 if (isShaking) {
-                    holder.itemView.alpha = 0.4f
+                    holder.itemView.alpha = shakeAnimationStrength
                 }
                 if (selectedPosition == position) {
                     if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains(
@@ -189,7 +190,7 @@ class GoPayCardAdapterUIKIT(
     private fun typeSavedCard(holder: RecyclerView.ViewHolder, position: Int) {
         Log.d("isShaking", isShaking.toString())
         if (isShaking) {
-            holder.itemView.alpha = 0.4f
+            holder.itemView.alpha = shakeAnimationStrength
             val animShake: Animation = AnimationUtils.loadAnimation(
                 holder.itemView.context,
                 R.anim.shake
