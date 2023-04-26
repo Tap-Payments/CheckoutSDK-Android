@@ -1117,7 +1117,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         .replace(R.id.webFrameLayout, fragment, "webFragment")
                         .addToBackStack("webFragment")
                         .commit()
-                    checkoutFragment.closeText.visibility = View.VISIBLE
+                  //  checkoutFragment.closeText.visibility = View.VISIBLE
                     webFrameLayout.visibility = View.VISIBLE
                     println("fragment hh" + Resources.getSystem().displayMetrics.heightPixels)
                     if (::bottomSheetLayout.isInitialized)
