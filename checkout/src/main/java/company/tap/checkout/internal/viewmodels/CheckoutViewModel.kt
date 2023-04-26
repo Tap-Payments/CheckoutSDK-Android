@@ -1118,17 +1118,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         .addToBackStack("webFragment")
                         .commit()
                     checkoutFragment.closeText.visibility = View.VISIBLE
+                    webFrameLayout.visibility = View.VISIBLE
                     println("fragment hh" + Resources.getSystem().displayMetrics.heightPixels)
                     if (::bottomSheetLayout.isInitialized)
                         translateHeightRedirect(sdkLayout)
 
                 }, 500)
-                Handler(Looper.getMainLooper()).postDelayed({
-
-                    // saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = View.INVISIBLE
-                    // removeViews(saveCardSwitchHolder)
-
-                }, 700)
 
 
             } else if (PaymentDataSource?.getWebViewType() != null && PaymentDataSource.getWebViewType() == WebViewType.THREE_DS_WEBVIEW) {
@@ -3471,9 +3466,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             /**
              * At this stage, Passing the googlePaylaod to Tap Backend TokenAPI call followed by chargeAPI.
              * ***/
-            /**
-             * At this stage, Passing the googlePaylaod to Tap Backend TokenAPI call followed by chargeAPI.
-             */
             val createTokenGPayRequest = CreateTokenGPayRequest("googlepay", jsonToken)
             CardViewModel().processEvent(
                 CardViewEvent.CreateGoogleTokenEvent,
