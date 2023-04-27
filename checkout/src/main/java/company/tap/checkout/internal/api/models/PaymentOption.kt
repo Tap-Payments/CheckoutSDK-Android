@@ -21,7 +21,7 @@ data class PaymentOption(
 
     @SerializedName("name")
     @Expose
-     val brand: CardBrand? = null,
+     val brand: String? = null,
 
     @SerializedName("name_ar")
     @Expose

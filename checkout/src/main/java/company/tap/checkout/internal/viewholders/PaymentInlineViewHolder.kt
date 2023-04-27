@@ -692,7 +692,7 @@ class PaymentInlineViewHolder(
                         expiryDate?.let { it1 ->
                             onPaymentCardComplete.onPayCardCompleteAction(
                                 true, PaymentType.CARD,
-                                it, it1, cvvNumber!!, cardHolderName
+                                it, it1, cvvNumber!!, cardHolderName ,PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
                             )
                         }
                     }
@@ -1091,7 +1091,7 @@ class PaymentInlineViewHolder(
                                 cvvNumber?.let { it2 ->
                                     onPaymentCardComplete.onPayCardCompleteAction(
                                         true, PaymentType.CARD,
-                                        it, it1, it2, null
+                                        it, it1, it2, null,PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
                                     )
 
                                     /* tapCardInputView.separatorcard2.setBackgroundColor(
@@ -1153,13 +1153,13 @@ class PaymentInlineViewHolder(
 
                         if (s.trim().length == 3 || s.trim().length == 4) {
                             onPaymentCardComplete.onPayCardSwitchAction(
-                                true, PaymentType.CARD
+                                true, PaymentType.CARD , PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
                             )
                             cardNumber?.let {
                                 expiryDate?.let { it1 ->
                                     onPaymentCardComplete.onPayCardCompleteAction(
                                         true, PaymentType.CARD,
-                                        it, it1, cvvNumber!!, cardHolderName
+                                        it, it1, cvvNumber!!, cardHolderName,PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
                                     )
                                 }
                             }
@@ -1620,10 +1620,10 @@ class PaymentInlineViewHolder(
             } else imageURL = imageURLApi[i].logos?.light?.png.toString()
             // imageURL = imageURLApi[i].image.toString()
             paymentType = imageURLApi[i].paymentType
-            cardBrandType = if (imageURLApi[i].brand?.name == null) {
+            cardBrandType = if (imageURLApi[i].brand == null) {
                 "unknown"
             } else
-                imageURLApi[i].brand?.name.toString()
+                imageURLApi[i].brand.toString()
 
             /// set payment option object for all payment types and send it to paymentcompletion action function and i will pass it to show extra fees
             /*      if (paymentType == PaymentType.telecom) {
@@ -1648,7 +1648,7 @@ class PaymentInlineViewHolder(
                 SectionTabItem(
                     imageURL,
                     imageURL,
-                    CardBrand.valueOf(cardBrandType)
+                    CardBrand.fromString(cardBrandType)
                 )
             )
         }

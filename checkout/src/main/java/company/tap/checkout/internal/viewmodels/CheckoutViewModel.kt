@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.ShapeDrawable
 import android.net.Uri
 import android.os.Build
@@ -84,6 +85,7 @@ import company.tap.checkout.open.enums.CardType
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.models.ItemsModel
 import company.tap.nfcreader.open.reader.TapEmvCard
+import company.tap.tapcardvalidator_android.CardBrand
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.SeparatorViewTheme
@@ -1982,21 +1984,22 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     savedCardsModel,
                     CardInputUIStatus.SavedCard
                 )
-                setPayButtonAction(PaymentType.SavedCard, savedCardsModel)
+
                 isSavedCardSelected = true
                 Bugfender.d(
                     CustomUtils.tagEvent,
-                    "Payment scheme selected: title :" + savedCardsModel?.brand + "& ID :" + savedCardsModel.paymentOptionIdentifier
+                    "Payment scheme selected: title :" + savedCardsModel?.brand  + "& ID :" + savedCardsModel.paymentOptionIdentifier
                 )
+                activateActionButton( cardBrandString = savedCardsModel?.brand.rawValue)
             }
             else -> {
                 if (savedCardsModel != null) {
-                    println("paymentType" + (savedCardsModel as PaymentOption).paymentType)
+                    println("paymentType" + (savedCardsModel as PaymentOption).brand)
                     if ((savedCardsModel as PaymentOption).paymentType == PaymentType.WEB) {
                         //  paymentInlineViewHolder.view.alpha = 0.95f
 
                         PaymentDataSource.setWebViewType(WebViewType.REDIRECT)
-                        activateActionButton()
+                        activateActionButton((savedCardsModel as PaymentOption))
                         setPayButtonAction(PaymentType.WEB, savedCardsModel)
                     } else if ((savedCardsModel as PaymentOption).paymentType == PaymentType.GOOGLE_PAY) {
                         removeViews(amountViewHolder, cardViewHolder, paymentInlineViewHolder)
@@ -2037,10 +2040,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
 
-    private fun activateActionButton() {
-        val payString: String
+    private fun activateActionButton(paymentOptObject: PaymentOption?=null ,cardBrandString: String? =null) {
+        val payStringButton: String
         when (PaymentDataSource.getTransactionMode()) {
-            TransactionMode.TOKENIZE_CARD -> payString = LocalizationManager.getValue(
+            TransactionMode.TOKENIZE_CARD -> payStringButton = LocalizationManager.getValue(
                 "pay",
                 "ActionButton"
             )
@@ -2048,24 +2051,101 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             /* TransactionMode.SAVE_CARD -> payString = LocalizationManager.getValue(
                  "savecard",
                  "ActionButton"
-             )*/  TransactionMode.SAVE_CARD -> payString = "SAVE CARD"
-            else -> payString = LocalizationManager.getValue("pay", "ActionButton")
+             )*/  TransactionMode.SAVE_CARD -> payStringButton = "SAVE CARD"
+            else -> {
+              val  payString :String = LocalizationManager.getValue("pay", "ActionButton")
+              val nowString :String = LocalizationManager.getValue("now", "ActionButton")
+
+                payStringButton =  payString +" "+ nowString
+            }
+        }
+
+
+
+        logicTogetButtonStyle(paymentOptObject, payStringButton , cardBrandString)
+
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun logicTogetButtonStyle(paymentOptObject: PaymentOption?, payString:String , cardBrandString: String?) {
+        println("paymentOptObject is" + paymentOptObject?.buttonStyle?.background?.darkModel?.backgroundColors?.size)
+        var selectedPayOpt : PaymentOption?=null
+
+        if(cardBrandString!=null){
+           selectedPayOpt =  logicTogetPayOptions(cardBrandString)
+            println("selectedPayOpt>>>"+selectedPayOpt)
+        }else selectedPayOpt = paymentOptObject
+
+        var colorBackGround: String? = null
+        var intColorArray: IntArray? = null
+        println("selectedPayOpt>>>"+selectedPayOpt)
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
+            if (selectedPayOpt?.buttonStyle?.background?.darkModel?.backgroundColors?.size == 1) {
+                colorBackGround = selectedPayOpt?.buttonStyle?.background?.darkModel?.backgroundColors?.get(0)
+            }
+            intColorArray =null
+
+        } else {
+            if (selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors?.size == 1) {
+                colorBackGround =
+                    selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors?.get(0)
+                intColorArray =null
+            } else {
+
+                if(selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors?.size==2){
+                    val startColor =   selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors?.get(1)?.replace("0x", "#")
+
+                    val endColor =  selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors?.get(0)?.replace("0x", "#")
+
+                    intColorArray =  intArrayOf(Color.parseColor(startColor),Color.parseColor(endColor))
+                    colorBackGround = "0"
+
+                }else if (paymentOptObject?.buttonStyle?.background?.lightModel?.backgroundColors?.size==3){
+                    val startColor =   selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors?.get(2)?.replace("0x", "#")
+
+                    val middleColor =  selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors?.get(1)?.replace("0x", "#")
+                    val endColor =  selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors?.get(0)?.replace("0x", "#")
+
+                    intColorArray=  intArrayOf(Color.parseColor(startColor), Color.parseColor(middleColor), Color.parseColor(endColor))
+                    colorBackGround = "0"
+
+                }
+
+            }
+
+
+
         }
 
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
             true,
-            "en",
-            if (::selectedAmount.isInitialized && ::selectedCurrency.isInitialized) {
-                payString + " " + currentCurrencySymbol + " " + selectedAmount
-            } else {
-                payString + " " + currentCurrencySymbol + " " + currentAmount
-            },
-            Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
+            LocalizationManager.getLocale(context).language,
+            payString,
+            if(colorBackGround.equals("0") ||colorBackGround==null ) 0 else Color.parseColor(colorBackGround),
+            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")), intColorArray
         )
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.removeAllViews()
 
-        saveCardSwitchHolder?.view?.cardSwitch?.showOnlyPayButton()
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated
+        Handler().postDelayed({
+            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.getImageViewUrl(getAssetName(selectedPayOpt))
+                ?.let { saveCardSwitchHolder?.view?.cardSwitch?.payButton?.addChildView(it) }
+            saveCardSwitchHolder?.view?.cardSwitch?.showOnlyPayButton()
+            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated
+        }, 500)
+
+
+    }
+
+    private fun logicTogetPayOptions(cardBrandString: String?)  : PaymentOption ?{
+        var selectedPayOption:PaymentOption ?= null
+        for(i in 0 until paymentOptionsResponse.paymentOptions?.size) {
+            if(paymentOptionsResponse.paymentOptions[i].brand == cardBrandString){
+               selectedPayOption =  paymentOptionsResponse.paymentOptions[i]
+            }
+        }
+        println("selectedPayOption before return"+selectedPayOption)
+        return selectedPayOption
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -2240,7 +2320,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
 
-    override fun onPayCardSwitchAction(isCompleted: Boolean, paymentType: PaymentType) {
+    override fun onPayCardSwitchAction(isCompleted: Boolean, paymentType: PaymentType , cardBrandString: String?) {
         println("isCompleted???" + isCompleted)
         //todo add validations from api when cvv is valid the only  activate ActionButton
         if (isCompleted) {
@@ -2254,7 +2334,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
              * @TODO:  Will be enabled when coming from API directly
              */
             //  initLoyaltyView() // Will be enabled when coming from API directly
-            activateActionButton()
+            activateActionButton(cardBrandString = cardBrandString)
             paymentActionType = paymentType
         } else {
 //            saveCardSwitchHolder11?.view?.mainSwitch?.visibility = View.GONE
@@ -2270,9 +2350,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         paymentType: PaymentType,
         cardNumber: String,
         expiryDate: String,
-        cvvNumber: String, holderName: String?
+        cvvNumber: String, holderName: String?,  cardBrandString: String?
     ) {
-        activateActionButton()
+        activateActionButton(cardBrandString = cardBrandString)
         setPayButtonAction(paymentType, null)
 
     }
@@ -3596,8 +3676,24 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     fun setTitleNormalCard() {
         cardViewHolder.view.cardInfoHeaderText.text =
             LocalizationManager.getValue("cardSectionTitleOr", "TapCardInputKit")
-
     }
+
+    fun getAssetName(paymentOptionOb: PaymentOption?) : String{
+        println("paymentOptionOb"+paymentOptionOb)
+       var lang:String = "en"
+       var theme :String ="light"
+        if(LocalizationManager.getLocale(context).language!=null) {
+            lang =  LocalizationManager.getLocale(context).language
+        }else lang ="en"
+        if(ThemeManager.currentTheme!=null &&  ThemeManager.currentTheme.contains("dark")) {
+            theme =  "dark"
+        }else theme ="light"
+        val assetToLoad :String = paymentOptionOb?.buttonStyle?.titleAssets.toString()
+        println("oppp"+assetToLoad.replace("{theme}",theme).replace("{lang}",lang)+".png")
+        return assetToLoad.replace("{theme}",theme).replace("{lang}",lang)+".png"
+    }
+
+
 
 }
 
