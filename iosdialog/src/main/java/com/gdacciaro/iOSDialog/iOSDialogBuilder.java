@@ -1,5 +1,6 @@
 package com.gdacciaro.iOSDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 
 /**
@@ -13,6 +14,8 @@ public class iOSDialogBuilder {
     private Typeface tf;
     private boolean bold,cancelable;
     private String title, subtitle, okLabel, koLabel;
+
+    private int backgroundColor;
     private Context context;
     private iOSDialogClickListener positiveListener;
     private iOSDialogClickListener negativeListener;
@@ -58,10 +61,13 @@ public class iOSDialogBuilder {
     }
 
     public iOSDialog build(){
-        iOSDialog dialog = new iOSDialog(context,title,subtitle, bold, tf,cancelable);
+        iOSDialog dialog = new iOSDialog(context,title,subtitle, bold, tf,cancelable,backgroundColor);
         dialog.setNegative(koLabel,negativeListener);
         dialog.setPositive(okLabel,positiveListener);
         return dialog;
     }
 
+    public void setBackgroundColor(int backgroundColor) {
+        this.backgroundColor = backgroundColor;
+    }
 }

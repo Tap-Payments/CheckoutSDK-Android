@@ -9,10 +9,9 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import company.tap.checkout.internal.api.enums.AmountModificatorType
 import company.tap.checkout.internal.api.enums.AuthorizeActionType
-import company.tap.checkout.internal.api.enums.Measurement
 import company.tap.checkout.internal.api.models.AmountModificator
 import company.tap.checkout.internal.api.models.PhoneNumber
-import company.tap.checkout.internal.api.models.Quantity
+import company.tap.checkout.internal.apiresponse.UserLocalCurrencyModel
 import company.tap.checkout.open.enums.Category
 import company.tap.checkout.open.enums.SdkMode
 import company.tap.checkout.open.enums.TransactionMode
@@ -21,7 +20,6 @@ import company.tap.checkoutsdk.activities.CustomerCreateActivity
 import company.tap.checkoutsdk.viewmodels.*
 import java.math.BigDecimal
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * Created by AhlaamK on 9/6/21.
@@ -39,7 +37,7 @@ object SettingsManager {
     }
 
     fun saveCustomer(
-        customerid:String?,
+        customerid: String?,
         name: String,
         middle: String,
         last: String,
@@ -135,24 +133,24 @@ object SettingsManager {
 
 
     fun saveItems(
-        proudctId:String?,
+        proudctId: String?,
         itemname: String,
         description: String,
-        quantity:Int,
+        quantity: Int,
         priceperunit: Double?,
         totalamount: Double?,
         itemDiscount: AmountModificator,
-        itemCurrency : String?,
-        itemCategory:Category?,
+        itemCurrency: String?,
+        itemCategory: Category?,
         itemVendor: Vendor?,
         itemFullFillService: String?,
-        itemIsRequireShip:Boolean?,
-        itemCode:String?,
-        accountCode:String?,
-        itemImage:String?,
-        itemReference:ReferenceItem?,
-        itemsDimensions : ItemDimensions?,
-        itemsTags :String?,
+        itemIsRequireShip: Boolean?,
+        itemCode: String?,
+        accountCode: String?,
+        itemImage: String?,
+        itemReference: ReferenceItem?,
+        itemsDimensions: ItemDimensions?,
+        itemsTags: String?,
         itemMetaData: MetaData?,
 
         ctx: Context
@@ -168,11 +166,27 @@ object SettingsManager {
         itemsList.add(
             totalamount?.let {
                 priceperunit?.let { it1 ->
-                    PaymentItemViewModel(proudctId,itemname, description,
+                    PaymentItemViewModel(
+                        proudctId,
+                        itemname,
+                        description,
                         it1,
-                        it,quantity,itemDiscount,itemCurrency,
-                        itemCategory,itemVendor,itemFullFillService,itemIsRequireShip,itemCode,accountCode,itemImage,itemReference,
-                        itemsDimensions, itemsTags, itemMetaData)
+                        it,
+                        quantity,
+                        itemDiscount,
+                        itemCurrency,
+                        itemCategory,
+                        itemVendor,
+                        itemFullFillService,
+                        itemIsRequireShip,
+                        itemCode,
+                        accountCode,
+                        itemImage,
+                        itemReference,
+                        itemsDimensions,
+                        itemsTags,
+                        itemMetaData
+                    )
                 }
             }
 
@@ -180,6 +194,7 @@ object SettingsManager {
         val data: String = gson.toJson(itemsList)
         writeItemsToPreferences(data, preferences)
     }
+
     fun editItems(
         oldItems: PaymentItemViewModel?,
         newItems: PaymentItemViewModel,
@@ -223,23 +238,35 @@ object SettingsManager {
             }?.let { paymentItemList.add(it) }
             val data: String = gson.toJson(paymentItemList)
             writeItemsToPreferences(data, preferences)
-        }  else {
+        } else {
             if (ctx != null) {
 
                 newItems.getItemsName()?.let {
                     newItems.getitemQuantity()?.let { it1 ->
                         newItems.getPricePUnit()?.let { it2 ->
                             newItems.getAmountType()?.let { it3 ->
-                                saveItems(newItems.getProductId(),
+                                saveItems(
+                                    newItems.getProductId(),
                                     it,
                                     newItems.getItemDescription()!!,
                                     it1,
                                     it2,
                                     newItems.getitemTotalPrice(),
-                                    it3,newItems.getItemCurrency(),newItems.getItemCategory(),
-                                    newItems.getItemVendor(),newItems.getItemFullfillmentService(),newItems.getItemIsRequireShip(),newItems.getItemCode(),
-                                    newItems.getAccountCode(),newItems.getItemImage(),newItems.getItemReference(),newItems.getItemDimens(),newItems.getItemTags(),
-                                    newItems.getItemMetaData(),ctx)
+                                    it3,
+                                    newItems.getItemCurrency(),
+                                    newItems.getItemCategory(),
+                                    newItems.getItemVendor(),
+                                    newItems.getItemFullfillmentService(),
+                                    newItems.getItemIsRequireShip(),
+                                    newItems.getItemCode(),
+                                    newItems.getAccountCode(),
+                                    newItems.getItemImage(),
+                                    newItems.getItemReference(),
+                                    newItems.getItemDimens(),
+                                    newItems.getItemTags(),
+                                    newItems.getItemMetaData(),
+                                    ctx
+                                )
                             }
                         }
                     }
@@ -334,6 +361,7 @@ object SettingsManager {
         editor.putString("paymentitems", data)
         editor.commit()
     }
+
     private fun writeCustomersToPreferences(data: String, preferences: SharedPreferences) {
         val editor = preferences.edit()
         editor.putString("customer", data)
@@ -351,6 +379,7 @@ object SettingsManager {
         editor.putString("sdkconfig", data)
         editor.commit()
     }
+
     fun getRegisteredCustomers(ctx: Context?): List<CustomerViewModel> {
         val preferences = PreferenceManager.getDefaultSharedPreferences(ctx)
         val gson = Gson()
@@ -361,6 +390,7 @@ object SettingsManager {
         )
         return customersList ?: ArrayList<CustomerViewModel>()
     }
+
     fun getRegisteredItems(ctx: Context?): List<PaymentItemViewModel> {
         val preferences = PreferenceManager.getDefaultSharedPreferences(ctx)
         val gson = Gson()
@@ -396,21 +426,21 @@ object SettingsManager {
         )
 
         // check if customer id is in pref.
-      //  customer =
+        //  customer =
         if (!customersList.isNullOrEmpty() && customersList.isNotEmpty()) {
-          //  println("preparing data source with customer ref :" + customersList[0].getRef())
-          //  println("preparing data source with isAdd ref :" + CustomerCreateActivity().isAddressEnabled)
-            if(CustomerCreateActivity().isAddressEnabled == true){
-                customer= TapCustomer(
+            //  println("preparing data source with customer ref :" + customersList[0].getRef())
+            //  println("preparing data source with isAdd ref :" + CustomerCreateActivity().isAddressEnabled)
+            if (CustomerCreateActivity().isAddressEnabled == true) {
+                customer = TapCustomer(
                     customersList[0].getRef(),
                     customersList[0].getName(),
                     customersList[0].getMiddleName(),
                     customersList[0].getLastName(),
                     customersList[0].getEmail(),
                     PhoneNumber(customersList[0].getSdn(), customersList[0].getMobile()),
-                    "meta","nationality", getCustomerAddress(),"en"
+                    "meta", "nationality", getCustomerAddress(), "en"
                 )
-            }else {
+            } else {
                 customer = TapCustomer(
                     customersList[0].getRef(),
                     customersList[0].getName(),
@@ -423,16 +453,23 @@ object SettingsManager {
             }
 
         } else {
-          //  println(" paymentResultDataManager.getCustomerRef(context) null")
+            //  println(" paymentResultDataManager.getCustomerRef(context) null")
             //65562630
-            if(CustomerCreateActivity().isAddressEnabled == true){
-                customer= TapCustomer(
-                    "cus_TS012520211349Za012907577", "ahlaam", "middlename",
-                    "lastname", "abcd@gmail.com",
-                    PhoneNumber("00965", "66175090"), "description","nationality", getCustomerAddress(),"en"
+            if (CustomerCreateActivity().isAddressEnabled == true) {
+                customer = TapCustomer(
+                    "cus_TS012520211349Za012907577",
+                    "ahlaam",
+                    "middlename",
+                    "lastname",
+                    "abcd@gmail.com",
+                    PhoneNumber("00965", "66175090"),
+                    "description",
+                    "nationality",
+                    getCustomerAddress(),
+                    "en"
                 )
-            }else {
-                customer= TapCustomer(
+            } else {
+                customer = TapCustomer(
                     "cus_TS012520211349Za012907577", "ahlaam", "middlename",
                     "lastname", "abcd@gmail.com",
                     PhoneNumber("00965", "66175090"), "description", "nationality", null, "en"
@@ -444,11 +481,12 @@ object SettingsManager {
         //  65562630
 
     }
-    fun getDynamicPaymentItems(): ArrayList<ItemsModel> ?{
+
+    fun getDynamicPaymentItems(): ArrayList<ItemsModel>? {
         val paymentitems: ArrayList<ItemsModel> = ArrayList()
         val gson = Gson()
         val response = pref?.getString("paymentitems", "")
-       // println(" get customer: $response")
+        // println(" get customer: $response")
         val itemsList = gson.fromJson<ArrayList<PaymentItemViewModel>>(
             response,
             object : TypeToken<List<PaymentItemViewModel?>?>() {}.type
@@ -457,30 +495,55 @@ object SettingsManager {
         // check if customer id is in pref.
         //  customer =
         if (itemsList != null) {
-           // println("preparing data source with itemsList ref :" + itemsList[0].getItemIsRequireShip())
+            // println("preparing data source with itemsList ref :" + itemsList[0].getItemIsRequireShip())
 
-  ItemsModel(itemsList[0].getProductId(),itemsList[0].getItemsName(),
-                    itemsList[0].getPricePUnit()?.let { BigDecimal.valueOf(it) },itemsList[0].getItemCurrency(),
-                    itemsList[0].getitemQuantity()?.toDouble()?.let { BigDecimal.valueOf(it) }, itemsList[0].getItemCategory(), itemsList[0].getAmountType(),  itemsList[0].getItemVendor(),
-                    itemsList[0].getItemFullfillmentService(),
-                    itemsList[0].getItemIsRequireShip(),  itemsList[0].getItemCode(),
-                    itemsList[0].getAccountCode(), itemsList[0].getItemDescription(), itemsList[0].getItemImage(),  itemsList[0].getItemReference(),
-                    itemsList[0].getItemDimens(), itemsList[0].getItemTags(),  itemsList[0].getItemMetaData())
-            .let { paymentitems.add(it) }
+            ItemsModel(
+                itemsList[0].getProductId(),
+                itemsList[0].getItemsName(),
+                itemsList[0].getPricePUnit()?.let { BigDecimal.valueOf(it) },
+                itemsList[0].getItemCurrency(),
+                itemsList[0].getitemQuantity()?.toDouble()?.let { BigDecimal.valueOf(it) },
+                itemsList[0].getItemCategory(),
+                itemsList[0].getAmountType(),
+                itemsList[0].getItemVendor(),
+                itemsList[0].getItemFullfillmentService(),
+                itemsList[0].getItemIsRequireShip(),
+                itemsList[0].getItemCode(),
+                itemsList[0].getAccountCode(),
+                itemsList[0].getItemDescription(),
+                itemsList[0].getItemImage(),
+                itemsList[0].getItemReference(),
+                itemsList[0].getItemDimens(),
+                itemsList[0].getItemTags(),
+                itemsList[0].getItemMetaData()
+            )
+                .let { paymentitems.add(it) }
         } else {
-          //  println(" paymentResultDataManager.itemsList(context) null")
-            paymentitems.add(ItemsModel(
-                "",
-                "Items1",
-                BigDecimal.valueOf(5),
-               "KWD",
-                BigDecimal.valueOf(
-                    2
-                ),null,
-                AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO),
-                null,null,false,null,null,"High-quality, durable and stylish backpack, perfect for daily use and outdoor adventures. Made with waterproof material, multiple compartments and comfortable straps",
-                null,null,null,null,null
-            ))
+            //  println(" paymentResultDataManager.itemsList(context) null")
+            paymentitems.add(
+                ItemsModel(
+                    "",
+                    "Items1",
+                    BigDecimal.valueOf(5),
+                    "KWD",
+                    BigDecimal.valueOf(
+                        2
+                    ),
+                    null,
+                    AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO),
+                    null,
+                    null,
+                    false,
+                    null,
+                    null,
+                    "High-quality, durable and stylish backpack, perfect for daily use and outdoor adventures. Made with waterproof material, multiple compartments and comfortable straps",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                )
+            )
 
 
         }
@@ -632,6 +695,7 @@ object SettingsManager {
         ) return TransactionMode.SAVE_CARD
         else TransactionMode.PURCHASE
     }
+
     /**
      * get Transaction mode
      * @param key
@@ -650,7 +714,6 @@ object SettingsManager {
                 ignoreCase = true
             )
         ) return "ar"
-
         else return "en"
     }
 
@@ -677,7 +740,7 @@ object SettingsManager {
      * @return
      */
     fun getFont(key: String?, defaultFont: String?): String? {
-      //  println("pref: " + pref!!.getString(key, defaultFont))
+        //  println("pref: " + pref!!.getString(key, defaultFont))
         return pref!!.getString(key, defaultFont)
     }
 
@@ -739,36 +802,36 @@ object SettingsManager {
         val shippingList: ArrayList<Shipping> = ArrayList<Shipping>()
         // println(" get shippingLists: $shippingLists")
         if (shippingLists != null)
-          //  println("preparing data source with shipping ref :" + shippingLists[0].getshippingName())
-        if (shippingLists != null) {
+        //  println("preparing data source with shipping ref :" + shippingLists[0].getshippingName())
+            if (shippingLists != null) {
 
-            shippingLists[0].getshippingDecsription()?.let {
-                shippingLists[0].getshippingAmount()?.toBigDecimal()?.let { it1 ->
-                    Shipping(
-                        shippingLists[0].getshippingName(),
-                        it,
-                        it1
+                shippingLists[0].getshippingDecsription()?.let {
+                    shippingLists[0].getshippingAmount()?.toBigDecimal()?.let { it1 ->
+                        Shipping(
+                            shippingLists[0].getshippingName(),
+                            it,
+                            it1
+                        )
+                    }
+                }?.let {
+                    shippingList.add(
+                        it
                     )
                 }
-            }?.let {
+
+                return shippingList
+
+
+            } else {
+
                 shippingList.add(
-                    it
+                    Shipping(
+                        "Test shipping #1",
+                        "Test shipping description #1",
+                        BigDecimal.ONE
+                    )
                 )
             }
-
-            return shippingList
-
-
-        } else {
-
-            shippingList.add(
-                Shipping(
-                    "Test shipping #1",
-                    "Test shipping description #1",
-                    BigDecimal.ONE
-                )
-            )
-        }
         return shippingList
 
     }
@@ -790,8 +853,8 @@ object SettingsManager {
         val response = pref?.getString("taxes", "")
         // println(" get shipping: $response")
         val taxesLists = gson.fromJson<ArrayList<TaxesViewModel>>(
-                response,
-                object : TypeToken<List<TaxesViewModel?>?>() {}.type
+            response,
+            object : TypeToken<List<TaxesViewModel?>?>() {}.type
         )
         val taxList: ArrayList<Tax> = ArrayList<Tax>()
         // println(" get taxesLists: $taxesLists")
@@ -802,14 +865,14 @@ object SettingsManager {
             taxesLists[0].getTaxesDecsription()?.let {
                 taxesLists[0].getTaxesAmount()?.toBigDecimal()?.let { it1 ->
                     Tax(
-                            taxesLists[0].getTaxesName(),
-                            it,
-                            AmountModificator(AmountModificatorType.FIXED,it1)
+                        taxesLists[0].getTaxesName(),
+                        it,
+                        AmountModificator(AmountModificatorType.FIXED, it1)
                     )
                 }
             }?.let {
                 taxList.add(
-                        it
+                    it
                 )
             }
 
@@ -819,11 +882,11 @@ object SettingsManager {
         } else {
 
             taxList.add(
-                    Tax(
-                            "Test Taxes #1",
-                            "TestTaxes #1",
-                            AmountModificator(AmountModificatorType.FIXED, BigDecimal.ONE)
-                    )
+                Tax(
+                    "Test Taxes #1",
+                    "TestTaxes #1",
+                    AmountModificator(AmountModificatorType.FIXED, BigDecimal.ONE)
+                )
             )
         }
         return taxList
@@ -833,8 +896,30 @@ object SettingsManager {
     //Set topup object
 
     fun getShippingObject(): ShippingObject? {
-        return ShippingObject(BigDecimal(1),"KWD",
-            Description("test"),"resource receipt", getCustomerAddress(), Provider("prov_FFSFAGGAHAAJAJ","ARAMEX")
+        return ShippingObject(
+            BigDecimal(1),
+            "KWD",
+            Description("test"),
+            "resource receipt",
+            getCustomerAddress(),
+            Provider("prov_FFSFAGGAHAAJAJ", "ARAMEX")
         )
+    }
+
+    fun <T> saveModelLocally(dataToBeSaved: T, keyValueToBeSaved: String) {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val prefsEditor = preferences.edit()
+        val gson = Gson()
+        val json = gson.toJson(dataToBeSaved)
+        prefsEditor.putString(keyValueToBeSaved, json)
+        prefsEditor.apply()
+    }
+
+    fun getUserLocalCurrency(): UserLocalCurrencyModel {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val gson = Gson()
+        val json = preferences.getString("MyObject", "");
+        val data = gson.fromJson(json, UserLocalCurrencyModel::class.java)
+        return data
     }
 }

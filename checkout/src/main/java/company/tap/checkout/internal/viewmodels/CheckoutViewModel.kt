@@ -62,8 +62,12 @@ import company.tap.checkout.internal.api.responses.MerchantData
 import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
 import company.tap.checkout.internal.apiresponse.CardViewEvent
 import company.tap.checkout.internal.apiresponse.CardViewModel
+import company.tap.checkout.internal.apiresponse.UserRepository
 import company.tap.checkout.internal.apiresponse.testmodels.GoPaySavedCards
 import company.tap.checkout.internal.apiresponse.testmodels.TapCardPhoneListDataSource
+import company.tap.checkout.internal.cache.SharedPrefManager
+import company.tap.checkout.internal.cache.UserLocalCurrencyModelKey
+import company.tap.checkout.internal.cache.UserSupportedLocaleForTransactions
 import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.enums.WebViewType
@@ -1269,6 +1273,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
         // println("PaymentOptionsResponse on get$paymentOptionsResponse")
         allCurrencies.value = paymentOptionsResponse?.supportedCurrencies
+        cacheUserLocalCurrency()
+        Log.e("supportedCurrencyUser", SharedPrefManager.getUserSupportedLocaleForTransactions(context).toString())
+
+
+
         savedCardList = paymentOptionsResponse?.cards
         currencyAdapter = CurrencyTypeAdapter(this)
         if (paymentOptionsResponse?.supportedCurrencies != null && ::amountViewHolder.isInitialized) {
@@ -1277,12 +1286,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
                 if (paymentOptionsResponse.supportedCurrencies[i].currency == currentCurrency) {
                     println("current amount value>>" + paymentOptionsResponse.supportedCurrencies[i].amount)
-                    //println("current currency value>>" + paymentOptionsResponse.supportedCurrencies[i].symbol)
                     currentAmount =
                         CurrencyFormatter.currencyFormat(paymentOptionsResponse.supportedCurrencies[i].amount.toString())
                     currentCurrency =
                         paymentOptionsResponse.supportedCurrencies[i].symbol.toString()
-                    //  println("currentCurrency currency value>>" + currentCurrency)
 
                     /* if (currentCurrency.length == 2) {
                          currentCurrency =
@@ -1401,6 +1408,17 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     }
 
+    private fun cacheUserLocalCurrency() {
+        val suportedCurrencyForUser = allCurrencies.value?.find {
+            it.symbol == SharedPrefManager.getUserLocalCurrency(context).symbol
+        }
+        SharedPrefManager.saveModelLocally(
+            context = context,
+            dataToBeSaved = suportedCurrencyForUser,
+            keyValueToBeSaved = UserSupportedLocaleForTransactions
+        )
+    }
+
     @RequiresApi(Build.VERSION_CODES.N)
     private fun initAdaptersAction() {
         adapter = CardTypeAdapterUIKIT(this)
@@ -1430,6 +1448,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             PaymentDataSource.getItems()?.let { itemAdapter.updateAdapterData(it) }
         }
         cardViewHolder.view.mainChipgroup.chipsRecycler.adapter = adapter
+        cardViewHolder.view.mainChipgroup.chipsRecycler.animation =
+            AnimationUtils.loadAnimation(context, R.anim.fall_down_animation)
         cardViewHolder.view.mainChipgroup.groupAction?.visibility = View.VISIBLE
         cardViewHolder.view.mainChipgroup.groupAction?.setOnClickListener {
             setMainChipGroupActionListener()

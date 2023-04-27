@@ -292,4 +292,7 @@ class CardViewModel : ViewModel() {
         compositeDisposable.clear()
     }
 
+
+
+
 }

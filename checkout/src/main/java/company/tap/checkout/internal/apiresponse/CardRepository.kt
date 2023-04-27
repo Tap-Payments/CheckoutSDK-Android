@@ -58,12 +58,13 @@ All rights reserved.
  **/
 class CardRepository : APIRequestCallback {
     val resultObservable = BehaviorSubject.create<CardViewState>()
-    @JvmField
-    var paymentOptionsResponse :PaymentOptionsResponse?= null
-    var merchantDataModel :MerchantData?= null
-    var assetsModel :AssetsModel?= null
 
-    lateinit var chargeResponse:Charge
+    @JvmField
+    var paymentOptionsResponse: PaymentOptionsResponse? = null
+    var merchantDataModel: MerchantData? = null
+    var assetsModel: AssetsModel? = null
+
+    lateinit var chargeResponse: Charge
     lateinit var listCardsResponse: ListCardsResponse
     lateinit var binLookupResponse: BINLookupResponse
     lateinit var authorizeActionResponse: Authorize
@@ -75,26 +76,32 @@ class CardRepository : APIRequestCallback {
     private lateinit var viewModel: CheckoutViewModel
     private lateinit var cardViewModel: CardViewModel
 
-    private var sdkSession : SDKSession = SDKSession
-    private var dataProvider: IPaymentDataProvider= PaymentDataProvider()
-     lateinit var  jsonString :String
-    private var configResponse:TapConfigResponseModel?=null
+    private var sdkSession: SDKSession = SDKSession
+    private var dataProvider: IPaymentDataProvider = PaymentDataProvider()
+    lateinit var jsonString: String
+    private var configResponse: TapConfigResponseModel? = null
+
     @JvmField
-    var initResponseModel :InitResponseModel?= null
-    var logsModel :LogsModel?= null
+    var initResponseModel: InitResponseModel? = null
+    var logsModel: LogsModel? = null
     fun getDataProvider(): IPaymentDataProvider {
         return dataProvider
     }
 
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun getINITData(_context: Context, viewModel: CheckoutViewModel, cardViewModel: CardViewModel?,supportFragmentManagerdata: FragmentManager) {
+    fun getINITData(
+        _context: Context,
+        viewModel: CheckoutViewModel,
+        cardViewModel: CardViewModel?,
+        supportFragmentManagerdata: FragmentManager
+    ) {
         this.viewModel = viewModel
         this.cardRepositoryContext = _context
         if (cardViewModel != null) {
             this.cardViewModel = cardViewModel
         }
-        this.supportFragmentManager =supportFragmentManagerdata
+        this.supportFragmentManager = supportFragmentManagerdata
         this.viewModel = viewModel
         val requestBody = PaymentOptionsRequest(
             PaymentDataSource.getTransactionMode(),
@@ -109,7 +116,7 @@ class CardRepository : APIRequestCallback {
             PaymentDataSource.getTopup(),
             PaymentDataSource.getOrderObject()
         )
-        println("getTransactionMode"+PaymentDataSource.getTransactionMode())
+        println("getTransactionMode" + PaymentDataSource.getTransactionMode())
 
         val jsonString = Gson().toJson(requestBody)
         NetworkController.getInstance().processRequest(
@@ -121,7 +128,6 @@ class CardRepository : APIRequestCallback {
     }
 
 
-
     @RequiresApi(Build.VERSION_CODES.N)
     fun createChargeRequest(
         viewModel: CheckoutViewModel,
@@ -129,19 +135,21 @@ class CardRepository : APIRequestCallback {
         identifier: String?
     ) {
         this.viewModel = viewModel
-        if(identifier!=null)callChargeOrAuthorizeOrSaveCardAPI(
+        if (identifier != null) callChargeOrAuthorizeOrSaveCardAPI(
             SourceRequest(identifier),
             selectedPaymentOption,
             null,
             null
         )
         else
-            selectedPaymentOption?.sourceId?.let { SourceRequest(it) }?.let { callChargeOrAuthorizeOrSaveCardAPI(
-                it,
-                selectedPaymentOption,
-                null,
-                null
-            ) }
+            selectedPaymentOption?.sourceId?.let { SourceRequest(it) }?.let {
+                callChargeOrAuthorizeOrSaveCardAPI(
+                    it,
+                    selectedPaymentOption,
+                    null,
+                    null
+                )
+            }
     }
 
 
@@ -159,22 +167,24 @@ class CardRepository : APIRequestCallback {
         viewModel: CheckoutViewModel,
         selectedPaymentOption: PaymentOption?,
         identifier: String?
-    ){
+    ) {
         this.viewModel = viewModel
 
-        if(identifier!=null)callChargeOrAuthorizeOrSaveCardAPI(
+        if (identifier != null) callChargeOrAuthorizeOrSaveCardAPI(
             SourceRequest(identifier),
             selectedPaymentOption,
             null,
             null
         )
         else
-            selectedPaymentOption?.sourceId?.let { SourceRequest(it) }?.let { callChargeOrAuthorizeOrSaveCardAPI(
-                it,
-                selectedPaymentOption,
-                null,
-                null
-            ) }
+            selectedPaymentOption?.sourceId?.let { SourceRequest(it) }?.let {
+                callChargeOrAuthorizeOrSaveCardAPI(
+                    it,
+                    selectedPaymentOption,
+                    null,
+                    null
+                )
+            }
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -190,13 +200,14 @@ class CardRepository : APIRequestCallback {
     @RequiresApi(Build.VERSION_CODES.N)
     fun retrieveBinLookup(viewModel: CheckoutViewModel, binValue: String?) {
         this.viewModel = viewModel
-       val reqBody =BinLookUpRequestModel(binValue)
-        jsonString =Gson().toJson(reqBody)
+        val reqBody = BinLookUpRequestModel(binValue)
+        jsonString = Gson().toJson(reqBody)
         NetworkController.getInstance().processRequest(
             TapMethodType.POST, ApiService.BIN, jsonString,
             this, BIN_RETRIEVE_CODE
         )
     }
+
     @RequiresApi(Build.VERSION_CODES.N)
     fun retrieveSaveCard(context: Context, viewModel: CheckoutViewModel) {
         this.viewModel = viewModel
@@ -205,6 +216,9 @@ class CardRepository : APIRequestCallback {
             RETRIEVE_SAVE_CARD_CODE
         )
     }
+
+
+
     @RequiresApi(Build.VERSION_CODES.N)
     fun callDeleteCardAPI(
         context: Context,
@@ -228,6 +242,7 @@ class CardRepository : APIRequestCallback {
 //        this.viewModel.deleteSelectedCardListener(deleteCardResponses)
 
     }
+
     @RequiresApi(Build.VERSION_CODES.N)
     fun createTokenWithEncryptedCard(
         context: Context,
@@ -235,15 +250,18 @@ class CardRepository : APIRequestCallback {
         createTokenWithCardDataRequest: CreateTokenCard?
     ) {
         this.viewModel = viewModel
-        val createTokenWithCardDataReq = createTokenWithCardDataRequest?.let { CreateTokenWithCardDataRequest(
-            it
-        ) }
+        val createTokenWithCardDataReq = createTokenWithCardDataRequest?.let {
+            CreateTokenWithCardDataRequest(
+                it
+            )
+        }
         val jsonString = Gson().toJson(createTokenWithCardDataReq)
         NetworkController.getInstance().processRequest(
             TapMethodType.POST, ApiService.TOKEN, jsonString,
             this, CREATE_TOKEN_CODE
         )
     }
+
     @RequiresApi(Build.VERSION_CODES.N)
     fun createSaveCard(
         viewModel: CheckoutViewModel,
@@ -252,20 +270,23 @@ class CardRepository : APIRequestCallback {
     ) {
         this.viewModel = viewModel
 
-        if(identifier!=null)callChargeOrAuthorizeOrSaveCardAPI(
+        if (identifier != null) callChargeOrAuthorizeOrSaveCardAPI(
             SourceRequest(identifier),
             selectedPaymentOption,
             null,
             null
         )
         else
-            selectedPaymentOption?.sourceId?.let { SourceRequest(it) }?.let { callChargeOrAuthorizeOrSaveCardAPI(
-                it,
-                selectedPaymentOption,
-                null,
-                null
-            ) }
+            selectedPaymentOption?.sourceId?.let { SourceRequest(it) }?.let {
+                callChargeOrAuthorizeOrSaveCardAPI(
+                    it,
+                    selectedPaymentOption,
+                    null,
+                    null
+                )
+            }
     }
+
     @RequiresApi(Build.VERSION_CODES.N)
     fun requestAuthenticateForChargeTransaction(
         viewModel: CheckoutViewModel,
@@ -286,9 +307,10 @@ class CardRepository : APIRequestCallback {
         context: Context, viewModel: CheckoutViewModel, createTokenSavedCard: CreateTokenSavedCard
     ) {
         this.viewModel = viewModel
-        val createTokenSavedCardReq: CreateTokenWithExistingCardDataRequest = CreateTokenWithExistingCardDataRequest.Builder(
-            createTokenSavedCard
-        ).build()
+        val createTokenSavedCardReq: CreateTokenWithExistingCardDataRequest =
+            CreateTokenWithExistingCardDataRequest.Builder(
+                createTokenSavedCard
+            ).build()
 
         val jsonString = Gson().toJson(createTokenSavedCardReq)
         NetworkController.getInstance().processRequest(
@@ -299,7 +321,9 @@ class CardRepository : APIRequestCallback {
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun createGoogleToken(
-        context: Context, viewModel: CheckoutViewModel, createTokenGPayRequest: CreateTokenGPayRequest
+        context: Context,
+        viewModel: CheckoutViewModel,
+        createTokenGPayRequest: CreateTokenGPayRequest
     ) {
         this.viewModel = viewModel
 
@@ -312,34 +336,37 @@ class CardRepository : APIRequestCallback {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun  authenticate(context: Context, viewModel: CheckoutViewModel, otpCode: String) {
+    fun authenticate(context: Context, viewModel: CheckoutViewModel, otpCode: String) {
         this.viewModel = viewModel
-        val createOTPVerificationRequest: CreateOTPVerificationRequest = CreateOTPVerificationRequest.Builder(
-            AuthenticationType.OTP,
-            otpCode
-        ).build()
+        val createOTPVerificationRequest: CreateOTPVerificationRequest =
+            CreateOTPVerificationRequest.Builder(
+                AuthenticationType.OTP,
+                otpCode
+            ).build()
 
         val jsonString = Gson().toJson(createOTPVerificationRequest)
-        if(::chargeResponse.isInitialized)
-        NetworkController.getInstance().processRequest(
-            TapMethodType.POST,
-            ApiService.CHARGES + "/" + ApiService.AUTHENTICATE + "/" + chargeResponse.id,
-            jsonString,
-            this,
-            CHARGE_REQ_CODE
-        )
+        if (::chargeResponse.isInitialized)
+            NetworkController.getInstance().processRequest(
+                TapMethodType.POST,
+                ApiService.CHARGES + "/" + ApiService.AUTHENTICATE + "/" + chargeResponse.id,
+                jsonString,
+                this,
+                CHARGE_REQ_CODE
+            )
     }
+
     @RequiresApi(Build.VERSION_CODES.N)
-    fun  authenticateAuthorizeTransaction(
+    fun authenticateAuthorizeTransaction(
         context: Context,
         viewModel: CheckoutViewModel,
         otpCode: String
     ) {
         this.viewModel = viewModel
-        val createOTPVerificationRequest: CreateOTPVerificationRequest = CreateOTPVerificationRequest.Builder(
-            AuthenticationType.OTP,
-            otpCode
-        ).build()
+        val createOTPVerificationRequest: CreateOTPVerificationRequest =
+            CreateOTPVerificationRequest.Builder(
+                AuthenticationType.OTP,
+                otpCode
+            ).build()
 
         val jsonString = Gson().toJson(createOTPVerificationRequest)
         NetworkController.getInstance().processRequest(
@@ -372,9 +399,10 @@ class CardRepository : APIRequestCallback {
             this, LIST_ALL_CARD_CODE
         )
     }
+
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onSuccess(responseCode: Int, requestCode: Int, response: Response<JsonElement>?) {
-       if (requestCode == INIT_CODE) {
+        if (requestCode == INIT_CODE) {
             if (response?.body() != null) {
                 response.body().let {
 
@@ -384,44 +412,67 @@ class CardRepository : APIRequestCallback {
                             paymentOptionsResponse = initResponseModel?.paymentOptionsResponse
                             merchantDataModel = initResponseModel?.merchant
                             assetsModel = initResponseModel?.assestsModel
-                         //   logsModel = initResponseModel?.merchant?.logs?.name
+                            //   logsModel = initResponseModel?.merchant?.logs?.name
 
-                            if(LocalizationManager.currentLocalized.length()==0) {
+                            if (LocalizationManager.currentLocalized.length() == 0) {
                                 LocalizationManager.setLocale(cardRepositoryContext, Locale("en"))
-                                LocalizationManager.loadTapLocale(cardRepositoryContext,assetsModel?.localisation?.urlLocale.toString())
+                                LocalizationManager.loadTapLocale(
+                                    cardRepositoryContext,
+                                    assetsModel?.localisation?.urlLocale.toString()
+                                )
                             }
 
-                            if (ThemeManager.currentTheme.isEmpty()){
-                                when (cardRepositoryContext.resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                            if (ThemeManager.currentTheme.isEmpty()) {
+                                when (cardRepositoryContext.resources?.configuration?.uiMode?.and(
+                                    Configuration.UI_MODE_NIGHT_MASK
+                                )) {
                                     Configuration.UI_MODE_NIGHT_YES -> {
 
-                                        ThemeManager.loadTapTheme(cardRepositoryContext,assetsModel?.theme?.darkUrl.toString(),"darktheme")
+                                        ThemeManager.loadTapTheme(
+                                            cardRepositoryContext,
+                                            assetsModel?.theme?.darkUrl.toString(),
+                                            "darktheme"
+                                        )
                                     }
                                     Configuration.UI_MODE_NIGHT_NO -> {
-                                        ThemeManager.loadTapTheme(cardRepositoryContext,assetsModel?.theme?.lightUrl.toString(),"lighttheme")
+                                        ThemeManager.loadTapTheme(
+                                            cardRepositoryContext,
+                                            assetsModel?.theme?.lightUrl.toString(),
+                                            "lighttheme"
+                                        )
 
                                     }
                                     Configuration.UI_MODE_NIGHT_UNDEFINED -> {
 
                                     }
-                                    else ->{
-                                        ThemeManager.loadTapTheme(cardRepositoryContext,assetsModel?.theme?.darkUrl.toString(),"darktheme")
+                                    else -> {
+                                        ThemeManager.loadTapTheme(
+                                            cardRepositoryContext,
+                                            assetsModel?.theme?.darkUrl.toString(),
+                                            "darktheme"
+                                        )
 
                                     }
                                 }
                             }
 
-                            NetworkApp.initNetworkToken(initResponseModel?.session, cardRepositoryContext,ApiService.BASE_URL,true, CheckOutActivity())
+                            NetworkApp.initNetworkToken(
+                                initResponseModel?.session,
+                                cardRepositoryContext,
+                                ApiService.BASE_URL,
+                                true,
+                                CheckOutActivity()
+                            )
                             PaymentDataSource.setPaymentOptionsResponse(paymentOptionsResponse)
                             PaymentDataSource.setMerchantData(merchantDataModel)
                             PaymentDataSource.setInitResponse(initResponseModel)
                             PaymentDataSource.setTokenConfig(initResponseModel?.session)
-                             if (tabAnimatedActionButton != null) {
-                                 tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
-                             }
+                            if (tabAnimatedActionButton != null) {
+                                tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
+                            }
                         }
 
-                    }else {
+                    } else {
                         sdkSession.sessionDelegate?.sessionFailedToStart()
                     }
                     if (tabAnimatedActionButton != null) {
@@ -434,13 +485,12 @@ class CardRepository : APIRequestCallback {
                     }
                 }
 
-            }else {
+            } else {
                 sdkSession.sessionDelegate?.sessionFailedToStart()
-                 tabAnimatedActionButton?.changeButtonState(ActionButtonState.RESET)
+                tabAnimatedActionButton?.changeButtonState(ActionButtonState.RESET)
             }
 
-        }
-        else if(requestCode == CHARGE_REQ_CODE) {
+        } else if (requestCode == CHARGE_REQ_CODE) {
 
             response?.body().let {
                 chargeResponse = Gson().fromJson(it, Charge::class.java)
@@ -448,26 +498,24 @@ class CardRepository : APIRequestCallback {
             }
             viewModel.globalChargeResponse = chargeResponse
             handleChargeResponse(chargeResponse)
-        }
-        else if(requestCode == CHARGE_RETRIEVE_CODE) {
+        } else if (requestCode == CHARGE_RETRIEVE_CODE) {
             println("CHARGE_RETRIEVE_CODE")
             response?.body().let {
                 chargeResponse = Gson().fromJson(it, Charge::class.java)
                 viewModel.globalChargeResponse = chargeResponse
-                if(chargeResponse.status?.name == ChargeStatus.CAPTURED.name){
+                if (chargeResponse.status?.name == ChargeStatus.CAPTURED.name) {
                     fireWebPaymentCallBack(chargeResponse)
-                     //chargeResponse?.transaction?.url?.let { it1 -> viewModel?.displayRedirect(it1,chargeResponse) }
+                    //chargeResponse?.transaction?.url?.let { it1 -> viewModel?.displayRedirect(it1,chargeResponse) }
                     //  viewModel?.redirectLoadingFinished(true,chargeResponse, contextSDK)
 
-                }else
+                } else
                     handleChargeResponse(chargeResponse)
             }
 
-        }
-        else if(requestCode == BIN_RETRIEVE_CODE){
+        } else if (requestCode == BIN_RETRIEVE_CODE) {
             response?.body().let {
                 binLookupResponse = Gson().fromJson(it, BINLookupResponse::class.java)
-                if(::binLookupResponse.isInitialized&&::cardRepositoryContext.isInitialized)
+                if (::binLookupResponse.isInitialized && ::cardRepositoryContext.isInitialized)
                     viewModel.setBinLookupData(
                         binLookupResponse,
                         cardRepositoryContext,
@@ -476,28 +524,27 @@ class CardRepository : APIRequestCallback {
                 PaymentDataSource.setBinLookupResponse(binLookupResponse)
 
             }
-        }
-        else if(requestCode == CREATE_TOKEN_CODE){
+        } else if (requestCode == CREATE_TOKEN_CODE) {
             response?.body().let {
                 tokenResponse = Gson().fromJson(it, Token::class.java)
-                if(tokenResponse!=null ) {
+                if (tokenResponse != null) {
                     when {
                         PaymentDataSource.getTransactionMode() == TransactionMode.AUTHORIZE_CAPTURE -> {
                             createAuthorizeRequest(viewModel, null, tokenResponse.id)
 
                         }
-                        PaymentDataSource.getTransactionMode()==TransactionMode.TOKENIZE_CARD -> {
+                        PaymentDataSource.getTransactionMode() == TransactionMode.TOKENIZE_CARD -> {
                             SDKSession.getListener()?.cardTokenizedSuccessfully(tokenResponse)
                             viewModel.handleSuccessFailureResponseButton(
                                 "tokenized",
                                 null,
                                 null,
                                 tabAnimatedActionButton,
- contextSDK
+                                contextSDK
                             )
 
                         }
-                        PaymentDataSource.getTransactionMode()==TransactionMode.SAVE_CARD -> {
+                        PaymentDataSource.getTransactionMode() == TransactionMode.SAVE_CARD -> {
                             createSaveCard(viewModel, null, tokenResponse.id)
                         }
                         else -> {
@@ -508,59 +555,57 @@ class CardRepository : APIRequestCallback {
 
                 }
             }
-        }
-        else if(requestCode == CREATE_GOOGLE_TOKEN){
+        } else if (requestCode == CREATE_GOOGLE_TOKEN) {
             response?.body().let {
                 tokenResponse = Gson().fromJson(it, Token::class.java)
-                if(tokenResponse!=null ) {
+                if (tokenResponse != null) {
                     createChargeRequest(viewModel, null, tokenResponse.id)
-                    }
-
+                }
 
 
             }
-        }
-        else if(requestCode == CREATE_AUTHORIZE_CODE){
+        } else if (requestCode == CREATE_AUTHORIZE_CODE) {
             response?.body().let {
                 authorizeActionResponse = Gson().fromJson(it, Authorize::class.java)
                 println("authorizeActionResponse value is>>>>" + authorizeActionResponse.status.name)
 
-                if(authorizeActionResponse.status?.name == ChargeStatus.INITIATED.name){
+                if (authorizeActionResponse.status?.name == ChargeStatus.INITIATED.name) {
                     // fireWebPaymentCallBack(authorizeActionResponse)
-                    if(authorizeActionResponse.transaction.url != null){
-                        authorizeActionResponse.transaction?.url?.let { it1 -> viewModel.displayRedirect(
-                            it1,
-                            authorizeActionResponse
-                        ) }
-                    }else handleAuthorizeResponse(authorizeActionResponse)
-                }else  handleAuthorizeResponse(authorizeActionResponse)
+                    if (authorizeActionResponse.transaction.url != null) {
+                        authorizeActionResponse.transaction?.url?.let { it1 ->
+                            viewModel.displayRedirect(
+                                it1,
+                                authorizeActionResponse
+                            )
+                        }
+                    } else handleAuthorizeResponse(authorizeActionResponse)
+                } else handleAuthorizeResponse(authorizeActionResponse)
 
             }
-        }
-        else if(requestCode == DEL_SAVE_CARD_CODE){
+        } else if (requestCode == DEL_SAVE_CARD_CODE) {
             response?.body().let {
                 deleteCardResponse = Gson().fromJson(it, DeleteCardResponse::class.java)
                 println("deleteCardResponse is" + deleteCardResponse)
                 viewModel.deleteSelectedCardListener(deleteCardResponse)
             }
-        }
-        else if(requestCode == CREATE_SAVE_CARD){
+        } else if (requestCode == CREATE_SAVE_CARD) {
             println("data in resp body>>" + response?.body())
             response?.body().let {
                 saveCardResponse = Gson().fromJson(it, SaveCard::class.java)
-                if(saveCardResponse.status?.name == ChargeStatus.INITIATED.name){
-                    saveCardResponse.transaction?.url?.let { it1 -> viewModel.displayRedirect(
-                        it1,
-                        saveCardResponse
-                    ) }
+                if (saveCardResponse.status?.name == ChargeStatus.INITIATED.name) {
+                    saveCardResponse.transaction?.url?.let { it1 ->
+                        viewModel.displayRedirect(
+                            it1,
+                            saveCardResponse
+                        )
+                    }
 
-                }else {
+                } else {
                     handleSaveCardResponse(saveCardResponse)
                 }
             }
 
-        }
-        else if(requestCode == RETRIEVE_SAVE_CARD_CODE){
+        } else if (requestCode == RETRIEVE_SAVE_CARD_CODE) {
 
             response?.body().let {
                 saveCardResponse = Gson().fromJson(it, SaveCard::class.java)
@@ -569,48 +614,41 @@ class CardRepository : APIRequestCallback {
                 handleSaveCardResponse(saveCardResponse)
 
             }
-        }
-        else if(requestCode == RETRIEVE_AUTHORIZE_CODE){
+        } else if (requestCode == RETRIEVE_AUTHORIZE_CODE) {
             response?.body().let {
                 authorizeActionResponse = Gson().fromJson(it, Authorize::class.java)
                 println("authorizeActionResponse ret value is>>>>" + authorizeActionResponse.status.name)
                 sdkSession.getListener()?.authorizationSucceed(authorizeActionResponse)
                 handleAuthorizeResponse(authorizeActionResponse)
             }
-        }
-        else if(requestCode == CREATE_SAVE_EXISTING_CODE){
+        } else if (requestCode == CREATE_SAVE_EXISTING_CODE) {
             response?.body().let {
                 tokenResponse = Gson().fromJson(it, Token::class.java)
                 println("CREATE_SAVE_EXISTING_CODE tokenResponse >>>>" + tokenResponse)
-                if(tokenResponse!=null) {
+                if (tokenResponse != null) {
                     if (PaymentDataSource.getTransactionMode() == TransactionMode.AUTHORIZE_CAPTURE) {
                         createAuthorizeRequest(viewModel, null, tokenResponse.id)
 
-                    }
-                    else if(PaymentDataSource.getTransactionMode()==TransactionMode.TOKENIZE_CARD){
+                    } else if (PaymentDataSource.getTransactionMode() == TransactionMode.TOKENIZE_CARD) {
                         SDKSession.getListener()?.cardTokenizedSuccessfully(tokenResponse)
                         SDKSession.tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
-                    }
-                    else if(PaymentDataSource.getTransactionMode()==TransactionMode.SAVE_CARD){
+                    } else if (PaymentDataSource.getTransactionMode() == TransactionMode.SAVE_CARD) {
                         createSaveCard(viewModel, null, tokenResponse.id)
-                    }
-                    else {
+                    } else {
                         createChargeRequest(viewModel, null, tokenResponse.id)
 
                     }
                 }
             }
-        }
-        else if(requestCode == AUTHENTICATE_CODE){
+        } else if (requestCode == AUTHENTICATE_CODE) {
             response?.body().let {
                 chargeResponse = Gson().fromJson(it, Charge::class.java)
                 println("AUTHENTICATE_CODE tokenResponse >>>>" + response?.body())
-                if(chargeResponse is Authorize)handleAuthorizeResponse(chargeResponse as Authorize)
+                if (chargeResponse is Authorize) handleAuthorizeResponse(chargeResponse as Authorize)
                 else
                     handleChargeResponse(chargeResponse)
             }
-        }
-        else if(requestCode == LIST_ALL_CARD_CODE){
+        } else if (requestCode == LIST_ALL_CARD_CODE) {
             response?.body().let {
                 listCardsResponse = Gson().fromJson(it, ListCardsResponse::class.java)
                 println("LIST_ALL_CARD_CODE >>>>" + listCardsResponse)
@@ -618,40 +656,41 @@ class CardRepository : APIRequestCallback {
             }
         }
 
-        if(::chargeResponse.isInitialized)
+        if (::chargeResponse.isInitialized)
             CardViewState.ChargeViewState(charge = chargeResponse)
-        if(::binLookupResponse.isInitialized)
+        if (::binLookupResponse.isInitialized)
             CardViewState.BinLookupViewState(binLookupResponse = binLookupResponse)
-       // if(configResponse!=null && paymentOptionsResponse!=null){
-        if( paymentOptionsResponse!=null){
+        // if(configResponse!=null && paymentOptionsResponse!=null){
+        if (paymentOptionsResponse != null) {
             val viewState = CardViewState(
                 configResponseModel = configResponse,
-                    paymentOptionsResponse = paymentOptionsResponse
+                paymentOptionsResponse = paymentOptionsResponse
             )
             tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
-           /* val tapCheckoutFragment = CheckoutFragment()
-            tapCheckoutFragment.show(supportFragmentManager.beginTransaction().addToBackStack(null), "CheckOutFragment")*/
+            /* val tapCheckoutFragment = CheckoutFragment()
+             tapCheckoutFragment.show(supportFragmentManager.beginTransaction().addToBackStack(null), "CheckOutFragment")*/
 
             Handler().postDelayed({
-            val intent = Intent(SDKSession.activity, CheckOutActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-           contextSDK?.startActivity(intent)
-         //   println("fragments" + supportFragmentManager.fragments)
+                val intent = Intent(SDKSession.activity, CheckOutActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                contextSDK?.startActivity(intent)
+                //   println("fragments" + supportFragmentManager.fragments)
 
-            SDKSession.sessionDelegate?.sessionIsStarting()
-            SessionManager.setActiveSession(false)
-            resultObservable.onNext(viewState)
+                SDKSession.sessionDelegate?.sessionIsStarting()
+                SessionManager.setActiveSession(false)
+                resultObservable.onNext(viewState)
             }, 4000)
         }
-        if( ::chargeResponse.isInitialized && chargeResponse!=null){
-            if(::viewModel.isInitialized && chargeResponse.status!=ChargeStatus.IN_PROGRESS && chargeResponse.status!= ChargeStatus.CANCELLED) {
-                chargeResponse?.transaction?.url?.let { viewModel.displayRedirect(
-                    it,
-                    chargeResponse
-                ) }
+        if (::chargeResponse.isInitialized && chargeResponse != null) {
+            if (::viewModel.isInitialized && chargeResponse.status != ChargeStatus.IN_PROGRESS && chargeResponse.status != ChargeStatus.CANCELLED) {
+                chargeResponse?.transaction?.url?.let {
+                    viewModel.displayRedirect(
+                        it,
+                        chargeResponse
+                    )
+                }
             }
         }
-
 
 
     }
@@ -664,7 +703,7 @@ class CardRepository : APIRequestCallback {
         Log.e("Charge status", (chargeResponse.status).name)
         if (chargeResponse is Authorize) {
             handleAuthorizeResponse(chargeResponse)
-        }else
+        } else
             when (chargeResponse.status) {
                 /**
                  * Charge response is Initiated is first call if it should be otp or not s**/
@@ -703,7 +742,7 @@ class CardRepository : APIRequestCallback {
                         chargeResponse.authenticate,
                         chargeResponse,
                         tabAnimatedActionButton,
- contextSDK
+                        contextSDK
                     )
 
                 }
@@ -711,11 +750,11 @@ class CardRepository : APIRequestCallback {
                     SDKSession.getListener()?.authorizationSucceed(chargeResponse as Authorize)
                 }
                 ChargeStatus.FAILED -> {
-                  //  println("FAILED caleld")
+                    //  println("FAILED caleld")
                     viewModel.handleSuccessFailureResponseButton(
                         "failure",
                         chargeResponse.authenticate,
-                        chargeResponse,tabAnimatedActionButton, contextSDK
+                        chargeResponse, tabAnimatedActionButton, contextSDK
                     )
                     SDKSession.getListener()?.paymentFailed(chargeResponse)
 
@@ -725,11 +764,11 @@ class CardRepository : APIRequestCallback {
                 ChargeStatus.ABANDONED, ChargeStatus.CANCELLED, ChargeStatus.DECLINED -> {
 
                     //  viewModel?.handleSuccessFailureResponseButton("failure",chargeResponse.authenticate,chargeResponse.status)
-                     viewModel.handleSuccessFailureResponseButton(
+                    viewModel.handleSuccessFailureResponseButton(
                         "failure",
                         chargeResponse.authenticate,
                         chargeResponse,
- tabAnimatedActionButton, contextSDK
+                        tabAnimatedActionButton, contextSDK
                     )
                     SDKSession.getListener()?.paymentFailed(
                         chargeResponse
@@ -780,7 +819,7 @@ class CardRepository : APIRequestCallback {
                     authorize.authenticate,
                     authorize,
                     tabAnimatedActionButton,
- contextSDK
+                    contextSDK
                 )
 
             } catch (e: java.lang.Exception) {
@@ -799,7 +838,7 @@ class CardRepository : APIRequestCallback {
                         authorize.authenticate,
                         authorize,
                         tabAnimatedActionButton,
- contextSDK
+                        contextSDK
                     )
                 } catch (e: java.lang.Exception) {
                     Log.d(
@@ -837,7 +876,7 @@ class CardRepository : APIRequestCallback {
                     saveCard.authenticate,
                     saveCard,
                     tabAnimatedActionButton,
- contextSDK
+                    contextSDK
 
                 )
             } catch (e: java.lang.Exception) {
@@ -854,7 +893,7 @@ class CardRepository : APIRequestCallback {
                     saveCard.authenticate,
                     saveCard,
                     tabAnimatedActionButton,
- contextSDK
+                    contextSDK
 
                 )
             } catch (e: java.lang.Exception) {
@@ -869,7 +908,7 @@ class CardRepository : APIRequestCallback {
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onFailure(requestCode: Int, errorDetails: GoSellError?) {
-        if (requestCode == CONFIG_CODE ||requestCode == CHARGE_REQ_CODE ||requestCode == INIT_CODE) {
+        if (requestCode == CONFIG_CODE || requestCode == CHARGE_REQ_CODE || requestCode == INIT_CODE) {
             sdkSession.getListener()?.sdkError(errorDetails)
             SDKSession.sessionActive = false
             viewModel.handleSuccessFailureResponseButton(
@@ -893,20 +932,19 @@ class CardRepository : APIRequestCallback {
                     null,
                     null,
                     tabAnimatedActionButton,
- contextSDK
+                    contextSDK
 
                 )
-            }else
+            } else
                 try {
                     // resultObservable.onError(Throwable(it.errorMessage))
                     RxJavaPlugins.setErrorHandler(Throwable::printStackTrace)
-                   // sdkSession.getListener()?.backendUnknownError(errorDetails)
+                    // sdkSession.getListener()?.backendUnknownError(errorDetails)
 
 
-                }catch (e: Exception){
+                } catch (e: Exception) {
 
                 }
-
 
 
         }
@@ -941,7 +979,8 @@ class CardRepository : APIRequestCallback {
     ) {
         Log.e("OkHttp", "CALL CHARGE API OR AUTHORIZE API")
         val provider: IPaymentDataProvider = getDataProvider()
-        val supportedCurrencies: java.util.ArrayList<SupportedCurrencies>? = provider.getSupportedCurrencies()
+        val supportedCurrencies: java.util.ArrayList<SupportedCurrencies>? =
+            provider.getSupportedCurrencies()
         val orderID: String? = provider.getPaymentOptionsOrderID()
         val postURL: String? = provider.getPostURL()
         val post = if (postURL == null) null else TrackingURL(URLStatus.PENDING, postURL)
@@ -951,17 +990,17 @@ class CardRepository : APIRequestCallback {
 
         //     Log.d("callChargeOrAuthorizeOr"," step 5 : callChargeOrAuthorizeOrSaveCardAPI : in class "+ "["+this.getClass().getName()+"] with amountedCurrency=["+amountedCurrency.getAmount()+"]  ");
         val transactionCurrency: AmountedCurrency? = provider.getTransactionCurrency()
-     //   println("transactionCurrency in cad" + transactionCurrency)
+        //   println("transactionCurrency in cad" + transactionCurrency)
         val customer: TapCustomer = provider.getCustomer()
         var fee = BigDecimal.ZERO
-       // println( "  --->>> extraFeeeeeesee--->>  "+ paymentOption?.extraFees)
+        // println( "  --->>> extraFeeeeeesee--->>  "+ paymentOption?.extraFees)
 
         if (paymentOption != null) fee = AmountCalculator.calculateExtraFeesAmount(
             paymentOption.extraFees,
             supportedCurrencies,
             amountedCurrency
         )
-       // Log.d("PaymentProcessManager", "fee : $fee")
+        // Log.d("PaymentProcessManager", "fee : $fee")
         val order = Order(orderID)
         val redirect = TrackingURL(URLStatus.PENDING, ApiService.RETURN_URL)
         val paymentDescription: String? = provider.getPaymentDescription()
@@ -977,8 +1016,8 @@ class CardRepository : APIRequestCallback {
         val cardIssuer: CardIssuer? = provider.getCardIssuer()
         val topUp: TopUp? = provider.getTopUp()
         val transactionMode: TransactionMode = provider.getTransactionMode()
-       // Log.d("PaymentProcessManager", "transactionMode : $transactionMode")
-       // println("paymentOption?.threeDS" + paymentOption?.threeDS)
+        // Log.d("PaymentProcessManager", "transactionMode : $transactionMode")
+        // println("paymentOption?.threeDS" + paymentOption?.threeDS)
         //        Log.d("PaymentProcessManager", "topUp : " + topUp.toString());
         /**
          * Condition added for 3Ds for merchant
@@ -993,50 +1032,50 @@ class CardRepository : APIRequestCallback {
             }
         }
 
-        var selectedTotalAmount :String
-        if(viewModel.selectedTotalAmount?.isNotBlank() == true  &&  viewModel.selectedTotalAmount?.isNotEmpty() == true){
-            if(viewModel.selectedTotalAmount!!.contains(","))
-            selectedTotalAmount = viewModel.selectedTotalAmount!!.replace(",","")
+        var selectedTotalAmount: String
+        if (viewModel.selectedTotalAmount?.isNotBlank() == true && viewModel.selectedTotalAmount?.isNotEmpty() == true) {
+            if (viewModel.selectedTotalAmount!!.contains(","))
+                selectedTotalAmount = viewModel.selectedTotalAmount!!.replace(",", "")
             else selectedTotalAmount = viewModel.selectedTotalAmount!!
-        }else {
-            if(viewModel.selectedTotalAmount?.contains(",") == true)
-            selectedTotalAmount = amountedCurrency?.amount.toString().replace(",","")
-           else selectedTotalAmount = amountedCurrency?.amount.toString()
+        } else {
+            if (viewModel.selectedTotalAmount?.contains(",") == true)
+                selectedTotalAmount = amountedCurrency?.amount.toString().replace(",", "")
+            else selectedTotalAmount = amountedCurrency?.amount.toString()
         }
 
-       // println("selectedTotalAmount in repo"+selectedTotalAmount)
+        // println("selectedTotalAmount in repo"+selectedTotalAmount)
         when (transactionMode) {
             TransactionMode.PURCHASE -> {
                 val chargeRequest = transactionCurrency?.amount?.let {
-                        amountedCurrency?.currency?.let { it1 ->
-                            CreateChargeRequest(
-                                    merchant,
-                                    it,
-                                    transactionCurrency?.currency,
-                                     BigDecimal(selectedTotalAmount),
-                                    it1,
-                                    customer,
-                                    fee,
-                                    order,
-                                    redirect,
-                                    post,
-                                    source,
-                                    paymentDescription,
-                                    paymentMetadata,
-                                    reference,
-                                    shouldSaveCard,
-                                    statementDescriptor,
-                                    require3DSecure,
-                                    receipt,
-                                    destinations,
-                                    topUp
-                            )
+                    amountedCurrency?.currency?.let { it1 ->
+                        CreateChargeRequest(
+                            merchant,
+                            it,
+                            transactionCurrency?.currency,
+                            BigDecimal(selectedTotalAmount),
+                            it1,
+                            customer,
+                            fee,
+                            order,
+                            redirect,
+                            post,
+                            source,
+                            paymentDescription,
+                            paymentMetadata,
+                            reference,
+                            shouldSaveCard,
+                            statementDescriptor,
+                            require3DSecure,
+                            receipt,
+                            destinations,
+                            topUp
+                        )
 
 
-                        }
                     }
-                    println("chargere" + chargeRequest)
-                     jsonString = Gson().toJson(chargeRequest)
+                }
+                println("chargere" + chargeRequest)
+                jsonString = Gson().toJson(chargeRequest)
                 NetworkController.getInstance().processRequest(
                     TapMethodType.POST, ApiService.CHARGES, jsonString, this, CHARGE_REQ_CODE
                 )
@@ -1046,28 +1085,28 @@ class CardRepository : APIRequestCallback {
                 val authorizeRequest = authorizeAction?.let {
                     transactionCurrency?.amount?.let { it1 ->
                         CreateAuthorizeRequest(
-                                merchant,
-                                it1,
-                                transactionCurrency?.currency,
-                                BigDecimal(selectedTotalAmount),
-                                    amountedCurrency?.currency.toString(),
-                                customer,
-                                fee,
-                                order,
-                                redirect,
-                                post,
-                                source,
-                                paymentDescription,
-                                paymentMetadata,
-                                reference,
-                                shouldSaveCard,
-                                statementDescriptor,
-                                require3DSecure,
-                                receipt,
-                                it,
-                                destinations,
-                                topUp
-                            )
+                            merchant,
+                            it1,
+                            transactionCurrency?.currency,
+                            BigDecimal(selectedTotalAmount),
+                            amountedCurrency?.currency.toString(),
+                            customer,
+                            fee,
+                            order,
+                            redirect,
+                            post,
+                            source,
+                            paymentDescription,
+                            paymentMetadata,
+                            reference,
+                            shouldSaveCard,
+                            statementDescriptor,
+                            require3DSecure,
+                            receipt,
+                            it,
+                            destinations,
+                            topUp
+                        )
 
                     }
 
@@ -1129,7 +1168,7 @@ class CardRepository : APIRequestCallback {
                     chargeResponse.authenticate,
                     chargeResponse,
                     tabAnimatedActionButton,
- contextSDK
+                    contextSDK
                 )
 
                 sdkSession.getListener()?.paymentSucceed(charge)
@@ -1151,7 +1190,7 @@ class CardRepository : APIRequestCallback {
                     chargeResponse.authenticate,
                     chargeResponse,
                     tabAnimatedActionButton,
- contextSDK
+                    contextSDK
                 )
 
                 SDKSession.getListener()?.paymentFailed(charge)
@@ -1166,6 +1205,15 @@ class CardRepository : APIRequestCallback {
     }
 
 
+    fun getUserIpAddress(){
+        NetworkController.getInstance().processRequest(
+            TapMethodType.GET,
+            ApiService.SAVE_CARD,
+            jsonString,
+            this,
+            CardRepository.CREATE_SAVE_CARD
+        )
+    }
 
 
 }

@@ -61,7 +61,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     private var arrayListSaveCard: ArrayList<List<SavedCard>> = ArrayList()
     private var adapterContent: List<PaymentOption> = java.util.ArrayList()
     private var adapterGooglePay: List<PaymentOption> = java.util.ArrayList()
-     var arrayListCombined: ArrayList<Any> = ArrayList()
+    var arrayListCombined: ArrayList<Any> = ArrayList()
     private var isShaking: Boolean = false
     private var goPayOpened: Boolean = false
     private var arrayModified: ArrayList<Any> = ArrayList()
@@ -232,21 +232,12 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                 true,
                 position.minus(adapterContent.size).minus(1),
                 cardNeeded.id,
-                maskCardNumber(
-                    arrayListCards[position.minus(adapterContent.size)
-                        .minus(1)].firstSix + arrayListCards[position.minus(adapterContent.size)
-                        .minus(1)].lastFour
-                ),
+                cardNeeded.lastFour,
                 arrayListCards as ArrayList<SavedCard>,
                 holder.itemView.findViewById(R.id.tapCardChip2),
                 holder.itemView.findViewById(R.id.tapCardChip2Constraints),
                 holder.bindingAdapterPosition
-
             )
-            //TODO  COMMENTED arrayListCards.removeAt(holder.itemView.id)
-//            holder.itemView.clearAnimation()
-//            it.animate().cancel()
-//            it.clearAnimation()
         }
 
     }
@@ -361,7 +352,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                 //resetSelection()
                 onCardSelectedActionListener.onCardSelectedAction(true, arrayListCombined[position])
                 selectedPosition = position
-           //     notifyDataSetChanged()
+                //     notifyDataSetChanged()
             }
 //            tapActionButtonInterface.onSelectPaymentOptionActionListener()
         }
@@ -371,7 +362,8 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     @SuppressLint("NotifyDataSetChanged")
     fun deleteSelectedCard(position: Int) {
         //(arrayListCards as java.util.List<String>).remove(position)
-        arrayListCards.toMutableList().remove(arrayListCards[position.minus(adapterContent.size).minus(1)])
+        arrayListCards.toMutableList()
+            .remove(arrayListCards[position.minus(adapterContent.size).minus(1)])
         this.updateAdapterDataSavedCard(arrayListCards)
         //this.notifyDataSetChanged()
 

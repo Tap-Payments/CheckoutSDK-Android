@@ -28,10 +28,12 @@ import com.blongho.country_data.World
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import company.tap.checkout.R
+import company.tap.checkout.internal.adapter._context
 import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.apiresponse.CardViewState
 import company.tap.checkout.internal.apiresponse.Resource
+import company.tap.checkout.internal.apiresponse.UserRepository
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.utils.*
 import company.tap.checkout.internal.utils.Constants.PoweredByLayoutAnimationDelay
@@ -67,6 +69,9 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     @JvmField
     var _viewModel: CheckoutViewModel? = null
+
+    lateinit var userRepository: UserRepository
+
     var _activity: Activity? = null
     var checkOutActivity: CheckOutActivity? = null
     lateinit var closeText: TapTextView
@@ -92,8 +97,9 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     private var topHeaderView: TapBrandView? = null
     private var displayMetrics: Int? = 0
     var originalHeight: Int? = 0
-        @JvmField
-    var countryCode :String?=null
+
+    @JvmField
+    var countryCode: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _activity = activity?.parent
@@ -124,12 +130,14 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         super.onViewCreated(view, savedInstanceState)
         val viewModel: CheckoutViewModel by viewModels()
         val cardViewModel: CardViewModel by viewModels()
+        userRepository = UserRepository(requireContext())
+        userRepository.getUserIpAddress()
         this._viewModel = viewModel
         _Context?.let { cardViewModel.getContext(it) }
         backgroundColor = (Color.parseColor(ThemeManager.getValue("tapBottomSheet.dimmedColor")))
 
         bottomSheetDialog.behavior.isDraggable = true
-        bottomSheetDialog.behavior.maxHeight = context?.getDeviceSpecs()?.first?: 1000
+        bottomSheetDialog.behavior.maxHeight = context?.getDeviceSpecs()?.first ?: 1000
 
         val checkoutLayout: LinearLayout? = view.findViewById(R.id.fragment_all)
         val frameLayout: FrameLayout? = view.findViewById(R.id.fragment_container_nfc_lib)
@@ -308,16 +316,17 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     /**
      * Logic to obtain ISO country code **/
-     fun getSimIsoCountryCurrency()  : String ?{
-        val tm = (context as Activity).getSystemService(AppCompatActivity.TELEPHONY_SERVICE) as TelephonyManager
-         countryCode = tm.simCountryIso
+    fun getSimIsoCountryCurrency(): String? {
+        val tm =
+            (context as Activity).getSystemService(AppCompatActivity.TELEPHONY_SERVICE) as TelephonyManager
+        countryCode = tm.simCountryIso
 
-        if(countryCode.isNullOrBlank()){
+        if (countryCode.isNullOrBlank()) {
             countryCode = tm.networkCountryIso
 
-         return  getCurrencySymbol(tm.networkCountryIso)
+            return getCurrencySymbol(tm.networkCountryIso)
 
-        }else return getCurrencySymbol(countryCode)
+        } else return getCurrencySymbol(countryCode)
 
     }
 
@@ -339,6 +348,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         }
         return currencySymbol
     }
+
     private fun initViews(view: View) {
         bottomSheetLayout = bottomSheetDialog.findViewById(R.id.design_bottom_sheet)
         closeText = view.findViewById(R.id.closeText)

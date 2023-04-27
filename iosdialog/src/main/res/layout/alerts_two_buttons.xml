@@ -3,6 +3,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginLeft="16dp"
+    android:id="@+id/relative_bg"
     android:layout_marginRight="16dp"
     android:background="@drawable/background"
     android:stateListAnimator="@null">

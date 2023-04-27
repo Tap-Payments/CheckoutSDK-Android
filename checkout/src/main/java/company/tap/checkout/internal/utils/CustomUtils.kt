@@ -1,15 +1,29 @@
 package company.tap.checkout.internal.utils
 
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
 import com.gdacciaro.iOSDialog.iOSDialogBuilder
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.adapters.context
+import company.tap.tapuilibrary.uikit.ktx.loadAppThemManagerFromPath
 
 
 /**
@@ -42,12 +56,14 @@ object CustomUtils {
             .setSubtitle(messageString)
             .setBoldPositiveLabel(false)
             .setCancelable(false)
-
-        builder.build()
-
+            /**
+             * needed to be changed to be colors from backend as well
+             */
+            .setBackgroundColor(loadAppThemManagerFromPath(AppColorTheme.GlobalValuesColor))
 
 
         if (btnType == 2) {
+
             builder.setPositiveListener(LocalizationManager.getValue("yes", "Common")) { dialog ->
                 dialog.dismiss()
                 baseLayoutManager?.didDialogueExecute("YES", cardTypeDialog)
@@ -71,8 +87,11 @@ object CustomUtils {
                 if (paymentType != null) {
                     baseLayoutManager?.dialogueExecuteExtraFees("NO", paymentType, savedCardsModel)
                 }
-            }
+            }.build().show()
+
         } else if (btnType == 4) {
+
+
             builder.setPositiveListener(
                 LocalizationManager.getValue(
                     "confirm",
@@ -99,6 +118,7 @@ object CustomUtils {
                 baseLayoutManager?.didDialogueExecute("OK", cardTypeDialog)
             }
                 .build().show()
+
         }
 
 
@@ -154,4 +174,15 @@ object CustomUtils {
     }
 
 
+    @SuppressLint("UseCompatLoadingForDrawables")
+    fun showAlertDialog(title: String, messageString: String, context: Context) {
+        MaterialAlertDialogBuilder(context, R.style.MaterialAlertDialog_rounded)
+            .setTitle(title)
+            .setMessage(messageString)
+            .setPositiveButtonIcon(context.resources.getDrawable(R.drawable.baseline_delete_24))
+            .setPositiveButton("Delete", null)
+            .setNegativeButton("Cancel", null)
+
+            .create().show()
+    }
 }
