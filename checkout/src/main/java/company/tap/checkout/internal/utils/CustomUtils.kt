@@ -150,7 +150,7 @@ object CustomUtils {
 
 
     fun getColor(): Int {
-        if (CustomUtils.getCurrentTheme().contains("dark")) {
+        if (getCurrentTheme().contains("dark")) {
             return Color.parseColor("#FFFFFF")
         } else return Color.parseColor("#000000")
     }
