@@ -213,16 +213,19 @@ class CardRepository : APIRequestCallback {
         customerId: String?
     ) {
         this.viewModel = viewModel
-//        NetworkController.getInstance().processRequest(
-//            TapMethodType.DELETE,
-//            ApiService.DELETE_CARD + "/" + customerId + "/" + deleteCardId,
-//            null,
-//            this,
-//            DEL_SAVE_CARD_CODE
-//        )
-        var deleteCardResponses  = DeleteCardResponse(delete = true, deleted = true)
-
-        this.viewModel.deleteSelectedCardListener(deleteCardResponses)
+        NetworkController.getInstance().processRequest(
+            TapMethodType.DELETE,
+            ApiService.DELETE_CARD + "/" + customerId + "/" + deleteCardId,
+            null,
+            this,
+            DEL_SAVE_CARD_CODE
+        )
+        /**
+         * Just for scope of testing to resemble delete function of chips without api
+         */
+//        var deleteCardResponses  = DeleteCardResponse(delete = true, deleted = true)
+//
+//        this.viewModel.deleteSelectedCardListener(deleteCardResponses)
 
     }
     @RequiresApi(Build.VERSION_CODES.N)

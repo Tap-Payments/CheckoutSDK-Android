@@ -61,8 +61,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     private var arrayListSaveCard: ArrayList<List<SavedCard>> = ArrayList()
     private var adapterContent: List<PaymentOption> = java.util.ArrayList()
     private var adapterGooglePay: List<PaymentOption> = java.util.ArrayList()
-    private var arrayListGoogle: ArrayList<String> = ArrayList()
-    private var arrayListCombined: ArrayList<Any> = ArrayList()
+     var arrayListCombined: ArrayList<Any> = ArrayList()
     private var isShaking: Boolean = false
     private var goPayOpened: Boolean = false
     private var arrayModified: ArrayList<Any> = ArrayList()
@@ -226,11 +225,13 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         holder.itemView.deleteImageViewSaved?.setOnClickListener {
             println("position>>>" + position)
             println("adapterContent>>>" + adapterContent.size)
+            println("arraylistCards>>>" + arrayListCards.size)
+            val cardNeeded = arrayListCards[position.minus(adapterContent.size).minus(1)]
 
             onCardSelectedActionListener.onDeleteIconClicked(
                 true,
                 position.minus(adapterContent.size).minus(1),
-                arrayListCards[position.minus(adapterContent.size).minus(1)].id,
+                cardNeeded.id,
                 maskCardNumber(
                     arrayListCards[position.minus(adapterContent.size)
                         .minus(1)].firstSix + arrayListCards[position.minus(adapterContent.size)
@@ -239,12 +240,13 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                 arrayListCards as ArrayList<SavedCard>,
                 holder.itemView.findViewById(R.id.tapCardChip2),
                 holder.itemView.findViewById(R.id.tapCardChip2Constraints),
-                position
+                holder.bindingAdapterPosition
+
             )
             //TODO  COMMENTED arrayListCards.removeAt(holder.itemView.id)
-            holder.itemView.clearAnimation()
-            it.animate().cancel()
-            it.clearAnimation()
+//            holder.itemView.clearAnimation()
+//            it.animate().cancel()
+//            it.clearAnimation()
         }
 
     }
@@ -348,7 +350,6 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         (holder as SavedViewHolder)
         bindSavedCardData(holder, position)
         setOnSavedCardOnClickAction(holder, position)
-         // deleteSelectedCard(holder, position)
         setOnClickActions(holder, position)
     }
 
@@ -358,11 +359,9 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         holder.itemView.setOnClickListener {
             if (!isShaking) {
                 //resetSelection()
-                val listArraySize: Int =
-                    itemCount.minus(adapterContent.size).minus(adapterGooglePay.size).minus(1)
                 onCardSelectedActionListener.onCardSelectedAction(true, arrayListCombined[position])
                 selectedPosition = position
-                notifyDataSetChanged()
+           //     notifyDataSetChanged()
             }
 //            tapActionButtonInterface.onSelectPaymentOptionActionListener()
         }
@@ -372,34 +371,11 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     @SuppressLint("NotifyDataSetChanged")
     fun deleteSelectedCard(position: Int) {
         //(arrayListCards as java.util.List<String>).remove(position)
-        arrayListCards.toMutableList().removeAt(position)
+        arrayListCards.toMutableList().remove(arrayListCards[position.minus(adapterContent.size).minus(1)])
         this.updateAdapterDataSavedCard(arrayListCards)
-        this.notifyDataSetChanged()
+        //this.notifyDataSetChanged()
 
     }
-
-//    private fun deleteSelectedCard(holder: RecyclerView.ViewHolder, position: Int) {
-//        holder.itemView.deleteImageViewSaved?.setOnClickListener {
-//            onCardSelectedActionListener.onDeleteIconClicked(
-//                true,
-//                position.minus(adapterContent.size),
-//                arrayListCards[position.minus(adapterContent.size)].id,
-//                maskCardNumber(
-//                    arrayListCards[position.minus(adapterContent.size)].firstSix + arrayListCards[position.minus(
-//                        adapterContent.size
-//                    )].lastFour
-//                ),
-//                arrayListCards as ArrayList<SavedCard>
-//            )
-//            // arrayListSaveCard.removeAt(position.minus(adapterContent.size))
-//            holder.itemView.clearAnimation()
-//            it.animate().cancel()
-//            it.clearAnimation()
-//            holder.itemView.deleteImageViewSaved?.visibility = View.GONE
-//            notifyDataSetChanged()
-//        }
-//
-//    }
 
 
     private fun bindSavedCardData(holder: RecyclerView.ViewHolder, position: Int) {

@@ -131,7 +131,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private var allCurrencies = MutableLiveData<List<SupportedCurrencies>>()
     private var selectedItemsDel by Delegates.notNull<Int>()
-    private var cardIDToBeDeleted :Int?=0
+    private var cardIDToBeDeleted: Int? = 0
 
     private val isShaking = MutableLiveData<Boolean>()
     private var deleteCard: Boolean = false
@@ -1615,13 +1615,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
     override fun deleteSelectedCardListener(delSelectedCard: DeleteCardResponse) {
-//        Log.e("error",savedCardList.toString())
-        context.showToast(cardIDToBeDeleted.toString())
         if (delSelectedCard.deleted) {
-            adapter.updateShaking(false)
-            savedCardList?.removeAt(cardIDToBeDeleted!!)
+            savedCardList?.removeAt(selectedItemsDel)
             savedCardList?.let { adapter.updateAdapterDataSavedCard(it) }
+            cardViewHolder.view.mainChipgroup.chipsRecycler.adapter = adapter
             deleteCard = false
+            adapter.updateShaking(false)
+
         }
     }
 
@@ -2192,7 +2192,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         viewToBeBlurCardViewHolder = viewtoBeBlur
         selectedItemsDel = itemId
         cardIDToBeDeleted = position
-      //  context.showToast(cardIDToBeDeleted)
         if (stopAnimation) {
             stopDeleteActionAnimation(itemId, maskedCardNumber, arrayListSavedCardSize)
         } else {
