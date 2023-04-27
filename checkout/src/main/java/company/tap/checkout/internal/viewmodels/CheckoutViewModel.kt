@@ -36,6 +36,7 @@ import cards.pay.paycardsrecognizer.sdk.FrameManager
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import com.blongho.country_data.World
 import com.bugfender.sdk.Bugfender
+import com.bumptech.glide.Glide
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.android.gms.wallet.PaymentData
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -488,8 +489,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         val currencyAlert: String = LocalizationManager.getValue("currencyAlert", "Common")
         /**Added to get dynamic flags from lib*/
-        amountViewHolder.view.amount_section.popupTextView.text =
-            currencyAlert + " " + checkoutFragment.getSimIsoCountryCurrency()
+        amountViewHolder.view.amount_section.popupTextView.text = currencyAlert + " " + checkoutFragment.getSimIsoCountryCurrency()
+      //  Glide.with(context).load(checkoutFragment.getSimIsoCountryflag()).into(amountViewHolder.view.amount_section.flagImageView);
         amountViewHolder.view.amount_section.flagImageView.setImageResource(
             World.getFlagOf(
                 checkoutFragment.countryCode

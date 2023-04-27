@@ -34,6 +34,7 @@ import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.apiresponse.CardViewState
 import company.tap.checkout.internal.apiresponse.Resource
 import company.tap.checkout.internal.apiresponse.UserRepository
+import company.tap.checkout.internal.cache.SharedPrefManager
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.utils.*
 import company.tap.checkout.internal.utils.Constants.PoweredByLayoutAnimationDelay
@@ -317,6 +318,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     /**
      * Logic to obtain ISO country code **/
     fun getSimIsoCountryCurrency(): String? {
+     //  return SharedPrefManager.getUserSupportedLocaleForTransactions(requireContext())?.symbol
         val tm =
             (context as Activity).getSystemService(AppCompatActivity.TELEPHONY_SERVICE) as TelephonyManager
         countryCode = tm.simCountryIso
@@ -327,6 +329,10 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             return getCurrencySymbol(tm.networkCountryIso)
 
         } else return getCurrencySymbol(countryCode)
+
+    }
+    fun getSimIsoCountryflag(): String? {
+        return SharedPrefManager.getUserSupportedLocaleForTransactions(requireContext())?.logos?.dark?.svg
 
     }
 
