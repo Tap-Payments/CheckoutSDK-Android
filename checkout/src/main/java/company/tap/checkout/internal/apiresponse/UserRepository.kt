@@ -6,7 +6,6 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import com.google.gson.Gson
 import com.google.gson.JsonElement
-import com.google.gson.annotations.SerializedName
 import company.tap.checkout.internal.api.network.RetrofitClient
 import company.tap.checkout.internal.api.responses.UserIpAddressResponse
 import company.tap.checkout.internal.api.responses.UserLocalCurrencyModel

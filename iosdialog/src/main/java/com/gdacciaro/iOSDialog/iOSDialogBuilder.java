@@ -1,6 +1,6 @@
 package com.gdacciaro.iOSDialog;
+
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Typeface;
 
 /**
@@ -12,10 +12,10 @@ import android.graphics.Typeface;
 
 public class iOSDialogBuilder {
     private Typeface tf;
-    private boolean bold,cancelable;
+    private boolean bold, cancelable;
     private String title, subtitle, okLabel, koLabel;
 
-    private int backgroundColor;
+    private int backgroundColor, textColor;
     private Context context;
     private iOSDialogClickListener positiveListener;
     private iOSDialogClickListener negativeListener;
@@ -40,34 +40,41 @@ public class iOSDialogBuilder {
     }
 
     public iOSDialogBuilder setFont(Typeface font) {
-        this.tf=font;
-        return this;
-    }
-    public iOSDialogBuilder setCancelable(boolean cancelable){
-        this.cancelable=cancelable;
+        this.tf = font;
         return this;
     }
 
-    public iOSDialogBuilder setNegativeListener(String koLabel,iOSDialogClickListener listener) {
-        this.negativeListener=listener;
-        this.koLabel=koLabel;
+    public iOSDialogBuilder setCancelable(boolean cancelable) {
+        this.cancelable = cancelable;
         return this;
     }
 
-    public iOSDialogBuilder setPositiveListener(String okLabel,iOSDialogClickListener listener) {
+    public iOSDialogBuilder setNegativeListener(String koLabel, iOSDialogClickListener listener) {
+        this.negativeListener = listener;
+        this.koLabel = koLabel;
+        return this;
+    }
+
+    public iOSDialogBuilder setPositiveListener(String okLabel, iOSDialogClickListener listener) {
         this.positiveListener = listener;
-        this.okLabel=okLabel;
+        this.okLabel = okLabel;
         return this;
     }
 
-    public iOSDialog build(){
-        iOSDialog dialog = new iOSDialog(context,title,subtitle, bold, tf,cancelable,backgroundColor);
-        dialog.setNegative(koLabel,negativeListener);
-        dialog.setPositive(okLabel,positiveListener);
+    public iOSDialog build() {
+        iOSDialog dialog = new iOSDialog(context, title, subtitle, bold, tf, cancelable, backgroundColor, textColor);
+        dialog.setNegative(koLabel, negativeListener);
+        dialog.setPositive(okLabel, positiveListener);
         return dialog;
     }
 
-    public void setBackgroundColor(int backgroundColor) {
+    public iOSDialogBuilder setBackgroundColor(int backgroundColor) {
         this.backgroundColor = backgroundColor;
+        return this;
+    }
+
+    public iOSDialogBuilder setTextColor(int textColor) {
+        this.textColor = textColor;
+        return this;
     }
 }

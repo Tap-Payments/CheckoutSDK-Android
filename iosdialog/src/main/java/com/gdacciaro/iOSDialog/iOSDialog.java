@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
-import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -31,7 +30,13 @@ public class iOSDialog {
     private boolean negativeExist;
     private static final String LOG_ERROR = "iOSDialog_ERROR";
 
-    public iOSDialog(Context context, String title, String subtitle, boolean bold, Typeface typeFace, boolean cancelable, int backgroundColor) {
+    public iOSDialog(Context context,
+                     String title,
+                     String subtitle,
+                     boolean bold, Typeface typeFace,
+                     boolean cancelable,
+                     int backgroundColor,
+                     int textColor) {
         negativeExist = false;
         dialog = new Dialog(context);
         dialog.setContentView(R.layout.alerts_two_buttons);
@@ -47,8 +52,8 @@ public class iOSDialog {
             relativeLayout.setBackgroundTintList(ColorStateList.valueOf(backgroundColor));
         }
 
-        setTitle(title);
-        setSubtitle(subtitle);
+        setTitle(title,textColor);
+        setSubtitle(subtitle,textColor);
         setBoldPositiveLabel(bold);
         setTypefaces(typeFace);
 
@@ -82,12 +87,15 @@ public class iOSDialog {
         dialog.dismiss();
     }
 
-    public void setTitle(String title) {
+    public void setTitle(String title, int textColor) {
+
         title_lbl.setText(title);
+        title_lbl.setTextColor(textColor);
     }
 
-    public void setSubtitle(String subtitle) {
+    public void setSubtitle(String subtitle, int textColor) {
         subtitle_lbl.setText(subtitle);
+        subtitle_lbl.setTextColor(textColor);
     }
 
     private void setPositiveLabel(String positive) {

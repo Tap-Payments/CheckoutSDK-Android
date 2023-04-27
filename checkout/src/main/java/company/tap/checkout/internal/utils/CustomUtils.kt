@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.content.res.Resources.Theme
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -56,10 +57,9 @@ object CustomUtils {
             .setSubtitle(messageString)
             .setBoldPositiveLabel(false)
             .setCancelable(false)
-            /**
-             * needed to be changed to be colors from backend as well
-             */
             .setBackgroundColor(loadAppThemManagerFromPath(AppColorTheme.GlobalValuesColor))
+            .setTextColor(getColor())
+
 
 
         if (btnType == 2) {
@@ -146,6 +146,13 @@ object CustomUtils {
     fun showKeyboard(context: Context) {
         val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
         imm?.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+    }
+
+
+    fun getColor(): Int {
+        if (CustomUtils.getCurrentTheme().contains("dark")) {
+            return Color.parseColor("#FFFFFF")
+        } else return Color.parseColor("#000000")
     }
 
     fun getDeviceDisplayMetrics(activity: Activity): Int {

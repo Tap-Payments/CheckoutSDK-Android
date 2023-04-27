@@ -11,7 +11,7 @@ import company.tap.checkout.internal.api.enums.AmountModificatorType
 import company.tap.checkout.internal.api.enums.AuthorizeActionType
 import company.tap.checkout.internal.api.models.AmountModificator
 import company.tap.checkout.internal.api.models.PhoneNumber
-import company.tap.checkout.internal.apiresponse.UserLocalCurrencyModel
+import company.tap.checkout.internal.api.responses.UserLocalCurrencyModel
 import company.tap.checkout.open.enums.Category
 import company.tap.checkout.open.enums.SdkMode
 import company.tap.checkout.open.enums.TransactionMode
@@ -906,20 +906,5 @@ object SettingsManager {
         )
     }
 
-    fun <T> saveModelLocally(dataToBeSaved: T, keyValueToBeSaved: String) {
-        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-        val prefsEditor = preferences.edit()
-        val gson = Gson()
-        val json = gson.toJson(dataToBeSaved)
-        prefsEditor.putString(keyValueToBeSaved, json)
-        prefsEditor.apply()
-    }
 
-    fun getUserLocalCurrency(): UserLocalCurrencyModel {
-        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-        val gson = Gson()
-        val json = preferences.getString("MyObject", "");
-        val data = gson.fromJson(json, UserLocalCurrencyModel::class.java)
-        return data
-    }
 }
