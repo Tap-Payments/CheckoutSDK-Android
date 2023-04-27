@@ -102,18 +102,17 @@ class WebViewHolder(
                     switchViewHolder?.view!!,
                     cardViewHolder.view
                 ).addFadeOutAnimationToViews(onAnimationEnd = {})
-              //  doAfterSpecificTime(50) {
-                    web_view.layoutParams = LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        context.twoThirdHeightView().roundToInt()
-                    )
-                    bottomSheetLayout.resizeAnimation(
-                        durationTime = resizeAnimationDuration,
-                        startHeight = sdkLayout.height,
-                        endHeight = context.getDeviceSpecs().first
-                    )
-                    showViewsRelatedToWebView()
-               // }
+                web_view.layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    context.twoThirdHeightView().roundToInt()
+                )
+                bottomSheetLayout.resizeAnimation(
+                    durationTime = resizeAnimationDuration,
+                    startHeight = sdkLayout.height,
+                    endHeight = context.getDeviceSpecs().first
+                )
+                showViewsRelatedToWebView()
+
             })
 
 
