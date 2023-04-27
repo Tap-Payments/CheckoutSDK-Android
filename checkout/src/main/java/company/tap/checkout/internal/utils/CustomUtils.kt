@@ -43,6 +43,9 @@ object CustomUtils {
             .setBoldPositiveLabel(false)
             .setCancelable(false)
 
+        builder.build()
+
+
 
         if (btnType == 2) {
             builder.setPositiveListener(LocalizationManager.getValue("yes", "Common")) { dialog ->

@@ -3618,7 +3618,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     fun setTitleNormalCard() {
         cardViewHolder.view.cardInfoHeaderText.text =
             LocalizationManager.getValue("cardSectionTitleOr", "TapCardInputKit")
-
     }
 
 }

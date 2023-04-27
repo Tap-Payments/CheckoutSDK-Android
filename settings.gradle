@@ -1,3 +1,4 @@
 rootProject.name='CheckoutSDK-Android'
 include ':app'
 include ':checkout'
+include ':iosdialog'
