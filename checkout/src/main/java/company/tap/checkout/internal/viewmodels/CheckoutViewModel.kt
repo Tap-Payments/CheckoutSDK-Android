@@ -2074,12 +2074,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         if(cardBrandString!=null){
            selectedPayOpt =  logicTogetPayOptions(cardBrandString)
-            println("selectedPayOpt>>>"+selectedPayOpt)
+
         }else selectedPayOpt = paymentOptObject
 
         var colorBackGround: String? = null
         var intColorArray: IntArray? = null
-        println("selectedPayOpt>>>"+selectedPayOpt)
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
             if (selectedPayOpt?.buttonStyle?.background?.darkModel?.backgroundColors?.size == 1) {
                 colorBackGround = selectedPayOpt?.buttonStyle?.background?.darkModel?.backgroundColors?.get(0)
@@ -2141,12 +2140,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         var selectedPayOption:PaymentOption ?= null
 
         for(i in 0 until paymentOptionsResponse.paymentOptions?.size) {
-            println("paymentOptions before return"+(paymentOptionsResponse.paymentOptions[i].brand))
             if(paymentOptionsResponse.paymentOptions[i].brand == cardBrandString?.toUpperCase()){
                selectedPayOption =  paymentOptionsResponse.paymentOptions[i]
             }
         }
-        println("selectedPayOption before return"+selectedPayOption)
+
         return selectedPayOption
     }
 
