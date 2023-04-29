@@ -686,6 +686,7 @@ class PaymentInlineViewHolder(
                      tapInlineCardSwitch?.visibility = View.GONE
 
                  }*/
+                println("PaymentDataSource?.getBinLookupResponse()"+PaymentDataSource?.getBinLookupResponse())
                 //On Details complete
                 if (s.toString().length > 3) {
                     cardNumber?.let {
@@ -1083,7 +1084,6 @@ class PaymentInlineViewHolder(
                  */
                 cvvNumber = s.toString()
 
-
                 if (s?.trim()?.length == 3 || s?.trim()?.length == 4) {
                     if (!PaymentDataSource.getCardHolderNameShowHide()) {
                         cardNumber.toString().let {
@@ -1144,6 +1144,7 @@ class PaymentInlineViewHolder(
                     tapAlertView?.visibility = View.GONE
 
                     if (cardInputUIStatus != null && cardInputUIStatus == CardInputUIStatus.SavedCard) {
+                        println("avedCardsModel?.brand?.name"+savedCardsModel?.brand?.name)
                         tapAlertView?.fadeVisibility(View.GONE, 500)
                         //  tapCardInputView.setVisibilityOfHolderField(false)
                         tapCardInputView.holderNameEnabled = false
@@ -1153,13 +1154,13 @@ class PaymentInlineViewHolder(
 
                         if (s.trim().length == 3 || s.trim().length == 4) {
                             onPaymentCardComplete.onPayCardSwitchAction(
-                                true, PaymentType.CARD , PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
+                                true, PaymentType.CARD , savedCardsModel?.brand?.name
                             )
                             cardNumber?.let {
                                 expiryDate?.let { it1 ->
                                     onPaymentCardComplete.onPayCardCompleteAction(
                                         true, PaymentType.CARD,
-                                        it, it1, cvvNumber!!, cardHolderName,PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
+                                        it, it1, cvvNumber!!, cardHolderName, savedCardsModel?.brand?.name
                                     )
                                 }
                             }

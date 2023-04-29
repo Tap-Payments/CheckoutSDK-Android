@@ -2061,7 +2061,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
 
 
-
+        println("cardBrandString before "+cardBrandString)
         logicTogetButtonStyle(paymentOptObject, payStringButton , cardBrandString)
 
 
@@ -2139,8 +2139,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun logicTogetPayOptions(cardBrandString: String?)  : PaymentOption ?{
         var selectedPayOption:PaymentOption ?= null
+
         for(i in 0 until paymentOptionsResponse.paymentOptions?.size) {
-            if(paymentOptionsResponse.paymentOptions[i].brand == cardBrandString){
+            println("paymentOptions before return"+(paymentOptionsResponse.paymentOptions[i].brand))
+            if(paymentOptionsResponse.paymentOptions[i].brand == cardBrandString?.toUpperCase()){
                selectedPayOption =  paymentOptionsResponse.paymentOptions[i]
             }
         }
