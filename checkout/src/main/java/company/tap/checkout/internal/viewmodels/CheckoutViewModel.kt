@@ -2162,6 +2162,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
 
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
+            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(backgroundColor = Color.parseColor(savedCardsModel.buttonStyle?.background?.darkModel?.baseColor))
+
+        }else saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(backgroundColor = Color.parseColor(savedCardsModel.buttonStyle?.background?.lightModel?.baseColor))
+
         saveCardSwitchHolder?.view?.mainSwitch?.mainTextSave?.visibility = View.INVISIBLE
 
         //Commented to try the flow of redirect
