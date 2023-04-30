@@ -9,8 +9,8 @@ Copyright (c) 2020    Tap Payments.
 All rights reserved.
  **/
 interface PaymentCardComplete {
-    fun onPayCardSwitchAction(isCompleted: Boolean, paymentType: PaymentType)
-    fun onPayCardCompleteAction(isCompleted: Boolean, paymentType: PaymentType, cardNumber: String, expiryDate: String, cvvNumber : String,holderName:String?)
+    fun onPayCardSwitchAction(isCompleted: Boolean, paymentType: PaymentType , cardBrandString: String?=null)
+    fun onPayCardCompleteAction(isCompleted: Boolean, paymentType: PaymentType, cardNumber: String, expiryDate: String, cvvNumber : String,holderName:String?,  cardBrandString: String?=null)
     fun onPaymentCardIsLoyaltyCard(isLoyaltyCard:Boolean)
 
 }
