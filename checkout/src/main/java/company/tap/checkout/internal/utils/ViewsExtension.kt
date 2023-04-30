@@ -29,6 +29,7 @@ import androidx.core.os.postDelayed
 import com.bumptech.glide.Glide
 import company.tap.checkout.R
 import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.atoms.TapChip
 import company.tap.tapuilibrary.uikit.ktx.loadAppThemManagerFromPath
 import jp.wasabeef.blurry.Blurry
 import kotlinx.android.synthetic.main.switch_layout.view.*
@@ -91,6 +92,23 @@ fun View.slidefromRightToLeft() {
     animate.fillAfter = true
     this.startAnimation(animate)
     this.visibility = View.VISIBLE // Change visibility VISIBLE or GONE
+}
+
+fun View.slideFromLeftToRight() {
+    val animate: TranslateAnimation
+    if (this.height == 0) {
+        animate = TranslateAnimation(
+            0f,
+            this.width.toFloat(), 0f,  0f
+        )
+    } else {
+        animate = TranslateAnimation(0f, this.width.toFloat(), 0f,0f) // View for animation
+    }
+    animate.duration = 1000
+    animate.fillAfter = false
+    this.startAnimation(animate)
+    //this.addFadeOutAnimation()
+    this.visibility = View.GONE // Change visibility VISIBLE or GONE
 }
 
 fun MutableList<View>.addFadeInAnimationForViews(durationTime: Long = 1000L) {

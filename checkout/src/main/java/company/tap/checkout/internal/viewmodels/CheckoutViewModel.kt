@@ -769,15 +769,17 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     fun addTitlePaymentAndFlag() {
-            val currencyAlert: String = LocalizationManager.getValue("currencyAlert", "Common")
-            amountViewHolder.view.amount_section.popupTextView.text =
-                currencyAlert + " " + checkoutFragment.getSimIsoCountryCurrency()
-            Glide.with(context).load(showCountryFlag())
-                .into(amountViewHolder.view.amount_section.flagImageView);
-        amountViewHolder.view.amount_section.itemPopupLayout.addFadeInAnimation(durationTime = 2000)
-        amountViewHolder.view.amount_section.itemPopupLayout.slidefromRightToLeft()
+        val currencyAlert: String = LocalizationManager.getValue("currencyAlert", "Common")
+        amountViewHolder.view.amount_section.popupTextView.text =
+            currencyAlert + " " + checkoutFragment.getSimIsoCountryCurrency()
+        Glide.with(context).load(showCountryFlag())
+            .into(amountViewHolder.view.amount_section.flagImageView);
+        amountViewHolder.view.amount_section.tapChipAmount.bringToFront()
+        amountViewHolder.view.amount_section.tapChipPopup.slidefromRightToLeft()
+        amountViewHolder.view.amount_section.tapChipPopup.setOnClickListener {
+            amountViewHolder.view.amount_section.tapChipPopup.slideFromLeftToRight()
 
-
+        }
     }
 
 
@@ -1419,11 +1421,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     }
 
-     fun cacheUserLocalCurrency() : Boolean {
+    fun cacheUserLocalCurrency(): Boolean {
         val suportedCurrencyForUser = allCurrencies.value?.find {
             it.symbol == SharedPrefManager.getUserLocalCurrency(context)?.symbol
         }
-       return SharedPrefManager.saveModelLocally(
+        return SharedPrefManager.saveModelLocally(
             context = context,
             dataToBeSaved = suportedCurrencyForUser,
             keyValueToBeSaved = UserSupportedLocaleForTransactions
@@ -2111,11 +2113,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
 
-        println("cardBrandString before "+cardBrandString)
+        println("cardBrandString before " + cardBrandString)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            logicTogetButtonStyle(paymentOptObject, payStringButton , cardBrandString)
+            logicTogetButtonStyle(paymentOptObject, payStringButton, cardBrandString)
         }
-
 
 
     }
@@ -2272,15 +2273,21 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun onClickCardPayment(savedCardsModel: Any?) {
-        println("onClickCardPayment"+savedCardsModel)
+        println("onClickCardPayment" + savedCardsModel)
 
         savedCardsModel as PaymentOption
         CustomUtils.hideKeyboardFrom(context, paymentInlineViewHolder.view)
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
-            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(backgroundColor = Color.parseColor(savedCardsModel.buttonStyle?.background?.darkModel?.baseColor))
+            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
+                backgroundColor = Color.parseColor(
+                    savedCardsModel.buttonStyle?.background?.darkModel?.baseColor
+                )
+            )
 
-        }else saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(backgroundColor = Color.parseColor(savedCardsModel.buttonStyle?.background?.lightModel?.baseColor))
+        } else saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
+            backgroundColor = Color.parseColor(savedCardsModel.buttonStyle?.background?.lightModel?.baseColor)
+        )
 
         saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
 
@@ -2456,12 +2463,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         paymentType: PaymentType,
         cardNumber: String,
         expiryDate: String,
-        cvvNumber: String, holderName: String?,  cardBrandString: String? , savedCardsModel: Any?
+        cvvNumber: String, holderName: String?, cardBrandString: String?, savedCardsModel: Any?
 
     ) {
         activateActionButton(cardBrandString = cardBrandString)
-        if(savedCardsModel!=null){ setPayButtonAction(paymentType, savedCardsModel)}
-        else {
+        if (savedCardsModel != null) {
+            setPayButtonAction(paymentType, savedCardsModel)
+        } else {
             val typedCardModel = logicTogetPayOptions(cardBrandString)
             setPayButtonAction(paymentType, typedCardModel)
         }
@@ -2865,16 +2873,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             )
         } else if (savedCardsModel != null) {
             if (paymentTypeEnum == PaymentType.CARD || paymentTypeEnum == PaymentType.SavedCard) {
-                if(paymentInlineViewHolder.cardInputUIStatus == CardInputUIStatus.SavedCard){
+                if (paymentInlineViewHolder.cardInputUIStatus == CardInputUIStatus.SavedCard) {
                     savedCardsModel as SavedCard
                     if (savedCardsModel.paymentOptionIdentifier.toInt() == 3 || savedCardsModel.paymentOptionIdentifier.toInt() == 4) {
                         setDifferentPaymentsAction(PaymentType.SavedCard, savedCardsModel)
                     }
 
-                }
-               else {
+                } else {
                     savedCardsModel as PaymentOption
-                   setDifferentPaymentsAction(PaymentType.CARD, savedCardsModel)
+                    setDifferentPaymentsAction(PaymentType.CARD, savedCardsModel)
 
                 }
 
@@ -2888,11 +2895,17 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
             ActionButtonState.LOADING
         )
-      val selectdSavedCard=  logicTogetPayOptions(savedCardsModel?.brand?.rawValue)
-           if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
-          saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(backgroundColor = Color.parseColor(selectdSavedCard?.buttonStyle?.background?.darkModel?.baseColor))
+        val selectdSavedCard = logicTogetPayOptions(savedCardsModel?.brand?.rawValue)
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
+            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
+                backgroundColor = Color.parseColor(
+                    selectdSavedCard?.buttonStyle?.background?.darkModel?.baseColor
+                )
+            )
 
-             }else saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(backgroundColor = Color.parseColor(selectdSavedCard?.buttonStyle?.background?.lightModel?.baseColor))
+        } else saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
+            backgroundColor = Color.parseColor(selectdSavedCard?.buttonStyle?.background?.lightModel?.baseColor)
+        )
 
         startSavedCardPaymentProcess(savedCardsModel as SavedCard)
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.getImageView(
@@ -3443,7 +3456,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 }
             }
             paymentType === PaymentType.CARD -> {
-                println("savedCardsModel fro card"+savedCardsModel)
+                println("savedCardsModel fro card" + savedCardsModel)
                 PaymentDataSource.setWebViewType(WebViewType.THREE_DS_WEBVIEW)
                 //Added to disable click when button loading
                 amountViewHolder.view.amount_section?.itemAmountLayout?.isEnabled = false
