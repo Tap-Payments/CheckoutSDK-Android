@@ -1,6 +1,5 @@
 package company.tap.checkout.internal.utils
 
-import android.animation.Animator
 import android.animation.ArgbEvaluator
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
@@ -9,16 +8,12 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
-import android.graphics.Color
-import android.graphics.drawable.Drawable
-import android.graphics.drawable.GradientDrawable
-import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.*
 import android.graphics.drawable.shapes.RoundRectShape
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.DisplayMetrics
-import android.util.TypedValue
 import android.view.*
 import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
@@ -35,7 +30,6 @@ import androidx.core.os.postDelayed
 import com.bumptech.glide.Glide
 import company.tap.checkout.R
 import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.uikit.atoms.TapChip
 import company.tap.tapuilibrary.uikit.ktx.loadAppThemManagerFromPath
 import jp.wasabeef.blurry.Blurry
 import kotlinx.android.synthetic.main.amountview_layout.view.*
@@ -50,7 +44,7 @@ private var bottomRightCorner = 0f
 private var bottomLeftCorner = 0f
 const val progressBarSize = 45
 
-fun View.startPoweredByAnimation(delayTime: Long, poweredByLogo: View?) {
+fun View.startPoweredByAnimation(delayTime: Long, poweredByLogo: View?,onAnimationEnd: () -> Unit?) {
     Handler(Looper.getMainLooper()).postDelayed({
         poweredByLogo?.visibility = View.GONE
         this.visibility = View.VISIBLE
@@ -68,7 +62,20 @@ fun View.startPoweredByAnimation(delayTime: Long, poweredByLogo: View?) {
         }
 
     resizeAnimation?.duration = animationDelayForResizeAnimation
+    resizeAnimation?.setAnimationListener(object :AnimationListener{
+        override fun onAnimationStart(p0: Animation?) {
+        }
+
+        override fun onAnimationEnd(p0: Animation?) {
+            onAnimationEnd.invoke()
+        }
+
+        override fun onAnimationRepeat(p0: Animation?) {
+        }
+
+    })
     this.startAnimation(resizeAnimation)
+
 
 
 }
@@ -79,19 +86,27 @@ fun doAfterSpecificTime(time: Long = 1000L, execute: () -> Unit) =
     }
 
 
-fun TapChip.applyGlowingEffect(colorPairs: Pair<Int, Int>, durationTime: Long = 1000L) {
+fun View.setMargins( left: Int, top: Int, right: Int, bottom: Int) {
+    if (this.layoutParams is ViewGroup.MarginLayoutParams) {
+        val p = this.layoutParams as ViewGroup.MarginLayoutParams
+        p.setMargins(left, top, right, bottom)
+        this.requestLayout()
+    }
+}
+fun View.applyGlowingEffect(colorPairs: Pair<Int, Int>, durationTime: Long = 1000L) {
     val animator: ObjectAnimator =
         ObjectAnimator.ofInt(
             this,
-            "CardBackgroundColor",
+            "BackgroundColor",
             colorPairs.first,
             colorPairs.second
         ).setDuration(durationTime)
+
+    this.setMargins(0,0,0,0)
     animator.setEvaluator(ArgbEvaluator())
     animator.repeatMode = ValueAnimator.REVERSE
     animator.repeatCount = Animation.INFINITE
     animator.start()
-    this.radius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 45f, context.resources.displayMetrics)
 
 
 

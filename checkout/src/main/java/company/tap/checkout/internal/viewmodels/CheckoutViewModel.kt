@@ -145,6 +145,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private val isShaking = MutableLiveData<Boolean>()
     val localCurrencyReturned = MutableLiveData<Boolean>()
+    val powerdByTapAnimationFinished = MutableLiveData<Boolean>()
 
     private var deleteCard: Boolean = false
     private var isCardDeletedSuccessfully: Boolean = false
@@ -313,6 +314,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     }
 
+    init {
+        powerdByTapAnimationFinished.value =false
+    }
     private fun initLoyaltyView() {
         if (SDKSession.enableLoyalty == true) {
             /*removeViews(saveCardSwitchHolder)
@@ -494,7 +498,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         goPayViewsHolder = GoPayViewsHolder(context, this, otpViewHolder)
         asynchronousPaymentViewHolder = AsynchronousPaymentViewHolder(context, this)
         logicForLoyaltyProgram()
-        addTitlePaymentAndFlag()
     }
 
     private fun showCountryFlag(): String? {
@@ -757,7 +760,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         amountViewHolder.setOnItemsClickListener()
         amountViewHolder.view.amount_section.flagImageView?.visibility = View.VISIBLE
 
-        addTitlePaymentAndFlag()
 
         saveCardSwitchHolder?.view?.visibility = View.VISIBLE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.RESET)
@@ -782,11 +784,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         amountViewHolder.view.amount_section.tapChipAmount.bringToFront()
 
         amountViewHolder.view.amount_section.tapChipPopup.slidefromRightToLeft()
-        amountViewHolder.view.amount_section.tapChipPopup.applyGlowingEffect(getCurrencyColors())
+        amountViewHolder.view.amount_section.itemPopupLayout.applyGlowingEffect(getCurrencyColors())
         amountViewHolder.view.amount_section.tapChipPopup.setOnClickListener {
             amountViewHolder.view.amount_section.tapChipPopup.slideFromLeftToRight()
 
         }
+    }
+    fun removevisibiltyCurrenycy(){
+        amountViewHolder.view.amount_section.tapChipPopup.visibility = View.GONE
     }
 
     fun getCurrencyColors(): Pair<Int, Int> {
@@ -800,7 +805,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             /**
              * light theme colors
              */
-          //  pair = Pair(Color.parseColor("#211F1F"), Color.parseColor("#343232"))
 
             pair = Pair(Color.parseColor("#F4F4F4"), Color.parseColor("#E1E1E1"))
         }
@@ -1727,7 +1731,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
          * close the sdk.
          * **/
 
-        addTitlePaymentAndFlag()
         // tabAnimatedActionButton?.clearAnimation()
         if (::webFrameLayout.isInitialized) {
             if (fragmentManager.findFragmentById(R.id.webFrameLayout) != null)

@@ -184,8 +184,17 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         }
 
         viewModel.localCurrencyReturned.observe(this, androidx.lifecycle.Observer {
-            if (viewModel.cacheUserLocalCurrency())
-                viewModel.addTitlePaymentAndFlag()
+            if (viewModel.cacheUserLocalCurrency()) {
+                viewModel.powerdByTapAnimationFinished.observe(this) {
+                    if (it == true) {
+                        doAfterSpecificTime {
+                            viewModel.addTitlePaymentAndFlag()
+                        }
+                    }else{
+                        viewModel.removevisibiltyCurrenycy()
+                    }
+                }
+            }
         })
 
         if (checkoutLayout != null) {
@@ -311,10 +320,16 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         adjustHeightAccToDensity(displayMetrics)
         topHeaderView?.startPoweredByAnimation(
             delayTime = PoweredByLayoutAnimationDelay,
-            topHeaderView?.poweredByImage
+            topHeaderView?.poweredByImage, onAnimationEnd = {
+                poweredByTapAnimationEnds(viewModel)
+            }
         )
 
 
+    }
+
+    private fun poweredByTapAnimationEnds(viewModel: CheckoutViewModel) {
+        viewModel.powerdByTapAnimationFinished.value = true
     }
 
     /**
