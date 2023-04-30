@@ -488,14 +488,18 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         logicForLoyaltyProgram()
 
         val currencyAlert: String = LocalizationManager.getValue("currencyAlert", "Common")
-        /**Added to get dynamic flags from lib*/
-        amountViewHolder.view.amount_section.popupTextView.text = currencyAlert + " " + checkoutFragment.getSimIsoCountryCurrency()
-      //  Glide.with(context).load(checkoutFragment.getSimIsoCountryflag()).into(amountViewHolder.view.amount_section.flagImageView);
-        amountViewHolder.view.amount_section.flagImageView.setImageResource(
-            World.getFlagOf(
-                checkoutFragment.countryCode
-            )
-        )
+
+addTitlePaymentAndFlag()
+    }
+
+    private fun showCountryFlag(): String {
+       val currency =  SharedPrefManager.getUserSupportedLocaleForTransactions(context)
+        if (ThemeManager.currentTheme.contains("dark")){
+            return currency?.logos?.dark?.png
+        }else{
+            return currency?.logos?.light?.png
+
+        }
     }
 
     private fun initSwitchAction() {
@@ -750,13 +754,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         val currencyAlert: String = LocalizationManager.getValue("currencyAlert", "Common")
         /**Added to get dynamic flags from lib*/
-        amountViewHolder.view.amount_section.popupTextView.text =
-            currencyAlert + " " + checkoutFragment.getSimIsoCountryCurrency()
-        amountViewHolder.view.amount_section.flagImageView.setImageResource(
-            World.getFlagOf(
-                checkoutFragment.countryCode
-            )
-        )
+        addTitlePaymentAndFlag(currencyAlert)
 
         saveCardSwitchHolder?.view?.visibility = View.VISIBLE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.RESET)
@@ -772,6 +770,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
         )
+    }
+
+    private fun addTitlePaymentAndFlag() {
+        val currencyAlert: String = LocalizationManager.getValue("currencyAlert", "Common")
+        amountViewHolder.view.amount_section.popupTextView.text = currencyAlert + " " + checkoutFragment.getSimIsoCountryCurrency()
+        Glide.with(context).load(showCountryFlag()).into(amountViewHolder.view.amount_section.flagImageView);
+        amountViewHolder.view.amount_section.popupTextView.text =
+            currencyAlert + " " + checkoutFragment.getSimIsoCountryCurrency()
+
     }
 
 

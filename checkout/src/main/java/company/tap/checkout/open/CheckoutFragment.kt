@@ -318,19 +318,20 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     /**
      * Logic to obtain ISO country code **/
     fun getSimIsoCountryCurrency(): String? {
-     //  return SharedPrefManager.getUserSupportedLocaleForTransactions(requireContext())?.symbol
-        val tm =
-            (context as Activity).getSystemService(AppCompatActivity.TELEPHONY_SERVICE) as TelephonyManager
-        countryCode = tm.simCountryIso
-
-        if (countryCode.isNullOrBlank()) {
-            countryCode = tm.networkCountryIso
-
-            return getCurrencySymbol(tm.networkCountryIso)
-
-        } else return getCurrencySymbol(countryCode)
+          return SharedPrefManager.getUserSupportedLocaleForTransactions(requireContext())?.symbol
+//        val tm =
+//            (context as Activity).getSystemService(AppCompatActivity.TELEPHONY_SERVICE) as TelephonyManager
+//        countryCode = tm.simCountryIso
+//
+//        if (countryCode.isNullOrBlank()) {
+//            countryCode = tm.networkCountryIso
+//
+//            return getCurrencySymbol(tm.networkCountryIso)
+//
+//        } else return getCurrencySymbol(countryCode)
 
     }
+
     fun getSimIsoCountryflag(): String? {
         return SharedPrefManager.getUserSupportedLocaleForTransactions(requireContext())?.logos?.dark?.svg
 
