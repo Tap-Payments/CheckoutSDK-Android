@@ -1992,7 +1992,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
             else -> {
                 if (savedCardsModel != null) {
-                    println("paymentType" + (savedCardsModel as PaymentOption).brand)
+
                     if ((savedCardsModel as PaymentOption).paymentType == PaymentType.WEB) {
                         //  paymentInlineViewHolder.view.alpha = 0.95f
 
@@ -2776,7 +2776,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
                 }
                else {
-                    println("PaymentOption>>"+ savedCardsModel as PaymentOption)
                     savedCardsModel as PaymentOption
                    setDifferentPaymentsAction(PaymentType.CARD, savedCardsModel)
 
