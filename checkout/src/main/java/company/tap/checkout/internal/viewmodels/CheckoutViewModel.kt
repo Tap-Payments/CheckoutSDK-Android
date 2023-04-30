@@ -769,15 +769,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     fun addTitlePaymentAndFlag() {
-        if (localCurrencyReturned.value == true) {
             val currencyAlert: String = LocalizationManager.getValue("currencyAlert", "Common")
             amountViewHolder.view.amount_section.popupTextView.text =
                 currencyAlert + " " + checkoutFragment.getSimIsoCountryCurrency()
             Glide.with(context).load(showCountryFlag())
                 .into(amountViewHolder.view.amount_section.flagImageView);
-            amountViewHolder.view.amount_section.addFadeInAnimation(durationTime = 5000)
+        amountViewHolder.view.amount_section.itemPopupLayout.addFadeInAnimation(durationTime = 2000)
+        amountViewHolder.view.amount_section.itemPopupLayout.slidefromRightToLeft()
 
-        }
+
     }
 
 
