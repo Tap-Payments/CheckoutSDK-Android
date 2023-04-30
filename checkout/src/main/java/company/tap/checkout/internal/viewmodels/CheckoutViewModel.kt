@@ -820,10 +820,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         }, 400)
 
-        // removeAllViews()
 
-
-        // checkoutFragment?.isFullscreen =true
 
         /**
          * will be replaced by itemList coming from the API**/
@@ -1272,7 +1269,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
         }
         // println("PaymentOptionsResponse on get$paymentOptionsResponse")
-        allCurrencies.value = paymentOptionsResponse?.supportedCurrencies
+        allCurrencies.value = (paymentOptionsResponse?.supportedCurrencies as List<SupportedCurrencies>).sortedBy { it.orderBy }
         Log.e(
             "supportedCurrencyUser",
             SharedPrefManager.getUserLocalCurrency(context).toString()
@@ -1284,32 +1281,24 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         savedCardList = paymentOptionsResponse?.cards
         currencyAdapter = CurrencyTypeAdapter(this)
-        if (paymentOptionsResponse?.supportedCurrencies != null && ::amountViewHolder.isInitialized) {
+        if (paymentOptionsResponse.supportedCurrencies != null && ::amountViewHolder.isInitialized) {
             currentCurrency = paymentOptionsResponse.currency
-            for (i in paymentOptionsResponse.supportedCurrencies.indices) {
+            val sortedList : List<SupportedCurrencies> = (paymentOptionsResponse.supportedCurrencies).sortedBy { it.orderBy }
+            for (i in sortedList.indices) {
 
-                if (paymentOptionsResponse.supportedCurrencies[i].currency == currentCurrency) {
-                    println("current amount value>>" + paymentOptionsResponse.supportedCurrencies[i].amount)
+                if (sortedList[i].currency == currentCurrency) {
                     currentAmount =
-                        CurrencyFormatter.currencyFormat(paymentOptionsResponse.supportedCurrencies[i].amount.toString())
+                        CurrencyFormatter.currencyFormat(sortedList[i].amount.toString())
                     currentCurrency =
-                        paymentOptionsResponse.supportedCurrencies[i].symbol.toString()
+                        sortedList[i].symbol.toString()
 
-                    /* if (currentCurrency.length == 2) {
-                         currentCurrency =
-                             paymentOptionsResponse.supportedCurrencies[i].currency.toString()
-                     } else {
-                         currentCurrency =
-                             paymentOptionsResponse.supportedCurrencies[i].symbol.toString()
-                         currentCurrencySymbol =
-                             paymentOptionsResponse.supportedCurrencies[i].symbol.toString()
-                     }*/
                     currentCurrency =
-                        paymentOptionsResponse.supportedCurrencies[i].currency.toString()
+                        sortedList[i].currency.toString()
                     currentCurrencySymbol =
-                        paymentOptionsResponse.supportedCurrencies[i].symbol.toString()
+                        sortedList[i].symbol.toString()
                     finalCurrencySymbol =
-                        paymentOptionsResponse.supportedCurrencies[i].symbol.toString()
+                        sortedList[i].symbol.toString()
+
                     currencyAdapter.updateSelectedPosition(i)
                 }
 
@@ -1338,7 +1327,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         if (::itemsViewHolder.isInitialized) {
             paymentOptionsResponse?.supportedCurrencies?.let {
                 itemsViewHolder.setDataFromAPI(
-                    it,
+                    it ,
                     PaymentDataSource.getItems()
                 )
             }
@@ -2464,6 +2453,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         cvvNumber: String, holderName: String?, cardBrandString: String?, savedCardsModel: Any?
 
     ) {
+        println("isCompleted aaa"+isCompleted)
+        println("expiryDate aaa"+expiryDate)
         activateActionButton(cardBrandString = cardBrandString)
         if (savedCardsModel != null) {
             setPayButtonAction(paymentType, savedCardsModel)

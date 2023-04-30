@@ -38,4 +38,8 @@ data class SupportedCurrencies(
     @SerializedName("logos")
     @Expose
     var logos: Logos? = null,
+
+    @SerializedName("order_by")
+    @Expose
+    var orderBy: Int? = 0,
     )
