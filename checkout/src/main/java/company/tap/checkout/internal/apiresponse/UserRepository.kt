@@ -11,11 +11,13 @@ import company.tap.checkout.internal.api.responses.UserIpAddressResponse
 import company.tap.checkout.internal.api.responses.UserLocalCurrencyModel
 import company.tap.checkout.internal.cache.SharedPrefManager
 import company.tap.checkout.internal.cache.UserLocalCurrencyModelKey
+import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.tapnetworkkit.connection.NetworkApp
 import company.tap.tapnetworkkit.controller.NetworkController
 import company.tap.tapnetworkkit.enums.TapMethodType
 import company.tap.tapnetworkkit.exception.GoSellError
 import company.tap.tapnetworkkit.interfaces.APIRequestCallback
+import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -25,7 +27,7 @@ import retrofit2.Response
  * User Repository to get IP address of user  + getting local Currency form Tap BaseUrl using TapNetwork Library
  */
 
-class UserRepository constructor(var context: Context) {
+class UserRepository constructor(var context: Context,var checkoutViewModel: CheckoutViewModel) {
     @RequiresApi(Build.VERSION_CODES.N)
     fun getUserIpAddress() {
         val call: Call<UserIpAddressResponse>? =
@@ -61,13 +63,17 @@ class UserRepository constructor(var context: Context) {
                     response: Response<JsonElement>?
                 ) {
                     response?.body().let {
-                        val userLocalCurrencyModel =
-                            Gson().fromJson(it, UserLocalCurrencyModel::class.java)
-                        SharedPrefManager.saveModelLocally(
+                        val userLocalCurrencyModel = Gson().fromJson(it, UserLocalCurrencyModel::class.java)
+                       val isSaved =  SharedPrefManager.saveModelLocally(
                             context = context,
                             dataToBeSaved = userLocalCurrencyModel,
                             keyValueToBeSaved = UserLocalCurrencyModelKey
                         )
+                        if (isSaved){
+                            checkoutViewModel.localCurrencyReturned.value = true
+
+                        }
+
 
                     }
                 }

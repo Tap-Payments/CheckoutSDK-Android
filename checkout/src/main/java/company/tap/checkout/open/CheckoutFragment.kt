@@ -10,14 +10,12 @@ import android.graphics.*
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.telephony.TelephonyManager
 import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
@@ -28,7 +26,6 @@ import com.blongho.country_data.World
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import company.tap.checkout.R
-import company.tap.checkout.internal.adapter._context
 import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.apiresponse.CardViewState
@@ -69,7 +66,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     private var _Context: Context? = null
 
     @JvmField
-    var _viewModel: CheckoutViewModel? = null
+    var viewModel: CheckoutViewModel? = null
 
     lateinit var userRepository: UserRepository
 
@@ -117,6 +114,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     }
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -131,9 +129,9 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         super.onViewCreated(view, savedInstanceState)
         val viewModel: CheckoutViewModel by viewModels()
         val cardViewModel: CardViewModel by viewModels()
-        userRepository = UserRepository(requireContext())
+        userRepository = UserRepository(requireContext(), viewModel)
         userRepository.getUserIpAddress()
-        this._viewModel = viewModel
+        this.viewModel = viewModel
         _Context?.let { cardViewModel.getContext(it) }
         backgroundColor = (Color.parseColor(ThemeManager.getValue("tapBottomSheet.dimmedColor")))
 
@@ -155,7 +153,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         topHeaderView?.visibility = View.GONE
 
         displayMetrics = CustomUtils.getDeviceDisplayMetrics(context as Activity)
-        getSimIsoCountryCurrency()
         val heightscreen: Int = Resources.getSystem().displayMetrics.heightPixels
         if (LocalizationManager.currentLocalized.length() != 0)
             closeText.text = LocalizationManager.getValue("close", "Common")
@@ -185,6 +182,11 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         bottomSheetLayout?.let {
             viewModel.setBottomSheetLayout(it)
         }
+
+        viewModel.localCurrencyReturned.observe(this, androidx.lifecycle.Observer {
+            if (viewModel.cacheUserLocalCurrency())
+                viewModel.addTitlePaymentAndFlag()
+        })
 
         if (checkoutLayout != null) {
             context?.let {
@@ -318,7 +320,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     /**
      * Logic to obtain ISO country code **/
     fun getSimIsoCountryCurrency(): String? {
-          return SharedPrefManager.getUserSupportedLocaleForTransactions(requireContext())?.symbol
+        return SharedPrefManager.getUserSupportedLocaleForTransactions(requireContext())?.symbol
 //        val tm =
 //            (context as Activity).getSystemService(AppCompatActivity.TELEPHONY_SERVICE) as TelephonyManager
 //        countryCode = tm.simCountryIso
@@ -385,7 +387,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         if (_resetFragment) {
             if (hideAllView) {
                 if (::status.isInitialized)
-                    _viewModel?.showOnlyButtonView(
+                    viewModel?.showOnlyButtonView(
                         status,
                         checkOutActivity,
                         this
@@ -393,8 +395,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
             } else {
 
-                _viewModel?.displayStartupLayout(enabledSections)
-                _viewModel?.getDatasfromAPIs(
+                viewModel?.displayStartupLayout(enabledSections)
+                viewModel?.getDatasfromAPIs(
                     PaymentDataSource.getMerchantData(),
                     PaymentDataSource.getPaymentOptionsResponse()
                 )
@@ -402,7 +404,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             }
         } else {
             if (::status.isInitialized)
-                _viewModel?.showOnlyButtonView(status, checkOutActivity, this)
+                viewModel?.showOnlyButtonView(status, checkOutActivity, this)
         }
 
         setBottomSheetInterface(this)

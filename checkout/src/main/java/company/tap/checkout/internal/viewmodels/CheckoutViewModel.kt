@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.ShapeDrawable
 import android.net.Uri
 import android.os.Build
@@ -35,7 +34,6 @@ import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import cards.pay.paycardsrecognizer.sdk.FrameManager
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
-import com.blongho.country_data.World
 import com.bugfender.sdk.Bugfender
 import com.bumptech.glide.Glide
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -68,7 +66,6 @@ import company.tap.checkout.internal.apiresponse.UserRepository
 import company.tap.checkout.internal.apiresponse.testmodels.GoPaySavedCards
 import company.tap.checkout.internal.apiresponse.testmodels.TapCardPhoneListDataSource
 import company.tap.checkout.internal.cache.SharedPrefManager
-import company.tap.checkout.internal.cache.UserLocalCurrencyModelKey
 import company.tap.checkout.internal.cache.UserSupportedLocaleForTransactions
 import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.SectionType
@@ -90,7 +87,6 @@ import company.tap.checkout.open.enums.CardType
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.models.ItemsModel
 import company.tap.nfcreader.open.reader.TapEmvCard
-import company.tap.tapcardvalidator_android.CardBrand
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.SeparatorViewTheme
@@ -141,11 +137,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private var cardIDToBeDeleted: Int? = 0
 
     private val isShaking = MutableLiveData<Boolean>()
+    val localCurrencyReturned = MutableLiveData<Boolean>()
+
     private var deleteCard: Boolean = false
     private var isCardDeletedSuccessfully: Boolean = false
     private var displayItemsOpen: Boolean = false
     private var displayOtpIsOpen: Boolean = false
     private var saveCardSwitchHolder: SwitchViewHolder? = null
+    lateinit var userRepository: UserRepository
 
     private lateinit var title: String
     private lateinit var paymentInlineViewHolder: PaymentInlineViewHolder
@@ -297,13 +296,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         aScene?.setEnterAction {
             AnimationUtils.loadAnimation(context, R.anim.slide_down)
         }
-
         initializeScanner(this)
         initViewHolders()
         initAmountAction()
         initSwitchAction()
         initOtpActionButton()
         setAllSeparatorTheme()
+
 
     }
 
@@ -493,11 +492,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun showCountryFlag(): String? {
         val currency = SharedPrefManager.getUserSupportedLocaleForTransactions(context)
+        Log.e("localNeeded", currency.toString())
         if (ThemeManager.currentTheme.contains("dark")) {
             return currency?.logos?.dark?.png
         } else {
             return currency?.logos?.light?.png
-
         }
     }
 
@@ -769,13 +768,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
     }
 
-    private fun addTitlePaymentAndFlag() {
-        val currencyAlert: String = LocalizationManager.getValue("currencyAlert", "Common")
-        amountViewHolder.view.amount_section.popupTextView.text =
-            currencyAlert + " " + checkoutFragment.getSimIsoCountryCurrency()
-        Glide.with(context).load(showCountryFlag())
-            .into(amountViewHolder.view.amount_section.flagImageView);
+    fun addTitlePaymentAndFlag() {
+        if (localCurrencyReturned.value == true) {
+            val currencyAlert: String = LocalizationManager.getValue("currencyAlert", "Common")
+            amountViewHolder.view.amount_section.popupTextView.text =
+                currencyAlert + " " + checkoutFragment.getSimIsoCountryCurrency()
+            Glide.with(context).load(showCountryFlag())
+                .into(amountViewHolder.view.amount_section.flagImageView);
+            amountViewHolder.view.amount_section.addFadeInAnimation(durationTime = 5000)
 
+        }
     }
 
 
@@ -927,8 +929,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         otpType: String,
         chargeResponse: Charge?
     ) {
-
-
 
 
         // amountViewHolder.changeGroupAction(false)
@@ -1280,11 +1280,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
         // println("PaymentOptionsResponse on get$paymentOptionsResponse")
         allCurrencies.value = paymentOptionsResponse?.supportedCurrencies
-        cacheUserLocalCurrency()
         Log.e(
             "supportedCurrencyUser",
-            SharedPrefManager.getUserSupportedLocaleForTransactions(context).toString()
+            SharedPrefManager.getUserLocalCurrency(context).toString()
         )
+        cacheUserLocalCurrency()
+
 
 
 
@@ -1418,11 +1419,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     }
 
-    private fun cacheUserLocalCurrency() {
+     fun cacheUserLocalCurrency() : Boolean {
         val suportedCurrencyForUser = allCurrencies.value?.find {
-            it.symbol == SharedPrefManager.getUserLocalCurrency(context).symbol
+            it.symbol == SharedPrefManager.getUserLocalCurrency(context)?.symbol
         }
-        SharedPrefManager.saveModelLocally(
+       return SharedPrefManager.saveModelLocally(
             context = context,
             dataToBeSaved = suportedCurrencyForUser,
             keyValueToBeSaved = UserSupportedLocaleForTransactions
@@ -1696,7 +1697,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
          * close the sdk.
          * **/
 
-
+        addTitlePaymentAndFlag()
         // tabAnimatedActionButton?.clearAnimation()
         if (::webFrameLayout.isInitialized) {
             if (fragmentManager.findFragmentById(R.id.webFrameLayout) != null)
@@ -1721,6 +1722,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 )
             }
         }
+
+
 
         if (::otpViewHolder.isInitialized)
             if (otpViewHolder.otpView.isVisible) {

@@ -375,7 +375,7 @@ class CheckOutActivity : AppCompatActivity()  , APILoggInterface {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ emvCard: TapEmvCard? ->
                     if (emvCard != null) {
-                        tapCheckoutFragment._viewModel?.handleNFCScannedResult(emvCard)
+                        tapCheckoutFragment.viewModel?.handleNFCScannedResult(emvCard)
                         println("emvCard$emvCard")
                     }
                 },
@@ -394,16 +394,16 @@ class CheckOutActivity : AppCompatActivity()  , APILoggInterface {
                     RESULT_OK -> {
                         val paymentData = data?.let { PaymentData.getFromIntent(it) }
                         if (paymentData != null) {
-                            tapCheckoutFragment._viewModel?.handlePaymentSuccess(paymentData)
+                            tapCheckoutFragment.viewModel?.handlePaymentSuccess(paymentData)
                         }else {
-                            AutoResolveHelper.getStatusFromIntent(data)?.statusCode?.let { tapCheckoutFragment._viewModel?.handleError(it) }
+                            AutoResolveHelper.getStatusFromIntent(data)?.statusCode?.let { tapCheckoutFragment.viewModel?.handleError(it) }
                         }
 
                         isGooglePayClicked = false
 
                     }
                     RESULT_CANCELED -> {
-                        tapCheckoutFragment._viewModel?.handleSuccessFailureResponseButton(
+                        tapCheckoutFragment.viewModel?.handleSuccessFailureResponseButton(
                             "Cancelled Google Pay",
                             null,
                             null,
@@ -416,7 +416,7 @@ class CheckOutActivity : AppCompatActivity()  , APILoggInterface {
                     AutoResolveHelper.RESULT_ERROR -> {
                         val status = AutoResolveHelper.getStatusFromIntent(data)
                         if (status != null) println(if ("status values are>>$status" != null) status.statusMessage else status.toString() + " >> code " + status.statusCode)
-                        tapCheckoutFragment._viewModel?.handleError(status?.statusCode ?: 400)
+                        tapCheckoutFragment.viewModel?.handleError(status?.statusCode ?: 400)
                         isGooglePayClicked = false
 
                     }

@@ -14,13 +14,13 @@ object SharedPrefManager {
         return mContext.getSharedPreferences("", Context.MODE_PRIVATE)
     }
 
-    fun <T> saveModelLocally(context: Context, dataToBeSaved: T, keyValueToBeSaved: String) {
+    fun <T> saveModelLocally(context: Context, dataToBeSaved: T, keyValueToBeSaved: String) :Boolean {
         val preferences = getSharedPref(context)
         val prefsEditor = preferences.edit()
         val gson = Gson()
         val json = gson.toJson(dataToBeSaved)
         prefsEditor.putString(keyValueToBeSaved, json)
-        prefsEditor.apply()
+       return prefsEditor.commit()
     }
 
 
@@ -28,7 +28,7 @@ object SharedPrefManager {
      * we use this model just to get more results from api :checkoutProfile api
      * by comparing the results
      */
-    fun getUserLocalCurrency(context: Context): UserLocalCurrencyModel {
+    fun getUserLocalCurrency(context: Context): UserLocalCurrencyModel? {
         val preferences = getSharedPref(context)
         val gson = Gson()
         val json = preferences.getString(UserLocalCurrencyModelKey, "");
