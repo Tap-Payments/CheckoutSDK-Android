@@ -176,10 +176,11 @@ class SwitchViewHolder(private val context: Context , private val checkoutViewMo
             if (isChecked) {
                 view.cardSwitch.payButton.isActivated
                 val payString: String = LocalizationManager.getValue("pay", "ActionButton")
+                val nowString: String = LocalizationManager.getValue("pay", "ActionButton")
                 view?.cardSwitch?.payButton?.setButtonDataSource(
                     false,
                     "en",
-                    payString+" "+checkoutViewModel.currentCurrencySymbol+" "+checkoutViewModel.currentAmount,
+                    payString+" "+nowString,
                     Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
                     Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
                 )
@@ -291,10 +292,11 @@ class SwitchViewHolder(private val context: Context , private val checkoutViewMo
         view.cardSwitch.payButton.stateListAnimator = null
         view.cardSwitch.payButton.isActivated
         val payString: String = LocalizationManager.getValue("pay", "ActionButton")
+        val nowString: String = LocalizationManager.getValue("now", "ActionButton")
         view?.cardSwitch?.payButton?.setButtonDataSource(
             false,
             "en",
-            payString+" "+checkoutViewModel.currentCurrencySymbol+" "+checkoutViewModel.currentAmount,
+            payString+" "+nowString,
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
         )

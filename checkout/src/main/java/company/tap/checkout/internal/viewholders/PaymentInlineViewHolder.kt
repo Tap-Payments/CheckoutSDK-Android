@@ -429,10 +429,11 @@ class PaymentInlineViewHolder(
 //        switchViewHolder11?.view?.cardSwitch?.showOnlyPayButton()
         switchViewHolder?.bindViewComponents()
         val payString: String = LocalizationManager.getValue("pay", "ActionButton")
+        val nowString: String = LocalizationManager.getValue("pay", "ActionButton")
         switchViewHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
             false,
             "en",
-            payString + " " + checkoutViewModel.currentCurrencySymbol + " " + checkoutViewModel.currentAmount,
+            payString + " " +nowString,
             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
         )

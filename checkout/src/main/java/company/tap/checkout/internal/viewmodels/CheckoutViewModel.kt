@@ -350,13 +350,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     saveCardSwitchHolder?.view?.mainSwitch?.switchSaveMobile?.visibility =
                         View.GONE
                     val payString: String = LocalizationManager.getValue("pay", "ActionButton")
+                    val nowString: String = LocalizationManager.getValue("now", "ActionButton")
                     saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
                         false,
                         "en",
                         if (::selectedAmount.isInitialized && ::selectedCurrency.isInitialized) {
-                            payString + " " + currentCurrencySymbol + " " + selectedAmount
+                            payString + " " + nowString
                         } else {
-                            payString + " " + currentCurrencySymbol + " " + currentAmount
+                            payString + " " + nowString
                         },
                         Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
                         Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
@@ -677,13 +678,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isClickable = true
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.stateListAnimator = null
             val payString: String = LocalizationManager.getValue("pay", "ActionButton")
+            val nowString: String = LocalizationManager.getValue("now", "ActionButton")
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
                 false,
                 "en",
                 if (::selectedAmount.isInitialized && ::selectedCurrency.isInitialized) {
-                    payString + " " + currentCurrencySymbol + " " + selectedAmount
+                    payString + " " + nowString
                 } else {
-                    payString + " " + currentCurrencySymbol + " " + currentAmount
+                    payString + " " +nowString
                 },
                 Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
                 Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
@@ -741,12 +743,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         saveCardSwitchHolder?.view?.visibility = View.VISIBLE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.RESET)
         val payString: String = LocalizationManager.getValue("pay", "ActionButton")
+        val nowString: String = LocalizationManager.getValue("pay", "ActionButton")
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
             false,
             "en",
             if (::selectedAmount.isInitialized && ::selectedCurrency.isInitialized) {
-                payString+" "+currentCurrencySymbol+" "+selectedAmount
-            }else{ payString+" "+currentCurrencySymbol+" "+currentAmount},
+                payString+" "+nowString
+            }else{ payString+" "+nowString},
             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
         )
@@ -1161,29 +1164,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 saveCardSwitchHolder?.view?.cardSwitch?.tapLogoImage?.visibility = View.GONE
                 checkoutFragment?.closeText?.visibility = View.GONE
 
-                /**Stopped showing cancel button and poweredby for 3ds**/
-                /*    saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
-                 true,
-                 LocalizationManager.getLocale(context).toString(),LocalizationManager.getValue("deleteSavedCardButtonCancel", "SavedCardTitle"),
-                        Color.parseColor(ThemeManager.getValue("actionButton.Cancel.backgroundColor")),
-                        Color.parseColor(ThemeManager.getValue("actionButton.Cancel.titleLabelColor")))
 
-                   saveCardSwitchHolder?.view?.cardSwitch?.payButton?.let {
-                       setBorderedView(
-                           it,
-                           100.0f,
-                           2.0f,
-                           Color.parseColor(ThemeManager.getValue("actionButton.Cancel.borderColor")),
-                           Color.parseColor(ThemeManager.getValue("actionButton.Cancel.backgroundColor")),
-                           Color.parseColor(ThemeManager.getValue("actionButton.Cancel.backgroundColor"))
-                       )
-                   }
-             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.RESET)
-
-             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setOnClickListener {
-                 this.dismissBottomSheet()
-
-             }*/
             }
 
 
@@ -1373,13 +1354,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         }
         val payString: String = LocalizationManager.getValue("pay", "ActionButton")
+        val nowString: String = LocalizationManager.getValue("now", "ActionButton")
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
             false,
             LocalizationManager.getLocale(context).toString(),
             if (::selectedAmount.isInitialized && ::selectedCurrency.isInitialized) {
-                payString + " " + currentCurrencySymbol + " " + selectedAmount
+                payString + " " +nowString
             } else {
-                payString + " " + currentCurrencySymbol + " " + currentAmount
+                payString + " " +nowString
             },
             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
@@ -1921,10 +1903,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
     private fun unActivateActionButton() {
-        val payString: String
+        val payNowString: String
 
         when (PaymentDataSource.getTransactionMode()) {
-            TransactionMode.TOKENIZE_CARD -> payString = LocalizationManager.getValue(
+            TransactionMode.TOKENIZE_CARD -> payNowString = LocalizationManager.getValue(
                 "pay",
                 "ActionButton"
             )
@@ -1933,17 +1915,23 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 "savecard",
                 "ActionButton"
             )*/
-            TransactionMode.SAVE_CARD -> payString = "SAVE CARD"
-            else -> payString = LocalizationManager.getValue("pay", "ActionButton")
+            TransactionMode.SAVE_CARD -> payNowString = "SAVE CARD"
+            else -> {
+                val  payString :String = LocalizationManager.getValue("pay", "ActionButton")
+                val nowString :String = LocalizationManager.getValue("now", "ActionButton")
+                payNowString = payString +" "+nowString
+            }
         }
 
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
             false,
             LocalizationManager.getLocale(context).toString(),
             if (::selectedAmount.isInitialized && ::selectedCurrency.isInitialized) {
-                payString + " " + currentCurrencySymbol + " " + selectedAmount
+                //payString + " " + currentCurrencySymbol + " " + selectedAmount
+               payNowString
             } else {
-                payString + " " + currentCurrencySymbol + " " + currentAmount
+               // payString + " " + currentCurrencySymbol + " " + currentAmount
+               payNowString
             },
             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
@@ -3436,13 +3424,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         removeAllViews()
         addViews(saveCardSwitchHolder)
         val payString: String = LocalizationManager.getValue("pay", "ActionButton")
+        val nowString: String = LocalizationManager.getValue("now", "ActionButton")
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
             false,
             "en",
             if (::selectedAmount.isInitialized && ::selectedCurrency.isInitialized) {
-                payString + " " + currentCurrencySymbol + " " + selectedAmount
+                payString + " " +nowString
             } else {
-                payString + " " + currentCurrencySymbol + " " + currentAmount
+                payString + " " + nowString
             },
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
