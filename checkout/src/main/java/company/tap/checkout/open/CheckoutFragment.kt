@@ -502,10 +502,11 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         //  checkOutActivity?.finish()
 
         val payString: String = LocalizationManager.getValue("pay", "ActionButton")
+        val nowString: String = LocalizationManager.getValue("now", "ActionButton")
         tabAnimatedActionButton?.setButtonDataSource(
             true,
             context?.let { LocalizationManager.getLocale(it).language },
-            payString,
+            payString+" "+nowString,
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
         )
