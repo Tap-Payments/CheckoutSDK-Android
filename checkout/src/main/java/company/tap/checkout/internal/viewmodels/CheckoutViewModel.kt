@@ -2060,7 +2060,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
         println("cardBrandString before "+cardBrandString)
-        logicTogetButtonStyle(paymentOptObject, payStringButton , cardBrandString)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            logicTogetButtonStyle(paymentOptObject, payStringButton , cardBrandString)
+        }
 
 
     }
@@ -2129,7 +2131,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 ?.let { saveCardSwitchHolder?.view?.cardSwitch?.payButton?.addChildView(it) }
             saveCardSwitchHolder?.view?.cardSwitch?.showOnlyPayButton()
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated
-        }, 500)
+        }, 700)
 
 
     }
@@ -2185,9 +2187,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun onClickCardPayment(savedCardsModel: Any?) {
-        println("onClickCardPayment")
+        println("onClickCardPayment"+savedCardsModel)
 
-
+        savedCardsModel as PaymentOption
         CustomUtils.hideKeyboardFrom(context, paymentInlineViewHolder.view)
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
@@ -2358,10 +2360,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         paymentType: PaymentType,
         cardNumber: String,
         expiryDate: String,
-        cvvNumber: String, holderName: String?,  cardBrandString: String?
+        cvvNumber: String, holderName: String?,  cardBrandString: String? , savedCardsModel: Any?
     ) {
         activateActionButton(cardBrandString = cardBrandString)
-        setPayButtonAction(paymentType, null)
+        if(savedCardsModel!=null){ setPayButtonAction(paymentType, savedCardsModel)}
+        else {
+            val typedCardModel = logicTogetPayOptions(cardBrandString)
+            setPayButtonAction(paymentType, typedCardModel)
+        }
 
     }
 
@@ -2762,9 +2768,18 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             )
         } else if (savedCardsModel != null) {
             if (paymentTypeEnum == PaymentType.CARD || paymentTypeEnum == PaymentType.SavedCard) {
-                savedCardsModel as SavedCard
-                if (savedCardsModel.paymentOptionIdentifier.toInt() == 3 || savedCardsModel.paymentOptionIdentifier.toInt() == 4) {
-                    setDifferentPaymentsAction(PaymentType.SavedCard, savedCardsModel)
+                if(paymentInlineViewHolder.cardInputUIStatus == CardInputUIStatus.SavedCard){
+                    savedCardsModel as SavedCard
+                    if (savedCardsModel.paymentOptionIdentifier.toInt() == 3 || savedCardsModel.paymentOptionIdentifier.toInt() == 4) {
+                        setDifferentPaymentsAction(PaymentType.SavedCard, savedCardsModel)
+                    }
+
+                }
+               else {
+                    println("PaymentOption>>"+ savedCardsModel as PaymentOption)
+                    savedCardsModel as PaymentOption
+                   setDifferentPaymentsAction(PaymentType.CARD, savedCardsModel)
+
                 }
 
             } else setDifferentPaymentsAction(paymentTypeEnum, savedCardsModel)
@@ -2777,6 +2792,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
             ActionButtonState.LOADING
         )
+      val selectdSavedCard=  logicTogetPayOptions(savedCardsModel?.brand?.rawValue)
+           if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
+          saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(backgroundColor = Color.parseColor(selectdSavedCard?.buttonStyle?.background?.darkModel?.baseColor))
+
+             }else saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(backgroundColor = Color.parseColor(selectdSavedCard?.buttonStyle?.background?.lightModel?.baseColor))
+
         startSavedCardPaymentProcess(savedCardsModel as SavedCard)
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.getImageView(
             R.drawable.loader,
@@ -3326,17 +3347,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 }
             }
             paymentType === PaymentType.CARD -> {
-                /* paymentInlineViewHolder.view.alpha = 0.9f
-                 if (::context.isInitialized) {
-                     val animation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
-                     paymentInlineViewHolder.view.startAnimation(animation)
-
-                 }*/
+                println("savedCardsModel fro card"+savedCardsModel)
                 PaymentDataSource.setWebViewType(WebViewType.THREE_DS_WEBVIEW)
                 //Added to disable click when button loading
                 amountViewHolder.view.amount_section?.itemAmountLayout?.isEnabled = false
                 amountViewHolder.view.amount_section?.itemAmountLayout?.isClickable = false
-
 
                 onClickCardPayment(savedCardsModel)
 

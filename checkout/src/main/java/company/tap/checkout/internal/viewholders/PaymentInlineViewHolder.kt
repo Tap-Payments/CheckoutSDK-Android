@@ -1160,7 +1160,7 @@ class PaymentInlineViewHolder(
                                 expiryDate?.let { it1 ->
                                     onPaymentCardComplete.onPayCardCompleteAction(
                                         true, PaymentType.CARD,
-                                        it, it1, cvvNumber!!, cardHolderName, savedCardsModel?.brand?.name
+                                        it, it1, cvvNumber!!, cardHolderName, savedCardsModel?.brand?.name ,savedCardsModel
                                     )
                                 }
                             }
