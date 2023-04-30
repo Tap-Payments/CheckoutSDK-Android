@@ -1644,7 +1644,12 @@ class PaymentInlineViewHolder(
                           )
                       )
                   }*/
-            println("imageURL are" + imageURL)
+            println("imageURL are" + cardBrandType)
+            /**Temp fix need to fix in validator kit todo
+             * */
+            if(cardBrandType!=null && cardBrandType == "OMANNET"){
+                cardBrandType = "OMAN_NET"
+            }
             itemsCardsList.add(
                 SectionTabItem(
                     imageURL,
