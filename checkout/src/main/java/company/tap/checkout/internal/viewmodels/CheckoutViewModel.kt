@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.ShapeDrawable
 import android.net.Uri
 import android.os.Build
@@ -85,7 +84,6 @@ import company.tap.checkout.open.enums.CardType
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.models.ItemsModel
 import company.tap.nfcreader.open.reader.TapEmvCard
-import company.tap.tapcardvalidator_android.CardBrand
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.SeparatorViewTheme
@@ -2186,12 +2184,17 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun onClickCardPayment() {
+    private fun onClickCardPayment(savedCardsModel: Any?) {
         println("onClickCardPayment")
 
 
         CustomUtils.hideKeyboardFrom(context, paymentInlineViewHolder.view)
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
+            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(backgroundColor = Color.parseColor(savedCardsModel.buttonStyle?.background?.darkModel?.baseColor))
+
+        }else saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(backgroundColor = Color.parseColor(savedCardsModel.buttonStyle?.background?.lightModel?.baseColor))
+
         saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
 
 
@@ -3335,7 +3338,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 amountViewHolder.view.amount_section?.itemAmountLayout?.isClickable = false
 
 
-                onClickCardPayment()
+                onClickCardPayment(savedCardsModel)
 
 
             }
