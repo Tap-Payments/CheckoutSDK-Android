@@ -488,17 +488,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         goPayViewsHolder = GoPayViewsHolder(context, this, otpViewHolder)
         asynchronousPaymentViewHolder = AsynchronousPaymentViewHolder(context, this)
         logicForLoyaltyProgram()
-
-        val currencyAlert: String = LocalizationManager.getValue("currencyAlert", "Common")
-
-addTitlePaymentAndFlag()
+        addTitlePaymentAndFlag()
     }
 
-    private fun showCountryFlag(): String {
-       val currency =  SharedPrefManager.getUserSupportedLocaleForTransactions(context)
-        if (ThemeManager.currentTheme.contains("dark")){
+    private fun showCountryFlag(): String? {
+        val currency = SharedPrefManager.getUserSupportedLocaleForTransactions(context)
+        if (ThemeManager.currentTheme.contains("dark")) {
             return currency?.logos?.dark?.png
-        }else{
+        } else {
             return currency?.logos?.light?.png
 
         }
@@ -754,9 +751,7 @@ addTitlePaymentAndFlag()
         amountViewHolder.setOnItemsClickListener()
         amountViewHolder.view.amount_section.flagImageView?.visibility = View.VISIBLE
 
-        val currencyAlert: String = LocalizationManager.getValue("currencyAlert", "Common")
-        /**Added to get dynamic flags from lib*/
-        addTitlePaymentAndFlag(currencyAlert)
+        addTitlePaymentAndFlag()
 
         saveCardSwitchHolder?.view?.visibility = View.VISIBLE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.RESET)
@@ -776,10 +771,10 @@ addTitlePaymentAndFlag()
 
     private fun addTitlePaymentAndFlag() {
         val currencyAlert: String = LocalizationManager.getValue("currencyAlert", "Common")
-        amountViewHolder.view.amount_section.popupTextView.text = currencyAlert + " " + checkoutFragment.getSimIsoCountryCurrency()
-        Glide.with(context).load(showCountryFlag()).into(amountViewHolder.view.amount_section.flagImageView);
         amountViewHolder.view.amount_section.popupTextView.text =
             currencyAlert + " " + checkoutFragment.getSimIsoCountryCurrency()
+        Glide.with(context).load(showCountryFlag())
+            .into(amountViewHolder.view.amount_section.flagImageView);
 
     }
 
@@ -932,6 +927,8 @@ addTitlePaymentAndFlag()
         otpType: String,
         chargeResponse: Charge?
     ) {
+
+
 
 
         // amountViewHolder.changeGroupAction(false)
@@ -1284,7 +1281,10 @@ addTitlePaymentAndFlag()
         // println("PaymentOptionsResponse on get$paymentOptionsResponse")
         allCurrencies.value = paymentOptionsResponse?.supportedCurrencies
         cacheUserLocalCurrency()
-        Log.e("supportedCurrencyUser", SharedPrefManager.getUserSupportedLocaleForTransactions(context).toString())
+        Log.e(
+            "supportedCurrencyUser",
+            SharedPrefManager.getUserSupportedLocaleForTransactions(context).toString()
+        )
 
 
 
@@ -2031,9 +2031,9 @@ addTitlePaymentAndFlag()
                 isSavedCardSelected = true
                 Bugfender.d(
                     CustomUtils.tagEvent,
-                    "Payment scheme selected: title :" + savedCardsModel?.brand  + "& ID :" + savedCardsModel.paymentOptionIdentifier
+                    "Payment scheme selected: title :" + savedCardsModel?.brand + "& ID :" + savedCardsModel.paymentOptionIdentifier
                 )
-                activateActionButton( cardBrandString = savedCardsModel?.brand.rawValue)
+                activateActionButton(cardBrandString = savedCardsModel?.brand.rawValue)
             }
             else -> {
                 if (savedCardsModel != null) {
@@ -2083,7 +2083,10 @@ addTitlePaymentAndFlag()
     }
 
 
-    private fun activateActionButton(paymentOptObject: PaymentOption?=null ,cardBrandString: String? =null) {
+    private fun activateActionButton(
+        paymentOptObject: PaymentOption? = null,
+        cardBrandString: String? = null
+    ) {
         val payStringButton: String
         when (PaymentDataSource.getTransactionMode()) {
             TransactionMode.TOKENIZE_CARD -> payStringButton = LocalizationManager.getValue(
@@ -2096,66 +2099,85 @@ addTitlePaymentAndFlag()
                  "ActionButton"
              )*/  TransactionMode.SAVE_CARD -> payStringButton = "SAVE CARD"
             else -> {
-              val  payString :String = LocalizationManager.getValue("pay", "ActionButton")
-              val nowString :String = LocalizationManager.getValue("now", "ActionButton")
+                val payString: String = LocalizationManager.getValue("pay", "ActionButton")
+                val nowString: String = LocalizationManager.getValue("now", "ActionButton")
 
-                payStringButton =  payString +" "+ nowString
+                payStringButton = payString + " " + nowString
             }
         }
 
 
-        println("cardBrandString before "+cardBrandString)
-        logicTogetButtonStyle(paymentOptObject, payStringButton , cardBrandString)
+        println("cardBrandString before " + cardBrandString)
+        logicTogetButtonStyle(paymentOptObject, payStringButton, cardBrandString)
 
 
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun logicTogetButtonStyle(paymentOptObject: PaymentOption?, payString:String , cardBrandString: String?) {
+    private fun logicTogetButtonStyle(
+        paymentOptObject: PaymentOption?,
+        payString: String,
+        cardBrandString: String?
+    ) {
         println("paymentOptObject is" + paymentOptObject?.buttonStyle?.background?.darkModel?.backgroundColors?.size)
-        var selectedPayOpt : PaymentOption?=null
+        var selectedPayOpt: PaymentOption? = null
 
-        if(cardBrandString!=null){
-           selectedPayOpt =  logicTogetPayOptions(cardBrandString)
+        if (cardBrandString != null) {
+            selectedPayOpt = logicTogetPayOptions(cardBrandString)
 
-        }else selectedPayOpt = paymentOptObject
+        } else selectedPayOpt = paymentOptObject
 
         var colorBackGround: String? = null
         var intColorArray: IntArray? = null
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
             if (selectedPayOpt?.buttonStyle?.background?.darkModel?.backgroundColors?.size == 1) {
-                colorBackGround = selectedPayOpt?.buttonStyle?.background?.darkModel?.backgroundColors?.get(0)
+                colorBackGround =
+                    selectedPayOpt?.buttonStyle?.background?.darkModel?.backgroundColors?.get(0)
             }
-            intColorArray =null
+            intColorArray = null
 
         } else {
             if (selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors?.size == 1) {
                 colorBackGround =
                     selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors?.get(0)
-                intColorArray =null
+                intColorArray = null
             } else {
 
-                if(selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors?.size==2){
-                    val startColor =   selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors?.get(1)?.replace("0x", "#")
+                if (selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors?.size == 2) {
+                    val startColor =
+                        selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors?.get(1)
+                            ?.replace("0x", "#")
 
-                    val endColor =  selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors?.get(0)?.replace("0x", "#")
+                    val endColor =
+                        selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors?.get(0)
+                            ?.replace("0x", "#")
 
-                    intColorArray =  intArrayOf(Color.parseColor(startColor),Color.parseColor(endColor))
+                    intColorArray =
+                        intArrayOf(Color.parseColor(startColor), Color.parseColor(endColor))
                     colorBackGround = "0"
 
-                }else if (paymentOptObject?.buttonStyle?.background?.lightModel?.backgroundColors?.size==3){
-                    val startColor =   selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors?.get(2)?.replace("0x", "#")
+                } else if (paymentOptObject?.buttonStyle?.background?.lightModel?.backgroundColors?.size == 3) {
+                    val startColor =
+                        selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors?.get(2)
+                            ?.replace("0x", "#")
 
-                    val middleColor =  selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors?.get(1)?.replace("0x", "#")
-                    val endColor =  selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors?.get(0)?.replace("0x", "#")
+                    val middleColor =
+                        selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors?.get(1)
+                            ?.replace("0x", "#")
+                    val endColor =
+                        selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors?.get(0)
+                            ?.replace("0x", "#")
 
-                    intColorArray=  intArrayOf(Color.parseColor(startColor), Color.parseColor(middleColor), Color.parseColor(endColor))
+                    intColorArray = intArrayOf(
+                        Color.parseColor(startColor),
+                        Color.parseColor(middleColor),
+                        Color.parseColor(endColor)
+                    )
                     colorBackGround = "0"
 
                 }
 
             }
-
 
 
         }
@@ -2164,13 +2186,20 @@ addTitlePaymentAndFlag()
             true,
             LocalizationManager.getLocale(context).language,
             payString,
-            if(colorBackGround.equals("0") ||colorBackGround==null ) 0 else Color.parseColor(colorBackGround),
-            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")), intColorArray
+            if (colorBackGround.equals("0") || colorBackGround == null) 0 else Color.parseColor(
+                colorBackGround
+            ),
+            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
+            intColorArray
         )
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.removeAllViews()
 
         Handler().postDelayed({
-            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.getImageViewUrl(getAssetName(selectedPayOpt))
+            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.getImageViewUrl(
+                getAssetName(
+                    selectedPayOpt
+                )
+            )
                 ?.let { saveCardSwitchHolder?.view?.cardSwitch?.payButton?.addChildView(it) }
             saveCardSwitchHolder?.view?.cardSwitch?.showOnlyPayButton()
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated
@@ -2179,12 +2208,12 @@ addTitlePaymentAndFlag()
 
     }
 
-    private fun logicTogetPayOptions(cardBrandString: String?)  : PaymentOption ?{
-        var selectedPayOption:PaymentOption ?= null
+    private fun logicTogetPayOptions(cardBrandString: String?): PaymentOption? {
+        var selectedPayOption: PaymentOption? = null
 
-        for(i in 0 until paymentOptionsResponse.paymentOptions?.size) {
-            if(paymentOptionsResponse.paymentOptions[i].brand == cardBrandString?.toUpperCase()){
-               selectedPayOption =  paymentOptionsResponse.paymentOptions[i]
+        for (i in 0 until paymentOptionsResponse.paymentOptions?.size) {
+            if (paymentOptionsResponse.paymentOptions[i].brand == cardBrandString?.toUpperCase()) {
+                selectedPayOption = paymentOptionsResponse.paymentOptions[i]
             }
         }
 
@@ -2206,9 +2235,15 @@ addTitlePaymentAndFlag()
 
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
-            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(backgroundColor = Color.parseColor(savedCardsModel.buttonStyle?.background?.darkModel?.baseColor))
+            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
+                backgroundColor = Color.parseColor(
+                    savedCardsModel.buttonStyle?.background?.darkModel?.baseColor
+                )
+            )
 
-        }else saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(backgroundColor = Color.parseColor(savedCardsModel.buttonStyle?.background?.lightModel?.baseColor))
+        } else saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
+            backgroundColor = Color.parseColor(savedCardsModel.buttonStyle?.background?.lightModel?.baseColor)
+        )
 
         saveCardSwitchHolder?.view?.mainSwitch?.mainTextSave?.visibility = View.INVISIBLE
 
@@ -2375,7 +2410,11 @@ addTitlePaymentAndFlag()
     }
 
 
-    override fun onPayCardSwitchAction(isCompleted: Boolean, paymentType: PaymentType , cardBrandString: String?) {
+    override fun onPayCardSwitchAction(
+        isCompleted: Boolean,
+        paymentType: PaymentType,
+        cardBrandString: String?
+    ) {
         println("isCompleted???" + isCompleted)
         //todo add validations from api when cvv is valid the only  activate ActionButton
         if (isCompleted) {
@@ -2405,7 +2444,7 @@ addTitlePaymentAndFlag()
         paymentType: PaymentType,
         cardNumber: String,
         expiryDate: String,
-        cvvNumber: String, holderName: String?,  cardBrandString: String?
+        cvvNumber: String, holderName: String?, cardBrandString: String?
     ) {
         activateActionButton(cardBrandString = cardBrandString)
         setPayButtonAction(paymentType, null)
@@ -3733,21 +3772,20 @@ addTitlePaymentAndFlag()
             LocalizationManager.getValue("cardSectionTitleOr", "TapCardInputKit")
     }
 
-    fun getAssetName(paymentOptionOb: PaymentOption?) : String{
-        println("paymentOptionOb"+paymentOptionOb)
-       var lang:String = "en"
-       var theme :String ="light"
-        if(LocalizationManager.getLocale(context).language!=null) {
-            lang =  LocalizationManager.getLocale(context).language
-        }else lang ="en"
-        if(ThemeManager.currentTheme!=null &&  ThemeManager.currentTheme.contains("dark")) {
-            theme =  "dark"
-        }else theme ="light"
-        val assetToLoad :String = paymentOptionOb?.buttonStyle?.titleAssets.toString()
-        println("oppp"+assetToLoad.replace("{theme}",theme).replace("{lang}",lang)+".png")
-        return assetToLoad.replace("{theme}",theme).replace("{lang}",lang)+".png"
+    fun getAssetName(paymentOptionOb: PaymentOption?): String {
+        println("paymentOptionOb" + paymentOptionOb)
+        var lang: String = "en"
+        var theme: String = "light"
+        if (LocalizationManager.getLocale(context).language != null) {
+            lang = LocalizationManager.getLocale(context).language
+        } else lang = "en"
+        if (ThemeManager.currentTheme != null && ThemeManager.currentTheme.contains("dark")) {
+            theme = "dark"
+        } else theme = "light"
+        val assetToLoad: String = paymentOptionOb?.buttonStyle?.titleAssets.toString()
+        println("oppp" + assetToLoad.replace("{theme}", theme).replace("{lang}", lang) + ".png")
+        return assetToLoad.replace("{theme}", theme).replace("{lang}", lang) + ".png"
     }
-
 
 
 }

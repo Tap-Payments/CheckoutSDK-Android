@@ -332,10 +332,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     }
 
-    fun getSimIsoCountryflag(): String? {
-        return SharedPrefManager.getUserSupportedLocaleForTransactions(requireContext())?.logos?.dark?.svg
-
-    }
 
     /**
      * Logic to obtain currency code symbol
