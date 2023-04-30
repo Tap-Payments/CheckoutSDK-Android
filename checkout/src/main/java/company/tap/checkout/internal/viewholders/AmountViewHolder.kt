@@ -13,6 +13,7 @@ import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.AmountInterface
 import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.checkout.internal.utils.CurrencyFormatter
+import company.tap.checkout.internal.utils.addFadeOutAnimation
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.TextViewTheme
@@ -161,6 +162,7 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
         })*/
  view.amount_section.tapChipAmount.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                view.amount_section.tapChipPopup.addFadeOutAnimation()
                 baseLayoutManager?.controlCurrency(isOpenedList)
                 return false
             }

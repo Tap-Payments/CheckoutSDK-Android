@@ -1,10 +1,15 @@
 package company.tap.checkout.internal.utils
 
+import android.animation.Animator
+import android.animation.ArgbEvaluator
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.ShapeDrawable
@@ -13,6 +18,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.DisplayMetrics
+import android.util.TypedValue
 import android.view.*
 import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
@@ -32,6 +38,7 @@ import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.atoms.TapChip
 import company.tap.tapuilibrary.uikit.ktx.loadAppThemManagerFromPath
 import jp.wasabeef.blurry.Blurry
+import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 
 
@@ -41,7 +48,7 @@ private var topLeftCorner = 16f
 private var topRightCorner = 16f
 private var bottomRightCorner = 0f
 private var bottomLeftCorner = 0f
-const val progressBarSize =45
+const val progressBarSize = 45
 
 fun View.startPoweredByAnimation(delayTime: Long, poweredByLogo: View?) {
     Handler(Looper.getMainLooper()).postDelayed({
@@ -71,6 +78,25 @@ fun doAfterSpecificTime(time: Long = 1000L, execute: () -> Unit) =
         execute.invoke()
     }
 
+
+fun TapChip.applyGlowingEffect(colorPairs: Pair<Int, Int>, durationTime: Long = 1000L) {
+    val animator: ObjectAnimator =
+        ObjectAnimator.ofInt(
+            this,
+            "CardBackgroundColor",
+            colorPairs.first,
+            colorPairs.second
+        ).setDuration(durationTime)
+    animator.setEvaluator(ArgbEvaluator())
+    animator.repeatMode = ValueAnimator.REVERSE
+    animator.repeatCount = Animation.INFINITE
+    animator.start()
+    this.radius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 45f, context.resources.displayMetrics)
+
+
+
+}
+
 fun View.addFadeInAnimation(durationTime: Long = 1000L) {
     this.visibility = View.VISIBLE
     val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
@@ -99,10 +125,10 @@ fun View.slideFromLeftToRight() {
     if (this.height == 0) {
         animate = TranslateAnimation(
             0f,
-            this.width.toFloat(), 0f,  0f
+            this.width.toFloat(), 0f, 0f
         )
     } else {
-        animate = TranslateAnimation(0f, this.width.toFloat(), 0f,0f) // View for animation
+        animate = TranslateAnimation(0f, this.width.toFloat(), 0f, 0f) // View for animation
     }
     animate.duration = 1000
     animate.fillAfter = false
@@ -316,8 +342,7 @@ fun View.applyBluryToView(
 }
 
 
-
-fun ViewGroup.addLoaderWithBlurryToView(invokeAfterLoad: () -> Unit,viewToBeBLur:View?) {
+fun ViewGroup.addLoaderWithBlurryToView(invokeAfterLoad: () -> Unit, viewToBeBLur: View?) {
 
     @DrawableRes
     val loaderGif: Int =

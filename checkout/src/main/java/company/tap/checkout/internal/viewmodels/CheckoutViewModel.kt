@@ -1,5 +1,9 @@
 package company.tap.checkout.internal.viewmodels
 
+import android.animation.Animator
+import android.animation.Animator.AnimatorListener
+import android.animation.ArgbEvaluator
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -7,6 +11,7 @@ import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.TransitionDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Handler
@@ -15,6 +20,8 @@ import android.text.format.DateFormat
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.Animation.AnimationListener
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.LinearLayout
@@ -770,16 +777,34 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     fun addTitlePaymentAndFlag() {
         val currencyAlert: String = LocalizationManager.getValue("currencyAlert", "Common")
-        amountViewHolder.view.amount_section.popupTextView.text =
-            currencyAlert + " " + checkoutFragment.getSimIsoCountryCurrency()
-        Glide.with(context).load(showCountryFlag())
-            .into(amountViewHolder.view.amount_section.flagImageView);
+        amountViewHolder.view.amount_section.popupTextView.text = currencyAlert + " " + checkoutFragment.getSimIsoCountryCurrency()
+        Glide.with(context).load(showCountryFlag()).into(amountViewHolder.view.amount_section.flagImageView);
         amountViewHolder.view.amount_section.tapChipAmount.bringToFront()
+
         amountViewHolder.view.amount_section.tapChipPopup.slidefromRightToLeft()
+        amountViewHolder.view.amount_section.tapChipPopup.applyGlowingEffect(getCurrencyColors())
         amountViewHolder.view.amount_section.tapChipPopup.setOnClickListener {
             amountViewHolder.view.amount_section.tapChipPopup.slideFromLeftToRight()
 
         }
+    }
+
+    fun getCurrencyColors(): Pair<Int, Int> {
+        var pair: Pair<Int, Int>? = null
+        if (ThemeManager.currentTheme.contains("dark")) {
+            /**
+             * dark theme colors
+             */
+            pair = Pair(Color.parseColor("#211F1F"), Color.parseColor("#343232"))
+        } else {
+            /**
+             * light theme colors
+             */
+          //  pair = Pair(Color.parseColor("#211F1F"), Color.parseColor("#343232"))
+
+            pair = Pair(Color.parseColor("#F4F4F4"), Color.parseColor("#E1E1E1"))
+        }
+        return pair
     }
 
 
@@ -1129,6 +1154,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
 
+                amountViewHolder.view?.amount_section?.tapChipPopup?.slideFromLeftToRight()
                 saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                     ActionButtonState.LOADING
@@ -1188,8 +1214,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                     ActionButtonState.LOADING
                 )
+                amountViewHolder.view.amount_section?.tapChipPopup?.slideFromLeftToRight()
+
                 saveCardSwitchHolder?.view?.cardSwitch?.tapLogoImage?.visibility = View.GONE
-                checkoutFragment?.closeText?.visibility = View.GONE
+                checkoutFragment.closeText.visibility = View.GONE
 
                 /**Stopped showing cancel button and poweredby for 3ds**/
                 /*    saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
