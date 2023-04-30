@@ -167,12 +167,12 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
         })
 
         /**Adding to get back to sdk when clicked closed ***/
-        view.amount_section.itemPopupLayout.setOnTouchListener(object : View.OnTouchListener {
-            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                baseLayoutManager?.reOpenSDKState()
-                return false
-            }
-        })
+//        view.amount_section.itemPopupLayout.setOnTouchListener(object : View.OnTouchListener {
+//            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+//                baseLayoutManager?.reOpenSDKState()
+//                return false
+//            }
+//        })
     }
 
     fun updateSelectedCurrency(
