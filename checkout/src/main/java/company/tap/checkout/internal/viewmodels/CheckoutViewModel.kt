@@ -303,7 +303,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         initSwitchAction()
         initOtpActionButton()
         setAllSeparatorTheme()
-        removevisibiltyCurrency()
 
 
     }
