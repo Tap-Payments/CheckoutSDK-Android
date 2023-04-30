@@ -101,7 +101,7 @@ dependencies {
     implementation 'com.github.2coffees1team:GlideToVectorYou:v2.0.0'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.11.1'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.1'
-    implementation 'com.github.Tap-Payments:TapCardValidator-Android:2.1.10'
+    implementation 'com.github.Tap-Payments:TapCardValidator-Android:2.1.11'
 //This is BungFender for logs
     implementation 'com.bugfender.sdk:android:3.+'
     implementation 'jp.wasabeef:blurry:4.0.1'

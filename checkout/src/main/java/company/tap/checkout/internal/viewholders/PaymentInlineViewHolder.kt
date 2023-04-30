@@ -429,10 +429,11 @@ class PaymentInlineViewHolder(
 //        switchViewHolder11?.view?.cardSwitch?.showOnlyPayButton()
         switchViewHolder?.bindViewComponents()
         val payString: String = LocalizationManager.getValue("pay", "ActionButton")
+        val nowString: String = LocalizationManager.getValue("pay", "ActionButton")
         switchViewHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
             false,
             "en",
-            payString + " " + checkoutViewModel.currentCurrencySymbol + " " + checkoutViewModel.currentAmount,
+            payString + " " +nowString,
             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
         )
@@ -993,7 +994,6 @@ class PaymentInlineViewHolder(
         tapCardInputView.setExpiryDateTextWatcher(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
                 tapCardInputView.isExpDateValid = false
             }
 
@@ -1004,6 +1004,7 @@ class PaymentInlineViewHolder(
     }
 
     private fun afterTextChangeAction(s: Editable?) {
+
         // tapInlineCardSwitch?.visibility = View.VISIBLE
         if (s.isNullOrEmpty()) {
             // tabLayout.resetBehaviour()
@@ -1012,7 +1013,8 @@ class PaymentInlineViewHolder(
              * we will get date value
              */
             expiryDate = s.toString()
-            if (s.length >= 5) {
+            println("expiryDate  cvvvb"+expiryDate)
+            if (s.length >= 5 ) {
                 if (cardInputUIStatus?.equals(CardInputUIStatus.SavedCard) == true) {
                     tapAlertView?.fadeVisibility(View.GONE, 500)
                 } else {
@@ -1644,7 +1646,12 @@ class PaymentInlineViewHolder(
                           )
                       )
                   }*/
-            println("imageURL are" + imageURL)
+            println("imageURL are" + cardBrandType)
+            /**Temp fix need to fix in validator kit todo
+             * */
+            if(cardBrandType!=null && cardBrandType == "OMANNET"){
+                cardBrandType = "OMAN_NET"
+            }
             itemsCardsList.add(
                 SectionTabItem(
                     imageURL,

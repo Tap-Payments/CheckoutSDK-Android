@@ -209,7 +209,8 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
         }
 
-        return totalArraySize.plus(1)
+        //TODO :removed goPAY as requested @osama totalArraySize.plus(1)
+        return totalArraySize
 
     }
 
