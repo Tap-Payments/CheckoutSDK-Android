@@ -2036,7 +2036,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     CustomUtils.tagEvent,
                     "Payment scheme selected: title :" + savedCardsModel?.brand + "& ID :" + savedCardsModel.paymentOptionIdentifier
                 )
-                activateActionButton(cardBrandString = savedCardsModel?.brand.rawValue)
+                unActivateActionButton()
             }
             else -> {
                 if (savedCardsModel != null) {
