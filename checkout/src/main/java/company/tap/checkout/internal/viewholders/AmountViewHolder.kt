@@ -13,6 +13,7 @@ import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.AmountInterface
 import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.checkout.internal.utils.CurrencyFormatter
+import company.tap.checkout.internal.utils.addFadeInAnimation
 import company.tap.checkout.internal.utils.addFadeOutAnimation
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
@@ -65,8 +66,8 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
         readyToScanTextViewTheme.font =
             ThemeManager.getFontName("Hints.Default.textFont")
         readyToScanText.setTheme(readyToScanTextViewTheme)
-        scannerLinearView.setBackgroundColor( Color.parseColor(ThemeManager.getValue("Hints.Default.backgroundColor")))
-        CustomCardViewStyle.setBackgroundColor( Color.parseColor(ThemeManager.getValue("Hints.Default.backgroundColor")))
+        scannerLinearView.setBackgroundColor(Color.parseColor(ThemeManager.getValue("Hints.Default.backgroundColor")))
+        CustomCardViewStyle.setBackgroundColor(Color.parseColor(ThemeManager.getValue("Hints.Default.backgroundColor")))
     }
 
     fun readyToScanVisibility(scannerClicked: Boolean) {
@@ -86,14 +87,14 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
                 itemCount = itemCountt + "  " + LocalizationManager.getValue("item", "Common")
             )
         } else {
-            var items: String=""
-            if(LocalizationManager.currentLocalized.length()!=0) {
-               items  = LocalizationManager.getValue("items", "Common")
+            var items: String = ""
+            if (LocalizationManager.currentLocalized.length() != 0) {
+                items = LocalizationManager.getValue("items", "Common")
             }
             return AmountViewDataSource(
                 selectedCurr = originalAmount,
                 selectedCurrText = transactionCurrency,
-               itemCount = itemCountt + "  " +items
+                itemCount = itemCountt + "  " + items
             )
         }
     }
@@ -116,6 +117,7 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
                         )
                     )
                 )
+                view.amount_section.tapChipPopup.addFadeInAnimation()
             } else changeDataSource(
                 AmountViewDataSource(
                     selectedCurr = originalAmount,
@@ -123,24 +125,23 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
                     itemCount = itemCountt + "  " + LocalizationManager.getValue("items", "Common")
                 )
             )
-            view.amount_section.itemAmountText.visibility =View.VISIBLE
-            view.amount_section.viewSeparator.visibility =View.VISIBLE
-            view.amount_section.amountImageView.visibility =View.VISIBLE
+            view.amount_section.itemAmountText.visibility = View.VISIBLE
+            view.amount_section.viewSeparator.visibility = View.VISIBLE
+            view.amount_section.amountImageView.visibility = View.VISIBLE
         } else {
-//            if (::originalAmount?.isInitialized)
             changeDataSource(
                 AmountViewDataSource(
                     selectedCurr = originalAmount,
                     selectedCurrText = transactionCurrency,
-                    itemCount = LocalizationManager.getValue<String?>("confirm", "Common")
+                    itemCount = LocalizationManager.getValue<String?>("close", "Common")
                 )
             )
             view.amount_section.itemCountButton.text =
-                LocalizationManager.getValue("confirm", "Common")
+                LocalizationManager.getValue("close", "Common")
 
-            view.amount_section.itemAmountText.visibility =View.GONE
-            view.amount_section.viewSeparator.visibility =View.GONE
-            view.amount_section.amountImageView.visibility =View.GONE
+            view.amount_section.itemAmountText.visibility = View.GONE
+            view.amount_section.viewSeparator.visibility = View.GONE
+            view.amount_section.amountImageView.visibility = View.GONE
 
 
         }
@@ -149,10 +150,10 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
 
     @SuppressLint("ClickableViewAccessibility")
     fun setOnItemsClickListener() {
-       /* view.amount_section.itemAmountLayout.setOnClickListener {
-            //onItemsClickListener()
-            baseLayoutManager?.controlCurrency(isOpenedList)
-        }*/
+        /* view.amount_section.itemAmountLayout.setOnClickListener {
+             //onItemsClickListener()
+             baseLayoutManager?.controlCurrency(isOpenedList)
+         }*/
 
         /*view.amount_section.itemAmountLayout.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
@@ -160,10 +161,12 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
                 return false
             }
         })*/
- view.amount_section.tapChipAmount.setOnTouchListener(object : View.OnTouchListener {
+        view.amount_section.tapChipAmount.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                view.amount_section.tapChipPopup.addFadeOutAnimation()
-                baseLayoutManager?.controlCurrency(isOpenedList)
+                view.amount_section.tapChipPopup.addFadeOutAnimation(onAnimationEnd = {
+                    baseLayoutManager?.controlCurrency(isOpenedList)
+
+                })
                 return false
             }
         })
@@ -188,6 +191,7 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
 
 
         isOpenedList = isOpen
+        //  if (selectedCurrency == get)
         if (selectedAmount == currentAmount && selectedCurrency == currentCurrency) {
             view.amount_section.mainKDAmountValue.visibility = View.GONE
         } else {
@@ -195,6 +199,9 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
         }
         if (isOpen) {
             if (selectedCurrencySymbol?.isNotBlank() == true || selectedCurrencySymbol?.isNotEmpty() == true) {
+                /**
+                 * here changed all symbols  to needed symbol currency
+                 */
                 if (itemCountt?.equals("1") == true) {
                     changeDataSource(
                         AmountViewDataSource(
@@ -291,7 +298,7 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
         transactionCurrencyApi: String,
         itemCountApi: String
     ) {
-       // println("transactionCurrencyApi" + transactionCurrencyApi)
+        // println("transactionCurrencyApi" + transactionCurrencyApi)
         itemCountt = itemCountApi
         originalAmount = CurrencyFormatter.currencyFormat(originalAmountApi)
         transactionCurrency = transactionCurrencyApi

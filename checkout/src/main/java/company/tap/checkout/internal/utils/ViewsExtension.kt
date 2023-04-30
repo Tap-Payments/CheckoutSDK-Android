@@ -44,7 +44,11 @@ private var bottomRightCorner = 0f
 private var bottomLeftCorner = 0f
 const val progressBarSize = 45
 
-fun View.startPoweredByAnimation(delayTime: Long, poweredByLogo: View?,onAnimationEnd: () -> Unit?) {
+fun View.startPoweredByAnimation(
+    delayTime: Long,
+    poweredByLogo: View?,
+    onAnimationEnd: () -> Unit?
+) {
     Handler(Looper.getMainLooper()).postDelayed({
         poweredByLogo?.visibility = View.GONE
         this.visibility = View.VISIBLE
@@ -62,7 +66,7 @@ fun View.startPoweredByAnimation(delayTime: Long, poweredByLogo: View?,onAnimati
         }
 
     resizeAnimation?.duration = animationDelayForResizeAnimation
-    resizeAnimation?.setAnimationListener(object :AnimationListener{
+    resizeAnimation?.setAnimationListener(object : AnimationListener {
         override fun onAnimationStart(p0: Animation?) {
         }
 
@@ -77,7 +81,6 @@ fun View.startPoweredByAnimation(delayTime: Long, poweredByLogo: View?,onAnimati
     this.startAnimation(resizeAnimation)
 
 
-
 }
 
 fun doAfterSpecificTime(time: Long = 1000L, execute: () -> Unit) =
@@ -86,28 +89,29 @@ fun doAfterSpecificTime(time: Long = 1000L, execute: () -> Unit) =
     }
 
 
-fun View.setMargins( left: Int, top: Int, right: Int, bottom: Int) {
+fun View.setMargins(left: Int, top: Int, right: Int, bottom: Int) {
     if (this.layoutParams is ViewGroup.MarginLayoutParams) {
         val p = this.layoutParams as ViewGroup.MarginLayoutParams
         p.setMargins(left, top, right, bottom)
         this.requestLayout()
     }
 }
+
 fun View.applyGlowingEffect(colorPairs: Pair<Int, Int>, durationTime: Long = 1000L) {
+    val backgroundColor = "BackgroundColor"
     val animator: ObjectAnimator =
         ObjectAnimator.ofInt(
             this,
-            "BackgroundColor",
+            backgroundColor,
             colorPairs.first,
             colorPairs.second
         ).setDuration(durationTime)
 
-    this.setMargins(0,0,0,0)
+    this.setMargins(0, 0, 0, 0)
     animator.setEvaluator(ArgbEvaluator())
     animator.repeatMode = ValueAnimator.REVERSE
     animator.repeatCount = Animation.INFINITE
     animator.start()
-
 
 
 }
@@ -265,7 +269,7 @@ fun getViewShapeDrawable(
     return shape
 }
 
-fun View.addFadeOutAnimation(durationTime: Long = 500L) {
+fun View.addFadeOutAnimation(durationTime: Long = 500L,onAnimationEnd: () -> Unit?) {
     val animation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
     animation.duration = durationTime
     this.startAnimation(animation)
@@ -275,6 +279,7 @@ fun View.addFadeOutAnimation(durationTime: Long = 500L) {
 
         override fun onAnimationEnd(p0: Animation?) {
             this@addFadeOutAnimation.visibility = View.GONE
+            onAnimationEnd.invoke()
         }
 
         override fun onAnimationRepeat(p0: Animation?) {

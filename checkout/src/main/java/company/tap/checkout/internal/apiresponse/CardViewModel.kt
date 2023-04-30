@@ -255,17 +255,7 @@ class CardViewModel : ViewModel() {
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun createSaveCard(
-        viewModel: CheckoutViewModel,
-        selectedPaymentOption: PaymentOption?
-    ) {
-        println("createSaveCard>>." + selectedPaymentOption)
-        if (selectedPaymentOption != null) {
-            repository.createSaveCard(viewModel, null, repository.tokenResponse.id)
-        }
 
-    }
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun requestAuthenticateForChargeTransaction(
