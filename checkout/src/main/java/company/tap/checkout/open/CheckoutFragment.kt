@@ -191,7 +191,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                             viewModel.addTitlePaymentAndFlag()
                         }
                     }else{
-                        viewModel.removevisibiltyCurrenycy()
+                        viewModel.removevisibiltyCurrency()
                     }
                 }
             }

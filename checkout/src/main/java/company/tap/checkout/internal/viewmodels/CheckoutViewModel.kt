@@ -1,9 +1,5 @@
 package company.tap.checkout.internal.viewmodels
 
-import android.animation.Animator
-import android.animation.Animator.AnimatorListener
-import android.animation.ArgbEvaluator
-import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -11,7 +7,6 @@ import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ShapeDrawable
-import android.graphics.drawable.TransitionDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Handler
@@ -20,8 +15,6 @@ import android.text.format.DateFormat
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.Animation.AnimationListener
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.LinearLayout
@@ -41,7 +34,6 @@ import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import cards.pay.paycardsrecognizer.sdk.FrameManager
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
-import com.blongho.country_data.World
 import com.bugfender.sdk.Bugfender
 import com.bumptech.glide.Glide
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -311,6 +303,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         initSwitchAction()
         initOtpActionButton()
         setAllSeparatorTheme()
+        removevisibiltyCurrency()
 
 
     }
@@ -799,7 +792,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
     }
 
-    fun removevisibiltyCurrenycy() {
+    fun removevisibiltyCurrency() {
         amountViewHolder.view.amount_section.tapChipPopup.visibility = View.GONE
     }
 

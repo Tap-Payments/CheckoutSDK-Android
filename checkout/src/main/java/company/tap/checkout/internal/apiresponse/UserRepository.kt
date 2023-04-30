@@ -71,10 +71,7 @@ class UserRepository constructor(var context: Context,var checkoutViewModel: Che
                         )
                         if (isSaved){
                             checkoutViewModel.localCurrencyReturned.value = true
-
                         }
-
-
                     }
                 }
 
