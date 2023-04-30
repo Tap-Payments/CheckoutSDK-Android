@@ -17,6 +17,7 @@ import android.view.*
 import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
 import android.view.animation.AnimationUtils
+import android.view.animation.TranslateAnimation
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -74,6 +75,22 @@ fun View.addFadeInAnimation(durationTime: Long = 1000L) {
     val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
     animation.duration = durationTime
     this.startAnimation(animation)
+}
+
+fun View.slidefromRightToLeft() {
+    val animate: TranslateAnimation
+    if (this.height == 0) {
+        animate = TranslateAnimation(
+            (this.width / 2).toFloat(),
+            0f, 0f, 0f
+        )
+    } else {
+        animate = TranslateAnimation(this.width.toFloat(), 0f, 0f, 0f) // View for animation
+    }
+    animate.duration = 1000
+    animate.fillAfter = true
+    this.startAnimation(animate)
+    this.visibility = View.VISIBLE // Change visibility VISIBLE or GONE
 }
 
 fun MutableList<View>.addFadeInAnimationForViews(durationTime: Long = 1000L) {
