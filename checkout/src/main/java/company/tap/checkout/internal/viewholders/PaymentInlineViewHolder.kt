@@ -1014,7 +1014,7 @@ class PaymentInlineViewHolder(
              * we will get date value
              */
             expiryDate = s.toString()
-            println("expiryDate  cvvvb"+expiryDate)
+            println("expiryDate  cvvvb"+tapCardInputView.isExpDateValid)
             if (s.length >= 5 ) {
                 if (cardInputUIStatus?.equals(CardInputUIStatus.SavedCard) == true) {
                     tapAlertView?.fadeVisibility(View.GONE, 500)
