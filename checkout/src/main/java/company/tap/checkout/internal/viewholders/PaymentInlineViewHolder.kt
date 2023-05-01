@@ -1033,14 +1033,16 @@ class PaymentInlineViewHolder(
                     } else{
                         checkoutViewModel.unActivateActionButton()
                         tapInlineCardSwitch?.visibility =View.GONE
-                        tapAlertView?.fadeVisibility(View.GONE, 500)
+                       // tapAlertView?.fadeVisibility(View.GONE, 500)
                     }
                 }
                 // tapAlertView?.visibility = View.VISIBLE
                 lastFocusField = CardInputListener.FocusField.FOCUS_CVC
                 // checkoutFragment.scrollView?.scrollTo(0,height)
                 tapInlineCardSwitch?.switchSaveCard?.isChecked = true
-            } else tapAlertView?.fadeVisibility(View.GONE, 500)
+            } else {
+              //  tapAlertView?.fadeVisibility(View.GONE, 500)
+            }
 
 
         }
@@ -1349,7 +1351,7 @@ class PaymentInlineViewHolder(
                         )
 
                         tabLayout?.visibility = View.GONE
-                        tapAlertView?.fadeVisibility(View.GONE, 500)
+                      //  tapAlertView?.fadeVisibility(View.GONE, 500)
                         return
                     }
                 }
@@ -1387,7 +1389,7 @@ class PaymentInlineViewHolder(
                     println("cardBrand val" + card.cardBrand)
                     if (card.cardBrand != null)
                         tabLayout.selectTab(card.cardBrand, false)
-                    tapAlertView?.fadeVisibility(View.VISIBLE)
+                    tapAlertView?.fadeVisibility(View.VISIBLE,1000)
                     tapAlertView?.alertMessage?.text =
                         (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
                     // checkoutFragment.scrollView?.smoothScrollTo(0,height)
@@ -1425,7 +1427,7 @@ class PaymentInlineViewHolder(
                         schema?.cardBrand?.let { tabLayout.selectTab(it, true) }
                     else tabLayout.selectTab(card.cardBrand, true)
 
-                    tapAlertView?.fadeVisibility(View.VISIBLE)
+                    tapAlertView?.fadeVisibility(View.VISIBLE,1000)
                     tapAlertView?.alertMessage?.text =
                         (LocalizationManager.getValue("Warning", "Hints", "missingExpiryCVV"))
                     // lastFocusField =CardInputListener.FocusField.FOCUS_EXPIRY

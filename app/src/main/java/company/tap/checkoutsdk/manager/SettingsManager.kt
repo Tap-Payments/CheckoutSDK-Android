@@ -525,7 +525,7 @@ object SettingsManager {
                     "",
                     "Items1",
                     BigDecimal.valueOf(5),
-                    "KWD",
+                   getString("key_sdk_transaction_currency", "KWD"),
                     BigDecimal.valueOf(
                         2
                     ),
