@@ -184,17 +184,26 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         }
 
         viewModel.localCurrencyReturned.observe(this, androidx.lifecycle.Observer {
-            if (viewModel.cacheUserLocalCurrency()) {
-                viewModel.powerdByTapAnimationFinished.observe(this) {
-                    if (it == true) {
-                        doAfterSpecificTime {
-                            viewModel.addTitlePaymentAndFlag()
+            with(viewModel) {
+                /**
+                 * check if data cached and different currency present
+                 * should put : @for check !isUserCurrencySameToMainCurrency()
+                 */
+                if (cacheUserLocalCurrency() && !isUserCurrencySameToMainCurrency()) {
+                        viewModel.powerdByTapAnimationFinished.observe(this@CheckoutFragment) {
+                            if (it == true) {
+                                doAfterSpecificTime {
+                                    viewModel.addTitlePaymentAndFlag()
+                                }
+                            }else {
+                                viewModel.removevisibiltyCurrency()
+                            }
                         }
-                    }else{
-                        viewModel.removevisibiltyCurrency()
-                    }
+                } else {
+                    viewModel.removevisibiltyCurrency()
                 }
             }
+
         })
 
         if (checkoutLayout != null) {
@@ -491,7 +500,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         tabAnimatedActionButton?.setButtonDataSource(
             true,
             context?.let { LocalizationManager.getLocale(it).language },
-            payString+" "+nowString,
+            payString + " " + nowString,
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
         )

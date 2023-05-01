@@ -1466,6 +1466,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
     }
 
+    fun isUserCurrencySameToMainCurrency(): Boolean {
+        val userCurrency = SharedPrefManager.getUserSupportedLocaleForTransactions(context)?.currency
+        val paymentCurrency = PaymentDataSource.getCurrency()?.isoCode
+        return userCurrency.equals(paymentCurrency, ignoreCase = true)
+    }
+
     @RequiresApi(Build.VERSION_CODES.N)
     private fun initAdaptersAction() {
         adapter = CardTypeAdapterUIKIT(this)
