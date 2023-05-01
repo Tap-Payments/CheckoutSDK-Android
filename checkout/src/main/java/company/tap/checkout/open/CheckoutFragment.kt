@@ -333,6 +333,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                 poweredByTapAnimationEnds(viewModel)
             }
         )
+     //   topHeaderView?.outerConstraint?.applyBluryToView()
 
 
     }

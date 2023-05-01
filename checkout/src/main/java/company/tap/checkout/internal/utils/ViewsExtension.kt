@@ -27,6 +27,8 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.core.os.postDelayed
+import androidx.core.text.TextUtilsCompat
+import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import company.tap.checkout.R
@@ -35,6 +37,7 @@ import company.tap.tapuilibrary.uikit.ktx.loadAppThemManagerFromPath
 import jp.wasabeef.blurry.Blurry
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
+import java.util.*
 
 
 private var targetHeight: Int? = 0
@@ -125,39 +128,42 @@ fun View.addFadeInAnimation(durationTime: Long = 1000L) {
 }
 
 fun View.slidefromRightToLeft() {
-    val animate: TranslateAnimation
-    if (this.height == 0) {
-        animate = TranslateAnimation(
-            (this.width / 2).toFloat(),
-            0f, 0f, 0f
-        )
-    } else {
-        animate = TranslateAnimation(this.width.toFloat(), 0f, 0f, 0f) // View for animation
-    }
+
+    val animate = TranslateAnimation(
+        if (isRTL()) -this.width.toFloat() else this.width.toFloat(),
+        0f,
+        0f,
+        0f
+    ) // View for animation
     animate.duration = 1000
     animate.fillAfter = true
     this.startAnimation(animate)
     this.visibility = View.VISIBLE // Change visibility VISIBLE or GONE
+
 }
 
 fun View.slideFromLeftToRight() {
+
     if (this.isVisible) {
-        val animate: TranslateAnimation
-        if (this.height == 0) {
-            animate = TranslateAnimation(
+        val animate =
+            TranslateAnimation(
                 0f,
-                this.width.toFloat(), 0f, 0f
-            )
-        } else {
-            animate = TranslateAnimation(0f, this.width.toFloat(), 0f, 0f) // View for animation
-        }
+                if (isRTL()) -this.width.toFloat() else this.width.toFloat(),
+                0f,
+                0f
+            ) // View for animation
         animate.duration = 1000
         animate.fillAfter = false
         this.startAnimation(animate)
-        //this.addFadeOutAnimation()
         this.visibility = View.GONE // Change visibility VISIBLE or GONE
     }
+
 }
+
+fun View.isRTL() = ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRECTION_RTL
+
+
+
 
 fun MutableList<View>.addFadeInAnimationForViews(durationTime: Long = 1000L) {
     this.forEachIndexed { index, view ->
@@ -371,7 +377,10 @@ fun ViewGroup.addLoaderWithBlurryToView(invokeAfterLoad: () -> Unit, viewToBeBLu
     val loaderGif: Int =
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
             R.drawable.loader
-        } else if (ThemeManager.currentTheme.isNotEmpty() && !ThemeManager.currentTheme.contains("dark")) {
+        } else if (ThemeManager.currentTheme.isNotEmpty() && !ThemeManager.currentTheme.contains(
+                "dark"
+            )
+        ) {
             R.drawable.output_black_loader_nobg
         } else R.drawable.loader
 

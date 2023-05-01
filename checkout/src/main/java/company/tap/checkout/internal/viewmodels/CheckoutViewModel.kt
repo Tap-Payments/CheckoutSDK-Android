@@ -2358,9 +2358,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 }
                 doAfterSpecificTime(time = 500L) {
                     viewsToFadeOut.addFadeOutAnimationToViews(onAnimationEnd = {})
-                    //doAfterSpecificTime {
                     paymentInlineViewHolder.paymentInputContainer.applyBluryToView()
-                    //  }
                 }
 
             }
