@@ -2,6 +2,7 @@ package company.tap.checkout.internal.adapter
 
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -158,12 +159,19 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
             previousIndex = selectedPosition
            // selectedPosition = position
             println("position of adapter"+ adapterContentCurrencies[position].amount)
+            Log.e("data",adapterContentCurrencies[position].rate.toString())
+            Log.e("data",adapterContentCurrencies[position].currency.toString())
+            Log.e("data",adapterContentCurrencies[position].amount.toString())
+            adapterContentCurrencies.forEachIndexed { index, supportedCurrencies ->
+                Log.e("data all ",supportedCurrencies.toString())
+
+            }
 
                adapterContentCurrencies[position].rate?.let { it1 ->
                 onCurrencyChangedActionListener.onCurrencyClicked(
-                        adapterContentCurrencies[position].currency.toString(),
-                        it1.toBigDecimal(),
-                adapterContentCurrencies[position].amount,adapterContentCurrencies[previousIndex].currency.toString(),  adapterContentCurrencies[position].symbol.toString())
+                        adapterContentCurrencies[position].currency.toString(), it1.toBigDecimal(),
+                adapterContentCurrencies[position].amount,adapterContentCurrencies[previousIndex].currency.toString(),
+                    adapterContentCurrencies[position].symbol.toString())
             }
             println("selcted symbol"+adapterContentCurrencies[position].symbol)
              CheckoutViewModel().selectedCurrencyPos = adapterContentCurrencies[position].currency.toString()

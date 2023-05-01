@@ -172,7 +172,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     internal lateinit var selectedAmount: String
 
     @Nullable
-    private lateinit var selectedCurrency: String
+    lateinit var selectedCurrency: String
+
+    companion object {
+        var currencySelectedForCheck: String = ""
+    }
+
     private var fee: BigDecimal? = BigDecimal.ZERO
     val provider: IPaymentDataProvider = PaymentDataProvider()
 
@@ -337,6 +342,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun initOtpActionButton() {
+
         otpViewHolder.otpView.otpViewActionButton.setOnClickListener {
             //Added to hide keyboard if open
             CustomUtils.hideKeyboardFrom(context as Activity, otpViewHolder.view)
@@ -684,6 +690,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             if (selectedAmount == currentAmount && selectedCurrency == currentCurrency) {
                 amountViewHolder.view.amount_section.mainKDAmountValue.visibility = View.GONE
 
+
             } else {
                 amountViewHolder.updateSelectedCurrency(
                     displayItemsOpen,
@@ -692,6 +699,18 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 )
 
             }
+//            if (display) {
+//                if (selectedCurrency != SharedPrefManager.getUserSupportedLocaleForTransactions(
+//                        context
+//                    )?.currency
+//                ) {
+//                    amountViewHolder.view.amount_section?.tapChipPopup?.addFadeInAnimation()
+//                } else {
+//                    amountViewHolder.view.amount_section?.tapChipPopup?.visibility = View.GONE
+//
+//                }
+//            }
+
         }
         if (otpViewHolder.otpView.isVisible) {
             removeViews(otpViewHolder)
@@ -787,6 +806,17 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         amountViewHolder.view.amount_section.itemPopupLayout.applyGlowingEffect(getCurrencyColors())
         amountViewHolder.view.amount_section.tapChipPopup.setOnClickListener {
             amountViewHolder.view.amount_section.tapChipPopup.slideFromLeftToRight()
+            with(SharedPrefManager.getUserSupportedLocaleForTransactions(context)!!) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    submitNewLocalCurrency(
+                        currencySelected = currency.toString(),
+                        currencyRate = rate?.toBigDecimal()!!,
+                        totalSelectedAmount = amount,
+                        selectedCurrencySymbol = symbol ?: ""
+                    )
+                }
+            }
+
 
         }
     }
@@ -840,7 +870,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 translateViewToNewHeight(bottomSheetLayout.measuredHeight, true)
 
         }, 400)
-
 
 
         /**
@@ -1291,7 +1320,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
         }
         // println("PaymentOptionsResponse on get$paymentOptionsResponse")
-        allCurrencies.value = (paymentOptionsResponse?.supportedCurrencies as List<SupportedCurrencies>).sortedBy { it.orderBy }
+        allCurrencies.value =
+            (paymentOptionsResponse?.supportedCurrencies as List<SupportedCurrencies>).sortedBy { it.orderBy }
         Log.e(
             "supportedCurrencyUser",
             SharedPrefManager.getUserLocalCurrency(context).toString()
@@ -1305,7 +1335,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         currencyAdapter = CurrencyTypeAdapter(this)
         if (paymentOptionsResponse.supportedCurrencies != null && ::amountViewHolder.isInitialized) {
             currentCurrency = paymentOptionsResponse.currency
-            val sortedList : List<SupportedCurrencies> = (paymentOptionsResponse.supportedCurrencies).sortedBy { it.orderBy }
+            val sortedList: List<SupportedCurrencies> =
+                (paymentOptionsResponse.supportedCurrencies).sortedBy { it.orderBy }
             for (i in sortedList.indices) {
 
                 if (sortedList[i].currency == currentCurrency) {
@@ -1349,7 +1380,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         if (::itemsViewHolder.isInitialized) {
             paymentOptionsResponse?.supportedCurrencies?.let {
                 itemsViewHolder.setDataFromAPI(
-                    it ,
+                    it,
                     PaymentDataSource.getItems()
                 )
             }
@@ -2491,8 +2522,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         cvvNumber: String, holderName: String?, cardBrandString: String?, savedCardsModel: Any?
 
     ) {
-        println("isCompleted aaa"+isCompleted)
-        println("expiryDate aaa"+expiryDate)
+        println("isCompleted aaa" + isCompleted)
+        println("expiryDate aaa" + expiryDate)
         activateActionButton(cardBrandString = cardBrandString)
         if (savedCardsModel != null) {
             setPayButtonAction(paymentType, savedCardsModel)
@@ -2637,6 +2668,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         selectedAmount = CurrencyFormatter.currencyFormat(totalSelectedAmount.toString())
         selectedCurrency = currencySelected
+        currencySelectedForCheck = currencySelected
         selectedTotalAmount = selectedAmount
         println("selectedAmount final>>" + selectedAmount)
         println("selectedCurrency final>>" + selectedCurrency.length)
@@ -2684,6 +2716,98 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             filterViewModels(currentCurrency)
             //Bugfender.d("Currency changed to : "+currentCurrency ,CustomUtils.tagEvent)
 
+        }
+
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun submitNewLocalCurrency(
+        currencySelected: String,
+        currencyRate: BigDecimal,
+        totalSelectedAmount: BigDecimal,
+        selectedCurrencySymbol: String
+    ) {
+
+
+        currencyOldRate = currencyRate
+        if (::unModifiedItemList.isInitialized)
+            println("unModifiedItemList" + unModifiedItemList)
+        if (::itemList.isInitialized) {
+            for (i in itemList.indices) {
+                itemList[i].amount = unModifiedItemList[i].amount?.times(currencyRate)
+                //itemList[i].totalAmount = currencyOldRate?.div(currencyRate)
+                itemList[i].totalAmount =
+                    unModifiedItemList[i].getPlainAmount()?.times(currencyRate)
+
+
+                println("item per unit >>" + itemList[i].amount)
+
+
+            }
+
+            itemsViewHolder.view.itemRecylerView.adapter = itemAdapter
+            itemAdapter.updateAdapterData(itemList)
+
+        }
+
+        //  itemList[i].amount = (list[i].amount.toLong())
+        //  itemList[i].currency = currencySelected
+
+        selectedAmount = CurrencyFormatter.currencyFormat(totalSelectedAmount.toString())
+        if (currencySelected != null) {
+            selectedCurrency = currencySelected
+        }
+        selectedTotalAmount = selectedAmount
+
+        /**
+         * Why this check present ??!!  :/
+         */
+        if (selectedCurrencySymbol.length == 2) {
+            amountViewHolder.updateSelectedCurrency(
+                displayItemsOpen,
+                selectedAmount,
+                selectedCurrency,
+                currentAmount,
+                currentCurrency,
+                selectedCurrencySymbol,
+                isChangingCurrencyFromOutside = true
+            )
+            //  PaymentDataSource.setSelectedCurrency(selectedCurrency = selectedCurrency, null) // changed from null to symbol
+            PaymentDataSource.setSelectedCurrency(selectedCurrency, selectedCurrencySymbol)
+            //  PaymentDataSource.setSelectedCurrency(selectedCurrency = selectedCurrencySymbol, selectedCurrencySymbol) //commented
+
+        } else {
+            amountViewHolder.updateSelectedCurrency(
+                displayItemsOpen,
+                selectedAmount,
+                selectedCurrency,
+                currentAmount,
+                finalCurrencySymbol,
+                selectedCurrencySymbol,
+                isChangingCurrencyFromOutside = true
+            )
+            PaymentDataSource.setSelectedCurrency(selectedCurrency, selectedCurrencySymbol)
+
+        }
+        currentCurrencySymbol = selectedCurrencySymbol
+
+        PaymentDataSource.setSelectedAmount(currencyRate)
+        if (paymentInlineViewHolder.tapCardInputView.isNotEmpty()) {
+            paymentInlineViewHolder.tapCardInputView.clear()
+            paymentInlineViewHolder.tapAlertView?.fadeVisibility(View.GONE, 500)
+            paymentInlineViewHolder.acceptedCardText.visibility = View.VISIBLE
+            paymentInlineViewHolder.tabLayout.resetBehaviour()
+        }
+
+        adapter.resetSelection()
+
+        if (::selectedCurrency.isInitialized) {
+            Bugfender.d(CustomUtils.tagEvent, "Currency changed to : " + selectedCurrencySymbol)
+            filterViewModels(selectedCurrency)
+        } else {
+            filterViewModels(currentCurrency)
+            //Bugfender.d("Currency changed to : "+currentCurrency ,CustomUtils.tagEvent)
         }
 
     }

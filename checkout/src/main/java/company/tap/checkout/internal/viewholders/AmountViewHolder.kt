@@ -9,15 +9,16 @@ import android.view.View
 import android.widget.LinearLayout
 import company.tap.cardinputwidget.CardInputUIStatus
 import company.tap.checkout.R
+import company.tap.checkout.internal.cache.SharedPrefManager
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.AmountInterface
 import company.tap.checkout.internal.interfaces.BaseLayoutManager
-import company.tap.checkout.internal.utils.CurrencyFormatter
-import company.tap.checkout.internal.utils.addFadeInAnimation
-import company.tap.checkout.internal.utils.addFadeOutAnimation
+import company.tap.checkout.internal.utils.*
+import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.TextViewTheme
+import company.tap.tapuilibrary.uikit.adapters.context
 import company.tap.tapuilibrary.uikit.atoms.TapChip
 import company.tap.tapuilibrary.uikit.atoms.TapSeparatorView
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
@@ -106,6 +107,9 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
     override fun changeGroupAction(isOpen: Boolean) {
         isOpenedList = isOpen
         if (isOpen) {
+            /**
+             * Second time opening The Items Currencies after choosing one Currency
+             */
             if (itemCountt?.contentEquals("1") == true) {
                 changeDataSource(
                     AmountViewDataSource(
@@ -117,7 +121,6 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
                         )
                     )
                 )
-                view.amount_section.tapChipPopup.addFadeInAnimation()
             } else changeDataSource(
                 AmountViewDataSource(
                     selectedCurr = originalAmount,
@@ -128,7 +131,19 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
             view.amount_section.itemAmountText.visibility = View.VISIBLE
             view.amount_section.viewSeparator.visibility = View.VISIBLE
             view.amount_section.amountImageView.visibility = View.VISIBLE
+            /**
+             * if same currency selected as Currency of user , not show local prompt
+             */
+            if (CheckoutViewModel.currencySelectedForCheck != SharedPrefManager.getUserSupportedLocaleForTransactions(view.amount_section.context)?.currency
+            )
+                doAfterSpecificTime(500) {
+                    view.amount_section?.tapChipPopup?.addFadeInAnimation()
+                }
         } else {
+            /**
+             * opening The Items Currencies to choose from
+             */
+
             changeDataSource(
                 AmountViewDataSource(
                     selectedCurr = originalAmount,
@@ -142,6 +157,7 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
             view.amount_section.itemAmountText.visibility = View.GONE
             view.amount_section.viewSeparator.visibility = View.GONE
             view.amount_section.amountImageView.visibility = View.GONE
+            view.amount_section?.tapChipPopup?.addFadeOutAnimation()
 
 
         }
@@ -161,15 +177,12 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
                 return false
             }
         })*/
-        view.amount_section.tapChipAmount.setOnTouchListener(object : View.OnTouchListener {
-            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                view.amount_section.tapChipPopup.addFadeOutAnimation(onAnimationEnd = {
-                    baseLayoutManager?.controlCurrency(isOpenedList)
+        view.amount_section.tapChipAmount.setOnTouchListener { v, event ->
+            baseLayoutManager?.controlCurrency(isOpenedList)
 
-                })
-                return false
-            }
-        })
+
+            false
+        }
 
         /**Adding to get back to sdk when clicked closed ***/
 //        view.amount_section.itemPopupLayout.setOnTouchListener(object : View.OnTouchListener {
@@ -186,7 +199,8 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
         selectedCurrency: String,
         currentAmount: String,
         currentCurrency: String,
-        selectedCurrencySymbol: String? = null
+        selectedCurrencySymbol: String? = null,
+        isChangingCurrencyFromOutside: Boolean? = false
     ) {
 
 
@@ -269,7 +283,10 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
                         selectedCurrText = selectedCurrencySymbol,
                         currentCurr = currentAmount,
                         currentCurrText = currentCurrency,
-                        itemCount = LocalizationManager.getValue("confirm", "Common")
+                        itemCount = if (isChangingCurrencyFromOutside == true) itemCountt + "  " + LocalizationManager.getValue(
+                            "items",
+                            "Common"
+                        ) else LocalizationManager.getValue("confirm", "Common")
                     )
                 )
             } else

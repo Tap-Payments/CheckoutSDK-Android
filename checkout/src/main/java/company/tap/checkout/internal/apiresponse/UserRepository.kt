@@ -37,6 +37,7 @@ class UserRepository constructor(var context: Context,var checkoutViewModel: Che
                 call: Call<UserIpAddressResponse>,
                 response: Response<UserIpAddressResponse>
             ) {
+                Log.e("error",response.body().toString())
                 NetworkApp.setUserIpAddress(response.body()?.IPv4 ?: "")
                 getCurrencyApi()
 

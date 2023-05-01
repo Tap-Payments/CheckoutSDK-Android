@@ -27,6 +27,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.core.os.postDelayed
+import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import company.tap.checkout.R
 import company.tap.tapuilibrary.themekit.ThemeManager
@@ -140,20 +141,22 @@ fun View.slidefromRightToLeft() {
 }
 
 fun View.slideFromLeftToRight() {
-    val animate: TranslateAnimation
-    if (this.height == 0) {
-        animate = TranslateAnimation(
-            0f,
-            this.width.toFloat(), 0f, 0f
-        )
-    } else {
-        animate = TranslateAnimation(0f, this.width.toFloat(), 0f, 0f) // View for animation
+    if (this.isVisible) {
+        val animate: TranslateAnimation
+        if (this.height == 0) {
+            animate = TranslateAnimation(
+                0f,
+                this.width.toFloat(), 0f, 0f
+            )
+        } else {
+            animate = TranslateAnimation(0f, this.width.toFloat(), 0f, 0f) // View for animation
+        }
+        animate.duration = 1000
+        animate.fillAfter = false
+        this.startAnimation(animate)
+        //this.addFadeOutAnimation()
+        this.visibility = View.GONE // Change visibility VISIBLE or GONE
     }
-    animate.duration = 1000
-    animate.fillAfter = false
-    this.startAnimation(animate)
-    //this.addFadeOutAnimation()
-    this.visibility = View.GONE // Change visibility VISIBLE or GONE
 }
 
 fun MutableList<View>.addFadeInAnimationForViews(durationTime: Long = 1000L) {
@@ -269,24 +272,24 @@ fun getViewShapeDrawable(
     return shape
 }
 
-fun View.addFadeOutAnimation(durationTime: Long = 500L,onAnimationEnd: () -> Unit?) {
-    val animation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
-    animation.duration = durationTime
-    this.startAnimation(animation)
-    this.animation.setAnimationListener(object : AnimationListener {
-        override fun onAnimationStart(p0: Animation?) {
-        }
+fun View.addFadeOutAnimation(durationTime: Long = 500L) {
+    if (this.isVisible) {
+        val animation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
+        animation.duration = durationTime
+        this.startAnimation(animation)
+        this.animation.setAnimationListener(object : AnimationListener {
+            override fun onAnimationStart(p0: Animation?) {
+            }
 
-        override fun onAnimationEnd(p0: Animation?) {
-            this@addFadeOutAnimation.visibility = View.GONE
-            onAnimationEnd.invoke()
-        }
+            override fun onAnimationEnd(p0: Animation?) {
+                this@addFadeOutAnimation.visibility = View.GONE
+            }
 
-        override fun onAnimationRepeat(p0: Animation?) {
-        }
+            override fun onAnimationRepeat(p0: Animation?) {
+            }
 
-    })
-
+        })
+    }
 }
 
 fun MutableList<View>.addFadeOutAnimationToViews(

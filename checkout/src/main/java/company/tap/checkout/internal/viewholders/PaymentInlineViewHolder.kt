@@ -500,6 +500,7 @@ class PaymentInlineViewHolder(
                     tabLayout.resetBehaviour()
                     cardInputUIStatus = CardInputUIStatus.NormalCard
                     tabLayout.resetBehaviour()
+                    tabLayout.getChildAt(0).minimumHeight=15
                     tapCardInputView.clear()
                     closeButton?.visibility = View.GONE
                     controlScannerOptions()
