@@ -48,7 +48,7 @@
         <entry key="checkout/src/main/res/layout/item_googlepay_light.xml" value="0.165" />
         <entry key="checkout/src/main/res/layout/item_gopay.xml" value="0.11182432432432432" />
         <entry key="checkout/src/main/res/layout/item_knet.xml" value="0.6593234087969806" />
-        <entry key="checkout/src/main/res/layout/item_save_cards.xml" value="1.2046404864336995" />
+        <entry key="checkout/src/main/res/layout/item_save_cards.xml" value="0.7938388625592417" />
         <entry key="checkout/src/main/res/layout/item_saved_card.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/item_view_adapter.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/itemviewholder_layout.xml" value="0.1" />
@@ -61,6 +61,5 @@
       </map>
     </option>
   </component>
-  <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
 </project>

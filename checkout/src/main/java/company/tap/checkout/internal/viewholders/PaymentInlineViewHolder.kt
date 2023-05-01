@@ -995,7 +995,11 @@ class PaymentInlineViewHolder(
         tapCardInputView.setExpiryDateTextWatcher(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                tapCardInputView.isExpDateValid = false
+                if(!tapCardInputView.isExpDateValid){
+                    checkoutViewModel.unActivateActionButton()
+                    tapInlineCardSwitch?.visibility =View.GONE
+                }
+
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -1014,7 +1018,8 @@ class PaymentInlineViewHolder(
              * we will get date value
              */
             expiryDate = s.toString()
-            println("expiryDate  cvvvb"+expiryDate)
+
+            println("isExpDateValid>>>"+tapCardInputView.isExpDateValid)
             if (s.length >= 5 ) {
                 if (cardInputUIStatus?.equals(CardInputUIStatus.SavedCard) == true) {
                     tapAlertView?.fadeVisibility(View.GONE, 500)
@@ -1025,7 +1030,11 @@ class PaymentInlineViewHolder(
                         val alertMessage: String =
                             LocalizationManager.getValue("Warning", "Hints", "missingCVV")
                         tapAlertView?.alertMessage?.text = alertMessage.replace("%i", "3")
-                    } else tapAlertView?.fadeVisibility(View.GONE, 500)
+                    } else{
+                        checkoutViewModel.unActivateActionButton()
+                        tapInlineCardSwitch?.visibility =View.GONE
+                        tapAlertView?.fadeVisibility(View.GONE, 500)
+                    }
                 }
                 // tapAlertView?.visibility = View.VISIBLE
                 lastFocusField = CardInputListener.FocusField.FOCUS_CVC
@@ -1087,7 +1096,7 @@ class PaymentInlineViewHolder(
                  */
                 cvvNumber = s.toString()
 
-                if (s?.trim()?.length == 3 || s?.trim()?.length == 4) {
+                if (s?.trim()?.length == 3 || s?.trim()?.length == 4 && tapCardInputView.isExpDateValid) {
                     if (!PaymentDataSource.getCardHolderNameShowHide()) {
                         cardNumber.toString().let {
                             expiryDate?.let { it1 ->
