@@ -2009,7 +2009,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
 
-    private fun unActivateActionButton() {
+     fun unActivateActionButton() {
         val payNowString: String
 
         when (PaymentDataSource.getTransactionMode()) {
@@ -2523,14 +2523,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     override fun onPayCardCompleteAction(
         isCompleted: Boolean,
         paymentType: PaymentType,
-        cardNumber: String,
-        expiryDate: String,
-        cvvNumber: String, holderName: String?, cardBrandString: String?, savedCardsModel: Any?
+        cardNumber: String?,
+        expiryDate: String?,
+        cvvNumber: String?, holderName: String?, cardBrandString: String?, savedCardsModel: Any?
 
     ) {
         println("isCompleted aaa" + isCompleted)
         println("expiryDate aaa" + expiryDate)
-        activateActionButton(cardBrandString = cardBrandString)
+        if(isCompleted) activateActionButton(cardBrandString = cardBrandString)
         if (savedCardsModel != null) {
             setPayButtonAction(paymentType, savedCardsModel)
         } else {
