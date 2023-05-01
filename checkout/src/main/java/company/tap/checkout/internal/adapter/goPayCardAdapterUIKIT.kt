@@ -1,5 +1,4 @@
 package company.tap.checkout.internal.adapter
-
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.Color.parseColor
@@ -18,7 +17,6 @@ import com.bumptech.glide.Glide
 import company.tap.checkout.R
 import company.tap.checkout.internal.apiresponse.testmodels.Chip1
 import company.tap.checkout.internal.apiresponse.testmodels.GoPaySavedCards
-
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
@@ -253,58 +251,6 @@ class GoPayCardAdapterUIKIT(
 
     }
 
-    private fun typeRedirect(holder: RecyclerView.ViewHolder, position: Int) {
-        if (selectedPosition == position) {
-            if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
-                holder.itemView.setBackgroundResource(R.drawable.border_shadow_white)
-            } else {
-                holder.itemView.setBackgroundResource(R.drawable.border_shadow)
-            }
-            setBorderedView(
-                holder.itemView.tapCardChip3Linear,
-                (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
-                0.0f,
-                parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
-                parseColor(ThemeManager.getValue("horizontalList.chips.gatewayChip.backgroundColor")),// tint color
-                parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
-            )// shadow color
-
-        } else {
-            if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
-                holder.itemView.setBackgroundResource(R.drawable.border_unclick_black)
-
-            } else {
-                holder.itemView.setBackgroundResource(R.drawable.border_unclick)
-
-            }
-
-            setBorderedView(
-                holder.itemView.tapCardChip3Linear,
-                (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
-                0.0f,
-                parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
-                parseColor(ThemeManager.getValue("horizontalList.chips.gatewayChip.backgroundColor")),// tint color
-                parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
-            )// shadow color
-
-        }
-        (holder as SingleViewHolder)
-            holder.itemView.setOnClickListener {
-                if (!isShaking) {
-                onCardSelectedActionListener.onCardSelectedAction(
-                    true,
-                    adapterContent[holder.adapterPosition]
-                )
-                selectedPosition = position
-                notifyDataSetChanged()
-            }
-        }
-        for (i in 0 until arrayListRedirect.size) {
-            Glide.with(holder.itemView.context)
-                    .load(arrayListRedirect[i])
-                    .into(holder.itemView.imageView_knet)
-        }
-    }
 
     private fun typeGoPaySavedCard(holder: RecyclerView.ViewHolder, position: Int){
         tapCardFrameLayout = holder.itemView.findViewById(R.id.tapCardChip4)

@@ -275,7 +275,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
              * GooglePay Type
              */
             getItemViewType(position) == TYPE_GOOGLE_PAY -> {
-                setAlphaWhenShaking(isShaking, holder)
+               // setAlphaWhenShaking(isShaking, holder)
                 typeGooglePay(holder, position)
             }
             /**
@@ -339,6 +339,16 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         if (selectedPosition == position) setSelectedCardTypeSavedShadowAndBackground(holder)
         else setUnSelectedCardTypeSavedShadowAndBackground(holder)
 
+
+//                setBorderedView(
+//            holder.itemView.tapCardChip2Constraints,
+//            //(ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
+//            19.0f,// corner raduis
+//            0.0f,
+//            parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
+//            Color.parseColor(ThemeManager.getValue("horizontalList.chips.savedCardChip.backgroundColor")),// tint color
+//            parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
+//        )// shadow color
         (holder as SavedViewHolder)
         bindSavedCardData(holder, position)
         setOnSavedCardOnClickAction(holder, position)
@@ -357,16 +367,6 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
             }
 //            tapActionButtonInterface.onSelectPaymentOptionActionListener()
         }
-
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun deleteSelectedCard(position: Int) {
-        //(arrayListCards as java.util.List<String>).remove(position)
-        arrayListCards.toMutableList()
-            .remove(arrayListCards[position.minus(adapterContent.size).minus(1)])
-        this.updateAdapterDataSavedCard(arrayListCards)
-        //this.notifyDataSetChanged()
 
     }
 
@@ -448,43 +448,24 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
     private fun setSelectedCardTypeSavedShadowAndBackground(holder: RecyclerView.ViewHolder) {
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
-            holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.border_shadow_white)
+            holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.stroke_black)
         } else {
-            holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.border_shadow)
+            holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.stroke_white)
         }
-        setBorderedView(
-            holder.itemView.tapCardChip2Constraints,
-            //(ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
-            19.0f,// corner raduis
-            0.0f,
-            parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
-            Color.parseColor(ThemeManager.getValue("horizontalList.chips.savedCardChip.backgroundColor")),// tint color
-            parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
-        )// shadow color
+
     }
 
 
     private fun setUnSelectedCardTypeSavedShadowAndBackground(holder: RecyclerView.ViewHolder) {
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
-            holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.border_unclick_black)
+            holder.itemView.tapCardChip2.setBackgroundResource(0)
         } else {
-            holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.border_unclick)
+            holder.itemView.tapCardChip2.setBackgroundResource(0)
         }
 
-        setBorderedView(
-            holder.itemView.tapCardChip2Constraints,
-            // (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
-            19.0f,// corner raduis
-            0.0f,
-            parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
-            Color.parseColor(ThemeManager.getValue("horizontalList.chips.savedCardChip.backgroundColor")),// tint color
-            parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
-        )// shadow color
     }
 
     private fun typeRedirect(holder: RecyclerView.ViewHolder, position: Int) {
-        if (selectedPosition == position) setSelectedCardTypeRedirectShadowAndBackground(holder)
-        else setUnSelectedCardTypeRedirectShadowAndBackground(holder)
         (holder as SingleViewHolder)
         holder.itemView.setOnClickListener {
             if (!isShaking) {
@@ -537,21 +518,12 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     }
 
     private fun typeGooglePay(holder: RecyclerView.ViewHolder, position: Int) {
-        if (selectedPosition == position) setSelectedGoogleShadowAndBackground(holder)
-        else setUnSelectedCardTypeGoogleShadowAndBackground(holder)
+
         println("typeGooglePay is called?????" + position)
         (holder as GooglePayViewHolder)
-        // Initialize a Google Pay API client for an environment suitable for testing.
-        // It's recommended to create the PaymentsClient object inside of the onCreate method.
-        //  paymentsClient = PaymentsUtil().createPaymentsClient(holder.itemView.context as Activity)
         possiblyShowGooglePayButton(holder)
-        //  bindGooglePayImageData(holder,position)
 
-        // setUnSelectedCardTypeGoogleShadowAndBackground(holder)
         holder.itemView.googlePayButton.setOnClickListener {
-            //   setSelectedGoogleShadowAndBackground(holder)
-            // if (!isShaking) {
-            //  selectedPosition = position
             println("typeGooglePay is clicked")
             if (position > 0)
                 onCardSelectedActionListener.onCardSelectedAction(
@@ -560,10 +532,8 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                 )
             else onCardSelectedActionListener.onCardSelectedAction(true, adapterGooglePay[position])
 
-            // onCardSelectedActionListener.onGooglePayClicked(true)
-            //  goPayOpenedfromMain(goPayOpened)
             notifyDataSetChanged()
-            // }
+
         }
     }
 
@@ -610,14 +580,9 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     private fun bindRedirectCardImage(holder: RecyclerView.ViewHolder) {
         for (i in 0 until arrayListRedirect.size) {
             val imageViewCard = holder.itemView.findViewById<ImageView>(R.id.imageView_knet)
-            //  arrayListRedirect[i].let { imageViewCard.loadSvg(it) }
             Glide.with(holder.itemView.context)
                 .load(arrayListRedirect[i].toUri())
                 .into(imageViewCard)
-            /* GlideToVectorYou
-                 .init()
-                 .with(holder.itemView.context)
-                 .load(arrayListRedirect[i].toUri(), imageViewCard)*/
         }
     }
 
@@ -628,7 +593,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         else holder.itemView.setBackgroundResource(R.drawable.border_shadow)
 
         setBorderedView(
-            holder.itemView.tapCardChip3Linear,
+            holder.itemView.tapCardChip3,
             // (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
 
             19.0f,// corner raduis
@@ -645,7 +610,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         )
         else holder.itemView.setBackgroundResource(R.drawable.border_unclick)
         setBorderedView(
-            holder.itemView.tapCardChip3Linear,
+            holder.itemView.tapCardChip3,
             //(ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
             19.0f,// corner raduis
             0.0f,
