@@ -302,12 +302,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         aScene?.setEnterAction {
             AnimationUtils.loadAnimation(context, R.anim.slide_down)
         }
-        initializeScanner(this)
+//        initializeScanner(this)
         initViewHolders()
-        initAmountAction()
-        initSwitchAction()
-        initOtpActionButton()
-        setAllSeparatorTheme()
+//        initAmountAction()
+//        initSwitchAction()
+//        initOtpActionButton()
+//        setAllSeparatorTheme()
 
 
     }
@@ -2387,7 +2387,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 cardViewModel.processEvent(
                     CardViewEvent.CreateTokenEvent,
                     this,
-
                     null,
                     null,
                     paymentInlineViewHolder.getCard(),

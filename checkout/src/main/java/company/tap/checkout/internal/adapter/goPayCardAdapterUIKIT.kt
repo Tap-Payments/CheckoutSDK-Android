@@ -198,9 +198,9 @@ class GoPayCardAdapterUIKIT(
         }
         if (selectedPosition == position) {
             if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
-                holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.border_shadow_white)
+                holder.itemView.card_view.setBackgroundResource(R.drawable.border_shadow_white)
             } else {
-                holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.border_shadow)
+                holder.itemView.card_view.setBackgroundResource(R.drawable.border_shadow)
             }
             setBorderedView(
                 holder.itemView.tapCardChip2Constraints,
@@ -213,9 +213,9 @@ class GoPayCardAdapterUIKIT(
 
         } else {
             if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
-                holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.border_unclick_black)
+                holder.itemView.card_view.setBackgroundResource(R.drawable.border_unclick_black)
             } else {
-                holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.border_unclick)
+                holder.itemView.card_view.setBackgroundResource(R.drawable.border_unclick)
             }
 
 

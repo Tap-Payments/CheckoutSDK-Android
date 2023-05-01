@@ -4,6 +4,7 @@ package company.tap.checkout.internal.adapter
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Color.parseColor
 import android.os.Build
@@ -32,6 +33,7 @@ import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.utils.PaymentsUtil
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.TextViewTheme
+import company.tap.tapuilibrary.uikit.ktx.loadAppThemManagerFromPath
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import kotlinx.android.synthetic.main.googlepay_button.view.*
 import kotlinx.android.synthetic.main.item_benefit_pay.view.*
@@ -235,7 +237,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                 cardNeeded.id,
                 cardNeeded.lastFour,
                 arrayListCards as ArrayList<SavedCard>,
-                holder.itemView.findViewById(R.id.tapCardChip2),
+                holder.itemView.findViewById(R.id.card_view),
                 holder.itemView.findViewById(R.id.tapCardChip2Constraints),
                 holder.bindingAdapterPosition
             )
@@ -275,7 +277,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
              * GooglePay Type
              */
             getItemViewType(position) == TYPE_GOOGLE_PAY -> {
-               // setAlphaWhenShaking(isShaking, holder)
+                setAlphaWhenShaking(isShaking, holder)
                 typeGooglePay(holder, position)
             }
             /**
@@ -439,8 +441,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         holder.itemView.deleteImageViewSaved.setImageResource(deleteIcon)
         if (isShaking) {
             Log.d("isShaking", isShaking.toString())
-            val animShake: Animation =
-                AnimationUtils.loadAnimation(holder.itemView.context, R.anim.shake)
+            val animShake: Animation = AnimationUtils.loadAnimation(holder.itemView.context, R.anim.shake)
             holder.itemView.startAnimation(animShake)
             holder.itemView.deleteImageViewSaved?.visibility = View.VISIBLE
         } else holder.itemView.deleteImageViewSaved?.visibility = View.GONE
@@ -448,24 +449,51 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
     private fun setSelectedCardTypeSavedShadowAndBackground(holder: RecyclerView.ViewHolder) {
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
-            holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.stroke_black)
+            holder.itemView.card_view.setBackgroundResource(R.drawable.border_shadow_white)
         } else {
-            holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.stroke_white)
+            holder.itemView.card_view.setBackgroundResource(R.drawable.border_shadow)
         }
-
+        setBorderedView(
+            holder.itemView.tapCardChip2Constraints,
+            //(ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
+            19.0f,// corner raduis
+            0.0f,
+            parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
+            Color.parseColor(ThemeManager.getValue("horizontalList.chips.savedCardChip.backgroundColor")),// tint color
+            parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
+        )// shadow color
     }
 
 
     private fun setUnSelectedCardTypeSavedShadowAndBackground(holder: RecyclerView.ViewHolder) {
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
-            holder.itemView.tapCardChip2.setBackgroundResource(0)
+
+
+            setBorderedView(
+                holder.itemView.card_view,
+                //(ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
+                19.0f,// corner raduis
+                0.0f,
+                parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
+                Color.parseColor(ThemeManager.getValue("horizontalList.chips.savedCardChip.backgroundColor")),// tint color
+                parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
+            )// shadow color
+
         } else {
-            holder.itemView.tapCardChip2.setBackgroundResource(0)
+            holder.itemView.card_view.backgroundTintList = ColorStateList.valueOf(
+                loadAppThemManagerFromPath("horizontalList.chips.savedCardChip.backgroundColor")
+            )
         }
+
+
+
+
 
     }
 
     private fun typeRedirect(holder: RecyclerView.ViewHolder, position: Int) {
+        if (selectedPosition == position) setSelectedCardTypeRedirectShadowAndBackground(holder)
+        else setUnSelectedCardTypeRedirectShadowAndBackground(holder)
         (holder as SingleViewHolder)
         holder.itemView.setOnClickListener {
             if (!isShaking) {
