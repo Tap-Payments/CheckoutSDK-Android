@@ -2705,7 +2705,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         PaymentDataSource.setSelectedAmount(currencyRate)
         if (paymentInlineViewHolder.tapCardInputView.isNotEmpty()) {
             paymentInlineViewHolder.tapCardInputView.clear()
-            //paymentInlineViewHolder.tapAlertView?.fadeVisibility(View.GONE, 500)
+            paymentInlineViewHolder.tapAlertView?.fadeVisibility(View.GONE, 500)
             paymentInlineViewHolder.acceptedCardText.visibility = View.VISIBLE
             paymentInlineViewHolder.tabLayout.resetBehaviour()
         }
@@ -2798,7 +2798,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         PaymentDataSource.setSelectedAmount(currencyRate)
         if (paymentInlineViewHolder.tapCardInputView.isNotEmpty()) {
             paymentInlineViewHolder.tapCardInputView.clear()
-            //paymentInlineViewHolder.tapAlertView?.fadeVisibility(View.GONE, 500)
+            paymentInlineViewHolder.tapAlertView?.fadeVisibility(View.GONE, 500)
             paymentInlineViewHolder.acceptedCardText.visibility = View.VISIBLE
             paymentInlineViewHolder.tabLayout.resetBehaviour()
         }

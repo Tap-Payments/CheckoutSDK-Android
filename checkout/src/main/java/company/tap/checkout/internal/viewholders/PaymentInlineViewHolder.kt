@@ -41,6 +41,7 @@ import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.checkout.internal.interfaces.PaymentCardComplete
 import company.tap.checkout.internal.interfaces.onCardNFCCallListener
 import company.tap.checkout.internal.utils.CustomUtils
+import company.tap.checkout.internal.utils.fadeVisibility
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.data_managers.PaymentDataSource
@@ -917,7 +918,7 @@ class PaymentInlineViewHolder(
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 checkoutViewModel.resetViewHolder()
-                tapAlertView?.fadeVisibility(View.GONE, 500)
+                //tapAlertView?.fadeVisibility(View.GONE, 500) // removed
                 if (after < count) {
                     // delete character action have done
                     // do what ever you want
@@ -993,7 +994,8 @@ class PaymentInlineViewHolder(
         )
 
         tapCardInputView.setExpiryDateTextWatcher(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if(!tapCardInputView.isExpDateValid){
                     checkoutViewModel.unActivateActionButton()
@@ -1041,7 +1043,7 @@ class PaymentInlineViewHolder(
                 // checkoutFragment.scrollView?.scrollTo(0,height)
                 tapInlineCardSwitch?.switchSaveCard?.isChecked = true
             } else {
-              //  tapAlertView?.fadeVisibility(View.GONE, 500)
+              tapAlertView?.fadeVisibility(View.GONE, 500)
             }
 
 
@@ -1351,7 +1353,7 @@ class PaymentInlineViewHolder(
                         )
 
                         tabLayout?.visibility = View.GONE
-                      //  tapAlertView?.fadeVisibility(View.GONE, 500)
+                      tapAlertView?.fadeVisibility(View.GONE, 500)
                         return
                     }
                 }
@@ -1385,6 +1387,7 @@ class PaymentInlineViewHolder(
     private fun checkValidationState(card: DefinedCardBrand) {
         if (card.cardBrand != null)
             when (card.validationState) {
+
                 CardValidationState.invalid -> {
                     println("cardBrand val" + card.cardBrand)
                     if (card.cardBrand != null)
@@ -1392,23 +1395,6 @@ class PaymentInlineViewHolder(
                     tapAlertView?.fadeVisibility(View.VISIBLE,1000)
                     tapAlertView?.alertMessage?.text =
                         (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
-                    // checkoutFragment.scrollView?.smoothScrollTo(0,height)
-                    /* if(cardNumber?.length!! >=19) {
-
-                         if (tapCardInputView.isDeleting == true) {
-
-                         } else {
-                             println("full no" + cardNumber)
-
-                                 tapCardInputView.setCardNumberMasked(cardNumber?.let {
-                                     maskCardNumber(
-                                         it
-                                     )
-                                 })
-                         }
-                         tapCardInputView.removeCardNumberTextWatcher(this)
-                         tapCardInputView.setCardNumberTextWatcher(this)
-                     }*/
                     cardNumValidation = false
                 }
                 CardValidationState.incomplete -> {
@@ -1423,13 +1409,13 @@ class PaymentInlineViewHolder(
                     cardNumValidation = false
                 }
                 CardValidationState.valid -> {
-                    if (schema != null)
-                        schema?.cardBrand?.let { tabLayout.selectTab(it, true) }
+                    if (schema != null) schema?.cardBrand?.let { tabLayout.selectTab(it, true) }
                     else tabLayout.selectTab(card.cardBrand, true)
 
                     tapAlertView?.fadeVisibility(View.VISIBLE,1000)
                     tapAlertView?.alertMessage?.text =
                         (LocalizationManager.getValue("Warning", "Hints", "missingExpiryCVV"))
+
                     // lastFocusField =CardInputListener.FocusField.FOCUS_EXPIRY
                     /*tapCardInputView.setCardNumberMasked(cardNumber?.let {
                         maskCardNumber(
@@ -2071,11 +2057,4 @@ class PaymentInlineViewHolder(
 
     }
 
-    fun View.fadeVisibility(visibility: Int, duration: Long = 400) {
-        val transition: Transition = Fade()
-        transition.duration = duration
-        transition.addTarget(this)
-        TransitionManager.beginDelayedTransition(this.parent as ViewGroup, transition)
-        this.visibility = visibility
-    }
 }

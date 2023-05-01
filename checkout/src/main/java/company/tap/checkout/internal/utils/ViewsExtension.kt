@@ -13,6 +13,9 @@ import android.graphics.drawable.shapes.RoundRectShape
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.transition.Fade
+import android.transition.Transition
+import android.transition.TransitionManager
 import android.util.DisplayMetrics
 import android.view.*
 import android.view.animation.Animation
@@ -431,4 +434,11 @@ fun createDrawableGradientForBlurry(colorsArrayList: IntArray): GradientDrawable
         bottomLeftCorner, bottomLeftCorner
     )
     return gradientDrawable
+}
+fun View.fadeVisibility(visibility: Int, duration: Long = 400) {
+    val transition: Transition = Fade()
+    transition.duration = duration
+    transition.addTarget(this)
+    TransitionManager.beginDelayedTransition(this.parent as ViewGroup, transition)
+    this.visibility = visibility
 }
