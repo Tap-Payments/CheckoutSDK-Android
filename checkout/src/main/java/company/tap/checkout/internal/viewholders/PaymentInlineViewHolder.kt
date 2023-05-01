@@ -139,11 +139,10 @@ class PaymentInlineViewHolder(
     var shippingDetailView: TapShippingDetailView? = null
     var tapPaymentInput: TapPaymentInput? = null
     var allFieldsValid: Boolean? = false
-    var watcherRemoved: Boolean? = false
     var separator1: TapSeparatorView? = null
     var cardNumValidation: Boolean = false
     var mPreviousCount: Int = 0
-    lateinit var cardBrandFromAPI: CardBrand
+    
 
     init {
 
@@ -1228,7 +1227,7 @@ class PaymentInlineViewHolder(
             baseLayoutManager.resetViewHolder()
 
 
-            if (charSequence.length <= 6) {
+            if (charSequence.length <=2) {
                 if (card.cardBrand != null)
                     logicTosetImageDynamic(card.cardBrand, charSequence.toString())
 
@@ -1237,7 +1236,7 @@ class PaymentInlineViewHolder(
             if (charSequence.length > 2) {
                 callCardBinNumberApi(charSequence, textWatcher)
 
-            } else {
+            }else {
                 tabLayout.resetBehaviour()
                 PaymentDataSource.setBinLookupResponse(null)
             }
@@ -1315,18 +1314,23 @@ class PaymentInlineViewHolder(
                             itemsCardsList[i].selectedImageURL.contains(
                                 it
                             )
-                        } == true) {
+                        } == true  ) {
                         selectedImageURL = itemsCardsList[i].selectedImageURL
+
                         tapCardInputView.setSingleCardInput(
                             CardBrandSingle.fromCode(
                                 binLookupResponse.cardBrand.toString()
                             ), selectedImageURL
                         )
+
                         tabLayout?.visibility = View.GONE
                         tapAlertView?.fadeVisibility(View.GONE, 500)
+
                     }
                 }
             }
+
+
 
 
 //            tabLayout.setUnselectedAlphaLevel(0.5f)
@@ -1354,7 +1358,7 @@ class PaymentInlineViewHolder(
 
                         tabLayout?.visibility = View.GONE
                       tapAlertView?.fadeVisibility(View.GONE, 500)
-                        return
+
                     }
                 }
             }
@@ -1372,15 +1376,15 @@ class PaymentInlineViewHolder(
      */
     @RequiresApi(Build.VERSION_CODES.N)
     private fun callCardBinNumberApi(s: CharSequence, textWatcher: TextWatcher) {
-
         if (s.trim().toString().replace(" ", "").length == BIN_NUMBER_LENGTH) {
             cardViewModel.processEvent(
                 CardViewEvent.RetreiveBinLookupEvent,
                 CheckoutViewModel(), null, s.trim().toString().replace(" ", ""), null, null
             )
-            tapCardInputView.removeCardNumberTextWatcher(textWatcher)
-            tapCardInputView.setCardNumberTextWatcher(textWatcher)
+
         }
+        tapCardInputView.removeCardNumberTextWatcher(textWatcher)
+        tapCardInputView.setCardNumberTextWatcher(textWatcher)
     }
 
 
