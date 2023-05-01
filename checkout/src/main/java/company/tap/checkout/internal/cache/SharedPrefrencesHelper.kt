@@ -45,4 +45,6 @@ object SharedPrefManager {
         return gson.fromJson(json, SupportedCurrencies::class.java)
     }
 
+
+
 }

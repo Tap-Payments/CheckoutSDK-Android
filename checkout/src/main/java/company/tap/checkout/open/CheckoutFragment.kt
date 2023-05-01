@@ -189,7 +189,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                  * check if data cached and different currency present
                  * should put : @for check !isUserCurrencySameToMainCurrency()
                  */
-                if (cacheUserLocalCurrency() && !isUserCurrencySameToMainCurrency()) {
+                if (cacheUserLocalCurrency() && !requireActivity().isUserCurrencySameToMainCurrency()) {
                         viewModel.powerdByTapAnimationFinished.observe(this@CheckoutFragment) {
                             if (it == true) {
                                 doAfterSpecificTime {

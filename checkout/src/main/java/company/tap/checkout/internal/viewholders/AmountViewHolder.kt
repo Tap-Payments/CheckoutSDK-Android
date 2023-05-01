@@ -3,11 +3,11 @@ package company.tap.checkout.internal.viewholders
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
-import company.tap.cardinputwidget.CardInputUIStatus
+import com.bumptech.glide.Glide
 import company.tap.checkout.R
 import company.tap.checkout.internal.cache.SharedPrefManager
 import company.tap.checkout.internal.enums.SectionType
@@ -18,9 +18,7 @@ import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.TextViewTheme
-import company.tap.tapuilibrary.uikit.adapters.context
 import company.tap.tapuilibrary.uikit.atoms.TapChip
-import company.tap.tapuilibrary.uikit.atoms.TapSeparatorView
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.datasource.AmountViewDataSource
 import kotlinx.android.synthetic.main.amountview_layout.view.*
@@ -31,7 +29,11 @@ import kotlinx.android.synthetic.main.amountview_layout.view.*
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayoutManager? = null) :
+class AmountViewHolder(
+    context: Context,
+    private val baseLayoutManager: BaseLayoutManager? = null,
+    private var checkoutViewModel: CheckoutViewModel
+) :
     TapBaseViewHolder,
     AmountInterface {
 
@@ -137,6 +139,7 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
             if (CheckoutViewModel.currencySelectedForCheck != SharedPrefManager.getUserSupportedLocaleForTransactions(view.amount_section.context)?.currency
             )
                 doAfterSpecificTime(500) {
+                   checkoutViewModel.addDataToAmountView()
                     view.amount_section?.tapChipPopup?.addFadeInAnimation()
                 }
         } else {
@@ -164,6 +167,15 @@ class AmountViewHolder(context: Context, private val baseLayoutManager: BaseLayo
     }
 
 
+    private fun showCountryFlag(): String? {
+        val currency = SharedPrefManager.getUserSupportedLocaleForTransactions(context = this.view.context)
+        Log.e("localNeeded", currency.toString())
+        if (ThemeManager.currentTheme.contains("dark")) {
+            return currency?.logos?.dark?.png
+        } else {
+            return currency?.logos?.light?.png
+        }
+    }
     @SuppressLint("ClickableViewAccessibility")
     fun setOnItemsClickListener() {
         /* view.amount_section.itemAmountLayout.setOnClickListener {

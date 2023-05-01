@@ -27,11 +27,12 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.core.os.postDelayed
-import androidx.core.text.TextUtilsCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import company.tap.checkout.R
+import company.tap.checkout.internal.cache.SharedPrefManager
+import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.ktx.loadAppThemManagerFromPath
 import jp.wasabeef.blurry.Blurry
@@ -127,8 +128,13 @@ fun View.addFadeInAnimation(durationTime: Long = 1000L) {
     this.startAnimation(animation)
 }
 
-fun View.slidefromRightToLeft() {
+fun Context.isUserCurrencySameToMainCurrency(): Boolean {
+    val userCurrency = SharedPrefManager.getUserSupportedLocaleForTransactions(this)?.currency
+    val paymentCurrency = PaymentDataSource.getCurrency()?.isoCode
+    return userCurrency.equals(paymentCurrency, ignoreCase = true)
+}
 
+fun View.slidefromRightToLeft() {
     val animate = TranslateAnimation(
         if (isRTL()) -this.width.toFloat() else this.width.toFloat(),
         0f,

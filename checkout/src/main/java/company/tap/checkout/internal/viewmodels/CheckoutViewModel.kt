@@ -448,7 +448,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     fun initViewHolders() {
         businessViewHolder = BusinessViewHolder(context, this)
-        amountViewHolder = AmountViewHolder(context, this)
+        amountViewHolder = AmountViewHolder(context, this,this)
         tabAnimatedActionButtonViewHolder = TabAnimatedActionButtonViewHolder(context)
         cardViewHolder = CardViewHolder(context, this)
         goPaySavedCardHolder = GoPaySavedCardHolder(context, this, this)
@@ -499,6 +499,22 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         goPayViewsHolder = GoPayViewsHolder(context, this, otpViewHolder)
         asynchronousPaymentViewHolder = AsynchronousPaymentViewHolder(context, this)
         logicForLoyaltyProgram()
+
+        amountViewHolder.view.amount_section.tapChipPopup.setOnClickListener {
+            amountViewHolder.view.amount_section.tapChipPopup.slideFromLeftToRight()
+            with(SharedPrefManager.getUserSupportedLocaleForTransactions(context)!!) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    submitNewLocalCurrency(
+                        currencySelected = currency.toString(),
+                        currencyRate = rate?.toBigDecimal()!!,
+                        totalSelectedAmount = amount,
+                        selectedCurrencySymbol = symbol ?: ""
+                    )
+                }
+            }
+
+
+        }
     }
 
     private fun showCountryFlag(): String? {
@@ -791,34 +807,23 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
         )
+
     }
 
 
     fun addTitlePaymentAndFlag() {
-        val currencyAlert: String = LocalizationManager.getValue("currencyAlert", "Common")
-        amountViewHolder.view.amount_section.popupTextView.text =
-            currencyAlert + " " + checkoutFragment.getSimIsoCountryCurrency()
-        Glide.with(context).load(showCountryFlag())
-            .into(amountViewHolder.view.amount_section.flagImageView);
-        amountViewHolder.view.amount_section.tapChipAmount.bringToFront()
-
+       addDataToAmountView()
         amountViewHolder.view.amount_section.tapChipPopup.slidefromRightToLeft()
         amountViewHolder.view.amount_section.itemPopupLayout.applyGlowingEffect(getCurrencyColors())
-        amountViewHolder.view.amount_section.tapChipPopup.setOnClickListener {
-            amountViewHolder.view.amount_section.tapChipPopup.slideFromLeftToRight()
-            with(SharedPrefManager.getUserSupportedLocaleForTransactions(context)!!) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    submitNewLocalCurrency(
-                        currencySelected = currency.toString(),
-                        currencyRate = rate?.toBigDecimal()!!,
-                        totalSelectedAmount = amount,
-                        selectedCurrencySymbol = symbol ?: ""
-                    )
-                }
-            }
 
+    }
 
-        }
+    fun addDataToAmountView(){
+        val currencyAlert: String = LocalizationManager.getValue("currencyAlert", "Common")
+        amountViewHolder.view.amount_section.popupTextView.text = currencyAlert + " " + checkoutFragment.getSimIsoCountryCurrency()
+        Glide.with(context).load(showCountryFlag()).into(amountViewHolder.view.amount_section.flagImageView);
+        amountViewHolder.view.amount_section.tapChipAmount.bringToFront()
+
     }
 
     fun removevisibiltyCurrency() {
@@ -1464,12 +1469,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             dataToBeSaved = suportedCurrencyForUser,
             keyValueToBeSaved = UserSupportedLocaleForTransactions
         )
-    }
-
-    fun isUserCurrencySameToMainCurrency(): Boolean {
-        val userCurrency = SharedPrefManager.getUserSupportedLocaleForTransactions(context)?.currency
-        val paymentCurrency = PaymentDataSource.getCurrency()?.isoCode
-        return userCurrency.equals(paymentCurrency, ignoreCase = true)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
