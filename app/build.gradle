@@ -12,7 +12,7 @@ android {
         applicationId "company.tap.checkoutsdk"
         minSdkVersion 22
         targetSdkVersion 31
-        versionCode 49
+        versionCode 50
         versionName "1.0.2.22"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
