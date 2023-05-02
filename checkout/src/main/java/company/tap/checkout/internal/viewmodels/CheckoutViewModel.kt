@@ -302,7 +302,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         aScene?.setEnterAction {
             AnimationUtils.loadAnimation(context, R.anim.slide_down)
         }
-        initializeScanner(this)
+        //initializeScanner(this)
         initViewHolders()
         initAmountAction()
         initSwitchAction()

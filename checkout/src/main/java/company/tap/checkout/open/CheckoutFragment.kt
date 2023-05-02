@@ -357,7 +357,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         relativeLL = view.findViewById(R.id.relativeLL)
         mainCardLayout = view.findViewById(R.id.mainCardLayout)
         /**Added to init the lib of getting dynamic flags*/
-        World.init(context)
+//        World.init(context)
     }
 
 

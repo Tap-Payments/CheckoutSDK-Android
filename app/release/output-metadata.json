@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "company.tap.checkoutsdk",
+  "variantName": "processReleaseResources",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "versionCode": 50,
+      "versionName": "1.0.2.22",
+      "outputFile": "app-release.apk"
+    }
+  ]
+}
