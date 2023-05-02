@@ -298,10 +298,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         this.checkoutFragment = checkoutFragment
         this.headerLayout = headerLayout
 
-        val aScene: Scene? = Scene.getCurrentScene(sdkLayout)
-        aScene?.setEnterAction {
-            AnimationUtils.loadAnimation(context, R.anim.slide_down)
-        }
+//        val aScene: Scene? = Scene.getCurrentScene(sdkLayout)
+//        aScene?.setEnterAction {
+//            AnimationUtils.loadAnimation(context, R.anim.slide_down)
+//        }
         //initializeScanner(this)
         initViewHolders()
         initAmountAction()
@@ -448,7 +448,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     fun initViewHolders() {
         businessViewHolder = BusinessViewHolder(context, this)
-        amountViewHolder = AmountViewHolder(context, this,this)
+        amountViewHolder = AmountViewHolder(context, this, this)
         tabAnimatedActionButtonViewHolder = TabAnimatedActionButtonViewHolder(context)
         cardViewHolder = CardViewHolder(context, this)
         goPaySavedCardHolder = GoPaySavedCardHolder(context, this, this)
@@ -812,16 +812,18 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
     fun addTitlePaymentAndFlag() {
-       addDataToAmountView()
+        addDataToAmountView()
         amountViewHolder.view.amount_section.tapChipPopup.slidefromRightToLeft()
         amountViewHolder.view.amount_section.itemPopupLayout.applyGlowingEffect(getCurrencyColors())
 
     }
 
-    fun addDataToAmountView(){
+    fun addDataToAmountView() {
         val currencyAlert: String = LocalizationManager.getValue("currencyAlert", "Common")
-        amountViewHolder.view.amount_section.popupTextView.text = currencyAlert + " " + checkoutFragment.getSimIsoCountryCurrency()
-        Glide.with(context).load(showCountryFlag()).into(amountViewHolder.view.amount_section.flagImageView);
+        amountViewHolder.view.amount_section.popupTextView.text =
+            currencyAlert + " " + checkoutFragment.getSimIsoCountryCurrency()
+        Glide.with(context).load(showCountryFlag())
+            .into(amountViewHolder.view.amount_section.flagImageView);
         amountViewHolder.view.amount_section.tapChipAmount.bringToFront()
 
     }
@@ -915,7 +917,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun translateViewToNewHeight(originalHeight: Int, expandHeightBool: Boolean) {
         val sdkLayoutHeight = sdkLayout.height
-        val bottomSheetLayoutHeight = bottomSheetLayout.height
         println("sdkLayoutHeight>>" + sdkLayoutHeight)
         println("originalHeight>>" + originalHeight)
         val resizeAnimation = ResizeAnimation(
@@ -1990,14 +1991,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     it?.view?.startAnimation(animation)
                 }
 
-                Handler().postDelayed({
-                    if (::sdkLayout.isInitialized) {
-                        // it?.view?.visibility = View.VISIBLE
-                        sdkLayout.removeView(it?.view)
-                        sdkLayout.addView(it?.view)
-
-                    }
-                }, 200)
+                if (::sdkLayout.isInitialized) {
+                    sdkLayout.addView(it?.view)
+                }
 
 
             }, 0)
@@ -2008,7 +2004,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
 
-     fun unActivateActionButton() {
+    fun unActivateActionButton() {
         val payNowString: String
 
         when (PaymentDataSource.getTransactionMode()) {
@@ -2527,7 +2523,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     ) {
         println("isCompleted aaa" + isCompleted)
         println("expiryDate aaa" + expiryDate)
-        if(isCompleted) activateActionButton(cardBrandString = cardBrandString)
+        if (isCompleted) activateActionButton(cardBrandString = cardBrandString)
         if (savedCardsModel != null) {
             setPayButtonAction(paymentType, savedCardsModel)
         } else {

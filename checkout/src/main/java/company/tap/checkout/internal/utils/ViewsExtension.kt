@@ -27,6 +27,7 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.core.os.postDelayed
@@ -45,7 +46,7 @@ import java.util.*
 
 
 private var targetHeight: Int? = 0
-private var animationDelayForResizeAnimation = 1500L
+private var animationDelayForResizeAnimation = 2000L
 private var topLeftCorner = 16f
 private var topRightCorner = 16f
 private var bottomRightCorner = 0f
@@ -59,34 +60,37 @@ fun View.startPoweredByAnimation(
 ) {
     Handler(Looper.getMainLooper()).postDelayed({
         poweredByLogo?.visibility = View.GONE
-        this.visibility = View.VISIBLE
+      //  this.addSlideUpAnimation ()
         doAfterSpecificTime(execute = {
-            poweredByLogo?.addFadeInAnimation()
+            poweredByLogo?.addFadeInAnimation(durationTime = 1500)
         })
+
     }, delayTime)
-    val resizeAnimation =
-        targetHeight?.let {
-            ResizeAnimation(
-                this,
-                it,
-                0, true
-            )
-        }
 
-    resizeAnimation?.duration = animationDelayForResizeAnimation
-    resizeAnimation?.setAnimationListener(object : AnimationListener {
-        override fun onAnimationStart(p0: Animation?) {
-        }
-
-        override fun onAnimationEnd(p0: Animation?) {
-            onAnimationEnd.invoke()
-        }
-
-        override fun onAnimationRepeat(p0: Animation?) {
-        }
-
-    })
-    this.startAnimation(resizeAnimation)
+    this.addSlideUpAnimation()
+//    val resizeAnimation =
+//        targetHeight?.let {
+//            ResizeAnimation(
+//                this,
+//                it,
+//                0, true
+//            )
+//        }
+//
+//    resizeAnimation?.duration = animationDelayForResizeAnimation
+//    resizeAnimation?.setAnimationListener(object : AnimationListener {
+//        override fun onAnimationStart(p0: Animation?) {
+//        }
+//
+//        override fun onAnimationEnd(p0: Animation?) {
+//            onAnimationEnd.invoke()
+//        }
+//
+//        override fun onAnimationRepeat(p0: Animation?) {
+//        }
+//
+//    })
+//    this.startAnimation(resizeAnimation)
 
 
 }
@@ -129,6 +133,25 @@ fun View.addFadeInAnimation(durationTime: Long = 1000L) {
     val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
     animation.duration = durationTime
     this.startAnimation(animation)
+}
+
+fun View.addSlideUpAnimation( durationTime: Long = 1000L) {
+    val animation = AnimationUtils.loadAnimation(context, R.anim.slide_up)
+    animation.duration = durationTime
+    this.startAnimation(animation)
+    this.animation.setAnimationListener(object : AnimationListener {
+        override fun onAnimationStart(p0: Animation?) {
+        }
+
+        override fun onAnimationEnd(p0: Animation?) {
+            this@addSlideUpAnimation.visibility = View.VISIBLE
+        }
+
+        override fun onAnimationRepeat(p0: Animation?) {
+        }
+
+    })
+
 }
 
 fun Context.isUserCurrencySameToMainCurrency(): Boolean {
@@ -426,7 +449,6 @@ fun createDrawableGradientForBlurry(colorsArrayList: IntArray): GradientDrawable
         GradientDrawable.Orientation.BL_TR,
         colorsArrayList
     )
-    gradientDrawable.gradientRadius = 100f
     gradientDrawable.cornerRadii = floatArrayOf(
         topLeftCorner, topLeftCorner,
         topRightCorner, topRightCorner,
