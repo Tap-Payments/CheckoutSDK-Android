@@ -2558,7 +2558,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
         //  addViews(businessViewHolder, amountViewHolder)
         frameLayout.visibility = View.VISIBLE
-        cardViewHolder?.view?.visibility=View.GONE
+        cardViewHolder.view.visibility=View.GONE
         fragmentManager
             .beginTransaction()
             .replace(R.id.fragment_container_nfc_lib, nfcFragment)
@@ -3333,7 +3333,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         checkoutFragment.isNfcOpened = false
         //  webFrameLayout.visibility = View.GONE
         frameLayout.visibility = View.GONE
-        cardViewHolder?.view?.fadeVisibility(View.VISIBLE)
+        cardViewHolder.view.visibility=View.VISIBLE
     }
 
 
