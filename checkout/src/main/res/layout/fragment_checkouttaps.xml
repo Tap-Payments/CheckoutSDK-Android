@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:blurkit="http://schemas.android.com/tools"
     android:windowSoftInputMode="adjustResize|adjustPan"
     android:orientation="vertical"
     android:fillViewport="true"
     android:clipToOutline="true"
-    app:cardElevation="0dp"
-    android:outlineProvider="none"
-    android:id="@+id/mainCardLayout"
+
+
     app:cardCornerRadius="1.5dp"
-    app:cardPreventCornerOverlap="false"
-    app:cardUseCompatPadding="true"
-    app:cardBackgroundColor="@android:color/transparent"
-    android:background="@android:color/transparent"
+    app:cardBackgroundColor="#10ffffff"
+
+
     tools:context=".open.CheckoutFragment">
+
 
 
     <androidx.core.widget.NestedScrollView
@@ -25,114 +24,113 @@
         android:layout_height="wrap_content"
         app:behavior_hideable="false"
         app:behavior_peekHeight="0dp"
+
         android:clipToOutline="true"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         android:id="@+id/scrollView"
-
-        android:background="@android:color/transparent"
-       >
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:windowSoftInputMode="adjustResize|adjustPan"
-        tools:context=".open.CheckoutFragment">
-
-
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:clipToOutline="true"
-
-    android:id="@+id/relativeLL"
-    android:gravity="center">
-  <!--  android:background="@drawable/layout_bg"-->
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/headerLayout"
-
-        tools:context=".open.CheckoutFragment">
+        >
 
         <LinearLayout
-            android:id="@+id/fragment_all"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipToOutline="true"
-            android:visibility="visible"
-
-            android:orientation="vertical" />
-
-        <!-- <LinearLayout
-             android:id="@+id/sdkContainer"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:orientation="vertical"
-            >
-         </LinearLayout>-->
-
-        <FrameLayout
-            android:id="@+id/webFrameLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"
-            android:layout_gravity="center"
-            />
-        <FrameLayout
-            android:id="@+id/fragment_container_nfc_lib"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="bottom"
             android:orientation="vertical"
-            android:visibility="gone"
-            android:gravity="bottom"/>
+            android:windowSoftInputMode="adjustResize|adjustPan"
+            tools:context=".open.CheckoutFragment">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToOutline="true"
+
+                android:gravity="center">
+                <!--  android:background="@drawable/layout_bg"-->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/headerLayout"
+                    android:clipToOutline="true"
+                    tools:context=".open.CheckoutFragment">
+
+                    <LinearLayout
+                        android:id="@+id/fragment_all"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clipToOutline="true"
+                        android:visibility="visible"
+                        android:background="@drawable/layout_bg"
+                        android:orientation="vertical" />
+
+                    <!-- <LinearLayout
+                         android:id="@+id/sdkContainer"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:orientation="vertical"
+                        >
+                     </LinearLayout>-->
+
+                    <FrameLayout
+                        android:id="@+id/webFrameLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="gone"
+                        android:layout_gravity="center"
+                        />
+                    <FrameLayout
+                        android:id="@+id/fragment_container_nfc_lib"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="bottom"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        android:gravity="bottom"/>
 
 
 
-        <FrameLayout
-            android:id="@+id/inline_container"
-            android:layout_width="match_parent"
-            android:visibility="gone"
-            android:layout_height="500dp"
-            />
+                    <FrameLayout
+                        android:id="@+id/inline_container"
+                        android:layout_width="match_parent"
+                        android:visibility="gone"
+                        android:layout_height="500dp"
+                        />
 
 
-    </LinearLayout>
-    <!--Kept webframelayout outside so that it takes full screen-->
+                </LinearLayout>
+                <!--Kept webframelayout outside so that it takes full screen-->
 
 
-    <company.tap.tapuilibrary.uikit.atoms.TapTextView
-        android:id="@+id/closeText"
-        android:layout_width="48dp"
-        android:layout_height="40dp"
-        android:layout_alignParentEnd="true"
-        android:layout_gravity="end"
-        android:layout_marginEnd="10dp"
-        android:gravity="center"
-        android:text="CLOSE"
-        android:textColor="@color/dark_gray"
-        android:textSize="12sp"
-        android:visibility="gone" />
+                <company.tap.tapuilibrary.uikit.atoms.TapTextView
+                    android:id="@+id/closeText"
+                    android:layout_width="48dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="10dp"
+                    android:gravity="center"
+                    android:text="CLOSE"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
 
-    <company.tap.tapuilibrary.uikit.atoms.TapImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:id="@+id/closeImage"
-        android:src="@drawable/ic_close"
-        android:gravity="center"
-        android:layout_marginEnd="10dp"
-        android:text="close"
-        android:visibility="gone"
-        android:layout_alignParentEnd="true"
-        android:layout_gravity="end"/>
+                <company.tap.tapuilibrary.uikit.atoms.TapImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/closeImage"
+                    android:src="@drawable/ic_close"
+                    android:gravity="center"
+                    android:layout_marginEnd="10dp"
+                    android:text="close"
+                    android:visibility="gone"
+                    android:layout_alignParentEnd="true"
+                    android:layout_gravity="end"/>
 
 
-</RelativeLayout>
-    </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
+            </RelativeLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 
 </androidx.cardview.widget.CardView>

@@ -136,7 +136,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         backgroundColor = (Color.parseColor(ThemeManager.getValue("tapBottomSheet.dimmedColor")))
 
         bottomSheetDialog.behavior.isDraggable = true
-        bottomSheetDialog.behavior.maxHeight = context?.getDeviceSpecs()?.first ?: 1000
+      //  bottomSheetDialog.behavior.maxHeight = context?.getDeviceSpecs()?.first ?: 1000
 
         val checkoutLayout: LinearLayout? = view.findViewById(R.id.fragment_all)
         val frameLayout: FrameLayout? = view.findViewById(R.id.fragment_container_nfc_lib)
@@ -282,7 +282,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         }
 
 
-        relativeLL.let { it1 ->
+     /*   relativeLL.let { it1 ->
             if (it1 != null) {
                 setTopBorders(
                     it1,
@@ -295,8 +295,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                     Color.parseColor(newColorVal)
                 )
             }
-        }
-        mainCardLayout.let { card ->
+        }*/
+      /*  mainCardLayout.let { card ->
             if (card != null) {
                 setTopBorders(
                     card,
@@ -308,7 +308,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                 )
             }
         }
-
+*/
         closeText.setOnClickListener {
             bottomSheetDialog.dismissWithAnimation
             bottomSheetDialog.hide()
@@ -354,8 +354,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         closeText = view.findViewById(R.id.closeText)
         closeImage = view.findViewById(R.id.closeImage)
         scrollView = view.findViewById(R.id.scrollView)
-        relativeLL = view.findViewById(R.id.relativeLL)
-        mainCardLayout = view.findViewById(R.id.mainCardLayout)
+       // relativeLL = view.findViewById(R.id.relativeLL)
+       // mainCardLayout = view.findViewById(R.id.mainCardLayout)
         /**Added to init the lib of getting dynamic flags*/
         World.init(context)
     }
