@@ -27,7 +27,6 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.widget.FrameLayout
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.core.os.postDelayed
@@ -60,14 +59,12 @@ fun View.startPoweredByAnimation(
 ) {
     Handler(Looper.getMainLooper()).postDelayed({
         poweredByLogo?.visibility = View.GONE
-      //  this.addSlideUpAnimation ()
+        this.visibility = View.VISIBLE
+        this.addSlideUpAnimation(onAnimationEnd = onAnimationEnd)
         doAfterSpecificTime(execute = {
-            poweredByLogo?.addFadeInAnimation(durationTime = 1500)
+            poweredByLogo?.addFadeInAnimation()
         })
-
     }, delayTime)
-
-    this.addSlideUpAnimation()
 //    val resizeAnimation =
 //        targetHeight?.let {
 //            ResizeAnimation(
@@ -76,7 +73,7 @@ fun View.startPoweredByAnimation(
 //                0, true
 //            )
 //        }
-//
+
 //    resizeAnimation?.duration = animationDelayForResizeAnimation
 //    resizeAnimation?.setAnimationListener(object : AnimationListener {
 //        override fun onAnimationStart(p0: Animation?) {
@@ -135,7 +132,7 @@ fun View.addFadeInAnimation(durationTime: Long = 1000L) {
     this.startAnimation(animation)
 }
 
-fun View.addSlideUpAnimation( durationTime: Long = 1000L) {
+fun View.addSlideUpAnimation( durationTime: Long = 1000L,onAnimationEnd: () -> Unit?) {
     val animation = AnimationUtils.loadAnimation(context, R.anim.slide_up)
     animation.duration = durationTime
     this.startAnimation(animation)
@@ -144,14 +141,13 @@ fun View.addSlideUpAnimation( durationTime: Long = 1000L) {
         }
 
         override fun onAnimationEnd(p0: Animation?) {
-            this@addSlideUpAnimation.visibility = View.VISIBLE
+            onAnimationEnd.invoke()
         }
 
         override fun onAnimationRepeat(p0: Animation?) {
         }
 
     })
-
 }
 
 fun Context.isUserCurrencySameToMainCurrency(): Boolean {

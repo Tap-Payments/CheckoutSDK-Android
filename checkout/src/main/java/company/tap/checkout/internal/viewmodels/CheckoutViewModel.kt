@@ -448,7 +448,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     fun initViewHolders() {
         businessViewHolder = BusinessViewHolder(context, this)
-        amountViewHolder = AmountViewHolder(context, this, this)
+        amountViewHolder = AmountViewHolder(context, this,this)
         tabAnimatedActionButtonViewHolder = TabAnimatedActionButtonViewHolder(context)
         cardViewHolder = CardViewHolder(context, this)
         goPaySavedCardHolder = GoPaySavedCardHolder(context, this, this)
@@ -1992,9 +1992,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 }
 
                 if (::sdkLayout.isInitialized) {
+                    sdkLayout.removeView(it?.view)
                     sdkLayout.addView(it?.view)
                 }
-
 
             }, 0)
             BottomSheetBehavior.STATE_HALF_EXPANDED
