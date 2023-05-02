@@ -142,7 +142,8 @@ class PaymentInlineViewHolder(
     var separator1: TapSeparatorView? = null
     var cardNumValidation: Boolean = false
     var mPreviousCount: Int = 0
-    
+    var saveLocalBinLookup: BINLookupResponse? = null
+
 
     init {
 
@@ -1065,8 +1066,8 @@ class PaymentInlineViewHolder(
 
                 if (s?.trim()?.length == 3 || s?.trim()?.length == 4) {
                     if (cardInputUIStatus == CardInputUIStatus.NormalCard) {
-                        if (PaymentDataSource.getBinLookupResponse()?.scheme != null) {
-                            PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.let {
+                        if (PaymentDataSource?.getBinLookupResponse()?.scheme != null) {
+                            PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.let {
                                 logicForImageOnCVV(
                                     it,
                                     s.toString()
@@ -1261,9 +1262,11 @@ class PaymentInlineViewHolder(
                 if (charSequence.length > 4) checkIfCardTypeExistInList(card.cardBrand)
                 if (PaymentDataSource.getCardType() != null && PaymentDataSource.getCardType() == CardType.ALL) {
 
+                    if(charSequence.length == 8) // added length check to avoid flickering
                     setTabLayoutBasedOnApiResponse(binLookupResponse, card)
                 } else {
                     checkAllowedCardTypes(binLookupResponse)
+                    if(charSequence.length == 8)// added length check to avoid flickering
                     setTabLayoutBasedOnApiResponse(binLookupResponse, card)
                 }
             }
@@ -1297,6 +1300,7 @@ class PaymentInlineViewHolder(
         binLookupResponse: BINLookupResponse?,
         cardBrand: DefinedCardBrand
     ) {
+
         if (binLookupResponse?.cardBrand?.name == binLookupResponse?.scheme?.name) {
             // we will send card brand to validator
             binLookupResponse?.cardBrand?.let { it1 ->
@@ -1319,7 +1323,7 @@ class PaymentInlineViewHolder(
 
                         tapCardInputView.setSingleCardInput(
                             CardBrandSingle.fromCode(
-                                binLookupResponse.cardBrand.toString()
+                                binLookupResponse?.cardBrand.toString()
                             ), selectedImageURL
                         )
 
@@ -2016,7 +2020,7 @@ class PaymentInlineViewHolder(
                         .contains(card.name.toLowerCase())
                 ) {
                     tapCardInputView.setCardBrandUrl(itemsCardsList[i].selectedImageURL)
-
+                    saveLocalBinLookup = null
                 }
             }
         }
