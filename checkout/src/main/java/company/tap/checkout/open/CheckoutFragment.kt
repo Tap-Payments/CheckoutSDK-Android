@@ -124,7 +124,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         return inflater.inflate(R.layout.fragment_checkouttaps, container, false)
     }
 
-    @SuppressLint("ResourceAsColor", "UseCompatLoadingForColorStateLists")
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
