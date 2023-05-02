@@ -46,6 +46,7 @@ import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.CardType
+import company.tap.nfcreader.open.reader.TapEmvCard
 import company.tap.nfcreader.open.utils.TapNfcUtils
 import company.tap.tapcardvalidator_android.CardBrand
 import company.tap.tapcardvalidator_android.CardValidationState
@@ -624,6 +625,91 @@ class PaymentInlineViewHolder(
     }
 
 
+    fun setNFCCardData(emvCard: TapEmvCard , month :Int , year :Int)
+    {
+        cardInputUIStatus = CardInputUIStatus.NormalCard
+        val updateCardString: String = emvCard.cardNumber?.trim().toString()
+            .substring(0, 6) + emvCard.cardNumber?.length?.minus(4)
+            ?.let {
+                emvCard.cardNumber?.trim().toString().substring(
+                    it
+                )
+            }
+        println("updateCardString"+updateCardString)
+
+        val cardModel = Card(
+            updateCardString,
+            null,
+          month,
+            year,
+            emvCard.holderFirstname,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            emvCard.cardNumber?.length?.minus(4)
+                ?.let { emvCard?.cardNumber?.substring(it) },
+            company.tap.cardinputwidget.CardBrand.fromCardNumber(emvCard.cardNumber),
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        )
+
+
+        if (emvCard?.holderFirstname != null) {
+            tapInlineCardSwitch?.visibility = View.VISIBLE
+            tapInlineCardSwitch?.switchesLayout?.visibility = View.VISIBLE
+            tapInlineCardSwitch?.switchSaveCard?.visibility = View.VISIBLE
+            tapInlineCardSwitch?.switchSaveCard?.isChecked = true
+            tapCardInputView.setVisibilityOfHolderField(true)
+            tapCardInputView.holderNameEnabled = true
+            separator1?.visibility = View.VISIBLE
+            tapInlineCardSwitch?.switchSaveCard?.isChecked = true
+
+        }
+
+        tapCardInputView.setNormalCardDetails(cardModel, CardInputUIStatus.NormalCard)
+        /*  val alertMessage:String = LocalizationManager.getValue("Warning", "Hints", "missingCVV")
+           tapAlertView?.alertMessage?.text =alertMessage.replace("%i","3")
+
+           tapAlertView?.visibility =View.VISIBLE*/
+        if (CustomUtils.getCurrentTheme() != null && CustomUtils.getCurrentTheme()
+                .contains("dark")
+        ) {
+            val card = CardValidator.validate(emvCard?.cardNumber)
+            emvCard.cardNumber?.let {
+                logicTosetImageDynamic(
+                    card.cardBrand,
+                    it
+                )
+            }
+        } else {
+            val card = CardValidator.validate(emvCard?.cardNumber)
+            emvCard.cardNumber?.let {
+                logicTosetImageDynamic(
+                    card.cardBrand,
+                    it
+                )
+            }
+        }
+
+        contactDetailsView?.visibility = View.GONE
+        shippingDetailView?.visibility = View.GONE
+        // intertabLayout.visibility = View.GONE
+        tabLayout?.fadeVisibility(View.GONE, 2000)
+        intertabLayout?.fadeVisibility(View.GONE, 2000)
+        //Added for opening as soon as cvv focus
+        CustomUtils.showKeyboard(context)
+
+    }
+
     private fun resetCardBrandIcon() {
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
             cardBrandView?.iconView?.setImageResource(R.drawable.card_icon_dark)
@@ -1066,8 +1152,8 @@ class PaymentInlineViewHolder(
 
                 if (s?.trim()?.length == 3 || s?.trim()?.length == 4) {
                     if (cardInputUIStatus == CardInputUIStatus.NormalCard) {
-                        if (PaymentDataSource?.getBinLookupResponse()?.scheme != null) {
-                            PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.let {
+                        if (PaymentDataSource.getBinLookupResponse()?.scheme != null) {
+                            PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.let {
                                 logicForImageOnCVV(
                                     it,
                                     s.toString()
