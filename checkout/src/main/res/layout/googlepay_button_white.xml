@@ -2,11 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:clickable="true"
     android:focusable="true"
-    android:layout_width="match_parent"
-    android:layout_height="48sp"
+    android:layout_width="100dp"
+    android:layout_height="40dp"
     android:id="@+id/googlePayButton"
     android:background="@drawable/googlepay_button_background_shape_white"
-    android:padding="2sp"
+
    >
     <LinearLayout
         android:duplicateParentState="true"
@@ -23,7 +23,7 @@
             android:duplicateParentState="true"
             android:src="@drawable/googlepay_button_content_white"/>
     </LinearLayout>
-    <ImageView
+   <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"

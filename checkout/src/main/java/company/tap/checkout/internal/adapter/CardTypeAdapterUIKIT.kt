@@ -456,7 +456,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
             holder.itemView.tapCardChip2Constraints,
             //(ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
             19.0f,// corner raduis
-            0.0f,
+            2.0f,
             parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
             Color.parseColor(ThemeManager.getValue("horizontalList.chips.savedCardChip.backgroundColor")),// tint color
             parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
@@ -632,7 +632,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
             // (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
 
             19.0f,// corner raduis
-            0.0f,
+            2.0f,
             parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
             parseColor(ThemeManager.getValue("horizontalList.chips.gatewayChip.backgroundColor")),// tint color
             parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
@@ -655,36 +655,23 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         )// shadow color
     }
 
-    private fun setUnSelectedCardTypeGoogleShadowAndBackground(holder: RecyclerView.ViewHolder) {
-        /* if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) holder.itemView.setBackgroundResource(
-             R.drawable.border_unclick_black
-         )
-         else holder.itemView.setBackgroundResource(R.drawable.border_unclick)*/
-        /*  setBorderedView(
-              holder.itemView.tapCardChip6Linear,
-              // (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
-              15.0f,// corner raduis
-              0.0f,
-              parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
-              parseColor(ThemeManager.getValue("horizontalList.chips.gatewayChip.backgroundColor")),// tint color
-              parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
-          )// shadow color*/
-    }
+
 
     private fun setSelectedGoogleShadowAndBackground(holder: RecyclerView.ViewHolder) {
-        /* if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) (holder.itemView.setBackgroundResource(
-             R.drawable.border_shadow_white
-         ))
-         else holder.itemView.setBackgroundResource(R.drawable.border_shadow)
-
-         setBorderedView(
-             holder.itemView.tapCardChip6Linear,
-             15.0f,// corner raduis
-             0.0f,
-             parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
-             parseColor(ThemeManager.getValue("horizontalList.chips.gatewayChip.backgroundColor")),// tint color
-             parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
-         )// shadow color*/
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
+            holder.itemView.tapCardChip6.setBackgroundResource(R.drawable.border_shadow_white)
+        } else {
+            holder.itemView.tapCardChip6.setBackgroundResource(R.drawable.border_shadow)
+        }
+        setBorderedView(
+            holder.itemView.tapCardChip6Linear,
+            //(ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
+            19.0f,// corner raduis
+            2.0f,
+            parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
+            Color.parseColor(ThemeManager.getValue("horizontalList.chips.savedCardChip.backgroundColor")),// tint color
+            parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
+        )// shadow color
     }
 
     internal class SavedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
@@ -745,6 +732,24 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         }
     }
 
+
+    private fun setUnSelectedCardTypeGoogleShadowAndBackground(holder: RecyclerView.ViewHolder) {
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
+            holder.itemView.tapCardChip6.setBackgroundResource(R.drawable.border_unclick_black)
+        } else {
+            holder.itemView.tapCardChip6.setBackgroundResource(R.drawable.border_unclick)
+        }
+
+        setBorderedView(
+            holder.itemView.tapCardChip6Linear,
+            // (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
+            19.0f,// corner raduis
+            0.0f,
+            parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
+            Color.parseColor(ThemeManager.getValue("horizontalList.chips.savedCardChip.backgroundColor")),// tint color
+            parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
+        )// shadow color
+    }
 
 }
 
