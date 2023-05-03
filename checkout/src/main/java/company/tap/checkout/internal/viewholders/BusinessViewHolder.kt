@@ -2,17 +2,28 @@ package company.tap.checkout.internal.viewholders
 
 import android.content.Context
 import android.graphics.Color
+import android.provider.CalendarContract.Colors
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
+import androidx.core.view.ViewCompat
+import androidx.core.view.setPadding
+import com.google.android.material.shape.CornerFamily
+import com.google.android.material.shape.MaterialShapeDrawable
+import com.google.android.material.shape.ShapeAppearanceModel
 import company.tap.checkout.R
 import company.tap.checkout.internal.enums.SectionType
+import company.tap.checkout.internal.utils.setMargins
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.themekit.theme.ImageViewTheme
 import company.tap.tapuilibrary.uikit.atoms.TapImageView
 import company.tap.tapuilibrary.uikit.datasource.HeaderDataSource
+import company.tap.tapuilibrary.uikit.ktx.setTopBorders
 import kotlinx.android.synthetic.main.businessview_layout.view.*
 
 
@@ -40,11 +51,27 @@ class BusinessViewHolder( context: Context, private  val checkoutViewModel: Chec
     }
 
     override fun bindViewComponents() {
+        val imagetheme = ImageViewTheme()
+        imagetheme.imageResource = (R.drawable.merchant_logo)
+        view.headerView.businessIcon.setTheme(imagetheme)
+        view.headerView.tapChipIcon.setMargins(20,0,0,0)
+        view.headerView.tapChipIcon.setPaddingRelative(4,4,4,4)
 
+        view.headerView.paymentFor.setMargins(0,0,0,0)
+        view.headerView.businessName.setMargins(0,0,0,0)
+
+        setTopBorders(
+            view.headerView.tapCloseIcon,
+            40f,// corner raduis
+            0.0f,
+            Color.parseColor(ThemeManager.getValue("merchantHeaderView.backgroundColor")),// stroke color
+            Color.parseColor(ThemeManager.getValue("merchantHeaderView.backgroundColor")),// tint color
+            Color.parseColor(ThemeManager.getValue("merchantHeaderView.backgroundColor"))
+        )//
         if(PaymentDataSource.getTransactionMode() == TransactionMode.SAVE_CARD || PaymentDataSource.getTransactionMode()==TransactionMode.TOKENIZE_CARD){
 
             view.headerView.setHeaderDataSource(HeaderDataSource("Enter Card Details",null,null))
-            view.headerView.businessIcon.visibility= View.GONE
+            view.headerView.businessIcon.visibility= View.VISIBLE
             //view.headerView.tapChipIcon.visibility= View.GONE
         }else
             if (merchantName != null){

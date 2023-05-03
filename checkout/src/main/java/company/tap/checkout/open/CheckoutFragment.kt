@@ -270,47 +270,54 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
         bottomSheetDialog.setOnShowListener {
             bottomSheetDialog.behavior.setState(BottomSheetBehavior.STATE_EXPANDED)
+
         }
 
-//        scrollView?.let {
-//            setTopBorders(
-//                it,
-//                strokeColor = Color.parseColor(
-//                    newColorVal
-//                ),
-//                tintColor = Color.parseColor(
-//                    newColorVal
-//                ),// tint color
-//                shadowColor = Color.parseColor(
-//                    newColorVal
-//                )
-//            )
-//        }
-//
-//
-//        relativeLL.let { it1 ->
-//            if (it1 != null) {
-//                setTopBorders(
-//                    it1,
-//                    strokeColor = Color.parseColor(
-//                        newColorVal
-//                    ),// stroke color
-//                    tintColor = Color.parseColor(newColorVal),// tint color
-//                    shadowColor = Color.parseColor(newColorVal)
-//                )
-//            }
-//        }
-//        mainCardLayout.let { card ->
-//            if (card != null) {
-//                setTopBorders(
-//                     card,
-//                    strokeColor = Color.parseColor(newColorVal),// stroke color
-//                    tintColor= Color.parseColor(newColorVal),// tint color
-//                    shadowColor = Color.parseColor(newColorVal)
-//                )
-//            }
-//        }
 
+
+        scrollView?.let {
+            setTopBorders(
+                it,
+                strokeColor = Color.parseColor(
+                    newColorVal
+                ),
+                tintColor = Color.parseColor(
+                    newColorVal
+                ),// tint color
+                shadowColor = Color.parseColor(
+                    newColorVal
+                )
+            )
+        }
+
+
+     /*   relativeLL.let { it1 ->
+            if (it1 != null) {
+                setTopBorders(
+                    it1,
+                    35f,// corner raduis
+                    0.0f,
+                    Color.parseColor(
+                        newColorVal
+                    ),// stroke color
+                    Color.parseColor(newColorVal),// tint color
+                    Color.parseColor(newColorVal)
+                )
+            }
+        }*/
+      /*  mainCardLayout.let { card ->
+            if (card != null) {
+                setTopBorders(
+                    card,
+                    35f,// corner raduis
+                    0.0f,
+                    Color.parseColor(newColorVal),// stroke color
+                    Color.parseColor(newColorVal),// tint color
+                    Color.parseColor(newColorVal)
+                )
+            }
+        }
+*/
         closeText.setOnClickListener {
             bottomSheetDialog.dismissWithAnimation
             bottomSheetDialog.hide()
@@ -327,6 +334,17 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             viewModel.incrementalCount = 0
 
         }
+//
+//        adjustHeightAccToDensity(displayMetrics)
+//        topHeaderView?.startPoweredByAnimation(
+//            delayTime = PoweredByLayoutAnimationDelay,
+//            topHeaderView?.poweredByImage, onAnimationEnd = {
+//                poweredByTapAnimationEnds(viewModel)
+//            }
+//        )
+//     //   topHeaderView?.outerConstraint?.applyBluryToView()
+
+
     }
 
     private fun poweredByTapAnimationEnds(viewModel: CheckoutViewModel) {

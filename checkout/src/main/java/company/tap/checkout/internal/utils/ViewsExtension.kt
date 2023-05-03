@@ -445,6 +445,7 @@ fun createDrawableGradientForBlurry(colorsArrayList: IntArray): GradientDrawable
         GradientDrawable.Orientation.BL_TR,
         colorsArrayList
     )
+    gradientDrawable.gradientRadius = 100f
     gradientDrawable.cornerRadii = floatArrayOf(
         topLeftCorner, topLeftCorner,
         topRightCorner, topRightCorner,

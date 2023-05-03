@@ -298,11 +298,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         this.checkoutFragment = checkoutFragment
         this.headerLayout = headerLayout
 
-//        val aScene: Scene? = Scene.getCurrentScene(sdkLayout)
-//        aScene?.setEnterAction {
-//            AnimationUtils.loadAnimation(context, R.anim.slide_down)
-//        }
-        //initializeScanner(this)
+        val aScene: Scene? = Scene.getCurrentScene(sdkLayout)
+        aScene?.setEnterAction {
+            AnimationUtils.loadAnimation(context, R.anim.slide_down)
+        }
+        initializeScanner(this)
         initViewHolders()
         initAmountAction()
         initSwitchAction()
@@ -917,6 +917,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun translateViewToNewHeight(originalHeight: Int, expandHeightBool: Boolean) {
         val sdkLayoutHeight = sdkLayout.height
+        val bottomSheetLayoutHeight = bottomSheetLayout.height
         println("sdkLayoutHeight>>" + sdkLayoutHeight)
         println("originalHeight>>" + originalHeight)
         val resizeAnimation = ResizeAnimation(
@@ -1991,10 +1992,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     it?.view?.startAnimation(animation)
                 }
 
-                if (::sdkLayout.isInitialized) {
-                    sdkLayout.removeView(it?.view)
-                    sdkLayout.addView(it?.view)
-                }
+                Handler().postDelayed({
+                    if (::sdkLayout.isInitialized) {
+                        // it?.view?.visibility = View.VISIBLE
+                        sdkLayout.removeView(it?.view)
+                        sdkLayout.addView(it?.view)
+
+                    }
+                }, 200)
+
 
             }, 0)
             BottomSheetBehavior.STATE_HALF_EXPANDED
@@ -2004,7 +2010,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
 
-    fun unActivateActionButton() {
+     fun unActivateActionButton() {
         val payNowString: String
 
         when (PaymentDataSource.getTransactionMode()) {
@@ -2243,7 +2249,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.removeAllViews()
 
-        Handler().postDelayed({
+       // Handler().postDelayed({
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.getImageViewUrl(
                 getAssetName(
                     selectedPayOpt
@@ -2252,7 +2258,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 ?.let { saveCardSwitchHolder?.view?.cardSwitch?.payButton?.addChildView(it) }
             saveCardSwitchHolder?.view?.cardSwitch?.showOnlyPayButton()
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated
-        }, 700)
+        //}, 500)
 
 
     }
@@ -2260,7 +2266,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private fun logicTogetPayOptions(cardBrandString: String?): PaymentOption? {
         var selectedPayOption: PaymentOption? = null
 
-        for (i in 0 until paymentOptionsResponse.paymentOptions?.size) {
+        for (i in 0 until paymentOptionsResponse.paymentOptions.size) {
             if (paymentOptionsResponse.paymentOptions[i].brand == cardBrandString?.toUpperCase()) {
                 selectedPayOption = paymentOptionsResponse.paymentOptions[i]
             }
@@ -2523,7 +2529,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     ) {
         println("isCompleted aaa" + isCompleted)
         println("expiryDate aaa" + expiryDate)
-        if (isCompleted) activateActionButton(cardBrandString = cardBrandString)
+        if(isCompleted) activateActionButton(cardBrandString = cardBrandString)
         if (savedCardsModel != null) {
             setPayButtonAction(paymentType, savedCardsModel)
         } else {
@@ -2543,7 +2549,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         removeViews(
             //businessViewHolder,
             // amountViewHolder,
-            cardViewHolder,
+           // cardViewHolder,
             saveCardSwitchHolder,
             paymentInlineViewHolder,
             otpViewHolder,
@@ -2566,10 +2572,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         val bottomSheet: FrameLayout? =
             bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet)
         BottomSheetBehavior.from(bottomSheet as View).state = BottomSheetBehavior.STATE_EXPANDED
-        Handler().postDelayed({
+       /* Handler().postDelayed({
             if (::bottomSheetLayout.isInitialized)
-                translateViewToNewHeight(bottomSheetLayout.measuredHeight, false)
-        }, 400)
+                translateViewToNewHeight(bottomSheetLayout.measuredHeight, true)
+        }, 400)*/
         checkSelectedAmountInitiated()
     }
 
@@ -3283,11 +3289,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         addViews(
             //   businessViewHolder,
             //   amountViewHolder,
-            cardViewHolder,
+           // cardViewHolder,
             paymentInlineViewHolder,
             saveCardSwitchHolder
         )
-
         callBinLookupApi(emvCard.cardNumber?.substring(0, 6))
 
         Handler().postDelayed({
@@ -3311,8 +3316,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private fun setNfcCardDetails(emvCard: TapEmvCard) {
         // auto slide added on scan to prevent overlap
         paymentInlineViewHolder.hideViewONScanNFC()
-        println("maskCardNumber" + paymentInlineViewHolder.maskCardNumber(emvCard.cardNumber))
-        paymentInlineViewHolder.tapCardInputView.setCardNumber(emvCard.cardNumber, false)
         convertDateString(emvCard)
         paymentInlineViewHolder.onFocusChange(CardInputListener.FocusField.FOCUS_CVC)
 
@@ -3329,7 +3332,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         checkoutFragment.isNfcOpened = false
         //  webFrameLayout.visibility = View.GONE
         frameLayout.visibility = View.GONE
-
+        cardViewHolder.view.visibility=View.VISIBLE
     }
 
 
@@ -3351,12 +3354,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         return
                     } else {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            paymentInlineViewHolder.tapCardInputView.setExpiryDate(
-                                month,
-                                year.toInt()
-                            )
+                            paymentInlineViewHolder.setNFCCardData(emvCard , month ,year.toInt())
                         }
-                        // paymentInlineViewHolder.tapCardInputVie
+
 
                     }
 
@@ -3366,6 +3366,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
         }
+
     }
 
     private fun filteredByPaymentTypeAndCurrencyAndSortedList(
