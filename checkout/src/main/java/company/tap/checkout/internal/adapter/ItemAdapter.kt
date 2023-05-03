@@ -120,7 +120,7 @@ class ItemAdapter(private var checkoutViewModel: CheckoutViewModel,private var b
             nameText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24F);
             nameText?.text = adapterContentItems[position].name
             // This to be handled in ui kit
-            totalAmount.text = PaymentDataSource.getSelectedCurrencySymbol()+ " " + CurrencyFormatter.currencyFormat(adapterContentItems[position].amount.toString())+ " X " +adapterContentItems[position].quantity?.toString()
+            totalAmount.text = PaymentDataSource.getSelectedCurrencySymbol()+ " " + CurrencyFormatter.currencyFormat(adapterContentItems[position].amount.toString())+ " x " +adapterContentItems[position].quantity?.toString()
 
         }else{
            // descriptionTextView.text = adapterContentItems[0].description

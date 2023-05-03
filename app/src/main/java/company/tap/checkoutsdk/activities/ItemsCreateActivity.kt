@@ -152,10 +152,7 @@ open class ItemsCreateActivity : AppCompatActivity() {
         item_price_per_unit?.setText(paymentItems?.getPricePUnit().toString())
         totalamount_textView?.text = "Total price is" + paymentItems?.getitemTotalPrice().toString()
         item_discount_unit?.setText(paymentItems?.getAmountType()?.getNormalizedValue().toString())
-
-
     }
-
 
     fun save(view: View?) {
 
@@ -208,8 +205,7 @@ open class ItemsCreateActivity : AppCompatActivity() {
                     item_name?.text.toString().trim { it <= ' ' },
                     item_description?.text.toString().trim { it <= ' ' },
                     item_price_per_unit?.text.toString().toDouble(),
-                    item_price_per_unit?.text.toString().toDouble()
-                        .times(item_quantity?.text.toString().toInt()),
+                    item_price_per_unit?.text.toString().toDouble().times(item_quantity?.text.toString().toInt()),
                     item_quantity?.text.toString().toInt(),
                     AmountModificator(amountModificatorType, BigDecimal.ZERO),
                     SettingsManager.getString("key_sdk_transaction_currency", "KWD"),
