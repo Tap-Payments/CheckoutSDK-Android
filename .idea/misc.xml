@@ -3,6 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/37af7803d6f230efad7bbcf0a6b4829b/jetified-TapUIKit-Android-1.1.1.358.323/res/drawable/border_shadow.xml" value="0.1935" />
+        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/37af7803d6f230efad7bbcf0a6b4829b/jetified-TapUIKit-Android-1.1.1.358.323/res/drawable/border_shadow_white.xml" value="0.1935" />
+        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/37af7803d6f230efad7bbcf0a6b4829b/jetified-TapUIKit-Android-1.1.1.358.323/res/drawable/border_unclick.xml" value="0.1935" />
+        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/37af7803d6f230efad7bbcf0a6b4829b/jetified-TapUIKit-Android-1.1.1.358.323/res/drawable/border_unclick_black.xml" value="0.1935" />
         <entry key="../../../../.gradle/caches/transforms-2/files-2.1/4a255d8b0e822e37d05a87346a2a8d5d/jetified-TapUIKit-Android-1.1.1.358.322/res/drawable/border_shadow_white.xml" value="0.1295" />
         <entry key="../../../../.gradle/caches/transforms-2/files-2.1/946198744a183bacd4f50c09eefabf76/jetified-TapCardScannerKit-Android-0.0.1.18.6/res/drawable/blur_back.xml" value="0.2235" />
         <entry key="../../../../.gradle/caches/transforms-2/files-2.1/b120a87aa1904a70788153632a6d4fb9/jetified-TapUIKit-Android-1.1.1.358.237/res/drawable/border_unclick_black.xml" value="0.2745" />
