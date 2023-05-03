@@ -14,6 +14,7 @@ import android.os.Looper
 import android.text.format.DateFormat
 import android.util.Log
 import android.view.View
+import android.view.View.GONE
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
@@ -2175,6 +2176,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         cardBrandString: String?
     ) {
         println("paymentOptObject is" + paymentOptObject?.buttonStyle?.background?.darkModel?.backgroundColors?.size)
+        println("paymentOptObject is" + paymentOptObject?.buttonStyle?.background?.darkModel?.backgroundColors?.size)
         var selectedPayOpt: PaymentOption? = null
 
         if (cardBrandString != null) {
@@ -2558,6 +2560,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
         //  addViews(businessViewHolder, amountViewHolder)
         frameLayout.visibility = View.VISIBLE
+        cardViewHolder.view.visibility=View.GONE
         fragmentManager
             .beginTransaction()
             .replace(R.id.fragment_container_nfc_lib, nfcFragment)

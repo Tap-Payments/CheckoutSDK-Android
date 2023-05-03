@@ -135,7 +135,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         backgroundColor = (Color.parseColor(ThemeManager.getValue("tapBottomSheet.dimmedColor")))
 
         bottomSheetDialog.behavior.isDraggable = true
-        bottomSheetDialog.behavior.maxHeight = context?.getDeviceSpecs()?.first ?: 1000
+      //  bottomSheetDialog.behavior.maxHeight = context?.getDeviceSpecs()?.first ?: 1000
 
         val checkoutLayout: LinearLayout? = view.findViewById(R.id.fragment_all)
         val frameLayout: FrameLayout? = view.findViewById(R.id.fragment_container_nfc_lib)
@@ -338,6 +338,11 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             viewModel.incrementalCount = 0
 
         }
+
+
+     //   topHeaderView?.outerConstraint?.applyBluryToView()
+
+
     }
 
     private fun poweredByTapAnimationEnds(viewModel: CheckoutViewModel) {
@@ -356,8 +361,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         closeText = view.findViewById(R.id.closeText)
         closeImage = view.findViewById(R.id.closeImage)
         scrollView = view.findViewById(R.id.scrollView)
-        relativeLL = view.findViewById(R.id.relativeLL)
-        mainCardLayout = view.findViewById(R.id.mainCardLayout)
+       // relativeLL = view.findViewById(R.id.relativeLL)
+       // mainCardLayout = view.findViewById(R.id.mainCardLayout)
         /**Added to init the lib of getting dynamic flags*/
         //        World.init(context)
     }
