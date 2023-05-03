@@ -13,17 +13,17 @@ import android.os.Handler
 import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
-import androidx.core.view.get
+import androidx.core.view.setPadding
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import cards.pay.paycardsrecognizer.sdk.Card
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
-import com.blongho.country_data.World
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import company.tap.checkout.R
@@ -52,7 +52,6 @@ import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
 import company.tap.tapuilibrary.uikit.views.TapBrandView
 import org.json.JSONObject
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 /**
@@ -152,6 +151,11 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         topHeaderView = context?.let { TapBrandView(it) }
         topHeaderView?.visibility = View.GONE
 
+        topHeaderView?.poweredByImage?.setImageResource(R.drawable.powered_by_tap)
+        topHeaderView?.poweredByImage?.scaleType = ImageView.ScaleType.CENTER_CROP
+        topHeaderView?.poweredByImage?.layoutParams?.width = context.getDimensionsInDp(120)
+        topHeaderView?.poweredByImage?.layoutParams?.height = context.getDimensionsInDp(22)
+
         displayMetrics = CustomUtils.getDeviceDisplayMetrics(context as Activity)
         val heightscreen: Int = Resources.getSystem().displayMetrics.heightPixels
         if (LocalizationManager.currentLocalized.length() != 0)
@@ -190,15 +194,15 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                  * should put : @for check !isUserCurrencySameToMainCurrency()
                  */
                 if (cacheUserLocalCurrency() && !requireActivity().isUserCurrencySameToMainCurrency()) {
-                        viewModel.powerdByTapAnimationFinished.observe(this@CheckoutFragment) {
-                            if (it == true) {
-                                doAfterSpecificTime {
-                                    viewModel.addTitlePaymentAndFlag()
-                                }
-                            }else {
-                                viewModel.removevisibiltyCurrency()
+                    viewModel.powerdByTapAnimationFinished.observe(this@CheckoutFragment) {
+                        if (it == true) {
+                            doAfterSpecificTime {
+                                viewModel.addTitlePaymentAndFlag()
                             }
+                        } else {
+                            viewModel.removevisibiltyCurrency()
                         }
+                    }
                 } else {
                     viewModel.removevisibiltyCurrency()
                 }
@@ -291,33 +295,33 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         }
 
 
-     /*   relativeLL.let { it1 ->
-            if (it1 != null) {
-                setTopBorders(
-                    it1,
-                    35f,// corner raduis
-                    0.0f,
-                    Color.parseColor(
-                        newColorVal
-                    ),// stroke color
-                    Color.parseColor(newColorVal),// tint color
-                    Color.parseColor(newColorVal)
-                )
-            }
-        }*/
-      /*  mainCardLayout.let { card ->
-            if (card != null) {
-                setTopBorders(
-                    card,
-                    35f,// corner raduis
-                    0.0f,
-                    Color.parseColor(newColorVal),// stroke color
-                    Color.parseColor(newColorVal),// tint color
-                    Color.parseColor(newColorVal)
-                )
-            }
-        }
-*/
+        /*   relativeLL.let { it1 ->
+               if (it1 != null) {
+                   setTopBorders(
+                       it1,
+                       35f,// corner raduis
+                       0.0f,
+                       Color.parseColor(
+                           newColorVal
+                       ),// stroke color
+                       Color.parseColor(newColorVal),// tint color
+                       Color.parseColor(newColorVal)
+                   )
+               }
+           }*/
+        /*  mainCardLayout.let { card ->
+              if (card != null) {
+                  setTopBorders(
+                      card,
+                      35f,// corner raduis
+                      0.0f,
+                      Color.parseColor(newColorVal),// stroke color
+                      Color.parseColor(newColorVal),// tint color
+                      Color.parseColor(newColorVal)
+                  )
+              }
+          }
+  */
         closeText.setOnClickListener {
             bottomSheetDialog.dismissWithAnimation
             bottomSheetDialog.hide()
@@ -334,17 +338,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             viewModel.incrementalCount = 0
 
         }
-//
-//        adjustHeightAccToDensity(displayMetrics)
-//        topHeaderView?.startPoweredByAnimation(
-//            delayTime = PoweredByLayoutAnimationDelay,
-//            topHeaderView?.poweredByImage, onAnimationEnd = {
-//                poweredByTapAnimationEnds(viewModel)
-//            }
-//        )
-//     //   topHeaderView?.outerConstraint?.applyBluryToView()
-
-
     }
 
     private fun poweredByTapAnimationEnds(viewModel: CheckoutViewModel) {
@@ -366,7 +359,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         relativeLL = view.findViewById(R.id.relativeLL)
         mainCardLayout = view.findViewById(R.id.mainCardLayout)
         /**Added to init the lib of getting dynamic flags*/
-            //        World.init(context)
+        //        World.init(context)
     }
 
 

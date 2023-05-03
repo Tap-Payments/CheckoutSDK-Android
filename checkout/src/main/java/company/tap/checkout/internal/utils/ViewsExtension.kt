@@ -17,6 +17,7 @@ import android.transition.Fade
 import android.transition.Transition
 import android.transition.TransitionManager
 import android.util.DisplayMetrics
+import android.util.TypedValue
 import android.view.*
 import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
@@ -89,6 +90,15 @@ fun View.startPoweredByAnimation(
 //    })
 //    this.startAnimation(resizeAnimation)
 
+
+}
+
+fun Context?.getDimensionsInDp(dimension: Int): Int {
+    return TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP,
+        dimension.toFloat(),
+        this?.resources?.displayMetrics
+    ).toInt()
 
 }
 

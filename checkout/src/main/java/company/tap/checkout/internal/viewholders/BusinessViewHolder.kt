@@ -2,18 +2,13 @@ package company.tap.checkout.internal.viewholders
 
 import android.content.Context
 import android.graphics.Color
-import android.provider.CalendarContract.Colors
-import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.ImageView
-import androidx.core.view.ViewCompat
-import androidx.core.view.setPadding
-import com.google.android.material.shape.CornerFamily
-import com.google.android.material.shape.MaterialShapeDrawable
-import com.google.android.material.shape.ShapeAppearanceModel
 import company.tap.checkout.R
 import company.tap.checkout.internal.enums.SectionType
+import company.tap.checkout.internal.utils.getDimensionsInDp
+import company.tap.checkout.internal.utils.isRTL
 import company.tap.checkout.internal.utils.setMargins
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.data_managers.PaymentDataSource
@@ -21,6 +16,7 @@ import company.tap.checkout.open.enums.TransactionMode
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.ImageViewTheme
+import company.tap.tapuilibrary.uikit.adapters.context
 import company.tap.tapuilibrary.uikit.atoms.TapImageView
 import company.tap.tapuilibrary.uikit.datasource.HeaderDataSource
 import company.tap.tapuilibrary.uikit.ktx.setTopBorders
@@ -32,7 +28,8 @@ import kotlinx.android.synthetic.main.businessview_layout.view.*
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class BusinessViewHolder( context: Context, private  val checkoutViewModel: CheckoutViewModel) : TapBaseViewHolder {
+class BusinessViewHolder(context: Context, private val checkoutViewModel: CheckoutViewModel) :
+    TapBaseViewHolder {
 
 
     override val view: View =
@@ -42,8 +39,7 @@ class BusinessViewHolder( context: Context, private  val checkoutViewModel: Chec
 
     private var merchantName: String? = null
     private var merchantLogo: String? = null
-   private var tapCloseIcon : TapImageView= view.findViewById(R.id.tapCloseIcon)
-
+    private var tapCloseIcon: TapImageView = view.findViewById(R.id.tapCloseIcon)
 
 
     init {
@@ -52,13 +48,27 @@ class BusinessViewHolder( context: Context, private  val checkoutViewModel: Chec
 
     override fun bindViewComponents() {
         val imagetheme = ImageViewTheme()
-        imagetheme.imageResource = (R.drawable.merchant_logo)
+        imagetheme.imageResource = (R.drawable.merchant_new_logo)
         view.headerView.businessIcon.setTheme(imagetheme)
-        view.headerView.tapChipIcon.setMargins(20,0,0,0)
-        view.headerView.tapChipIcon.setPaddingRelative(4,4,4,4)
 
-        view.headerView.paymentFor.setMargins(0,0,0,0)
-        view.headerView.businessName.setMargins(0,0,0,0)
+
+
+
+        view.headerView.tapCloseIcon.layoutParams.height =
+            view.headerView.context.getDimensionsInDp(30)
+        view.headerView.tapCloseIcon.layoutParams.width =
+            view.headerView.context.getDimensionsInDp(30)
+        view.headerView.tapChipIcon.layoutParams.width = view.headerView.context.getDimensionsInDp(40)
+        view.headerView.tapChipIcon.layoutParams.height = view.headerView.context.getDimensionsInDp(40)
+        view.headerView.businessIcon.layoutParams.height = view.headerView.context.getDimensionsInDp(40)
+        view.headerView.businessIcon.layoutParams.width = view.headerView.context.getDimensionsInDp(40)
+
+        view.headerView.draggerView.layoutParams.width = view.headerView.context.getDimensionsInDp(65)
+
+        view.headerView.tapChipIcon.setMargins(if (view.headerView.tapChipIcon.isRTL()) 0 else 20, 0, if (view.headerView.tapChipIcon.isRTL()) 20 else 0, 0)
+
+        view.headerView.paymentFor.setMargins(0, 0, 0, 0)
+        view.headerView.businessName.setMargins(0, 0, 0, 0)
 
         setTopBorders(
             view.headerView.tapCloseIcon,
@@ -68,27 +78,27 @@ class BusinessViewHolder( context: Context, private  val checkoutViewModel: Chec
             Color.parseColor(ThemeManager.getValue("merchantHeaderView.backgroundColor")),// tint color
             Color.parseColor(ThemeManager.getValue("merchantHeaderView.backgroundColor"))
         )//
-        if(PaymentDataSource.getTransactionMode() == TransactionMode.SAVE_CARD || PaymentDataSource.getTransactionMode()==TransactionMode.TOKENIZE_CARD){
+        if (PaymentDataSource.getTransactionMode() == TransactionMode.SAVE_CARD || PaymentDataSource.getTransactionMode() == TransactionMode.TOKENIZE_CARD) {
 
-            view.headerView.setHeaderDataSource(HeaderDataSource("Enter Card Details",null,null))
-            view.headerView.businessIcon.visibility= View.VISIBLE
+            view.headerView.setHeaderDataSource(HeaderDataSource("Enter Card Details", null, null))
+            view.headerView.businessIcon.visibility = View.VISIBLE
             //view.headerView.tapChipIcon.visibility= View.GONE
-        }else
-            if (merchantName != null){
-            view.headerView.setHeaderDataSource(getHeaderDataSourceFromAPI())
-                if(merchantName.equals("fawry")){
+        } else
+            if (merchantName != null) {
+                view.headerView.setHeaderDataSource(getHeaderDataSourceFromAPI())
+                if (merchantName.equals("fawry")) {
                     view.headerView.paymentFor.visibility = View.GONE
                 }
-            view.headerView.businessIcon.visibility= View.VISIBLE
-             //   view.headerView.tapChipIcon.visibility= View.VISIBLE
-         //   view.headerView.showHideLoading(false)
-            view.headerView.constraint.visibility= View.VISIBLE
+                view.headerView.businessIcon.visibility = View.VISIBLE
+                //   view.headerView.tapChipIcon.visibility= View.VISIBLE
+                //   view.headerView.showHideLoading(false)
+                view.headerView.constraint.visibility = View.VISIBLE
 
                 tapCloseIcon.setOnClickListener {
                     checkoutViewModel.dismissBottomSheet()
                 }
 
-        }
+            }
         /**
          * set separator background
          */
