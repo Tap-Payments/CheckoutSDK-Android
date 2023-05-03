@@ -181,7 +181,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private var fee: BigDecimal? = BigDecimal.ZERO
     val provider: IPaymentDataProvider = PaymentDataProvider()
-
+    private var webPaymentOptions: java.util.ArrayList<PaymentOption> = ArrayList()
     @JvmField
     var currentCurrency: String = ""
 
@@ -333,7 +333,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             loyaltyViewHolder.view.loyaltyView.constraintLayout?.visibility = View.VISIBLE
 
         } else
-            loyaltyViewHolder.view.loyaltyView.constraintLayout?.visibility = View.GONE
+            loyaltyViewHolder.view.loyaltyView.constraintLayout?.visibility = GONE
     }
 
     private fun initializeScanner(checkoutViewModel: CheckoutViewModel) {
@@ -371,7 +371,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         saveCardSwitchHolder
                     )
                     saveCardSwitchHolder?.view?.mainSwitch?.switchSaveMobile?.visibility =
-                        View.GONE
+                        GONE
                     val payString: String = LocalizationManager.getValue("pay", "ActionButton")
                     val nowString: String = LocalizationManager.getValue("now", "ActionButton")
                     saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
@@ -478,7 +478,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         itemsViewHolder = ItemsViewHolder(context, this)
         otpViewHolder = OTPViewHolder(context)
-        otpViewHolder.otpView.visibility = View.GONE
+        otpViewHolder.otpView.visibility = GONE
         otpViewHolder.otpView.requestFocus()
         otpViewHolder.otpView.otpViewInput1.cursorColor =
             Color.parseColor(ThemeManager.getValue("TapOtpView.OtpController.activeBottomColor"))
@@ -501,7 +501,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         asynchronousPaymentViewHolder = AsynchronousPaymentViewHolder(context, this)
         logicForLoyaltyProgram()
 
-        amountViewHolder.view.amount_section.tapChipPopup.setOnClickListener {
+       amountViewHolder.view.amount_section.tapChipPopup.setOnClickListener {
             amountViewHolder.view.amount_section.tapChipPopup.slideFromLeftToRight()
             with(SharedPrefManager.getUserSupportedLocaleForTransactions(context)!!) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -529,17 +529,17 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     private fun initSwitchAction() {
-        saveCardSwitchHolder?.view?.mainSwitch?.mainSwitch?.visibility = View.GONE
+        saveCardSwitchHolder?.view?.mainSwitch?.mainSwitch?.visibility = GONE
         saveCardSwitchHolder?.view?.cardSwitch?.switchGoPayCheckout?.isChecked = false
-        saveCardSwitchHolder?.view?.cardSwitch?.switchGoPayCheckout?.visibility = View.GONE
-        saveCardSwitchHolder?.view?.cardSwitch?.saveGoPay?.visibility = View.GONE
-        saveCardSwitchHolder?.view?.cardSwitch?.alertGoPaySignUp?.visibility = View.GONE
-        saveCardSwitchHolder?.view?.cardSwitch?.switchSeparator?.visibility = View.GONE
+        saveCardSwitchHolder?.view?.cardSwitch?.switchGoPayCheckout?.visibility = GONE
+        saveCardSwitchHolder?.view?.cardSwitch?.saveGoPay?.visibility = GONE
+        saveCardSwitchHolder?.view?.cardSwitch?.alertGoPaySignUp?.visibility = GONE
+        saveCardSwitchHolder?.view?.cardSwitch?.switchSeparator?.visibility = GONE
     }
 
     private fun initAmountAction() {
         amountViewHolder.setOnItemsClickListener()
-        amountViewHolder.view.amount_section.mainKDAmountValue.visibility = View.GONE
+        amountViewHolder.view.amount_section.mainKDAmountValue.visibility = GONE
     }
 
 
@@ -572,7 +572,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         cardViewHolder,
                         saveCardSwitchHolder
                     )
-                    cardViewHolder.cardInfoHeaderText?.visibility = View.GONE
+                    cardViewHolder.cardInfoHeaderText?.visibility = GONE
                 } else if (PaymentDataSource.getPaymentDataType() == "CARD") {
                     addViews(
                         businessViewHolder,
@@ -611,7 +611,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 )
             )
         )
-        inLineCardLayout.visibility = View.GONE
+        inLineCardLayout.visibility = GONE
         amountViewHolder.readyToScanVisibility(false)
         saveCardSwitchHolder?.view?.cardviewSwitch?.cardElevation = 0f
         SDKSession.activity?.let {
@@ -705,7 +705,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         // if (this::currentAmount.isInitialized)
         if (this::selectedAmount.isInitialized && this::selectedCurrency.isInitialized) {
             if (selectedAmount == currentAmount && selectedCurrency == currentCurrency) {
-                amountViewHolder.view.amount_section.mainKDAmountValue.visibility = View.GONE
+                amountViewHolder.view.amount_section.mainKDAmountValue.visibility = GONE
 
 
             } else {
@@ -828,7 +828,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     fun removevisibiltyCurrency() {
-        amountViewHolder.view.amount_section.tapChipPopup.visibility = View.GONE
+        amountViewHolder.view.amount_section.tapChipPopup.visibility = GONE
     }
 
     fun getCurrencyColors(): Pair<Int, Int> {
@@ -951,11 +951,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             paymentInlineViewHolder,
             saveCardSwitchHolder
         )
+
+
         paymentInlineViewHolder.resetPaymentCardView()
         //itemsViewHolder.resetView()
         //I comment   itemsViewHolder.setItemsRecylerView()
         //  itemsViewHolder?.view?.itemRecylerView?.adapter = itemAdapter
-        frameLayout.visibility = View.GONE
+        frameLayout.visibility = GONE
     }
 
     private fun setActionNotGoPayOpenedNotItemsDisplayed() {
@@ -979,13 +981,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 it
             )
         }
+
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.IDLE)
         // itemsViewHolder.resetView()
         //  itemsViewHolder.setItemsRecylerView()
         //   itemsViewHolder.setCurrencyRecylerView()
         itemsViewHolder.view.mainCurrencyChip.chipsRecycler.adapter = currencyAdapter
         //  itemsViewHolder.view.itemRecylerView.adapter =itemAdapter
-        frameLayout.visibility = View.GONE
+        frameLayout.visibility = GONE
 
 
     }
@@ -1006,7 +1009,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
         // amountViewHolder.view.amount_section.itemAmountLayout?.visibility = View.GONE
         //  amountViewHolder.view.amount_section.itemPopupLayout?.visibility = View.GONE
-        amountViewHolder.view.amount_section.flagImageView?.visibility = View.GONE
+        amountViewHolder.view.amount_section.flagImageView?.visibility = GONE
         amountViewHolder.view.amount_section.popupTextView.text = LocalizationManager.getValue(
             "close",
             "Common"
@@ -1075,7 +1078,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         otpViewHolder.otpView.visibility = View.VISIBLE
         //Added to hide the Items-Amount button when OTP is opened
         // amountViewHolder.view.amount_section.itemAmountLayout?.visibility = View.GONE
-        amountViewHolder.view.amount_section.tapChipAmount?.visibility = View.GONE
+        amountViewHolder.view.amount_section.tapChipAmount?.visibility = GONE
         CustomUtils.showKeyboard(context)
         setOtpPhoneNumber(phoneNumber)
         otpViewHolder.otpView.changePhone.visibility = View.INVISIBLE
@@ -1083,7 +1086,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             resendOTPCode(chargeResponse)
             otpViewHolder.otpView.restartTimer()
         }
-        amountViewHolder.view.amount_section.mainKDAmountValue.visibility = View.GONE
+        amountViewHolder.view.amount_section.mainKDAmountValue.visibility = GONE
     }
 
     private fun setOtpPhoneNumber(phoneNumber: PhoneNumber?) {
@@ -1136,11 +1139,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             otpViewHolder
         )
         //Added check change listener to handle showing of extra save options
-        saveCardSwitchHolder?.view?.mainSwitch?.switchSaveMobile?.visibility = View.GONE
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = View.GONE
+        saveCardSwitchHolder?.view?.mainSwitch?.switchSaveMobile?.visibility = GONE
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = GONE
         saveCardSwitchHolder?.view?.mainSwitch?.switchSaveMobile?.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) saveCardSwitchHolder?.view?.cardSwitch?.switchesLayout?.visibility =
-                View.GONE
+                GONE
         }
         saveCardSwitchHolder?.setSwitchToggleData(PaymentType.telecom)
         otpViewHolder.setMobileOtpView()
@@ -1173,8 +1176,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
             // setSlideAnimation()
             if (PaymentDataSource?.getWebViewType() != null && PaymentDataSource.getWebViewType() == WebViewType.REDIRECT) {
-                businessViewHolder.view.headerView.constraint.visibility = View.GONE
-                businessViewHolder.view.topSeparatorLinear.visibility = View.GONE
+                businessViewHolder.view.headerView.constraint.visibility = GONE
+                businessViewHolder.view.topSeparatorLinear.visibility = GONE
                 //Stopped showing closetext as requested
                 // checkoutFragment.closeText.visibility = View.VISIBLE
                 removeViews(
@@ -1195,12 +1198,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
 
-                saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
+                saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                     ActionButtonState.LOADING
                 )
-                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = View.GONE
-                saveCardSwitchHolder?.view?.cardSwitch?.tapLogoImage?.visibility = View.GONE
+                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = GONE
+                saveCardSwitchHolder?.view?.cardSwitch?.tapLogoImage?.visibility = GONE
 
                 Handler(Looper.getMainLooper()).postDelayed({
 
@@ -1250,13 +1253,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
                 //Added to hide the Items-Amount button when 3ds is opened within
                 addViews(webViewHolder)
-                saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
+                saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                     ActionButtonState.LOADING
                 )
 
-                saveCardSwitchHolder?.view?.cardSwitch?.tapLogoImage?.visibility = View.GONE
-                checkoutFragment.closeText.visibility = View.GONE
+                saveCardSwitchHolder?.view?.cardSwitch?.tapLogoImage?.visibility = GONE
+                checkoutFragment.closeText.visibility = GONE
 
 
             }
@@ -1493,7 +1496,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 filterSavedCardTypes(savedCardList as List<SavedCard>)
             } else adapter.updateAdapterDataSavedCard(savedCardList as List<SavedCard>)
         } else {
-            cardViewHolder.view.mainChipgroup.groupAction?.visibility = View.GONE
+            cardViewHolder.view.mainChipgroup.groupAction?.visibility = GONE
         }
         //  itemsViewHolder.view.itemRecylerView.adapter = itemAdapter
         itemsViewHolder.view.mainCurrencyChip.chipsRecycler.adapter = currencyAdapter
@@ -1668,7 +1671,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 goPayViewsHolder.goPayopened = false
                 adapter.goPayOpenedfromMain(true)
                 adapter.updateShaking(false)
-                cardViewHolder.view.mainChipgroup.groupAction.visibility = View.VISIBLE
+                //cardViewHolder.view.mainChipgroup.groupAction.visibility = View.VISIBLE
             }
         } else if (response == "NO") {
             adapter.updateShaking(false)
@@ -1694,7 +1697,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             cardViewHolder.view.mainChipgroup.chipsRecycler.adapter = adapter
             deleteCard = false
             adapter.updateShaking(false)
-            if(savedCardList.isNullOrEmpty()) cardViewHolder.view.mainChipgroup?.groupAction?.visibility =View.GONE
+            if(savedCardList.isNullOrEmpty()) cardViewHolder.view.mainChipgroup?.groupAction?.visibility =
+                GONE
 
         }
     }
@@ -1723,7 +1727,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 contextSDK as Activity
             )
         )*/
-        saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
+        saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = View.VISIBLE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setDisplayMetrics(
             CustomUtils.getDeviceDisplayMetrics(
@@ -1746,7 +1750,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 fragmentManager.beginTransaction()
                     .hide(fragmentManager.findFragmentById(R.id.webFrameLayout)!!)
                     .commitNow()
-            webFrameLayout.visibility = View.GONE
+            webFrameLayout.visibility = GONE
             supportFragmentManager?.popBackStack()
         }
         if (::webViewHolder.isInitialized) {
@@ -1781,12 +1785,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             // removeAllViews()
             //   addViews(saveCardSwitchHolder)
             saveCardSwitchHolder?.view?.visibility = View.VISIBLE
-            saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
+            saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = View.VISIBLE
         }
 
         if (::checkoutFragment.isInitialized)
-            checkoutFragment.closeText.visibility = View.GONE
+            checkoutFragment.closeText.visibility = GONE
         println("chargeResponse are>>>>" + chargeResponse?.status)
         // println("saveCardSwitchHolder are>>>>"+saveCardSwitchHolder)
         if (response.contains("failure") && chargeResponse == null) {
@@ -1863,10 +1867,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
                     if (::businessViewHolder.isInitialized && saveCardSwitchHolder != null) {
                         addViews(businessViewHolder, saveCardSwitchHolder)
-                        businessViewHolder.view.headerView.constraint.visibility = View.GONE
-                        businessViewHolder.view.topSeparatorLinear.visibility = View.GONE
+                        businessViewHolder.view.headerView.constraint.visibility = GONE
+                        businessViewHolder.view.topSeparatorLinear.visibility = GONE
                         saveCardSwitchHolder?.view?.visibility = View.VISIBLE
-                        saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
+                        saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
                         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
                             false,
                             Color.RED
@@ -2322,7 +2326,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 paymentInlineViewHolder,
                 tabAnimatedActionButtonViewHolder
             )
-            businessViewHolder.view.headerView.constraint.visibility = View.GONE
+            businessViewHolder.view.headerView.constraint.visibility = GONE
             Handler().postDelayed({
                 if (::bottomSheetLayout.isInitialized)
                     translateViewToNewHeight(bottomSheetLayout.measuredHeight, true)
@@ -2350,7 +2354,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 backgroundColor = Color.parseColor(savedCardsModel.buttonStyle?.background?.lightModel?.baseColor)
             )
 
-            saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
+            saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
 
 
             with(cardViewHolder.view.mainChipgroup) {
@@ -2500,8 +2504,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         //todo add validations from api when cvv is valid the only  activate ActionButton
         if (isCompleted) {
             businessViewHolder.view?.headerView.constraint.visibility = View.VISIBLE
-            saveCardSwitchHolder?.view?.mainSwitch?.visibility = View.GONE
-            saveCardSwitchHolder?.view?.mainSwitch?.switchSaveMobile?.visibility = View.GONE
+            saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
+            saveCardSwitchHolder?.view?.mainSwitch?.switchSaveMobile?.visibility = GONE
             saveCardSwitchHolder?.setSwitchToggleData(paymentType)
             loyaltyViewHolder.view.loyaltyView?.constraintLayout?.visibility = View.VISIBLE
             // loyatFlag = true
@@ -2513,7 +2517,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             paymentActionType = paymentType
         } else {
 //            saveCardSwitchHolder11?.view?.mainSwitch?.visibility = View.GONE
-            saveCardSwitchHolder?.view?.mainSwitch?.switchSaveMobile?.visibility = View.GONE
+            saveCardSwitchHolder?.view?.mainSwitch?.switchSaveMobile?.visibility = GONE
             saveCardSwitchHolder?.setSwitchToggleData(paymentType)
             unActivateActionButton()
         }
@@ -2559,7 +2563,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
         //  addViews(businessViewHolder, amountViewHolder)
         frameLayout.visibility = View.VISIBLE
-        cardViewHolder.view.visibility=View.GONE
+        cardViewHolder.view.visibility= GONE
         fragmentManager
             .beginTransaction()
             .replace(R.id.fragment_container_nfc_lib, nfcFragment)
@@ -2709,7 +2713,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         PaymentDataSource.setSelectedAmount(currencyRate)
         if (paymentInlineViewHolder.tapCardInputView.isNotEmpty()) {
             paymentInlineViewHolder.tapCardInputView.clear()
-            paymentInlineViewHolder.tapAlertView?.fadeVisibility(View.GONE, 500)
+            paymentInlineViewHolder.tapAlertView?.fadeVisibility(GONE, 500)
             paymentInlineViewHolder.acceptedCardText.visibility = View.VISIBLE
             paymentInlineViewHolder.tabLayout.resetBehaviour()
         }
@@ -2717,6 +2721,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         adapter.resetSelection()
 
         if (::selectedCurrency.isInitialized) {
+            println("selectedCurrency he"+selectedCurrency)
             Bugfender.d(CustomUtils.tagEvent, "Currency changed to : " + selectedCurrencySymbol)
             filterViewModels(selectedCurrency)
         } else {
@@ -2802,7 +2807,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         PaymentDataSource.setSelectedAmount(currencyRate)
         if (paymentInlineViewHolder.tapCardInputView.isNotEmpty()) {
             paymentInlineViewHolder.tapCardInputView.clear()
-            paymentInlineViewHolder.tapAlertView?.fadeVisibility(View.GONE, 500)
+            paymentInlineViewHolder.tapAlertView?.fadeVisibility(GONE, 500)
             paymentInlineViewHolder.acceptedCardText.visibility = View.VISIBLE
             paymentInlineViewHolder.tabLayout.resetBehaviour()
         }
@@ -2843,7 +2848,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 fragmentManager.beginTransaction()
                     .hide(fragmentManager.findFragmentById(R.id.webFrameLayout)!!)
                     .commit()
-            webFrameLayout.visibility = View.GONE
+            webFrameLayout.visibility = GONE
             sdkLayout.visibility = View.VISIBLE
             supportFragmentManager?.popBackStack()
 
@@ -3137,7 +3142,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         businessViewHolder.view.topSeparatorLinear.topSeparator.setTheme(separatorViewTheme)
 
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
-            amountViewHolder.view.amountView_separator.visibility = View.GONE
+            amountViewHolder.view.amountView_separator.visibility = GONE
         } else amountViewHolder.view.amountView_separator.visibility = View.VISIBLE
         amountViewHolder.view.amountView_separator.setTheme(separatorViewTheme)
         //  cardViewHolder.view.tapSeparatorViewLinear1.separator_1.setTheme(separatorViewTheme)
@@ -3183,7 +3188,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             // inlineCamerFragment.onDestroy()
             isInlineOpened = false
             checkoutFragment.isScannerOpened = false
-            inLineCardLayout.visibility = View.GONE
+            inLineCardLayout.visibility = GONE
             amountViewHolder.readyToScanVisibility(false)
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                 ActionButtonState.RESET
@@ -3333,7 +3338,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         isNFCOpened = false
         checkoutFragment.isNfcOpened = false
         //  webFrameLayout.visibility = View.GONE
-        frameLayout.visibility = View.GONE
+        frameLayout.visibility = GONE
         cardViewHolder.view.visibility=View.VISIBLE
     }
 
@@ -3433,7 +3438,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             val savedCardsWorker: java.util.ArrayList<SavedCard> =
                 java.util.ArrayList<SavedCard>(paymentOptionsResponse.cards)
         }
-        val webPaymentOptions: java.util.ArrayList<PaymentOption> =
+         webPaymentOptions =
             filteredByPaymentTypeAndCurrencyAndSortedList(
                 paymentOptionsWorker, PaymentType.WEB, currency
             )
@@ -3461,7 +3466,17 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             adapter.updateAdapterGooglePay(googlePaymentOptions)
             PaymentDataSource.setGoogleCardPay(googlePaymentOptions)
         }
-        logicToHandlePaymentDataType(webPaymentOptions, cardPaymentOptions)
+        println("hasWebPaymentOptions"+webPaymentOptions.size)
+        println("hasCardPaymentOptions"+hasCardPaymentOptions)
+        println("savedCardList"+savedCardList?.isNullOrEmpty())
+        if(webPaymentOptions.size==0) {
+            adapter.updateAdapterData(ArrayList())
+            cardViewHolder.view.mainChipgroup?.groupName?.visibility =View.GONE
+
+
+        }else logicToHandlePaymentDataType(webPaymentOptions, cardPaymentOptions)
+
+
 
     }
 
@@ -3471,6 +3486,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         cardPaymentOptions: ArrayList<PaymentOption>
 
     ) {
+        cardViewHolder.view.mainChipgroup?.groupName?.visibility =View.VISIBLE
         // println("webPaymentOptions in logic >>>>$webPaymentOptions")
         //  println("cardPaymentOptions in logic >>>>$cardPaymentOptions")
 
@@ -3496,7 +3512,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
                 } else {
-                    saveCardSwitchHolder?.mainTextSave?.visibility = View.GONE
+                    saveCardSwitchHolder?.mainTextSave?.visibility = GONE
                     removeViews(paymentInlineViewHolder)
                 }
 
@@ -3797,7 +3813,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             goPaySavedCardHolder,
             goPayViewsHolder
         )
-        saveCardSwitchHolder?.view?.cardSwitch?.switchesLayout?.visibility = View.GONE
+        saveCardSwitchHolder?.view?.cardSwitch?.switchesLayout?.visibility = GONE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = View.VISIBLE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
 
@@ -3892,8 +3908,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
             } else {
 
-                loyaltyViewHolder.loyaltyView.linearLayout2?.visibility = View.GONE
-                loyaltyViewHolder.loyaltyView.linearLayout3?.visibility = View.GONE
+                loyaltyViewHolder.loyaltyView.linearLayout2?.visibility = GONE
+                loyaltyViewHolder.loyaltyView.linearLayout3?.visibility = GONE
 
             }
         }

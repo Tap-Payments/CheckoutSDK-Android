@@ -89,7 +89,8 @@ class CardViewHolder(private val context: Context, private val onCardSelectedAct
             cardInfoHeaderText.text =  LocalizationManager.getValue("cardSectionTitle", "TapCardInputKit")
 
         }else{
-        cardInfoHeaderText.text =  LocalizationManager.getValue("cardSectionTitleOr", "TapCardInputKit")
+            if(saveCardsList?.isEmpty() == true)  cardInfoHeaderText.text =  LocalizationManager.getValue("cardSectionTitle", "TapCardInputKit")
+      else  cardInfoHeaderText.text =  LocalizationManager.getValue("cardSectionTitleOr", "TapCardInputKit")
         }
        /* var cardInfoTextTheme = TextViewTheme()
         cardInfoTextTheme.textColor =
