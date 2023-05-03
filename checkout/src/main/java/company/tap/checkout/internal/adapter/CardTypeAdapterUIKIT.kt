@@ -456,7 +456,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
             holder.itemView.tapCardChip2Constraints,
             //(ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
             19.0f,// corner raduis
-            2.0f,
+            0.0f,
             parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
             Color.parseColor(ThemeManager.getValue("horizontalList.chips.savedCardChip.backgroundColor")),// tint color
             parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
@@ -632,7 +632,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
             // (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
 
             19.0f,// corner raduis
-            2.0f,
+            0.0f,
             parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
             parseColor(ThemeManager.getValue("horizontalList.chips.gatewayChip.backgroundColor")),// tint color
             parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
@@ -667,7 +667,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
             holder.itemView.tapCardChip6Linear,
             //(ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
             19.0f,// corner raduis
-            2.0f,
+            0.0f,
             parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
             Color.parseColor(ThemeManager.getValue("horizontalList.chips.savedCardChip.backgroundColor")),// tint color
             parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
