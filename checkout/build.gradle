@@ -68,6 +68,7 @@ dependencies {
     api 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.36.205'
     implementation "com.hbb20:ccp:2.5.0"
     api 'androidx.activity:activity-ktx:1.4.0'
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
@@ -97,7 +98,7 @@ dependencies {
     implementation "com.google.android.gms:play-services-wallet:19.1.0"
     implementation project(":iosdialog")
 
-    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.358.318'
+    api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.358.322'
     implementation 'com.github.2coffees1team:GlideToVectorYou:v2.0.0'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.11.1'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.1'

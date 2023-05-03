@@ -151,10 +151,10 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         topHeaderView = context?.let { TapBrandView(it) }
         topHeaderView?.visibility = View.GONE
 
-        topHeaderView?.poweredByImage?.setImageResource(R.drawable.powered_by_tap)
-        topHeaderView?.poweredByImage?.scaleType = ImageView.ScaleType.CENTER_CROP
-        topHeaderView?.poweredByImage?.layoutParams?.width = context.getDimensionsInDp(120)
-        topHeaderView?.poweredByImage?.layoutParams?.height = context.getDimensionsInDp(22)
+//        topHeaderView?.poweredByImage?.setImageResource(R.drawable.powered_by_tap)
+//        topHeaderView?.poweredByImage?.scaleType = ImageView.ScaleType.CENTER_CROP
+//        topHeaderView?.poweredByImage?.layoutParams?.width = context.getDimensionsInDp(120)
+//        topHeaderView?.poweredByImage?.layoutParams?.height = context.getDimensionsInDp(22)
 
         displayMetrics = CustomUtils.getDeviceDisplayMetrics(context as Activity)
         val heightscreen: Int = Resources.getSystem().displayMetrics.heightPixels
@@ -262,6 +262,10 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         }
         topHeaderView?.visibility = View.GONE
 
+
+        inLineCardLayout?.minimumHeight = heightscreen - checkoutLayout?.height!!
+        dialog?.window?.attributes?.windowAnimations = R.style.DialogAnimation
+
         adjustHeightAccToDensity(displayMetrics)
         topHeaderView?.startPoweredByAnimation(
             delayTime = PoweredByLayoutAnimationDelay,
@@ -269,9 +273,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                 poweredByTapAnimationEnds(viewModel)
             }
         )
-        inLineCardLayout?.minimumHeight = heightscreen - checkoutLayout?.height!!
-        dialog?.window?.attributes?.windowAnimations = R.style.DialogAnimation
-
         bottomSheetDialog.setOnShowListener {
             bottomSheetDialog.behavior.setState(BottomSheetBehavior.STATE_EXPANDED)
 

@@ -3,10 +3,16 @@ package company.tap.checkout.internal.viewholders
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
+import android.graphics.Typeface
+import android.os.Build
+import android.provider.CalendarContract.Colors
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
+import androidx.annotation.DrawableRes
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.marginTop
 import com.bumptech.glide.Glide
 import company.tap.checkout.R
 import company.tap.checkout.internal.cache.SharedPrefManager
@@ -18,9 +24,11 @@ import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.TextViewTheme
+import company.tap.tapuilibrary.uikit.adapters.context
 import company.tap.tapuilibrary.uikit.atoms.TapChip
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.datasource.AmountViewDataSource
+import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 
 
@@ -55,8 +63,47 @@ class AmountViewHolder(
         bindViewComponents()
     }
 
+    @DrawableRes
+    val dropDownIcon: Int =
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")){
+            R.drawable.dark_dropwdonw
+        } else if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("light")) {
+            R.drawable.light_dropdown
+        }else R.drawable.light_dropdown
+
     override fun bindViewComponents() {
         view.amount_section.setAmountViewDataSource(getAmountDataSourceFromAPIs())
+        view.amount_section.tapChipAmount.layoutParams.width = view.context.getDimensionsInDp(97)
+        view.amount_section.tapChipAmount.layoutParams.height = view.context.getDimensionsInDp(24)
+        view.amount_section.tapChipPopup.layoutParams.width = view.context.getDimensionsInDp(97)
+        view.amount_section.tapChipPopup.layoutParams.height = view.context.getDimensionsInDp(24)
+
+        view.amount_section.amountImageView.setImageResource(dropDownIcon)
+
+        view.amount_section.findViewById<ConstraintLayout>(R.id.constraint).layoutParams.height = view.context.getDimensionsInDp(75)
+
+
+
+        setBorderedView(
+            view.amount_section.tapChipPopup,
+            ThemeManager.getValue<Float>("amountSectionView.itemsNumberButtonCorner").toFloat() +5,// corner raduis
+            0.0f,
+            Color.parseColor(ThemeManager.getValue("amountSectionView.itemsNumberButtonBackgroundColor")),
+            Color.parseColor(ThemeManager.getValue("amountSectionView.itemsNumberButtonBackgroundColor")),
+            Color.parseColor(ThemeManager.getValue("amountSectionView.itemsNumberButtonBorder.color"))
+        )
+
+        setBorderedView(
+            view.amount_section.tapChipAmount,
+            ThemeManager.getValue<Float>("amountSectionView.itemsNumberButtonCorner").toFloat() +5,// corner raduis
+            0.0f,
+            Color.parseColor(ThemeManager.getValue("amountSectionView.itemsNumberButtonBackgroundColor")),
+            Color.parseColor(ThemeManager.getValue("amountSectionView.itemsNumberButtonBackgroundColor")),
+            Color.parseColor(ThemeManager.getValue("amountSectionView.itemsNumberButtonBorder.color"))
+        )
+
+
+
         scanTextTheme()
     }
 
@@ -107,6 +154,8 @@ class AmountViewHolder(
     }
 
     override fun changeGroupAction(isOpen: Boolean) {
+
+
         isOpenedList = isOpen
         if (isOpen) {
             /**
@@ -167,15 +216,6 @@ class AmountViewHolder(
     }
 
 
-    private fun showCountryFlag(): String? {
-        val currency = SharedPrefManager.getUserSupportedLocaleForTransactions(context = this.view.context)
-        Log.e("localNeeded", currency.toString())
-        if (ThemeManager.currentTheme.contains("dark")) {
-            return currency?.logos?.dark?.png
-        } else {
-            return currency?.logos?.light?.png
-        }
-    }
     @SuppressLint("ClickableViewAccessibility")
     fun setOnItemsClickListener() {
         /* view.amount_section.itemAmountLayout.setOnClickListener {
@@ -191,7 +231,6 @@ class AmountViewHolder(
         })*/
         view.amount_section.tapChipAmount.setOnTouchListener { v, event ->
             baseLayoutManager?.controlCurrency(isOpenedList)
-
 
             false
         }

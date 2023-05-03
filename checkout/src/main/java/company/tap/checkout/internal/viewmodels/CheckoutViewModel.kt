@@ -916,7 +916,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     }
 
-    private fun translateViewToNewHeight(originalHeight: Int, expandHeightBool: Boolean) {
+     fun translateViewToNewHeight(originalHeight: Int, expandHeightBool: Boolean) {
         val sdkLayoutHeight = sdkLayout.height
         val bottomSheetLayoutHeight = bottomSheetLayout.height
         println("sdkLayoutHeight>>" + sdkLayoutHeight)
@@ -1478,7 +1478,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private fun initAdaptersAction() {
         adapter = CardTypeAdapterUIKIT(this)
         goPayAdapter = GoPayCardAdapterUIKIT(this)
-        itemAdapter = ItemAdapter()
+        itemAdapter = ItemAdapter(this,bottomSheetLayout)
         // adapter?.possiblyShowGooglePayButton()
         // val arrayList = ArrayList<String>()//Creating an empty arraylist
         //  arrayList.add("Google Pay")//Adding object in arraylist

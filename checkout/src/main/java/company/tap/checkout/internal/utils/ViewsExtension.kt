@@ -66,30 +66,6 @@ fun View.startPoweredByAnimation(
             poweredByLogo?.addFadeInAnimation()
         })
     }, delayTime)
-//    val resizeAnimation =
-//        targetHeight?.let {
-//            ResizeAnimation(
-//                this,
-//                it,
-//                0, true
-//            )
-//        }
-
-//    resizeAnimation?.duration = animationDelayForResizeAnimation
-//    resizeAnimation?.setAnimationListener(object : AnimationListener {
-//        override fun onAnimationStart(p0: Animation?) {
-//        }
-//
-//        override fun onAnimationEnd(p0: Animation?) {
-//            onAnimationEnd.invoke()
-//        }
-//
-//        override fun onAnimationRepeat(p0: Animation?) {
-//        }
-//
-//    })
-//    this.startAnimation(resizeAnimation)
-
 
 }
 

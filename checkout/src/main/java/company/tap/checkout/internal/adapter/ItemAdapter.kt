@@ -7,38 +7,38 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import android.text.InputFilter
 import android.text.InputFilter.AllCaps
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.internal.api.enums.AmountModificatorType
 import company.tap.checkout.internal.utils.CurrencyFormatter
+import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.models.ItemsModel
-import company.tap.checkout.open.models.PaymentItem
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.R
 import company.tap.tapuilibrary.fontskit.enums.TapFont
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.SeparatorViewTheme
 import company.tap.tapuilibrary.themekit.theme.TextViewTheme
-import company.tap.tapuilibrary.uikit.atoms.TapImageView
 import company.tap.tapuilibrary.uikit.atoms.TapSeparatorView
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.datasource.ItemViewDataSource
 import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import company.tap.tapuilibrary.uikit.views.TapItemListView
-import company.tap.tapuilibrary.uikit.views.TapListItemView
 
 
 /**
 Copyright (c) 2020    Tap Payments.
 All rights reserved.
  **/
-class ItemAdapter :
+class ItemAdapter(private var checkoutViewModel: CheckoutViewModel,private var bottomSheetLayout: FrameLayout) :
     RecyclerView.Adapter<ItemAdapter.ItemHolder>() {
     private var previousExpandedPosition = -1
     private var mExpandedPosition = -1
@@ -75,9 +75,11 @@ class ItemAdapter :
         initView(holder, position)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun initView(holder: ItemHolder, position: Int) {
         val descriptionTextView = holder.itemView.findViewById<TapTextView>(R.id.description_textView)
-        val descText = holder.itemView.findViewById<TapTextView>(R.id.brief_description)
+        val nameText = holder.itemView.findViewById<TapTextView>(R.id.brief_description)
+
         val itemSeparator = holder.itemView.findViewById<TapSeparatorView>(R.id.itemseparator)
         val totalQuantity = holder.itemView.findViewById<TapTextView>(R.id.total_quantity)
       //  val discount = holder.itemView.findViewById<TapTextView>(R.id.discount_text)
@@ -115,10 +117,10 @@ class ItemAdapter :
                     )
                 }
             }
-
-            descText?.text = "Static name for now"
+            nameText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24F);
+            nameText?.text = adapterContentItems[position].name
             // This to be handled in ui kit
-            totalAmount.text = PaymentDataSource.getSelectedCurrencySymbol()+CurrencyFormatter.currencyFormat(adapterContentItems[position].amount.toString())+"X"+adapterContentItems[position].quantity?.toString()
+            totalAmount.text = PaymentDataSource.getSelectedCurrencySymbol()+ " " + CurrencyFormatter.currencyFormat(adapterContentItems[position].amount.toString())+ " X " +adapterContentItems[position].quantity?.toString()
 
         }else{
            // descriptionTextView.text = adapterContentItems[0].description
@@ -128,13 +130,14 @@ class ItemAdapter :
         holder.itemView.setBackgroundColor(Color.parseColor(ThemeManager.getValue("itemsList.item.backgroundColor")))
 
         onItemClickAction(holder, position, isExpanded)
-        showHideDescText(isExpanded, position, descText)
-        setTheme(descriptionTextView, descText, totalQuantity, totalAmount, itemName, itemSeparator, mainViewLinear,null)
-      if(LocalizationManager.getLocale(context).language=="en"){
-          setFontsEnglish(itemName, totalAmount, descText, descriptionTextView, totalQuantity)
-      }else setFontsArabic(itemName, totalAmount, descText, descriptionTextView, totalQuantity)
+        showHideDescText(isExpanded, position, nameText)
+        setTheme(descriptionTextView, nameText, totalQuantity, totalAmount, itemName, itemSeparator, mainViewLinear,null)
+      //  nameText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24F);
 
-      //  checkItemListPosition(position, discount, totalAmount, itemName)
+        if(LocalizationManager.getLocale(context).language=="en"){
+          setFontsEnglish(itemName, totalAmount, nameText, descriptionTextView, totalQuantity)
+      }else setFontsArabic(itemName, totalAmount, nameText, descriptionTextView, totalQuantity)
+
         checkItemListPosition(position, totalAmount, itemName)
     }
 
@@ -144,6 +147,9 @@ class ItemAdapter :
            // descText?.text = LocalizationManager.getValue("hideDesc", "ItemList")
             itemViewAdapter.collapseImageView?.visibility= View.VISIBLE
             itemViewAdapter.expandImageView?.visibility= View.GONE
+            checkoutViewModel.translateViewToNewHeight(bottomSheetLayout.measuredHeight,true)
+
+
         } else {
            // descText?.text = LocalizationManager.getValue("showDesc", "ItemList")
             itemViewAdapter.expandImageView?.visibility= View.VISIBLE

@@ -523,7 +523,7 @@ object SettingsManager {
             paymentitems.add(
                 ItemsModel(
                     "",
-                    "Items1",
+                    "Items",
                     BigDecimal.valueOf(5),
                    getString("key_sdk_transaction_currency", "KWD"),
                     BigDecimal.valueOf(
@@ -544,6 +544,7 @@ object SettingsManager {
                     null
                 )
             )
+
 
 
         }
