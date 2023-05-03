@@ -1503,7 +1503,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         cardViewHolder.view.mainChipgroup.chipsRecycler.adapter = adapter
         cardViewHolder.view.mainChipgroup.chipsRecycler.animation =
             AnimationUtils.loadAnimation(context, R.anim.fall_down_animation)
-        cardViewHolder.view.mainChipgroup.groupAction?.visibility = View.VISIBLE
+
         cardViewHolder.view.mainChipgroup.groupAction?.setOnClickListener {
             setMainChipGroupActionListener()
             paymentInlineViewHolder.tapCardInputView?.clear()
@@ -1694,6 +1694,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             cardViewHolder.view.mainChipgroup.chipsRecycler.adapter = adapter
             deleteCard = false
             adapter.updateShaking(false)
+            if(savedCardList.isNullOrEmpty()) cardViewHolder.view.mainChipgroup?.groupAction?.visibility =View.GONE
 
         }
     }

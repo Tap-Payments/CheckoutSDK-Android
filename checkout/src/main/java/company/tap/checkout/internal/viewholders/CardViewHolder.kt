@@ -60,6 +60,9 @@ class CardViewHolder(private val context: Context, private val onCardSelectedAct
         cardTypeAdapterUIKIT = CardTypeAdapterUIKIT(onCardSelectedActionListener )
         view.mainChipgroup.chipsRecycler.adapter = cardTypeAdapterUIKIT
         view.mainChipgroup.chipsRecycler.elevation = 0F
+        println("saveCardsList >>"+saveCardsList?.size)
+
+        if(saveCardsList?.isEmpty() == true) view.mainChipgroup.groupAction.visibility = View.GONE
 
         paymentCardsList?.let { cardTypeAdapterUIKIT.updateAdapterData(it) }
       //  println("saveCardsList in adapter"+saveCardsList)
