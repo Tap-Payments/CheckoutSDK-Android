@@ -293,6 +293,7 @@ class PaymentInlineViewHolder(
         scannerButton?.setOnClickListener {
             checkoutViewModel.onClickCardScanner(true)
         }
+        controlScannerOptions()
         closeButton?.setOnClickListener {
 
             tapCardInputView.clear()
