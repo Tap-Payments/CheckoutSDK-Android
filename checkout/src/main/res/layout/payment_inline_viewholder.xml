@@ -9,12 +9,12 @@
 
 
     <company.tap.tapuilibrary.uikit.organisms.TapPaymentInput
-
         android:id="@+id/tap_payment_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
         android:layout_marginEnd="6dp"
+        android:layout_marginTop="-5dp"
         android:layoutDirection="locale" />
 
     <company.tap.tapuilibrary.uikit.views.TapContactDetailsView
