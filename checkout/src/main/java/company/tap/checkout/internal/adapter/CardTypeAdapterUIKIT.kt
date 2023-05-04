@@ -622,10 +622,10 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     }
 
     private fun setSelectedCardTypeRedirectShadowAndBackground(holder: RecyclerView.ViewHolder) {
-        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) (holder.itemView.setBackgroundResource(
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) (holder.itemView.tapCardChip3.setBackgroundResource(
             R.drawable.border_shadow_white
         ))
-        else holder.itemView.setBackgroundResource(R.drawable.border_shadow)
+        else holder.itemView.tapCardChip3.setBackgroundResource(R.drawable.border_shadow)
 
         setBorderedView(
             holder.itemView.tapCardChip3Linear,
@@ -640,10 +640,10 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     }
 
     private fun setUnSelectedCardTypeRedirectShadowAndBackground(holder: RecyclerView.ViewHolder) {
-        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) holder.itemView.setBackgroundResource(
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) holder.itemView.tapCardChip3.setBackgroundResource(
             R.drawable.border_unclick_black
         )
-        else holder.itemView.setBackgroundResource(R.drawable.border_unclick)
+        else holder.itemView.tapCardChip3.setBackgroundResource(R.drawable.border_unclick)
         setBorderedView(
             holder.itemView.tapCardChip3Linear,
             //(ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis

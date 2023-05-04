@@ -212,7 +212,7 @@ class PaymentInlineViewHolder(
         // tapMobileInputViewWatcher()
         initializeCardForm()
         initializeIcons()
-        initializeCardBrandView()
+       // initializeCardBrandView()
         initCustomerDetailView()
 
 
