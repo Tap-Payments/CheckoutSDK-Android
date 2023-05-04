@@ -1971,13 +1971,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     it?.view?.startAnimation(animation)
 
                 }
-                Handler().postDelayed({
+
+              //  Handler().postDelayed({
                     if (::sdkLayout.isInitialized) {
                         //it?.view?.visibility = View.INVISIBLE
+                            sdkLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
                         sdkLayout.removeView(it?.view)
 
                     }
-                }, 150)
+              //  }, 150)
 
 
             }, 0)
@@ -1996,14 +1998,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     it?.view?.startAnimation(animation)
                 }
 
-                Handler().postDelayed({
+             //   Handler().postDelayed({
                     if (::sdkLayout.isInitialized) {
                         // it?.view?.visibility = View.VISIBLE
+                        sdkLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
                         sdkLayout.removeView(it?.view)
                         sdkLayout.addView(it?.view)
 
                     }
-                }, 200)
+              //  }, 200)
 
 
             }, 0)
@@ -2182,6 +2185,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         var selectedPayOpt: PaymentOption? = null
         var colorBackGround: String? = null
         var intColorArray: IntArray? = null
+
 
         if (cardBrandString != null) {
             selectedPayOpt = logicTogetPayOptions(cardBrandString)
