@@ -79,7 +79,6 @@ class AmountViewHolder(
         view.amount_section.findViewById<ConstraintLayout>(R.id.constraint).layoutParams.height = view.context.getDimensionsInDp(70)
 
 
-        view.amount_section.selectedAmountValue.setMargins(0,0,0,0)
         view.amount_section.mainKDAmountValue.setMargins(0,10,0,15)
 
 
