@@ -7,7 +7,6 @@ All rights reserved.
  **/
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
@@ -17,19 +16,25 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
+import android.widget.FrameLayout
+import android.widget.LinearLayout
 import android.widget.ProgressBar
+import android.widget.RelativeLayout
 import androidx.annotation.DrawableRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.utils.CustomUtils
+import company.tap.checkout.internal.utils.addFadeOutAnimation
+import company.tap.checkout.internal.utils.showToast
+import company.tap.checkout.internal.utils.twoThirdHeightView
+import company.tap.checkout.internal.viewholders.SwitchViewHolder
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
-import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession.contextSDK
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.tapuilibrary.themekit.ThemeManager
@@ -37,13 +42,18 @@ import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import company.tap.tapuilibrary.uikit.ktx.setTopBorders
 import kotlinx.android.synthetic.main.fragment_web.*
 import kotlinx.android.synthetic.main.fragment_web.web_view
+import kotlinx.android.synthetic.main.switch_layout.view.*
 import kotlinx.android.synthetic.main.web_view_layout.*
+import kotlin.math.roundToInt
 
 
 class WebFragment(
     private val webViewContract: WebViewContract?,
     private val cardViewModel: CardViewModel?,
-    private val checkoutViewModel: CheckoutViewModel
+    private val checkoutViewModel: CheckoutViewModel,
+    private val webFrameLayout: FrameLayout,
+    private val saveCardSwitchHolder: SwitchViewHolder?,
+    private val onLoadedWebView: () -> Unit
 ) : DialogFragment(),
     CustomWebViewClientContract {
 
@@ -51,9 +61,10 @@ class WebFragment(
     private var chargeResponse: Charge? = null
     val progressBar by lazy { view?.findViewById<ProgressBar>(R.id.progressBar) }
     private var displayMetrics: Int? = 0
+
     @DrawableRes
     val loaderGif: Int =
-        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) R.drawable.reduced_loader_white else R.drawable.reduced_loader_black
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) R.drawable.reduced_loader_white else R.drawable.loader_black
 
     override fun getTheme(): Int = R.style.DialogTheme
     override fun onCreateView(
@@ -81,9 +92,11 @@ class WebFragment(
         if (TextUtils.isEmpty(webViewUrl)) {
             throw IllegalArgumentException("Empty URL passed to WebViewFragment!")
         }
-        if (displayMetrics == DisplayMetrics.DENSITY_400 ||displayMetrics == DisplayMetrics.DENSITY_XXHIGH || displayMetrics == DisplayMetrics.DENSITY_450 || displayMetrics == DisplayMetrics.DENSITY_440) {
-            progressBar?.indeterminateDrawable = (context as Activity).resources.getDrawable(loaderGif)
-        }else  progressBar?.indeterminateDrawable = (context as Activity).resources.getDrawable(loaderGif)
+        if (displayMetrics == DisplayMetrics.DENSITY_400 || displayMetrics == DisplayMetrics.DENSITY_XXHIGH || displayMetrics == DisplayMetrics.DENSITY_450 || displayMetrics == DisplayMetrics.DENSITY_440) {
+            progressBar?.indeterminateDrawable =
+                (context as Activity).resources.getDrawable(loaderGif)
+        } else progressBar?.indeterminateDrawable =
+            (context as Activity).resources.getDrawable(loaderGif)
 
         progressBar?.visibility = View.VISIBLE
         web_view?.visibility = View.GONE
@@ -94,7 +107,7 @@ class WebFragment(
     private fun setTopDraggerView() {
         setTopBorders(
             topLinear,
-            40f,// corner raduis
+            80f,// corner raduis
             0.0f,
             Color.parseColor(ThemeManager.getValue("merchantHeaderView.backgroundColor")),// stroke color
             Color.parseColor(ThemeManager.getValue("merchantHeaderView.backgroundColor")),// tint color
@@ -104,7 +117,7 @@ class WebFragment(
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
             setBorderedView(
                 draggerView,
-                40f,// corner raduis
+                80f,// corner raduis
                 0.0f,
                 Color.parseColor("#3b3b3c"),// stroke color
                 Color.parseColor("#3b3b3c"),// tint color
@@ -113,7 +126,7 @@ class WebFragment(
         } else {
             setBorderedView(
                 draggerView,
-                40f,// corner raduis
+                80f,// corner raduis
                 0.0f,
                 Color.parseColor("#e0e0e0"),// stroke color
                 Color.parseColor("#e0e0e0"),// tint color
@@ -127,9 +140,13 @@ class WebFragment(
     private fun setUpWebView(mUrl: String) {
         web_view.settings.javaScriptEnabled = true
         web_view.webChromeClient = WebChromeClient()
+        web_view.isVerticalScrollBarEnabled = true
+        web_view.isHorizontalScrollBarEnabled = true
+
         web_view.settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
-        web_view.webViewClient = cardViewModel?.let { TapCustomWebViewClient(this, it,checkoutViewModel) }!!
-      //  web_view.webViewClient = cardViewModel?.let { TapCustomWebViewClient2(this, it) }!!
+        web_view.webViewClient =
+            cardViewModel?.let { TapCustomWebViewClient(this, it, checkoutViewModel) }!!
+        //  web_view.webViewClient = cardViewModel?.let { TapCustomWebViewClient2(this, it) }!!
         web_view.settings.loadWithOverviewMode = true
         web_view.settings.layoutAlgorithm = WebSettings.LayoutAlgorithm.NORMAL
         web_view.settings.useWideViewPort = true
@@ -139,12 +156,12 @@ class WebFragment(
             if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
 
                 //if (web_view.canGoBack()) {
-                    web_view.goBack()
-                    CheckoutViewModel().cancelledCall()
-                    /**
-                     * put here listener or delegate thT process cancelled **/
-                    return@setOnKeyListener true
-              //  }
+                web_view.goBack()
+                CheckoutViewModel().cancelledCall()
+                /**
+                 * put here listener or delegate thT process cancelled **/
+                return@setOnKeyListener true
+                //  }
                 return@setOnKeyListener false
             }
             false
@@ -166,9 +183,9 @@ class WebFragment(
                 // Update the progress bar with page loading progress
                 progressBar?.progress = newProgress
                 if (newProgress == 100) {
-                    // Hide the progressbar
+                    onLoadedWebView.invoke()
                     progressBar?.visibility = View.GONE
-                      web_view?.visibility = View.VISIBLE
+                    web_view.visibility = View.VISIBLE
                 }
             }
         }
@@ -189,17 +206,19 @@ class WebFragment(
     override fun submitResponseStatus(success: Boolean) {
         /*  val intent = Intent(activity, CheckoutFragment::class.java)
           startActivity(intent)*/
-    //    webViewContract?.redirectLoadingFinished(success, chargeResponse, contextSDK)
+        //    webViewContract?.redirectLoadingFinished(success, chargeResponse, contextSDK)
     }
 
     override fun getRedirectedURL(url: String) {
-        println("url are>>"+PaymentDataSource.getChargeOrAuthorize())
+        println("url are>>" + PaymentDataSource.getChargeOrAuthorize())
         // webViewContract.redirectLoadingFinished(url.contains("https://www.google.com/search?"))
         if (url.contains("gosellsdk://return_url")) {
-           // webViewContract?.resultObtained(true, contextSDK)
+            // webViewContract?.resultObtained(true, contextSDK)
 
-        webViewContract?.redirectLoadingFinished(url.contains("gosellsdk://return_url"), chargeResponse,
-            contextSDK)
+            webViewContract?.redirectLoadingFinished(
+                url.contains("gosellsdk://return_url"), chargeResponse,
+                contextSDK
+            )
         } else {
 
 //            webViewContract.directLoadingFinished(true)
@@ -216,18 +235,27 @@ class WebFragment(
             webViewContract: WebViewContract,
             cardViewModel: CardViewModel,
             chargeResponse: Charge?,
-            checkoutViewModel: CheckoutViewModel
+            checkoutViewModel: CheckoutViewModel,
+            webFrameLayout: FrameLayout,
+            saveCardSwitchHolder: SwitchViewHolder?,
+            onLoadedWebView: () -> Unit
         ): WebFragment {
-            val fragment = WebFragment(webViewContract, cardViewModel,checkoutViewModel)
+            val fragment = WebFragment(
+                webViewContract,
+                cardViewModel,
+                checkoutViewModel,
+                webFrameLayout,
+                saveCardSwitchHolder,
+                onLoadedWebView
+            )
             val args = Bundle()
             args.putString(KEY_URL, url)
             args.putSerializable(CHARGE, chargeResponse)
             fragment.arguments = args
-            println("fragment is"+fragment)
+            println("fragment is" + fragment)
             return fragment
         }
     }
-
 
 
 }
