@@ -1078,6 +1078,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         // bottomSheetDialog.dismissWithAnimation
         //start counter on open otpview
         otpViewHolder?.otpView?.startCounter()
+        amountViewHolder?.view?.amountView_separator?.visibility =View.GONE
+        //Replaced blur with below
+        otpViewHolder?.otpView?.otpLinearLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("amountSectionView.backgroundColor")))
+       // otpViewHolder?.otpView?.otpLinearLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("TapOtpView.backgroundColor")))
         addViews(otpViewHolder)
         otpViewHolder.otpView.visibility = View.VISIBLE
         //Added to hide the Items-Amount button when OTP is opened
