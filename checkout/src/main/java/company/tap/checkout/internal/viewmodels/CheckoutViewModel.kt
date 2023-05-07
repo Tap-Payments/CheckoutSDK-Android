@@ -1973,13 +1973,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     it?.view?.startAnimation(animation)
 
                 }
-                Handler().postDelayed({
+
+              //  Handler().postDelayed({
                     if (::sdkLayout.isInitialized) {
                         //it?.view?.visibility = View.INVISIBLE
+                            sdkLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
                         sdkLayout.removeView(it?.view)
 
                     }
-                }, 150)
+              //  }, 150)
 
 
             }, 0)
@@ -1998,14 +2000,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     it?.view?.startAnimation(animation)
                 }
 
-                Handler().postDelayed({
+             //   Handler().postDelayed({
                     if (::sdkLayout.isInitialized) {
                         // it?.view?.visibility = View.VISIBLE
+                        sdkLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
                         sdkLayout.removeView(it?.view)
                         sdkLayout.addView(it?.view)
 
                     }
-                }, 200)
+              //  }, 200)
 
 
             }, 0)
@@ -2180,28 +2183,28 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         payString: String,
         cardBrandString: String?
     ) {
-        println("paymentOptObject is" + paymentOptObject?.buttonStyle?.background?.darkModel?.backgroundColors?.size)
-        println("paymentOptObject is" + paymentOptObject?.buttonStyle?.background?.darkModel?.backgroundColors?.size)
+
         var selectedPayOpt: PaymentOption? = null
+        var colorBackGround: String? = null
+        var intColorArray: IntArray? = null
+
 
         if (cardBrandString != null) {
             selectedPayOpt = logicTogetPayOptions(cardBrandString)
 
         } else selectedPayOpt = paymentOptObject
 
-        var colorBackGround: String? = null
-        var intColorArray: IntArray? = null
+
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
             if (selectedPayOpt?.buttonStyle?.background?.darkModel?.backgroundColors?.size == 1) {
-                colorBackGround =
-                    selectedPayOpt?.buttonStyle?.background?.darkModel?.backgroundColors?.get(0)
+                colorBackGround = selectedPayOpt.buttonStyle?.background?.darkModel?.backgroundColors?.get(0)
             }
             intColorArray = null
 
         } else {
             if (selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors?.size == 1) {
                 colorBackGround =
-                    selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors?.get(0)
+                    selectedPayOpt.buttonStyle?.background?.lightModel?.backgroundColors?.get(0)
                 intColorArray = null
             } else {
 
@@ -2256,8 +2259,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.removeAllViews()
 
-       // Handler().postDelayed({
-            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.getImageViewUrl(
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.getImageViewUrl(
                 getAssetName(
                     selectedPayOpt
                 )
@@ -2265,7 +2267,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 ?.let { saveCardSwitchHolder?.view?.cardSwitch?.payButton?.addChildView(it) }
             saveCardSwitchHolder?.view?.cardSwitch?.showOnlyPayButton()
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated
-        //}, 500)
+
 
 
     }
@@ -3121,6 +3123,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             .replace("#", "")
 
         sdkLayout.setBackgroundColor(Color.parseColor(newBorderColor))
+
         sdkLayout.let { it1 ->
             setTopBorders(
                 it1,
