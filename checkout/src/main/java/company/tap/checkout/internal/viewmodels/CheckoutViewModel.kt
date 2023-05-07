@@ -121,6 +121,8 @@ import kotlin.properties.Delegates
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
+
+const val animationSpeed = 50L
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedActionListener,
     PaymentCardComplete, onCardNFCCallListener, OnCurrencyChangedActionListener, WebViewContract,
@@ -877,7 +879,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             if (::bottomSheetLayout.isInitialized)
                 translateViewToNewHeight(bottomSheetLayout.measuredHeight, true)
 
-        }, 400)
+        }, animationSpeed)
 
 
         /**
@@ -912,7 +914,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         Handler().postDelayed({
             if (::bottomSheetLayout.isInitialized)
                 translateViewToNewHeight(bottomSheetLayout.measuredHeight, false)
-        }, 400)
+        }, animationSpeed)
 
     }
 
@@ -1953,7 +1955,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             addViews(asynchronousPaymentViewHolder)
             Handler().postDelayed({
                 translateViewToNewHeight(bottomSheetLayout.measuredHeight, true)
-            }, 400)
+            }, animationSpeed)
             asynchronousPaymentViewHolder.setDataFromAPI(chargeResponse)
         }
     }
@@ -1977,7 +1979,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
               //  Handler().postDelayed({
                     if (::sdkLayout.isInitialized) {
                         //it?.view?.visibility = View.INVISIBLE
-                            sdkLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
+                  //          sdkLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
                         sdkLayout.removeView(it?.view)
 
                     }
@@ -2003,7 +2005,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
              //   Handler().postDelayed({
                     if (::sdkLayout.isInitialized) {
                         // it?.view?.visibility = View.VISIBLE
-                        sdkLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
+             //           sdkLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
                         sdkLayout.removeView(it?.view)
                         sdkLayout.addView(it?.view)
 
@@ -2334,7 +2336,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             Handler().postDelayed({
                 if (::bottomSheetLayout.isInitialized)
                     translateViewToNewHeight(bottomSheetLayout.measuredHeight, true)
-            }, 400)
+            }, animationSpeed)
 
         }
     }
@@ -2628,7 +2630,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         Handler().postDelayed({
             if (::bottomSheetLayout.isInitialized)
                 translateViewToNewHeight(bottomSheetLayout.measuredHeight, false)
-        }, 400)
+        }, animationSpeed)
         checkSelectedAmountInitiated()
     }
 
@@ -3122,7 +3124,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         newBorderColor = "#" + borderOpacityVal + borderColor.substring(0, borderColor.length - 2)
             .replace("#", "")
 
-        sdkLayout.setBackgroundColor(Color.parseColor(newBorderColor))
+      //  sdkLayout.setBackgroundColor(Color.parseColor(newBorderColor))
 
         sdkLayout.let { it1 ->
             setTopBorders(

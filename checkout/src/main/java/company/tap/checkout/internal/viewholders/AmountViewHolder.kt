@@ -77,7 +77,8 @@ class AmountViewHolder(
         view.amount_section.tapChipAmount.layoutParams.height = view.context.getDimensionsInDp(24)
         view.amount_section.tapChipPopup.layoutParams.width = view.context.getDimensionsInDp(97)
         view.amount_section.tapChipPopup.layoutParams.height = view.context.getDimensionsInDp(24)
-
+        view.amount_section.tapChipPopup.layoutParams.height = view.context.getDimensionsInDp(24)
+        view.amount_section.selectedAmountValue.setMargins(if (view.amount_section.isRTL()) 0 else 16,24,if (view.amount_section.isRTL()) 16 else 0,24)
         view.amount_section.amountImageView.setImageResource(dropDownIcon)
 
         view.amount_section.findViewById<ConstraintLayout>(R.id.constraint).layoutParams.height = view.context.getDimensionsInDp(75)
