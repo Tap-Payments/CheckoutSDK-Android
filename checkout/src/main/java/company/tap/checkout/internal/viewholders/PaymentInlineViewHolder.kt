@@ -193,6 +193,7 @@ class PaymentInlineViewHolder(
         constraintt = view.findViewById(R.id.constraintt)
         constraintt.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
         acceptedCardText = view.findViewById(R.id.acceptedCardText)
+
         acceptedCardText.text = LocalizationManager.getValue("weSupport", "TapCardInputKit")
         saveForOtherCheckBox?.text =
             LocalizationManager.getValue("cardSaveForTapLabel", "TapCardInputKit")
