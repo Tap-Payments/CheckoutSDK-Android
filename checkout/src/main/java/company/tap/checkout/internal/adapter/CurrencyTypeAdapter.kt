@@ -201,7 +201,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
                 holder.itemView.CurrencyChipLinear,
                 15.0f,// corner raduis
           //  (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),
-                0.0f,
+                2.0f,
                 Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.selected.shadow.color")),
                 Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.backgroundColor")),
                 Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.selected.shadow.color"))

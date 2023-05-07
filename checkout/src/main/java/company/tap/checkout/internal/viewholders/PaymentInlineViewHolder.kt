@@ -212,7 +212,7 @@ class PaymentInlineViewHolder(
         // tapMobileInputViewWatcher()
         initializeCardForm()
         initializeIcons()
-        initializeCardBrandView()
+       // initializeCardBrandView()
         initCustomerDetailView()
 
 
@@ -293,6 +293,7 @@ class PaymentInlineViewHolder(
         scannerButton?.setOnClickListener {
             checkoutViewModel.onClickCardScanner(true)
         }
+        controlScannerOptions()
         closeButton?.setOnClickListener {
 
             tapCardInputView.clear()

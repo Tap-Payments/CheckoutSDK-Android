@@ -59,7 +59,11 @@ class CardViewHolder(private val context: Context, private val onCardSelectedAct
         )
         cardTypeAdapterUIKIT = CardTypeAdapterUIKIT(onCardSelectedActionListener )
         view.mainChipgroup.chipsRecycler.adapter = cardTypeAdapterUIKIT
-        view.mainChipgroup.chipsRecycler.elevation = 0F
+        view.mainChipgroup.chipsRecycler.elevation = 0f
+
+        println("saveCardsList >>"+saveCardsList?.size)
+
+        if(saveCardsList?.isEmpty() == true) view.mainChipgroup.groupAction.visibility = View.GONE
 
         paymentCardsList?.let { cardTypeAdapterUIKIT.updateAdapterData(it) }
       //  println("saveCardsList in adapter"+saveCardsList)
@@ -86,7 +90,8 @@ class CardViewHolder(private val context: Context, private val onCardSelectedAct
             cardInfoHeaderText.text =  LocalizationManager.getValue("cardSectionTitle", "TapCardInputKit")
 
         }else{
-        cardInfoHeaderText.text =  LocalizationManager.getValue("cardSectionTitleOr", "TapCardInputKit")
+            if(saveCardsList?.isEmpty() == true)  cardInfoHeaderText.text =  LocalizationManager.getValue("cardSectionTitle", "TapCardInputKit")
+      else  cardInfoHeaderText.text =  LocalizationManager.getValue("cardSectionTitleOr", "TapCardInputKit")
         }
        /* var cardInfoTextTheme = TextViewTheme()
         cardInfoTextTheme.textColor =
