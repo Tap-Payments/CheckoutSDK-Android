@@ -68,7 +68,7 @@ class BusinessViewHolder(context: Context, private val checkoutViewModel: Checko
         view.headerView.tapChipIcon.setMargins(if (view.headerView.tapChipIcon.isRTL()) 0 else 20, 0, if (view.headerView.tapChipIcon.isRTL()) 20 else 20, 0)
 
         view.headerView.paymentFor.setMargins(10, 0, 0, 0)
-        view.headerView.businessName.setMargins(10, 0, 0, 0)
+        view.headerView.businessName.setMargins(0, 2, 0, 0)
 
 
         setTopBorders(
