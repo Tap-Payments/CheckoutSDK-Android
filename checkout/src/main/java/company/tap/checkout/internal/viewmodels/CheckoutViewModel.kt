@@ -2348,6 +2348,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     private fun onClickCardPayment(savedCardsModel: Any?) {
         println("onClickCardPayment" + savedCardsModel)
+        PaymentDataSource.setWebViewType(WebViewType.THREE_DS_WEBVIEW)
         amountViewHolder.view.amount_section?.tapChipPopup?.slideFromLeftToRight()
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
         doAfterSpecificTime {
@@ -3082,6 +3083,40 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             )
         }
 
+        PaymentDataSource.setWebViewType(WebViewType.THREE_DS_WEBVIEW)
+        amountViewHolder.view.amount_section?.tapChipPopup?.slideFromLeftToRight()
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
+        doAfterSpecificTime {
+
+            CustomUtils.hideKeyboardFrom(context, paymentInlineViewHolder.view)
+
+            saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
+
+
+            with(cardViewHolder.view.mainChipgroup) {
+                val viewsToFadeOut = mutableListOf<View>(chipsRecycler, groupAction, groupName)
+                /*if (paymentInlineViewHolder.cardInputUIStatus == CardInputUIStatus.SavedCard) {
+                    viewsToFadeOut.add(amountViewHolder.view)
+                }*/
+                doAfterSpecificTime(time = 500L) {
+                    viewsToFadeOut.addFadeOutAnimationToViews(onAnimationEnd = {})
+                    paymentInlineViewHolder.paymentInputContainer.applyBluryToView()
+                }
+
+            }
+
+
+            if (paymentInlineViewHolder.cardInputUIStatus == CardInputUIStatus.SavedCard) {
+                cardViewHolder.view.cardInfoHeaderText.visibility = View.VISIBLE
+                cardViewHolder.view.cardInfoHeaderText.text =
+                    LocalizationManager.getValue("savedCardSectionTitle", "TapCardInputKit")
+            }
+
+
+
+
+        }
+
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -3626,7 +3661,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
             paymentType === PaymentType.CARD -> {
                 println("savedCardsModel fro card" + savedCardsModel)
-                PaymentDataSource.setWebViewType(WebViewType.THREE_DS_WEBVIEW)
+
                 //Added to disable click when button loading
                 amountViewHolder.view.amount_section?.itemAmountLayout?.isEnabled = false
                 amountViewHolder.view.amount_section?.itemAmountLayout?.isClickable = false
@@ -3637,10 +3672,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
             paymentType === PaymentType.SavedCard -> {
                 if (isSavedCardSelected == true) {
+                    PaymentDataSource.setWebViewType(WebViewType.THREE_DS_WEBVIEW)
                     //Added to disable click when button loading
                     amountViewHolder.view.amount_section?.itemAmountLayout?.isEnabled = false
                     amountViewHolder.view.amount_section?.itemAmountLayout?.isClickable = false
-                    payActionSavedCard(savedCardsModel as SavedCard)
+                          payActionSavedCard(savedCardsModel as SavedCard)
 
                 }
             }
