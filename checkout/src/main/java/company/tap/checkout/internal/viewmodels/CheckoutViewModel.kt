@@ -15,6 +15,7 @@ import android.text.format.DateFormat
 import android.util.Log
 import android.view.View
 import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
@@ -1072,10 +1073,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }*/
         removeViews(
             cardViewHolder,
-            paymentInlineViewHolder, saveCardSwitchHolder, otpViewHolder
+            paymentInlineViewHolder, otpViewHolder
         )
+        saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
+
         paymentInlineViewHolder.paymentInputContainer.applyBluryToView(showOriginalView = true)
-        // bottomSheetDialog.dismissWithAnimation
+
+
         //start counter on open otpview
         otpViewHolder?.otpView?.startCounter()
         amountViewHolder?.view?.amountView_separator?.visibility =View.GONE
@@ -1095,6 +1100,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             otpViewHolder.otpView.restartTimer()
         }
         amountViewHolder.view.amount_section.mainKDAmountValue.visibility = GONE
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = GONE
     }
 
     private fun setOtpPhoneNumber(phoneNumber: PhoneNumber?) {
@@ -1265,7 +1271,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                     ActionButtonState.LOADING
                 )
-
+                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = VISIBLE
                 saveCardSwitchHolder?.view?.cardSwitch?.tapLogoImage?.visibility = GONE
                 checkoutFragment.closeText.visibility = GONE
 
@@ -1767,15 +1773,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             )
             removeViews(webViewHolder)
         }
-        doAfterSpecificTime(250) {
-            if (::bottomSheetLayout.isInitialized) {
-                bottomSheetLayout.resizeAnimation(
-                    startHeight = bottomSheetLayout.measuredHeight,
-                    endHeight = sdkLayout.height,
-                    durationTime = 250, isExpanding = false
-                )
-            }
-        }
+
 
 
 
@@ -1796,7 +1794,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = View.VISIBLE
         }
-
+        doAfterSpecificTime(250) {
+            if (::bottomSheetLayout.isInitialized) {
+                bottomSheetLayout.resizeAnimation(
+                    startHeight = bottomSheetLayout.measuredHeight,
+                    endHeight = sdkLayout.height,
+                    durationTime = 250, isExpanding = false
+                )
+            }
+        }
         if (::checkoutFragment.isInitialized)
             checkoutFragment.closeText.visibility = GONE
         println("chargeResponse are>>>>" + chargeResponse?.status)
@@ -1816,10 +1822,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             )
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.ERROR)
         }
+        println("chargeResponse to handle" + saveCardSwitchHolder?.view)
         println("chargeResponse to handle" + chargeResponse?.status)
         when (chargeResponse?.status) {
             ChargeStatus.CAPTURED, ChargeStatus.AUTHORIZED, ChargeStatus.VALID, ChargeStatus.IN_PROGRESS -> {
-                doAfterSpecificTime(2000) {
+                doAfterSpecificTime(500) {
                     saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                         ActionButtonState.SUCCESS
                     )
