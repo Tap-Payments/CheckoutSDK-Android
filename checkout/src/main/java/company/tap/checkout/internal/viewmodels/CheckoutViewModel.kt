@@ -523,6 +523,27 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
         }
+
+       /* sdkLayout.let {
+            setTopBorders(
+                it,
+                35f,
+                strokeColor = Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),
+                tintColor =Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),// tint color
+                shadowColor =Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
+            )
+        }*/
+        sdkLayout?.setBackgroundDrawable(
+            createDrawableGradientForBlurry(
+                intArrayOf(
+                    Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),
+                    Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),
+                    Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
+                )
+            )
+        )
+
+
     }
 
     private fun showCountryFlag(): String? {
@@ -919,7 +940,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             sdkLayoutHeight,
             originalHeight, expandHeightBool
         )
-        resizeAnimation.duration = 350
+        resizeAnimation.duration = 10
         bottomSheetLayout.startAnimation(resizeAnimation)
 
 
@@ -970,6 +991,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         saveCardSwitchHolder?.let {
             addViews(
+
                 cardViewHolder,
                 paymentInlineViewHolder,
                 it
@@ -1061,14 +1083,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             println("selectedAmount>>>>" + selectedAmount)
         }*/
         removeViews(
-            cardViewHolder,
             paymentInlineViewHolder, otpViewHolder
         )
+
         saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
-
-        paymentInlineViewHolder.paymentInputContainer.applyBluryToView(showOriginalView = true)
-
 
         //start counter on open otpview
         otpViewHolder?.otpView?.startCounter()
@@ -1077,12 +1096,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         otpViewHolder?.otpView?.otpLinearLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("amountSectionView.backgroundColor")))
        // otpViewHolder?.otpView?.otpLinearLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("TapOtpView.backgroundColor")))
         doAfterSpecificTime(time = 700L) {
+            removeViews(cardViewHolder)
             addViews(otpViewHolder)
-        otpViewHolder.otpView.visibility = View.VISIBLE}
+        otpViewHolder.otpView.visibility = View.VISIBLE
+
+        }
+        doAfterSpecificTime(time = 800L) { CustomUtils.showKeyboard(context) }
         //Added to hide the Items-Amount button when OTP is opened
         // amountViewHolder.view.amount_section.itemAmountLayout?.visibility = View.GONE
         amountViewHolder.view.amount_section.tapChipAmount?.visibility = GONE
-        CustomUtils.showKeyboard(context)
+
         setOtpPhoneNumber(phoneNumber)
         otpViewHolder.otpView.changePhone.visibility = View.INVISIBLE
         otpViewHolder.otpView.timerText.setOnClickListener {
@@ -1553,19 +1576,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     @SuppressLint("ClickableViewAccessibility")
     private fun touchHandlingForCardView() {
-
-//        bottomSheetLayout.resizeAnimation(
-//            durationTime = resizeAnimationDuration,
-//            startHeight = bottomSheetLayout.height,
-//            endHeight = sdkLayout.height ,
-//        )
         saveCardSwitchHolder?.view?.setOnTouchListener { v, _ ->
             CustomUtils.hideKeyboardFrom(context, paymentInlineViewHolder.view)
             paymentInlineViewHolder.resetView = true
             paymentInlineViewHolder.resetTouchView()
-
-            Log.e("error bottomSheetHeight",bottomSheetLayout.measuredHeight.toString())
-            Log.e("error sdk",sdkLayout.height.toString())
 
             true
         }
@@ -1756,6 +1770,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 contextSDK as Activity
             )
         )*/
+
         saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = View.VISIBLE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setDisplayMetrics(
@@ -2004,11 +2019,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
                 }
 
-                //  Handler().postDelayed({
-                if (::sdkLayout.isInitialized) {
-                    //it?.view?.visibility = View.INVISIBLE
-                    //          sdkLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
-                    sdkLayout.removeView(it?.view)
+              //  Handler().postDelayed({
+                    if (::sdkLayout.isInitialized) {
+                        //it?.view?.visibility = View.INVISIBLE
+                            sdkLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
+                        sdkLayout.removeView(it?.view)
 
                 }
                 //  }, 150)
@@ -2030,12 +2045,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     it?.view?.startAnimation(animation)
                 }
 
-                //   Handler().postDelayed({
-                if (::sdkLayout.isInitialized) {
-                    // it?.view?.visibility = View.VISIBLE
-                    //           sdkLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
-                    sdkLayout.removeView(it?.view)
-                    sdkLayout.addView(it?.view)
+             //   Handler().postDelayed({
+                    if (::sdkLayout.isInitialized) {
+                        // it?.view?.visibility = View.VISIBLE
+                        sdkLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
+                      //  sdkLayout.setBackgroundColor(Color.RED)
+                        sdkLayout.removeView(it?.view)
+                        sdkLayout.addView(it?.view)
 
                 }
                 //  }, 200)
@@ -2341,32 +2357,36 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             )
 
 
-//            if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
-//                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
-//                    backgroundColor = Color.parseColor(
-//                        savedCardsModel.buttonStyle?.background?.darkModel?.baseColor
-//                    )
-//                )
-//
-//            } else saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
-//                backgroundColor = Color.parseColor(savedCardsModel.buttonStyle?.background?.lightModel?.baseColor)
-//            )
-//
-//            saveCardSwitchHolder?.view?.mainSwitch?.mainTextSave?.visibility = View.INVISIBLE
-//
-//            //Commented to try the flow of redirect
-//            removeViews(
-//                //    businessViewHolder,
-//                amountViewHolder,
-//                cardViewHolder,
-//                paymentInlineViewHolder,
-//                tabAnimatedActionButtonViewHolder
-//            )
-//            businessViewHolder.view.headerView.constraint.visibility = GONE
-//            Handler().postDelayed({
-//                if (::bottomSheetLayout.isInitialized)
-//                    translateViewToNewHeight(bottomSheetLayout.measuredHeight, true)
-//            }, animationSpeed)
+
+
+
+
+            if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
+                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
+                    backgroundColor = Color.parseColor(
+                        savedCardsModel.buttonStyle?.background?.darkModel?.baseColor
+                    )
+                )
+
+            } else saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
+                backgroundColor = Color.parseColor(savedCardsModel.buttonStyle?.background?.lightModel?.baseColor)
+            )
+
+            saveCardSwitchHolder?.view?.mainSwitch?.mainTextSave?.visibility = View.INVISIBLE
+
+            //Commented to try the flow of redirect
+            removeViews(
+                //    businessViewHolder,
+                amountViewHolder,
+                cardViewHolder,
+                paymentInlineViewHolder,
+                tabAnimatedActionButtonViewHolder
+            )
+            businessViewHolder.view.headerView.constraint.visibility = GONE
+            Handler().postDelayed({
+                if (::bottomSheetLayout.isInitialized)
+                    translateViewToNewHeight(bottomSheetLayout.measuredHeight, true)
+            }, animationSpeed)
 
         }
     }
@@ -2876,15 +2896,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         println("saveCardSwitchHolder val" + saveCardSwitchHolder)
         println("redirect val" + charge?.response)
         println("gatewayResponse val" + charge?.gatewayResponse)
+
       //  saveCardSwitchHolder?.view?.layoutParams= ViewGroup.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT)
 
         businessViewHolder = contextSDK?.let { BusinessViewHolder(it, this) }!!
         // saveCardSwitchHolder = contextSDK.let { SwitchViewHolder(it,this) }
         removeViews(businessViewHolder)
-        doAfterSpecificTime(time = 10L) {
-            if(::webViewHolder.isInitialized) webViewHolder?.view?.visibility= INVISIBLE
-            translateViewToNewHeight(bottomSheetLayout.measuredHeight,false)
-        }
+
 
         if (::webFrameLayout.isInitialized) {
             if (fragmentManager.findFragmentById(R.id.webFrameLayout) != null)
@@ -2898,6 +2916,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
 
 
+        if(::webViewHolder.isInitialized) {
+            webViewHolder?.view?.visibility= INVISIBLE
+            removeViews(webViewHolder)
+        }
+        doAfterSpecificTime(time = 5L) {
+
+            println("sdklayout hh val" + sdkLayout.measuredHeight)
+            println("bottomSheetLayout hh val" + bottomSheetLayout.measuredHeight)
+            translateViewToNewHeight(bottomSheetLayout.measuredHeight,false)
+        }
 
         //  sdkLayout.visibility =View.VISIBLE
         if (::amountViewHolder.isInitialized && ::cardViewHolder.isInitialized && ::cardViewHolder.isInitialized && ::paymentInlineViewHolder.isInitialized)
@@ -3201,7 +3229,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         //  sdkLayout.setBackgroundColor(Color.parseColor(newBorderColor))
 
-        sdkLayout.let { it1 ->
+      /*  sdkLayout.let { it1 ->
             setTopBorders(
                 it1,
                 35f,// corner raduis
@@ -3216,7 +3244,18 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     newBorderColor
                 )
             )
-        }
+        }*/
+
+        sdkLayout?.setBackgroundDrawable(
+            createDrawableGradientForBlurry(
+                intArrayOf(
+                    Color.parseColor(newBorderColor),
+                    Color.parseColor(newBorderColor),
+                    Color.parseColor(newBorderColor)
+                )
+            )
+        )
+
         val separatorViewTheme = SeparatorViewTheme()
         separatorViewTheme.strokeColor =
             Color.parseColor(ThemeManager.getValue("tapSeparationLine.backgroundColor"))

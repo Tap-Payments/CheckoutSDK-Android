@@ -349,24 +349,24 @@ fun MutableList<View>.addFadeOutAnimationToViews(
     onAnimationEnd: () -> Unit?
 ) {
     this.forEachIndexed { index, view ->
-//        val animation = AnimationUtils.loadAnimation(view.context, R.anim.fade_out)
-//        animation.duration = durationTime
-//        view.startAnimation(animation)
-        view.visibility = View.GONE
-//        view.animation.setAnimationListener(object : AnimationListener {
-//            override fun onAnimationStart(p0: Animation?) {
-//            }
-//
-//            override fun onAnimationEnd(p0: Animation?) {
-//                view.visibility = View.GONE
-//                onAnimationEnd.invoke()
-//
-//            }
-//
-//            override fun onAnimationRepeat(p0: Animation?) {
-//            }
-//
-//        })
+        val animation = AnimationUtils.loadAnimation(view.context, R.anim.fade_out)
+                animation.duration = durationTime
+       view.startAnimation(animation)
+       // view.visibility = View.GONE
+        view.animation.setAnimationListener(object : AnimationListener {
+            override fun onAnimationStart(p0: Animation?) {
+            }
+
+            override fun onAnimationEnd(p0: Animation?) {
+                view.visibility = View.GONE
+                onAnimationEnd.invoke()
+
+          }
+
+            override fun onAnimationRepeat(p0: Animation?) {
+           }
+
+        })
     }
 
 
