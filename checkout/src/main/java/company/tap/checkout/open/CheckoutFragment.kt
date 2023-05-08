@@ -323,7 +323,35 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                   )
               }
           }
+
   */
+
+        checkoutLayout?.let {
+            setTopBorders(
+                it,
+                105f,
+                strokeColor = Color.parseColor(
+                    newColorVal
+                ),
+                tintColor = Color.parseColor(
+                    newColorVal
+                ),// tint color
+                shadowColor = Color.parseColor(
+                    newColorVal
+                )
+            )
+        }
+
+        checkoutLayout?.setBackgroundDrawable(
+            createDrawableGradientForBlurry(
+                intArrayOf(
+                    Color.parseColor(newColorVal),
+                    Color.parseColor(newColorVal),
+                    Color.parseColor(newColorVal)
+                )
+            )
+        )
+
         closeText.setOnClickListener {
             bottomSheetDialog.dismissWithAnimation
             bottomSheetDialog.hide()

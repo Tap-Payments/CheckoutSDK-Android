@@ -519,6 +519,27 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
         }
+
+       /* sdkLayout.let {
+            setTopBorders(
+                it,
+                35f,
+                strokeColor = Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),
+                tintColor =Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),// tint color
+                shadowColor =Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
+            )
+        }*/
+        sdkLayout?.setBackgroundDrawable(
+            createDrawableGradientForBlurry(
+                intArrayOf(
+                    Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),
+                    Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),
+                    Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
+                )
+            )
+        )
+
+
     }
 
     private fun showCountryFlag(): String? {
@@ -929,7 +950,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             sdkLayoutHeight,
             originalHeight, expandHeightBool
         )
-        resizeAnimation.duration = 350
+        resizeAnimation.duration = 10
         bottomSheetLayout.startAnimation(resizeAnimation)
 
 
@@ -2020,6 +2041,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     if (::sdkLayout.isInitialized) {
                         // it?.view?.visibility = View.VISIBLE
                         sdkLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
+                      //  sdkLayout.setBackgroundColor(Color.RED)
                         sdkLayout.removeView(it?.view)
                         sdkLayout.addView(it?.view)
 
@@ -2880,6 +2902,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
 
 
+        if(::webViewHolder.isInitialized) {
+            webViewHolder?.view?.visibility= INVISIBLE
+            removeViews(webViewHolder)
+        }
+        doAfterSpecificTime(time = 5L) {
+
+            println("sdklayout hh val" + sdkLayout.measuredHeight)
+            println("bottomSheetLayout hh val" + bottomSheetLayout.measuredHeight)
+            translateViewToNewHeight(bottomSheetLayout.measuredHeight,false)
+        }
 
         //  sdkLayout.visibility =View.VISIBLE
         if (::amountViewHolder.isInitialized && ::cardViewHolder.isInitialized && ::cardViewHolder.isInitialized && ::paymentInlineViewHolder.isInitialized)
@@ -3181,7 +3213,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
       //  sdkLayout.setBackgroundColor(Color.parseColor(newBorderColor))
 
-        sdkLayout.let { it1 ->
+      /*  sdkLayout.let { it1 ->
             setTopBorders(
                 it1,
                 35f,// corner raduis
@@ -3196,7 +3228,18 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     newBorderColor
                 )
             )
-        }
+        }*/
+
+        sdkLayout?.setBackgroundDrawable(
+            createDrawableGradientForBlurry(
+                intArrayOf(
+                    Color.parseColor(newBorderColor),
+                    Color.parseColor(newBorderColor),
+                    Color.parseColor(newBorderColor)
+                )
+            )
+        )
+
         val separatorViewTheme = SeparatorViewTheme()
         separatorViewTheme.strokeColor =
             Color.parseColor(ThemeManager.getValue("tapSeparationLine.backgroundColor"))
