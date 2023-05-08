@@ -1089,11 +1089,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
        // otpViewHolder?.otpView?.otpLinearLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("TapOtpView.backgroundColor")))
         doAfterSpecificTime(time = 700L) {
             addViews(otpViewHolder)
-        otpViewHolder.otpView.visibility = View.VISIBLE}
+        otpViewHolder.otpView.visibility = View.VISIBLE
+
+        }
+        doAfterSpecificTime(time = 800L) { CustomUtils.showKeyboard(context) }
         //Added to hide the Items-Amount button when OTP is opened
         // amountViewHolder.view.amount_section.itemAmountLayout?.visibility = View.GONE
         amountViewHolder.view.amount_section.tapChipAmount?.visibility = GONE
-        CustomUtils.showKeyboard(context)
+
         setOtpPhoneNumber(phoneNumber)
         otpViewHolder.otpView.changePhone.visibility = View.INVISIBLE
         otpViewHolder.otpView.timerText.setOnClickListener {
@@ -2858,13 +2861,20 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         println("saveCardSwitchHolder val" + saveCardSwitchHolder)
         println("redirect val" + charge?.response)
         println("gatewayResponse val" + charge?.gatewayResponse)
+
       //  saveCardSwitchHolder?.view?.layoutParams= ViewGroup.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT)
 
         businessViewHolder = contextSDK?.let { BusinessViewHolder(it, this) }!!
         // saveCardSwitchHolder = contextSDK.let { SwitchViewHolder(it,this) }
         removeViews(businessViewHolder)
-        doAfterSpecificTime(time = 10L) {
-            if(::webViewHolder.isInitialized) webViewHolder?.view?.visibility= INVISIBLE
+        if(::webViewHolder.isInitialized) {
+            webViewHolder?.view?.visibility= INVISIBLE
+            removeViews(webViewHolder)
+        }
+        doAfterSpecificTime(time = 5L) {
+
+            println("sdklayout hh val" + sdkLayout.measuredHeight)
+            println("bottomSheetLayout hh val" + bottomSheetLayout.measuredHeight)
             translateViewToNewHeight(bottomSheetLayout.measuredHeight,false)
         }
 
@@ -3113,9 +3123,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
             with(cardViewHolder.view.mainChipgroup) {
                 val viewsToFadeOut = mutableListOf<View>(chipsRecycler, groupAction, groupName)
-                /*if (paymentInlineViewHolder.cardInputUIStatus == CardInputUIStatus.SavedCard) {
-                    viewsToFadeOut.add(amountViewHolder.view)
-                }*/
+
                 doAfterSpecificTime(time = 500L) {
                     viewsToFadeOut.addFadeOutAnimationToViews(onAnimationEnd = {})
                     paymentInlineViewHolder.paymentInputContainer.applyBluryToView()
