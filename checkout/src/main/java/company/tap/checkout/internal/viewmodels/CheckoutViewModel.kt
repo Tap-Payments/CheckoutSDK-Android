@@ -11,11 +11,11 @@ import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.text.Layout
 import android.text.format.DateFormat
 import android.util.Log
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
+import android.view.View.*
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
@@ -1087,8 +1087,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         //Replaced blur with below
         otpViewHolder?.otpView?.otpLinearLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("amountSectionView.backgroundColor")))
        // otpViewHolder?.otpView?.otpLinearLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("TapOtpView.backgroundColor")))
-        addViews(otpViewHolder)
-        otpViewHolder.otpView.visibility = View.VISIBLE
+        doAfterSpecificTime(time = 700L) {
+            addViews(otpViewHolder)
+        otpViewHolder.otpView.visibility = View.VISIBLE}
         //Added to hide the Items-Amount button when OTP is opened
         // amountViewHolder.view.amount_section.itemAmountLayout?.visibility = View.GONE
         amountViewHolder.view.amount_section.tapChipAmount?.visibility = GONE
@@ -2857,10 +2858,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         println("saveCardSwitchHolder val" + saveCardSwitchHolder)
         println("redirect val" + charge?.response)
         println("gatewayResponse val" + charge?.gatewayResponse)
+      //  saveCardSwitchHolder?.view?.layoutParams= ViewGroup.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT)
 
         businessViewHolder = contextSDK?.let { BusinessViewHolder(it, this) }!!
         // saveCardSwitchHolder = contextSDK.let { SwitchViewHolder(it,this) }
         removeViews(businessViewHolder)
+        doAfterSpecificTime(time = 10L) {
+            if(::webViewHolder.isInitialized) webViewHolder?.view?.visibility= INVISIBLE
+            translateViewToNewHeight(bottomSheetLayout.measuredHeight,false)
+        }
+
         if (::webFrameLayout.isInitialized) {
             if (fragmentManager.findFragmentById(R.id.webFrameLayout) != null)
                 fragmentManager.beginTransaction()
@@ -2871,6 +2878,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             supportFragmentManager?.popBackStack()
 
         }
+
+
+
         //  sdkLayout.visibility =View.VISIBLE
         if (::amountViewHolder.isInitialized && ::cardViewHolder.isInitialized && ::cardViewHolder.isInitialized && ::paymentInlineViewHolder.isInitialized)
             removeViews(
@@ -2879,6 +2889,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 cardViewHolder,
                 paymentInlineViewHolder
             )
+
 
 
         Handler().postDelayed({
