@@ -1072,14 +1072,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             println("selectedAmount>>>>" + selectedAmount)
         }*/
         removeViews(
-            cardViewHolder,
             paymentInlineViewHolder, otpViewHolder
         )
+
         saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
-
-        paymentInlineViewHolder.paymentInputContainer.applyBluryToView(showOriginalView = true)
-
 
         //start counter on open otpview
         otpViewHolder?.otpView?.startCounter()
@@ -1088,6 +1085,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         otpViewHolder?.otpView?.otpLinearLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("amountSectionView.backgroundColor")))
        // otpViewHolder?.otpView?.otpLinearLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("TapOtpView.backgroundColor")))
         doAfterSpecificTime(time = 700L) {
+            removeViews(cardViewHolder)
             addViews(otpViewHolder)
         otpViewHolder.otpView.visibility = View.VISIBLE
 
@@ -3119,24 +3117,24 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             CustomUtils.hideKeyboardFrom(context, paymentInlineViewHolder.view)
 
             saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
-
+            if (paymentInlineViewHolder.cardInputUIStatus == CardInputUIStatus.SavedCard) {
+                cardViewHolder.view.cardInfoHeaderText.visibility = View.VISIBLE
+                cardViewHolder.view.cardInfoHeaderText.text =
+                    LocalizationManager.getValue("savedCardSectionTitle", "TapCardInputKit")
+            }
 
             with(cardViewHolder.view.mainChipgroup) {
                 val viewsToFadeOut = mutableListOf<View>(chipsRecycler, groupAction, groupName)
-
+                   viewsToFadeOut.add(cardViewHolder.view?.cardInfoHeaderText)
                 doAfterSpecificTime(time = 500L) {
-                    viewsToFadeOut.addFadeOutAnimationToViews(onAnimationEnd = {})
+
+                    viewsToFadeOut.addFadeOutAnimationToViews( durationTime = 1000L, onAnimationEnd = {})
                     paymentInlineViewHolder.paymentInputContainer.applyBluryToView()
                 }
 
             }
 
 
-            if (paymentInlineViewHolder.cardInputUIStatus == CardInputUIStatus.SavedCard) {
-                cardViewHolder.view.cardInfoHeaderText.visibility = View.VISIBLE
-                cardViewHolder.view.cardInfoHeaderText.text =
-                    LocalizationManager.getValue("savedCardSectionTitle", "TapCardInputKit")
-            }
 
 
 
