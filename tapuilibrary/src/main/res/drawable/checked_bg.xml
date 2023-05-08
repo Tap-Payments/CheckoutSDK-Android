@@ -1,0 +1,38 @@
+<vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="16dp"
+    android:height="16dp"
+    android:viewportWidth="16"
+    android:viewportHeight="16"
+    >
+
+    <group>
+
+        <clip-path
+            android:pathData="M4 0H12C14.2091 0 16 1.79086 16 4V12C16 14.2091 14.2091 16 12 16H4C1.79086 16 0 14.2091 0 12V4C0 1.79086 1.79086 0 4 0Z"
+            />
+
+        <path
+            android:pathData="M0 0V16H16V0"
+            android:fillColor="@color/buttoncheckBox"
+            />
+
+    </group>
+
+        <group>
+
+            <clip-path
+                android:pathData="M0 0H9.01788V6.507H0V0Z"
+                />
+
+            <path
+                android:pathData="M0 0V6.507H9.01788V0"
+                android:fillColor="#FFFFFF"
+                />
+
+        </group>
+
+
+
+</vector>

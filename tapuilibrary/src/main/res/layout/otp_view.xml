@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:blurkit="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/otpMainView"
+    android:fitsSystemWindows="true"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_marginTop="-20dp"
+        android:layout_height="70dp"
+        android:id="@+id/changePhoneCardView"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="0dp"
+        android:layout_gravity="center">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:paddingTop="15dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp">
+
+            <company.tap.tapuilibrary.uikit.atoms.TapTextView
+                android:id="@+id/otpSentText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:fontFamily="sans-serif-light"
+                tools:text="OTP has been sent to"
+                android:textColor="#4b4847"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                android:textDirection="locale"
+                android:layoutDirection="locale"
+                android:layout_marginStart="@dimen/margin_basic_10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <company.tap.tapuilibrary.uikit.atoms.TapTextView
+                android:id="@+id/mobileNumberText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_basic_6dp"
+                android:layout_marginEnd="@dimen/margin_basic_6dp"
+                android:fontFamily="sans-serif-light"
+                android:textColor="#1381f9"
+                android:textSize="14sp"
+                android:textDirection="locale"
+                android:layoutDirection="locale"
+                tools:text="mmmmmm"
+                android:textStyle="normal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/otpSentText"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <company.tap.tapuilibrary.uikit.atoms.TapTextView
+                android:id="@+id/changePhone"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="15dp"
+                android:gravity="center"
+                android:text="CHANGE"
+                android:textDirection="locale"
+                android:layoutDirection="locale"
+                android:textColor="@color/blue"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+    <LinearLayout
+        android:id="@+id/otpLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="270dp"
+        android:layout_marginTop="-8dp"
+        android:paddingTop="-5dp"
+        android:windowSoftInputMode="adjustPan"
+        android:layout_gravity="center"
+        android:gravity="center"
+       
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_gravity="center">
+
+            <company.tap.tapuilibrary.uikit.views.TapOTPView
+                android:id="@+id/otpViewInput1"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/margin_basic_20dp"
+                android:cursorVisible="true"
+                android:fitsSystemWindows="true"
+                android:focusable="true"
+               android:focusableInTouchMode="true"
+                android:focusedByDefault="true"
+                android:fontFamily="sans-serif-light"
+                android:foregroundGravity="center"
+                android:gravity="center"
+                android:inputType="number"
+                android:lineHeight="0.2dp"
+                android:lineSpacingExtra="@dimen/margin_basic_6dp"
+                android:textAlignment="center"
+                android:textColor="#4b4847"
+                android:textFontWeight="200"
+                android:textSize="25sp"
+                app:itemCount="6"
+
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lineColor="@color/blue"
+                app:viewType="line" />
+
+            <!--            android:accessibilityTraversalBefore="@+id/otpViewInput2"-->
+
+            <!--            <company.tap.tapuilibrary.uikit.views.TapOTPView-->
+            <!--                android:id="@+id/otpViewInput2"-->
+            <!--                android:layout_width="0dp"-->
+            <!--                android:layout_height="40dp"-->
+            <!--                app:layout_constraintRight_toRightOf="parent"-->
+            <!--                app:layout_constraintTop_toTopOf="parent"-->
+            <!--                android:accessibilityTraversalAfter="@+id/otpViewInput1"-->
+            <!--                android:imeOptions="actionDone"-->
+            <!--                android:layout_gravity="center"-->
+            <!--                android:gravity="center"-->
+            <!--                android:foregroundGravity="center"-->
+            <!--                android:cursorVisible="true"-->
+            <!--                android:fitsSystemWindows="true"-->
+            <!--                android:focusable="true"-->
+            <!--                android:textFontWeight="200"-->
+            <!--                android:fontFamily="sans-serif-light"-->
+            <!--                android:focusableInTouchMode="true"-->
+            <!--                android:inputType="number"-->
+            <!--                android:textColor="#4b4847"-->
+            <!--                android:textSize="25sp"-->
+            <!--                android:visibility="visible"-->
+            <!--                android:layout_marginTop="@dimen/margin_basic_20dp"-->
+            <!--                android:nextFocusLeft="@id/otpViewInput1"-->
+            <!--                android:nextFocusUp="@id/otpViewInput1"-->
+            <!--                app:itemCount="3"-->
+            <!--                android:focusedByDefault="true"-->
+            <!--                android:lineHeight="0.2dp"-->
+            <!--                app:lineColor="@color/blue"-->
+            <!--                app:viewType="line" />-->
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingEnd="@dimen/margin_basic_20dp"
+            android:paddingStart="@dimen/margin_basic_20dp"
+            android:id="@+id/timerConstraints"
+            android:layout_marginTop="@dimen/margin_basic_20dp"
+            android:layout_marginBottom="@dimen/margin_basic_20dp">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:id="@+id/otpSentConstraintNormalPay"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp">
+
+                <company.tap.tapuilibrary.uikit.atoms.TapTextView
+                    android:id="@+id/otpSentTextNormalPay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:fontFamily="sans-serif-light"
+                    tools:text="OTP has been sent to"
+                    android:textColor="#4b4847"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    android:layout_marginStart="@dimen/margin_basic_10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <company.tap.tapuilibrary.uikit.atoms.TapTextView
+                    android:id="@+id/mobileNumberTextNormalPay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_basic_6dp"
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="#1381f9"
+                    android:textSize="12sp"
+                    tools:text="mmmmmm"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/otpSentTextNormalPay"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <company.tap.tapuilibrary.uikit.atoms.TapTextView
+                android:id="@+id/otpHintText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="sans-serif-light"
+                tools:text="OTP Hint"
+                android:cursorVisible="false"
+                android:textColor="#4b4847"
+                android:textSize="12sp"
+                android:textStyle="normal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <company.tap.tapuilibrary.uikit.atoms.TapTextView
+                android:id="@+id/timerText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.35"
+                android:textColor="#007aff"
+                android:textSize="16sp"
+                android:textStyle="normal"
+                android:gravity="start"
+                android:textDirection="locale"
+                android:layoutDirection="locale"
+                android:textAlignment="gravity"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="00:09" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
+            android:id="@+id/otpViewActionButton"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_margin="@dimen/margin_basic_20dp"
+            android:text="click" />
+        <LinearLayout
+            android:id="@+id/brandingLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="gone"
+            android:layoutDirection="ltr"
+            android:textDirection="firstStrongLtr"
+
+
+            android:orientation="horizontal">
+
+            <company.tap.tapuilibrary.uikit.atoms.TapTextView
+                android:id="@+id/textViewPowered"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Powered by"
+                android:textColor="#626262"
+                android:visibility="gone"
+                android:textSize="@dimen/font_size_10sp"
+                />
+            <company.tap.tapuilibrary.uikit.atoms.TapImageView
+                android:layout_width="92dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/margin_basic_4dp"
+                android:layout_marginEnd="@dimen/margin_basic_4dp"
+
+                android:id="@+id/tapLogoImage"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

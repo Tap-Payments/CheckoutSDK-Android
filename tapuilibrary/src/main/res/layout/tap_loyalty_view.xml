@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardViewOut"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    android:layoutDirection="locale"
+   >
+
+
+
+        <company.tap.tapuilibrary.uikit.atoms.TapChip
+            android:id="@+id/mainChip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="0dp"
+            android:orientation="vertical"
+            android:visibility="visible"
+            android:layoutDirection="locale"
+           >
+
+
+            <LinearLayout
+                android:id="@+id/constraintLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layoutDirection="locale"
+              >
+
+                <LinearLayout
+                    android:id="@+id/linearLayout1"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/margin_basic_10dp"
+                    android:layoutDirection="locale"
+                    android:weightSum="1">
+
+
+                    <company.tap.tapuilibrary.uikit.atoms.TapImageView
+                        android:id="@+id/iconBank"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginTop="-5dp"
+                       android:layout_marginStart="2dp"
+                        android:layout_marginEnd="2dp"
+                        android:layoutDirection="locale"
+                        android:textDirection="locale"
+                        android:layout_weight="0.1" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:weightSum="0.8"
+                        android:layoutDirection="locale"
+                        android:orientation="vertical">
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:layoutDirection="locale"
+                            android:id="@+id/relative">
+
+                            <company.tap.tapuilibrary.uikit.atoms.TapTextView
+                                android:id="@+id/textViewTitle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentTop="true"
+                                android:text="Redeem ADCB TouchPoints " />
+
+
+                            <company.tap.tapuilibrary.uikit.atoms.TapSwitch
+                                android:id="@+id/switchLoyalty"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginRight="32dp" />
+
+                            <company.tap.tapuilibrary.uikit.atoms.TapTextView
+                                android:id="@+id/textViewClickable"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/textViewTitle"
+                                android:layout_marginRight="70dp"
+                                android:autoLink="all"
+                                android:layoutDirection="locale"
+                                android:linksClickable="true"
+                                android:singleLine="false"
+                                android:text="Balance: AED 520.00 (81,500 TouchPoints) (T&amp;C)" />
+
+
+
+                        </RelativeLayout>
+
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayout2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layoutDirection="locale"
+                    android:visibility="gone"
+
+                    >
+                    <company.tap.tapuilibrary.uikit.atoms.TapTextView
+                        android:id="@+id/textViewSubTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        tools:text="Amount to redeem"
+                        android:textDirection="locale"
+                        android:layoutDirection="locale"
+                       />
+
+                    <RelativeLayout
+
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="-10dp"
+                      >
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/textInputLine"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_gravity="center"
+
+
+                            />
+                        <company.tap.tapuilibrary.uikit.atoms.TapTextView
+                            android:id="@+id/textViewCurrency"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:text="AED"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+
+                            android:textDirection="locale"
+                            />
+
+                        <company.tap.tapuilibrary.uikit.atoms.TextInputEditText
+                            android:id="@+id/editTextAmount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/light_gray"
+                            android:digits="01234567890."
+                            android:hint="350.00"
+                            android:layoutDirection="locale"
+                            android:paddingLeft="45dp"
+                            android:paddingRight="45dp"
+                            android:textCursorDrawable="@color/blue"
+                            android:textDirection="locale" />
+
+                        <company.tap.tapuilibrary.uikit.atoms.TapTextView
+                            android:id="@+id/textViewTouchPoints"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="10dp"
+                            android:layoutDirection="locale"
+                            android:textDirection="locale"
+
+                            tools:text="= Touch Points" />
+
+                    </RelativeLayout>
+                    <company.tap.tapuilibrary.uikit.views.TapAlertView
+                        android:id="@+id/loyalty_alertView"
+                        android:visibility="gone"
+                        android:layout_marginTop="-9dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/linearLayout3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="2dp"
+                    android:visibility="gone"
+                    android:layoutDirection="locale"
+                    android:orientation="vertical">
+
+
+                    <company.tap.tapuilibrary.uikit.atoms.TapTextView
+                        android:id="@+id/textViewRemainPoints"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="Remaining TouchPoints: 19,000"
+                        android:textDirection="locale"
+                        android:layoutDirection="locale"
+
+                       />
+
+                    <company.tap.tapuilibrary.uikit.atoms.TapTextView
+                        android:id="@+id/textViewRemainAmount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="Remaining amount to pay: AED 0.00"
+                        android:textDirection="locale"
+                        android:layoutDirection="locale"
+
+                       />
+                </LinearLayout>
+
+            </LinearLayout>
+        </company.tap.tapuilibrary.uikit.atoms.TapChip>
+    </androidx.cardview.widget.CardView>
+

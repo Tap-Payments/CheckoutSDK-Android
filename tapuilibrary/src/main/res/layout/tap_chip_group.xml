@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearMainView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/header_view"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal"
+        android:paddingTop="6dp"
+        android:paddingStart="@dimen/margin_basic_15dp"
+        android:paddingEnd="@dimen/margin_basic_15dp">
+
+        <company.tap.tapuilibrary.uikit.atoms.TapTextView
+            android:id="@+id/group_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:fontFamily="sans-serif"
+            android:textAllCaps="true"
+            android:textColor="@color/brown_grey_0"
+            android:textSize="@dimen/font_size_10sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="kjnbbvcxvbnm" />
+
+        <company.tap.tapuilibrary.uikit.atoms.TapTextView
+            android:id="@+id/group_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:textAllCaps="true"
+            android:textColor="@color/text_color_light_"
+            android:textSize="@dimen/font_size_10sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="kjnbbvcxvbnm" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chip_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:paddingStart="@dimen/margin_basic_10dp"
+        android:paddingEnd="@dimen/margin_basic_10dp"
+        android:nestedScrollingEnabled="true"
+        android:orientation="horizontal"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="center"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+</LinearLayout>

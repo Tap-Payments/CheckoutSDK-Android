@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/margin_basic_16dp"
+    android:layout_marginTop="@dimen/margin_basic_14dp"
+    android:layout_marginEnd="@dimen/margin_basic_16dp"
+    android:layoutDirection="locale"
+    android:textDirection="locale"
+    android:layout_marginBottom="@dimen/margin_basic_13dp">
+
+    <company.tap.tapuilibrary.uikit.atoms.TapTextView
+        android:id="@+id/item_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_basic_10dp"
+        android:layout_marginBottom="2dp"
+        android:ellipsize="marquee"
+        android:fontFamily="sans-serif"
+        android:gravity="start|top"
+        android:lineSpacingExtra="2sp"
+        android:maxLines="3"
+        android:textColor="#4b4847"
+        android:textSize="14sp"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toTopOf="@+id/show_description"
+        app:layout_constraintEnd_toStartOf="@+id/item_amount"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Item TItle Item TItle Item TItle Item TItle Item TItle IItle Item TItle Item TItle IItle Item TItle Item TItle IItle Item TItle Item TItle Item TItle Item TItle" />
+
+    <company.tap.tapuilibrary.uikit.atoms.TapTextView
+        android:id="@+id/show_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
+        android:textColor="#a8a8a8"
+        android:textSize="12sp"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Show Description" />
+
+    <company.tap.tapuilibrary.uikit.atoms.TapTextView
+        android:id="@+id/item_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:fontFamily="sans-serif"
+        android:textColor="#4b4847"
+        android:textSize="14sp"
+        android:textStyle="normal"
+        android:gravity="end"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="1000,000" />
+
+    <company.tap.tapuilibrary.uikit.atoms.TapTextView
+        android:id="@+id/discount_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="2dp"
+        android:fontFamily="sans-serif-light"
+        android:textColor="#a8a8a8"
+        android:textSize="12sp"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/total_amount"
+        tools:text="Discount" />
+
+    <company.tap.tapuilibrary.uikit.atoms.TapTextView
+        android:id="@+id/total_amount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/pay_btn_padding_vertical"
+        android:layout_marginBottom="2dp"
+        android:fontFamily="sans-serif-light"
+        android:gravity="end"
+        android:textColor="#a8a8a8"
+        android:textSize="12sp"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/quantityRelative"
+        tools:text="1000,000.000" />
+
+    <RelativeLayout
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:id="@+id/quantityRelative"
+        android:background="@drawable/rounded_circle"
+        android:gravity="center"
+        android:paddingBottom="2dp"
+        android:layout_marginStart="@dimen/pay_btn_padding_vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <company.tap.tapuilibrary.uikit.atoms.TapTextView
+            android:id="@+id/total_quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#4b4847"
+            android:textSize="9sp"
+            android:textStyle="normal"
+            tools:text="2" />
+    </RelativeLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

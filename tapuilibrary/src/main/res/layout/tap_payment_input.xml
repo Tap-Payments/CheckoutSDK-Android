@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mainLinear"
+
+    android:orientation="vertical">
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/inline_CardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="1dp"
+        android:clipToPadding="false"
+        android:clipChildren="false"
+        app:cardPreventCornerOverlap="false"
+        app:cardUseCompatPadding="true"
+        android:layout_margin="3dp"
+
+        >
+        <company.tap.tapuilibrary.uikit.atoms.TapSeparatorView
+            android:id="@+id/separator"
+            android:layout_width="match_parent"
+            android:layout_height="0.75dp"
+            tools:background="@color/red_error"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:id="@+id/tabLinear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/header_gray"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/payment_input_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+
+                android:orientation="horizontal" />
+
+
+            <company.tap.tapuilibrary.uikit.views.TapAlertView
+                android:id="@+id/alertView"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_below="@+id/payment_input_layout"
+                android:layout_marginTop="-4dp"
+                android:visibility="gone" />
+
+            <company.tap.tapuilibrary.uikit.atoms.TapSeparatorView
+                android:id="@+id/separator4"
+                android:layout_width="match_parent"
+                android:layout_height="0.75dp"
+                tools:background="@color/red_error"
+                android:visibility="gone"
+                android:layout_below="@+id/payment_input_layout"/>
+
+
+        </RelativeLayout>
+        <ProgressBar
+            android:id="@+id/inlineProgressbar"
+            android:visibility="gone"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:indeterminate="false"
+            android:max="100"
+            android:progress="50"
+            android:secondaryProgress="100" />
+    </androidx.cardview.widget.CardView>
+    <company.tap.tapuilibrary.uikit.views.TapInlineCardSwitch
+        android:id="@+id/switch_Inline_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+
+        android:layout_gravity="start"
+        android:layoutDirection="locale"
+        android:layout_below="@+id/alertView"/>
+    <company.tap.tapuilibrary.uikit.views.TapSelectionTabLayout
+        android:id="@+id/sections_tablayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp"
+       android:layout_marginTop="-5dp"
+        android:visibility="visible"
+
+        />
+
+</LinearLayout>
