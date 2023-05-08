@@ -2858,7 +2858,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         println("saveCardSwitchHolder val" + saveCardSwitchHolder)
         println("redirect val" + charge?.response)
         println("gatewayResponse val" + charge?.gatewayResponse)
-        saveCardSwitchHolder?.view?.layoutParams= ViewGroup.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT)
+      //  saveCardSwitchHolder?.view?.layoutParams= ViewGroup.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT)
 
         businessViewHolder = contextSDK?.let { BusinessViewHolder(it, this) }!!
         // saveCardSwitchHolder = contextSDK.let { SwitchViewHolder(it,this) }
