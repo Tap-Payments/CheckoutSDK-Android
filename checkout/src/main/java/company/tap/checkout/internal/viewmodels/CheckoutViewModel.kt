@@ -479,7 +479,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             this,
             saveCardSwitchHolder,
             this,
-            cardViewModel, checkoutFragment, loyaltyViewHolder
+            cardViewModel, checkoutFragment, loyaltyViewHolder,
+            sdkLayout,bottomSheetLayout
         )
 
         itemsViewHolder = ItemsViewHolder(context, this)
@@ -1317,7 +1318,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             saveCardSwitchHolder,
             this,
             cardViewModel,
-            checkoutFragment, loyaltyViewHolder
+            checkoutFragment, loyaltyViewHolder, sdkLayout, bottomSheetLayout
         )
         //  paymentInlineViewHolder.tabLayout.setUnselectedAlphaLevel(1.0f)
         if (::paymentInlineViewHolder.isInitialized)
@@ -1552,10 +1553,19 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     @SuppressLint("ClickableViewAccessibility")
     private fun touchHandlingForCardView() {
+
+//        bottomSheetLayout.resizeAnimation(
+//            durationTime = resizeAnimationDuration,
+//            startHeight = bottomSheetLayout.height,
+//            endHeight = sdkLayout.height ,
+//        )
         saveCardSwitchHolder?.view?.setOnTouchListener { v, _ ->
             CustomUtils.hideKeyboardFrom(context, paymentInlineViewHolder.view)
             paymentInlineViewHolder.resetView = true
             paymentInlineViewHolder.resetTouchView()
+
+            Log.e("error bottomSheetHeight",bottomSheetLayout.measuredHeight.toString())
+            Log.e("error sdk",sdkLayout.height.toString())
 
             true
         }
@@ -2169,6 +2179,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     ) {
         val payStringButton: String
 
+        bottomSheetLayout.resizeAnimation(
+            durationTime = resizeAnimationDuration,
+            startHeight = bottomSheetLayout.height,
+            endHeight = sdkLayout.height ,
+        )
         when (PaymentDataSource.getTransactionMode()) {
             TransactionMode.TOKENIZE_CARD -> payStringButton = LocalizationManager.getValue(
                 "pay",

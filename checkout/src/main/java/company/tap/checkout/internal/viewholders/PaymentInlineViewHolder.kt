@@ -9,16 +9,14 @@ import android.os.Build
 import android.text.Editable
 import android.text.TextWatcher
 import android.transition.Fade
-import android.transition.Transition
 import android.transition.TransitionManager
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.widget.doAfterTextChanged
 import com.bugfender.sdk.Bugfender
 import com.google.android.material.tabs.TabLayout
@@ -40,9 +38,7 @@ import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.checkout.internal.interfaces.PaymentCardComplete
 import company.tap.checkout.internal.interfaces.onCardNFCCallListener
-import company.tap.checkout.internal.utils.CustomUtils
-import company.tap.checkout.internal.utils.fadeVisibility
-import company.tap.checkout.internal.utils.showToast
+import company.tap.checkout.internal.utils.*
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.data_managers.PaymentDataSource
@@ -55,7 +51,6 @@ import company.tap.tapcardvalidator_android.CardValidator
 import company.tap.tapcardvalidator_android.DefinedCardBrand
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.uikit.atoms.TapImageView
 import company.tap.tapuilibrary.uikit.atoms.TapSeparatorView
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
@@ -78,6 +73,8 @@ class PaymentInlineViewHolder(
     private val cardViewModel: CardViewModel,
     private val checkoutFragment: CheckoutFragment,
     private val loyaltyViewHolder: LoyaltyViewHolder?,
+    private val sdkLayout: LinearLayout,
+    private val bottomSheetLayout: FrameLayout,
 ) : TapBaseViewHolder,
     TapSelectionTabLayoutInterface, CardInputListener, TapPaymentShowHideClearImage {
     override val view: View =
@@ -1150,6 +1147,18 @@ class PaymentInlineViewHolder(
                 "TapCardInputKit"
             )
         )
+
+        Log.e("error sdklayout",sdkLayout.height.toString())
+        Log.e("error bottomsheet",bottomSheetLayout.measuredHeight.toString())
+
+//        bottomSheetLayout.resizeAnimation(
+//            durationTime = resizeAnimationDuration,
+//            startHeight = sdkLayout.height,
+//            endHeight = context.getDeviceSpecs().first,
+//            onAnimationStart = {
+//                showWebView()
+//            }
+//        )
         tapCardInputView.setCvcNumberTextWatcher(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
