@@ -136,7 +136,6 @@ object CustomUtils {
         imm.hideSoftInputFromWindow(view.windowToken, 0)
         view.clearFocus()
 
-
     }
 
     /**

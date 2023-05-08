@@ -19,8 +19,10 @@ import android.transition.TransitionManager
 import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.*
-import android.view.animation.*
+import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
+import android.view.animation.AnimationUtils
+import android.view.animation.TranslateAnimation
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -45,8 +47,8 @@ import java.util.*
 
 private var targetHeight: Int? = 0
 private var animationDelayForResizeAnimation = 2000L
-private var topLeftCorner = 16f
-private var topRightCorner = 16f
+private var topLeftCorner = 45f
+private var topRightCorner = 45f
 private var bottomRightCorner = 0f
 private var bottomLeftCorner = 0f
 const val progressBarSize = 45
@@ -226,11 +228,6 @@ fun WebView.applyConfigurationForWebView(
                 }
 
             }
-
-            override fun onCloseWindow(window: WebView?) {
-
-                super.onCloseWindow(window)
-            }
         }
     }
 
@@ -327,20 +324,6 @@ fun View.addFadeOutAnimation(durationTime: Long = 500L,isGone :Boolean=true) {
             }
 
         })
-    }
-}
-
-fun View.addNewFadeOut(durationTime: Long = 500L) {
-    if (this.isVisible) {
-        val fadeOut = AlphaAnimation(1f, 0f)
-        fadeOut.interpolator = AccelerateInterpolator() //and this
-        fadeOut.startOffset = 1000
-        fadeOut.duration = 1000
-        val animation = AnimationSet(false) //change to false
-        animation.addAnimation(fadeOut)
-        this.animation = animation
-        this.startAnimation(animation)
-
     }
 }
 

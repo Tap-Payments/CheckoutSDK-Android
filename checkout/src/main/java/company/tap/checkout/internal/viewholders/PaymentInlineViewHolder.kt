@@ -1147,18 +1147,6 @@ class PaymentInlineViewHolder(
                 "TapCardInputKit"
             )
         )
-
-        Log.e("error sdklayout",sdkLayout.height.toString())
-        Log.e("error bottomsheet",bottomSheetLayout.measuredHeight.toString())
-
-//        bottomSheetLayout.resizeAnimation(
-//            durationTime = resizeAnimationDuration,
-//            startHeight = sdkLayout.height,
-//            endHeight = context.getDeviceSpecs().first,
-//            onAnimationStart = {
-//                showWebView()
-//            }
-//        )
         tapCardInputView.setCvcNumberTextWatcher(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }

@@ -28,8 +28,8 @@
 
         <WebView
             android:id="@+id/web_view"
-            android:layout_width="500dp"
-            android:layout_height="900dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:scrollbars="vertical|horizontal" />
     </RelativeLayout>
 
