@@ -12,6 +12,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -51,8 +52,7 @@ class WebFragment(
     private val webViewContract: WebViewContract?,
     private val cardViewModel: CardViewModel?,
     private val checkoutViewModel: CheckoutViewModel,
-    private val webFrameLayout: FrameLayout,
-    private val saveCardSwitchHolder: SwitchViewHolder?,
+    private val isFirstTimeLoading: Boolean,
     private val onLoadedWebView: () -> Unit
 ) : DialogFragment(),
     CustomWebViewClientContract {
@@ -61,6 +61,7 @@ class WebFragment(
     private var chargeResponse: Charge? = null
     val progressBar by lazy { view?.findViewById<ProgressBar>(R.id.progressBar) }
     private var displayMetrics: Int? = 0
+    private var isFirstTimeLoadingInWeb = this.isFirstTimeLoading
 
     @DrawableRes
     val loaderGif: Int =
@@ -76,7 +77,6 @@ class WebFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setTopDraggerView()
 
         progressBar?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("merchantHeaderView.backgroundColor")))
         progressBar?.progressDrawable?.setColorFilter(
@@ -104,36 +104,6 @@ class WebFragment(
 
     }
 
-    private fun setTopDraggerView() {
-        setTopBorders(
-            topLinear,
-            80f,// corner raduis
-            0.0f,
-            Color.parseColor(ThemeManager.getValue("merchantHeaderView.backgroundColor")),// stroke color
-            Color.parseColor(ThemeManager.getValue("merchantHeaderView.backgroundColor")),// tint color
-            Color.parseColor(ThemeManager.getValue("merchantHeaderView.backgroundColor"))
-        )//
-
-        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
-            setBorderedView(
-                draggerView,
-                80f,// corner raduis
-                0.0f,
-                Color.parseColor("#3b3b3c"),// stroke color
-                Color.parseColor("#3b3b3c"),// tint color
-                Color.parseColor("#3b3b3c")
-            )//
-        } else {
-            setBorderedView(
-                draggerView,
-                80f,// corner raduis
-                0.0f,
-                Color.parseColor("#e0e0e0"),// stroke color
-                Color.parseColor("#e0e0e0"),// tint color
-                Color.parseColor("#e0e0e0")
-            )//
-        }
-    }
 
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -183,11 +153,23 @@ class WebFragment(
                 // Update the progress bar with page loading progress
                 progressBar?.progress = newProgress
                 if (newProgress == 100) {
-                    onLoadedWebView.invoke()
-                    progressBar?.visibility = View.GONE
+                    if (isFirstTimeLoadingInWeb) {
+                        onLoadedWebView.invoke()
+                        isFirstTimeLoadingInWeb =false
+                    }
+                    progressBar?.visibility = View.INVISIBLE
                     web_view.visibility = View.VISIBLE
                 }
             }
+
+
+            override fun onCloseWindow(window: WebView?) {
+                requireContext().showToast("closing")
+                super.onCloseWindow(window)
+                Log.e("webview", "Window trying to close");
+
+            }
+
         }
     }
 
@@ -236,16 +218,14 @@ class WebFragment(
             cardViewModel: CardViewModel,
             chargeResponse: Charge?,
             checkoutViewModel: CheckoutViewModel,
-            webFrameLayout: FrameLayout,
-            saveCardSwitchHolder: SwitchViewHolder?,
+            isFirstTimeLoading: Boolean,
             onLoadedWebView: () -> Unit
         ): WebFragment {
             val fragment = WebFragment(
                 webViewContract,
                 cardViewModel,
                 checkoutViewModel,
-                webFrameLayout,
-                saveCardSwitchHolder,
+                isFirstTimeLoading,
                 onLoadedWebView
             )
             val args = Bundle()

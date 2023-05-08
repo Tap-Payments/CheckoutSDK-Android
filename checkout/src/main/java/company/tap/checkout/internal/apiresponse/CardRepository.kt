@@ -21,6 +21,7 @@ import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.interfaces.IPaymentDataProvider
 import company.tap.checkout.internal.utils.AmountCalculator
 import company.tap.checkout.internal.utils.CustomUtils
+import company.tap.checkout.internal.utils.showToast
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.CheckOutActivity
 import company.tap.checkout.open.controller.SDKSession
@@ -41,6 +42,7 @@ import company.tap.tapnetworkkit.enums.TapMethodType
 import company.tap.tapnetworkkit.exception.GoSellError
 import company.tap.tapnetworkkit.interfaces.APIRequestCallback
 import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.adapters.context
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog.Companion.TAG
 import io.reactivex.plugins.RxJavaPlugins
@@ -833,6 +835,8 @@ class CardRepository : APIRequestCallback {
                 try {
                     //    closePaymentActivity()
                     SDKSession.getListener()?.authorizationFailed(authorize)
+                    cardRepositoryContext?.showToast(" Cancelled")
+
                     viewModel.handleSuccessFailureResponseButton(
                         "failure",
                         authorize.authenticate,
@@ -888,6 +892,8 @@ class CardRepository : APIRequestCallback {
             }
             ChargeStatus.INVALID, ChargeStatus.FAILED, ChargeStatus.ABANDONED, ChargeStatus.CANCELLED, ChargeStatus.DECLINED, ChargeStatus.RESTRICTED -> try {
                 SDKSession.getListener()?.cardSavingFailed(saveCard)
+                cardRepositoryContext?.showToast("Cancelled Save Card")
+
                 viewModel?.handleSuccessFailureResponseButton(
                     "failure",
                     saveCard.authenticate,
@@ -911,6 +917,8 @@ class CardRepository : APIRequestCallback {
         if (requestCode == CONFIG_CODE || requestCode == CHARGE_REQ_CODE || requestCode == INIT_CODE) {
             sdkSession.getListener()?.sdkError(errorDetails)
             SDKSession.sessionActive = false
+            cardRepositoryContext?.showToast("Handle Fail")
+
             viewModel.handleSuccessFailureResponseButton(
                 "failure",
                 null,
@@ -927,6 +935,8 @@ class CardRepository : APIRequestCallback {
             if (it.throwable != null) {
                 resultObservable.onError(it.throwable)
                 sdkSession.getListener()?.backendUnknownError(errorDetails)
+                cardRepositoryContext?.showToast("Handle Fail two ")
+
                 viewModel.handleSuccessFailureResponseButton(
                     "failure",
                     null,
@@ -1163,6 +1173,8 @@ class CardRepository : APIRequestCallback {
             ChargeStatus.CAPTURED, ChargeStatus.AUTHORIZED -> try {
                 // closePaymentActivity()
                 println("fireWebPaymentCallBack>>" + charge?.status)
+                cardRepositoryContext?.showToast("Handle FireWeb")
+
                 viewModel?.handleSuccessFailureResponseButton(
                     "success",
                     chargeResponse.authenticate,
@@ -1185,15 +1197,15 @@ class CardRepository : APIRequestCallback {
             }
             ChargeStatus.FAILED, ChargeStatus.ABANDONED, ChargeStatus.CANCELLED, ChargeStatus.DECLINED, ChargeStatus.RESTRICTED, ChargeStatus.UNKNOWN, ChargeStatus.TIMEDOUT -> try {
                 //closePaymentActivity()
-                viewModel?.handleSuccessFailureResponseButton(
-                    "failure",
-                    chargeResponse.authenticate,
-                    chargeResponse,
-                    tabAnimatedActionButton,
-                    contextSDK
-                )
+//                viewModel?.handleSuccessFailureResponseButton(
+//                    "failure",
+//                    chargeResponse.authenticate,
+//                    chargeResponse,
+//                    tabAnimatedActionButton,
+//                    contextSDK
+//                )
 
-                SDKSession.getListener()?.paymentFailed(charge)
+           //     SDKSession.getListener()?.paymentFailed(charge)
             } catch (e: Exception) {
                 Log.d(
                     "cardrepo",

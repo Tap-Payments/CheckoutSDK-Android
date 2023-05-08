@@ -109,6 +109,9 @@ import kotlinx.android.synthetic.main.itemviewholder_layout.view.*
 import kotlinx.android.synthetic.main.loyalty_view_layout.view.*
 import kotlinx.android.synthetic.main.otpview_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import mobi.foo.benefitinapp.data.Transaction
 import mobi.foo.benefitinapp.listener.CheckoutListener
 import mobi.foo.benefitinapp.utils.BenefitInAppCheckout
@@ -1187,39 +1190,53 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
                 //Stopped showing closetext as requested
                 // checkoutFragment.closeText.visibility = View.VISIBLE
-               // businessViewHolder.view.headerView.visibility = View.INVISIBLE
-                businessViewHolder.view.topSeparatorLinear.visibility = VISIBLE
-                removeViews(
-                    amountViewHolder,
-                    paymentInlineViewHolder,
-                    cardViewHolder,
-                    otpViewHolder,
-                    goPaySavedCardHolder,
-                    goPayViewsHolder
-                )
-
-
-                /**
-                 * apply Background Drawable to switchView
-                 */
-                   saveCardSwitchHolder?.view?.cardviewSwitch?.background = getViewShapeDrawable()
-
-                    val fragment = WebFragment.newInstance(
-                        redirectURL,
-                        this, cardViewModel, authenticate, this,
-                        webFrameLayout, saveCardSwitchHolder, onLoadedWebView = {
-                            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.addFadeOutAnimation()
-                            doAfterSpecificTime {
-                                translateHeightRedirect(sdkLayout)
-                                webFrameLayout.visibility = View.VISIBLE
-                            }
-
-                        }
+                doAfterSpecificTime {
+                    removeViews(
+                        amountViewHolder,
+                        paymentInlineViewHolder,
+                        cardViewHolder,
+                        otpViewHolder,
+                        goPaySavedCardHolder,
+                        goPayViewsHolder
                     )
-                    fragmentManager.beginTransaction()
-                        .replace(R.id.webFrameLayout, fragment, "webFragment")
-                        .addToBackStack("webFragment")
-                        .commit()
+                    businessViewHolder.view.headerView.constraint.visibility = View.GONE
+                    businessViewHolder.view.topSeparatorLinear.visibility = GONE
+
+                }
+
+
+
+
+
+                val fragment = WebFragment.newInstance(
+                    redirectURL,
+                    this,
+                    cardViewModel,
+                    authenticate,
+                    this,
+                    isFirstTimeLoading = true,
+                    onLoadedWebView = {
+                        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.addFadeOutAnimation(
+                            durationTime = 5,
+                            isGone = false
+                        )
+                        doAfterSpecificTime(time = 100) {
+                            bottomSheetLayout.resizeAnimation(
+                                durationTime = resizeAnimationDuration,
+                                startHeight = sdkLayout.height,
+                                endHeight = context.getDeviceSpecs().first,
+                                onAnimationStart = {
+                                    showWebView()
+                                }
+                            )
+                       }
+
+                    }
+                )
+                fragmentManager.beginTransaction()
+                    .replace(R.id.webFrameLayout, fragment, "webFragment")
+                    .addToBackStack("webFragment")
+                    .commit()
 
 
             } else if (PaymentDataSource?.getWebViewType() != null && PaymentDataSource.getWebViewType() == WebViewType.THREE_DS_WEBVIEW) {
@@ -1268,6 +1285,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         // tabAnimatedActionButtonViewHolder?.view?.actionButton?.visibility = View.INVISIBLE
     }
 
+    private fun showWebView() {
+        webFrameLayout.visibility = VISIBLE
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = GONE
+
+    }
+
 
     private fun getWindowHeight(): Int {
         // Calculate window height for fullscreen use
@@ -1283,7 +1306,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             Resources.getSystem().displayMetrics.heightPixels,
             sdkLayout.height, true
         )
-        resizeAnimation.duration = 400
+        resizeAnimation.duration = 200
         bottomSheetLayout.startAnimation(resizeAnimation)
     }
 
@@ -1717,6 +1740,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         tabAnimatedActionButton: TabAnimatedActionButton?,
         contextSDK: Context?
     ) {
+
         SessionManager.setActiveSession(false)
         println("response val>>" + response)
         println("tabAnimatedActionButton val>>" + tabAnimatedActionButton)
@@ -1733,13 +1757,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 contextSDK as Activity
             )
         )*/
-        saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = View.VISIBLE
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setDisplayMetrics(
-            CustomUtils.getDeviceDisplayMetrics(
-                context as Activity
-            )
-        )
+//        saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
+//        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = View.VISIBLE
+//        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setDisplayMetrics(
+//            CustomUtils.getDeviceDisplayMetrics(
+//                context as Activity
+//            )
+//        )
 
         //  addViews(saveCardSwitchHolder)
         /***
@@ -1765,14 +1789,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             )
             removeViews(webViewHolder)
         }
-        doAfterSpecificTime(250) {
-            if (::bottomSheetLayout.isInitialized) {
-                bottomSheetLayout.resizeAnimation(
-                    startHeight = bottomSheetLayout.measuredHeight,
-                    endHeight = sdkLayout.height,
-                    durationTime = 250, isExpanding = false
-                )
-            }
+
+    if (::bottomSheetLayout.isInitialized) {
+            bottomSheetLayout.resizeAnimation(
+                startHeight = bottomSheetLayout.measuredHeight,
+                endHeight = sdkLayout.height,
+                durationTime = 250, isExpanding = false
+            )
         }
 
 
@@ -1833,12 +1856,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             ChargeStatus.CANCELLED, ChargeStatus.TIMEDOUT, ChargeStatus.FAILED, ChargeStatus.DECLINED, ChargeStatus.UNKNOWN,
             ChargeStatus.RESTRICTED, ChargeStatus.ABANDONED, ChargeStatus.VOID, ChargeStatus.INVALID -> {
                 println("CANCELLED 2>>>" + saveCardSwitchHolder?.view?.cardSwitch?.payButton)
-                Handler().postDelayed({
+                doAfterSpecificTime(time = 200) {
                     saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                         ActionButtonState.ERROR
                     )
-                }, 400)
-
+                         }
                 tabAnimatedActionButton?.changeButtonState(
                     ActionButtonState.ERROR
                 )

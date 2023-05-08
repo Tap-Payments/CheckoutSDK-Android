@@ -19,10 +19,8 @@ import android.transition.TransitionManager
 import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.*
-import android.view.animation.Animation
+import android.view.animation.*
 import android.view.animation.Animation.AnimationListener
-import android.view.animation.AnimationUtils
-import android.view.animation.TranslateAnimation
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -237,7 +235,7 @@ fun WebView.applyConfigurationForWebView(
 fun View.resizeAnimation(
     durationTime: Long = 1000L,
     startHeight: Int = 1000,
-    endHeight: Int = 1000, isExpanding: Boolean = false
+    endHeight: Int = 1000, isExpanding: Boolean = false,onAnimationStart: () -> Unit? = {}
 ) {
     val resizeAnimation = ResizeAnimation(
         this,
@@ -246,6 +244,18 @@ fun View.resizeAnimation(
     )
     resizeAnimation.duration = durationTime
     this.startAnimation(resizeAnimation)
+    this.animation.setAnimationListener(object : AnimationListener {
+        override fun onAnimationStart(p0: Animation?) {
+        }
+
+        override fun onAnimationEnd(p0: Animation?) {
+            onAnimationStart.invoke()
+        }
+
+        override fun onAnimationRepeat(p0: Animation?) {
+        }
+
+    })
 }
 
 
@@ -292,7 +302,7 @@ fun getViewShapeDrawable(
     return shape
 }
 
-fun View.addFadeOutAnimation(durationTime: Long = 500L) {
+fun View.addFadeOutAnimation(durationTime: Long = 500L,isGone :Boolean=true) {
     if (this.isVisible) {
         val animation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
         animation.duration = durationTime
@@ -302,13 +312,28 @@ fun View.addFadeOutAnimation(durationTime: Long = 500L) {
             }
 
             override fun onAnimationEnd(p0: Animation?) {
-                this@addFadeOutAnimation.visibility = View.GONE
+                if (isGone)this@addFadeOutAnimation.visibility = View.GONE
+               else  this@addFadeOutAnimation.visibility = View.INVISIBLE
             }
 
             override fun onAnimationRepeat(p0: Animation?) {
             }
 
         })
+    }
+}
+
+fun View.addNewFadeOut(durationTime: Long = 500L) {
+    if (this.isVisible) {
+        val fadeOut = AlphaAnimation(1f, 0f)
+        fadeOut.interpolator = AccelerateInterpolator() //and this
+        fadeOut.startOffset = 1000
+        fadeOut.duration = 1000
+        val animation = AnimationSet(false) //change to false
+        animation.addAnimation(fadeOut)
+        this.animation = animation
+        this.startAnimation(animation)
+
     }
 }
 

@@ -31,7 +31,7 @@ import kotlinx.android.synthetic.main.switch_layout.view.*
 import kotlin.math.roundToInt
 
 
-const val resizeAnimationDuration = 1000L
+const val resizeAnimationDuration = 100L
 const val fadeInAnimationDuration = 2000L
 
 @RequiresApi(Build.VERSION_CODES.N)
