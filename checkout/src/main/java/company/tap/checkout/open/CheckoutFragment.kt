@@ -93,6 +93,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     private var relativeLL: RelativeLayout? = null
     private var mainCardLayout: CardView? = null
     private var topHeaderView: TapBrandView? = null
+    var headerLayout: LinearLayout? =null
     private var displayMetrics: Int? = 0
     var originalHeight: Int? = 0
 
@@ -132,7 +133,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         userRepository.getUserIpAddress()
         this.viewModel = viewModel
         _Context?.let { cardViewModel.getContext(it) }
-        backgroundColor = (Color.parseColor(ThemeManager.getValue("tapBottomSheet.dimmedColor")))
+       // backgroundColor = (Color.parseColor(ThemeManager.getValue("tapBottomSheet.dimmedColor")))
 
         bottomSheetDialog.behavior.isDraggable = true
       //  bottomSheetDialog.behavior.maxHeight = context?.getDeviceSpecs()?.first ?: 1000
@@ -145,7 +146,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             Resources.getSystem().displayMetrics.heightPixels
         )
         inLineCardLayout = view.findViewById(R.id.inline_container)
-        val headerLayout: LinearLayout? = view.findViewById(R.id.headerLayout)
+         headerLayout = view.findViewById(R.id.headerLayout)
         initViews(view)
 
         topHeaderView = context?.let { TapBrandView(it) }
@@ -227,7 +228,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                                         inLineCardLayout!!,
                                         this,
                                         it2,
-                                        cardViewModel, this, headerLayout
+                                        cardViewModel, this, headerLayout!!
                                     )
                                 }
                             }
@@ -258,7 +259,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                     )
                 )
             )
-            checkoutLayout.addView(topHeaderView, 0)
+            headerLayout?.addView(topHeaderView, 0)
         }
         topHeaderView?.visibility = View.GONE
 

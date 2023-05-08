@@ -1743,6 +1743,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 contextSDK as Activity
             )
         )*/
+
         saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = View.VISIBLE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setDisplayMetrics(
@@ -1992,7 +1993,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
               //  Handler().postDelayed({
                     if (::sdkLayout.isInitialized) {
                         //it?.view?.visibility = View.INVISIBLE
-                  //          sdkLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
+                            sdkLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
                         sdkLayout.removeView(it?.view)
 
                     }
@@ -2018,7 +2019,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
              //   Handler().postDelayed({
                     if (::sdkLayout.isInitialized) {
                         // it?.view?.visibility = View.VISIBLE
-             //           sdkLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
+                        sdkLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
                         sdkLayout.removeView(it?.view)
                         sdkLayout.addView(it?.view)
 
@@ -2865,16 +2866,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         businessViewHolder = contextSDK?.let { BusinessViewHolder(it, this) }!!
         // saveCardSwitchHolder = contextSDK.let { SwitchViewHolder(it,this) }
         removeViews(businessViewHolder)
-        if(::webViewHolder.isInitialized) {
-            webViewHolder?.view?.visibility= INVISIBLE
-            removeViews(webViewHolder)
-        }
-        doAfterSpecificTime(time = 5L) {
 
-            println("sdklayout hh val" + sdkLayout.measuredHeight)
-            println("bottomSheetLayout hh val" + bottomSheetLayout.measuredHeight)
-            translateViewToNewHeight(bottomSheetLayout.measuredHeight,false)
-        }
 
         if (::webFrameLayout.isInitialized) {
             if (fragmentManager.findFragmentById(R.id.webFrameLayout) != null)
