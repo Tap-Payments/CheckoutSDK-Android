@@ -226,6 +226,11 @@ fun WebView.applyConfigurationForWebView(
                 }
 
             }
+
+            override fun onCloseWindow(window: WebView?) {
+
+                super.onCloseWindow(window)
+            }
         }
     }
 
@@ -261,6 +266,8 @@ fun View.resizeAnimation(
 
 /**
  * This function return specs of device height && width
+ * first -> height
+ * second -> width
  */
 fun Context.getDeviceSpecs(): Pair<Int, Int> {
     val displayMetrics = DisplayMetrics()

@@ -32,6 +32,7 @@ import kotlin.math.roundToInt
 
 
 const val resizeAnimationDuration = 100L
+const val translationAnimationDurationAfter = 200L
 const val fadeInAnimationDuration = 2000L
 
 @RequiresApi(Build.VERSION_CODES.N)

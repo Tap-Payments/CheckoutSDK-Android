@@ -7,6 +7,7 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import android.text.InputFilter
 import android.text.InputFilter.AllCaps
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,9 @@ import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.internal.api.enums.AmountModificatorType
 import company.tap.checkout.internal.utils.CurrencyFormatter
+import company.tap.checkout.internal.utils.doAfterSpecificTime
+import company.tap.checkout.internal.utils.resizeAnimation
+import company.tap.checkout.internal.viewholders.resizeAnimationDuration
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.models.ItemsModel
@@ -38,14 +42,20 @@ import company.tap.tapuilibrary.uikit.views.TapItemListView
 Copyright (c) 2020    Tap Payments.
 All rights reserved.
  **/
-class ItemAdapter(private var checkoutViewModel: CheckoutViewModel,private var bottomSheetLayout: FrameLayout) :
+class ItemAdapter(
+    private var checkoutViewModel: CheckoutViewModel,
+    private var bottomSheetLayout: FrameLayout,
+    private var sdkLayout: LinearLayout
+) :
     RecyclerView.Adapter<ItemAdapter.ItemHolder>() {
     private var previousExpandedPosition = -1
     private var mExpandedPosition = -1
     private lateinit var itemViewAdapter: TapItemListView
     private lateinit var context: Context
-    private var arrayModifiedItem : ArrayList<Any> = ArrayList()
+    private var arrayModifiedItem: Boolean = false
+
     private var adapterContentItems: List<ItemsModel> = java.util.ArrayList()
+    lateinit var descriptionTextView: TapTextView
     override fun onCreateViewHolder(@NonNull parent: ViewGroup, viewType: Int): ItemHolder {
 
 
@@ -60,11 +70,12 @@ class ItemAdapter(private var checkoutViewModel: CheckoutViewModel,private var b
     }
 
     fun updateAdapterData(adapterContentItems: List<ItemsModel>) {
-        println("adapterContentItems val"+adapterContentItems)
+        println("adapterContentItems val" + adapterContentItems)
         this.adapterContentItems = adapterContentItems
         notifyDataSetChanged()
 
     }
+
     override fun getItemCount() = adapterContentItems.size
 
 
@@ -77,35 +88,48 @@ class ItemAdapter(private var checkoutViewModel: CheckoutViewModel,private var b
 
     @SuppressLint("SetTextI18n")
     private fun initView(holder: ItemHolder, position: Int) {
-        val descriptionTextView = holder.itemView.findViewById<TapTextView>(R.id.description_textView)
+        descriptionTextView = holder.itemView.findViewById<TapTextView>(R.id.description_textView)
         val nameText = holder.itemView.findViewById<TapTextView>(R.id.brief_description)
 
         val itemSeparator = holder.itemView.findViewById<TapSeparatorView>(R.id.itemseparator)
         val totalQuantity = holder.itemView.findViewById<TapTextView>(R.id.total_quantity)
-      //  val discount = holder.itemView.findViewById<TapTextView>(R.id.discount_text)
-      //  val quantityRelative = holder.itemView.findViewById<RelativeLayout>(R.id.quantityRelative)
+        //  val discount = holder.itemView.findViewById<TapTextView>(R.id.discount_text)
+        //  val quantityRelative = holder.itemView.findViewById<RelativeLayout>(R.id.quantityRelative)
         val totalAmount = holder.itemView.findViewById<TapTextView>(R.id.total_amount)
         val mainViewLinear = holder.itemView.findViewById<LinearLayout>(R.id.mainViewLinear)
         val itemName = holder.itemView.findViewById<TapTextView>(R.id.item_title)
         itemName.filters = arrayOf<InputFilter>(AllCaps())
         val isExpanded = position == mExpandedPosition
-        if(adapterContentItems.isNotEmpty()){
+        if (adapterContentItems.isNotEmpty()) {
             for (i in adapterContentItems.indices) {
                 descriptionTextView.text = adapterContentItems[position].description
-                descriptionTextView.visibility = if (isExpanded) View.VISIBLE else View.GONE
+                if (isExpanded) {
+                    descriptionTextView.visibility = View.VISIBLE
+
+
+                } else {
+
+                    descriptionTextView.visibility = View.GONE
+
+                }
                 holder.itemView.isActivated = isExpanded
-               // totalQuantity.text = adapterContentItems[position].quantity?.toString()
-               /* itemViewAdapter.setItemViewDataSource(
-                    getItemViewDataSource(null, CurrencyFormatter.currencyFormat(adapterContentItems[position].totalAmount.toString()),adapterContentItems[position].currency ,  CurrencyFormatter.currencyFormat(adapterContentItems[position].totalAmount.toString()), adapterContentItems[position].currency, adapterContentItems[position].quantity.toString())
-                )*/
+                // totalQuantity.text = adapterContentItems[position].quantity?.toString()
+                /* itemViewAdapter.setItemViewDataSource(
+                     getItemViewDataSource(null, CurrencyFormatter.currencyFormat(adapterContentItems[position].totalAmount.toString()),adapterContentItems[position].currency ,  CurrencyFormatter.currencyFormat(adapterContentItems[position].totalAmount.toString()), adapterContentItems[position].currency, adapterContentItems[position].quantity.toString())
+                 )*/
 
 //replaced PaymentDataSource.getSelectedCurrency with PaymentDataSource.getSelectedCurrencySymbol
-              //  println("PaymentDataSource.getSelectedCurrencySymbol()"+PaymentDataSource.getSelectedCurrencySymbol())
+                //  println("PaymentDataSource.getSelectedCurrencySymbol()"+PaymentDataSource.getSelectedCurrencySymbol())
                 PaymentDataSource.getSelectedCurrencySymbol()?.let {
                     PaymentDataSource.getSelectedCurrencySymbol()?.let { it1 ->
                         adapterContentItems[position].quantity?.toString()?.let { it2 ->
-                            getItemViewDataSource(adapterContentItems[position]?.name.toString().toUpperCase(), CurrencyFormatter.currencyFormat(adapterContentItems[position].getPlainAmount().toString() ),
-                                it,CurrencyFormatter.currencyFormat(adapterContentItems[position].amount.toString() ),
+                            getItemViewDataSource(
+                                adapterContentItems[position]?.name.toString().toUpperCase(),
+                                CurrencyFormatter.currencyFormat(
+                                    adapterContentItems[position].getPlainAmount().toString()
+                                ),
+                                it,
+                                CurrencyFormatter.currencyFormat(adapterContentItems[position].amount.toString()),
                                 it1,
                                 it2
                             )
@@ -120,10 +144,14 @@ class ItemAdapter(private var checkoutViewModel: CheckoutViewModel,private var b
             nameText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24F);
             nameText?.text = adapterContentItems[position].name
             // This to be handled in ui kit
-            totalAmount.text = PaymentDataSource.getSelectedCurrencySymbol()+ " " + CurrencyFormatter.currencyFormat(adapterContentItems[position].amount.toString())+ " x " +adapterContentItems[position].quantity?.toString()
+            totalAmount.text =
+                PaymentDataSource.getSelectedCurrencySymbol() + " " + CurrencyFormatter.currencyFormat(
+                    adapterContentItems[position].amount.toString()
+                ) + " x " + adapterContentItems[position].quantity?.toString()
 
-        }else{
-           // descriptionTextView.text = adapterContentItems[0].description
+        } else {
+            // descriptionTextView.text = adapterContentItems[0].description
+
             descriptionTextView.visibility = if (isExpanded) View.VISIBLE else View.GONE
             holder.itemView.isActivated = isExpanded
         }
@@ -131,12 +159,21 @@ class ItemAdapter(private var checkoutViewModel: CheckoutViewModel,private var b
 
         onItemClickAction(holder, position, isExpanded)
         showHideDescText(isExpanded, position, nameText)
-        setTheme(descriptionTextView, nameText, totalQuantity, totalAmount, itemName, itemSeparator, mainViewLinear,null)
-      //  nameText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24F);
+        setTheme(
+            descriptionTextView,
+            nameText,
+            totalQuantity,
+            totalAmount,
+            itemName,
+            itemSeparator,
+            mainViewLinear,
+            null
+        )
+        //  nameText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24F);
 
-        if(LocalizationManager.getLocale(context).language=="en"){
-          setFontsEnglish(itemName, totalAmount, nameText, descriptionTextView, totalQuantity)
-      }else setFontsArabic(itemName, totalAmount, nameText, descriptionTextView, totalQuantity)
+        if (LocalizationManager.getLocale(context).language == "en") {
+            setFontsEnglish(itemName, totalAmount, nameText, descriptionTextView, totalQuantity)
+        } else setFontsArabic(itemName, totalAmount, nameText, descriptionTextView, totalQuantity)
 
         checkItemListPosition(position, totalAmount, itemName)
     }
@@ -144,16 +181,14 @@ class ItemAdapter(private var checkoutViewModel: CheckoutViewModel,private var b
     private fun showHideDescText(isExpanded: Boolean, position: Int, descText: TapTextView?) {
         if (isExpanded) {
             previousExpandedPosition = position
-           // descText?.text = LocalizationManager.getValue("hideDesc", "ItemList")
-            itemViewAdapter.collapseImageView?.visibility= View.VISIBLE
-            itemViewAdapter.expandImageView?.visibility= View.GONE
-            checkoutViewModel.translateViewToNewHeight(bottomSheetLayout.measuredHeight,true)
-
+            // descText?.text = LocalizationManager.getValue("hideDesc", "ItemList")
+            itemViewAdapter.collapseImageView?.visibility = View.VISIBLE
+            itemViewAdapter.expandImageView?.visibility = View.GONE
 
         } else {
-           // descText?.text = LocalizationManager.getValue("showDesc", "ItemList")
-            itemViewAdapter.expandImageView?.visibility= View.VISIBLE
-            itemViewAdapter.collapseImageView?.visibility= View.GONE
+
+            itemViewAdapter.expandImageView?.visibility = View.VISIBLE
+            itemViewAdapter.collapseImageView?.visibility = View.GONE
         }
     }
 
@@ -161,6 +196,19 @@ class ItemAdapter(private var checkoutViewModel: CheckoutViewModel,private var b
         holder.itemView.setOnClickListener {
             itemViewAdapter.visibility = View.VISIBLE
             mExpandedPosition = if (isExpanded) -1 else position
+            if (isExpanded) {
+                bottomSheetLayout.resizeAnimation(
+                    durationTime = resizeAnimationDuration,
+                    startHeight = bottomSheetLayout.height,
+                    endHeight = bottomSheetLayout.height - 80,
+                )
+            } else {
+                bottomSheetLayout.resizeAnimation(
+                    durationTime = resizeAnimationDuration,
+                    startHeight = bottomSheetLayout.height,
+                    endHeight = sdkLayout.height + 80,
+                )
+            }
             notifyItemChanged(previousExpandedPosition)
             notifyItemChanged(position)
         }
@@ -170,36 +218,38 @@ class ItemAdapter(private var checkoutViewModel: CheckoutViewModel,private var b
     @SuppressLint("SetTextI18n")
     private fun checkItemListPosition(
         position: Int,
-       // discount: TapTextView?,
+        // discount: TapTextView?,
         totalAmount: TapTextView?,
         itemName: TapTextView?
     ) {
-        if(adapterContentItems.isEmpty()) {
+        if (adapterContentItems.isEmpty()) {
             if (position % 2 == 0) {
                 //discount?.visibility = View.VISIBLE
-               // discount?.text = LocalizationManager.getValue("Discount", "ItemList")
+                // discount?.text = LocalizationManager.getValue("Discount", "ItemList")
                 totalAmount?.paintFlags = totalAmount?.paintFlags?.or(Paint.STRIKE_THRU_TEXT_FLAG)!!
                 itemName?.text = "ITEM TITLE " + adapterContentItems[position]
             } else {
                 //discount?.visibility = View.INVISIBLE
-                totalAmount?.paintFlags = totalAmount?.paintFlags?.and(Paint.STRIKE_THRU_TEXT_FLAG.inv())!!
+                totalAmount?.paintFlags =
+                    totalAmount?.paintFlags?.and(Paint.STRIKE_THRU_TEXT_FLAG.inv())!!
                 itemName?.text =
                     "VERY LOOOONNGGGG ITEM TITLE ITEM TITLE TITLE ITEM TITLETITLE ITEM TITLETITLE ITEM TITLETITLE ITEM TITLETITLE ITEM TITLETITLE ITEM TITLE " + adapterContentItems[position]
             }
-        }else
+        } else
             for (i in adapterContentItems.indices) {
                 itemName?.text = adapterContentItems[position].name
-                if(adapterContentItems[position].discount?.amnttype?.name == AmountModificatorType.PERCENTAGE.name){
-                 //   discount?.visibility = View.VISIBLE
-                 //  discount?.text = adapterContentItems[i].discount.toString()
-                //    discount?.text = LocalizationManager.getValue("Discount", "ItemList")
-                    totalAmount?.paintFlags = totalAmount?.paintFlags?.or(Paint.STRIKE_THRU_TEXT_FLAG)!!
+                if (adapterContentItems[position].discount?.amnttype?.name == AmountModificatorType.PERCENTAGE.name) {
+                    //   discount?.visibility = View.VISIBLE
+                    //  discount?.text = adapterContentItems[i].discount.toString()
+                    //    discount?.text = LocalizationManager.getValue("Discount", "ItemList")
+                    totalAmount?.paintFlags =
+                        totalAmount?.paintFlags?.or(Paint.STRIKE_THRU_TEXT_FLAG)!!
                     totalAmount.text = adapterContentItems[position].getPlainAmount().toString()
 
-                }else{
-                   // discount?.visibility = View.INVISIBLE
+                } else {
+                    // discount?.visibility = View.INVISIBLE
                     //totalAmount?.paintFlags = totalAmount?.paintFlags?.and(Paint.STRIKE_THRU_TEXT_FLAG.inv())!!
-                  //  totalAmount?.text = "KWD 4 x 3"
+                    //  totalAmount?.text = "KWD 4 x 3"
                 }
             }
 
@@ -208,7 +258,7 @@ class ItemAdapter(private var checkoutViewModel: CheckoutViewModel,private var b
 
     private fun setTheme(
         descriptionTextView: TapTextView?,
-       // discount: TapTextView?,
+        // discount: TapTextView?,
         descText: TapTextView?,
         totalQuantity: TapTextView?,
         totalAmount: TapTextView?,
@@ -220,12 +270,14 @@ class ItemAdapter(private var checkoutViewModel: CheckoutViewModel,private var b
 
         itemViewAdapter.setBackgroundColor(Color.parseColor(ThemeManager.getValue("itemsList.item.backgroundColor")))
         val descriptionTextViewTheme = TextViewTheme()
-        descriptionTextViewTheme.textColor = Color.parseColor(ThemeManager.getValue("itemsList.item.descLabelColor"))
-        descriptionTextViewTheme.backgroundColor = Color.parseColor(ThemeManager.getValue("itemsList.item.backgroundColor"))
+        descriptionTextViewTheme.textColor =
+            Color.parseColor(ThemeManager.getValue("itemsList.item.descLabelColor"))
+        descriptionTextViewTheme.backgroundColor =
+            Color.parseColor(ThemeManager.getValue("itemsList.item.backgroundColor"))
         descriptionTextViewTheme.textSize = ThemeManager.getFontSize("itemsList.item.descLabelFont")
         descriptionTextViewTheme.font = ThemeManager.getFontName("itemsList.item.descLabelFont")
         descriptionTextView?.setTheme(descriptionTextViewTheme)
-       // discount?.setTheme(descriptionTextViewTheme)
+        // discount?.setTheme(descriptionTextViewTheme)
         descText?.setTheme(descriptionTextViewTheme)
 
         mainViewLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("itemsList.item.backgroundColor")))
@@ -270,7 +322,8 @@ class ItemAdapter(private var checkoutViewModel: CheckoutViewModel,private var b
 
 
         val separatorViewTheme = SeparatorViewTheme()
-        separatorViewTheme.strokeColor = Color.parseColor(ThemeManager.getValue("itemsList.separatorColor"))
+        separatorViewTheme.strokeColor =
+            Color.parseColor(ThemeManager.getValue("itemsList.separatorColor"))
         itemSeparator?.setTheme(separatorViewTheme)
 
     }
@@ -278,7 +331,7 @@ class ItemAdapter(private var checkoutViewModel: CheckoutViewModel,private var b
 
     private fun setFontsEnglish(
         itemName: TapTextView?, totalAmount: TapTextView?,
-       // discount: TapTextView?,
+        // discount: TapTextView?,
         descText: TapTextView?,
         descriptionTextView: TapTextView?, totalQuantity: TapTextView?
     ) {
@@ -317,7 +370,7 @@ class ItemAdapter(private var checkoutViewModel: CheckoutViewModel,private var b
 
     private fun setFontsArabic(
         itemName: TapTextView?, totalAmount: TapTextView?,
-       // discount: TapTextView?,
+        // discount: TapTextView?,
         descText: TapTextView?,
         descriptionTextView: TapTextView?, totalQuantity: TapTextView?
     ) {
@@ -331,11 +384,11 @@ class ItemAdapter(private var checkoutViewModel: CheckoutViewModel,private var b
                 TapFont.TajawalMedium
             )
         )
-       /* discount?.typeface = Typeface.createFromAsset(
-            context?.assets, TapFont.tapFontType(
-                TapFont.TajawalLight
-            )
-        )*/
+        /* discount?.typeface = Typeface.createFromAsset(
+             context?.assets, TapFont.tapFontType(
+                 TapFont.TajawalLight
+             )
+         )*/
         descText?.typeface = Typeface.createFromAsset(
             context?.assets, TapFont.tapFontType(
                 TapFont.TajawalLight
@@ -357,19 +410,18 @@ class ItemAdapter(private var checkoutViewModel: CheckoutViewModel,private var b
     private fun getItemViewDataSource(
         itemTitle: String?,
         itemAmount: String,
-        itemAmountCurr:String, totalAmount: String,
-        totalAmountCurr:String, totalQuantity: String): ItemViewDataSource {
+        itemAmountCurr: String, totalAmount: String,
+        totalAmountCurr: String, totalQuantity: String
+    ): ItemViewDataSource {
         return ItemViewDataSource(
             itemTitle = itemTitle,
             itemAmount = itemAmount,
             itemAmountCurr = itemAmountCurr,
-            totalAmount =totalAmount,
+            totalAmount = totalAmount,
             totalAmountCurr = totalAmountCurr,
             totalQuantity = totalQuantity
         )
     }
-
-
 
 
 }

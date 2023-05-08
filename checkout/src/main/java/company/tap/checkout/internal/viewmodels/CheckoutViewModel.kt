@@ -109,9 +109,6 @@ import kotlinx.android.synthetic.main.itemviewholder_layout.view.*
 import kotlinx.android.synthetic.main.loyalty_view_layout.view.*
 import kotlinx.android.synthetic.main.otpview_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import mobi.foo.benefitinapp.data.Transaction
 import mobi.foo.benefitinapp.listener.CheckoutListener
 import mobi.foo.benefitinapp.utils.BenefitInAppCheckout
@@ -725,17 +722,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 )
 
             }
-//            if (display) {
-//                if (selectedCurrency != SharedPrefManager.getUserSupportedLocaleForTransactions(
-//                        context
-//                    )?.currency
-//                ) {
-//                    amountViewHolder.view.amount_section?.tapChipPopup?.addFadeInAnimation()
-//                } else {
-//                    amountViewHolder.view.amount_section?.tapChipPopup?.visibility = View.GONE
-//
-//                }
-//            }
 
         }
         if (otpViewHolder.otpView.isVisible) {
@@ -865,28 +851,26 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
      */
 
     private fun caseDisplayControlCurrency() {
-        /*  val newHeight = (context as Activity).window?.decorView?.measuredHeight
-          val viewGroupLayoutParams = bottomSheetLayout.layoutParams
-          viewGroupLayoutParams.height = newHeight ?: 0
-          bottomSheetLayout.layoutParams = viewGroupLayoutParams
-    */
-        val originalHeight: Int = sdkLayout.height
 
         removeViews(
-            //  businessViewHolder,
-            // amountViewHolder,
             cardViewHolder,
             paymentInlineViewHolder,
+            saveCardSwitchHolder,
+            goPayViewsHolder,
+            otpViewHolder,
         )
         addViews(
             itemsViewHolder
         )
-        //replaced original height with bottomSheetLayout height
-        Handler().postDelayed({
-            if (::bottomSheetLayout.isInitialized)
-                translateViewToNewHeight(bottomSheetLayout.measuredHeight, true)
+        doAfterSpecificTime(translationAnimationDurationAfter) {
 
-        }, animationSpeed)
+            if (::bottomSheetLayout.isInitialized)
+                bottomSheetLayout.resizeAnimation(
+                    durationTime = resizeAnimationDuration,
+                    startHeight = bottomSheetLayout.height,
+                    endHeight = sdkLayout.measuredHeight,
+                )
+        }
 
 
         /**
@@ -900,12 +884,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         frameLayout.visibility = View.VISIBLE
         itemsViewHolder.itemsdisplayed = true
 
-        removeViews(
-            saveCardSwitchHolder,
-            goPayViewsHolder,
-            otpViewHolder,
-            // itemsViewHolder
-        )
+
         //Hide keyboard of any open
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             CustomUtils.hideKeyboardFrom(
@@ -918,11 +897,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private fun caseNotDisplayControlCurrency() {
         if (goPayViewsHolder.goPayopened || itemsViewHolder.itemsdisplayed) setActionGoPayOpenedItemsDisplayed()
         else setActionNotGoPayOpenedNotItemsDisplayed()
-        Handler().postDelayed({
-            if (::bottomSheetLayout.isInitialized)
-                translateViewToNewHeight(bottomSheetLayout.measuredHeight, false)
-        }, animationSpeed)
 
+        doAfterSpecificTime(translationAnimationDurationAfter) {
+            if (::bottomSheetLayout.isInitialized)
+                bottomSheetLayout.resizeAnimation(
+                    durationTime = resizeAnimationDuration,
+                    startHeight = bottomSheetLayout.height,
+                    endHeight = sdkLayout.measuredHeight,
+                )
+        }
     }
 
     fun translateViewToNewHeight(originalHeight: Int, expandHeightBool: Boolean) {
@@ -986,7 +969,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         saveCardSwitchHolder?.let {
             addViews(
-
                 cardViewHolder,
                 paymentInlineViewHolder,
                 it
@@ -1205,9 +1187,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 }
 
 
-
-
-
                 val fragment = WebFragment.newInstance(
                     redirectURL,
                     this,
@@ -1229,7 +1208,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                                     showWebView()
                                 }
                             )
-                       }
+                        }
 
                     }
                 )
@@ -1508,7 +1487,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private fun initAdaptersAction() {
         adapter = CardTypeAdapterUIKIT(this)
         goPayAdapter = GoPayCardAdapterUIKIT(this)
-        itemAdapter = ItemAdapter(this, bottomSheetLayout)
+        itemAdapter = ItemAdapter(this, bottomSheetLayout, sdkLayout)
         // adapter?.possiblyShowGooglePayButton()
         // val arrayList = ArrayList<String>()//Creating an empty arraylist
         //  arrayList.add("Google Pay")//Adding object in arraylist
@@ -1605,6 +1584,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
             true
         }
+
+        Log.i("error height sdk", sdkLayout.height.toString())
+        Log.i("error height bottomsheet", bottomSheetLayout.measuredHeight.toString())
+
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -1790,7 +1773,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             removeViews(webViewHolder)
         }
 
-    if (::bottomSheetLayout.isInitialized) {
+        if (::bottomSheetLayout.isInitialized) {
             bottomSheetLayout.resizeAnimation(
                 startHeight = bottomSheetLayout.measuredHeight,
                 endHeight = sdkLayout.height,
@@ -1860,7 +1843,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                         ActionButtonState.ERROR
                     )
-                         }
+                }
                 tabAnimatedActionButton?.changeButtonState(
                     ActionButtonState.ERROR
                 )
@@ -1977,6 +1960,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                   selectedPaymentOption.brand?.name
               )*/
             addViews(asynchronousPaymentViewHolder)
+
+
+
             Handler().postDelayed({
                 translateViewToNewHeight(bottomSheetLayout.measuredHeight, true)
             }, animationSpeed)

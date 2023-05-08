@@ -40,11 +40,6 @@ class ResizeAnimation(view: View?, targetHeight: Int, startHeight: Int, expandHe
 
     override fun initialize(width: Int, height: Int, parentWidth: Int, parentHeight: Int) {
         super.initialize(width, height, parentWidth, parentHeight)
-        println("initialize width>>"+width)
-        println("initialize height>>"+height)
-        println("initialize parentWidth>>"+parentWidth)
-        println("initialize parentHeight>>"+parentHeight)
-
     }
 
     override fun willChangeBounds(): Boolean {

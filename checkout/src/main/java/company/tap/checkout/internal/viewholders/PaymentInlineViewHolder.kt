@@ -42,6 +42,7 @@ import company.tap.checkout.internal.interfaces.PaymentCardComplete
 import company.tap.checkout.internal.interfaces.onCardNFCCallListener
 import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.utils.fadeVisibility
+import company.tap.checkout.internal.utils.showToast
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.data_managers.PaymentDataSource
@@ -222,6 +223,9 @@ class PaymentInlineViewHolder(
          */
         //  view.separator?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
         //setSeparatorTheme()
+
+
+
     }
 
     private fun initCustomerDetailView() {
