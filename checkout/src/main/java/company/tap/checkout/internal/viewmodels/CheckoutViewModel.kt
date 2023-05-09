@@ -127,6 +127,7 @@ import kotlin.properties.Delegates
  */
 
 const val animationSpeed = 50L
+
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedActionListener,
     PaymentCardComplete, onCardNFCCallListener, OnCurrencyChangedActionListener, WebViewContract,
@@ -138,7 +139,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private var goPayCardList = MutableLiveData<List<GoPaySavedCards>>()
     private var selectedViewToBeDeletedFromCardViewHolder: ViewGroup? = null
     private var viewToBeBlurCardViewHolder: View? = null
-     var newColorVal : Int?=null
+    var newColorVal: Int? = null
 
     private var allCurrencies = MutableLiveData<List<SupportedCurrencies>>()
     private var selectedItemsDel by Delegates.notNull<Int>()
@@ -189,6 +190,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private var fee: BigDecimal? = BigDecimal.ZERO
     val provider: IPaymentDataProvider = PaymentDataProvider()
     private var webPaymentOptions: java.util.ArrayList<PaymentOption> = ArrayList()
+
     @JvmField
     var currentCurrency: String = ""
 
@@ -481,7 +483,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             saveCardSwitchHolder,
             this,
             cardViewModel, checkoutFragment, loyaltyViewHolder,
-            sdkLayout,bottomSheetLayout
+            sdkLayout, bottomSheetLayout
         )
 
         itemsViewHolder = ItemsViewHolder(context, this)
@@ -526,15 +528,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         }
 
-       /* sdkLayout.let {
-            setTopBorders(
-                it,
-                35f,
-                strokeColor = Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),
-                tintColor =Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),// tint color
-                shadowColor =Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
-            )
-        }*/
+        /* sdkLayout.let {
+             setTopBorders(
+                 it,
+                 35f,
+                 strokeColor = Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),
+                 tintColor =Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),// tint color
+                 shadowColor =Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
+             )
+         }*/
         sdkLayout?.setBackgroundDrawable(
             createDrawableGradientForBlurry(
                 intArrayOf(
@@ -545,7 +547,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             )
         )
 
-        newColorVal =  Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
+        newColorVal = Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
 
 
     }
@@ -889,11 +891,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             itemsViewHolder
         )
         doAfterSpecificTime(translationAnimationDurationAfter) {
-
-            Log.e("bottomSheet height",bottomSheetLayout.height.toString())
-            Log.e("sdk height",sdkLayout.height.toString())
-            Log.e("headerLayout height",headerLayout.height.toString())
-
             if (::bottomSheetLayout.isInitialized)
                 bottomSheetLayout.resizeAnimation(
                     durationTime = resizeAnimationDuration,
@@ -934,7 +931,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 bottomSheetLayout.resizeAnimation(
                     durationTime = resizeAnimationDuration,
                     startHeight = bottomSheetLayout.measuredHeight,
-                    endHeight = headerLayout.height  ,
+                    endHeight = headerLayout.height,
                 )
 
             itemAdapter.resetViewToInitialValue()
@@ -961,12 +958,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     private fun setActionGoPayOpenedItemsDisplayed() {
         removeViews(
-
             cardViewHolder,
             paymentInlineViewHolder,
             saveCardSwitchHolder,
             goPayViewsHolder,
-
             otpViewHolder,
             itemsViewHolder
         )
@@ -1102,14 +1097,20 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         //start counter on open otpview
         otpViewHolder?.otpView?.startCounter()
-        amountViewHolder?.view?.amountView_separator?.visibility =View.GONE
+        amountViewHolder?.view?.amountView_separator?.visibility = View.GONE
         //Replaced blur with below
-        otpViewHolder?.otpView?.otpLinearLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("amountSectionView.backgroundColor")))
-       // otpViewHolder?.otpView?.otpLinearLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("TapOtpView.backgroundColor")))
+        otpViewHolder?.otpView?.otpLinearLayout.setBackgroundColor(
+            Color.parseColor(
+                ThemeManager.getValue(
+                    "amountSectionView.backgroundColor"
+                )
+            )
+        )
+        // otpViewHolder?.otpView?.otpLinearLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("TapOtpView.backgroundColor")))
         doAfterSpecificTime(time = 700L) {
             removeViews(cardViewHolder)
             addViews(otpViewHolder)
-        otpViewHolder.otpView.visibility = View.VISIBLE
+            otpViewHolder.otpView.visibility = View.VISIBLE
 
         }
         doAfterSpecificTime(time = 800L) { CustomUtils.showKeyboard(context) }
@@ -1397,11 +1398,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         currencyAdapter = CurrencyTypeAdapter(this)
         if (paymentOptionsResponse.supportedCurrencies != null && ::amountViewHolder.isInitialized) {
             currentCurrency = paymentOptionsResponse.currency
-            val sortedList: List<SupportedCurrencies> = (paymentOptionsResponse.supportedCurrencies).sortedBy { it.orderBy }
+            val sortedList: List<SupportedCurrencies> =
+                (paymentOptionsResponse.supportedCurrencies).sortedBy { it.orderBy }
             for (i in sortedList.indices) {
 
                 if (sortedList[i].currency == currentCurrency) {
-                    currentAmount = CurrencyFormatter.currencyFormat(sortedList[i].amount.toString())
+                    currentAmount =
+                        CurrencyFormatter.currencyFormat(sortedList[i].amount.toString())
                     currentCurrency =
                         sortedList[i].symbol.toString()
 
@@ -1531,7 +1534,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private fun initAdaptersAction() {
         adapter = CardTypeAdapterUIKIT(this)
         goPayAdapter = GoPayCardAdapterUIKIT(this)
-        itemAdapter = ItemAdapter( bottomSheetLayout, headerLayout)
+        itemAdapter = ItemAdapter(bottomSheetLayout, headerLayout)
         // adapter?.possiblyShowGooglePayButton()
         // val arrayList = ArrayList<String>()//Creating an empty arraylist
         //  arrayList.add("Google Pay")//Adding object in arraylist
@@ -2029,20 +2032,20 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
                 }
 
-              //  Handler().postDelayed({
-                    if (::sdkLayout.isInitialized) {
-                        //it?.view?.visibility = View.INVISIBLE
-                        sdkLayout?.setBackgroundDrawable(
-                            createDrawableGradientForBlurry(
-                                intArrayOf(
-                                    newColorVal!!,
-                                    newColorVal!!,
-                                    newColorVal!!
-                                )
+                //  Handler().postDelayed({
+                if (::sdkLayout.isInitialized) {
+                    //it?.view?.visibility = View.INVISIBLE
+                    sdkLayout?.setBackgroundDrawable(
+                        createDrawableGradientForBlurry(
+                            intArrayOf(
+                                newColorVal!!,
+                                newColorVal!!,
+                                newColorVal!!
                             )
                         )
-                         //   sdkLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
-                        sdkLayout.removeView(it?.view)
+                    )
+                    //   sdkLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
+                    sdkLayout.removeView(it?.view)
 
                 }
                 //  }, 150)
@@ -2064,13 +2067,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     it?.view?.startAnimation(animation)
                 }
 
-             //   Handler().postDelayed({
-                    if (::sdkLayout.isInitialized) {
-                        // it?.view?.visibility = View.VISIBLE
-                     //   sdkLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
-                      //  sdkLayout.setBackgroundColor(Color.RED)
-                        sdkLayout.removeView(it?.view)
-                        sdkLayout.addView(it?.view)
+                //   Handler().postDelayed({
+                if (::sdkLayout.isInitialized) {
+                    // it?.view?.visibility = View.VISIBLE
+                    //   sdkLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
+                    //  sdkLayout.setBackgroundColor(Color.RED)
+                    sdkLayout.removeView(it?.view)
+                    sdkLayout.addView(it?.view)
 
                 }
                 //  }, 200)
@@ -2217,7 +2220,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         bottomSheetLayout.resizeAnimation(
             durationTime = resizeAnimationDuration,
             startHeight = bottomSheetLayout.height,
-            endHeight = sdkLayout.height ,
+            endHeight = sdkLayout.height,
         )
         when (PaymentDataSource.getTransactionMode()) {
             TransactionMode.TOKENIZE_CARD -> payStringButton = LocalizationManager.getValue(
@@ -2338,7 +2341,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             ?.let { saveCardSwitchHolder?.view?.cardSwitch?.payButton?.addChildView(it) }
         saveCardSwitchHolder?.view?.cardSwitch?.showOnlyPayButton()
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated
-
 
 
     }
@@ -2613,7 +2615,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     ) {
         println("isCompleted aaa" + isCompleted)
         println("expiryDate aaa" + expiryDate)
-        if(isCompleted) activateActionButton(cardBrandString = cardBrandString)
+        if (isCompleted) activateActionButton(cardBrandString = cardBrandString)
         if (savedCardsModel != null) {
             setPayButtonAction(paymentType, savedCardsModel)
         } else {
@@ -2633,7 +2635,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         removeViews(
             //businessViewHolder,
             // amountViewHolder,
-           // cardViewHolder,
+            // cardViewHolder,
             saveCardSwitchHolder,
             paymentInlineViewHolder,
             otpViewHolder,
@@ -2642,7 +2644,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
         //  addViews(businessViewHolder, amountViewHolder)
         frameLayout.visibility = View.VISIBLE
-        cardViewHolder.view.visibility= GONE
+        cardViewHolder.view.visibility = GONE
         fragmentManager
             .beginTransaction()
             .replace(R.id.fragment_container_nfc_lib, nfcFragment)
@@ -2657,10 +2659,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         val bottomSheet: FrameLayout? =
             bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet)
         BottomSheetBehavior.from(bottomSheet as View).state = BottomSheetBehavior.STATE_EXPANDED
-       /* Handler().postDelayed({
-            if (::bottomSheetLayout.isInitialized)
-                translateViewToNewHeight(bottomSheetLayout.measuredHeight, true)
-        }, 400)*/
+        /* Handler().postDelayed({
+             if (::bottomSheetLayout.isInitialized)
+                 translateViewToNewHeight(bottomSheetLayout.measuredHeight, true)
+         }, 400)*/
         checkSelectedAmountInitiated()
     }
 
@@ -2800,7 +2802,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         adapter.resetSelection()
 
         if (::selectedCurrency.isInitialized) {
-            println("selectedCurrency he"+selectedCurrency)
+            println("selectedCurrency he" + selectedCurrency)
             Bugfender.d(CustomUtils.tagEvent, "Currency changed to : " + selectedCurrencySymbol)
             filterViewModels(selectedCurrency)
         } else {
@@ -2828,7 +2830,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             for (i in itemList.indices) {
                 itemList[i].amount = unModifiedItemList[i].amount?.times(currencyRate)
                 //itemList[i].totalAmount = currencyOldRate?.div(currencyRate)
-                itemList[i].totalAmount = unModifiedItemList[i].getPlainAmount()?.times(currencyRate)
+                itemList[i].totalAmount =
+                    unModifiedItemList[i].getPlainAmount()?.times(currencyRate)
 
 
             }
@@ -2880,13 +2883,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
         currentCurrencySymbol = selectedCurrencySymbol
 
-        Log.e("itemList",itemList.toString())
-        val sortedList: List<SupportedCurrencies> = (paymentOptionsResponse.supportedCurrencies).sortedBy { it.orderBy }
+        Log.e("itemList", itemList.toString())
+        val sortedList: List<SupportedCurrencies> =
+            (paymentOptionsResponse.supportedCurrencies).sortedBy { it.orderBy }
         sortedList.forEachIndexed { index, supportedCurrencies ->
             /**
              * here we update selected currency flag to be rounded corner
              */
-            if (supportedCurrencies.currency == selectedCurrency){
+            if (supportedCurrencies.currency == selectedCurrency) {
                 currencyAdapter.updateSelectedPosition(index)
             }
             /**
@@ -2931,7 +2935,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         println("redirect val" + charge?.response)
         println("gatewayResponse val" + charge?.gatewayResponse)
 
-      //  saveCardSwitchHolder?.view?.layoutParams= ViewGroup.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT)
+        //  saveCardSwitchHolder?.view?.layoutParams= ViewGroup.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT)
 
         businessViewHolder = contextSDK?.let { BusinessViewHolder(it, this) }!!
         // saveCardSwitchHolder = contextSDK.let { SwitchViewHolder(it,this) }
@@ -2950,15 +2954,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
 
 
-        if(::webViewHolder.isInitialized) {
-            webViewHolder?.view?.visibility= INVISIBLE
+        if (::webViewHolder.isInitialized) {
+            webViewHolder?.view?.visibility = INVISIBLE
             removeViews(webViewHolder)
         }
         doAfterSpecificTime(time = 5L) {
 
             println("sdklayout hh val" + sdkLayout.measuredHeight)
             println("bottomSheetLayout hh val" + bottomSheetLayout.measuredHeight)
-            translateViewToNewHeight(bottomSheetLayout.measuredHeight,false)
+            translateViewToNewHeight(bottomSheetLayout.measuredHeight, false)
         }
 
         //  sdkLayout.visibility =View.VISIBLE
@@ -3197,18 +3201,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
             with(cardViewHolder.view.mainChipgroup) {
                 val viewsToFadeOut = mutableListOf<View>(chipsRecycler, groupAction, groupName)
-                   viewsToFadeOut.add(cardViewHolder.view?.cardInfoHeaderText)
+                viewsToFadeOut.add(cardViewHolder.view?.cardInfoHeaderText)
                 doAfterSpecificTime(time = 500L) {
 
-                    viewsToFadeOut.addFadeOutAnimationToViews( durationTime = 1000L, onAnimationEnd = {})
+                    viewsToFadeOut.addFadeOutAnimationToViews(
+                        durationTime = 1000L,
+                        onAnimationEnd = {})
                     paymentInlineViewHolder.paymentInputContainer.applyBluryToView()
                 }
 
             }
-
-
-
-
 
 
         }
@@ -3259,24 +3261,24 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         newBorderColor = "#" + borderOpacityVal + borderColor.substring(0, borderColor.length - 2)
             .replace("#", "")
 
-      //  sdkLayout.setBackgroundColor(Color.parseColor(newBorderColor))
+        //  sdkLayout.setBackgroundColor(Color.parseColor(newBorderColor))
 
-      /*  sdkLayout.let { it1 ->
-            setTopBorders(
-                it1,
-                35f,// corner raduis
-                0.0f,
-                Color.parseColor(
-                    newBorderColor
-                ),// stroke color
-                Color.parseColor(
-                    newBorderColor
-                ),// tint color
-                Color.parseColor(
-                    newBorderColor
-                )
-            )
-        }*/
+        /*  sdkLayout.let { it1 ->
+              setTopBorders(
+                  it1,
+                  35f,// corner raduis
+                  0.0f,
+                  Color.parseColor(
+                      newBorderColor
+                  ),// stroke color
+                  Color.parseColor(
+                      newBorderColor
+                  ),// tint color
+                  Color.parseColor(
+                      newBorderColor
+                  )
+              )
+          }*/
 
         sdkLayout?.setBackgroundDrawable(
             createDrawableGradientForBlurry(
@@ -3450,7 +3452,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         addViews(
             //   businessViewHolder,
             //   amountViewHolder,
-           // cardViewHolder,
+            // cardViewHolder,
             paymentInlineViewHolder,
             saveCardSwitchHolder
         )
@@ -3493,7 +3495,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         checkoutFragment.isNfcOpened = false
         //  webFrameLayout.visibility = View.GONE
         frameLayout.visibility = GONE
-        cardViewHolder.view.visibility=View.VISIBLE
+        cardViewHolder.view.visibility = View.VISIBLE
     }
 
 
@@ -3515,7 +3517,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         return
                     } else {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            paymentInlineViewHolder.setNFCCardData(emvCard , month ,year.toInt())
+                            paymentInlineViewHolder.setNFCCardData(emvCard, month, year.toInt())
                         }
 
 
@@ -3592,7 +3594,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             val savedCardsWorker: java.util.ArrayList<SavedCard> =
                 java.util.ArrayList<SavedCard>(paymentOptionsResponse.cards)
         }
-         webPaymentOptions =
+        webPaymentOptions =
             filteredByPaymentTypeAndCurrencyAndSortedList(
                 paymentOptionsWorker, PaymentType.WEB, currency
             )
@@ -3620,15 +3622,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             adapter.updateAdapterGooglePay(googlePaymentOptions)
             PaymentDataSource.setGoogleCardPay(googlePaymentOptions)
         }
-        println("hasWebPaymentOptions"+webPaymentOptions.size)
-        println("hasCardPaymentOptions"+hasCardPaymentOptions)
-        println("savedCardList"+savedCardList?.isNullOrEmpty())
-        if(webPaymentOptions.size==0) {
+        println("hasWebPaymentOptions" + webPaymentOptions.size)
+        println("hasCardPaymentOptions" + hasCardPaymentOptions)
+        println("savedCardList" + savedCardList?.isNullOrEmpty())
+        if (webPaymentOptions.size == 0) {
             adapter.updateAdapterData(ArrayList())
-            cardViewHolder.view.mainChipgroup?.groupName?.visibility =View.GONE
+            cardViewHolder.view.mainChipgroup?.groupName?.visibility = View.GONE
 
 
-        }else logicToHandlePaymentDataType(webPaymentOptions, cardPaymentOptions)
+        } else logicToHandlePaymentDataType(webPaymentOptions, cardPaymentOptions)
 
 
     }
@@ -3639,7 +3641,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         cardPaymentOptions: ArrayList<PaymentOption>
 
     ) {
-        cardViewHolder.view.mainChipgroup?.groupName?.visibility =View.VISIBLE
+        cardViewHolder.view.mainChipgroup?.groupName?.visibility = View.VISIBLE
         // println("webPaymentOptions in logic >>>>$webPaymentOptions")
         //  println("cardPaymentOptions in logic >>>>$cardPaymentOptions")
 
@@ -3783,7 +3785,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     //Added to disable click when button loading
                     amountViewHolder.view.amount_section?.itemAmountLayout?.isEnabled = false
                     amountViewHolder.view.amount_section?.itemAmountLayout?.isClickable = false
-                          payActionSavedCard(savedCardsModel as SavedCard)
+                    payActionSavedCard(savedCardsModel as SavedCard)
 
                 }
             }

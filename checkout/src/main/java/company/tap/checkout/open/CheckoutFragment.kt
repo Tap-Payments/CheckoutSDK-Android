@@ -153,17 +153,16 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             requireContext().getDeviceSpecs().first - 100
         )
         inLineCardLayout = view.findViewById(R.id.inline_container)
-         headerLayout = view.findViewById(R.id.headerLayout)
+        headerLayout = view.findViewById(R.id.headerLayout)
         initViews(view)
 
         topHeaderView = context?.let { TapBrandView(it) }
 
         topHeaderView?.visibility = View.GONE
-
-//        topHeaderView?.poweredByImage?.setImageResource(R.drawable.powered_by_tap)
-//        topHeaderView?.poweredByImage?.scaleType = ImageView.ScaleType.CENTER_CROP
-//        topHeaderView?.poweredByImage?.layoutParams?.width = context.getDimensionsInDp(120)
-//        topHeaderView?.poweredByImage?.layoutParams?.height = context.getDimensionsInDp(22)
+        topHeaderView?.poweredByImage?.setImageResource(R.drawable.powered_by_tap)
+        topHeaderView?.poweredByImage?.scaleType = ImageView.ScaleType.CENTER_CROP
+        topHeaderView?.poweredByImage?.layoutParams?.width = context.getDimensionsInDp(120)
+        topHeaderView?.poweredByImage?.layoutParams?.height = context.getDimensionsInDp(22)
 
         displayMetrics = CustomUtils.getDeviceDisplayMetrics(context as Activity)
         val heightscreen: Int = Resources.getSystem().displayMetrics.heightPixels
