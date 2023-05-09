@@ -2848,6 +2848,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
         selectedTotalAmount = selectedAmount
 
+
         /**
          * Why this check present ??!!  :/
          */
@@ -2883,9 +2884,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         Log.e("itemList",itemList.toString())
         val sortedList: List<SupportedCurrencies> = (paymentOptionsResponse.supportedCurrencies).sortedBy { it.orderBy }
         sortedList.forEachIndexed { index, supportedCurrencies ->
+            /**
+             * here we update selected currency flag to be rounded corner
+             */
             if (supportedCurrencies.currency == selectedCurrency){
                 currencyAdapter.updateSelectedPosition(index)
             }
+            /**
+             * here we update currency selected check to avoid it's appearance when selected currency is same
+             */
+            CheckoutViewModel.currencySelectedForCheck = selectedCurrency
         }
 
 
