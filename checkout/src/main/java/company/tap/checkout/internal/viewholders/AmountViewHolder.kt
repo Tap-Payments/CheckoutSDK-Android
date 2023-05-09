@@ -3,6 +3,7 @@ package company.tap.checkout.internal.viewholders
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
@@ -73,6 +74,7 @@ class AmountViewHolder(
         view.amount_section.tapChipPopup.layoutParams.width = view.context.getDimensionsInDp(97)
         view.amount_section.tapChipPopup.layoutParams.height = view.context.getDimensionsInDp(22)
         view.amount_section.tapChipPopup.layoutParams.height = view.context.getDimensionsInDp(22)
+        view.amount_section.tapChipPopup.visibility = View.INVISIBLE
 
         view.amount_section.amountImageView.setImageResource(dropDownIcon)
 
@@ -183,8 +185,11 @@ class AmountViewHolder(
             /**
              * if same currency selected as Currency of user , not show local prompt
              */
-            if (CheckoutViewModel.currencySelectedForCheck != SharedPrefManager.getUserSupportedLocaleForTransactions(view.amount_section.context)?.currency
-            )
+
+            Log.e("currency Selected ", CheckoutViewModel.currencySelectedForCheck.toString())
+            Log.e("saved Currency", SharedPrefManager.getUserSupportedLocaleForTransactions(view.amount_section.context)?.currency.toString())
+
+            if (CheckoutViewModel.currencySelectedForCheck != SharedPrefManager.getUserSupportedLocaleForTransactions(view.amount_section.context)?.currency)
                 doAfterSpecificTime(500) {
                    checkoutViewModel.addDataToAmountView()
                     view.amount_section?.tapChipPopup?.addFadeInAnimation()

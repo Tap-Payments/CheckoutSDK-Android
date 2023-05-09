@@ -18,6 +18,7 @@ import company.tap.checkout.internal.api.models.SupportedCurrencies
 import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener
 import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
+import company.tap.checkout.internal.viewmodels.CheckoutViewModel.Companion.currencySelectedForCheck
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.themekit.theme.TextViewTheme
 import company.tap.tapuilibrary.uikit.atoms.TapImageView
@@ -103,7 +104,9 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
         for (i in adapterContentCurrencies.indices) {
             bindItemData(holder, position)
         }
-        if (selectedPosition == position) drawSelectedBorder(holder)
+        if (selectedPosition == position) {
+            drawSelectedBorder(holder)
+        }
          else drawUnSelectedBorder(holder)
         onItemClickListener(holder, position)
 

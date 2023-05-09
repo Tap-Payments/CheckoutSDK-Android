@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.internal.api.enums.AmountModificatorType
 import company.tap.checkout.internal.utils.CurrencyFormatter
 import company.tap.checkout.internal.utils.doAfterSpecificTime
+import company.tap.checkout.internal.utils.getDimensions
 import company.tap.checkout.internal.utils.resizeAnimation
 import company.tap.checkout.internal.viewholders.resizeAnimationDuration
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
@@ -194,22 +195,15 @@ class ItemAdapter(
     private fun onItemClickAction(holder: ItemHolder, position: Int, isExpanded: Boolean) {
         holder.itemView.setOnClickListener {
             itemViewAdapter.visibility = View.VISIBLE
+
             mExpandedPosition = if (isExpanded) -1 else position
-            var height = 0
-            descriptionTextView.post {
-                height = it.measuredHeight
-            }
             if (isExpanded) {
-                Log.e("height",height.toString())
-                bottomSheetLayout.resizeAnimation(
-                    durationTime = resizeAnimationDuration,
-                    startHeight = bottomSheetLayout.height,
-                    endHeight = bottomSheetLayout.height - 70,
-                )
-
-
+                    bottomSheetLayout.resizeAnimation(
+                        durationTime = resizeAnimationDuration,
+                        startHeight = bottomSheetLayout.height,
+                        endHeight = bottomSheetLayout.height - 70
+                    )
             } else {
-                Log.e("height",height.toString())
                 bottomSheetLayout.resizeAnimation(
                     durationTime = resizeAnimationDuration,
                     startHeight = bottomSheetLayout.height,

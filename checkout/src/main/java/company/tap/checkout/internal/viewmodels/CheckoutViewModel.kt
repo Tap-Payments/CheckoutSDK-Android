@@ -1398,13 +1398,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         currencyAdapter = CurrencyTypeAdapter(this)
         if (paymentOptionsResponse.supportedCurrencies != null && ::amountViewHolder.isInitialized) {
             currentCurrency = paymentOptionsResponse.currency
-            val sortedList: List<SupportedCurrencies> =
-                (paymentOptionsResponse.supportedCurrencies).sortedBy { it.orderBy }
+            val sortedList: List<SupportedCurrencies> = (paymentOptionsResponse.supportedCurrencies).sortedBy { it.orderBy }
             for (i in sortedList.indices) {
 
                 if (sortedList[i].currency == currentCurrency) {
-                    currentAmount =
-                        CurrencyFormatter.currencyFormat(sortedList[i].amount.toString())
+                    currentAmount = CurrencyFormatter.currencyFormat(sortedList[i].amount.toString())
                     currentCurrency =
                         sortedList[i].symbol.toString()
 
@@ -1414,6 +1412,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         sortedList[i].symbol.toString()
                     finalCurrencySymbol =
                         sortedList[i].symbol.toString()
+                    currencySelectedForCheck = currentCurrency
 
                     currencyAdapter.updateSelectedPosition(i)
                 }
@@ -2830,11 +2829,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             for (i in itemList.indices) {
                 itemList[i].amount = unModifiedItemList[i].amount?.times(currencyRate)
                 //itemList[i].totalAmount = currencyOldRate?.div(currencyRate)
-                itemList[i].totalAmount =
-                    unModifiedItemList[i].getPlainAmount()?.times(currencyRate)
-
-
-                println("item per unit >>" + itemList[i].amount)
+                itemList[i].totalAmount = unModifiedItemList[i].getPlainAmount()?.times(currencyRate)
 
 
             }
@@ -2885,7 +2880,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
         currentCurrencySymbol = selectedCurrencySymbol
 
-        PaymentDataSource.setSelectedAmount(currencyRate)
+        Log.e("itemList",itemList.toString())
+        val sortedList: List<SupportedCurrencies> = (paymentOptionsResponse.supportedCurrencies).sortedBy { it.orderBy }
+        sortedList.forEachIndexed { index, supportedCurrencies ->
+            if (supportedCurrencies.currency == selectedCurrency){
+                currencyAdapter.updateSelectedPosition(index)
+            }
+        }
+
+
         if (paymentInlineViewHolder.tapCardInputView.isNotEmpty()) {
             paymentInlineViewHolder.tapCardInputView.clear()
             paymentInlineViewHolder.tapAlertView?.fadeVisibility(GONE, 500)

@@ -156,6 +156,14 @@ fun View.slidefromRightToLeft() {
 
 }
 
+inline fun View.getDimensions(crossinline onDimensionsReady: (Int, Int) -> Unit) {
+    lateinit var layoutListener: ViewTreeObserver.OnGlobalLayoutListener
+    layoutListener = ViewTreeObserver.OnGlobalLayoutListener {
+        viewTreeObserver.removeOnGlobalLayoutListener(layoutListener)
+        onDimensionsReady(width, height)
+    }
+    viewTreeObserver.addOnGlobalLayoutListener(layoutListener)
+}
 fun View.slideFromLeftToRight() {
 
     if (this.isVisible) {
