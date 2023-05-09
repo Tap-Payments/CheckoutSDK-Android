@@ -192,7 +192,7 @@ class AmountViewHolder(
             if (CheckoutViewModel.currencySelectedForCheck != SharedPrefManager.getUserSupportedLocaleForTransactions(view.amount_section.context)?.currency)
                 doAfterSpecificTime(500) {
                    checkoutViewModel.addDataToAmountView()
-                    view.amount_section?.tapChipPopup?.addFadeInAnimation()
+                    view.amount_section?.tapChipPopup?.addFadeInAnimation(durationTime = 500)
                 }
         } else {
             /**
