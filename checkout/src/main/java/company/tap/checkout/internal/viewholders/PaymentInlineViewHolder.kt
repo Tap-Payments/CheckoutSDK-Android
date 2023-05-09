@@ -1257,15 +1257,30 @@ class PaymentInlineViewHolder(
                         tapInlineCardSwitch?.visibility = View.GONE
 
                         if (s.trim().length == 3 || s.trim().length == 4) {
-                            onPaymentCardComplete.onPayCardSwitchAction(
-                                true, PaymentType.CARD , savedCardsModel?.brand?.name
-                            )
-                            cardNumber?.let {
-                                expiryDate?.let { it1 ->
-                                    onPaymentCardComplete.onPayCardCompleteAction(
-                                        true, PaymentType.CARD,
-                                        it, it1, cvvNumber!!, cardHolderName, savedCardsModel?.brand?.name ,savedCardsModel
-                                    )
+                            if(savedCardsModel!=null){
+
+                                onPaymentCardComplete.onPayCardSwitchAction(
+                                    true, PaymentType.SavedCard , savedCardsModel?.brand?.name
+                                )
+                                cardNumber?.let {
+                                    expiryDate?.let { it1 ->
+                                        onPaymentCardComplete.onPayCardCompleteAction(
+                                            true, PaymentType.SavedCard,
+                                            it, it1, cvvNumber!!, cardHolderName, savedCardsModel?.brand?.name ,savedCardsModel
+                                        )
+                                    }
+                                }
+                            }else {
+                                onPaymentCardComplete.onPayCardSwitchAction(
+                                    true, PaymentType.CARD , savedCardsModel?.brand?.name
+                                )
+                                cardNumber?.let {
+                                    expiryDate?.let { it1 ->
+                                        onPaymentCardComplete.onPayCardCompleteAction(
+                                            true, PaymentType.CARD,
+                                            it, it1, cvvNumber!!, cardHolderName, savedCardsModel?.brand?.name ,null
+                                        )
+                                    }
                                 }
                             }
                             tapAlertView?.fadeVisibility(View.GONE, 500)

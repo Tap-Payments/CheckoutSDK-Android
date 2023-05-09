@@ -179,7 +179,10 @@ object CustomUtils {
 
         return ThemeManager.currentTheme
     }
+    fun getCurrentLocale(context: Context): String {
 
+        return LocalizationManager.getLocale(context).language
+    }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     fun showAlertDialog(title: String, messageString: String, context: Context) {
