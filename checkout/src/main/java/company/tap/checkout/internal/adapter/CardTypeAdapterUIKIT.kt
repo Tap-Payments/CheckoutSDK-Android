@@ -227,11 +227,10 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
             println("position>>>" + position)
             println("adapterContent>>>" + adapterContent.size)
             println("arraylistCards>>>" + arrayListCards.size)
-            val cardNeeded = arrayListCards[position.minus(adapterContent.size).minus(1)]
-
+            val cardNeeded = arrayListCards[position.minus(adapterContent.size).minus(adapterGooglePay.size)]
             onCardSelectedActionListener.onDeleteIconClicked(
                 true,
-                position.minus(adapterContent.size).minus(1),
+                position.minus(adapterContent.size).minus(adapterGooglePay.size),
                 cardNeeded.id,
                 cardNeeded.lastFour,
                 arrayListCards as ArrayList<SavedCard>,

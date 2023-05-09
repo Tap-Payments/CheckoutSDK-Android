@@ -3649,10 +3649,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         println("savedCardList" + savedCardList?.isNullOrEmpty())
         if (webPaymentOptions.size == 0) {
             adapter.updateAdapterData(ArrayList())
-            cardViewHolder.view.mainChipgroup?.groupName?.visibility = View.GONE
+            if (savedCardList.isNullOrEmpty()){
+                cardViewHolder.view.mainChipgroup?.groupName?.visibility =View.GONE
+            }else{
+                cardViewHolder.view.mainChipgroup?.groupName?.visibility =View.VISIBLE
+            }
 
 
-        } else logicToHandlePaymentDataType(webPaymentOptions, cardPaymentOptions)
+        }
+
+        else logicToHandlePaymentDataType(webPaymentOptions, cardPaymentOptions)
 
 
     }
