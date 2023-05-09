@@ -496,6 +496,7 @@ class PaymentInlineViewHolder(
         switchCheckedState()
 
 
+
         tapCardInputView.backArrow.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
                 //  println("getPreTypedCardData data was there"+getPreTypedCardData())
