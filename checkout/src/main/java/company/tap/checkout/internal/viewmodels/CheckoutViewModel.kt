@@ -485,6 +485,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
 
         itemsViewHolder = ItemsViewHolder(context, this)
+
         otpViewHolder = OTPViewHolder(context)
         otpViewHolder.otpView.visibility = GONE
         otpViewHolder.otpView.requestFocus()
@@ -927,18 +928,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         if (goPayViewsHolder.goPayopened || itemsViewHolder.itemsdisplayed) setActionGoPayOpenedItemsDisplayed()
         else setActionNotGoPayOpenedNotItemsDisplayed()
 
-        doAfterSpecificTime(translationAnimationDurationAfter) {
-            Log.e("error bottomsheet height ",bottomSheetLayout.measuredHeight.toString())
-            Log.e("error sdk height ",sdkLayout.measuredHeight.toString())
-            Log.e("error header  height ",headerLayout.measuredHeight.toString())
-            Log.e("error header  powerdBy ",headerLayout.getChildAt(0).layoutParams.height.toString())
 
+        doAfterSpecificTime(translationAnimationDurationAfter) {
             if (::bottomSheetLayout.isInitialized)
                 bottomSheetLayout.resizeAnimation(
                     durationTime = resizeAnimationDuration,
                     startHeight = bottomSheetLayout.measuredHeight,
                     endHeight = headerLayout.height  ,
                 )
+
+            itemAdapter.resetViewToInitialValue()
         }
     }
 
@@ -1532,7 +1531,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private fun initAdaptersAction() {
         adapter = CardTypeAdapterUIKIT(this)
         goPayAdapter = GoPayCardAdapterUIKIT(this)
-        itemAdapter = ItemAdapter(this, bottomSheetLayout, headerLayout)
+        itemAdapter = ItemAdapter( bottomSheetLayout, headerLayout)
         // adapter?.possiblyShowGooglePayButton()
         // val arrayList = ArrayList<String>()//Creating an empty arraylist
         //  arrayList.add("Google Pay")//Adding object in arraylist

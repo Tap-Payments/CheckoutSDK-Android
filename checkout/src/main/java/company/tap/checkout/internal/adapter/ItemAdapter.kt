@@ -45,7 +45,6 @@ Copyright (c) 2020    Tap Payments.
 All rights reserved.
  **/
 class ItemAdapter(
-    private var checkoutViewModel: CheckoutViewModel,
     private var bottomSheetLayout: FrameLayout,
     private var headerLayout: LinearLayout
 ) :
@@ -192,17 +191,23 @@ class ItemAdapter(
         }
     }
 
+    fun resetViewToInitialValue() {
+        previousExpandedPosition = -1
+        mExpandedPosition = -1
+        this.notifyDataSetChanged()
+    }
+
     private fun onItemClickAction(holder: ItemHolder, position: Int, isExpanded: Boolean) {
         holder.itemView.setOnClickListener {
             itemViewAdapter.visibility = View.VISIBLE
 
             mExpandedPosition = if (isExpanded) -1 else position
             if (isExpanded) {
-                    bottomSheetLayout.resizeAnimation(
-                        durationTime = resizeAnimationDuration,
-                        startHeight = bottomSheetLayout.height,
-                        endHeight = bottomSheetLayout.height - 70
-                    )
+                bottomSheetLayout.resizeAnimation(
+                    durationTime = resizeAnimationDuration,
+                    startHeight = bottomSheetLayout.height,
+                    endHeight = bottomSheetLayout.height - 70
+                )
             } else {
                 bottomSheetLayout.resizeAnimation(
                     durationTime = resizeAnimationDuration,

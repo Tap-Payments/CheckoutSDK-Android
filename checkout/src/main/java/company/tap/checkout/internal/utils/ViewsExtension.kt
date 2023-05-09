@@ -112,10 +112,11 @@ fun View.applyGlowingEffect(colorPairs: Pair<Int, Int>, durationTime: Long = 100
 }
 
 fun View.addFadeInAnimation(durationTime: Long = 1000L) {
-    this.visibility = View.VISIBLE
     val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
     animation.duration = durationTime
     this.startAnimation(animation)
+    this.visibility = View.VISIBLE
+
 }
 
 fun View.addSlideUpAnimation( durationTime: Long = 1000L,onAnimationEnd: () -> Unit?) {
@@ -187,15 +188,6 @@ fun View.isRTL() = ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRE
 
 
 
-fun MutableList<View>.addFadeInAnimationForViews(durationTime: Long = 1000L) {
-    this.forEachIndexed { index, view ->
-        view.visibility = View.VISIBLE
-        val animation = AnimationUtils.loadAnimation(view.context, R.anim.fade_in)
-        animation.duration = durationTime
-        view.startAnimation(animation)
-    }
-
-}
 
 fun Context.twoThirdHeightView(): Double {
     return getDeviceSpecs().first.times(2.3) / 3

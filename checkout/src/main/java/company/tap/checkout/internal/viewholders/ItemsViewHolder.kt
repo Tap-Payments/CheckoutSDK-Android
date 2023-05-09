@@ -46,9 +46,6 @@ class ItemsViewHolder(private val context: Context, private val onCurrencyChange
      var currencyRecyclerView:RecyclerView
      var headerview:ConstraintLayout
      var itemSeparatorView: TapSeparatorView
-  //  private val adapterItems by lazy { ItemAdapter(bottomSheetDialog) }
-    private val adapterCurrency by lazy { CurrencyTypeAdapter(onCurrencyChangedActionListener) }
-
     init {
         mainCurrencyChip = view.findViewById(R.id.mainCurrencyChip)
         mainCurrencyChip.groupAction.visibility = View.GONE
@@ -68,10 +65,7 @@ class ItemsViewHolder(private val context: Context, private val onCurrencyChange
         mainCurrencyChip.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
         itemsRecyclerView.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
         itemSeparatorView.setBackgroundColor(Color.parseColor(ThemeManager.getValue("itemsList.separatorColor")))
-        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")){
-            itemSeparatorView.visibility = View.VISIBLE
-        }else itemSeparatorView.visibility = View.VISIBLE
-
+        itemSeparatorView.visibility = View.VISIBLE
 
 
     }
@@ -116,9 +110,7 @@ class ItemsViewHolder(private val context: Context, private val onCurrencyChange
         if (supportItemListApi != null) {
             supportedItemList = supportItemListApi
         }
-   //    println("supportedItemList curr list:$supportedItemList")
 
     }
-
 
 }
