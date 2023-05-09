@@ -1191,11 +1191,14 @@ class PaymentInlineViewHolder(
 
                 if (s?.trim()?.length == 3 || s?.trim()?.length == 4 && tapCardInputView.isExpDateValid) {
                     if (!PaymentDataSource.getCardHolderNameShowHide()) {
+                        var paymentTyper :PaymentType
+                        if(savedCardsModel ==null)paymentTyper = PaymentType.CARD else paymentTyper = PaymentType.SavedCard
+
                         cardNumber.toString().let {
                             expiryDate?.let { it1 ->
                                 cvvNumber?.let { it2 ->
                                     onPaymentCardComplete.onPayCardCompleteAction(
-                                        true, PaymentType.CARD,
+                                        true, paymentTyper,
                                         it, it1, it2, null,PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
                                     )
 
@@ -1298,8 +1301,11 @@ class PaymentInlineViewHolder(
                     cvvNumberPrev = s.toString()
                 } else {
 
-                    onPaymentCardComplete.onPayCardSwitchAction(
+                    if(cardInputUIStatus == CardInputUIStatus.NormalCard)
+                        onPaymentCardComplete.onPayCardSwitchAction(
                         false, PaymentType.CARD
+                    )else  onPaymentCardComplete.onPayCardSwitchAction(
+                        false, PaymentType.SavedCard
                     )
                     //  tapAlertView?.visibility = View.VISIBLE
 
