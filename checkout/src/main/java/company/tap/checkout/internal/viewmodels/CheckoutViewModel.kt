@@ -2358,6 +2358,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated = true
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isClickable = true
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isEnabled= true
 
 
 
@@ -3222,7 +3223,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
             with(cardViewHolder.view.mainChipgroup) {
                 val viewsToFadeOut = mutableListOf<View>(chipsRecycler, groupAction, groupName)
-                viewsToFadeOut.add(cardViewHolder.view?.cardInfoHeaderText)
+                cardViewHolder.view.cardInfoHeaderText?.let { viewsToFadeOut.add(it) }
                 doAfterSpecificTime(time = 500L) {
 
                     viewsToFadeOut.addFadeOutAnimationToViews(
