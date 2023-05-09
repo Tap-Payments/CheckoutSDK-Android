@@ -53,7 +53,6 @@
                     android:orientation="vertical"
                     android:id="@+id/headerLayout"
                     android:clipToOutline="true"
-
                     tools:context=".open.CheckoutFragment">
 
                     <LinearLayout

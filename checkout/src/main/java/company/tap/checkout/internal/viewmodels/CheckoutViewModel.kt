@@ -891,12 +891,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
             Log.e("bottomSheet height",bottomSheetLayout.height.toString())
             Log.e("sdk height",sdkLayout.height.toString())
+            Log.e("headerLayout height",headerLayout.height.toString())
 
             if (::bottomSheetLayout.isInitialized)
                 bottomSheetLayout.resizeAnimation(
                     durationTime = resizeAnimationDuration,
                     startHeight = bottomSheetLayout.measuredHeight,
-                    endHeight = sdkLayout.height,
+                    endHeight = sdkLayout.height + (headerLayout.height - sdkLayout.height),
                 )
         }
 
@@ -927,11 +928,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         else setActionNotGoPayOpenedNotItemsDisplayed()
 
         doAfterSpecificTime(translationAnimationDurationAfter) {
+            Log.e("error bottomsheet height ",bottomSheetLayout.measuredHeight.toString())
+            Log.e("error sdk height ",sdkLayout.measuredHeight.toString())
+            Log.e("error header  height ",headerLayout.measuredHeight.toString())
+            Log.e("error header  powerdBy ",headerLayout.getChildAt(0).layoutParams.height.toString())
+
             if (::bottomSheetLayout.isInitialized)
                 bottomSheetLayout.resizeAnimation(
                     durationTime = resizeAnimationDuration,
-                    startHeight = bottomSheetLayout.height,
-                    endHeight = sdkLayout.measuredHeight,
+                    startHeight = bottomSheetLayout.measuredHeight,
+                    endHeight = headerLayout.height  ,
                 )
         }
     }
@@ -1527,7 +1533,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private fun initAdaptersAction() {
         adapter = CardTypeAdapterUIKIT(this)
         goPayAdapter = GoPayCardAdapterUIKIT(this)
-        itemAdapter = ItemAdapter(this, bottomSheetLayout, sdkLayout)
+        itemAdapter = ItemAdapter(this, bottomSheetLayout, headerLayout)
         // adapter?.possiblyShowGooglePayButton()
         // val arrayList = ArrayList<String>()//Creating an empty arraylist
         //  arrayList.add("Google Pay")//Adding object in arraylist
@@ -3364,6 +3370,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         if (card != null && card.cardNumber?.trim() != null && card.cardNumber.trim().length == 6) {
             callBinLookupApi(card.cardNumber.trim().substring(0, 6))
         }
+
 
 
         Handler().postDelayed({

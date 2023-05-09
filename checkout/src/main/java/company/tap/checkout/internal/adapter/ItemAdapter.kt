@@ -16,6 +16,7 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.annotation.NonNull
+import androidx.core.view.doOnLayout
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.internal.api.enums.AmountModificatorType
 import company.tap.checkout.internal.utils.CurrencyFormatter
@@ -45,7 +46,7 @@ All rights reserved.
 class ItemAdapter(
     private var checkoutViewModel: CheckoutViewModel,
     private var bottomSheetLayout: FrameLayout,
-    private var sdkLayout: LinearLayout
+    private var headerLayout: LinearLayout
 ) :
     RecyclerView.Adapter<ItemAdapter.ItemHolder>() {
     private var previousExpandedPosition = -1
@@ -105,8 +106,6 @@ class ItemAdapter(
                 descriptionTextView.text = adapterContentItems[position].description
                 if (isExpanded) {
                     descriptionTextView.visibility = View.VISIBLE
-
-
                 } else {
 
                     descriptionTextView.visibility = View.GONE
@@ -196,18 +195,27 @@ class ItemAdapter(
         holder.itemView.setOnClickListener {
             itemViewAdapter.visibility = View.VISIBLE
             mExpandedPosition = if (isExpanded) -1 else position
+            var height = 0
+            descriptionTextView.post {
+                height = it.measuredHeight
+            }
             if (isExpanded) {
+                Log.e("height",height.toString())
                 bottomSheetLayout.resizeAnimation(
                     durationTime = resizeAnimationDuration,
                     startHeight = bottomSheetLayout.height,
-                    endHeight = bottomSheetLayout.height - 80,
+                    endHeight = bottomSheetLayout.height - 70,
                 )
+
+
             } else {
+                Log.e("height",height.toString())
                 bottomSheetLayout.resizeAnimation(
                     durationTime = resizeAnimationDuration,
                     startHeight = bottomSheetLayout.height,
-                    endHeight = sdkLayout.height + 80,
+                    endHeight = headerLayout.height + 70,
                 )
+
             }
             notifyItemChanged(previousExpandedPosition)
             notifyItemChanged(position)
