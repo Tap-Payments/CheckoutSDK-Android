@@ -14,11 +14,11 @@ import android.graphics.drawable.shapes.RoundRectShape
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import android.provider.Settings.Global
 import android.transition.Fade
 import android.transition.Transition
 import android.transition.TransitionManager
 import android.util.DisplayMetrics
+import android.util.Log
 import android.util.TypedValue
 import android.view.*
 import android.view.animation.Animation
@@ -44,7 +44,7 @@ import company.tap.tapuilibrary.uikit.ktx.loadAppThemManagerFromPath
 import jp.wasabeef.blurry.Blurry
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import java.util.*
@@ -124,7 +124,7 @@ fun View.addFadeInAnimation(durationTime: Long = 1000L) {
 
 }
 
-fun View.addSlideUpAnimation( durationTime: Long = 1000L,onAnimationEnd: () -> Unit?) {
+fun View.addSlideUpAnimation(durationTime: Long = 1000L, onAnimationEnd: () -> Unit?) {
     val animation = AnimationUtils.loadAnimation(context, R.anim.slide_up)
     animation.duration = durationTime
     this.startAnimation(animation)
@@ -170,20 +170,65 @@ inline fun View.getDimensions(crossinline onDimensionsReady: (Int, Int) -> Unit)
     }
     viewTreeObserver.addOnGlobalLayoutListener(layoutListener)
 }
-inline fun View?.onSizeChange(crossinline runnable: () -> Unit) = this?.apply {
-    addOnLayoutChangeListener { _, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
-        val rect = Rect(left, top, right, bottom)
-        val oldRect = Rect(oldLeft, oldTop, oldRight, oldBottom)
-        if (rect.width() != oldRect.width() || rect.height() != oldRect.height()) {
-                runnable();
+
+inline fun View?.onSizeChange(
+    crossinline destinationFunction: () -> Unit
+) =
+    this?.apply {
+        addOnLayoutChangeListener { _, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+            Log.e("listen","listen")
+            val rect = Rect(left, top, right, bottom)
+            val oldRect = Rect(oldLeft, oldTop, oldRight, oldBottom)
+            if (rect.width() != oldRect.width() || rect.height() != oldRect.height()) {
+                destinationFunction.invoke()
+            }
+        }
+    }
+
+
+/**
+ * throttleLatest works similar to debounce but it operates on time intervals and
+ * returns the latest data for each one, which allows you to get and process intermediate data if you need to
+ */
+fun throttleLatest(
+    intervalMs: Long = 500L,
+    coroutineScope: CoroutineScope,
+    destinationFunction: () -> Unit
+): () -> Unit {
+    var throttleJob: Job? = null
+    //  var latestParam: T
+    return {
+        //latestParam = param
+        if (throttleJob?.isCompleted != false) {
+            throttleJob = coroutineScope.launch {
+                delay(intervalMs)
+                destinationFunction.invoke()
+            }
         }
     }
 }
 
-fun View.clicks(): Flow<Unit> = callbackFlow {
-        trySend(Unit).isSuccess
-    awaitClose { setOnClickListener(null) }
+/**
+ * throttleFirst is useful when you need to process the first call right away and then skip subsequent calls for
+ * some time to avoid undesired behavior (avoid starting two identical activities on Android, for example).
+ */
+
+fun <T> throttleFirst(
+    skipMs: Long = 300L,
+    coroutineScope: CoroutineScope,
+    destinationFunction: (T) -> Unit
+): (T) -> Unit {
+    var throttleJob: Job? = null
+    return { param: T ->
+        if (throttleJob?.isCompleted != false) {
+            throttleJob = coroutineScope.launch {
+                destinationFunction(param)
+                delay(skipMs)
+            }
+        }
+    }
 }
+
 fun View.slideFromLeftToRight() {
 
     if (this.isVisible) {
@@ -203,9 +248,6 @@ fun View.slideFromLeftToRight() {
 }
 
 fun View.isRTL() = ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRECTION_RTL
-
-
-
 
 
 fun Context.twoThirdHeightView(): Double {
@@ -256,7 +298,7 @@ fun WebView.applyConfigurationForWebView(
 fun View.resizeAnimation(
     durationTime: Long = 1000L,
     startHeight: Int = 1000,
-    endHeight: Int = 1000, isExpanding: Boolean = false,onAnimationStart: () -> Unit? = {}
+    endHeight: Int = 1000, isExpanding: Boolean = false, onAnimationStart: () -> Unit? = {}
 ) {
     val resizeAnimation = ResizeAnimation(
         this,
@@ -325,7 +367,7 @@ fun getViewShapeDrawable(
     return shape
 }
 
-fun View.addFadeOutAnimation(durationTime: Long = 500L,isGone :Boolean=true) {
+fun View.addFadeOutAnimation(durationTime: Long = 500L, isGone: Boolean = true) {
     if (this.isVisible) {
         val animation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
         animation.duration = durationTime
@@ -335,8 +377,8 @@ fun View.addFadeOutAnimation(durationTime: Long = 500L,isGone :Boolean=true) {
             }
 
             override fun onAnimationEnd(p0: Animation?) {
-                if (isGone)this@addFadeOutAnimation.visibility = View.GONE
-               else  this@addFadeOutAnimation.visibility = View.INVISIBLE
+                if (isGone) this@addFadeOutAnimation.visibility = View.GONE
+                else this@addFadeOutAnimation.visibility = View.INVISIBLE
             }
 
             override fun onAnimationRepeat(p0: Animation?) {
@@ -352,9 +394,9 @@ fun MutableList<View>.addFadeOutAnimationToViews(
 ) {
     this.forEachIndexed { index, view ->
         val animation = AnimationUtils.loadAnimation(view.context, R.anim.fade_out)
-                animation.duration = durationTime
-       view.startAnimation(animation)
-       // view.visibility = View.GONE
+        animation.duration = durationTime
+        view.startAnimation(animation)
+        // view.visibility = View.GONE
         view.animation.setAnimationListener(object : AnimationListener {
             override fun onAnimationStart(p0: Animation?) {
             }
@@ -363,10 +405,10 @@ fun MutableList<View>.addFadeOutAnimationToViews(
                 view.visibility = View.GONE
                 onAnimationEnd.invoke()
 
-          }
+            }
 
             override fun onAnimationRepeat(p0: Animation?) {
-           }
+            }
 
         })
     }
@@ -474,6 +516,7 @@ fun createDrawableGradientForBlurry(colorsArrayList: IntArray): GradientDrawable
     )
     return gradientDrawable
 }
+
 fun View.fadeVisibility(visibility: Int, duration: Long = 400) {
     val transition: Transition = Fade()
     transition.duration = duration

@@ -560,21 +560,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         newColorVal = Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
 
-        sdkLayout.onSizeChange {
-            Log.e("bottomsheet",bottomSheetLayout.measuredHeight.toString())
-            Log.e("sdkLayout",sdkLayout.measuredHeight.toString())
-            Log.e("headerLayout",headerLayout.measuredHeight.toString())
-            doAfterSpecificTime(translationAnimationDurationAfter) {
-                if (::bottomSheetLayout.isInitialized)
-                    bottomSheetLayout.resizeAnimation(
-                        durationTime = resizeAnimationDuration,
-                        startHeight = bottomSheetLayout.measuredHeight,
-                        endHeight =  headerLayout.measuredHeight ,
-                    )
-            }
-        }
-
     }
+
 
     private fun showCountryFlag(): String? {
         val currency = SharedPrefManager.getUserSupportedLocaleForTransactions(context)
@@ -910,7 +897,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             goPayViewsHolder,
             otpViewHolder,
         )
-        saveCardSwitchHolder?.view?.visibility= View.GONE
+        saveCardSwitchHolder?.view?.visibility = View.GONE
         addViews(
             itemsViewHolder
         )
@@ -922,7 +909,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 //                    endHeight = sdkLayout.height + (headerLayout.height - sdkLayout.height),
 //                )
 //        }
-
 
 
         /**
@@ -953,18 +939,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         itemAdapter.resetViewToInitialValue()
 
-        doAfterSpecificTime(translationAnimationDurationAfter) {
-//            Log.e("error header",headerLayout.measuredHeight.toString())
-//            Log.e("error bottomsheet",bottomSheetLayout.measuredHeight.toString())
-//            Log.e("error sdk",sdkLayout.measuredHeight.toString())
-
-//            if (::bottomSheetLayout.isInitialized)
-//                bottomSheetLayout.resizeAnimation(
-//                    durationTime = resizeAnimationDuration,
-//                    startHeight = bottomSheetLayout.measuredHeight,
-//                    endHeight = headerLayout.height,
-//                )
-        }
     }
 
     fun translateViewToNewHeight(originalHeight: Int, expandHeightBool: Boolean) {
@@ -2045,10 +2019,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             addViews(asynchronousPaymentViewHolder)
 
 
-
-            Handler().postDelayed({
-                translateViewToNewHeight(bottomSheetLayout.measuredHeight, true)
-            }, animationSpeed)
+//            Handler().postDelayed({
+//                translateViewToNewHeight(bottomSheetLayout.measuredHeight, true)
+//            }, animationSpeed)
             asynchronousPaymentViewHolder.setDataFromAPI(chargeResponse)
         }
     }
@@ -2094,7 +2067,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
 
-    private fun addViews(vararg viewHolders: TapBaseViewHolder?,afterAddingViews:()->Unit={}) {
+    private fun addViews(
+        vararg viewHolders: TapBaseViewHolder?,
+        afterAddingViews: () -> Unit = {}
+    ) {
 
         viewHolders.forEach {
             Handler(Looper.getMainLooper()).postDelayed(Runnable {
@@ -2433,10 +2409,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 tabAnimatedActionButtonViewHolder
             )
             businessViewHolder.view.headerView.constraint.visibility = GONE
-            Handler().postDelayed({
-                if (::bottomSheetLayout.isInitialized)
-                    translateViewToNewHeight(bottomSheetLayout.measuredHeight, true)
-            }, animationSpeed)
+//            Handler().postDelayed({
+//                if (::bottomSheetLayout.isInitialized)
+//                    translateViewToNewHeight(bottomSheetLayout.measuredHeight, true)
+//            }, animationSpeed)
 
         }
     }
@@ -2731,10 +2707,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         val bottomSheet: FrameLayout? =
             bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet)
         BottomSheetBehavior.from(bottomSheet as View).state = BottomSheetBehavior.STATE_EXPANDED
-        Handler().postDelayed({
-            if (::bottomSheetLayout.isInitialized)
-                translateViewToNewHeight(bottomSheetLayout.measuredHeight, false)
-        }, animationSpeed)
+//        Handler().postDelayed({
+//            if (::bottomSheetLayout.isInitialized)
+//                translateViewToNewHeight(bottomSheetLayout.measuredHeight, false)
+//        }, animationSpeed)
         checkSelectedAmountInitiated()
     }
 
@@ -2987,12 +2963,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             webViewHolder?.view?.visibility = INVISIBLE
             removeViews(webViewHolder)
         }
-        doAfterSpecificTime(time = 5L) {
-
-            println("sdklayout hh val" + sdkLayout.measuredHeight)
-            println("bottomSheetLayout hh val" + bottomSheetLayout.measuredHeight)
-            translateViewToNewHeight(bottomSheetLayout.measuredHeight, false)
-        }
+//        doAfterSpecificTime(time = 5L) {
+//
+//            println("sdklayout hh val" + sdkLayout.measuredHeight)
+//            println("bottomSheetLayout hh val" + bottomSheetLayout.measuredHeight)
+//            translateViewToNewHeight(bottomSheetLayout.measuredHeight, false)
+//        }
 
         //  sdkLayout.visibility =View.VISIBLE
         if (::amountViewHolder.isInitialized && ::cardViewHolder.isInitialized && ::cardViewHolder.isInitialized && ::paymentInlineViewHolder.isInitialized)
@@ -3021,7 +2997,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun setPayButtonAction(paymentTypeEnum: PaymentType?=null, savedCardsModel: Any?=null) {
+    private fun setPayButtonAction(
+        paymentTypeEnum: PaymentType? = null,
+        savedCardsModel: Any? = null
+    ) {
         println("setPayButtonAction >>" + saveCardSwitchHolder?.view?.cardSwitch?.payButton)
         println("paymentTypeEnum >>" + paymentTypeEnum)
         /**
