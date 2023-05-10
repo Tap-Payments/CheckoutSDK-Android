@@ -942,7 +942,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         else setActionNotGoPayOpenedNotItemsDisplayed()
 
 
-
         doAfterSpecificTime(translationAnimationDurationAfter) {
             if (::bottomSheetLayout.isInitialized)
                 bottomSheetLayout.resizeAnimation(
@@ -950,8 +949,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     startHeight = bottomSheetLayout.measuredHeight,
                     endHeight = headerLayout.height,
                 )
-
-            //   itemAdapter.resetViewToInitialValue()
+            itemAdapter.resetViewToInitialValue()
         }
     }
 
@@ -989,7 +987,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             cardViewHolder,
             paymentInlineViewHolder,
             saveCardSwitchHolder, afterAddingViews = {
-                saveCardSwitchHolder?.view?.visibility = View.VISIBLE
+                doAfterSpecificTime(100) {
+                    saveCardSwitchHolder?.view?.visibility = View.VISIBLE
+                }
             })
 
 
