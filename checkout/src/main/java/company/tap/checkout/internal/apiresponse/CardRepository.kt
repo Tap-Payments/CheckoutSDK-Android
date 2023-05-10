@@ -74,6 +74,7 @@ class CardRepository : APIRequestCallback {
     lateinit var supportFragmentManager: FragmentManager
     lateinit var cardRepositoryContext: Context
     private lateinit var viewModel: CheckoutViewModel
+    private  var savedCardValue: Boolean = true
     private lateinit var cardViewModel: CardViewModel
 
     private var sdkSession: SDKSession = SDKSession
@@ -248,9 +249,12 @@ class CardRepository : APIRequestCallback {
     fun createTokenWithEncryptedCard(
         context: Context,
         viewModel: CheckoutViewModel,
-        createTokenWithCardDataRequest: CreateTokenCard?
+        createTokenWithCardDataRequest: CreateTokenCard? , saveCardValue :Boolean?
     ) {
         this.viewModel = viewModel
+        if (saveCardValue != null) {
+            this.savedCardValue = saveCardValue
+        }
         val createTokenWithCardDataReq = createTokenWithCardDataRequest?.let {
             CreateTokenWithCardDataRequest(
                 it
@@ -476,12 +480,13 @@ class CardRepository : APIRequestCallback {
                     } else {
                         sdkSession.sessionDelegate?.sessionFailedToStart()
                     }
+
                     if (tabAnimatedActionButton != null) {
                         activity?.let { it1 ->
                             CustomUtils.getDeviceDisplayMetrics(
                                 it1
                             )
-                        }?.let { it2 -> tabAnimatedActionButton?.setDisplayMetrics(it2) }
+                        }?.let { it2 -> tabAnimatedActionButton?.setDisplayMetricsTheme(it2 , CustomUtils.getCurrentTheme()) }
                         tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
                     }
                 }
@@ -535,7 +540,7 @@ class CardRepository : APIRequestCallback {
 
                         }
                         PaymentDataSource.getTransactionMode() == TransactionMode.TOKENIZE_CARD -> {
-                            SDKSession.getListener()?.cardTokenizedSuccessfully(tokenResponse)
+                            SDKSession.getListener()?.cardTokenizedSuccessfully(tokenResponse, savedCardValue)
                             viewModel.handleSuccessFailureResponseButton(
                                 "tokenized",
                                 null,
@@ -549,7 +554,7 @@ class CardRepository : APIRequestCallback {
                             createSaveCard(viewModel, null, tokenResponse.id)
                         }
                         else -> {
-                            createChargeRequest(viewModel, null, tokenResponse.id, true)
+                            createChargeRequest(viewModel, null, tokenResponse.id, saveCardValue = savedCardValue)
                         }
                     }
 
@@ -631,12 +636,12 @@ class CardRepository : APIRequestCallback {
                         createAuthorizeRequest(viewModel, null, tokenResponse.id)
 
                     } else if (PaymentDataSource.getTransactionMode() == TransactionMode.TOKENIZE_CARD) {
-                        SDKSession.getListener()?.cardTokenizedSuccessfully(tokenResponse)
+                        SDKSession.getListener()?.cardTokenizedSuccessfully(tokenResponse, savedCardValue)
                         SDKSession.tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
                     } else if (PaymentDataSource.getTransactionMode() == TransactionMode.SAVE_CARD) {
                         createSaveCard(viewModel, null, tokenResponse.id)
                     } else {
-                        createChargeRequest(viewModel, null, tokenResponse.id, true)
+                        createChargeRequest(viewModel, null, tokenResponse.id, savedCardValue)
 
                     }
                 }
@@ -1034,6 +1039,8 @@ class CardRepository : APIRequestCallback {
                 require3DSecure = provider?.getRequires3DSecure()
             }
         }
+
+
 
         var selectedTotalAmount: String
         if (viewModel.selectedTotalAmount?.isNotBlank() == true && viewModel.selectedTotalAmount?.isNotEmpty() == true) {

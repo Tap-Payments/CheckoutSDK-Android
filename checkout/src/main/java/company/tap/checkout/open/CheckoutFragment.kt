@@ -536,7 +536,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun resetTabAnimatedButton() {
-        checkOutActivity?.displayMetrics?.let { tabAnimatedActionButton?.setDisplayMetrics(it) }
+        checkOutActivity?.displayMetrics?.let { tabAnimatedActionButton?.setDisplayMetricsTheme(it,CustomUtils.getCurrentTheme()) }
         SDKSession.sessionActive = false
         tabAnimatedActionButton?.changeButtonState(ActionButtonState.RESET)
         if (checkOutActivity?.isGooglePayClicked == false) {
@@ -547,13 +547,15 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
         val payString: String = LocalizationManager.getValue("pay", "ActionButton")
         val nowString: String = LocalizationManager.getValue("now", "ActionButton")
-        tabAnimatedActionButton?.setButtonDataSource(
+        /**
+         * Stopped reseting the view of button cz of loader will test if not required will remove this code*/
+     /*   tabAnimatedActionButton?.setButtonDataSource(
             true,
             context?.let { LocalizationManager.getLocale(it).language },
             payString + " " + nowString,
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
-        )
+        )*/
         /*  tabAnimatedActionButton?.setOnClickListener {
               requireActivity().supportFragmentManager.let { it1 -> SDKSession.contextSDK?.let { it2 ->
                   SDKSession.startSDK(it1,
