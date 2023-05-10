@@ -1,6 +1,5 @@
 package company.tap.checkout.internal.apiresponse
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -133,14 +132,15 @@ class CardRepository : APIRequestCallback {
     fun createChargeRequest(
         viewModel: CheckoutViewModel,
         selectedPaymentOption: PaymentOption?,
-        identifier: String?
+        identifier: String?,
+        saveCardValue: Boolean?
     ) {
         this.viewModel = viewModel
         if (identifier != null) callChargeOrAuthorizeOrSaveCardAPI(
             SourceRequest(identifier),
             selectedPaymentOption,
             null,
-            null
+            saveCardValue
         )
         else
             selectedPaymentOption?.sourceId?.let { SourceRequest(it) }?.let {
@@ -148,7 +148,7 @@ class CardRepository : APIRequestCallback {
                     it,
                     selectedPaymentOption,
                     null,
-                    null
+                    saveCardValue
                 )
             }
     }
@@ -549,7 +549,7 @@ class CardRepository : APIRequestCallback {
                             createSaveCard(viewModel, null, tokenResponse.id)
                         }
                         else -> {
-                            createChargeRequest(viewModel, null, tokenResponse.id)
+                            createChargeRequest(viewModel, null, tokenResponse.id, true)
                         }
                     }
 
@@ -560,7 +560,7 @@ class CardRepository : APIRequestCallback {
             response?.body().let {
                 tokenResponse = Gson().fromJson(it, Token::class.java)
                 if (tokenResponse != null) {
-                    createChargeRequest(viewModel, null, tokenResponse.id)
+                    createChargeRequest(viewModel, null, tokenResponse.id, true)
                 }
 
 
@@ -636,7 +636,7 @@ class CardRepository : APIRequestCallback {
                     } else if (PaymentDataSource.getTransactionMode() == TransactionMode.SAVE_CARD) {
                         createSaveCard(viewModel, null, tokenResponse.id)
                     } else {
-                        createChargeRequest(viewModel, null, tokenResponse.id)
+                        createChargeRequest(viewModel, null, tokenResponse.id, true)
 
                     }
                 }
@@ -1009,7 +1009,7 @@ class CardRepository : APIRequestCallback {
         val paymentDescription: String? = provider.getPaymentDescription()
         val paymentMetadata: HashMap<String, String>? = provider.getPaymentMetadata()
         val reference: Reference? = provider.getPaymentReference()
-        val shouldSaveCard = saveCard ?: false
+        val shouldSaveCard = saveCard ?: true
         val statementDescriptor: String? = provider.getPaymentStatementDescriptor()
         var require3DSecure: Boolean = provider
             .getRequires3DSecure() // this.dataSource.getRequires3DSecure() || this.chargeRequires3DSecure();

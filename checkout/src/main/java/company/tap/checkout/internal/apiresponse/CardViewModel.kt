@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModel
 import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.internal.api.requests.CreateTokenGPayRequest
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
-import company.tap.checkout.open.data_managers.PaymentDataSource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 
@@ -84,7 +83,8 @@ class CardViewModel : ViewModel() {
         otpString: String? = null,
         supportFragmentManager: FragmentManager? = null,
         context: Context? = null,
-        createTokenGPayRequest: CreateTokenGPayRequest? = null
+        createTokenGPayRequest: CreateTokenGPayRequest? = null,
+        saveCardValue:Boolean?=true
     ) {
         when (event) {
             CardViewEvent.InitEvent -> getINITData(
@@ -93,7 +93,7 @@ class CardViewModel : ViewModel() {
                 cardViewModel,
                 supportFragmentManager
             )
-            CardViewEvent.ChargeEvent -> createChargeRequest(viewModel, selectedPaymentOption, null)
+            CardViewEvent.ChargeEvent -> createChargeRequest(viewModel, selectedPaymentOption, null,saveCardValue)
             CardViewEvent.RetreiveChargeEvent -> retrieveChargeRequest(viewModel)
             CardViewEvent.RetreiveBinLookupEvent -> retrieveBinlookup(viewModel, binValue)
             CardViewEvent.CreateTokenEvent -> createTokenWithEncryptedCard(
@@ -139,9 +139,10 @@ class CardViewModel : ViewModel() {
     private fun createChargeRequest(
         viewModel: CheckoutViewModel,
         selectedPaymentOption: PaymentOption?,
-        cardtoken: String?
+        cardtoken: String?,
+        saveCardValue: Boolean?
     ) {
-        repository.createChargeRequest(viewModel, selectedPaymentOption, cardtoken)
+        repository.createChargeRequest(viewModel, selectedPaymentOption, cardtoken,saveCardValue)
 
     }
 

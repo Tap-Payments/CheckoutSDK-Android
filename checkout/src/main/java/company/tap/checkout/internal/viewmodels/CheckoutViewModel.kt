@@ -32,6 +32,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
 import androidx.core.view.setMargins
+addeimport androidx.core.view.size
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -282,12 +283,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     val mcc: String = "4816"
 
 
-   private var colorBackGround: String? = null
-   private var intColorArray: IntArray? = null
-   private var startColor: String? = null
-   private var endColor: String? = null
-   private var middleColor: String? = null
-  private  var image:ImageView?=null
+    private var colorBackGround: String? = null
+    private var intColorArray: IntArray? = null
+    private var startColor: String? = null
+    private var endColor: String? = null
+    private var middleColor: String? = null
+    private var image: ImageView? = null
+
     @JvmField
     var incrementalCount: Int = 0
 
@@ -474,6 +476,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         cardViewHolder = CardViewHolder(context, this)
         goPaySavedCardHolder = GoPaySavedCardHolder(context, this, this)
         saveCardSwitchHolder = SwitchViewHolder(context, this)
+
         loyaltyViewHolder = LoyaltyViewHolder(context, this, this)
 
         headerLayout.let { it1 ->
@@ -539,16 +542,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         }
 
-       /* sdkLayout.let {
-            setTopBorders(
-                it,
-                35f,
-                strokeColor = Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),
-                tintColor =Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),// tint color
-                shadowColor =Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
-            )
-        }*/
-        sdkLayout?.setBackgroundDrawable(
+        /* sdkLayout.let {
+             setTopBorders(
+                 it,
+                 35f,
+                 strokeColor = Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),
+                 tintColor =Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),// tint color
+                 shadowColor =Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
+             )
+         }*/
+        sdkLayout.setBackgroundDrawable(
             createDrawableGradientForBlurry(
                 intArrayOf(
                     Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),
@@ -559,6 +562,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
 
         newColorVal = Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
+
 
 
     }
@@ -747,7 +751,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         displayItemsOpen = !display
         amountViewHolder.changeGroupAction(!display)
-        // if (this::currentAmount.isInitialized)
+        //   if (this::currentAmount.isInitialized)
         if (this::selectedAmount.isInitialized && this::selectedCurrency.isInitialized) {
             if (selectedAmount == currentAmount && selectedCurrency == currentCurrency) {
                 amountViewHolder.view.amount_section.mainKDAmountValue.visibility = GONE
@@ -781,7 +785,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
                 Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
             )
-//            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated = false
+            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated = false
         }
         if (PaymentDataSource.getPaymentDataType() != null && PaymentDataSource.getPaymentDataType() == "WEB") {
             removeViews(paymentInlineViewHolder)
@@ -890,14 +894,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
      */
 
     private fun caseDisplayControlCurrency() {
+        Log.e("viewsBefore Delete any",sdkLayout.size.toString())
 
         removeViews(
             cardViewHolder,
             paymentInlineViewHolder,
-            saveCardSwitchHolder,
+          //  saveCardSwitchHolder,
             goPayViewsHolder,
             otpViewHolder,
         )
+        saveCardSwitchHolder?.view?.visibility= View.GONE
         addViews(
             itemsViewHolder
         )
@@ -909,6 +915,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     endHeight = sdkLayout.height + (headerLayout.height - sdkLayout.height),
                 )
         }
+
+        Log.e("viewsBefore Delete After Currencies opend",sdkLayout.size.toString())
+
+
 
 
         /**
@@ -933,8 +943,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     private fun caseNotDisplayControlCurrency() {
+
         if (goPayViewsHolder.goPayopened || itemsViewHolder.itemsdisplayed) setActionGoPayOpenedItemsDisplayed()
         else setActionNotGoPayOpenedNotItemsDisplayed()
+
 
 
         doAfterSpecificTime(translationAnimationDurationAfter) {
@@ -945,7 +957,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     endHeight = headerLayout.height,
                 )
 
-            itemAdapter.resetViewToInitialValue()
+            //   itemAdapter.resetViewToInitialValue()
         }
     }
 
@@ -968,10 +980,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun setActionGoPayOpenedItemsDisplayed() {
+
         removeViews(
             cardViewHolder,
             paymentInlineViewHolder,
-            saveCardSwitchHolder,
             goPayViewsHolder,
             otpViewHolder,
             itemsViewHolder
@@ -982,8 +994,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         addViews(
             cardViewHolder,
             paymentInlineViewHolder,
-            saveCardSwitchHolder
-        )
+            saveCardSwitchHolder, afterAddingViews = {
+                saveCardSwitchHolder?.view?.visibility = View.VISIBLE
+            })
+
+
+
+
+
+
 
 
         paymentInlineViewHolder.resetPaymentCardView()
@@ -1008,7 +1027,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         saveCardSwitchHolder?.let {
             addViews(
-
                 cardViewHolder,
                 paymentInlineViewHolder,
                 it
@@ -1018,7 +1036,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.IDLE)
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isEnabled = true
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isClickable = true
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated= true
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated = true
         // itemsViewHolder.resetView()
         //  itemsViewHolder.setItemsRecylerView()
         //   itemsViewHolder.setCurrencyRecylerView()
@@ -2071,7 +2089,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
 
-    private fun addViews(vararg viewHolders: TapBaseViewHolder?) {
+    private fun addViews(vararg viewHolders: TapBaseViewHolder?,afterAddingViews:()->Unit={}) {
 
         viewHolders.forEach {
             Handler(Looper.getMainLooper()).postDelayed(Runnable {
@@ -2080,22 +2098,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
                     it?.view?.startAnimation(animation)
                 }
-
-                //   Handler().postDelayed({
-                if (::sdkLayout.isInitialized) {
-                    // it?.view?.visibility = View.VISIBLE
-                    //   sdkLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
-                    //  sdkLayout.setBackgroundColor(Color.RED)
-                    sdkLayout.removeView(it?.view)
-                    sdkLayout.addView(it?.view)
-
+                doAfterSpecificTime(50) {
+                    if (::sdkLayout.isInitialized) {
+                        sdkLayout.removeView(it?.view)
+                        sdkLayout.addView(it?.view)
+                    }
                 }
-                //  }, 200)
-
-
             }, 0)
-            BottomSheetBehavior.STATE_HALF_EXPANDED
+            //BottomSheetBehavior.STATE_HALF_EXPANDED
         }
+        afterAddingViews.invoke()
 
 
     }
@@ -2191,7 +2203,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         removeViews(amountViewHolder, cardViewHolder, paymentInlineViewHolder)
                         checkoutFragment.checkOutActivity?.handleGooglePayApiCall()
                         activateActionButtonForGPay()
-                        //setPayButtonAction(PaymentType.WEB, savedCardsModel)
+                        setPayButtonAction(PaymentType.WEB, savedCardsModel)
                         PaymentDataSource.setWebViewType(WebViewType.REDIRECT)
                     }
                     Bugfender.d(
@@ -2288,25 +2300,26 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             intColorArray = null
 
         } else {
-            val bgArrayList : ArrayList<String>? = selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors
+            val bgArrayList: ArrayList<String>? =
+                selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors
             if (bgArrayList?.size == 1) {
                 colorBackGround = bgArrayList[0]
                 intColorArray = null
             } else {
 
                 if (bgArrayList?.size == 2) {
-                     startColor = bgArrayList.get(1).replace("0x", "#")
-                    endColor =  bgArrayList.get(0).replace("0x", "#")
+                    startColor = bgArrayList.get(1).replace("0x", "#")
+                    endColor = bgArrayList.get(0).replace("0x", "#")
 
                     intColorArray =
                         intArrayOf(Color.parseColor(startColor), Color.parseColor(endColor))
                     colorBackGround = "0"
 
                 } else if (bgArrayList?.size == 3) {
-                     startColor = bgArrayList[2].replace("0x", "#")
+                    startColor = bgArrayList[2].replace("0x", "#")
 
-                     middleColor = bgArrayList[1].replace("0x", "#")
-                     endColor = bgArrayList[0].replace("0x", "#")
+                    middleColor = bgArrayList[1].replace("0x", "#")
+                    endColor = bgArrayList[0].replace("0x", "#")
 
                     intColorArray = intArrayOf(
                         Color.parseColor(startColor),
@@ -2336,7 +2349,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.clearFocus()
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.clearAnimation()
 
-         image = ImageView(context)
+        image = ImageView(context)
         val params = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
@@ -2344,20 +2357,20 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         params.setMargins(20)
         image?.layoutParams = params
         Glide.with(context)
-            .load(getAssetName(
-                selectedPayOpt
-            ))
-            .thumbnail( 0.5f )
-            .override( 200, 200 )
-            .diskCacheStrategy( DiskCacheStrategy.ALL )
+            .load(
+                getAssetName(
+                    selectedPayOpt
+                )
+            )
+            .thumbnail(0.5f)
+            .override(200, 200)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
             .into(image!!)
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.addChildView(image!!)
 
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated = true
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isClickable = true
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isEnabled = true
-
-
 
 
     }
@@ -2486,16 +2499,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 )
 
             } else {*/
-                cardViewModel.processEvent(
-                    CardViewEvent.CreateTokenEvent,
-                    this,
+            cardViewModel.processEvent(
+                CardViewEvent.CreateTokenEvent,
+                this,
 
-                    null,
-                    null,
-                    paymentInlineViewHolder.getCard(),
-                    null
-                )
-          //  }
+                null,
+                null,
+                paymentInlineViewHolder.getCard(),
+                null
+            )
+            //  }
 
 
         }
@@ -2629,10 +2642,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     ) {
         println("isCompleted aaa" + isCompleted)
         println("expiryDate aaa" + expiryDate)
-        println("cardInput status>>"+paymentInlineViewHolder.cardInputUIStatus)
-        println("paymentTypeEnum status>>"+paymentType)
-        println("savedCardsModel status>>"+savedCardsModel)
-        if(isCompleted) activateActionButton(cardBrandString = cardBrandString)
+        println("cardInput status>>" + paymentInlineViewHolder.cardInputUIStatus)
+        println("paymentTypeEnum status>>" + paymentType)
+        println("savedCardsModel status>>" + savedCardsModel)
+        if (isCompleted) activateActionButton(cardBrandString = cardBrandString)
         if (savedCardsModel != null) {
             setPayButtonAction(paymentType, savedCardsModel)
         } else {
@@ -3009,7 +3022,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun setPayButtonAction(paymentTypeEnum: PaymentType, savedCardsModel: Any?) {
+    private fun setPayButtonAction(paymentTypeEnum: PaymentType?=null, savedCardsModel: Any?=null) {
         println("setPayButtonAction >>" + saveCardSwitchHolder?.view?.cardSwitch?.payButton)
         println("paymentTypeEnum >>" + paymentTypeEnum)
         /**
@@ -3090,11 +3103,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     )
                 }
             }
-          //  false
+            //  false
         }
 
     }
-
 
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -3160,9 +3172,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             )
         } else if (savedCardsModel != null) {
 
-            println("savedCardsModel after fees"+savedCardsModel)
-            println("savedCardsModel after fees"+paymentTypeEnum)
-            println("savedCardsModel after fees"+paymentInlineViewHolder.cardInputUIStatus)
+            println("savedCardsModel after fees" + savedCardsModel)
+            println("savedCardsModel after fees" + paymentTypeEnum)
+            println("savedCardsModel after fees" + paymentInlineViewHolder.cardInputUIStatus)
             if (paymentTypeEnum == PaymentType.CARD || paymentTypeEnum == PaymentType.SavedCard) {
                 if (paymentInlineViewHolder.cardInputUIStatus == CardInputUIStatus.SavedCard) {
                     savedCardsModel as SavedCard
@@ -3171,12 +3183,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     }
 
                 } else {
-                //    savedCardsModel as PaymentOption
+                    //    savedCardsModel as PaymentOption
                     setDifferentPaymentsAction(PaymentType.CARD, savedCardsModel)
 
                 }
 
-            }else setDifferentPaymentsAction(paymentTypeEnum, savedCardsModel)
+            } else setDifferentPaymentsAction(paymentTypeEnum, savedCardsModel)
         } else setDifferentPaymentsAction(paymentTypeEnum, savedCardsModel)
     }
 
@@ -3656,16 +3668,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         println("savedCardList" + savedCardList?.isNullOrEmpty())
         if (webPaymentOptions.size == 0) {
             adapter.updateAdapterData(ArrayList())
-            if (savedCardList.isNullOrEmpty()){
-                cardViewHolder.view.mainChipgroup?.groupName?.visibility =View.GONE
-            }else{
-                cardViewHolder.view.mainChipgroup?.groupName?.visibility =View.VISIBLE
+            if (savedCardList.isNullOrEmpty()) {
+                cardViewHolder.view.mainChipgroup?.groupName?.visibility = View.GONE
+            } else {
+                cardViewHolder.view.mainChipgroup?.groupName?.visibility = View.VISIBLE
             }
 
 
-        }
-
-        else logicToHandlePaymentDataType(webPaymentOptions, cardPaymentOptions)
+        } else logicToHandlePaymentDataType(webPaymentOptions, cardPaymentOptions)
 
 
     }
@@ -3810,8 +3820,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 amountViewHolder.view.amount_section?.itemAmountLayout?.isEnabled = false
                 amountViewHolder.view.amount_section?.itemAmountLayout?.isClickable = false
 
-                if(savedCardsModel is PaymentOption)  onClickCardPayment(savedCardsModel)
-
+                if (savedCardsModel is PaymentOption) onClickCardPayment(savedCardsModel)
 
 
             }
