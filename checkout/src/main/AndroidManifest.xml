@@ -21,6 +21,7 @@
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden"
             android:anyDensity = "false"
+            android:hardwareAccelerated="true"
             android:theme="@style/TransparentCompat"
           >
             <intent-filter>

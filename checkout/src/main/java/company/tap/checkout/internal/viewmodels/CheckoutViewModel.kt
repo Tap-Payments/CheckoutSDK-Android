@@ -15,16 +15,14 @@ import android.text.Layout
 import android.text.format.DateFormat
 import android.util.DisplayMetrics
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.View.*
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
 import androidx.annotation.RestrictTo
@@ -767,6 +765,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             removeViews(otpViewHolder)
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.RESET)
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isClickable = true
+            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isEnabled = true
+            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated = true
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.stateListAnimator = null
             val payString: String = LocalizationManager.getValue("pay", "ActionButton")
             val nowString: String = LocalizationManager.getValue("now", "ActionButton")
@@ -2123,7 +2123,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
 
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
-            false,
+            true,
             LocalizationManager.getLocale(context).toString(),
             if (::selectedAmount.isInitialized && ::selectedCurrency.isInitialized) {
                 //payString + " " + currentCurrencySymbol + " " + selectedAmount
@@ -2137,9 +2137,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
 
         // saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.IDLE)
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated = false
+   /*     saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated = false
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isClickable = false
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isEnabled = false
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isEnabled = false*/
     }
 
 
@@ -2159,7 +2159,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         paymentInlineViewHolder.clearCardInputAction()
 
         println("savedCardsModel is" + savedCardsModel)
-        unActivateActionButton()
+       // unActivateActionButton()
         when (savedCardsModel) {
             is SavedCard -> {
                 Bugfender.d(
@@ -2170,13 +2170,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     savedCardsModel,
                     CardInputUIStatus.SavedCard
                 )
+                paymentInlineViewHolder.cardInputUIStatus = CardInputUIStatus.SavedCard
 
                 isSavedCardSelected = true
                 Bugfender.d(
                     CustomUtils.tagEvent,
                     "Payment scheme selected: title :" + savedCardsModel?.brand + "& ID :" + savedCardsModel.paymentOptionIdentifier
                 )
-                unActivateActionButton()
+                //unActivateActionButton()
             }
             else -> {
                 if (savedCardsModel != null) {
@@ -2232,11 +2233,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     ) {
         val payStringButton: String
 
-        bottomSheetLayout.resizeAnimation(
+      /*  bottomSheetLayout.resizeAnimation(
             durationTime = resizeAnimationDuration,
             startHeight = bottomSheetLayout.height,
             endHeight = sdkLayout.height,
-        )
+        )*/
         when (PaymentDataSource.getTransactionMode()) {
             TransactionMode.TOKENIZE_CARD -> payStringButton = LocalizationManager.getValue(
                 "pay",
@@ -2321,7 +2322,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
         }
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.removeAllViewsInLayout()
+
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
             true,
             LocalizationManager.getLocale(context).language,
@@ -2333,15 +2334,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             intColorArray
         )
 
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.clearFocus()
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.clearAnimation()
+      //  saveCardSwitchHolder?.view?.cardSwitch?.payButton?.clearFocus()
+      //  saveCardSwitchHolder?.view?.cardSwitch?.payButton?.clearAnimation()
 
          image = ImageView(context)
         val params = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
+            LinearLayout.LayoutParams.MATCH_PARENT
         )
         params.setMargins(20)
+        params.gravity =Gravity.CENTER_HORIZONTAL
         image?.layoutParams = params
         Glide.with(context)
             .load(getAssetName(
@@ -2351,11 +2353,18 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             .override( 200, 200 )
             .diskCacheStrategy( DiskCacheStrategy.ALL )
             .into(image!!)
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.addChildView(image!!)
 
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated = true
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isClickable = true
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isEnabled = true
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.removeAllViews()
+       saveCardSwitchHolder?.view?.cardSwitch?.payButton?.addChildView(image!!)
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isEnabled
+
+      //  saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
+      //  saveCardSwitchHolder?.view?.cardSwitch?.payButton?.bringChildToFront(image)
+
+    //    saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated = false
+    ///    saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isClickable = false
+    //    saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isEnabled = false
 
 
 
@@ -3090,7 +3099,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     )
                 }
             }
-          //  false
+           // false
         }
 
     }

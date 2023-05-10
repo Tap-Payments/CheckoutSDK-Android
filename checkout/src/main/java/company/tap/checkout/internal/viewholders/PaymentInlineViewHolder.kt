@@ -1171,7 +1171,8 @@ class PaymentInlineViewHolder(
                                 )
                         }
                         acceptedCardText.visibility = View.GONE
-                        tabLayout.fadeVisibility(View.GONE, 2000)
+                       // tabLayout.fadeVisibility(View.GONE, 2000)
+                        tabLayout.visibility =View.GONE
                     } else logicForImageOnCVV(
                         CardValidator.validate(savedCardsModel?.firstSix).cardBrand,
                         s.toString()
@@ -1984,8 +1985,9 @@ class PaymentInlineViewHolder(
         acceptedCardText.visibility = View.GONE
         contactDetailsView?.visibility = View.GONE
         shippingDetailView?.visibility = View.GONE
-        //  intertabLayout.visibility = View.GONE
-        tabLayout.fadeVisibility(View.GONE, 2000)
+        intertabLayout.visibility = View.GONE
+        tabLayout.visibility = View.GONE
+       // tabLayout.fadeVisibility(View.GONE, 2000)
         //Added for opening as soon as cvv focus
         CustomUtils.showKeyboard(context)
     }
