@@ -8,11 +8,13 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
+import android.graphics.Rect
 import android.graphics.drawable.*
 import android.graphics.drawable.shapes.RoundRectShape
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.provider.Settings.Global
 import android.transition.Fade
 import android.transition.Transition
 import android.transition.TransitionManager
@@ -42,6 +44,9 @@ import company.tap.tapuilibrary.uikit.ktx.loadAppThemManagerFromPath
 import jp.wasabeef.blurry.Blurry
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.*
 import java.util.*
 
 
@@ -164,6 +169,20 @@ inline fun View.getDimensions(crossinline onDimensionsReady: (Int, Int) -> Unit)
         onDimensionsReady(width, height)
     }
     viewTreeObserver.addOnGlobalLayoutListener(layoutListener)
+}
+inline fun View?.onSizeChange(crossinline runnable: () -> Unit) = this?.apply {
+    addOnLayoutChangeListener { _, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+        val rect = Rect(left, top, right, bottom)
+        val oldRect = Rect(oldLeft, oldTop, oldRight, oldBottom)
+        if (rect.width() != oldRect.width() || rect.height() != oldRect.height()) {
+                runnable();
+        }
+    }
+}
+
+fun View.clicks(): Flow<Unit> = callbackFlow {
+        trySend(Unit).isSuccess
+    awaitClose { setOnClickListener(null) }
 }
 fun View.slideFromLeftToRight() {
 

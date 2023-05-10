@@ -26,6 +26,7 @@ import cards.pay.paycardsrecognizer.sdk.Card
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.apiresponse.CardViewModel
@@ -473,7 +474,11 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return super.onCreateDialog(savedInstanceState)
+         val dialog = super.onCreateDialog(savedInstanceState)
+        (dialog as BottomSheetDialog).behavior.isFitToContents = true
+        (dialog as BottomSheetDialog).behavior.halfExpandedRatio = 0.3f
+
+        return dialog
     }
 
     @RequiresApi(Build.VERSION_CODES.N)

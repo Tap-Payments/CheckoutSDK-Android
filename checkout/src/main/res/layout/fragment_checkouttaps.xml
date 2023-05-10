@@ -9,12 +9,7 @@
     android:orientation="vertical"
     android:fillViewport="true"
     android:clipToOutline="true"
-
-
-    app:cardCornerRadius="1.5dp"
     app:cardBackgroundColor="#10ffffff"
-
-
     tools:context=".open.CheckoutFragment">
 
 
@@ -24,55 +19,33 @@
         android:layout_height="wrap_content"
         app:behavior_hideable="false"
         app:behavior_peekHeight="0dp"
-
         android:clipToOutline="true"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         android:id="@+id/scrollView"
         >
 
-        <LinearLayout
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:clipToOutline="true"
             android:orientation="vertical"
             android:windowSoftInputMode="adjustResize|adjustPan"
             tools:context=".open.CheckoutFragment">
-
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clipToOutline="true"
-
-                android:gravity="center">
-                <!--  android:background="@drawable/layout_bg"-->
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:id="@+id/headerLayout"
-                    android:clipToOutline="true"
+                    app:layout_dodgeInsetEdges="bottom"
                     tools:context=".open.CheckoutFragment">
 
                     <LinearLayout
                         android:id="@+id/fragment_all"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:clipToOutline="true"
-
                         android:visibility="visible"
-
                         android:orientation="vertical" />
-
-                    <!-- <LinearLayout
-                         android:id="@+id/sdkContainer"
-                         android:layout_width="match_parent"
-                         android:layout_height="wrap_content"
-                         android:orientation="vertical"
-                        >
-                     </LinearLayout>-->
-
                     <FrameLayout
                         android:id="@+id/webFrameLayout"
                         android:layout_width="match_parent"
@@ -100,7 +73,6 @@
 
 
                 </LinearLayout>
-                <!--Kept webframelayout outside so that it takes full screen-->
 
 
                 <company.tap.tapuilibrary.uikit.atoms.TapTextView
@@ -128,9 +100,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_gravity="end"/>
 
-
-            </RelativeLayout>
-        </LinearLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </androidx.core.widget.NestedScrollView>
 
 

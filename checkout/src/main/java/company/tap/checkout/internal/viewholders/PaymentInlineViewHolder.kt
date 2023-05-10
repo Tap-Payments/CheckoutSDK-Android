@@ -19,6 +19,7 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.widget.doAfterTextChanged
 import com.bugfender.sdk.Bugfender
+import com.bugfender.sdk.v
 import com.google.android.material.tabs.TabLayout
 import company.tap.cardinputwidget.Card
 import company.tap.cardinputwidget.CardBrandSingle
@@ -62,6 +63,7 @@ import company.tap.tapuilibrary.uikit.views.*
 import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 
+
 @RequiresApi(Build.VERSION_CODES.N)
 class PaymentInlineViewHolder(
     private val context: Context,
@@ -75,6 +77,7 @@ class PaymentInlineViewHolder(
     private val loyaltyViewHolder: LoyaltyViewHolder?,
     private val sdkLayout: LinearLayout,
     private val bottomSheetLayout: FrameLayout,
+    private val headerLayout: LinearLayout,
 ) : TapBaseViewHolder,
     TapSelectionTabLayoutInterface, CardInputListener, TapPaymentShowHideClearImage {
     override val view: View =
@@ -497,6 +500,24 @@ class PaymentInlineViewHolder(
 
 
 
+//        bottomSheetLayout.addOnLayoutChangeListener { view, i, i2, i3, i4, i5, i6, i7, i8 ->
+//            Log.e("error bottomsheet",view.measuredHeight.toString())
+//            Log.e("error bottomsheet",view.measuredWidth.toString())
+//            val widthWas: Int = rightWas - leftWas // Right exclusive, left inclusive
+//
+//            if (v.getWidth() !== widthWas) {
+//                // Width has changed
+//            }
+//            val heightWas: Int = bottomWas - topWas // Bottom exclusive, top inclusive
+//
+//            if (v.getHeight() !== heightWas) {
+//                // Height has changed
+//            }
+//
+//
+//        }
+
+
         tapCardInputView.backArrow.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
                 //  println("getPreTypedCardData data was there"+getPreTypedCardData())
@@ -735,7 +756,7 @@ class PaymentInlineViewHolder(
                 if (allFieldsValid == true) {
                     intertabLayout.visibility = View.GONE
                     tabLayout.visibility = View.GONE
-                    acceptedCardText.visibility = View.GONE
+                    acceptedCardText.visibility = View.INVISIBLE
 
                 }
 
@@ -1544,7 +1565,7 @@ class PaymentInlineViewHolder(
                     })*/
                     intertabLayout.visibility = View.GONE
                     tabLayout.visibility = View.GONE
-                    acceptedCardText.visibility = View.GONE
+                    acceptedCardText.visibility = View.INVISIBLE
                     cardNumValidation = true
                 }
                 else -> {
@@ -1983,7 +2004,7 @@ class PaymentInlineViewHolder(
         }
         tapInlineCardSwitch?.visibility = View.GONE
         separator1?.visibility = View.GONE
-        acceptedCardText.visibility = View.GONE
+        acceptedCardText.visibility = View.INVISIBLE
         contactDetailsView?.visibility = View.GONE
         shippingDetailView?.visibility = View.GONE
         //  intertabLayout.visibility = View.GONE
@@ -2172,7 +2193,7 @@ class PaymentInlineViewHolder(
     fun hideViewONScanNFC() {
         intertabLayout.visibility = View.GONE
         tabLayout.visibility = View.GONE
-        acceptedCardText.visibility = View.GONE
+        acceptedCardText.visibility = View.INVISIBLE
         tapCardInputView.onTouchView()
 
     }
