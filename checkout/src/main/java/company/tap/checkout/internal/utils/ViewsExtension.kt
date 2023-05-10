@@ -8,6 +8,7 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
+import android.graphics.Rect
 import android.graphics.drawable.*
 import android.graphics.drawable.shapes.RoundRectShape
 import android.os.Build
@@ -164,6 +165,15 @@ inline fun View.getDimensions(crossinline onDimensionsReady: (Int, Int) -> Unit)
         onDimensionsReady(width, height)
     }
     viewTreeObserver.addOnGlobalLayoutListener(layoutListener)
+}
+inline fun View?.onSizeChange(crossinline runnable: () -> Unit) = this?.apply {
+    addOnLayoutChangeListener { _, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+        val rect = Rect(left, top, right, bottom)
+        val oldRect = Rect(oldLeft, oldTop, oldRight, oldBottom)
+        if (rect.width() != oldRect.width() || rect.height() != oldRect.height()) {
+            runnable();
+        }
+    }
 }
 fun View.slideFromLeftToRight() {
 

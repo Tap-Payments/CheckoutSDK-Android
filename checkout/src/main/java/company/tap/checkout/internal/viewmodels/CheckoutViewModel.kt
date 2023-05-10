@@ -11,7 +11,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import android.text.Layout
 import android.text.format.DateFormat
 import android.util.DisplayMetrics
 import android.util.Log
@@ -24,7 +23,6 @@ import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
 import androidx.annotation.RestrictTo
@@ -496,7 +494,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             saveCardSwitchHolder,
             this,
             cardViewModel, checkoutFragment, loyaltyViewHolder,
-            sdkLayout, bottomSheetLayout
+            sdkLayout, bottomSheetLayout,headerLayout
         )
 
         itemsViewHolder = ItemsViewHolder(context, this)
@@ -562,7 +560,21 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         newColorVal = Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
 
+        headerLayout.onSizeChange {
+            Log.e("bottomsheet",bottomSheetLayout.measuredHeight.toString())
+            Log.e("sdkLayout",sdkLayout.measuredHeight.toString())
+            Log.e("headerLayout",headerLayout.measuredHeight.toString())
 
+            doAfterSpecificTime(translationAnimationDurationAfter) {
+                if (::bottomSheetLayout.isInitialized)
+                    bottomSheetLayout.resizeAnimation(
+                        durationTime = resizeAnimationDuration,
+                        startHeight = bottomSheetLayout.measuredHeight,
+                        endHeight =  headerLayout.height,
+                    )
+            }
+
+        }
 
     }
 
@@ -943,6 +955,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
         doAfterSpecificTime(translationAnimationDurationAfter) {
+            Log.e("error header",headerLayout.measuredHeight.toString())
+            Log.e("error bottomsheet",bottomSheetLayout.measuredHeight.toString())
+            Log.e("error sdk",sdkLayout.measuredHeight.toString())
+
             if (::bottomSheetLayout.isInitialized)
                 bottomSheetLayout.resizeAnimation(
                     durationTime = resizeAnimationDuration,
@@ -1373,7 +1389,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             saveCardSwitchHolder,
             this,
             cardViewModel,
-            checkoutFragment, loyaltyViewHolder, sdkLayout, bottomSheetLayout
+            checkoutFragment, loyaltyViewHolder, sdkLayout, bottomSheetLayout, headerLayout
         )
         //  paymentInlineViewHolder.tabLayout.setUnselectedAlphaLevel(1.0f)
         if (::paymentInlineViewHolder.isInitialized)
@@ -2093,7 +2109,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     }
                 }
             }, 0)
-            BottomSheetBehavior.STATE_HALF_EXPANDED
         }
         afterAddingViews.invoke()
 
