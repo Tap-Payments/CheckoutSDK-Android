@@ -32,7 +32,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
 import androidx.core.view.setMargins
-addeimport androidx.core.view.size
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -894,12 +893,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
      */
 
     private fun caseDisplayControlCurrency() {
-        Log.e("viewsBefore Delete any",sdkLayout.size.toString())
 
         removeViews(
             cardViewHolder,
             paymentInlineViewHolder,
-          //  saveCardSwitchHolder,
             goPayViewsHolder,
             otpViewHolder,
         )
@@ -915,9 +912,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     endHeight = sdkLayout.height + (headerLayout.height - sdkLayout.height),
                 )
         }
-
-        Log.e("viewsBefore Delete After Currencies opend",sdkLayout.size.toString())
-
 
 
 
@@ -997,12 +991,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             saveCardSwitchHolder, afterAddingViews = {
                 saveCardSwitchHolder?.view?.visibility = View.VISIBLE
             })
-
-
-
-
-
-
 
 
         paymentInlineViewHolder.resetPaymentCardView()
@@ -2105,7 +2093,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     }
                 }
             }, 0)
-            //BottomSheetBehavior.STATE_HALF_EXPANDED
+            BottomSheetBehavior.STATE_HALF_EXPANDED
         }
         afterAddingViews.invoke()
 
