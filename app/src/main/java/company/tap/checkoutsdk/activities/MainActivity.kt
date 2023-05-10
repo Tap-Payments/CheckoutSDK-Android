@@ -646,8 +646,9 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
        println("Card Saved Failed : " + charge.response.message)
    }
 
-   override fun cardTokenizedSuccessfully(token: Token) {
+   override fun cardTokenizedSuccessfully(token: Token, saveCard:Boolean) {
        println("Card Tokenized Succeeded : ")
+       println("saveCard Succeeded : "+saveCard)
        println("Token card : " + token.card?.firstSix.toString() + " **** " + token.card?.lastFour)
        println("Token card : " + token.card?.fingerprint.toString() + " **** " + token.card?.funding)
        println("Token card : " + token.card?.id.toString() + " ****** " + token.card?.name)

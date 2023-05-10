@@ -25,7 +25,7 @@ interface SessionDelegate {
     fun cardSaved(charge: Charge)
     fun cardSavingFailed(charge: Charge)
 
-    fun cardTokenizedSuccessfully(token: Token)
+    fun cardTokenizedSuccessfully(token: Token , saveCard:Boolean)
 
     fun savedCardsList(cardsList: CardsList)
 

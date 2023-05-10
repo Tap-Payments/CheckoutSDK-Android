@@ -98,7 +98,7 @@ class CardViewModel : ViewModel() {
             CardViewEvent.RetreiveBinLookupEvent -> retrieveBinlookup(viewModel, binValue)
             CardViewEvent.CreateTokenEvent -> createTokenWithEncryptedCard(
                 viewModel,
-                cardDataRequest
+                cardDataRequest,saveCardValue
             )
             CardViewEvent.CreateAuthorizeEvent -> createAuthorizeCard(
                 viewModel,
@@ -184,14 +184,14 @@ class CardViewModel : ViewModel() {
     @RequiresApi(Build.VERSION_CODES.N)
     private fun createTokenWithEncryptedCard(
         viewModel: CheckoutViewModel,
-        createTokenWithEncryptedDataRequest: CreateTokenCard?
+        createTokenWithEncryptedDataRequest: CreateTokenCard? , saveCardValue :Boolean?
     ) {
         println("createTokenWithEncryptedDataRequest>>." + createTokenWithEncryptedDataRequest)
         if (createTokenWithEncryptedDataRequest != null) {
             repository.createTokenWithEncryptedCard(
                 context,
                 viewModel,
-                createTokenWithEncryptedDataRequest
+                createTokenWithEncryptedDataRequest, saveCardValue
             )
         }
 

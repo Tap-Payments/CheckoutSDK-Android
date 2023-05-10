@@ -2497,7 +2497,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 null,
                 null,
                 paymentInlineViewHolder.getCard(),
-                null
+                null, saveCardValue = paymentInlineViewHolder.tapInlineCardSwitch?.switchSaveCard?.isChecked
             )
             //  }
 
