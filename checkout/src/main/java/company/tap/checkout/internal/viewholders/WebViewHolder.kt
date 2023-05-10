@@ -31,7 +31,7 @@ import kotlinx.android.synthetic.main.switch_layout.view.*
 import kotlin.math.roundToInt
 
 
-const val resizeAnimationDuration = 100L
+const val resizeAnimationDuration = 50L
 const val translationAnimationDurationAfter = 150L
 const val fadeInAnimationDuration = 2000L
 
@@ -107,11 +107,11 @@ class WebViewHolder(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     context.twoThirdHeightView().roundToInt()
                 )
-                bottomSheetLayout.resizeAnimation(
-                    durationTime = resizeAnimationDuration,
-                    startHeight = sdkLayout.height,
-                    endHeight = context.getDeviceSpecs().first
-                )
+//                bottomSheetLayout.resizeAnimation(
+//                    durationTime = resizeAnimationDuration,
+//                    startHeight = sdkLayout.height,
+//                    endHeight = context.getDeviceSpecs().first
+//                )
                 showViewsRelatedToWebView()
 
             })

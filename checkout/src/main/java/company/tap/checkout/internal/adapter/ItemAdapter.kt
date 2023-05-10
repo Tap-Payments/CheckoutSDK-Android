@@ -16,15 +16,9 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.annotation.NonNull
-import androidx.core.view.doOnLayout
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.internal.api.enums.AmountModificatorType
 import company.tap.checkout.internal.utils.CurrencyFormatter
-import company.tap.checkout.internal.utils.doAfterSpecificTime
-import company.tap.checkout.internal.utils.getDimensions
-import company.tap.checkout.internal.utils.resizeAnimation
-import company.tap.checkout.internal.viewholders.resizeAnimationDuration
-import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.models.ItemsModel
 import company.tap.taplocalizationkit.LocalizationManager
@@ -203,17 +197,17 @@ class ItemAdapter(
 
             mExpandedPosition = if (isExpanded) -1 else position
             if (isExpanded) {
-                bottomSheetLayout.resizeAnimation(
-                    durationTime = resizeAnimationDuration,
-                    startHeight = bottomSheetLayout.height,
-                    endHeight = bottomSheetLayout.height - 70
-                )
+//                bottomSheetLayout.resizeAnimation(
+//                    durationTime = resizeAnimationDuration,
+//                    startHeight = bottomSheetLayout.height,
+//                    endHeight = bottomSheetLayout.height - 70
+//                )
             } else {
-                bottomSheetLayout.resizeAnimation(
-                    durationTime = resizeAnimationDuration,
-                    startHeight = bottomSheetLayout.height,
-                    endHeight = headerLayout.height + 70,
-                )
+//                bottomSheetLayout.resizeAnimation(
+//                    durationTime = resizeAnimationDuration,
+//                    startHeight = bottomSheetLayout.height,
+//                    endHeight = headerLayout.height + 70,
+//                )
 
             }
             notifyItemChanged(previousExpandedPosition)

@@ -560,20 +560,18 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         newColorVal = Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
 
-        headerLayout.onSizeChange {
+        sdkLayout.onSizeChange {
             Log.e("bottomsheet",bottomSheetLayout.measuredHeight.toString())
             Log.e("sdkLayout",sdkLayout.measuredHeight.toString())
             Log.e("headerLayout",headerLayout.measuredHeight.toString())
-
             doAfterSpecificTime(translationAnimationDurationAfter) {
                 if (::bottomSheetLayout.isInitialized)
                     bottomSheetLayout.resizeAnimation(
                         durationTime = resizeAnimationDuration,
                         startHeight = bottomSheetLayout.measuredHeight,
-                        endHeight =  headerLayout.height,
+                        endHeight =  headerLayout.measuredHeight ,
                     )
             }
-
         }
 
     }
@@ -916,14 +914,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         addViews(
             itemsViewHolder
         )
-        doAfterSpecificTime(translationAnimationDurationAfter) {
-            if (::bottomSheetLayout.isInitialized)
-                bottomSheetLayout.resizeAnimation(
-                    durationTime = resizeAnimationDuration,
-                    startHeight = bottomSheetLayout.measuredHeight,
-                    endHeight = sdkLayout.height + (headerLayout.height - sdkLayout.height),
-                )
-        }
+//        doAfterSpecificTime(translationAnimationDurationAfter) {
+//            if (::bottomSheetLayout.isInitialized)
+//                bottomSheetLayout.resizeAnimation(
+//                    durationTime = resizeAnimationDuration,
+//                    startHeight = bottomSheetLayout.measuredHeight,
+//                    endHeight = sdkLayout.height + (headerLayout.height - sdkLayout.height),
+//                )
+//        }
 
 
 
@@ -953,19 +951,19 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         if (goPayViewsHolder.goPayopened || itemsViewHolder.itemsdisplayed) setActionGoPayOpenedItemsDisplayed()
         else setActionNotGoPayOpenedNotItemsDisplayed()
 
+        itemAdapter.resetViewToInitialValue()
 
         doAfterSpecificTime(translationAnimationDurationAfter) {
-            Log.e("error header",headerLayout.measuredHeight.toString())
-            Log.e("error bottomsheet",bottomSheetLayout.measuredHeight.toString())
-            Log.e("error sdk",sdkLayout.measuredHeight.toString())
+//            Log.e("error header",headerLayout.measuredHeight.toString())
+//            Log.e("error bottomsheet",bottomSheetLayout.measuredHeight.toString())
+//            Log.e("error sdk",sdkLayout.measuredHeight.toString())
 
-            if (::bottomSheetLayout.isInitialized)
-                bottomSheetLayout.resizeAnimation(
-                    durationTime = resizeAnimationDuration,
-                    startHeight = bottomSheetLayout.measuredHeight,
-                    endHeight = headerLayout.height,
-                )
-            itemAdapter.resetViewToInitialValue()
+//            if (::bottomSheetLayout.isInitialized)
+//                bottomSheetLayout.resizeAnimation(
+//                    durationTime = resizeAnimationDuration,
+//                    startHeight = bottomSheetLayout.measuredHeight,
+//                    endHeight = headerLayout.height,
+//                )
         }
     }
 
@@ -1873,15 +1871,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = View.VISIBLE
         }
-        doAfterSpecificTime(250) {
-            if (::bottomSheetLayout.isInitialized) {
-                bottomSheetLayout.resizeAnimation(
-                    startHeight = bottomSheetLayout.measuredHeight,
-                    endHeight = sdkLayout.height,
-                    durationTime = 250, isExpanding = false
-                )
-            }
-        }
+//        doAfterSpecificTime(250) {
+//            if (::bottomSheetLayout.isInitialized) {
+//                bottomSheetLayout.resizeAnimation(
+//                    startHeight = bottomSheetLayout.measuredHeight,
+//                    endHeight = sdkLayout.height,
+//                    durationTime = 250, isExpanding = false
+//                )
+//            }
+//        }
         if (::checkoutFragment.isInitialized)
             checkoutFragment.closeText.visibility = GONE
         println("chargeResponse are>>>>" + chargeResponse?.status)
@@ -2247,11 +2245,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     ) {
         val payStringButton: String
 
-        bottomSheetLayout.resizeAnimation(
-            durationTime = resizeAnimationDuration,
-            startHeight = bottomSheetLayout.height,
-            endHeight = sdkLayout.height,
-        )
         when (PaymentDataSource.getTransactionMode()) {
             TransactionMode.TOKENIZE_CARD -> payStringButton = LocalizationManager.getValue(
                 "pay",
