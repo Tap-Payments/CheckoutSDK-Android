@@ -476,12 +476,13 @@ class CardRepository : APIRequestCallback {
                     } else {
                         sdkSession.sessionDelegate?.sessionFailedToStart()
                     }
+
                     if (tabAnimatedActionButton != null) {
                         activity?.let { it1 ->
                             CustomUtils.getDeviceDisplayMetrics(
                                 it1
                             )
-                        }?.let { it2 -> tabAnimatedActionButton?.setDisplayMetrics(it2) }
+                        }?.let { it2 -> tabAnimatedActionButton?.setDisplayMetricsTheme(it2 , CustomUtils.getCurrentTheme()) }
                         tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
                     }
                 }

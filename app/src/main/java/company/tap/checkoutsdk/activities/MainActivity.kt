@@ -500,6 +500,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
    @RequiresApi(Build.VERSION_CODES.N)
    private fun initActionButton() {
+       println("current tehe"+ThemeManager.currentTheme)
        payButton.setButtonDataSource(
            true,
            this.let { LocalizationManager.getLocale(it).language },

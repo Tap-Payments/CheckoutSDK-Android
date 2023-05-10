@@ -420,10 +420,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun confirmOTPCode(otpCode: String) {
-        otpViewHolder.view.otpView.otpViewActionButton.setDisplayMetrics(
+        otpViewHolder.view.otpView.otpViewActionButton.setDisplayMetricsTheme(
             CustomUtils.getDeviceDisplayMetrics(
                 context as Activity
-            )
+            ),CustomUtils.getCurrentTheme()
         )
         otpViewHolder.view.otpView.otpViewActionButton.changeButtonState(ActionButtonState.LOADING)
         when (PaymentDataSource.getTransactionMode()) {
@@ -666,7 +666,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             CustomUtils.getDeviceDisplayMetrics(
                 it
             )
-        }?.let { saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setDisplayMetrics(it) }
+        }?.let { saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setDisplayMetricsTheme(it,CustomUtils.getCurrentTheme()) }
 
 
     }
@@ -1798,7 +1798,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
              SDKSession.getListener()?.getStatusSDK(response,chargeResponse)
          }*/
 
-        /*saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setDisplayMetrics(
+        /*saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setDisplayMetricsTheme(
             CustomUtils.getDeviceDisplayMetrics(
                 contextSDK as Activity
             )
@@ -1806,10 +1806,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = View.VISIBLE
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setDisplayMetrics(
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setDisplayMetricsTheme(
             CustomUtils.getDeviceDisplayMetrics(
                 context as Activity
-            )
+            ),CustomUtils.getCurrentTheme()
         )
 
         //  addViews(saveCardSwitchHolder)
@@ -1979,8 +1979,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 }
             }
         }
-
-        doAfterSpecificTime(4000) {
+        /**
+         * Stopped reseting the view of button cz of loader will test if not required will remove this code*/
+       /* doAfterSpecificTime(4000) {
             if (chargeResponse != null)
                 tabAnimatedActionButton?.setButtonDataSource(
                     true,
@@ -1990,9 +1991,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     loadAppThemManagerFromPath(AppColorTheme.ActionButtonValidTitleLabelColor),
                 )
             SDKSession.sessionActive = false
-        }
+        }*/
         SessionManager.setActiveSession(false)
-        tabAnimatedActionButton?.setOnClickListener {
+        /**
+         * Stopped reseting the view of button cz of loader will test if not required will remove this code*/
+       /* tabAnimatedActionButton?.setOnClickListener {
             // if(::fragmentManager.isInitialized)
             tabAnimatedActionButton.changeButtonState(ActionButtonState.LOADING)
             SDKSession.startSDK(
@@ -2000,7 +2003,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 tabAnimatedActionButton.context,
                 tabAnimatedActionButton.context as AppCompatActivity
             )
-        }
+        }*/
         //removeAllViews()
         doAfterSpecificTime(4500) {
             if (::bottomSheetDialog.isInitialized)
@@ -3910,10 +3913,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         when (status) {
             ChargeStatus.CAPTURED, ChargeStatus.AUTHORIZED, ChargeStatus.VALID, ChargeStatus.IN_PROGRESS -> {
-                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setDisplayMetrics(
+                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setDisplayMetricsTheme(
                     CustomUtils.getDeviceDisplayMetrics(
                         context as Activity
-                    )
+                    ),CustomUtils.getCurrentTheme()
                 )
                 Handler().postDelayed({
                     saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
