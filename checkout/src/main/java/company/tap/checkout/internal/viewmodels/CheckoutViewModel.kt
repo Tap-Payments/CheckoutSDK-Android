@@ -26,18 +26,16 @@ import android.widget.LinearLayout
 import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
 import androidx.annotation.RestrictTo
-import androidx.appcompat.app.AppCompatActivity
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
 import androidx.core.view.setMargins
 import androidx.fragment.app.FragmentManager
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.transition.Fade
-import androidx.transition.Scene
-import androidx.transition.Transition
-import androidx.transition.TransitionManager
+import androidx.transition.*
 import cards.pay.paycardsrecognizer.sdk.FrameManager
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import com.bugfender.sdk.Bugfender
@@ -221,12 +219,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @SuppressLint("StaticFieldLeak")
     private lateinit var headerLayout: LinearLayout
 
+    private lateinit var coordinatorLayout: CoordinatorLayout
+    private lateinit var vbsBehavior:FrameLayout
+
     @SuppressLint("StaticFieldLeak")
     private lateinit var sdkLayout: LinearLayout
     private lateinit var checkoutFragment: CheckoutFragment
     private lateinit var itemList: List<ItemsModel>
     private lateinit var unModifiedItemList: List<ItemsModel>
     private lateinit var selectedPaymentOption: PaymentOption
+
 
     @SuppressLint("StaticFieldLeak")
     private lateinit var context: Context
@@ -303,7 +305,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         intent: Intent,
         cardViewModel: CardViewModel,
         checkoutFragment: CheckoutFragment,
-        headerLayout: LinearLayout
+        headerLayout: LinearLayout,
+        coordinatorLayout: CoordinatorLayout,
+        vbsBehavior: FrameLayout
     ) {
         this.context = context
         this.fragmentManager = fragmentManager
@@ -317,6 +321,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         this.cardViewModel = cardViewModel
         this.checkoutFragment = checkoutFragment
         this.headerLayout = headerLayout
+        this.coordinatorLayout = coordinatorLayout
+        this.vbsBehavior = vbsBehavior
 
         val aScene: Scene? = Scene.getCurrentScene(sdkLayout)
         aScene?.setEnterAction {
@@ -421,7 +427,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         otpViewHolder.view.otpView.otpViewActionButton.setDisplayMetricsTheme(
             CustomUtils.getDeviceDisplayMetrics(
                 context as Activity
-            ),CustomUtils.getCurrentTheme()
+            ), CustomUtils.getCurrentTheme()
         )
         otpViewHolder.view.otpView.otpViewActionButton.changeButtonState(ActionButtonState.LOADING)
         when (PaymentDataSource.getTransactionMode()) {
@@ -476,17 +482,17 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         loyaltyViewHolder = LoyaltyViewHolder(context, this, this)
 
-        headerLayout.let { it1 ->
-            setTopBorders(
-                view = it1,
-                cornerRadius = 35f,
-                strokeWidth = 0.0f,
-                strokeColor = loadAppThemManagerFromPath(AppColorTheme.PoweredByTapBackgroundColor),// stroke color
-                tintColor = loadAppThemManagerFromPath(AppColorTheme.PoweredByTapBackgroundColor),// tint color
-                shadowColor = loadAppThemManagerFromPath(AppColorTheme.PoweredByTapBackgroundColor)
-            )
-
-        }//
+//        headerLayout.let { it1 ->
+//            setTopBorders(
+//                view = it1,
+//                cornerRadius = 35f,
+//                strokeWidth = 0.0f,
+//                strokeColor = loadAppThemManagerFromPath(AppColorTheme.PoweredByTapBackgroundColor),// stroke color
+//                tintColor = loadAppThemManagerFromPath(AppColorTheme.PoweredByTapBackgroundColor),// tint color
+//                shadowColor = loadAppThemManagerFromPath(AppColorTheme.PoweredByTapBackgroundColor)
+//            )
+//
+//        }//
         paymentInlineViewHolder = PaymentInlineViewHolder(
             context, this,
             this,
@@ -494,7 +500,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             saveCardSwitchHolder,
             this,
             cardViewModel, checkoutFragment, loyaltyViewHolder,
-            sdkLayout, bottomSheetLayout,headerLayout
+            sdkLayout, bottomSheetLayout, headerLayout
         )
 
         itemsViewHolder = ItemsViewHolder(context, this)
@@ -663,7 +669,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             CustomUtils.getDeviceDisplayMetrics(
                 it
             )
-        }?.let { saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setDisplayMetricsTheme(it,CustomUtils.getCurrentTheme()) }
+        }?.let {
+            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setDisplayMetricsTheme(
+                it,
+                CustomUtils.getCurrentTheme()
+            )
+        }
 
 
     }
@@ -1797,7 +1808,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setDisplayMetricsTheme(
             CustomUtils.getDeviceDisplayMetrics(
                 context as Activity
-            ),CustomUtils.getCurrentTheme()
+            ), CustomUtils.getCurrentTheme()
         )
 
         //  addViews(saveCardSwitchHolder)
@@ -1969,29 +1980,29 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
         /**
          * Stopped reseting the view of button cz of loader will test if not required will remove this code*/
-       /* doAfterSpecificTime(4000) {
-            if (chargeResponse != null)
-                tabAnimatedActionButton?.setButtonDataSource(
-                    true,
-                    "en",
-                    null,
-                    loadAppThemManagerFromPath(AppColorTheme.ActionButtonBackgroundColor),
-                    loadAppThemManagerFromPath(AppColorTheme.ActionButtonValidTitleLabelColor),
-                )
-            SDKSession.sessionActive = false
-        }*/
+        /* doAfterSpecificTime(4000) {
+             if (chargeResponse != null)
+                 tabAnimatedActionButton?.setButtonDataSource(
+                     true,
+                     "en",
+                     null,
+                     loadAppThemManagerFromPath(AppColorTheme.ActionButtonBackgroundColor),
+                     loadAppThemManagerFromPath(AppColorTheme.ActionButtonValidTitleLabelColor),
+                 )
+             SDKSession.sessionActive = false
+         }*/
         SessionManager.setActiveSession(false)
         /**
          * Stopped reseting the view of button cz of loader will test if not required will remove this code*/
-       /* tabAnimatedActionButton?.setOnClickListener {
-            // if(::fragmentManager.isInitialized)
-            tabAnimatedActionButton.changeButtonState(ActionButtonState.LOADING)
-            SDKSession.startSDK(
-                (tabAnimatedActionButton.context as AppCompatActivity).supportFragmentManager,
-                tabAnimatedActionButton.context,
-                tabAnimatedActionButton.context as AppCompatActivity
-            )
-        }*/
+        /* tabAnimatedActionButton?.setOnClickListener {
+             // if(::fragmentManager.isInitialized)
+             tabAnimatedActionButton.changeButtonState(ActionButtonState.LOADING)
+             SDKSession.startSDK(
+                 (tabAnimatedActionButton.context as AppCompatActivity).supportFragmentManager,
+                 tabAnimatedActionButton.context,
+                 tabAnimatedActionButton.context as AppCompatActivity
+             )
+         }*/
         //removeAllViews()
         doAfterSpecificTime(4500) {
             if (::bottomSheetDialog.isInitialized)
@@ -2034,36 +2045,32 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private fun removeViews(vararg viewHolders: TapBaseViewHolder?) {
 
         viewHolders.forEach {
-            Handler(Looper.getMainLooper()).postDelayed(Runnable {
-                //  it?.view?.visibility =View.INVISIBLE
-                if (::context.isInitialized) {
-                    val animation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
-                    it?.view?.startAnimation(animation)
-
-                }
-
-                //  Handler().postDelayed({
+            animateBS {
                 if (::sdkLayout.isInitialized) {
-                    //it?.view?.visibility = View.INVISIBLE
-                    sdkLayout?.setBackgroundDrawable(
-                        createDrawableGradientForBlurry(
-                            intArrayOf(
-                                newColorVal!!,
-                                newColorVal!!,
-                                newColorVal!!
-                            )
-                        )
-                    )
-                    //   sdkLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
                     sdkLayout.removeView(it?.view)
-
                 }
-                //  }, 150)
-
-
-            }, 0)
+            }
+//            doAfterSpecificTime(0) {
+//                if (::sdkLayout.isInitialized) {
+//                    sdkLayout.removeView(it?.view)
+//                }
+//            }
         }
 
+    }
+    fun animateBS(changeHeight: () -> Unit) {
+        // custom animation
+        val transition = AutoTransition()
+        transition.addTarget(vbsBehavior)
+        transition.interpolator = FastOutSlowInInterpolator()
+        transition.duration = 1000L
+        TransitionManager.beginDelayedTransition(coordinatorLayout, transition)
+
+        // simple animation
+        // comment above code, uncomment below line
+        //TransitionManager.beginDelayedTransition(vCoordinator)
+        changeHeight()
+        TransitionManager.endTransitions(vbsBehavior)
     }
 
 
@@ -2073,24 +2080,32 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     ) {
 
         viewHolders.forEach {
-            Handler(Looper.getMainLooper()).postDelayed(Runnable {
-                // it?.view?.visibility =View.VISIBLE
-                if (::context.isInitialized) {
-                    val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
-                    it?.view?.startAnimation(animation)
+            animateBS {
+                if (::sdkLayout.isInitialized) {
+                    sdkLayout.removeView(it?.view)
+                    sdkLayout.addView(it?.view)
                 }
-                doAfterSpecificTime(50) {
-                    if (::sdkLayout.isInitialized) {
-                        sdkLayout.removeView(it?.view)
-                        sdkLayout.addView(it?.view)
-                    }
-                }
-            }, 0)
+            }
+//            Handler(Looper.getMainLooper()).postDelayed(Runnable {
+//                // it?.view?.visibility =View.VISIBLE
+//                if (::context.isInitialized) {
+//                    val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
+//                    it?.view?.startAnimation(animation)
+//                }
+//                doAfterSpecificTime(50) {
+//                    if (::sdkLayout.isInitialized) {
+//                        sdkLayout.removeView(it?.view)
+//                        sdkLayout.addView(it?.view)
+//                    }
+//                }
+//            }, 0)
         }
         afterAddingViews.invoke()
 
 
     }
+
+
 
 
     fun unActivateActionButton() {
@@ -2481,7 +2496,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 null,
                 null,
                 paymentInlineViewHolder.getCard(),
-                null, saveCardValue = paymentInlineViewHolder.tapInlineCardSwitch?.switchSaveCard?.isChecked
+                null,
+                saveCardValue = paymentInlineViewHolder.tapInlineCardSwitch?.switchSaveCard?.isChecked
             )
             //  }
 
@@ -2661,13 +2677,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         isNFCOpened = true
         checkoutFragment.isNfcOpened = true
         amountViewHolder.changeGroupAction(false)
-        val bottomSheet: FrameLayout? =
-            bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet)
-        BottomSheetBehavior.from(bottomSheet as View).state = BottomSheetBehavior.STATE_EXPANDED
-        /* Handler().postDelayed({
-             if (::bottomSheetLayout.isInitialized)
-                 translateViewToNewHeight(bottomSheetLayout.measuredHeight, true)
-         }, 400)*/
         checkSelectedAmountInitiated()
     }
 
@@ -2690,10 +2699,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         // addViews(businessViewHolder, amountViewHolder)
         inLineCardLayout.visibility = View.VISIBLE
         FrameManager.getInstance().frameColor = Color.WHITE
-        // Use
-        //  val bottomSheet: FrameLayout? = bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet)
-        //  BottomSheetBehavior.from(bottomSheet as View).state = BottomSheetBehavior.STATE_EXPANDED
-        //   bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
 
         fragmentManager
             .beginTransaction()
@@ -2704,13 +2709,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         checkoutFragment.isScannerOpened = true
 
         amountViewHolder.changeGroupAction(false)
-        val bottomSheet: FrameLayout? =
-            bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet)
-        BottomSheetBehavior.from(bottomSheet as View).state = BottomSheetBehavior.STATE_EXPANDED
-//        Handler().postDelayed({
-//            if (::bottomSheetLayout.isInitialized)
-//                translateViewToNewHeight(bottomSheetLayout.measuredHeight, false)
-//        }, animationSpeed)
         checkSelectedAmountInitiated()
     }
 
@@ -2981,12 +2979,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
 
-        Handler().postDelayed({
-            // checkoutFragment.dismiss()
-            /*if (::bottomSheetDialog.isInitialized)
-                bottomSheetDialog.dismiss()*/
-
-        }, 3000)
 
 
     }
@@ -3299,15 +3291,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
               )
           }*/
 
-        sdkLayout?.setBackgroundDrawable(
-            createDrawableGradientForBlurry(
-                intArrayOf(
-                    Color.parseColor(newBorderColor),
-                    Color.parseColor(newBorderColor),
-                    Color.parseColor(newBorderColor)
-                )
-            )
-        )
 
         val separatorViewTheme = SeparatorViewTheme()
         separatorViewTheme.strokeColor =
@@ -3903,7 +3886,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setDisplayMetricsTheme(
                     CustomUtils.getDeviceDisplayMetrics(
                         context as Activity
-                    ),CustomUtils.getCurrentTheme()
+                    ), CustomUtils.getCurrentTheme()
                 )
                 Handler().postDelayed({
                     saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
@@ -3967,14 +3950,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 }
             }
         }
-        /*   Handler().postDelayed({
-               checkOutActivity?.onBackPressed()
-
-               if (::bottomSheetDialog.isInitialized)
-                   bottomSheetDialog.dismiss()
-               _checkoutFragment.activity?.onBackPressed()
-
-           }, 12000)*/
     }
 
 

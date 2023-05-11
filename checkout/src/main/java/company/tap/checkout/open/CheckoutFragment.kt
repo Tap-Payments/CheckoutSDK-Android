@@ -15,10 +15,8 @@ import android.view.*
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import androidx.annotation.RequiresApi
-import androidx.cardview.widget.CardView
-import androidx.core.view.setPadding
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -30,8 +28,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.apiresponse.CardViewModel
-import company.tap.checkout.internal.apiresponse.CardViewState
-import company.tap.checkout.internal.apiresponse.Resource
 import company.tap.checkout.internal.apiresponse.UserRepository
 import company.tap.checkout.internal.cache.SharedPrefManager
 import company.tap.checkout.internal.enums.SectionType
@@ -48,7 +44,6 @@ import company.tap.tapuilibrary.uikit.atoms.TapImageView
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
-import company.tap.tapuilibrary.uikit.ktx.setTopBorders
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
 import company.tap.tapuilibrary.uikit.views.TapBrandView
 import org.json.JSONObject
@@ -91,12 +86,12 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
 
     private var inLineCardLayout: FrameLayout? = null
-    private var relativeLL: RelativeLayout? = null
-    private var mainCardLayout: CardView? = null
     private var topHeaderView: TapBrandView? = null
-    var headerLayout: LinearLayout? =null
+    var headerLayout: LinearLayout? = null
     private var displayMetrics: Int? = 0
     var originalHeight: Int? = 0
+    private lateinit var coordinatorLayout: CoordinatorLayout
+    private lateinit var vbsBehavior: FrameLayout
 
     @JvmField
     var countryCode: String? = null
@@ -118,9 +113,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     override fun onStateChanged(newState: Int) {
         super.onStateChanged(newState)
-        if (newState == BottomSheetBehavior.STATE_DRAGGING) {
-            bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED;
-        }
     }
 
 
@@ -141,12 +133,12 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         userRepository.getUserIpAddress()
         this.viewModel = viewModel
         _Context?.let { cardViewModel.getContext(it) }
-       // backgroundColor = (Color.parseColor(ThemeManager.getValue("tapBottomSheet.dimmedColor")))
+        // backgroundColor = (Color.parseColor(ThemeManager.getValue("tapBottomSheet.dimmedColor")))
 
-        bottomSheetDialog.behavior.isDraggable = true
-      //  bottomSheetDialog.behavior.maxHeight = context?.getDeviceSpecs()?.first ?: 1000
+        //  bottomSheetDialog.behavior.isDraggable = true
+        // bottomSheetDialog.behavior.maxHeight = context?.getDeviceSpecs()?.first ?: 1000
 
-        val checkoutLayout: LinearLayout? = view.findViewById(R.id.fragment_all)
+        val sdk_layout: LinearLayout? = view.findViewById(R.id.sdk_layout)
         val frameLayout: FrameLayout? = view.findViewById(R.id.fragment_container_nfc_lib)
         val webFrameLayout: FrameLayout? = view.findViewById(R.id.webFrameLayout)
         webFrameLayout?.layoutParams = LinearLayout.LayoutParams(
@@ -155,6 +147,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         )
         inLineCardLayout = view.findViewById(R.id.inline_container)
         headerLayout = view.findViewById(R.id.headerLayout)
+        coordinatorLayout = view.findViewById(R.id.coordinator)
+        vbsBehavior = view.findViewById(R.id.vBSBehavior)
         initViews(view)
 
         topHeaderView = context?.let { TapBrandView(it) }
@@ -219,7 +213,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
         })
 
-        if (checkoutLayout != null) {
+        if (sdk_layout != null) {
             context?.let {
                 if (frameLayout != null) {
                     webFrameLayout?.let { it1 ->
@@ -230,13 +224,14 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                                         bottomSheetDialog,
                                         it,
                                         childFragmentManager,
-                                        checkoutLayout,
+                                        sdk_layout,
                                         frameLayout,
                                         it1,
                                         inLineCardLayout!!,
                                         this,
                                         it2,
-                                        cardViewModel, this, headerLayout!!
+                                        cardViewModel, this, headerLayout!!,
+                                        coordinatorLayout, vbsBehavior
                                     )
                                 }
                             }
@@ -255,7 +250,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                 .replace("#", "")
             Log.e("color", newColorVal.toString())
             enableSections()
-            originalHeight = checkoutLayout.measuredHeight
 
 
             topHeaderView?.backgroundHeader?.setBackgroundDrawable(
@@ -270,115 +264,80 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             headerLayout?.addView(topHeaderView, 0)
         }
         topHeaderView?.visibility = View.GONE
+        ///  inLineCardLayout?.minimumHeight = heightscreen - sdk_layout?.height!!
+        //  dialog?.window?.attributes?.windowAnimations = R.style.DialogAnimation
 
-
-        inLineCardLayout?.minimumHeight = heightscreen - checkoutLayout?.height!!
-        dialog?.window?.attributes?.windowAnimations = R.style.DialogAnimation
-
-        adjustHeightAccToDensity(displayMetrics)
+        //   adjustHeightAccToDensity(displayMetrics)
         topHeaderView?.startPoweredByAnimation(
             delayTime = PoweredByLayoutAnimationDelay,
             topHeaderView?.poweredByImage, onAnimationEnd = {
                 poweredByTapAnimationEnds(viewModel)
             }
         )
-        bottomSheetDialog.setOnShowListener {
-            bottomSheetDialog.behavior.setState(BottomSheetBehavior.STATE_EXPANDED)
-
-        }
-
-
-
-        scrollView?.let {
-            setTopBorders(
-                it,
-                strokeColor = Color.parseColor(
-                    newColorVal
-                ),
-                tintColor = Color.parseColor(
-                    newColorVal
-                ),// tint color
-                shadowColor = Color.parseColor(
-                    newColorVal
-                )
-            )
-        }
+//        scrollView?.let {
+//            setTopBorders(
+//                it,
+//                strokeColor = Color.parseColor(
+//                    newColorVal
+//                ),
+//                tintColor = Color.parseColor(
+//                    newColorVal
+//                ),// tint color
+//                shadowColor = Color.parseColor(
+//                    newColorVal
+//                )
+//            )
+//        }
 
 
-        /*   relativeLL.let { it1 ->
-               if (it1 != null) {
-                   setTopBorders(
-                       it1,
-                       35f,// corner raduis
-                       0.0f,
-                       Color.parseColor(
-                           newColorVal
-                       ),// stroke color
-                       Color.parseColor(newColorVal),// tint color
-                       Color.parseColor(newColorVal)
-                   )
-               }
-           }*/
-        /*  mainCardLayout.let { card ->
-              if (card != null) {
-                  setTopBorders(
-                      card,
-                      35f,// corner raduis
-                      0.0f,
-                      Color.parseColor(newColorVal),// stroke color
-                      Color.parseColor(newColorVal),// tint color
-                      Color.parseColor(newColorVal)
-                  )
-              }
-          }
+//        sdk_layout?.let {
+//            setTopBorders(
+//                it,
+//                105f,
+//                strokeColor = Color.parseColor(
+//                    newColorVal
+//                ),
+//                tintColor = Color.parseColor(
+//                    newColorVal
+//                ),// tint color
+//                shadowColor = Color.parseColor(
+//                    newColorVal
+//                )
+//            )
+//        }
 
-  */
-
-        checkoutLayout?.let {
-            setTopBorders(
-                it,
-                105f,
-                strokeColor = Color.parseColor(
-                    newColorVal
-                ),
-                tintColor = Color.parseColor(
-                    newColorVal
-                ),// tint color
-                shadowColor = Color.parseColor(
-                    newColorVal
-                )
-            )
-        }
-
-        checkoutLayout?.setBackgroundDrawable(
-            createDrawableGradientForBlurry(
-                intArrayOf(
-                    Color.parseColor(newColorVal),
-                    Color.parseColor(newColorVal),
-                    Color.parseColor(newColorVal)
-                )
-            )
-        )
+//        sdk_layout?.setBackgroundDrawable(
+//            createDrawableGradientForBlurry(
+//                intArrayOf(
+//                    Color.parseColor(newColorVal),
+//                    Color.parseColor(newColorVal),
+//                    Color.parseColor(newColorVal)
+//                )
+//            )
+//        )
 
         closeText.setOnClickListener {
-            bottomSheetDialog.dismissWithAnimation
-            bottomSheetDialog.hide()
-            bottomSheetDialog.dismiss()
+            dismissBottomSheet()
+
             viewModel.incrementalCount = 0
             resetTabAnimatedButton()
 
 
         }
         closeImage.setOnClickListener {
-            bottomSheetDialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
-            bottomSheetDialog.hide()
+
+            with(bottomSheetDialog) {
+                window?.attributes?.windowAnimations = R.style.DialogAnimation
+                hide()
+            }
+
             resetTabAnimatedButton()
             viewModel.incrementalCount = 0
 
         }
 
 
-     //   topHeaderView?.outerConstraint?.applyBluryToView()
+        //   topHeaderView?.outerConstraint?.applyBluryToView()
 
 
     }
@@ -399,10 +358,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         closeText = view.findViewById(R.id.closeText)
         closeImage = view.findViewById(R.id.closeImage)
         scrollView = view.findViewById(R.id.scrollView)
-       // relativeLL = view.findViewById(R.id.relativeLL)
-       // mainCardLayout = view.findViewById(R.id.mainCardLayout)
-        /**Added to init the lib of getting dynamic flags*/
-        //        World.init(context)
     }
 
 
@@ -474,11 +429,16 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-         val dialog = super.onCreateDialog(savedInstanceState)
-        (dialog as BottomSheetDialog).behavior.isFitToContents = true
-        (dialog as BottomSheetDialog).behavior.halfExpandedRatio = 0.3f
+        bottomSheetDialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+        bottomSheetDialog.behavior.isFitToContents = true
+        bottomSheetDialog.setOnShowListener {
+            bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
 
-        return dialog
+        }
+        bottomSheetDialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+
+        return bottomSheetDialog
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -491,26 +451,16 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     }
 
 
-    private fun consumeResponse(response: Resource<CardViewState>) {
-        println("response value is" + response.data?.configResponseModel)
-        when (response) {
-            is Resource.Loading -> concatText("Loading")
-            is Resource.Finished -> renderView(response.data)
-            is Error -> response.message?.let { concatText(it) }
-            is Resource.Success -> renderView(response.data)
-
-        }
-    }
-
-    private fun renderView(data: CardViewState?) {
-
-    }
-
-
     @SuppressLint("SetTextI18n")
     private fun concatText(newText: String) {
         println("newText respoonse$newText")
 
+    }
+
+    override fun setupDialog(dialog: Dialog, style: Int) {
+        super.setupDialog(dialog, style)
+        dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE or WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+        )
     }
 
 
@@ -536,7 +486,12 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun resetTabAnimatedButton() {
-        checkOutActivity?.displayMetrics?.let { tabAnimatedActionButton?.setDisplayMetricsTheme(it,CustomUtils.getCurrentTheme()) }
+        checkOutActivity?.displayMetrics?.let {
+            tabAnimatedActionButton?.setDisplayMetricsTheme(
+                it,
+                CustomUtils.getCurrentTheme()
+            )
+        }
         SDKSession.sessionActive = false
         tabAnimatedActionButton?.changeButtonState(ActionButtonState.RESET)
         if (checkOutActivity?.isGooglePayClicked == false) {
@@ -549,13 +504,13 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         val nowString: String = LocalizationManager.getValue("now", "ActionButton")
         /**
          * Stopped reseting the view of button cz of loader will test if not required will remove this code*/
-     /*   tabAnimatedActionButton?.setButtonDataSource(
-            true,
-            context?.let { LocalizationManager.getLocale(it).language },
-            payString + " " + nowString,
-            Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
-        )*/
+        /*   tabAnimatedActionButton?.setButtonDataSource(
+               true,
+               context?.let { LocalizationManager.getLocale(it).language },
+               payString + " " + nowString,
+               Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
+               Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
+           )*/
         /*  tabAnimatedActionButton?.setOnClickListener {
               requireActivity().supportFragmentManager.let { it1 -> SDKSession.contextSDK?.let { it2 ->
                   SDKSession.startSDK(it1,
@@ -571,12 +526,19 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         //bottomSheetDialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
         ThemeManager.currentTheme = ""
         LocalizationManager.currentLocalized = JSONObject()
-        bottomSheetDialog.dismissWithAnimation
-        bottomSheetDialog.hide()
-        bottomSheetDialog.dismiss()
+        dismissBottomSheet()
+
         resetTabAnimatedButton()
         sessionDelegate?.sessionCancelled()
 
+    }
+
+    private fun dismissBottomSheet() {
+        with(bottomSheetDialog) {
+            dismissWithAnimation
+            hide()
+            dismiss()
+        }
     }
 
 

@@ -56,7 +56,7 @@
         tools:context=".open.CheckoutFragment">
 
         <LinearLayout
-            android:id="@+id/fragment_all"
+            android:id="@+id/sdk_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipToOutline="true"
