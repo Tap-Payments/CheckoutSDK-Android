@@ -102,12 +102,14 @@ class WebViewHolder(
                     paymentInlineViewHolder.view,
                     switchViewHolder?.view!!,
                     cardViewHolder.view
-                ).addFadeOutAnimationToViews(onAnimationEnd = {})
-                web_view.layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    context.twoThirdHeightView().roundToInt()
-                )
-                showViewsRelatedToWebView()
+                ).addFadeOutAnimationToViews(onAnimationEnd = {
+                    web_view.layoutParams = LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        context.twoThirdHeightView().roundToInt()
+                    )
+                    showViewsRelatedToWebView()
+                })
+
 
             })
 

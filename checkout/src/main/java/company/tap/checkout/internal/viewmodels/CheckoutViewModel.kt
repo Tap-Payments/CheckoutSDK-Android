@@ -2424,10 +2424,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     private fun onClickCardPayment(savedCardsModel: Any?) {
         println("onClickCardPayment" + savedCardsModel)
+        println("paymentInlineViewHolder.cardInputUIStatus" + paymentInlineViewHolder.cardInputUIStatus)
         PaymentDataSource.setWebViewType(WebViewType.THREE_DS_WEBVIEW)
         amountViewHolder.view.amount_section?.tapChipPopup?.slideFromLeftToRight()
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
-        doAfterSpecificTime {
+        doAfterSpecificTime(time= 100L) {
             savedCardsModel as PaymentOption
             CustomUtils.hideKeyboardFrom(context, paymentInlineViewHolder.view)
             if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
@@ -2443,20 +2444,21 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
             saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
 
+            if(paymentInlineViewHolder.cardInputUIStatus == CardInputUIStatus.NormalCard) {
 
-            with(cardViewHolder.view.mainChipgroup) {
-                val viewsToFadeOut = mutableListOf<View>(chipsRecycler, groupAction, groupName)
-                if (paymentInlineViewHolder.cardInputUIStatus == CardInputUIStatus.NormalCard) {
-                    viewsToFadeOut.add(amountViewHolder.view)
-                }
-                doAfterSpecificTime(time = 500L) {
-                    viewsToFadeOut.addFadeOutAnimationToViews(onAnimationEnd = {})
-                    paymentInlineViewHolder.paymentInputContainer.applyBluryToView()
+                with(cardViewHolder.view.mainChipgroup) {
+                    val viewsToFadeOut = mutableListOf<View>(chipsRecycler, groupAction, groupName)
+                    if (paymentInlineViewHolder.cardInputUIStatus == CardInputUIStatus.NormalCard) {
+                        viewsToFadeOut.add(amountViewHolder.view)
+                    }
+                    doAfterSpecificTime(time = 500L) {
+                        viewsToFadeOut.addFadeOutAnimationToViews(onAnimationEnd = {})
+                        paymentInlineViewHolder.paymentInputContainer.applyBluryToView()
+                    }
+
                 }
 
             }
-
-
 
 
 /*
@@ -3216,22 +3218,23 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 cardViewHolder.view.cardInfoHeaderText.visibility = View.VISIBLE
                 cardViewHolder.view.cardInfoHeaderText.text =
                     LocalizationManager.getValue("savedCardSectionTitle", "TapCardInputKit")
-            }
 
-            with(cardViewHolder.view.mainChipgroup) {
-                val viewsToFadeOut = mutableListOf<View>(chipsRecycler, groupAction, groupName)
-                cardViewHolder.view.cardInfoHeaderText?.let { viewsToFadeOut.add(it) }
-                doAfterSpecificTime(time = 500L) {
 
-                    viewsToFadeOut.addFadeOutAnimationToViews(
-                        durationTime = 1000L,
-                        onAnimationEnd = {})
-                    paymentInlineViewHolder.paymentInputContainer.applyBluryToView()
+                with(cardViewHolder.view.mainChipgroup) {
+                    val viewsToFadeOut = mutableListOf<View>(chipsRecycler, groupAction, groupName)
+                    cardViewHolder.view.cardInfoHeaderText?.let { viewsToFadeOut.add(it) }
+                    viewsToFadeOut.add(amountViewHolder?.view)
+                    doAfterSpecificTime(time = 500L) {
+                        viewsToFadeOut.add(amountViewHolder.view)
+                        viewsToFadeOut.addFadeOutAnimationToViews(
+                            durationTime = 1000L,
+                            onAnimationEnd = {})
+                        paymentInlineViewHolder.paymentInputContainer.applyBluryToView()
+                    }
+
                 }
 
             }
-
-
         }
 
     }
