@@ -48,6 +48,7 @@ import company.tap.tapuilibrary.uikit.atoms.TapImageView
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.enums.ActionButtonState
 import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
+import company.tap.tapuilibrary.uikit.ktx.loadAppThemManagerFromPath
 import company.tap.tapuilibrary.uikit.ktx.setTopBorders
 import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
 import company.tap.tapuilibrary.uikit.views.TapBrandView
@@ -95,6 +96,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     private var mainCardLayout: CardView? = null
     private var topHeaderView: TapBrandView? = null
     var headerLayout: LinearLayout? =null
+    var sdkCardView: CardView? =null
     private var displayMetrics: Int? = 0
     var originalHeight: Int? = 0
 
@@ -155,6 +157,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         )
         inLineCardLayout = view.findViewById(R.id.inline_container)
         headerLayout = view.findViewById(R.id.headerLayout)
+        sdkCardView = view.findViewById(R.id.sdkCardView)
         initViews(view)
 
         topHeaderView = context?.let { TapBrandView(it) }
@@ -256,9 +259,11 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             Log.e("color", newColorVal.toString())
             enableSections()
             originalHeight = checkoutLayout.measuredHeight
+        /**
+         *
+         * Discuss with aslm if it affected or not**/
 
-
-            topHeaderView?.backgroundHeader?.setBackgroundDrawable(
+      /*      topHeaderView?.backgroundHeader?.setBackgroundDrawable(
                 createDrawableGradientForBlurry(
                     intArrayOf(
                         Color.parseColor(newColorVal),
@@ -266,7 +271,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                         Color.parseColor(newColorVal)
                     )
                 )
-            )
+            )*/
+            topHeaderView?.backgroundHeader?.setBackgroundDrawable(null)
             headerLayout?.addView(topHeaderView, 0)
         }
         topHeaderView?.visibility = View.GONE
@@ -289,7 +295,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
 
 
-        scrollView?.let {
+       /* scrollView?.let {
             setTopBorders(
                 it,
                 strokeColor = Color.parseColor(
@@ -302,7 +308,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                     newColorVal
                 )
             )
-        }
+        }*/
 
 
         /*   relativeLL.let { it1 ->
@@ -319,38 +325,46 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                    )
                }
            }*/
-        /*  mainCardLayout.let { card ->
-              if (card != null) {
-                  setTopBorders(
-                      card,
-                      35f,// corner raduis
-                      0.0f,
-                      Color.parseColor(newColorVal),// stroke color
-                      Color.parseColor(newColorVal),// tint color
-                      Color.parseColor(newColorVal)
-                  )
-              }
-          }
-
-  */
-
-        checkoutLayout?.let {
-            setTopBorders(
-                it,
-                105f,
-                strokeColor = Color.parseColor(
-                    newColorVal
-                ),
-                tintColor = Color.parseColor(
-                    newColorVal
-                ),// tint color
-                shadowColor = Color.parseColor(
-                    newColorVal
+        sdkCardView?.setBackgroundDrawable(
+            createDrawableGradientForBlurry(
+                intArrayOf(
+                    Color.parseColor(newColorVal),
+                    Color.parseColor(context?.getString(R.color.black_blur_12)),
+                    Color.parseColor(newColorVal)
                 )
             )
-        }
+        )
+        //sdkCardView?.setBackgroundColor(Color.parseColor(context?.getString(R.color.black_blur_12)))
+      /*  sdkCardView.let { it1 ->
+            if (it1 != null) {
+                setTopBorders(
+                    it1,
+                    35f,// corner raduis
+                    0.0f,
+                    Color.parseColor(
+                        newColorVal
+                    ),// stroke color
+                    Color.parseColor(newColorVal),// tint color
+                    Color.parseColor(newColorVal)
+                )
+            }
+        }*/
 
-        checkoutLayout?.setBackgroundDrawable(
+        setTopBorders(
+            checkoutLayout,
+            105f,
+            strokeColor = Color.parseColor(
+                newColorVal
+            ),
+            tintColor = Color.parseColor(
+                newColorVal
+            ),// tint color
+            shadowColor = Color.parseColor(
+                newColorVal
+            )
+        )
+
+        checkoutLayout.setBackgroundDrawable(
             createDrawableGradientForBlurry(
                 intArrayOf(
                     Color.parseColor(newColorVal),
@@ -359,6 +373,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                 )
             )
         )
+
 
         closeText.setOnClickListener {
             bottomSheetDialog.dismissWithAnimation
