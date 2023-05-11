@@ -418,7 +418,12 @@ fun MutableList<View>.addFadeOutAnimationToViews(
 
 }
 
-fun animateBS(changeHeight: () -> Unit, fromView: ViewGroup, toView: ViewGroup,transitionAnimation:Long=800L) {
+fun animateBS(
+    changeHeight: () -> Unit,
+    fromView: ViewGroup,
+    toView: ViewGroup,
+    transitionAnimation: Long = 800L
+) {
     val transition = AutoTransition()
     transition.addTarget(fromView)
     transition.interpolator = FastOutSlowInInterpolator()

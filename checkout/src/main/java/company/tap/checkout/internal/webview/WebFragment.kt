@@ -10,6 +10,7 @@ import android.app.Activity
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Message
 import android.text.TextUtils
 import android.util.DisplayMetrics
 import android.util.Log
@@ -17,35 +18,25 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
-import android.widget.FrameLayout
-import android.widget.LinearLayout
 import android.widget.ProgressBar
-import android.widget.RelativeLayout
 import androidx.annotation.DrawableRes
 import androidx.fragment.app.DialogFragment
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.utils.CustomUtils
-import company.tap.checkout.internal.utils.addFadeOutAnimation
 import company.tap.checkout.internal.utils.showToast
-import company.tap.checkout.internal.utils.twoThirdHeightView
-import company.tap.checkout.internal.viewholders.SwitchViewHolder
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.controller.SDKSession.contextSDK
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.uikit.ktx.setBorderedView
-import company.tap.tapuilibrary.uikit.ktx.setTopBorders
 import kotlinx.android.synthetic.main.fragment_web.*
 import kotlinx.android.synthetic.main.fragment_web.web_view
 import kotlinx.android.synthetic.main.switch_layout.view.*
 import kotlinx.android.synthetic.main.web_view_layout.*
-import kotlin.math.roundToInt
 
 
 class WebFragment(
@@ -105,7 +96,6 @@ class WebFragment(
     }
 
 
-
     @SuppressLint("SetJavaScriptEnabled")
     private fun setUpWebView(mUrl: String) {
         web_view.settings.javaScriptEnabled = true
@@ -120,6 +110,8 @@ class WebFragment(
         web_view.settings.loadWithOverviewMode = true
         web_view.settings.layoutAlgorithm = WebSettings.LayoutAlgorithm.NORMAL
         web_view.settings.useWideViewPort = true
+        web_view.settings.setSupportMultipleWindows(true);
+
         webViewUrl?.let { web_view.loadUrl(it) }
 
         web_view.setOnKeyListener { _, keyCode, event ->
@@ -140,6 +132,16 @@ class WebFragment(
 
 
         web_view.webChromeClient = object : WebChromeClient() {
+
+            override fun onCreateWindow(
+                view: WebView?,
+                isDialog: Boolean,
+                isUserGesture: Boolean,
+                resultMsg: Message?
+            ): Boolean {
+                return super.onCreateWindow(view, isDialog, isUserGesture, resultMsg)
+            }
+
             /*
                     public void onProgressChanged (WebView view, int newProgress)
                         Tell the host application the current progress of loading a page.
@@ -155,7 +157,7 @@ class WebFragment(
                 if (newProgress == 100) {
                     if (isFirstTimeLoadingInWeb) {
                         onLoadedWebView.invoke()
-                        isFirstTimeLoadingInWeb =false
+                        isFirstTimeLoadingInWeb = false
                     }
                     progressBar?.visibility = View.INVISIBLE
                     web_view.visibility = View.VISIBLE

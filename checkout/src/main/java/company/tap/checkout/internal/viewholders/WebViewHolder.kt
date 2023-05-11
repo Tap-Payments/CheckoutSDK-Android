@@ -93,8 +93,9 @@ class WebViewHolder(
     @RequiresApi(Build.VERSION_CODES.N)
     @SuppressLint("SetJavaScriptEnabled")
     private fun setUpWebView() {
-        web_view.webViewClient =
-            cardViewModel.let { TapCustomWebViewClient(this, it, checkoutViewModel) }
+        web_view.webViewClient = cardViewModel.let {
+            TapCustomWebViewClient(this, it, checkoutViewModel)
+        }
         web_view.applyConfigurationForWebView(
             url = redirectURL,
             onProgressWebViewFinishedLoading = {
@@ -102,13 +103,13 @@ class WebViewHolder(
                     paymentInlineViewHolder.view,
                     switchViewHolder?.view!!,
                     cardViewHolder.view
-                ).addFadeOutAnimationToViews(onAnimationEnd = {
+                ).addFadeOutAnimationToViews {
                     web_view.layoutParams = LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         context.twoThirdHeightView().roundToInt()
                     )
                     showViewsRelatedToWebView()
-                })
+                }
 
 
             })

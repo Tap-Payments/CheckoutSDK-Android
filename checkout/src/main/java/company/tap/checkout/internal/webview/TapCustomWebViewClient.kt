@@ -37,6 +37,7 @@ class TapCustomWebViewClient constructor(private val customWebViewClientContract
     }
 
 
+
     @RequiresApi(Build.VERSION_CODES.N)
     override fun shouldOverrideUrlLoading(view: WebView, @NonNull url: String): Boolean {
         checkPaymentError(url.toLowerCase())

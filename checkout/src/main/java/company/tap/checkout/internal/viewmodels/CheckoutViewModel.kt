@@ -10,7 +10,6 @@ import android.graphics.drawable.ShapeDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Handler
-import android.os.Looper
 import android.text.format.DateFormat
 import android.util.DisplayMetrics
 import android.util.Log
@@ -31,7 +30,6 @@ import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
 import androidx.core.view.setMargins
 import androidx.fragment.app.FragmentManager
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -1771,6 +1769,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         println("response val>>" + response)
         println("tabAnimatedActionButton val>>" + tabAnimatedActionButton)
         println("save val>>" + saveCardSwitchHolder)
+
         /* if(chargeResponse?.status == null && response == "tokenized"){
              //todo replaced authorized with chargeresponse
              SDKSession.getListener()?.getStatusSDK(response,chargeResponse)
@@ -2002,6 +2001,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         animateBS(
             fromView = bottomSheetLayout,
             toView = sdkLayout,
+            transitionAnimation = 300,
             changeHeight = {
                 viewHolders.forEach {
                     if (::sdkLayout.isInitialized) {
@@ -2028,15 +2028,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         afterAddingViews: () -> Unit = {}
     ) {
 
-        animateBS(fromView = bottomSheetLayout, toView = sdkLayout, changeHeight = {
-            viewHolders.forEach {
-                if (::sdkLayout.isInitialized) {
-                    sdkLayout.removeView(it?.view)
-                    sdkLayout.addView(it?.view)
+        animateBS(fromView = bottomSheetLayout, toView = sdkLayout,
+            changeHeight = {
+                viewHolders.forEach {
+                    if (::sdkLayout.isInitialized) {
+                        sdkLayout.removeView(it?.view)
+                        sdkLayout.addView(it?.view)
+                    }
                 }
-            }
-            afterAddingViews.invoke()
-        })
+                afterAddingViews.invoke()
+            })
 
     }
 
@@ -2399,44 +2400,21 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     if (paymentInlineViewHolder.cardInputUIStatus == CardInputUIStatus.NormalCard) {
                         viewsToFadeOut.add(amountViewHolder.view)
                     }
-                    doAfterSpecificTime(time = 500L) {
-                        viewsToFadeOut.addFadeOutAnimationToViews(onAnimationEnd = {})
-                        paymentInlineViewHolder.paymentInputContainer.applyBluryToView()
-                    }
+                    viewsToFadeOut.addFadeOutAnimationToViews {}
+                    paymentInlineViewHolder.paymentInputContainer.applyBluryToView()
 
                 }
 
             }
-
-
-/*
-            if (isSavedCardSelected == true) {
-                cardViewModel.processEvent(
-                    CardViewEvent.CreateTokenExistingCardEvent,
-                    this,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    paymentInlineViewHolder.getSavedCardData()
-                )
-
-            } else {*/
             cardViewModel.processEvent(
                 CardViewEvent.CreateTokenEvent,
                 this,
-
                 null,
                 null,
                 paymentInlineViewHolder.getCard(),
                 null,
                 saveCardValue = paymentInlineViewHolder.tapInlineCardSwitch?.switchSaveCard?.isChecked
             )
-            //  }
-
-
         }
 
 
@@ -3173,12 +3151,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     val viewsToFadeOut = mutableListOf<View>(chipsRecycler, groupAction, groupName)
                     cardViewHolder.view.cardInfoHeaderText?.let { viewsToFadeOut.add(it) }
                     viewsToFadeOut.add(amountViewHolder?.view)
-                    doAfterSpecificTime(time = 500L) {
-                        viewsToFadeOut.add(amountViewHolder.view)
-                        viewsToFadeOut.addFadeOutAnimationToViews(
-                            durationTime = 1000L,
-                            onAnimationEnd = {})
-                        paymentInlineViewHolder.paymentInputContainer.applyBluryToView()
+                    viewsToFadeOut.addFadeOutAnimationToViews(
+                        durationTime = 500L
+                    ) {
+                        animateBS(
+                            fromView = bottomSheetLayout,
+                            toView = sdkLayout,
+                            changeHeight = {
+                                paymentInlineViewHolder.paymentInputContainer.applyBluryToView()
+                            })
                     }
 
                 }
