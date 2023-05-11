@@ -1255,17 +1255,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                             durationTime = 5,
                             isGone = false
                         )
-                        doAfterSpecificTime(time = 100) {
-                            bottomSheetLayout.resizeAnimation(
-                                durationTime = resizeAnimationDuration,
-                                startHeight = sdkLayout.height,
-                                endHeight = context.getDeviceSpecs().first,
-                                onAnimationStart = {
-                                    showWebView()
-                                }
-                            )
-                        }
-
+                        showWebView()
                     }
                 )
                 fragmentManager.beginTransaction()
@@ -1847,15 +1837,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = View.VISIBLE
         }
-//        doAfterSpecificTime(250) {
-//            if (::bottomSheetLayout.isInitialized) {
-//                bottomSheetLayout.resizeAnimation(
-//                    startHeight = bottomSheetLayout.measuredHeight,
-//                    endHeight = sdkLayout.height,
-//                    durationTime = 250, isExpanding = false
-//                )
-//            }
-//        }
         if (::checkoutFragment.isInitialized)
             checkoutFragment.closeText.visibility = GONE
         println("chargeResponse are>>>>" + chargeResponse?.status)
@@ -1879,11 +1860,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         println("chargeResponse to handle" + chargeResponse?.status)
         when (chargeResponse?.status) {
             ChargeStatus.CAPTURED, ChargeStatus.AUTHORIZED, ChargeStatus.VALID, ChargeStatus.IN_PROGRESS -> {
-                doAfterSpecificTime(500) {
-                    saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
-                        ActionButtonState.SUCCESS
-                    )
-                }
+                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
+                    ActionButtonState.SUCCESS
+                )
+
 //                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
 //                    true,
 //                    "en", "",
@@ -1894,24 +1874,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
             ChargeStatus.CANCELLED, ChargeStatus.TIMEDOUT, ChargeStatus.FAILED, ChargeStatus.DECLINED, ChargeStatus.UNKNOWN,
             ChargeStatus.RESTRICTED, ChargeStatus.ABANDONED, ChargeStatus.VOID, ChargeStatus.INVALID -> {
-                println("CANCELLED 2>>>" + saveCardSwitchHolder?.view?.cardSwitch?.payButton)
-                doAfterSpecificTime(time = 200) {
-                    saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
-                        ActionButtonState.ERROR
-                    )
-                }
-                tabAnimatedActionButton?.changeButtonState(
+                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                     ActionButtonState.ERROR
                 )
-
-                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
-                    false,
-                    "en",
-                    "",
-                    Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
-                    Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
-                )
-
             }
             else -> {
 
@@ -2034,24 +1999,27 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     private fun removeViews(vararg viewHolders: TapBaseViewHolder?) {
-        animateBS(fromView = bottomSheetLayout, toView = sdkLayout, changeHeight = {
-            viewHolders.forEach {
-                if (::sdkLayout.isInitialized) {
-                    sdkLayout.setBackgroundDrawable(
-                        createDrawableGradientForBlurry(
-                            newColorVal?.let { it1 ->
-                                intArrayOf(
-                                    it1,
-                                    it1,
-                                    it1
-                                )
-                            }!!
+        animateBS(
+            fromView = bottomSheetLayout,
+            toView = sdkLayout,
+            changeHeight = {
+                viewHolders.forEach {
+                    if (::sdkLayout.isInitialized) {
+                        sdkLayout.setBackgroundDrawable(
+                            createDrawableGradientForBlurry(
+                                newColorVal?.let { it1 ->
+                                    intArrayOf(
+                                        it1,
+                                        it1,
+                                        it1
+                                    )
+                                }!!
+                            )
                         )
-                    )
-                    sdkLayout.removeView(it?.view)
+                        sdkLayout.removeView(it?.view)
+                    }
                 }
-            }
-        })
+            })
     }
 
 
@@ -2143,9 +2111,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     CardInputUIStatus.SavedCard
                 )
 
-                    cardViewHolder.view.cardInfoHeaderText.visibility = View.VISIBLE
-                    cardViewHolder.view.cardInfoHeaderText.text =
-                        LocalizationManager.getValue("savedCardSectionTitle", "TapCardInputKit")
+                cardViewHolder.view.cardInfoHeaderText.visibility = View.VISIBLE
+                cardViewHolder.view.cardInfoHeaderText.text =
+                    LocalizationManager.getValue("savedCardSectionTitle", "TapCardInputKit")
 
                 isSavedCardSelected = true
                 Bugfender.d(
@@ -2408,7 +2376,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         PaymentDataSource.setWebViewType(WebViewType.THREE_DS_WEBVIEW)
         amountViewHolder.view.amount_section?.tapChipPopup?.slideFromLeftToRight()
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
-        doAfterSpecificTime(time= 100L) {
+        doAfterSpecificTime(time = 100L) {
             savedCardsModel as PaymentOption
             CustomUtils.hideKeyboardFrom(context, paymentInlineViewHolder.view)
             if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
@@ -2424,7 +2392,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
             saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
 
-            if(paymentInlineViewHolder.cardInputUIStatus == CardInputUIStatus.NormalCard) {
+            if (paymentInlineViewHolder.cardInputUIStatus == CardInputUIStatus.NormalCard) {
 
                 with(cardViewHolder.view.mainChipgroup) {
                     val viewsToFadeOut = mutableListOf<View>(chipsRecycler, groupAction, groupName)
@@ -3264,24 +3232,23 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         newBorderColor = "#" + borderOpacityVal + borderColor.substring(0, borderColor.length - 2)
             .replace("#", "")
 
-        //  sdkLayout.setBackgroundColor(Color.parseColor(newBorderColor))
 
-        /*  sdkLayout.let { it1 ->
-              setTopBorders(
-                  it1,
-                  35f,// corner raduis
-                  0.0f,
-                  Color.parseColor(
-                      newBorderColor
-                  ),// stroke color
-                  Color.parseColor(
-                      newBorderColor
-                  ),// tint color
-                  Color.parseColor(
-                      newBorderColor
-                  )
-              )
-          }*/
+        sdkLayout.let { it1 ->
+            setTopBorders(
+                it1,
+                35f,// corner raduis
+                0.0f,
+                Color.parseColor(
+                    newBorderColor
+                ),// stroke color
+                Color.parseColor(
+                    newBorderColor
+                ),// tint color
+                Color.parseColor(
+                    newBorderColor
+                )
+            )
+        }
 
         sdkLayout?.setBackgroundDrawable(
             createDrawableGradientForBlurry(
