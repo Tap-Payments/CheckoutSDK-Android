@@ -15,10 +15,8 @@ import android.view.*
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import androidx.annotation.RequiresApi
-import androidx.cardview.widget.CardView
-import androidx.core.view.setPadding
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -26,6 +24,7 @@ import cards.pay.paycardsrecognizer.sdk.Card
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.ChargeStatus
@@ -82,6 +81,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     @JvmField
     var scrollView: NestedScrollView? = null
+    var coordinatorLayout: CoordinatorLayout? = null
+
 
     @JvmField
     var isNfcOpened: Boolean = false
@@ -91,15 +92,11 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
 
     private var inLineCardLayout: FrameLayout? = null
-    private var relativeLL: RelativeLayout? = null
-    private var mainCardLayout: CardView? = null
     private var topHeaderView: TapBrandView? = null
     var headerLayout: LinearLayout? =null
     private var displayMetrics: Int? = 0
     var originalHeight: Int? = 0
 
-    @JvmField
-    var countryCode: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _activity = activity?.parent
@@ -114,13 +111,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         Glide.with(this).pauseRequests()
         resetTabAnimatedButton()
 
-    }
-
-    override fun onStateChanged(newState: Int) {
-        super.onStateChanged(newState)
-        if (newState == BottomSheetBehavior.STATE_DRAGGING) {
-            bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED;
-        }
     }
 
 
@@ -236,7 +226,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                                         inLineCardLayout!!,
                                         this,
                                         it2,
-                                        cardViewModel, this, headerLayout!!
+                                        cardViewModel, this, headerLayout!!,
+                                        coordinatorLayout
                                     )
                                 }
                             }
@@ -399,6 +390,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         closeText = view.findViewById(R.id.closeText)
         closeImage = view.findViewById(R.id.closeImage)
         scrollView = view.findViewById(R.id.scrollView)
+        coordinatorLayout = view.findViewById(R.id.coordinator)
        // relativeLL = view.findViewById(R.id.relativeLL)
        // mainCardLayout = view.findViewById(R.id.mainCardLayout)
         /**Added to init the lib of getting dynamic flags*/
@@ -476,10 +468,9 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
          val dialog = super.onCreateDialog(savedInstanceState)
         (dialog as BottomSheetDialog).behavior.isFitToContents = true
-        (dialog as BottomSheetDialog).behavior.halfExpandedRatio = 0.3f
-
         return dialog
     }
+
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onScanCardFinished(card: Card?, cardImage: ByteArray?) {
@@ -489,19 +480,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
         }
     }
-
-
-    private fun consumeResponse(response: Resource<CardViewState>) {
-        println("response value is" + response.data?.configResponseModel)
-        when (response) {
-            is Resource.Loading -> concatText("Loading")
-            is Resource.Finished -> renderView(response.data)
-            is Error -> response.message?.let { concatText(it) }
-            is Resource.Success -> renderView(response.data)
-
-        }
-    }
-
     private fun renderView(data: CardViewState?) {
 
     }

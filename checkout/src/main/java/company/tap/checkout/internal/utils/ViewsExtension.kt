@@ -35,6 +35,8 @@ import androidx.annotation.DrawableRes
 import androidx.core.os.postDelayed
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+import androidx.transition.AutoTransition
 import com.bumptech.glide.Glide
 import company.tap.checkout.R
 import company.tap.checkout.internal.cache.SharedPrefManager
@@ -176,7 +178,7 @@ inline fun View?.onSizeChange(
 ) =
     this?.apply {
         addOnLayoutChangeListener { _, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
-            Log.e("listen","listen")
+            Log.e("listen", "listen")
             val rect = Rect(left, top, right, bottom)
             val oldRect = Rect(oldLeft, oldTop, oldRight, oldBottom)
             if (rect.width() != oldRect.width() || rect.height() != oldRect.height()) {
@@ -414,6 +416,16 @@ fun MutableList<View>.addFadeOutAnimationToViews(
     }
 
 
+}
+
+fun animateBS(changeHeight: () -> Unit, fromView: ViewGroup, toView: ViewGroup) {
+    val transition = AutoTransition()
+    transition.addTarget(fromView)
+    transition.interpolator = FastOutSlowInInterpolator()
+    transition.duration = 3000L
+    androidx.transition.TransitionManager.beginDelayedTransition(toView, transition)
+    changeHeight()
+    androidx.transition.TransitionManager.endTransitions(fromView)
 }
 
 fun MutableList<View>.addFadeInAnimationToViews(durationTime: Long = 500L) {
