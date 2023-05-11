@@ -2163,6 +2163,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     CardInputUIStatus.SavedCard
                 )
 
+                    cardViewHolder.view.cardInfoHeaderText.visibility = View.VISIBLE
+                    cardViewHolder.view.cardInfoHeaderText.text =
+                        LocalizationManager.getValue("savedCardSectionTitle", "TapCardInputKit")
+
                 isSavedCardSelected = true
                 Bugfender.d(
                     CustomUtils.tagEvent,
@@ -2453,11 +2457,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
 
 
-            if (paymentInlineViewHolder.cardInputUIStatus == CardInputUIStatus.SavedCard) {
-                cardViewHolder.view.cardInfoHeaderText.visibility = View.VISIBLE
-                cardViewHolder.view.cardInfoHeaderText.text =
-                    LocalizationManager.getValue("savedCardSectionTitle", "TapCardInputKit")
-            }
+
 
 /*
             if (isSavedCardSelected == true) {
