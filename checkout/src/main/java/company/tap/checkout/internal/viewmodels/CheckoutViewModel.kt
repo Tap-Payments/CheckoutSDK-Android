@@ -1289,7 +1289,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 )
                 removeViews(
                     //  businessViewHolder,
-                    amountViewHolder,
+                   // amountViewHolder,
                     //  cardViewHolder,
                     //  saveCardSwitchHolder,
                     // paymentInlineViewHolder,
@@ -3219,13 +3219,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 cardViewHolder.view.cardInfoHeaderText.text =
                     LocalizationManager.getValue("savedCardSectionTitle", "TapCardInputKit")
 
-
                 with(cardViewHolder.view.mainChipgroup) {
                     val viewsToFadeOut = mutableListOf<View>(chipsRecycler, groupAction, groupName)
                     cardViewHolder.view.cardInfoHeaderText?.let { viewsToFadeOut.add(it) }
-                    viewsToFadeOut.add(amountViewHolder?.view)
+                    viewsToFadeOut.add(amountViewHolder.view)
                     doAfterSpecificTime(time = 500L) {
-                        viewsToFadeOut.add(amountViewHolder.view)
                         viewsToFadeOut.addFadeOutAnimationToViews(
                             durationTime = 1000L,
                             onAnimationEnd = {})
