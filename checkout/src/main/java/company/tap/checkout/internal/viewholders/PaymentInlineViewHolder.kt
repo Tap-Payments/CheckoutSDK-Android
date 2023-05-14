@@ -188,8 +188,8 @@ class PaymentInlineViewHolder(
         // tapSeparatorViewLinear = view.findViewById(R.id.tapSeparatorViewLinear)
         // tapSeparatorViewLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
         // tabLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.backgroundColor")))
-        tabLayout.changeTabItemMarginBottomValue(10)
-        tabLayout.changeTabItemMarginTopValue(10)
+        //tabLayout.changeTabItemMarginBottomValue(5)
+        tabLayout.changeTabItemMarginTopValue(5)
 
         constraintt = view.findViewById(R.id.constraintt)
         constraintt.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
@@ -1719,7 +1719,9 @@ class PaymentInlineViewHolder(
         //  intertabLayout.setPadding(-50, 0, 0, 0)
         PaymentDataSource.setBinLookupResponse(null)
 //        tabLayout.changeTabItemAlphaValue(1f)
-        decideTapSelection(imageURLApi, itemsMobilesList, itemsCardsList)
+        /**
+         * Sorted cardpayment types based on orderBY*/
+        decideTapSelection(imageURLApi.sortedBy { it.orderBy }, itemsMobilesList, itemsCardsList)
         /**
          * if there is only one payment method we will set visibility gone for tablayout
          * and set the payment method icon for inline input card
