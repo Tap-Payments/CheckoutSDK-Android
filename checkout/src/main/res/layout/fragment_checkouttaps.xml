@@ -9,6 +9,7 @@
     android:orientation="vertical"
     android:fillViewport="true"
     android:clipToOutline="true"
+    android:id="@+id/sdkCardView"
     app:cardBackgroundColor="#10ffffff"
     tools:context=".open.CheckoutFragment">
 
