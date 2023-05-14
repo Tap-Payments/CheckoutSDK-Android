@@ -27,6 +27,7 @@ import company.tap.cardinputwidget.CardInputUIStatus
 import company.tap.cardinputwidget.views.CardBrandView
 import company.tap.cardinputwidget.widget.CardInputListener
 import company.tap.cardinputwidget.widget.inline.InlineCardInput2
+import company.tap.cardscanner.TapCard
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.CardScheme
 import company.tap.checkout.internal.api.enums.LogsModel
@@ -736,6 +737,92 @@ class PaymentInlineViewHolder(
 
     }
 
+    fun setCardScanData(emvCard: TapCard, month :Int, year :Int)
+    {
+        cardInputUIStatus = CardInputUIStatus.NormalCard
+        val updateCardString: String = emvCard.cardNumber?.trim().toString()
+            .substring(0, 6) + emvCard.cardNumber?.length?.minus(4)
+            ?.let {
+                emvCard.cardNumber?.trim().toString().substring(
+                    it
+                )
+            }
+        println("updateCardString"+updateCardString)
+
+        val cardModel = Card(
+            updateCardString,
+            null,
+            month,
+            year,
+            emvCard.cardHolder,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            emvCard.cardNumber?.length?.minus(4)
+                ?.let { emvCard?.cardNumber?.substring(it) },
+            company.tap.cardinputwidget.CardBrand.fromCardNumber(emvCard.cardNumber),
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        )
+
+
+        if (emvCard?.cardHolder != null) {
+            tapInlineCardSwitch?.visibility = View.VISIBLE
+            tapInlineCardSwitch?.switchesLayout?.visibility = View.VISIBLE
+            tapInlineCardSwitch?.switchSaveCard?.visibility = View.VISIBLE
+            tapInlineCardSwitch?.switchSaveCard?.isChecked = true
+            tapCardInputView.setVisibilityOfHolderField(true)
+            tapCardInputView.holderNameEnabled = true
+            separator1?.visibility = View.VISIBLE
+            tapInlineCardSwitch?.switchSaveCard?.isChecked = true
+            cardHolderName = emvCard.cardHolder
+
+        }
+
+        tapCardInputView.setNormalCardDetails(cardModel, CardInputUIStatus.NormalCard)
+        /*  val alertMessage:String = LocalizationManager.getValue("Warning", "Hints", "missingCVV")
+           tapAlertView?.alertMessage?.text =alertMessage.replace("%i","3")
+
+           tapAlertView?.visibility =View.VISIBLE*/
+        if (CustomUtils.getCurrentTheme() != null && CustomUtils.getCurrentTheme()
+                .contains("dark")
+        ) {
+            val card = CardValidator.validate(emvCard?.cardNumber)
+            emvCard.cardNumber?.let {
+                logicTosetImageDynamic(
+                    card.cardBrand,
+                    it
+                )
+            }
+        } else {
+            val card = CardValidator.validate(emvCard?.cardNumber)
+            emvCard.cardNumber?.let {
+                logicTosetImageDynamic(
+                    card.cardBrand,
+                    it
+                )
+            }
+        }
+
+        contactDetailsView?.visibility = View.GONE
+        shippingDetailView?.visibility = View.GONE
+        // intertabLayout.visibility = View.GONE
+        tabLayout?.fadeVisibility(View.GONE, 2000)
+        intertabLayout?.fadeVisibility(View.GONE, 2000)
+        //Added for opening as soon as cvv focus
+        CustomUtils.showKeyboard(context)
+
+    }
+
     private fun resetCardBrandIcon() {
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
             cardBrandView?.iconView?.setImageResource(R.drawable.card_icon_dark)
@@ -802,13 +889,15 @@ class PaymentInlineViewHolder(
 
                  }*/
                 println("PaymentDataSource?.getBinLookupResponse()"+PaymentDataSource?.getBinLookupResponse())
+                println("cardHolderName>>"+cardHolderName)
                 //On Details complete
                 if (s.toString().length > 3) {
                     cardNumber?.let {
                         expiryDate?.let { it1 ->
+                            if(PaymentDataSource.getBinLookupResponse()!=null && cvvNumber!=null)
                             onPaymentCardComplete.onPayCardCompleteAction(
                                 true, PaymentType.CARD,
-                                it, it1, cvvNumber!!, cardHolderName ,PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
+                                it, it1, cvvNumber!!, cardHolderName ,PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
                             )
                         }
                     }

@@ -2592,14 +2592,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             //businessViewHolder,
             // amountViewHolder,
             // cardViewHolder,
-            saveCardSwitchHolder,
             paymentInlineViewHolder,
+            saveCardSwitchHolder,
             otpViewHolder,
             goPaySavedCardHolder,
             goPayViewsHolder
         )
-        //  addViews(businessViewHolder, amountViewHolder)
         frameLayout.visibility = View.VISIBLE
+        //  addViews(businessViewHolder, amountViewHolder)
+
         cardViewHolder.view.visibility = GONE
         fragmentManager
             .beginTransaction()
@@ -2630,7 +2631,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         removeViews(
             //businessViewHolder,
             // amountViewHolder,
-            cardViewHolder,
+            //cardViewHolder,
             saveCardSwitchHolder,
             paymentInlineViewHolder,
             otpViewHolder,
@@ -2640,6 +2641,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         amountViewHolder.readyToScanVisibility(scannerClicked)
         // addViews(businessViewHolder, amountViewHolder)
         inLineCardLayout.visibility = View.VISIBLE
+        cardViewHolder.view.visibility = GONE
         FrameManager.getInstance().frameColor = Color.WHITE
         // Use
         //  val bottomSheet: FrameLayout? = bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet)
@@ -3312,11 +3314,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             isInlineOpened = false
             checkoutFragment.isScannerOpened = false
             inLineCardLayout.visibility = GONE
+            cardViewHolder.view.visibility = VISIBLE
             amountViewHolder.readyToScanVisibility(false)
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                 ActionButtonState.RESET
             )
-
+            incrementalCount =0
         }
 
     }
@@ -3340,17 +3343,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         //  removeViews(amountViewHolder, businessViewHolder)
         addViews(
-            // businessViewHolder,
-            /// amountViewHolder,
-            cardViewHolder,
+            //   businessViewHolder,
+            //   amountViewHolder,
+            // cardViewHolder,
             paymentInlineViewHolder,
             saveCardSwitchHolder
         )
-
-        if (card != null && card.cardNumber?.trim() != null && card.cardNumber.trim().length == 6) {
-            callBinLookupApi(card.cardNumber.trim().substring(0, 6))
-        }
-
+        callBinLookupApi(card.cardNumber?.trim()?.substring(0, 6))
 
 
         Handler().postDelayed({
@@ -3365,7 +3364,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 }
 
             }
-        }, 300)
+        }, 1000)
 
 
         // inlineCamerFragment.onDestroy()
@@ -3376,29 +3375,25 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun setScannedCardDetails(card: TapCard) {
-        /* if(CardUtils.isValidCardNumber(card.cardNumber)){
-             paymentInlineViewHolder.tapCardInputView.onTouchView()
-         }else {
-             paymentInlineViewHolder.tapCardInputView.onTouchCardField()
-         }*/
-        //paymentInlineViewHolder.tapCardInputView.onTouchCardField()
+
+
         println("scanned card holder is${card.cardHolder}")
         println("scanned card number is${card.cardNumber}")
 
-        paymentInlineViewHolder.tapCardInputView.setCardNumberMasked(
+       /* paymentInlineViewHolder.tapCardInputView.setCardNumberMasked(
             paymentInlineViewHolder.maskCardNumber(
                 card.cardNumber
             )
-        )
+        )*/
+        paymentInlineViewHolder.hideViewONScanNFC()
         val dateParts: List<String>? = card.expirationDate?.split("/")
         val month = dateParts?.get(0)?.toInt()
         val year = dateParts?.get(1)?.toInt()
         if (month != null) {
             if (year != null) {
-                paymentInlineViewHolder.tapCardInputView.setExpiryDate(month, year)
+                paymentInlineViewHolder.setCardScanData(card, month, year)
             }
         }
-
 
         // paymentInlineViewHolder.tapCardInputView.setCardHolderName(card.cardHolder)
 
