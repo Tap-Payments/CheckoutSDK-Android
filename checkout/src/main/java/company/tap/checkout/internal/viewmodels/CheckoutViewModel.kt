@@ -3602,7 +3602,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
 
 
-        } else logicToHandlePaymentDataType(webPaymentOptions, cardPaymentOptions)
+        } else logicToHandlePaymentDataType(webPaymentOptions,
+            cardPaymentOptions
+        )
 
 
     }
