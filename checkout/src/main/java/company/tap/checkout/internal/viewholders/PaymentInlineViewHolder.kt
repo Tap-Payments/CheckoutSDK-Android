@@ -894,7 +894,7 @@ class PaymentInlineViewHolder(
                 if (s.toString().length > 3) {
                     cardNumber?.let {
                         expiryDate?.let { it1 ->
-                            if(PaymentDataSource.getBinLookupResponse()!=null && cvvNumber!=null)
+                            if(PaymentDataSource.getBinLookupResponse()!=null)
                             onPaymentCardComplete.onPayCardCompleteAction(
                                 true, PaymentType.CARD,
                                 it, it1, cvvNumber!!, cardHolderName ,PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
