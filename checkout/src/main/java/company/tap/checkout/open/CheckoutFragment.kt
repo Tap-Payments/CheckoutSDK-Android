@@ -231,9 +231,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                                         this,
                                         it2,
                                         cardViewModel, this, headerLayout!!,
-                                        coordinatorLayout,
-                                        background
-                                    )
+                                        coordinatorLayout)
                                 }
                             }
 
