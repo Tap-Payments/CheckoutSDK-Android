@@ -917,7 +917,7 @@ class CardRepository : APIRequestCallback {
         if (requestCode == CONFIG_CODE || requestCode == CHARGE_REQ_CODE || requestCode == INIT_CODE) {
             sdkSession.getListener()?.sdkError(errorDetails)
             SDKSession.sessionActive = false
-            cardRepositoryContext?.showToast("Handle Fail")
+          //  cardRepositoryContext?.showToast("Handle Fail")
 
             viewModel.handleSuccessFailureResponseButton(
                 "failure",
