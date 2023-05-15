@@ -2305,6 +2305,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
          * on Click Redirect for Knet Redirection
          */
 
+
         sdkLayout.setBackgroundDrawable(
             createDrawableGradientForBlurry(
                 newColorVal?.let { it1 ->
