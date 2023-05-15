@@ -81,6 +81,7 @@ class CardRepository : APIRequestCallback {
     private var dataProvider: IPaymentDataProvider = PaymentDataProvider()
     lateinit var jsonString: String
     private var configResponse: TapConfigResponseModel? = null
+    private var selectedPaymentOption: PaymentOption? = null
 
     @JvmField
     var initResponseModel: InitResponseModel? = null
@@ -328,9 +329,10 @@ class CardRepository : APIRequestCallback {
     fun createGoogleToken(
         context: Context,
         viewModel: CheckoutViewModel,
-        createTokenGPayRequest: CreateTokenGPayRequest
+        createTokenGPayRequest: CreateTokenGPayRequest, selectedPaymentOption : PaymentOption
     ) {
         this.viewModel = viewModel
+        this.selectedPaymentOption = selectedPaymentOption
 
 
         val jsonString = Gson().toJson(createTokenGPayRequest)
@@ -564,8 +566,8 @@ class CardRepository : APIRequestCallback {
         } else if (requestCode == CREATE_GOOGLE_TOKEN) {
             response?.body().let {
                 tokenResponse = Gson().fromJson(it, Token::class.java)
-                if (tokenResponse != null) {
-                    createChargeRequest(viewModel, null, tokenResponse.id, true)
+                if (tokenResponse != null &&  selectedPaymentOption !=null) {
+                    createChargeRequest(viewModel, selectedPaymentOption, tokenResponse.id, true)
                 }
 
 
@@ -917,7 +919,7 @@ class CardRepository : APIRequestCallback {
         if (requestCode == CONFIG_CODE || requestCode == CHARGE_REQ_CODE || requestCode == INIT_CODE) {
             sdkSession.getListener()?.sdkError(errorDetails)
             SDKSession.sessionActive = false
-            cardRepositoryContext?.showToast("Handle Fail")
+          //  cardRepositoryContext?.showToast("Handle Fail")
 
             viewModel.handleSuccessFailureResponseButton(
                 "failure",
@@ -1025,7 +1027,8 @@ class CardRepository : APIRequestCallback {
         val topUp: TopUp? = provider.getTopUp()
         val transactionMode: TransactionMode = provider.getTransactionMode()
         // Log.d("PaymentProcessManager", "transactionMode : $transactionMode")
-        // println("paymentOption?.threeDS" + paymentOption?.threeDS)
+       //  println("paymentOption?.threeDS" + paymentOption?.threeDS)
+         println("paymentOption?.threeDS" + paymentOption?.threeDS)
         //        Log.d("PaymentProcessManager", "topUp : " + topUp.toString());
         /**
          * Condition added for 3Ds for merchant

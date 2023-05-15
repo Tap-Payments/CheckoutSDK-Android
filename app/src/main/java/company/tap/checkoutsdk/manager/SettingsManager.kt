@@ -523,7 +523,7 @@ object SettingsManager {
             paymentitems.add(
                 ItemsModel(
                     "",
-                    "Items",
+                    "Items1",
                     BigDecimal.valueOf(5),
                    getString("key_sdk_transaction_currency", "KWD"),
                     BigDecimal.valueOf(
@@ -544,6 +544,80 @@ object SettingsManager {
                     null
                 )
             )
+            paymentitems.add(
+                ItemsModel(
+                    "",
+                    "Items2",
+                    BigDecimal.valueOf(5),
+                    getString("key_sdk_transaction_currency", "KWD"),
+                    BigDecimal.valueOf(
+                        2
+                    ),
+                    null,
+                    AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO),
+                    null,
+                    null,
+                    false,
+                    null,
+                    null,
+                    "High-quality, durable and stylish backpack, perfect for daily use and outdoor adventures. Made with waterproof material, multiple compartments and comfortable straps",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                )
+            )
+
+            paymentitems.add(
+                ItemsModel(
+                    "",
+                    "Items3",
+                    BigDecimal.valueOf(5),
+                    getString("key_sdk_transaction_currency", "KWD"),
+                    BigDecimal.valueOf(
+                        2
+                    ),
+                    null,
+                    AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO),
+                    null,
+                    null,
+                    false,
+                    null,
+                    null,
+                    "High-quality, durable and stylish backpack, perfect for daily use and outdoor adventures. Made with waterproof material, multiple compartments and comfortable straps",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                )
+            )
+            paymentitems.add(
+                ItemsModel(
+                    "",
+                    "Items4",
+                    BigDecimal.valueOf(5),
+                    getString("key_sdk_transaction_currency", "KWD"),
+                    BigDecimal.valueOf(
+                        2
+                    ),
+                    null,
+                    AmountModificator(AmountModificatorType.FIXED, BigDecimal.ZERO),
+                    null,
+                    null,
+                    false,
+                    null,
+                    null,
+                    "High-quality, durable and stylish backpack, perfect for daily use and outdoor adventures. Made with waterproof material, multiple compartments and comfortable straps",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                )
+            )
+
 
 
 

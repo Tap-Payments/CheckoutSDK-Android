@@ -20,6 +20,7 @@ import com.google.android.gms.wallet.PaymentsClient
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.enums.LogsModel
+import company.tap.checkout.internal.api.models.PaymentOption
 import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.utils.PaymentsUtil
 import company.tap.checkout.open.controller.SDKSession
@@ -41,6 +42,7 @@ class CheckOutActivity : AppCompatActivity()  , APILoggInterface {
     lateinit var chargeStatus:ChargeStatus
     var sdkSession: SDKSession = SDKSession
     private lateinit var tapNfcCardReader: TapNfcCardReader
+    private lateinit var selectedPaymentOption: PaymentOption
     private var cardReadDisposable: Disposable = Disposables.empty()
     @JvmField
     // Arbitrarily-picked constant integer you define to track a request for payment data activity.
@@ -109,245 +111,7 @@ class CheckOutActivity : AppCompatActivity()  , APILoggInterface {
 
     }
 
-/*    override fun paymentSucceed(charge: Charge) {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
-            SDKSession.getPluginListener()?.paymentSucceed(charge)
-            this.finish()
-        }else {
-            tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
-            Handler().postDelayed({
-              //  tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-            }, 1000)
 
-            this.finish()
-        }
-    }
-
-    override fun paymentFailed(charge: Charge?) {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
-            SDKSession.getPluginListener()?.paymentFailed(charge)
-            this.finish()
-        }else {
-            println("paymentFailed called here")
-            tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
-            Handler().postDelayed({
-               // tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-            }, 1000)
-
-            this.finish()
-        }
-    }
-
-    override fun authorizationSucceed(authorize: Authorize) {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
-            SDKSession.getPluginListener()?.authorizationSucceed(authorize)
-            this.finish()
-        }else {
-            tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
-            Handler().postDelayed({
-              //  tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-            }, 1000)
-
-            this.finish()
-        }
-    }
-
-    override fun authorizationFailed(authorize: Authorize?) {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
-            SDKSession.getPluginListener()?.authorizationFailed(authorize)
-            this.finish()
-        }else {
-            tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
-            Handler().postDelayed({
-                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-            }, 1000)
-
-            this.finish()
-        }
-
-    }
-
-    override fun cardSaved(charge: Charge) {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
-            SDKSession.getPluginListener()?.cardSaved(charge)
-            this.finish()
-        }else {
-            tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
-            Handler().postDelayed({
-                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-            }, 1000)
-
-            this.finish()
-        }
-    }
-
-    override fun cardSavingFailed(charge: Charge) {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
-            SDKSession.getPluginListener()?.cardSavingFailed(charge)
-            this.finish()
-        }else {
-            tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
-            Handler().postDelayed({
-                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-            }, 1000)
-
-            this.finish()
-        }
-    }
-
-    override fun cardTokenizedSuccessfully(token: Token) {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
-            SDKSession.getPluginListener()?.cardTokenizedSuccessfully(token)
-            this.finish()
-        }else {
-            tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
-            Handler().postDelayed({
-                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-            }, 1000)
-
-            this.finish()
-        }
-    }
-
-    override fun savedCardsList(cardsList: CardsList) {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
-            SDKSession.getPluginListener()?.savedCardsList(cardsList)
-            this.finish()
-        }else {
-            tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
-            Handler().postDelayed({
-                tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-            }, 1000)
-
-            this.finish()
-        }
-
-    }
-
-    override fun sdkError(goSellError: GoSellError?) {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
-            SDKSession.getPluginListener()?.sdkError(goSellError)
-            this.finish()
-        }else {
-            if (!this.isDestroyed) {
-                tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
-                Handler().postDelayed({
-                   // tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-                }, 1000)
-
-                this.finish()
-            }
-        }
-    }
-
-    override fun sessionIsStarting() {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
-            SDKSession.getPluginListener()?.sessionIsStarting()
-        }
-    }
-
-    override fun sessionHasStarted() {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
-            SDKSession.getPluginListener()?.sessionHasStarted()
-        }
-    }
-
-    override fun sessionCancelled() {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
-            SDKSession.getPluginListener()?.sessionCancelled()
-        }
-    }
-
-    override fun sessionFailedToStart() {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
-            SDKSession.getPluginListener()?.sessionFailedToStart()
-        }
-    }
-
-    override fun invalidCardDetails() {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
-            SDKSession.getPluginListener()?.invalidCardDetails()
-            this.finish()
-        }else {
-            tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
-            Handler().postDelayed({
-             //   tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-            }, 1000)
-
-            this.finish()
-        }
-
-    }
-
-    override fun backendUnknownError(message: GoSellError?) {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
-            SDKSession.getPluginListener()?.backendUnknownError(message)
-            this.finish()
-        }else {
-            tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
-            Handler().postDelayed({
-              //  tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-            }, 1000)
-            this.finish()
-        }
-
-    }
-
-    override fun invalidTransactionMode() {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
-            SDKSession.getPluginListener()?.invalidTransactionMode()
-            this.finish()
-        }else {
-            tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
-            Handler().postDelayed({
-              //  tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-            }, 1000)
-
-            this.finish()
-        }
-
-    }
-
-    override fun invalidCustomerID() {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
-            SDKSession.getPluginListener()?.invalidCustomerID()
-            this.finish()
-        }else {
-            tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
-            Handler().postDelayed({
-              //  tabAnimatedActionButton?.changeButtonState(ActionButtonState.IDLE)
-            }, 1000)
-
-            this.finish()
-        }
-
-    }
-
-    override fun userEnabledSaveCardOption(saveCardEnabled: Boolean) {
-        if(sdkSession.sdkIdentifier!=null && (SDKSession.sdkIdentifier ==SdkIdentifier.Flutter.name|| SDKSession.sdkIdentifier ==SdkIdentifier.ReactNative.name)){
-            SDKSession.getPluginListener()?.userEnabledSaveCardOption(saveCardEnabled)
-            this.finish()
-        }else {
-            tabAnimatedActionButton?.changeButtonState(ActionButtonState.SUCCESS)
-            Handler().postDelayed({
-                tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
-            }, 1000)
-
-            this.finish()
-        }
-    }*/
-
-/*    @RequiresApi(Build.VERSION_CODES.N)
-    override fun getStatusSDK(response:String? ,charge: Charge?) {
-        println("tabAnimatedActionButton is"+tabAnimatedActionButton)
-        tabAnimatedActionButton?.let {
-            SDKSession.resetBottomSheetForButton(
-                supportFragmentManager, this,
-                it, this, charge?.status
-            )
-        }
-        tabAnimatedActionButton?.visibility = View.VISIBLE
-    }*/
 
     override fun onBackPressed() {
         super.onBackPressed()
@@ -397,7 +161,7 @@ class CheckOutActivity : AppCompatActivity()  , APILoggInterface {
                     RESULT_OK -> {
                         val paymentData = data?.let { PaymentData.getFromIntent(it) }
                         if (paymentData != null) {
-                            tapCheckoutFragment.viewModel?.handlePaymentSuccess(paymentData)
+                            tapCheckoutFragment.viewModel?.handlePaymentSuccess(paymentData, selectedPaymentOption)
                         }else {
                             AutoResolveHelper.getStatusFromIntent(data)?.statusCode?.let { tapCheckoutFragment.viewModel?.handleError(it) }
                         }
@@ -429,7 +193,7 @@ class CheckOutActivity : AppCompatActivity()  , APILoggInterface {
         }
     }
 
-    fun handleGooglePayApiCall(){
+    fun handleGooglePayApiCall(paymentOption: PaymentOption) {
         // Disables the button to prevent multiple clicks.
           googlePayButton?.isClickable = false
         // assert(PaymentDataSource.getInstance().getAmount() != null)
@@ -440,7 +204,7 @@ class CheckOutActivity : AppCompatActivity()  , APILoggInterface {
             Log.e("RequestPayment", "Can't fetch payment data request")
             return
         }
-
+        selectedPaymentOption = paymentOption
         val request = PaymentDataRequest.fromJson(paymentDataRequestJson.toString())
         println("request value is>>>" + request.toJson())
         println("Activity is>>>" + this as Activity)
