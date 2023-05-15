@@ -55,7 +55,6 @@ class ItemsAdapter(paymentList: List<PaymentItemViewModel>, listener: OnClickLis
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         (holder as ItemsViewHolder).bindData(getPayitems(position))
-
         item_currency?.setText("Items Currency is: "+ SettingsManager.getString("key_sdk_transaction_currency", "KWD"))
         item_shippable?.setText("Item is Shippable: "+(getPayitems(position).getItemIsRequireShip()))
         item_discount?.setText("Item Discount: "+(getPayitems(position).getAmountType()?.getNormalizedValue()))

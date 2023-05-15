@@ -24,6 +24,7 @@ import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
 import androidx.annotation.RestrictTo
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.view.children
 import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
 import androidx.core.view.setMargins
@@ -99,6 +100,7 @@ import company.tap.tapuilibrary.uikit.ktx.loadAppThemManagerFromPath
 import company.tap.tapuilibrary.uikit.ktx.makeLinks
 import company.tap.tapuilibrary.uikit.ktx.setTopBorders
 import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
+import company.tap.tapuilibrary.uikit.views.TapBrandView
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.businessview_layout.view.*
 import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
@@ -300,8 +302,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         checkoutFragment: CheckoutFragment,
         headerLayout: LinearLayout,
         coordinatorLayout: CoordinatorLayout?,
-        background: LinearLayout
-    ) {
+   ) {
         this.context = context
         this.fragmentManager = fragmentManager
         this.sdkLayout = sdkLayout
@@ -314,7 +315,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         this.cardViewModel = cardViewModel
         this.checkoutFragment = checkoutFragment
         this.headerLayout = headerLayout
-        this.background = background
 
         initializeScanner(this)
         initViewHolders()
@@ -888,6 +888,18 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun caseDisplayControlCurrency() {
 
+
+        sdkLayout.setBackgroundDrawable(
+            createDrawableGradientForBlurry(
+                newColorVal?.let { it1 ->
+                    intArrayOf(
+                        it1,
+                        it1,
+                        it1
+                    )
+                }!!
+            )
+        )
         removeViews(
             cardViewHolder,
             paymentInlineViewHolder,
@@ -1198,6 +1210,17 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 //Stopped showing closetext as requested
                 // checkoutFragment.closeText.visibility = View.VISIBLE
                 doAfterSpecificTime {
+                    sdkLayout.setBackgroundDrawable(
+                        createDrawableGradientForBlurry(
+                            newColorVal?.let { it1 ->
+                                intArrayOf(
+                                    it1,
+                                    it1,
+                                    it1
+                                )
+                            }!!
+                        )
+                    )
                     removeViews(
                         paymentInlineViewHolder,
                         otpViewHolder,
@@ -1251,6 +1274,17 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     saveCardSwitchHolder,
                     paymentInlineViewHolder,
                     cardViewHolder
+                )
+                sdkLayout.setBackgroundDrawable(
+                    createDrawableGradientForBlurry(
+                        newColorVal?.let { it1 ->
+                            intArrayOf(
+                                it1,
+                                it1,
+                                it1
+                            )
+                        }!!
+                    )
                 )
                 removeViews(
                     //  businessViewHolder,
@@ -1961,10 +1995,27 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         animateBS(
             fromView = bottomSheetLayout,
             toView = sdkLayout,
-            transitionAnimation = 1000L,
+            transitionAnimation =200L,
             changeHeight = {
                 viewHolders.forEach {
                     if (::sdkLayout.isInitialized) {
+                        headerLayout.children.forEachIndexed { index, view ->
+                            if (index != 0){
+                                view.setBackgroundDrawable(
+                                    createDrawableGradientForBlurry(
+                                        newColorVal?.let { it1 ->
+                                            intArrayOf(
+                                                it1,
+                                                it1,
+                                                it1
+                                            )
+                                        }!!
+                                    )
+                                )
+                            }
+
+                        }
+
                         sdkLayout.removeView(it?.view)
                         sdkLayout.setBackgroundDrawable(
                             createDrawableGradientForBlurry(
@@ -1977,17 +2028,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                                 }!!
                             )
                         )
-                        bottomSheetLayout.setBackgroundDrawable(
-                            createDrawableGradientForBlurry(
-                                newColorVal?.let { it1 ->
-                                    intArrayOf(
-                                        it1,
-                                        it1,
-                                        it1
-                                    )
-                                }!!
-                            )
-                        )
+
                     }
                 }
             })
@@ -2004,6 +2045,22 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 if (::sdkLayout.isInitialized) {
                     sdkLayout.removeView(it?.view)
                     sdkLayout.addView(it?.view)
+                    headerLayout.children.forEachIndexed { index, view ->
+                        if (index != 0){
+                            view.setBackgroundDrawable(
+                                createDrawableGradientForBlurry(
+                                    newColorVal?.let { it1 ->
+                                        intArrayOf(
+                                            it1,
+                                            it1,
+                                            it1
+                                        )
+                                    }!!
+                                )
+                            )
+                        }
+
+                    }
                 }
             }
             afterAddingViews.invoke()
@@ -2293,7 +2350,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
          */
         amountViewHolder.view.amount_section?.tapChipPopup?.slideFromLeftToRight()
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
-        bottomSheetLayout.setBackgroundDrawable(
+        sdkLayout.setBackgroundDrawable(
             createDrawableGradientForBlurry(
                 newColorVal?.let { it1 ->
                     intArrayOf(
@@ -2333,10 +2390,19 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 paymentInlineViewHolder.view,
                 tabAnimatedActionButtonViewHolder!!.view
             ).addFadeOutAnimationToViews {
+                sdkLayout.setBackgroundDrawable(
+                    createDrawableGradientForBlurry(
+                        newColorVal?.let { it1 ->
+                            intArrayOf(
+                                it1,
+                                it1,
+                                it1
+                            )
+                        }!!
+                    )
+                )
                 translateHeightAnimationForWebViews()
             }
-
-            //Commented to try the flow of redirect
 
         }
     }
@@ -3083,7 +3149,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun payActionSavedCard(savedCardsModel: SavedCard?) {
-        bottomSheetLayout.setBackgroundDrawable(
+        sdkLayout.setBackgroundDrawable(
             createDrawableGradientForBlurry(
                 newColorVal?.let { it1 ->
                     intArrayOf(
@@ -3162,7 +3228,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         animateBS(
             fromView = bottomSheetLayout,
             toView = sdkLayout,
-            transitionAnimation = 300L,
+            transitionAnimation = 500L,
             changeHeight = {})
     }
 
@@ -3210,16 +3276,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         newBorderColor = "#" + borderOpacityVal + borderColor.substring(0, borderColor.length - 2)
             .replace("#", "")
 
-
-        bottomSheetLayout.setBackgroundDrawable(
-            createDrawableGradientForBlurry(
-                intArrayOf(
-                    Color.parseColor(newBorderColor),
-                    Color.parseColor(newBorderColor),
-                    Color.parseColor(newBorderColor)
-                )
-            )
-        )
 
         val separatorViewTheme = SeparatorViewTheme()
         separatorViewTheme.strokeColor =

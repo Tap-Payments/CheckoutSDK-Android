@@ -78,7 +78,6 @@ class CheckOutActivity : AppCompatActivity()  , APILoggInterface {
             supportFragmentManager.beginTransaction().addToBackStack(null),
             "CheckOutFragment"
         )
-
         tapCheckoutFragment.arguments=getArguments()
         tapNfcCardReader = TapNfcCardReader(this)
 
