@@ -1232,10 +1232,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                             durationTime = 5,
                             isGone = true
                         )
-                        businessViewHolder.view.addFadeOutAnimation(
-                            durationTime = 5,
-                            isGone = true
-                        )
+
                         showWebView()
                     }
                 )
@@ -1752,7 +1749,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             )
         )*/
 
-        saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
+        if (::webFrameLayout.isInitialized) {
+            businessViewHolder.view.visibility = View.VISIBLE
+        }
+
+
+
+            saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = View.VISIBLE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setDisplayMetricsTheme(
             CustomUtils.getDeviceDisplayMetrics(
@@ -1768,23 +1771,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
          * WRONG OTP scenario also handled here as similar to old sdk show user error button and
          * close the sdk.
          * **/
-
-        // tabAnimatedActionButton?.clearAnimation()
-        if (::webFrameLayout.isInitialized) {
-            if (fragmentManager.findFragmentById(R.id.webFrameLayout) != null)
-                fragmentManager.beginTransaction()
-                    .hide(fragmentManager.findFragmentById(R.id.webFrameLayout)!!)
-                    .commitNow()
-            webFrameLayout.visibility = GONE
-            supportFragmentManager?.popBackStack()
-
-        }
-        if (::webViewHolder.isInitialized) {
-            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
-                ActionButtonState.LOADING, 100
-            )
-            removeViews(webViewHolder)
-        }
 
 
 
@@ -1834,14 +1820,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     ActionButtonState.SUCCESS
                 )
 
-
-//                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
-//                    true,
-//                    "en", "",
-//                    loadAppThemManagerFromPath(AppColorTheme.ActionButtonBackgroundColor),
-//                    loadAppThemManagerFromPath(AppColorTheme.ActionButtonValidTitleLabelColor),
-//                )
-
             }
             ChargeStatus.CANCELLED, ChargeStatus.TIMEDOUT, ChargeStatus.FAILED, ChargeStatus.DECLINED, ChargeStatus.UNKNOWN,
             ChargeStatus.RESTRICTED, ChargeStatus.ABANDONED, ChargeStatus.VOID, ChargeStatus.INVALID -> {
@@ -1887,15 +1865,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
 
                             )
-
-                        /*tabAnimatedActionButton?.setButtonDataSource(
-                             false,
-                             "en",
-                             null,
-                             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
-                             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
-
-                             )*/
                         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                             ActionButtonState.ERROR
                         )
@@ -2887,20 +2856,38 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
         if (::webFrameLayout.isInitialized) {
-            if (fragmentManager.findFragmentById(R.id.webFrameLayout) != null)
-                fragmentManager.beginTransaction()
-                    .hide(fragmentManager.findFragmentById(R.id.webFrameLayout)!!)
-                    .commit()
-            webFrameLayout.visibility = GONE
-            sdkLayout.visibility = View.VISIBLE
-            supportFragmentManager?.popBackStack()
+
+            webFrameLayout.addFadeOutAnimation(isGone = true, durationTime = 1000) {
+                animateBS(
+                    fromView = bottomSheetLayout,
+                    toView = sdkLayout,
+                    transitionAnimation = 800L,
+                    changeHeight = {
+                        if (fragmentManager.findFragmentById(R.id.webFrameLayout) != null)
+                            fragmentManager.beginTransaction()
+                                .hide(fragmentManager.findFragmentById(R.id.webFrameLayout)!!)
+                                .commit()
+
+                        supportFragmentManager?.popBackStack()
+
+                    })
+            }
 
         }
 
 
         if (::webViewHolder.isInitialized) {
-            webViewHolder?.view?.visibility = INVISIBLE
-            removeViews(webViewHolder)
+            webViewHolder.view.addFadeOutAnimation(isGone = false, durationTime = 1000) {
+                animateBS(
+                    fromView = bottomSheetLayout,
+                    toView = sdkLayout,
+                    transitionAnimation = 800L,
+                    changeHeight = {
+                        removeViews(webViewHolder)
+                    })
+            }
+
+
         }
 
         if (::amountViewHolder.isInitialized && ::cardViewHolder.isInitialized && ::cardViewHolder.isInitialized && ::paymentInlineViewHolder.isInitialized)
