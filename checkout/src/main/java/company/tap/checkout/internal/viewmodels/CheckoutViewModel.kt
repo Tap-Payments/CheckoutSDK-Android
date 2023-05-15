@@ -1832,6 +1832,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         println("chargeResponse to handle" + chargeResponse?.status)
         when (chargeResponse?.status) {
             ChargeStatus.CAPTURED, ChargeStatus.AUTHORIZED, ChargeStatus.VALID, ChargeStatus.IN_PROGRESS -> {
+                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = View.VISIBLE
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                     ActionButtonState.SUCCESS
                 )
@@ -2113,7 +2114,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         setPayButtonAction(PaymentType.WEB, savedCardsModel)
                     } else if ((savedCardsModel as PaymentOption).paymentType == PaymentType.GOOGLE_PAY) {
                         removeViews(amountViewHolder, cardViewHolder, paymentInlineViewHolder)
-                        checkoutFragment.checkOutActivity?.handleGooglePayApiCall()
+                        checkoutFragment.checkOutActivity?.handleGooglePayApiCall(savedCardsModel as PaymentOption)
                         activateActionButtonForGPay()
                         setPayButtonAction(PaymentType.WEB, savedCardsModel)
                         PaymentDataSource.setWebViewType(WebViewType.REDIRECT)
@@ -2386,7 +2387,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
 
 
-/*
+
             if (isSavedCardSelected == true) {
                 cardViewModel.processEvent(
                     CardViewEvent.CreateTokenExistingCardEvent,
@@ -2400,7 +2401,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     paymentInlineViewHolder.getSavedCardData()
                 )
 
-            } else {*/
+            } else {
             cardViewModel.processEvent(
                 CardViewEvent.CreateTokenEvent,
                 this,
@@ -2411,7 +2412,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 null,
                 saveCardValue = paymentInlineViewHolder.tapInlineCardSwitch?.switchSaveCard?.isChecked
             )
-            //  }
+              }
 
 
         }
@@ -2501,7 +2502,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onGooglePayClicked(isClicked: Boolean) {
         println("onGooglePayClicked>>>" + isClicked)
-        checkoutFragment.checkOutActivity?.handleGooglePayApiCall()
+       // checkoutFragment.checkOutActivity?.handleGooglePayApiCall(savedCardsModel as PaymentOption)
 
     }
 
@@ -3764,6 +3765,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     //Added to disable click when button loading
                     amountViewHolder.view.amount_section?.itemAmountLayout?.isEnabled = false
                     amountViewHolder.view.amount_section?.itemAmountLayout?.isClickable = false
+                    if(savedCardsModel!=null)
                     payActionSavedCard(savedCardsModel as SavedCard)
 
                 }
@@ -3937,7 +3939,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
      * handlePaymentSuccess handles the payment token obtained from GooglePay API
      * **/
     @RequiresApi(Build.VERSION_CODES.N)
-    fun handlePaymentSuccess(paymentData: PaymentData) {
+    fun handlePaymentSuccess(paymentData: PaymentData , selectedPaymentOption :PaymentOption) {
         removeViews(
             //businessViewHolder,
             amountViewHolder,
@@ -3976,7 +3978,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             CardViewModel().processEvent(
                 CardViewEvent.CreateGoogleTokenEvent,
                 this,
-                null,
+                selectedPaymentOption,
                 null,
                 null,
                 null,
@@ -4023,6 +4025,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
             if (card.cardNumber != null && card.cardHolder != null && card.expirationDate != null) {
                 handleScanSuccessResult(card)
+                incrementalCount=0
             }
             return
         }

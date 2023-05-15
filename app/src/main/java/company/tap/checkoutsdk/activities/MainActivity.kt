@@ -293,7 +293,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
        //    )
        // }//** Required **
        sdkSession.setAmount(
-           BigDecimal.valueOf(10)
+           BigDecimal.valueOf(40)
        )
 
        // Set Payment ItemsModel array list
