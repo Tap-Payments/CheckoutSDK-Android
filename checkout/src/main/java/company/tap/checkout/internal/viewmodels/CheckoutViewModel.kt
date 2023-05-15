@@ -10,7 +10,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.text.format.DateFormat
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.view.View.GONE
@@ -1217,8 +1216,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 }
 
 
-                context.showToast("Im here")
-
                 val fragment = WebFragment.newInstance(
                     redirectURL,
                     this,
@@ -1292,18 +1289,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     private fun showWebView() {
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = GONE
-        animateBS(fromView = bottomSheetLayout, toView = sdkLayout, transitionAnimation = 1000L, changeHeight = {
-            webFrameLayout.visibility = VISIBLE
-        })
-    }
-
-
-    private fun getWindowHeight(): Int {
-        // Calculate window height for fullscreen use
-        val displayMetrics = DisplayMetrics()
-        (context as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)
-        return displayMetrics.heightPixels
+        animateBS(
+            fromView = bottomSheetLayout,
+            toView = sdkLayout,
+            transitionAnimation = 1000L,
+            changeHeight = {
+                webFrameLayout.visibility = VISIBLE
+            })
     }
 
 
@@ -1756,7 +1748,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             )
         )*/
 
-        saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = View.VISIBLE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setDisplayMetricsTheme(
             CustomUtils.getDeviceDisplayMetrics(
@@ -1775,12 +1766,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         // tabAnimatedActionButton?.clearAnimation()
         if (::webFrameLayout.isInitialized) {
-            if (fragmentManager.findFragmentById(R.id.webFrameLayout) != null)
-                fragmentManager.beginTransaction()
-                    .hide(fragmentManager.findFragmentById(R.id.webFrameLayout)!!)
-                    .commitNow()
-            webFrameLayout.visibility = GONE
-            supportFragmentManager?.popBackStack()
+//            if (fragmentManager.findFragmentById(R.id.webFrameLayout) != null)
+//                fragmentManager.beginTransaction()
+//                    .hide(fragmentManager.findFragmentById(R.id.webFrameLayout)!!)
+//                    .commitNow()
+//            webFrameLayout.visibility = GONE
+//            supportFragmentManager?.popBackStack()
+            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
+                ActionButtonState.LOADING, 100
+            )
         }
         if (::webViewHolder.isInitialized) {
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
@@ -1836,12 +1830,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     ActionButtonState.SUCCESS
                 )
 
-//                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
-//                    true,
-//                    "en", "",
-//                    loadAppThemManagerFromPath(AppColorTheme.ActionButtonBackgroundColor),
-//                    loadAppThemManagerFromPath(AppColorTheme.ActionButtonValidTitleLabelColor),
-//                )
+                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
+                    true,
+                    "en", "",
+                    loadAppThemManagerFromPath(AppColorTheme.ActionButtonBackgroundColor),
+                    loadAppThemManagerFromPath(AppColorTheme.ActionButtonValidTitleLabelColor),
+                )
 
             }
             ChargeStatus.CANCELLED, ChargeStatus.TIMEDOUT, ChargeStatus.FAILED, ChargeStatus.DECLINED, ChargeStatus.UNKNOWN,
@@ -1971,6 +1965,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         animateBS(
             fromView = bottomSheetLayout,
             toView = sdkLayout,
+            transitionAnimation = 1000L,
             changeHeight = {
                 viewHolders.forEach {
                     if (::sdkLayout.isInitialized) {
@@ -2338,7 +2333,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 paymentInlineViewHolder.view,
                 tabAnimatedActionButtonViewHolder!!.view
             ).addFadeOutAnimationToViews {
-                translateHeightAnimation()
+                translateHeightAnimationForWebViews()
             }
 
             //Commented to try the flow of redirect
@@ -3155,7 +3150,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         viewsToFadeOut.addFadeOutAnimationToViews(
                             durationTime = 500L
                         ) {
-                            translateHeightAnimation()
+                            translateHeightAnimationForWebViews()
                         }
                         paymentInlineViewHolder.paymentInputContainer.applyBluryToView()
                     }
@@ -3167,16 +3162,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     }
 
-    private fun translateHeightAnimation(): Unit {
+    private fun translateHeightAnimationForWebViews(): Unit {
         animateBS(
             fromView = bottomSheetLayout,
             toView = sdkLayout,
             transitionAnimation = 300L,
-            changeHeight = {
-                Log.e("error bs", bottomSheetLayout.measuredHeight.toString())
-                Log.e("error header", headerLayout.measuredHeight.toString())
-                Log.e("error sdk", sdkLayout.measuredHeight.toString())
-            })
+            changeHeight = {})
     }
 
     @RequiresApi(Build.VERSION_CODES.N)

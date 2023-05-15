@@ -100,20 +100,20 @@ class ItemAdapter(
             for (i in adapterContentItems.indices) {
                 descriptionTextView.text = adapterContentItems[position].description
                 if (isExpanded) {
-                    animateBS(fromView = bottomSheetLayout, toView = sdkLayout, transitionAnimation = 800L, changeHeight = {
-                        Log.e("error bs", bottomSheetLayout.measuredHeight.toString())
-                        Log.e("error header", headerLayout.measuredHeight.toString())
-                        descriptionTextView.visibility = View.VISIBLE
-
-                    })
+                    animateBS(
+                        fromView = bottomSheetLayout,
+                        toView = sdkLayout,
+                        changeHeight = {
+                            descriptionTextView.visibility = View.VISIBLE
+                        })
 
                 } else {
-                    animateBS(fromView = bottomSheetLayout, toView = sdkLayout, transitionAnimation = 800L, changeHeight = {
-                        Log.e("error bs", bottomSheetLayout.measuredHeight.toString())
-                        Log.e("error header", headerLayout.measuredHeight.toString())
-                        descriptionTextView.visibility = View.GONE
-
-                    })
+                    animateBS(
+                        fromView = bottomSheetLayout,
+                        toView = sdkLayout,
+                        changeHeight = {
+                            descriptionTextView.visibility = View.GONE
+                        })
                 }
                 holder.itemView.isActivated = isExpanded
                 // totalQuantity.text = adapterContentItems[position].quantity?.toString()
