@@ -737,13 +737,13 @@ class PaymentInlineViewHolder(
 
     }
 
-    fun setCardScanData(emvCard: TapCard, month :Int, year :Int)
+    fun setCardScanData(tapCard: TapCard, month :Int, year :Int)
     {
         cardInputUIStatus = CardInputUIStatus.NormalCard
-        val updateCardString: String = emvCard.cardNumber?.trim().toString()
-            .substring(0, 6) + emvCard.cardNumber?.length?.minus(4)
+        val updateCardString: String = tapCard.cardNumber?.trim().toString()
+            .substring(0, 6) + tapCard.cardNumber?.length?.minus(4)
             ?.let {
-                emvCard.cardNumber?.trim().toString().substring(
+                tapCard.cardNumber?.trim().toString().substring(
                     it
                 )
             }
@@ -754,7 +754,7 @@ class PaymentInlineViewHolder(
             null,
             month,
             year,
-            emvCard.cardHolder,
+            tapCard.cardHolder,
             null,
             null,
             null,
@@ -763,9 +763,9 @@ class PaymentInlineViewHolder(
             null,
             null,
             null,
-            emvCard.cardNumber?.length?.minus(4)
-                ?.let { emvCard?.cardNumber?.substring(it) },
-            company.tap.cardinputwidget.CardBrand.fromCardNumber(emvCard.cardNumber),
+            tapCard.cardNumber?.length?.minus(4)
+                ?.let { tapCard?.cardNumber?.substring(it) },
+            company.tap.cardinputwidget.CardBrand.fromCardNumber(tapCard.cardNumber),
             null,
             null,
             null,
@@ -775,7 +775,7 @@ class PaymentInlineViewHolder(
         )
 
 
-        if (emvCard?.cardHolder != null) {
+        if (tapCard?.cardHolder != null) {
             tapInlineCardSwitch?.visibility = View.VISIBLE
             tapInlineCardSwitch?.switchesLayout?.visibility = View.VISIBLE
             tapInlineCardSwitch?.switchSaveCard?.visibility = View.VISIBLE
@@ -784,7 +784,7 @@ class PaymentInlineViewHolder(
             tapCardInputView.holderNameEnabled = true
             separator1?.visibility = View.VISIBLE
             tapInlineCardSwitch?.switchSaveCard?.isChecked = true
-            cardHolderName = emvCard.cardHolder
+            cardHolderName = tapCard.cardHolder
 
         }
 
@@ -796,16 +796,16 @@ class PaymentInlineViewHolder(
         if (CustomUtils.getCurrentTheme() != null && CustomUtils.getCurrentTheme()
                 .contains("dark")
         ) {
-            val card = CardValidator.validate(emvCard?.cardNumber)
-            emvCard.cardNumber?.let {
+            val card = CardValidator.validate(tapCard?.cardNumber)
+            tapCard.cardNumber?.let {
                 logicTosetImageDynamic(
                     card.cardBrand,
                     it
                 )
             }
         } else {
-            val card = CardValidator.validate(emvCard?.cardNumber)
-            emvCard.cardNumber?.let {
+            val card = CardValidator.validate(tapCard?.cardNumber)
+            tapCard.cardNumber?.let {
                 logicTosetImageDynamic(
                     card.cardBrand,
                     it
@@ -897,7 +897,7 @@ class PaymentInlineViewHolder(
                             if(PaymentDataSource.getBinLookupResponse()!=null)
                             onPaymentCardComplete.onPayCardCompleteAction(
                                 true, PaymentType.CARD,
-                                it, it1, cvvNumber!!, cardHolderName ,PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
+                                it, it1, cvvNumber, cardHolderName ,PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
                             )
                         }
                     }
