@@ -1,115 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:blurkit="http://schemas.android.com/tools"
     android:windowSoftInputMode="adjustResize|adjustPan"
-    android:orientation="vertical"
-    android:fillViewport="true"
-    android:clipToOutline="true"
-    android:id="@+id/sdkCardView"
-    app:cardBackgroundColor="#10ffffff"
     tools:context=".open.CheckoutFragment">
 
+<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="@dimen/activity_vertical_margin"-->
+<!--        android:src="@drawable/close_icon"-->
+<!--        app:layout_anchor="@+id/sdkCardView"-->
+<!--        app:layout_anchorGravity="top|center" />-->
 
-
-
-    <androidx.core.widget.NestedScrollView
+    <androidx.cardview.widget.CardView
+        android:id="@+id/sdkCardView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:behavior_hideable="false"
-        app:behavior_peekHeight="0dp"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:orientation="vertical"
+        android:windowSoftInputMode="adjustResize|adjustPan"
+        app:cardBackgroundColor="#10ffffff"
+        tools:context=".open.CheckoutFragment">
 
-        android:clipToOutline="true"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-        android:id="@+id/scrollView"
-        >
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:windowSoftInputMode="adjustResize|adjustPan"
-            tools:context=".open.CheckoutFragment">
+            android:layout_height="wrap_content"
+            android:clipToOutline="true"
+            app:behavior_hideable="false"
+            app:behavior_peekHeight="0dp"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+
+            <LinearLayout
+                android:id="@+id/headerLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+
+                tools:context=".open.CheckoutFragment">
 
                 <LinearLayout
+                    android:id="@+id/background_color"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:id="@+id/headerLayout"
-
-                    tools:context=".open.CheckoutFragment">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:orientation="vertical"
-                        android:id="@+id/background_color"
-                        android:layout_height="wrap_content">
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:id="@+id/fragment_all"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:visibility="visible"
-                        android:orientation="vertical" />
+                        android:orientation="vertical"
+                        android:visibility="visible" />
+
                     <FrameLayout
                         android:id="@+id/webFrameLayout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:visibility="gone"
                         android:layout_gravity="center"
-                        />
+                        android:visibility="gone" />
+
                     <FrameLayout
                         android:id="@+id/fragment_container_nfc_lib"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="bottom"
+                        android:gravity="bottom"
                         android:orientation="vertical"
-                        android:visibility="gone"
-                        android:gravity="bottom"/>
-
+                        android:visibility="gone" />
 
 
                     <FrameLayout
                         android:id="@+id/inline_container"
                         android:layout_width="match_parent"
-                        android:visibility="gone"
                         android:layout_height="500dp"
-                        />
+                        android:visibility="gone" />
 
-                    </LinearLayout>
+                    <company.tap.tapuilibrary.uikit.atoms.TapTextView
+                        android:id="@+id/closeText"
+                        android:layout_width="48dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_gravity="end"
+                        android:layout_marginEnd="10dp"
+                        android:gravity="center"
+                        android:text="CLOSE"
+                        android:textColor="@color/dark_gray"
+                        android:textSize="12sp"
+                        android:visibility="gone" />
 
+                    <company.tap.tapuilibrary.uikit.atoms.TapImageView
+                        android:id="@+id/closeImage"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_gravity="end"
+                        android:layout_marginEnd="10dp"
+                        android:gravity="center"
+                        android:src="@drawable/ic_close"
+                        android:text="close"
+                        android:visibility="gone" />
                 </LinearLayout>
 
-
-                <company.tap.tapuilibrary.uikit.atoms.TapTextView
-                    android:id="@+id/closeText"
-                    android:layout_width="48dp"
-                    android:layout_height="40dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_gravity="end"
-                    android:layout_marginEnd="10dp"
-                    android:gravity="center"
-                    android:text="CLOSE"
-                    android:textColor="@color/dark_gray"
-                    android:textSize="12sp"
-                    android:visibility="gone" />
-
-                <company.tap.tapuilibrary.uikit.atoms.TapImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:id="@+id/closeImage"
-                    android:src="@drawable/ic_close"
-                    android:gravity="center"
-                    android:layout_marginEnd="10dp"
-                    android:text="close"
-                    android:visibility="gone"
-                    android:layout_alignParentEnd="true"
-                    android:layout_gravity="end"/>
-
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
-    </androidx.core.widget.NestedScrollView>
+            </LinearLayout>
 
 
-</androidx.cardview.widget.CardView>
+        </androidx.core.widget.NestedScrollView>
+
+
+    </androidx.cardview.widget.CardView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

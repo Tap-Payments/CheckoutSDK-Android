@@ -8,6 +8,7 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
+import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.drawable.*
 import android.graphics.drawable.shapes.RoundRectShape
@@ -368,7 +369,7 @@ fun getViewShapeDrawable(
     return shape
 }
 
-fun View.addFadeOutAnimation(durationTime: Long = 500L, isGone: Boolean = true) {
+fun View.addFadeOutAnimation(durationTime: Long = 500L, isGone: Boolean = true,onAnimationEnd: () -> Unit?={}) {
     if (this.isVisible) {
         val animation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
         animation.duration = durationTime
@@ -380,6 +381,8 @@ fun View.addFadeOutAnimation(durationTime: Long = 500L, isGone: Boolean = true) 
             override fun onAnimationEnd(p0: Animation?) {
                 if (isGone) this@addFadeOutAnimation.visibility = View.GONE
                 else this@addFadeOutAnimation.visibility = View.INVISIBLE
+
+                onAnimationEnd.invoke()
             }
 
             override fun onAnimationRepeat(p0: Animation?) {
@@ -403,6 +406,8 @@ fun MutableList<View>.addFadeOutAnimationToViews(
 
             override fun onAnimationEnd(p0: Animation?) {
                 view.visibility = View.GONE
+                view.setBackgroundColor(Color.WHITE)
+
                 onAnimationEnd.invoke()
 
 
@@ -418,12 +423,13 @@ fun MutableList<View>.addFadeOutAnimationToViews(
 }
 
 fun animateBS(changeHeight: () -> Unit, fromView: ViewGroup, toView: ViewGroup,transitionAnimation:Long=500L) {
+    changeHeight()
+
     val transition = AutoTransition()
     transition.addTarget(fromView)
     transition.interpolator = FastOutSlowInInterpolator()
     transition.duration = transitionAnimation
     androidx.transition.TransitionManager.beginDelayedTransition(toView, transition)
-    changeHeight()
     androidx.transition.TransitionManager.endTransitions(fromView)
 }
 

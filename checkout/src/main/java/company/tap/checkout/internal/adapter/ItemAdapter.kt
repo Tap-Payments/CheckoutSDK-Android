@@ -100,19 +100,13 @@ class ItemAdapter(
             for (i in adapterContentItems.indices) {
                 descriptionTextView.text = adapterContentItems[position].description
                 if (isExpanded) {
-                    animateBS(fromView = bottomSheetLayout, toView = sdkLayout, transitionAnimation = 800L, changeHeight = {
-                        Log.e("error bs", bottomSheetLayout.measuredHeight.toString())
-                        Log.e("error header", headerLayout.measuredHeight.toString())
+                    animateBS(fromView = bottomSheetLayout, toView = sdkLayout, transitionAnimation = 50L, changeHeight = {
                         descriptionTextView.visibility = View.VISIBLE
-
                     })
 
                 } else {
-                    animateBS(fromView = bottomSheetLayout, toView = sdkLayout, transitionAnimation = 800L, changeHeight = {
-                        Log.e("error bs", bottomSheetLayout.measuredHeight.toString())
-                        Log.e("error header", headerLayout.measuredHeight.toString())
+                    animateBS(fromView = bottomSheetLayout, toView = sdkLayout, transitionAnimation = 50L, changeHeight = {
                         descriptionTextView.visibility = View.GONE
-
                     })
                 }
                 holder.itemView.isActivated = isExpanded
@@ -207,17 +201,9 @@ class ItemAdapter(
 
             mExpandedPosition = if (isExpanded) -1 else position
             if (isExpanded) {
-//                bottomSheetLayout.resizeAnimation(
-//                    durationTime = resizeAnimationDuration,
-//                    startHeight = bottomSheetLayout.height,
-//                    endHeight = bottomSheetLayout.height - 70
-//                )
+
             } else {
-//                bottomSheetLayout.resizeAnimation(
-//                    durationTime = resizeAnimationDuration,
-//                    startHeight = bottomSheetLayout.height,
-//                    endHeight = headerLayout.height + 70,
-//                )
+
 
             }
             notifyItemChanged(previousExpandedPosition)

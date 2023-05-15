@@ -18,7 +18,6 @@ import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.view.get
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -231,7 +230,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                                         this,
                                         it2,
                                         cardViewModel, this, headerLayout!!,
-                                        coordinatorLayout)
+                                        coordinatorLayout,sdkCardView)
                                 }
                             }
 
@@ -286,38 +285,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
         }
 
-
-
-       /* scrollView?.let {
-            setTopBorders(
-                it,
-                strokeColor = Color.parseColor(
-                    newColorVal
-                ),
-                tintColor = Color.parseColor(
-                    newColorVal
-                ),// tint color
-                shadowColor = Color.parseColor(
-                    newColorVal
-                )
-            )
-        }*/
-
-
-        /*   relativeLL.let { it1 ->
-               if (it1 != null) {
-                   setTopBorders(
-                       it1,
-                       35f,// corner raduis
-                       0.0f,
-                       Color.parseColor(
-                           newColorVal
-                       ),// stroke color
-                       Color.parseColor(newColorVal),// tint color
-                       Color.parseColor(newColorVal)
-                   )
-               }
-           }*/
         sdkCardView?.setBackgroundDrawable(
             createDrawableGradientForBlurry(
                 intArrayOf(
@@ -327,21 +294,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                 )
             )
         )
-        //sdkCardView?.setBackgroundColor(Color.parseColor(context?.getString(R.color.black_blur_12)))
-      /*  sdkCardView.let { it1 ->
-            if (it1 != null) {
-                setTopBorders(
-                    it1,
-                    35f,// corner raduis
-                    0.0f,
-                    Color.parseColor(
-                        newColorVal
-                    ),// stroke color
-                    Color.parseColor(newColorVal),// tint color
-                    Color.parseColor(newColorVal)
-                )
-            }
-        }*/
 
         setTopBorders(
             checkoutLayout,
@@ -496,16 +448,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             //  _viewModel?.handleScanSuccessResult(card)
 
         }
-    }
-    private fun renderView(data: CardViewState?) {
-
-    }
-
-
-    @SuppressLint("SetTextI18n")
-    private fun concatText(newText: String) {
-        println("newText respoonse$newText")
-
     }
 
 
