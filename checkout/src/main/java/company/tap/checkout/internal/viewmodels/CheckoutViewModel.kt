@@ -10,7 +10,6 @@ import android.graphics.drawable.ShapeDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Handler
-import android.os.Looper
 import android.text.format.DateFormat
 import android.util.DisplayMetrics
 import android.util.Log
@@ -31,7 +30,6 @@ import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
 import androidx.core.view.setMargins
 import androidx.fragment.app.FragmentManager
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -2134,7 +2132,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         setPayButtonAction(PaymentType.WEB, savedCardsModel)
                     } else if ((savedCardsModel as PaymentOption).paymentType == PaymentType.GOOGLE_PAY) {
                         removeViews(amountViewHolder, cardViewHolder, paymentInlineViewHolder)
-                        checkoutFragment.checkOutActivity?.handleGooglePayApiCall()
+                        checkoutFragment.checkOutActivity?.handleGooglePayApiCall(savedCardsModel as PaymentOption)
                         activateActionButtonForGPay()
                         setPayButtonAction(PaymentType.WEB, savedCardsModel)
                         PaymentDataSource.setWebViewType(WebViewType.REDIRECT)
@@ -2525,7 +2523,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onGooglePayClicked(isClicked: Boolean) {
         println("onGooglePayClicked>>>" + isClicked)
-        checkoutFragment.checkOutActivity?.handleGooglePayApiCall()
+       // checkoutFragment.checkOutActivity?.handleGooglePayApiCall(savedCardsModel as PaymentOption)
 
     }
 
@@ -3929,7 +3927,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
      * handlePaymentSuccess handles the payment token obtained from GooglePay API
      * **/
     @RequiresApi(Build.VERSION_CODES.N)
-    fun handlePaymentSuccess(paymentData: PaymentData) {
+    fun handlePaymentSuccess(paymentData: PaymentData , selectedPaymentOption :PaymentOption) {
         removeViews(
             //businessViewHolder,
             amountViewHolder,
@@ -3968,7 +3966,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             CardViewModel().processEvent(
                 CardViewEvent.CreateGoogleTokenEvent,
                 this,
-                null,
+                selectedPaymentOption,
                 null,
                 null,
                 null,
@@ -4015,6 +4013,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
             if (card.cardNumber != null && card.cardHolder != null && card.expirationDate != null) {
                 handleScanSuccessResult(card)
+                incrementalCount=0
             }
             return
         }

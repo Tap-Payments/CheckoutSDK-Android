@@ -121,10 +121,12 @@ class CardViewModel : ViewModel() {
             )
             CardViewEvent.ListAllCards -> listAllCards(viewModel, customerId)
             CardViewEvent.CreateGoogleTokenEvent -> context?.let {
-                createGoogleTokenRequest(
-                    viewModel,
-                    it, createTokenGPayRequest
-                )
+                if (selectedPaymentOption != null) {
+                    createGoogleTokenRequest(
+                        viewModel,
+                        it, createTokenGPayRequest,selectedPaymentOption
+                    )
+                }
             }
         }
     }
@@ -213,11 +215,11 @@ class CardViewModel : ViewModel() {
     private fun createGoogleTokenRequest(
         viewModel: CheckoutViewModel,
         context: Context,
-        createTokenGPayRequest: CreateTokenGPayRequest?
+        createTokenGPayRequest: CreateTokenGPayRequest?, selectedPaymentOption:PaymentOption
     ) {
         println("createTokenSavedCard>>." + createTokenGPayRequest)
         if (createTokenGPayRequest != null) {
-            repository.createGoogleToken(context, viewModel, createTokenGPayRequest)
+            repository.createGoogleToken(context, viewModel, createTokenGPayRequest, selectedPaymentOption)
         }
 
     }
