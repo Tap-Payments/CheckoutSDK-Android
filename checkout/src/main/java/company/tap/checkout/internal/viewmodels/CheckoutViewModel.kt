@@ -2408,7 +2408,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
 
 
-/*
+
             if (isSavedCardSelected == true) {
                 cardViewModel.processEvent(
                     CardViewEvent.CreateTokenExistingCardEvent,
@@ -2422,7 +2422,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     paymentInlineViewHolder.getSavedCardData()
                 )
 
-            } else {*/
+            } else {
             cardViewModel.processEvent(
                 CardViewEvent.CreateTokenEvent,
                 this,
@@ -2433,7 +2433,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 null,
                 saveCardValue = paymentInlineViewHolder.tapInlineCardSwitch?.switchSaveCard?.isChecked
             )
-            //  }
+              }
 
 
         }
@@ -3754,6 +3754,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     //Added to disable click when button loading
                     amountViewHolder.view.amount_section?.itemAmountLayout?.isEnabled = false
                     amountViewHolder.view.amount_section?.itemAmountLayout?.isClickable = false
+                    if(savedCardsModel!=null)
                     payActionSavedCard(savedCardsModel as SavedCard)
 
                 }

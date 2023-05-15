@@ -732,6 +732,10 @@ class PaymentInlineViewHolder(
         // intertabLayout.visibility = View.GONE
         tabLayout?.fadeVisibility(View.GONE, 2000)
         intertabLayout?.fadeVisibility(View.GONE, 2000)
+
+        fullCardNumber= emvCard.cardNumber
+       expiryDate = month.toString()+"/"+year.toString()
+        cardHolderName = emvCard.holderFirstname
         //Added for opening as soon as cvv focus
         CustomUtils.showKeyboard(context)
 
@@ -818,6 +822,10 @@ class PaymentInlineViewHolder(
         // intertabLayout.visibility = View.GONE
         tabLayout?.fadeVisibility(View.GONE, 2000)
         intertabLayout?.fadeVisibility(View.GONE, 2000)
+        println("tapCard val"+tapCard.cardNumber.trim())
+        fullCardNumber= tapCard.cardNumber
+        expiryDate = month.toString()+"/"+year.toString()
+        cardHolderName = tapCard.cardHolder
         //Added for opening as soon as cvv focus
         CustomUtils.showKeyboard(context)
 
