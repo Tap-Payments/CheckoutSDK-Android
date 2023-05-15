@@ -1,5 +1,6 @@
 package company.tap.checkout.open
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
@@ -7,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
+import android.widget.FrameLayout
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.bugfender.sdk.Bugfender
@@ -50,6 +52,7 @@ class CheckOutActivity : AppCompatActivity()  , APILoggInterface {
      var displayMetrics: Int?=0
     @JvmField
     var isGooglePayClicked:Boolean = false
+    @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -75,6 +78,7 @@ class CheckOutActivity : AppCompatActivity()  , APILoggInterface {
             supportFragmentManager.beginTransaction().addToBackStack(null),
             "CheckOutFragment"
         )
+
         tapCheckoutFragment.arguments=getArguments()
         tapNfcCardReader = TapNfcCardReader(this)
 

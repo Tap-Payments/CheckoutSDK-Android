@@ -31,7 +31,6 @@ import company.tap.checkout.R
 import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.utils.CustomUtils
-import company.tap.checkout.internal.utils.addFadeOutAnimation
 import company.tap.checkout.internal.utils.showToast
 import company.tap.checkout.internal.utils.twoThirdHeightView
 import company.tap.checkout.internal.viewholders.SwitchViewHolder

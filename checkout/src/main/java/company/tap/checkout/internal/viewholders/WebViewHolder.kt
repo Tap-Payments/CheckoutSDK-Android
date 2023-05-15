@@ -2,9 +2,9 @@ package company.tap.checkout.internal.viewholders
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Color
 import android.os.Build
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.webkit.WebView
@@ -23,7 +23,6 @@ import company.tap.checkout.internal.webview.TapCustomWebViewClient
 import company.tap.checkout.internal.webview.WebViewContract
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import company.tap.tapuilibrary.uikit.ktx.loadAppThemManagerFromPath
 import kotlinx.android.synthetic.main.fragment_web.*
@@ -31,9 +30,6 @@ import kotlinx.android.synthetic.main.switch_layout.view.*
 import kotlin.math.roundToInt
 
 
-const val resizeAnimationDuration = 150L
-const val translationAnimationDurationAfter = 200L
-const val fadeInAnimationDuration = 2000L
 
 @RequiresApi(Build.VERSION_CODES.N)
 @SuppressLint("UseCompatLoadingForDrawables")
@@ -102,13 +98,13 @@ class WebViewHolder(
                     paymentInlineViewHolder.view,
                     switchViewHolder?.view!!,
                     cardViewHolder.view
-                ).addFadeOutAnimationToViews(onAnimationEnd = {
+                ).addFadeOutAnimationToViews {
                     web_view.layoutParams = LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         context.twoThirdHeightView().roundToInt()
                     )
                     showViewsRelatedToWebView()
-                })
+                }
 
 
             })
@@ -117,9 +113,13 @@ class WebViewHolder(
     }
 
     private fun showViewsRelatedToWebView() {
-        topLinear.visibility = View.VISIBLE
-        web_view.visibility = View.VISIBLE
-        webCardview.visibility = View.VISIBLE
+
+        animateBS(fromView = bottomSheetLayout, toView = sdkLayout, transitionAnimation = 1000L, changeHeight = {
+            topLinear.visibility = View.VISIBLE
+            web_view.visibility = View.VISIBLE
+            webCardview.visibility = View.VISIBLE
+        })
+
     }
 
 }

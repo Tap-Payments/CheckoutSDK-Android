@@ -47,7 +47,6 @@ import jp.wasabeef.blurry.Blurry
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import java.util.*
 
@@ -392,13 +391,12 @@ fun View.addFadeOutAnimation(durationTime: Long = 500L, isGone: Boolean = true) 
 
 fun MutableList<View>.addFadeOutAnimationToViews(
     durationTime: Long = 500L,
-    onAnimationEnd: () -> Unit?
+    onAnimationEnd: () -> Unit={}
 ) {
     this.forEachIndexed { index, view ->
         val animation = AnimationUtils.loadAnimation(view.context, R.anim.fade_out)
         animation.duration = durationTime
         view.startAnimation(animation)
-        // view.visibility = View.GONE
         view.animation.setAnimationListener(object : AnimationListener {
             override fun onAnimationStart(p0: Animation?) {
             }
@@ -406,6 +404,7 @@ fun MutableList<View>.addFadeOutAnimationToViews(
             override fun onAnimationEnd(p0: Animation?) {
                 view.visibility = View.GONE
                 onAnimationEnd.invoke()
+
 
             }
 
@@ -418,7 +417,7 @@ fun MutableList<View>.addFadeOutAnimationToViews(
 
 }
 
-fun animateBS(changeHeight: () -> Unit, fromView: ViewGroup, toView: ViewGroup,transitionAnimation:Long=800L) {
+fun animateBS(changeHeight: () -> Unit, fromView: ViewGroup, toView: ViewGroup,transitionAnimation:Long=500L) {
     val transition = AutoTransition()
     transition.addTarget(fromView)
     transition.interpolator = FastOutSlowInInterpolator()

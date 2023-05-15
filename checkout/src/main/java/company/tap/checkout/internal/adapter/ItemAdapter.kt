@@ -19,6 +19,7 @@ import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.internal.api.enums.AmountModificatorType
 import company.tap.checkout.internal.utils.CurrencyFormatter
+import company.tap.checkout.internal.utils.animateBS
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.models.ItemsModel
 import company.tap.taplocalizationkit.LocalizationManager
@@ -40,14 +41,14 @@ All rights reserved.
  **/
 class ItemAdapter(
     private var bottomSheetLayout: FrameLayout,
-    private var headerLayout: LinearLayout
+    private var headerLayout: LinearLayout,
+    private var sdkLayout: LinearLayout
 ) :
     RecyclerView.Adapter<ItemAdapter.ItemHolder>() {
     private var previousExpandedPosition = -1
     private var mExpandedPosition = -1
     private lateinit var itemViewAdapter: TapItemListView
     private lateinit var context: Context
-    private var arrayModifiedItem: Boolean = false
 
     private var adapterContentItems: List<ItemsModel> = java.util.ArrayList()
     lateinit var descriptionTextView: TapTextView
@@ -99,11 +100,20 @@ class ItemAdapter(
             for (i in adapterContentItems.indices) {
                 descriptionTextView.text = adapterContentItems[position].description
                 if (isExpanded) {
-                    descriptionTextView.visibility = View.VISIBLE
+                    animateBS(fromView = bottomSheetLayout, toView = sdkLayout, transitionAnimation = 800L, changeHeight = {
+                        Log.e("error bs", bottomSheetLayout.measuredHeight.toString())
+                        Log.e("error header", headerLayout.measuredHeight.toString())
+                        descriptionTextView.visibility = View.VISIBLE
+
+                    })
+
                 } else {
+                    animateBS(fromView = bottomSheetLayout, toView = sdkLayout, transitionAnimation = 800L, changeHeight = {
+                        Log.e("error bs", bottomSheetLayout.measuredHeight.toString())
+                        Log.e("error header", headerLayout.measuredHeight.toString())
+                        descriptionTextView.visibility = View.GONE
 
-                    descriptionTextView.visibility = View.GONE
-
+                    })
                 }
                 holder.itemView.isActivated = isExpanded
                 // totalQuantity.text = adapterContentItems[position].quantity?.toString()

@@ -15,11 +15,13 @@
 
 
 
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:behavior_hideable="false"
         app:behavior_peekHeight="0dp"
+
         android:clipToOutline="true"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         android:id="@+id/scrollView"
@@ -36,8 +38,14 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:id="@+id/headerLayout"
-                    app:layout_dodgeInsetEdges="bottom"
+
                     tools:context=".open.CheckoutFragment">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:id="@+id/background_color"
+                        android:layout_height="wrap_content">
 
                     <LinearLayout
                         android:id="@+id/fragment_all"
@@ -70,6 +78,7 @@
                         android:layout_height="500dp"
                         />
 
+                    </LinearLayout>
 
                 </LinearLayout>
 
