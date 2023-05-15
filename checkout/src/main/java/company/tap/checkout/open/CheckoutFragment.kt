@@ -20,6 +20,7 @@ import androidx.cardview.widget.CardView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.get
 import androidx.core.widget.NestedScrollView
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import cards.pay.paycardsrecognizer.sdk.Card
@@ -102,6 +103,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         super.onCreate(savedInstanceState)
         _activity = activity?.parent
         this._Context = context
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
 
 
     }
@@ -487,6 +489,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
          val dialog = super.onCreateDialog(savedInstanceState)
         (dialog as BottomSheetDialog).behavior.isFitToContents = true
+
         return dialog
     }
 
