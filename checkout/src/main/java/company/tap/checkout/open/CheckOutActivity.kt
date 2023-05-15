@@ -9,6 +9,7 @@ import android.util.DisplayMetrics
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
 import com.bugfender.sdk.Bugfender
 import com.bumptech.glide.Glide
 import com.google.android.gms.wallet.AutoResolveHelper
@@ -33,66 +34,69 @@ import io.reactivex.disposables.Disposables
 import kotlinx.android.synthetic.main.googlepay_button.*
 import org.json.JSONObject
 
-class CheckOutActivity : AppCompatActivity()  , APILoggInterface {
+class CheckOutActivity : AppCompatActivity(), APILoggInterface {
     private val tapCheckoutFragment = CheckoutFragment()
-    var hideAllViews:Boolean = false
-    lateinit var chargeStatus:ChargeStatus
+    var hideAllViews: Boolean = false
+    lateinit var chargeStatus: ChargeStatus
     var sdkSession: SDKSession = SDKSession
     private lateinit var tapNfcCardReader: TapNfcCardReader
     private var cardReadDisposable: Disposable = Disposables.empty()
+
     @JvmField
     // Arbitrarily-picked constant integer you define to track a request for payment data activity.
     val LOAD_PAYMENT_DATA_REQUEST_CODE = 991
 
 
     lateinit var _paymentsClient: PaymentsClient
+
     @JvmField
-     var displayMetrics: Int?=0
+    var displayMetrics: Int? = 0
+
     @JvmField
-    var isGooglePayClicked:Boolean = false
+    var isGooglePayClicked: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_check_out)
         val intent = intent
         val bundle = intent.extras
-        displayMetrics= CustomUtils.getDeviceDisplayMetrics(this)
+        displayMetrics = CustomUtils.getDeviceDisplayMetrics(this)
         if (bundle != null) {
-            if(bundle["hideAllViews"]!=null){
+            if (bundle["hideAllViews"] != null) {
                 hideAllViews = bundle["hideAllViews"] as Boolean? == true
 
             }
-            if( bundle["status"]!=null){
+            if (bundle["status"] != null) {
                 chargeStatus = bundle["status"] as ChargeStatus
             }
         }
-       // sdkSession.addSessionDelegate(this)
-        tapCheckoutFragment.hideAllView =hideAllViews
+        // sdkSession.addSessionDelegate(this)
+        tapCheckoutFragment.hideAllView = hideAllViews
         tapCheckoutFragment.checkOutActivity = this
-        if(::chargeStatus.isInitialized)
-            tapCheckoutFragment.status =chargeStatus
-        tapCheckoutFragment.show(
-            supportFragmentManager.beginTransaction().addToBackStack(null),
-            "CheckOutFragment"
-        )
-        tapCheckoutFragment.arguments=getArguments()
+        if (::chargeStatus.isInitialized)
+            tapCheckoutFragment.status = chargeStatus
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_one, TabBrandFragment()).commit()
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_two, CheckoutFragment()).commit()
+//        tapCheckoutFragment.show(
+//            supportFragmentManager.beginTransaction().addToBackStack(null),
+//            "CheckOutFragment"
+//        )
+        tapCheckoutFragment.arguments = getArguments()
         tapNfcCardReader = TapNfcCardReader(this)
-
-
 
 
     }
 
     private fun getArguments(): Bundle {
         val arguments = Bundle()
-        if(displayMetrics == DisplayMetrics.DENSITY_450 ||displayMetrics == DisplayMetrics.DENSITY_420 ||displayMetrics == DisplayMetrics.DENSITY_400||displayMetrics == DisplayMetrics.DENSITY_440||displayMetrics == DisplayMetrics.DENSITY_XXHIGH){
+        if (displayMetrics == DisplayMetrics.DENSITY_450 || displayMetrics == DisplayMetrics.DENSITY_420 || displayMetrics == DisplayMetrics.DENSITY_400 || displayMetrics == DisplayMetrics.DENSITY_440 || displayMetrics == DisplayMetrics.DENSITY_XXHIGH) {
 
             arguments.putFloatArray(DialogConfigurations.Corners, floatArrayOf(25f, 25f, 0f, 0f))
-        }else if (displayMetrics == DisplayMetrics.DENSITY_280||displayMetrics == DisplayMetrics.DENSITY_260||displayMetrics == DisplayMetrics.DENSITY_300||displayMetrics == DisplayMetrics.DENSITY_XHIGH || displayMetrics == DisplayMetrics.DENSITY_340||displayMetrics == DisplayMetrics.DENSITY_360){
+        } else if (displayMetrics == DisplayMetrics.DENSITY_280 || displayMetrics == DisplayMetrics.DENSITY_260 || displayMetrics == DisplayMetrics.DENSITY_300 || displayMetrics == DisplayMetrics.DENSITY_XHIGH || displayMetrics == DisplayMetrics.DENSITY_340 || displayMetrics == DisplayMetrics.DENSITY_360) {
             arguments.putFloatArray(DialogConfigurations.Corners, floatArrayOf(5f, 5f, 0f, 0f))
         }
 
-            arguments.putInt(DialogConfigurations.Color, Color.TRANSPARENT)
+        arguments.putInt(DialogConfigurations.Color, Color.TRANSPARENT)
         arguments.putBoolean(DialogConfigurations.Cancelable, false)
         arguments.putFloat(DialogConfigurations.Dim, 0.75f)
         return arguments
@@ -348,7 +352,7 @@ class CheckOutActivity : AppCompatActivity()  , APILoggInterface {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        if(isDestroyed){
+        if (isDestroyed) {
             Glide.with(this).pauseRequests()
         }
         finish()
@@ -356,12 +360,11 @@ class CheckOutActivity : AppCompatActivity()  , APILoggInterface {
 
     override fun onPause() {
         super.onPause()
-        if(tapCheckoutFragment.isNfcOpened){
+        if (tapCheckoutFragment.isNfcOpened) {
             cardReadDisposable.dispose()
             tapNfcCardReader.disableDispatch()
-        }
-        else if(!isGooglePayClicked){
-             finish()
+        } else if (!isGooglePayClicked) {
+            finish()
         }
 //changed above condition ELSE of simply finish to check gpay and finish , otherwise it ws not calling onactivity result
 
@@ -385,9 +388,9 @@ class CheckOutActivity : AppCompatActivity()  , APILoggInterface {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    override fun onActivityResult(requestCode:Int, resultCode:Int, data:Intent?){
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        println("<<<<onActivityResult>>>"+resultCode)
+        println("<<<<onActivityResult>>>" + resultCode)
         when (requestCode) {
             LOAD_PAYMENT_DATA_REQUEST_CODE -> {
                 when (resultCode) {
@@ -395,8 +398,12 @@ class CheckOutActivity : AppCompatActivity()  , APILoggInterface {
                         val paymentData = data?.let { PaymentData.getFromIntent(it) }
                         if (paymentData != null) {
                             tapCheckoutFragment.viewModel?.handlePaymentSuccess(paymentData)
-                        }else {
-                            AutoResolveHelper.getStatusFromIntent(data)?.statusCode?.let { tapCheckoutFragment.viewModel?.handleError(it) }
+                        } else {
+                            AutoResolveHelper.getStatusFromIntent(data)?.statusCode?.let {
+                                tapCheckoutFragment.viewModel?.handleError(
+                                    it
+                                )
+                            }
                         }
 
                         isGooglePayClicked = false
@@ -426,13 +433,14 @@ class CheckOutActivity : AppCompatActivity()  , APILoggInterface {
         }
     }
 
-    fun handleGooglePayApiCall(){
+    fun handleGooglePayApiCall() {
         // Disables the button to prevent multiple clicks.
-          googlePayButton?.isClickable = false
+        googlePayButton?.isClickable = false
         // assert(PaymentDataSource.getInstance().getAmount() != null)
         _paymentsClient = PaymentsUtil.createPaymentsClient(this)
         isGooglePayClicked = true
-        val paymentDataRequestJson: JSONObject? = PaymentDataSource.getSelectedAmount()?.toLong()?.let { PaymentsUtil.getPaymentDataRequest(it) }
+        val paymentDataRequestJson: JSONObject? = PaymentDataSource.getSelectedAmount()?.toLong()
+            ?.let { PaymentsUtil.getPaymentDataRequest(it) }
         if (paymentDataRequestJson == null) {
             Log.e("RequestPayment", "Can't fetch payment data request")
             return
@@ -447,13 +455,14 @@ class CheckOutActivity : AppCompatActivity()  , APILoggInterface {
         // onActivityResult will be called with the result.
         if (request != null) {
             AutoResolveHelper.resolveTask(
-                    _paymentsClient.loadPaymentData(request), this, LOAD_PAYMENT_DATA_REQUEST_CODE)
+                _paymentsClient.loadPaymentData(request), this, LOAD_PAYMENT_DATA_REQUEST_CODE
+            )
         }
     }
 
     override fun onLoggingEvent(logs: String?) {
         Bugfender.d(LogsModel.API.name, logs)
-        println("logs"+logs)
+        println("logs" + logs)
     }
 
 
