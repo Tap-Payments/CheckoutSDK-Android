@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/0846c3e26493dd710c60be0505be9003/jetified-TapUIKit-Android-1.1.1.358.355/res/drawable/border_shadow_white.xml" value="0.126" />
+        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/2ae998f7ddf2935b89ba61673b0b964f/jetified-TapUIKit-Android-1.1.1.358.354/res/drawable/border_shadow_white.xml" value="0.45" />
+        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/2ae998f7ddf2935b89ba61673b0b964f/jetified-TapUIKit-Android-1.1.1.358.354/res/drawable/border_unclick_black.xml" value="0.147" />
         <entry key="../../../../.gradle/caches/transforms-2/files-2.1/37af7803d6f230efad7bbcf0a6b4829b/jetified-TapUIKit-Android-1.1.1.358.323/res/drawable/border_shadow.xml" value="0.1935" />
         <entry key="../../../../.gradle/caches/transforms-2/files-2.1/37af7803d6f230efad7bbcf0a6b4829b/jetified-TapUIKit-Android-1.1.1.358.323/res/drawable/border_shadow_white.xml" value="0.1935" />
         <entry key="../../../../.gradle/caches/transforms-2/files-2.1/37af7803d6f230efad7bbcf0a6b4829b/jetified-TapUIKit-Android-1.1.1.358.323/res/drawable/border_unclick.xml" value="0.1935" />
@@ -15,6 +18,7 @@
         <entry key="../../../../.gradle/caches/transforms-2/files-2.1/cf442cc5454b0a8aa00ff098a090e4ef/jetified-TapUIKit-Android-1.1.1.358.248/res/drawable/border_shadow_white.xml" value="0.2455" />
         <entry key="../../../../.gradle/caches/transforms-2/files-2.1/e33628322437d9783711a06165169f52/jetified-TapUIKit-Android-1.1.1.358.254/res/layout/item_view_adapter.xml" value="0.1" />
         <entry key="../../../../.gradle/caches/transforms-2/files-2.1/ea844a6ddcb0f1848d7025be3c6f6cf4/jetified-TapUIKit-Android-1.1.1.358.255/res/layout/item_view_adapter.xml" value="0.1" />
+        <entry key="../../../../.gradle/caches/transforms-2/files-2.1/f3608b326270988e1d81e4638a48cc86/jetified-TapUIKit-Android-1.1.1.358.356/res/drawable/border_shadow_white.xml" value="0.165" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/menu/menumain.xml" value="0.1" />
         <entry key="app/src/main/res/xml/root_preferences.xml" value="0.11317567567567567" />

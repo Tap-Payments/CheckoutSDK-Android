@@ -11,7 +11,6 @@ import android.text.TextWatcher
 import android.transition.Fade
 import android.transition.TransitionManager
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -19,7 +18,6 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.widget.doAfterTextChanged
 import com.bugfender.sdk.Bugfender
-import com.bugfender.sdk.v
 import com.google.android.material.tabs.TabLayout
 import company.tap.cardinputwidget.Card
 import company.tap.cardinputwidget.CardBrandSingle
@@ -702,7 +700,7 @@ class PaymentInlineViewHolder(
 
         }
 
-        tapCardInputView.setNormalCardDetails(cardModel, CardInputUIStatus.NormalCard)
+        tapCardInputView.setScanNFCCardDetails(cardModel, CardInputUIStatus.NormalCard)
         /*  val alertMessage:String = LocalizationManager.getValue("Warning", "Hints", "missingCVV")
            tapAlertView?.alertMessage?.text =alertMessage.replace("%i","3")
 
@@ -752,9 +750,10 @@ class PaymentInlineViewHolder(
                 )
             }
         println("updateCardString"+updateCardString)
+        println("cardnumber scanner"+tapCard.cardNumber)
 
         val cardModel = Card(
-            updateCardString,
+            tapCard.cardNumber,
             null,
             month,
             year,
@@ -791,8 +790,9 @@ class PaymentInlineViewHolder(
             cardHolderName = tapCard.cardHolder
 
         }
+        println("cardNumValidation is"+cardNumValidation)
 
-        tapCardInputView.setNormalCardDetails(cardModel, CardInputUIStatus.NormalCard)
+        tapCardInputView.setScanNFCCardDetails(cardModel, CardInputUIStatus.NormalCard)
         /*  val alertMessage:String = LocalizationManager.getValue("Warning", "Hints", "missingCVV")
            tapAlertView?.alertMessage?.text =alertMessage.replace("%i","3")
 
