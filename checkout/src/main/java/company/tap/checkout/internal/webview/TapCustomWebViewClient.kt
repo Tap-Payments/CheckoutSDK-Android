@@ -22,7 +22,11 @@ import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 Copyright (c) 2020    Tap Payments.
 All rights reserved.
  **/
-class TapCustomWebViewClient constructor(private val customWebViewClientContract: CustomWebViewClientContract,private val cardViewModel:CardViewModel ,private val checkoutViewModel: CheckoutViewModel) : WebViewClient() {
+class TapCustomWebViewClient constructor(
+    private val customWebViewClientContract: CustomWebViewClientContract,
+    private val cardViewModel: CardViewModel,
+    private val checkoutViewModel: CheckoutViewModel
+) : WebViewClient() {
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
@@ -31,8 +35,10 @@ class TapCustomWebViewClient constructor(private val customWebViewClientContract
         checkCreditCardPaymentStatus(request.url.toString().toLowerCase())
         checkCreditCardToken(request.url.toString().toLowerCase())
         showLoadingToCheckCreditCardToken(request.url.toString().toLowerCase())
-        Log.d("urlincustom",request.url.toString())
-        getCustomHeaders()?.let { view.loadUrl(request.url.toString(), it) }
+        if (request.url.toString().contains(ApiService.RETURN_URL)) {
+
+        } else
+            getCustomHeaders()?.let { view.loadUrl(request.url.toString(), it) }
         return true
     }
 
@@ -52,7 +58,7 @@ class TapCustomWebViewClient constructor(private val customWebViewClientContract
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun checkKnetPaymentStatus(url: String) {
-       // if (url.contains("response/receiptKnet".toLowerCase())) {
+        // if (url.contains("response/receiptKnet".toLowerCase())) {
         val urlIsReturnURL: Boolean = url.startsWith(ApiService.RETURN_URL)
         val shouldLoad = !urlIsReturnURL
         val redirectionFinished = urlIsReturnURL
@@ -71,7 +77,9 @@ class TapCustomWebViewClient constructor(private val customWebViewClientContract
     @RequiresApi(Build.VERSION_CODES.N)
     private fun checkCreditCardPaymentStatus(url: String) {
         if (url.contains("response/receiptCC".toLowerCase())) {
-            if (checkPaymentSuccess(url)) customWebViewClientContract.submitResponseStatus(true) else customWebViewClientContract.submitResponseStatus(false)
+            if (checkPaymentSuccess(url)) customWebViewClientContract.submitResponseStatus(true) else customWebViewClientContract.submitResponseStatus(
+                false
+            )
 
         }
     }
@@ -80,7 +88,9 @@ class TapCustomWebViewClient constructor(private val customWebViewClientContract
     @RequiresApi(Build.VERSION_CODES.N)
     private fun checkCreditCardToken(url: String) {
         if (url.contains("response/receipt_checkout".toLowerCase())) {
-            if (checkPaymentSuccess(url)) customWebViewClientContract.submitResponseStatus(true) else customWebViewClientContract.submitResponseStatus(false)
+            if (checkPaymentSuccess(url)) customWebViewClientContract.submitResponseStatus(true) else customWebViewClientContract.submitResponseStatus(
+                false
+            )
         }
     }
 
@@ -88,7 +98,9 @@ class TapCustomWebViewClient constructor(private val customWebViewClientContract
         if (url.contains("errorPage".toLowerCase())) {
             val urlQuerySanitizer: Uri = Uri.parse(url)
             val msg: String = urlQuerySanitizer.getQueryParameter("message").toString()
-            if (msg.isNotEmpty()) customWebViewClientContract.submitResponseStatus(true) else customWebViewClientContract.submitResponseStatus(false)
+            if (msg.isNotEmpty()) customWebViewClientContract.submitResponseStatus(true) else customWebViewClientContract.submitResponseStatus(
+                false
+            )
         }
     }
 
@@ -99,7 +111,7 @@ class TapCustomWebViewClient constructor(private val customWebViewClientContract
             // here we will put the word of return in response url
             val token: String = urlQuerySanitizer.getQueryParameter("cko-payment-token").toString()
 //            if (token.isNotEmpty()) {
-                customWebViewClientContract.showLoading(true)
+            customWebViewClientContract.showLoading(true)
 //                customWebViewClientContract.web_view.visibility = View.INVISIBLE
 //            }
         } catch (ex: UnsupportedOperationException) {
@@ -114,21 +126,43 @@ class TapCustomWebViewClient constructor(private val customWebViewClientContract
             println("urlQuerySanitizer on checkpayment" + urlQuerySanitizer)
             when {
                 url.contains("auth_ts") -> {
-                    cardViewModel.processEvent(CardViewEvent.RetreiveAuthorizeEvent, checkoutViewModel, null, null, null, null)
+                    cardViewModel.processEvent(
+                        CardViewEvent.RetreiveAuthorizeEvent,
+                        checkoutViewModel,
+                        null,
+                        null,
+                        null,
+                        null
+                    )
 
                 }
                 url.contains("auth") -> {
-                    cardViewModel.processEvent(CardViewEvent.RetreiveSaveCardEvent,checkoutViewModel, null, null, null, null)
+                    cardViewModel.processEvent(
+                        CardViewEvent.RetreiveSaveCardEvent,
+                        checkoutViewModel,
+                        null,
+                        null,
+                        null,
+                        null
+                    )
 
                 }
                 else -> {
-                    cardViewModel.processEvent(CardViewEvent.RetreiveChargeEvent,checkoutViewModel, null, null, null, null)}
+                    cardViewModel.processEvent(
+                        CardViewEvent.RetreiveChargeEvent,
+                        checkoutViewModel,
+                        null,
+                        null,
+                        null,
+                        null
+                    )
+                }
             }
             val status: String = urlQuerySanitizer.getQueryParameter("tap_id").toString()
             println("status on checkpayment" + status)
             status.equals("CAPTURED", ignoreCase = true) || status.equals(
-                    "0",
-                    ignoreCase = true
+                "0",
+                ignoreCase = true
             )
         } catch (ex: Exception) {
             false
@@ -141,12 +175,13 @@ class TapCustomWebViewClient constructor(private val customWebViewClientContract
         Log.d("url", url.toString())
         customWebViewClientContract.showLoading(true)
 
-     //   url?.let { customWebViewClientContract.getRedirectedURL(it) }
+        //   url?.let { customWebViewClientContract.getRedirectedURL(it) }
     }
 
     override fun onPageFinished(@NonNull view: WebView?, url: String?) {
         super.onPageFinished(view, url)
         Log.d("onPageFinished", url.toString())
+
         customWebViewClientContract.showLoading(false)
 
         url?.let { customWebViewClientContract.getRedirectedURL(it) }
@@ -156,8 +191,8 @@ class TapCustomWebViewClient constructor(private val customWebViewClientContract
 
     @SuppressLint("NewApi")
     override fun shouldInterceptRequest(
-            view: WebView?,
-            request: WebResourceRequest?
+        view: WebView?,
+        request: WebResourceRequest?
     ): WebResourceResponse? {
         return null
     }

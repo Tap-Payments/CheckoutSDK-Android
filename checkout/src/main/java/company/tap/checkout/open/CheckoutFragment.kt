@@ -265,11 +265,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             topHeaderView?.backgroundHeader?.setBackgroundDrawable(null)
             headerLayout?.addView(topHeaderView, 0)
         }
-        val nextFrag = CheckoutFragment()
 
         topHeaderView?.visibility = View.GONE
-
-
         inLineCardLayout?.minimumHeight = heightscreen - checkoutLayout?.height!!
         dialog?.window?.attributes?.windowAnimations = R.style.DialogAnimation
 
@@ -336,10 +333,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             viewModel.incrementalCount = 0
 
         }
-
-
-     //   topHeaderView?.outerConstraint?.applyBluryToView()
-
 
     }
 

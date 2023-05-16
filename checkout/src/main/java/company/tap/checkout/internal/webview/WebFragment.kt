@@ -104,7 +104,6 @@ class WebFragment(
     }
 
 
-
     @SuppressLint("SetJavaScriptEnabled")
     private fun setUpWebView(mUrl: String) {
         web_view.settings.javaScriptEnabled = true
@@ -154,7 +153,7 @@ class WebFragment(
                 if (newProgress == 100) {
                     if (isFirstTimeLoadingInWeb) {
                         onLoadedWebView.invoke()
-                        isFirstTimeLoadingInWeb =false
+                        isFirstTimeLoadingInWeb = false
                     }
                     progressBar?.visibility = View.INVISIBLE
                     web_view.visibility = View.VISIBLE
@@ -163,7 +162,6 @@ class WebFragment(
 
 
             override fun onCloseWindow(window: WebView?) {
-                requireContext().showToast("closing")
                 super.onCloseWindow(window)
                 Log.e("webview", "Window trying to close");
 
@@ -192,6 +190,8 @@ class WebFragment(
 
     override fun getRedirectedURL(url: String) {
         println("url are>>" + PaymentDataSource.getChargeOrAuthorize())
+        println("url are>>" + url)
+
         // webViewContract.redirectLoadingFinished(url.contains("https://www.google.com/search?"))
         if (url.contains("gosellsdk://return_url")) {
             // webViewContract?.resultObtained(true, contextSDK)

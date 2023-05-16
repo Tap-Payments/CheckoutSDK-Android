@@ -369,7 +369,11 @@ fun getViewShapeDrawable(
     return shape
 }
 
-fun View.addFadeOutAnimation(durationTime: Long = 500L, isGone: Boolean = true,onAnimationEnd: () -> Unit?={}) {
+fun View.addFadeOutAnimation(
+    durationTime: Long = 500L,
+    isGone: Boolean = true,
+    onAnimationEnd: () -> Unit? = {}
+) {
     if (this.isVisible) {
         val animation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
         animation.duration = durationTime
@@ -392,9 +396,34 @@ fun View.addFadeOutAnimation(durationTime: Long = 500L, isGone: Boolean = true,o
     }
 }
 
+fun View.addSlideToBottom(onAnimationStart: () -> Unit? = {}) {
+
+    val slide_down = AnimationUtils.loadAnimation(
+        this.context,
+        R.anim.slide_down
+    )
+    this.startAnimation(slide_down)
+    this.animation.setAnimationListener(object : AnimationListener {
+        override fun onAnimationStart(p0: Animation?) {
+            onAnimationStart.invoke()
+        }
+
+        override fun onAnimationEnd(p0: Animation?) {
+            this@addSlideToBottom.visibility = View.GONE
+        }
+
+        override fun onAnimationRepeat(p0: Animation?) {
+        }
+
+    })
+
+}
+
+
+
 fun MutableList<View>.addFadeOutAnimationToViews(
     durationTime: Long = 500L,
-    onAnimationEnd: () -> Unit={}
+    onAnimationEnd: () -> Unit = {}
 ) {
     this.forEachIndexed { index, view ->
         val animation = AnimationUtils.loadAnimation(view.context, R.anim.fade_out)
@@ -407,7 +436,6 @@ fun MutableList<View>.addFadeOutAnimationToViews(
             override fun onAnimationEnd(p0: Animation?) {
                 view.visibility = View.GONE
                 view.setBackgroundColor(Color.WHITE)
-
                 onAnimationEnd.invoke()
 
 
@@ -422,7 +450,13 @@ fun MutableList<View>.addFadeOutAnimationToViews(
 
 }
 
-fun animateBS(changeHeight: () -> Unit, fromView: ViewGroup, toView: ViewGroup,transitionAnimation:Long=500L) {
+fun animateBS(
+    changeHeight: () -> Unit,
+    fromView: ViewGroup,
+    toView: ViewGroup,
+    transitionAnimation: Long = 500L,
+    onTransitionEnd:()->Unit={}
+) {
     val transition = AutoTransition()
     transition.addTarget(fromView)
     transition.interpolator = FastOutSlowInInterpolator()
@@ -430,6 +464,7 @@ fun animateBS(changeHeight: () -> Unit, fromView: ViewGroup, toView: ViewGroup,t
     androidx.transition.TransitionManager.beginDelayedTransition(toView, transition)
     changeHeight()
     androidx.transition.TransitionManager.endTransitions(fromView)
+    onTransitionEnd.invoke()
 }
 
 fun MutableList<View>.addFadeInAnimationToViews(durationTime: Long = 500L) {
