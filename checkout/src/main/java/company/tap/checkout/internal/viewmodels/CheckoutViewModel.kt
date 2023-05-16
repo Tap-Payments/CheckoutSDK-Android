@@ -2242,8 +2242,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     selectedPayOpt
                 )
             )
-            .thumbnail(0.5f)
-            .override(200, 200)
+            //.thumbnail(0.5f)
+            //.override(200, 200)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .into(image!!)
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.addChildView(image!!)
@@ -4049,7 +4049,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             theme = "dark"
         } else theme = "light"
         val assetToLoad: String = paymentOptionOb?.buttonStyle?.titleAssets.toString()
-        //println("oppp" + assetToLoad.replace("{theme}", theme).replace("{lang}", lang) + ".png")
+        println("<<<assetToLoad>>>" + assetToLoad.replace("{theme}", theme).replace("{lang}", lang) + ".png")
         return assetToLoad.replace("{theme}", theme).replace("{lang}", lang) + ".png"
     }
 
