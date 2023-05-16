@@ -1736,6 +1736,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         println("response val>>" + response)
         println("tabAnimatedActionButton val>>" + tabAnimatedActionButton)
         println("save val>>" + saveCardSwitchHolder)
+
         /* if(chargeResponse?.status == null && response == "tokenized"){
              //todo replaced authorized with chargeresponse
              SDKSession.getListener()?.getStatusSDK(response,chargeResponse)
@@ -1796,6 +1797,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         // println("saveCardSwitchHolder are>>>>"+saveCardSwitchHolder)
         if (response.contains("failure") && chargeResponse == null) {
 
+
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
                 false,
                 Color.MAGENTA
@@ -1807,15 +1809,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
                 Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
             )
-            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.ERROR)
+            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
+                ActionButtonState.ERROR
+            )
         }
         println("chargeResponse to handle" + saveCardSwitchHolder?.view)
         println("chargeResponse to handle" + chargeResponse?.status)
         when (chargeResponse?.status) {
             ChargeStatus.CAPTURED, ChargeStatus.AUTHORIZED, ChargeStatus.VALID, ChargeStatus.IN_PROGRESS -> {
-                provideBackgroundtoBsLayout()
                 if (::webViewHolder.isInitialized) {
-
+                    provideBackgroundtoBsLayout()
                     webViewHolder.view.addFadeOutAnimation {
                         animateBS(
                             fromView = bottomSheetLayout,
@@ -1906,32 +1909,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 }
             }
         }
-        /**
-         * Stopped reseting the view of button cz of loader will test if not required will remove this code*/
-        /* doAfterSpecificTime(4000) {
-             if (chargeResponse != null)
-                 tabAnimatedActionButton?.setButtonDataSource(
-                     true,
-                     "en",
-                     null,
-                     loadAppThemManagerFromPath(AppColorTheme.ActionButtonBackgroundColor),
-                     loadAppThemManagerFromPath(AppColorTheme.ActionButtonValidTitleLabelColor),
-                 )
-             SDKSession.sessionActive = false
-         }*/
+
+
         SessionManager.setActiveSession(false)
-        /**
-         * Stopped reseting the view of button cz of loader will test if not required will remove this code*/
-        /* tabAnimatedActionButton?.setOnClickListener {
-             // if(::fragmentManager.isInitialized)
-             tabAnimatedActionButton.changeButtonState(ActionButtonState.LOADING)
-             SDKSession.startSDK(
-                 (tabAnimatedActionButton.context as AppCompatActivity).supportFragmentManager,
-                 tabAnimatedActionButton.context,
-                 tabAnimatedActionButton.context as AppCompatActivity
-             )
-         }*/
-        //removeAllViews()
         doAfterSpecificTime(4500)
         {
             if (::bottomSheetDialog.isInitialized)
@@ -1969,6 +1949,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     private fun removeViews(vararg viewHolders: TapBaseViewHolder?, onRemoveEnd: () -> Unit = {}) {
+        Log.e("bottomSheetLevel before", bottomSheetLayout.background.level.toString())
         animateBS(
             fromView = bottomSheetLayout,
             toView = sdkLayout,
@@ -1976,30 +1957,17 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             changeHeight = {
                 viewHolders.forEach {
                     if (::sdkLayout.isInitialized) {
-                        headerLayout.children.forEachIndexed { index, view ->
-                            if (index != 0) {
-                                view.setBackgroundDrawable(
-                                    createDrawableGradientForBlurry(
-                                        newColorVal?.let { it1 ->
-                                            intArrayOf(
-                                                it1,
-                                                it1,
-                                                it1
-                                            )
-                                        }!!
-                                    )
-                                )
-                            }
-
-                        }
-
-
-
                         sdkLayout.removeView(it?.view)
                         onRemoveEnd.invoke()
 
                     }
+                    Log.e(
+                        "bottomSheetLevel while removing",
+                        bottomSheetLayout.background.level.toString()
+                    )
                 }
+                Log.e("bottomSheetLevel after ", bottomSheetLayout.background.level.toString())
+
             })
     }
 
@@ -4078,7 +4046,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             theme = "dark"
         } else theme = "light"
         val assetToLoad: String = paymentOptionOb?.buttonStyle?.titleAssets.toString()
-        println("<<<assetToLoad>>>" + assetToLoad.replace("{theme}", theme).replace("{lang}", lang) + ".png")
+        println(
+            "<<<assetToLoad>>>" + assetToLoad.replace("{theme}", theme)
+                .replace("{lang}", lang) + ".png"
+        )
         return assetToLoad.replace("{theme}", theme).replace("{lang}", lang) + ".png"
     }
 

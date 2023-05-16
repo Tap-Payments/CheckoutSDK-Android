@@ -950,7 +950,14 @@ class CardRepository : APIRequestCallback {
                     // resultObservable.onError(Throwable(it.errorMessage))
                     RxJavaPlugins.setErrorHandler(Throwable::printStackTrace)
                     // sdkSession.getListener()?.backendUnknownError(errorDetails)
+                    viewModel.handleSuccessFailureResponseButton(
+                        "failure",
+                        null,
+                        null,
+                        tabAnimatedActionButton,
+                        contextSDK
 
+                    )
 
                 } catch (e: Exception) {
 
