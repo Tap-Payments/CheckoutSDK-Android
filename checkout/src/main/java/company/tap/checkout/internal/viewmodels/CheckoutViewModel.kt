@@ -2256,7 +2256,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         var selectedPayOption: PaymentOption? = null
 
         for (i in 0 until paymentOptionsResponse.paymentOptions.size) {
-            if (paymentOptionsResponse.paymentOptions[i].brand == cardBrandString?.toUpperCase()) {
+            if (paymentOptionsResponse.paymentOptions[i].brand?.replace("_","") == cardBrandString?.toUpperCase()) {
                 selectedPayOption = paymentOptionsResponse.paymentOptions[i]
             }
         }
@@ -3020,13 +3020,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
             println("savedCardsModel after fees" + savedCardsModel)
             println("savedCardsModel after fees" + paymentTypeEnum)
-            println("savedCardsModel after fees" + paymentInlineViewHolder.cardInputUIStatus)
+
             if (paymentTypeEnum == PaymentType.CARD || paymentTypeEnum == PaymentType.SavedCard) {
                 if (paymentInlineViewHolder.cardInputUIStatus == CardInputUIStatus.SavedCard) {
                     savedCardsModel as SavedCard
+                    println("savedCardsModel after fees" + savedCardsModel.paymentOptionIdentifier.toInt())
                     if (savedCardsModel.paymentOptionIdentifier.toInt() == 3 || savedCardsModel.paymentOptionIdentifier.toInt() == 4) {
                         setDifferentPaymentsAction(PaymentType.SavedCard, savedCardsModel)
-                    }
+                    } else   setDifferentPaymentsAction(PaymentType.SavedCard, savedCardsModel)
 
                 } else {
                     //    savedCardsModel as PaymentOption
