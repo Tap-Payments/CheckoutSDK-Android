@@ -1735,7 +1735,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )*/
 
         if (::webFrameLayout.isInitialized) {
-            businessViewHolder.view.visibility = VISIBLE
+        //    businessViewHolder.view.visibility = VISIBLE
         }
 
         /***

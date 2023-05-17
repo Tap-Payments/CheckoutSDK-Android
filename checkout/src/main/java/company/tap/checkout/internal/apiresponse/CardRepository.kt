@@ -166,7 +166,7 @@ class CardRepository : APIRequestCallback {
         Log.e("chargeResponseForGoogle",viewModel.globalChargeResponse?.id.toString())
 
         NetworkController.getInstance().processRequest(
-            TapMethodType.GET, ApiService.CHARGE_ID + if (::chargeResponse.isInitialized)chargeResponse.id else  viewModel.globalChargeResponse , null,
+            TapMethodType.GET, ApiService.CHARGE_ID + if (::chargeResponse.isInitialized)chargeResponse.id else  viewModel.globalChargeResponse?.id , null,
             this, CHARGE_RETRIEVE_CODE
         )
     }
