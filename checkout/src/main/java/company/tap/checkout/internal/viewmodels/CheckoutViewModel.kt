@@ -1767,7 +1767,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         if (response.contains("failure") && chargeResponse == null) {
 
             if (::webFrameLayout.isInitialized) {
-                provideBackgroundtoBsLayout(7000)
+                provideBackgroundtoBsLayout(7800)
                 showAnimatedButtonRegardingWebViewDismiss(
                     viewToFadeOut = webFrameLayout,
                     isSuccess = false
