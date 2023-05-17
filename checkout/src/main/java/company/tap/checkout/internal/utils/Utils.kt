@@ -24,21 +24,25 @@ All rights reserved.
                 list: T,
                 filter: Filter<E>
             ): T {
-                val result: T = try {
+                val result: T
+                 result = try {
                     val listClass: T = list
-                    listClass as T
+                     listClass
                 } catch (e: IllegalAccessException) {
                     return list
                 } catch (e: InstantiationException) {
                     return list
                 }
-                for (element in list!!) {
-                    if (filter.isIncluded(element)) {
-                       // result.add(element)
+                if (list != null) {
+                    for (element in list) {
+                        if (filter.isIncluded(element)) {
+                         //   result.add(element)
+                        }
                     }
                 }
                 return result
             }
+
             /**
              * The interface Filter.
              *

@@ -1,6 +1,5 @@
 package company.tap.checkout.internal.viewmodels
 
-import android.R.attr.logo
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -16,7 +15,6 @@ import android.util.Log
 import android.view.View
 import android.view.View.*
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -26,7 +24,6 @@ import androidx.annotation.RequiresApi
 import androidx.annotation.RestrictTo
 import androidx.cardview.widget.CardView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.view.children
 import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
 import androidx.core.view.setMargins
@@ -116,6 +113,7 @@ import mobi.foo.benefitinapp.utils.BenefitInAppCheckout
 import org.json.JSONException
 import org.json.JSONObject
 import java.math.BigDecimal
+import java.util.*
 import kotlin.properties.Delegates
 
 
@@ -3432,25 +3430,52 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         } as ArrayList<PaymentOption>
     }
 
-    private fun <E : CurrenciesSupport?> getCurrenciesFilter(
+    private fun <E : CurrenciesSupport> getCurrenciesFilter(
         currency: String
-    ): Utils.List.Filter<E>? {
+    ): Utils.List.Filter<E> {
         return object : Utils.List.Filter<E> {
             override fun isIncluded(`object`: E): Boolean {
-                return `object`?.getSupportedCurrencies()!!.contains(currency)
+                return `object`.getSupportedCurrencies()!!.contains(currency)
             }
         }
     }
 
+    private  fun <E> filterByCurrenciesAndSortList(list: ArrayList<E>, currency: String): ArrayList<SavedCard> where E : CurrenciesSupport?, E : Comparable<E>? {
+        println("currency filterByCurrenciesAndSortList"+currency)
+        println("list here"+list.size)
+        println("list here"+list)
+      //  val filter: Utils.List.Filter<E> = getCurrenciesFilter(currency)
+       // println("filter here"+filter)
+
+
+      // var filtered: ArrayList<E> = Utils.List.filter(list, filter)
+/**
+ * Stopped generic for now to work the functionality**/
+        return list.filter { items ->
+           items?.getSupportedCurrencies()?.contains(
+                currency
+            ) == true
+        } as ArrayList<SavedCard>
+       /* Collections.sort(filtered)
+         return filtered*/
+    }
+
     @RequiresApi(Build.VERSION_CODES.N)
     fun filterViewModels(currency: String) {
+        var savedCards: java.util.ArrayList<SavedCard>? = null
         if (paymentOptionsResponse.paymentOptions != null)
             paymentOptionsWorker =
                 java.util.ArrayList<PaymentOption>(paymentOptionsResponse.paymentOptions)
         if (paymentOptionsResponse.cards != null) {
             val savedCardsWorker: java.util.ArrayList<SavedCard> =
                 java.util.ArrayList<SavedCard>(paymentOptionsResponse.cards)
+            savedCards = filterByCurrenciesAndSortList(savedCardsWorker, currency)
+
         }
+        println("savedCards>>"+savedCards)
+        println("savedCards>>"+savedCards?.size)
+
+
         webPaymentOptions =
             filteredByPaymentTypeAndCurrencyAndSortedList(
                 paymentOptionsWorker, PaymentType.WEB, currency
@@ -3469,6 +3494,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         val hasWebPaymentOptions = webPaymentOptions.size > 0
         val hasCardPaymentOptions = cardPaymentOptions.size > 0
         val hasGooglePaymentOptions = googlePaymentOptions.size > 0
+        val hasSavedCards: Boolean = savedCards?.size!! > 0
         // println("hasGooglePaymentOptions"+hasGooglePaymentOptions)
 
         //Added if else to update showing GooglePay button based on api
@@ -3497,8 +3523,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             webPaymentOptions,
             cardPaymentOptions
         )
+        if (savedCards == null) savedCards = ArrayList()
+        if (hasSavedCards) {
+            adapter.updateAdapterDataSavedCard(savedCards)
+        // update RecentSectionViewModel data with only filtered cards. // added to fix filtering saved cards based on changed currency
 
-
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
