@@ -499,24 +499,6 @@ class PaymentInlineViewHolder(
 
 
 
-//        bottomSheetLayout.addOnLayoutChangeListener { view, i, i2, i3, i4, i5, i6, i7, i8 ->
-//            Log.e("error bottomsheet",view.measuredHeight.toString())
-//            Log.e("error bottomsheet",view.measuredWidth.toString())
-//            val widthWas: Int = rightWas - leftWas // Right exclusive, left inclusive
-//
-//            if (v.getWidth() !== widthWas) {
-//                // Width has changed
-//            }
-//            val heightWas: Int = bottomWas - topWas // Bottom exclusive, top inclusive
-//
-//            if (v.getHeight() !== heightWas) {
-//                // Height has changed
-//            }
-//
-//
-//        }
-
-
         tapCardInputView.backArrow.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
                 //  println("getPreTypedCardData data was there"+getPreTypedCardData())

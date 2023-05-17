@@ -549,16 +549,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                  shadowColor =Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
              )
          }*/
-        bottomSheetLayout.setBackgroundDrawable(
-            createDrawableGradientForBlurry(
-                intArrayOf(
-                    Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),
-                    Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),
-                    Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
-                )
-            )
-        )
-
         newColorVal = Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
 
     }
@@ -1801,8 +1791,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             ChargeStatus.CAPTURED, ChargeStatus.AUTHORIZED, ChargeStatus.VALID, ChargeStatus.IN_PROGRESS -> {
                 if (::webViewHolder.isInitialized) {
                     showAnimatedButtonRegardingWebViewDismiss(viewToFadeOut = webViewHolder.view)
-                }
-                if (::webFrameLayout.isInitialized) {
+                }else if (::webFrameLayout.isInitialized) {
+                    provideBackgroundtoBsLayout(7600)
                     showAnimatedButtonRegardingWebViewDismiss(viewToFadeOut = webFrameLayout)
                 } else {
                     saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = VISIBLE
@@ -1816,6 +1806,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             ChargeStatus.RESTRICTED, ChargeStatus.ABANDONED, ChargeStatus.VOID, ChargeStatus.INVALID -> {
 
                 if (::webFrameLayout.isInitialized) {
+                    provideBackgroundtoBsLayout(7600)
                     showAnimatedButtonRegardingWebViewDismiss(
                         viewToFadeOut = webFrameLayout,
                         isSuccess = false
@@ -1887,9 +1878,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         viewToFadeOut: View,
         isSuccess: Boolean = true
     ) {
-        if (viewToFadeOut is FrameLayout){
-         //   provideBackgroundtoBsLayout(8200)
-        }
+
         viewToFadeOut.addFadeOutAnimation {
             animateBS(
                 fromView = bottomSheetLayout,
@@ -1997,14 +1986,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
     }
 
-    fun provideBackgroundtoBsLayout(levelDuration:Int=7000) {
+    fun provideBackgroundtoBsLayout(levelDuration: Int = 7000) {
         /**
          * needed to be enhanced according to the bottomSheetAnimation .
          *
          */
         bottomSheetLayout.background = context.resources.getDrawable(R.drawable.bkgd_level)
-        bottomSheetLayout.backgroundTintList =
-            ColorStateList.valueOf(loadAppThemManagerFromPath(AppColorTheme.MerchantHeaderViewColor))
+        bottomSheetLayout.backgroundTintList = ColorStateList.valueOf(loadAppThemManagerFromPath(AppColorTheme.GlobalValuesColor))
         bottomSheetLayout.background.level = levelDuration
     }
 
@@ -2057,6 +2045,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCardSelectedAction(isSelected: Boolean, savedCardsModel: Any?) {
+
 
         /**
          * Clear card input text
@@ -2144,6 +2133,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     ) {
         val payStringButton: String
 
+        provideBackgroundtoBsLayout()
         when (PaymentDataSource.getTransactionMode()) {
             TransactionMode.TOKENIZE_CARD -> payStringButton = LocalizationManager.getValue(
                 "pay",

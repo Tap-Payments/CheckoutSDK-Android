@@ -282,15 +282,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
         }
 
-        sdkCardView?.setBackgroundDrawable(
-            createDrawableGradientForBlurry(
-                intArrayOf(
-                    Color.parseColor(newColorVal),
-                    Color.parseColor(context?.getString(R.color.black_blur_12)),
-                    Color.parseColor(newColorVal)
-                )
-            )
-        )
 
         setTopBorders(
             checkoutLayout,
@@ -306,15 +297,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             )
         )
 
-        checkoutLayout.setBackgroundDrawable(
-            createDrawableGradientForBlurry(
-                intArrayOf(
-                    Color.parseColor(newColorVal),
-                    Color.parseColor(newColorVal),
-                    Color.parseColor(newColorVal)
-                )
-            )
-        )
 
 
         closeText.setOnClickListener {

@@ -565,6 +565,7 @@ fun createDrawableGradientForBlurry(colorsArrayList: IntArray): GradientDrawable
         bottomRightCorner, bottomRightCorner,
         bottomLeftCorner, bottomLeftCorner
     )
+
     return gradientDrawable
 }
 
