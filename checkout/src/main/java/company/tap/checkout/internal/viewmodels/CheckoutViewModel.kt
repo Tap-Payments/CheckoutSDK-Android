@@ -2103,7 +2103,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
             else -> {
                 if (savedCardsModel != null) {
-
+                    println("savedCardsModel is>>" +   PaymentType.GOOGLE_PAY)
                     if ((savedCardsModel as PaymentOption).paymentType == PaymentType.WEB) {
                         //  paymentInlineViewHolder.view.alpha = 0.95f
 
@@ -2111,10 +2111,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         activateActionButton((savedCardsModel as PaymentOption))
                         setPayButtonAction(PaymentType.WEB, savedCardsModel)
                     } else if ((savedCardsModel as PaymentOption).paymentType == PaymentType.GOOGLE_PAY) {
-                        removeViews(amountViewHolder, cardViewHolder, paymentInlineViewHolder)
-                        checkoutFragment.checkOutActivity?.handleGooglePayApiCall(savedCardsModel as PaymentOption)
-                        activateActionButtonForGPay()
-                        setPayButtonAction(PaymentType.WEB, savedCardsModel)
+                      //  removeViews(amountViewHolder, cardViewHolder, paymentInlineViewHolder)
+                       // checkoutFragment.checkOutActivity?.handleGooglePayApiCall(savedCardsModel as PaymentOption)
+                        //activateActionButtonForGPay()
+                        activateActionButton((savedCardsModel as PaymentOption))
+                        setPayButtonAction(PaymentType.GOOGLE_PAY, savedCardsModel)
                         PaymentDataSource.setWebViewType(WebViewType.REDIRECT)
                     }
                     Bugfender.d(
@@ -2145,7 +2146,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         saveCardSwitchHolder?.view?.cardSwitch?.showOnlyPayButton()
 
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
+        //saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
+
+
     }
 
 
@@ -2986,10 +2989,19 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         PaymentDataProvider().getSelectedCurrency()
                     )
                 }
+                PaymentType.GOOGLE_PAY->{
+                    checkoutFragment.checkOutActivity?.handleGooglePayApiCall(savedCardsModel as PaymentOption)
+
+                }
+
             }
             //  false
         }
 
+    }
+
+    fun changeButtonToLoading(){
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
     }
 
 

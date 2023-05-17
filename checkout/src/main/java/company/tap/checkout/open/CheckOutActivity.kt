@@ -204,6 +204,7 @@ class CheckOutActivity : AppCompatActivity(), APILoggInterface {
     fun handleGooglePayApiCall(paymentOption: PaymentOption) {
         // Disables the button to prevent multiple clicks.
         googlePayButton?.isClickable = false
+        tapCheckoutFragment.viewModel?.changeButtonToLoading()
         // assert(PaymentDataSource.getInstance().getAmount() != null)
         _paymentsClient = PaymentsUtil.createPaymentsClient(this)
         isGooglePayClicked = true
