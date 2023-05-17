@@ -1772,6 +1772,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     viewToFadeOut = webFrameLayout,
                     isSuccess = false
                 )
+            }else{
+                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = VISIBLE
+                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
+                    ActionButtonState.ERROR
+                )
             }
         }
         when (chargeResponse?.status) {
@@ -1863,14 +1868,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun showAnimatedButtonRegardingWebViewDismiss(
         viewToFadeOut: View,
-        isSuccess: Boolean = true
+        isSuccess: Boolean = true,
+        tranisitionDuration:Long = 1000L
     ) {
 
         viewToFadeOut.addFadeOutAnimation {
             animateBS(
                 fromView = bottomSheetLayout,
                 toView = sdkLayout,
-                transitionAnimation = 1000L,
+                transitionAnimation = tranisitionDuration,
                 changeHeight = {},
                 onTransitionEnd = {
                     doAfterSpecificTime {
@@ -2124,7 +2130,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     ) {
         val payStringButton: String
 
-        provideBackgroundtoBsLayout()
+        provideBackgroundtoSdkLayout()
         when (PaymentDataSource.getTransactionMode()) {
             TransactionMode.TOKENIZE_CARD -> payStringButton = LocalizationManager.getValue(
                 "pay",
