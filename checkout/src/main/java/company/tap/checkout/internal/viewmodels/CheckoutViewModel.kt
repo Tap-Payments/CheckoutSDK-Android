@@ -1754,17 +1754,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             businessViewHolder.view.visibility = VISIBLE
         }
 
-
-
-        saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = VISIBLE
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setDisplayMetricsTheme(
-            CustomUtils.getDeviceDisplayMetrics(
-                context as Activity
-            ), CustomUtils.getCurrentTheme()
-        )
-
-        //  addViews(saveCardSwitchHolder)
         /***
          * This function is  working fine as expected in case when 3ds is false
          * i.e.  sdkSession.isRequires3DSecure(false) as no loading of url occurs direct response
@@ -1785,18 +1774,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 )
             }
         if (saveCardSwitchHolder != null) {
-            // removeAllViews()
-            //   addViews(saveCardSwitchHolder)
+            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = INVISIBLE
             saveCardSwitchHolder?.view?.visibility = VISIBLE
-            saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
-            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = VISIBLE
         }
         if (::checkoutFragment.isInitialized)
             checkoutFragment.closeText.visibility = GONE
         println("chargeResponse are>>>>" + chargeResponse?.status)
-        // println("saveCardSwitchHolder are>>>>"+saveCardSwitchHolder)
         if (response.contains("failure") && chargeResponse == null) {
-
 
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
                 false,
@@ -1813,26 +1797,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 ActionButtonState.ERROR
             )
         }
-        println("chargeResponse to handle" + saveCardSwitchHolder?.view)
-        println("chargeResponse to handle" + chargeResponse?.status)
         when (chargeResponse?.status) {
             ChargeStatus.CAPTURED, ChargeStatus.AUTHORIZED, ChargeStatus.VALID, ChargeStatus.IN_PROGRESS -> {
                 if (::webViewHolder.isInitialized) {
-                    provideBackgroundtoBsLayout()
-                    webViewHolder.view.addFadeOutAnimation {
-                        animateBS(
-                            fromView = bottomSheetLayout,
-                            toView = sdkLayout,
-                            changeHeight = {
-                                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility =
-                                    VISIBLE
-                                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
-                                    ActionButtonState.SUCCESS
-                                )
-                            },
-                        )
-                    }
-
+                    showAnimatedButtonRegardingWebViewDismiss(viewToFadeOut = webViewHolder.view)
+                }
+                if (::webFrameLayout.isInitialized) {
+                    showAnimatedButtonRegardingWebViewDismiss(viewToFadeOut = webFrameLayout)
                 } else {
                     saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = VISIBLE
                     saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
@@ -1843,22 +1814,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
             ChargeStatus.CANCELLED, ChargeStatus.TIMEDOUT, ChargeStatus.FAILED, ChargeStatus.DECLINED, ChargeStatus.UNKNOWN,
             ChargeStatus.RESTRICTED, ChargeStatus.ABANDONED, ChargeStatus.VOID, ChargeStatus.INVALID -> {
-                provideBackgroundtoBsLayout()
 
                 if (::webFrameLayout.isInitialized) {
-                    webFrameLayout.addFadeOutAnimation {
-                        animateBS(
-                            fromView = bottomSheetLayout,
-                            toView = sdkLayout,
-                            transitionAnimation = 800L,
-                            changeHeight = {
-                                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
-                                    ActionButtonState.ERROR
-                                )
-                            })
-                    }
-
-
+                    showAnimatedButtonRegardingWebViewDismiss(
+                        viewToFadeOut = webFrameLayout,
+                        isSuccess = false
+                    )
                 }
 
             }
@@ -1922,6 +1883,41 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
 
+    private fun showAnimatedButtonRegardingWebViewDismiss(
+        viewToFadeOut: View,
+        isSuccess: Boolean = true
+    ) {
+        if (viewToFadeOut is FrameLayout){
+         //   provideBackgroundtoBsLayout(8200)
+        }
+        viewToFadeOut.addFadeOutAnimation {
+            animateBS(
+                fromView = bottomSheetLayout,
+                toView = sdkLayout,
+                transitionAnimation = 1000L,
+                changeHeight = {},
+                onTransitionEnd = {
+                    doAfterSpecificTime {
+                        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = VISIBLE
+                        if (isSuccess) {
+                            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
+                                ActionButtonState.SUCCESS
+                            )
+                        } else {
+                            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
+                                ActionButtonState.ERROR
+                            )
+                        }
+                        provideBackgroundtoBsLayout()
+                    }
+
+                },
+            )
+        }
+
+    }
+
+
     override fun displayAsynchronousPaymentView(chargeResponse: Charge) {
         if (chargeResponse != null) {
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
@@ -1949,7 +1945,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     private fun removeViews(vararg viewHolders: TapBaseViewHolder?, onRemoveEnd: () -> Unit = {}) {
-        Log.e("bottomSheetLevel before", bottomSheetLayout.background.level.toString())
         animateBS(
             fromView = bottomSheetLayout,
             toView = sdkLayout,
@@ -1958,15 +1953,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 viewHolders.forEach {
                     if (::sdkLayout.isInitialized) {
                         sdkLayout.removeView(it?.view)
+                        provideBackgroundtoBsLayout()
                         onRemoveEnd.invoke()
 
                     }
-                    Log.e(
-                        "bottomSheetLevel while removing",
-                        bottomSheetLayout.background.level.toString()
-                    )
                 }
-                Log.e("bottomSheetLevel after ", bottomSheetLayout.background.level.toString())
 
             })
     }
@@ -1981,8 +1972,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             viewHolders.forEach {
                 if (::sdkLayout.isInitialized) {
                     sdkLayout.removeView(it?.view)
+                    provideBackgroundtoBsLayout()
                     sdkLayout.addView(it?.view)
-                    provideBackgroundtoSdkLayout()
+
 
                 }
             }
@@ -2005,18 +1997,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
     }
 
-    fun provideBackgroundtoBsLayout() {
+    fun provideBackgroundtoBsLayout(levelDuration:Int=7000) {
         /**
          * needed to be enhanced according to the bottomSheetAnimation .
          *
          */
         bottomSheetLayout.background = context.resources.getDrawable(R.drawable.bkgd_level)
-        bottomSheetLayout.backgroundTintList = ColorStateList.valueOf(newColorVal!!)
-        bottomSheetLayout.background.level = 4000
-    }
-
-    fun removeBackgroundBsSheet() {
-        bottomSheetLayout.setBackgroundDrawable(null)
+        bottomSheetLayout.backgroundTintList =
+            ColorStateList.valueOf(loadAppThemManagerFromPath(AppColorTheme.MerchantHeaderViewColor))
+        bottomSheetLayout.background.level = levelDuration
     }
 
 
@@ -2868,25 +2857,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         removeViews(businessViewHolder)
 
 
-//        if (::webFrameLayout.isInitialized) {
-//
-//            webFrameLayout.addFadeOutAnimation(isGone = true, durationTime = 1000) {
-//                animateBS(
-//                    fromView = bottomSheetLayout,
-//                    toView = sdkLayout,
-//                    transitionAnimation = 800L,
-//                    changeHeight = {
-//                        if (fragmentManager.findFragmentById(R.id.webFrameLayout) != null)
-//                            fragmentManager.beginTransaction()
-//                                .hide(fragmentManager.findFragmentById(R.id.webFrameLayout)!!)
-//                                .commit()
-//
-//                        supportFragmentManager?.popBackStack()
-//
-//                    })
-//            }
-//
-//        }
 
         if (::amountViewHolder.isInitialized && ::cardViewHolder.isInitialized && ::cardViewHolder.isInitialized && ::paymentInlineViewHolder.isInitialized)
             removeViews(

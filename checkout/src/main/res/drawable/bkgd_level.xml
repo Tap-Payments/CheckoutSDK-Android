@@ -3,4 +3,4 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:drawable="@drawable/bkgd_shape"
     android:clipOrientation="vertical"
-    android:gravity="clip_vertical"/>
+    android:gravity="clip_vertical|bottom|center_vertical"/>
