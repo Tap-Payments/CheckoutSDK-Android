@@ -575,6 +575,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
     override fun displayStartupLayout(enabledSections: ArrayList<SectionType>) {
+        println("PaymentDataSource.getPaymentDataType()"+PaymentDataSource.getPaymentDataType())
         //Todo based on api response logic for switch case
         when (PaymentDataSource.getTransactionMode()) {
 
@@ -605,8 +606,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     )
                     cardViewHolder.cardInfoHeaderText?.visibility = GONE
                 } else if (PaymentDataSource.getPaymentDataType() == "CARD") {
+
                     addViews(
                         businessViewHolder,
+                        amountViewHolder,
+                        cardViewHolder,
                         paymentInlineViewHolder, saveCardSwitchHolder
                     )
                     cardViewHolder.cardInfoHeaderText.visibility = VISIBLE
@@ -3475,7 +3479,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             adapter.updateAdapterGooglePay(googlePaymentOptions)
             PaymentDataSource.setGoogleCardPay(googlePaymentOptions)
         }
-        println("hasWebPaymentOptions" + webPaymentOptions.size)
+        println("hasWebPaymentOptions" + webPaymentOptions)
         println("hasCardPaymentOptions" + hasCardPaymentOptions)
         println("savedCardList" + savedCardList?.isNullOrEmpty())
         if (webPaymentOptions.size == 0) {
@@ -3487,7 +3491,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
 
 
-        } else logicToHandlePaymentDataType(
+        }
+
+        logicToHandlePaymentDataType(
             webPaymentOptions,
             cardPaymentOptions
         )
@@ -3497,17 +3503,21 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun logicToHandlePaymentDataType(
-        webPaymentOptions: ArrayList<PaymentOption>,
+        webPaymentOptions: ArrayList<PaymentOption>? =null,
         cardPaymentOptions: ArrayList<PaymentOption>
 
     ) {
         cardViewHolder.view.mainChipgroup?.groupName?.visibility = VISIBLE
         // println("webPaymentOptions in logic >>>>$webPaymentOptions")
-        //  println("cardPaymentOptions in logic >>>>$cardPaymentOptions")
+          println("cardPaymentOptions in logic >>>>$cardPaymentOptions")
+          println("payment data in logic >>>>"+PaymentDataSource.getPaymentDataType())
+
 
         if (PaymentDataSource.getPaymentDataType() != null && PaymentDataSource.getPaymentDataType() == "WEB" && PaymentDataSource.getTransactionMode() != TransactionMode.AUTHORIZE_CAPTURE) {
             adapter.updateAdapterDataSavedCard(ArrayList())
-            adapter.updateAdapterData(webPaymentOptions)
+            if (webPaymentOptions != null) {
+                adapter.updateAdapterData(webPaymentOptions)
+            }
             saveCardSwitchHolder?.view?.cardSwitch?.showOnlyPayButton()
         } else if (PaymentDataSource.getPaymentDataType() != null && PaymentDataSource.getPaymentDataType() == "CARD") {
             adapter.updateAdapterData(ArrayList())
@@ -3521,7 +3531,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 adapter.updateAdapterData(ArrayList())
                 paymentInlineViewHolder.setDataFromAPI(cardPaymentOptions)
             } else {
-                adapter.updateAdapterData(webPaymentOptions)
+                if (webPaymentOptions != null) {
+                    adapter.updateAdapterData(webPaymentOptions)
+                }
                 if (!cardPaymentOptions.isEmpty()) {
                     paymentInlineViewHolder.setDataFromAPI(cardPaymentOptions)
 
