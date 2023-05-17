@@ -8,13 +8,6 @@
     android:windowSoftInputMode="adjustResize|adjustPan"
     tools:context=".open.CheckoutFragment">
 
-<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_margin="@dimen/activity_vertical_margin"-->
-<!--        android:src="@drawable/close_icon"-->
-<!--        app:layout_anchor="@+id/sdkCardView"-->
-<!--        app:layout_anchorGravity="top|center" />-->
 
     <androidx.cardview.widget.CardView
         android:id="@+id/sdkCardView"

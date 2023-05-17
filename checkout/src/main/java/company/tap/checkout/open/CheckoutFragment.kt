@@ -93,7 +93,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     private var inLineCardLayout: FrameLayout? = null
     private var topHeaderView: TapBrandView? = null
     var headerLayout: LinearLayout? =null
-    var sdkCardView: CardView? =null
     private var displayMetrics: Int? = 0
     var originalHeight: Int? = 0
 
@@ -144,10 +143,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             LinearLayout.LayoutParams.MATCH_PARENT,
             requireContext().getDeviceSpecs().first - 100
         )
-        val background = view.findViewById<LinearLayout>(R.id.background_color)
         inLineCardLayout = view.findViewById(R.id.inline_container)
         headerLayout = view.findViewById(R.id.headerLayout)
-        sdkCardView = view.findViewById(R.id.sdkCardView)
         initViews(view)
 
         topHeaderView = context?.let { TapBrandView(it) }
@@ -230,7 +227,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                                         this,
                                         it2,
                                         cardViewModel, this, headerLayout!!,
-                                        coordinatorLayout,sdkCardView)
+                                        coordinatorLayout)
                                 }
                             }
 
@@ -253,7 +250,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
          *
          * Discuss with aslm if it affected or not**/
 
-      /*      topHeaderView?.backgroundHeader?.setBackgroundDrawable(
+            topHeaderView?.backgroundHeader?.setBackgroundDrawable(
                 createDrawableGradientForBlurry(
                     intArrayOf(
                         Color.parseColor(newColorVal),
@@ -261,8 +258,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                         Color.parseColor(newColorVal)
                     )
                 )
-            )*/
-            topHeaderView?.backgroundHeader?.setBackgroundDrawable(null)
+            )
+            //topHeaderView?.backgroundHeader?.setBackgroundDrawable(null)
             headerLayout?.addView(topHeaderView, 0)
         }
 

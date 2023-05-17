@@ -221,7 +221,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @SuppressLint("StaticFieldLeak")
     private lateinit var sdkLayout: LinearLayout
-    private lateinit var sdkCardView: CardView
 
     private lateinit var checkoutFragment: CheckoutFragment
     private lateinit var itemList: List<ItemsModel>
@@ -305,7 +304,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         checkoutFragment: CheckoutFragment,
         headerLayout: LinearLayout,
         coordinatorLayout: CoordinatorLayout?,
-        sdkCardView: CardView?,
     ) {
         this.context = context
         this.fragmentManager = fragmentManager
@@ -319,9 +317,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         this.cardViewModel = cardViewModel
         this.checkoutFragment = checkoutFragment
         this.headerLayout = headerLayout
-        if (sdkCardView != null) {
-            this.sdkCardView = sdkCardView
-        }
 
         initializeScanner(this)
         initViewHolders()
@@ -1767,26 +1762,19 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         println("chargeResponse are>>>>" + chargeResponse?.status)
         if (response.contains("failure") && chargeResponse == null) {
 
-            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
-                false,
-                Color.MAGENTA
-            )
-            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
-                false,
-                "en",
-                null,
-                Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
-                Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
-            )
-            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
-                ActionButtonState.ERROR
-            )
+            if (::webFrameLayout.isInitialized) {
+                provideBackgroundtoBsLayout(7000)
+                showAnimatedButtonRegardingWebViewDismiss(
+                    viewToFadeOut = webFrameLayout,
+                    isSuccess = false
+                )
+            }
         }
         when (chargeResponse?.status) {
             ChargeStatus.CAPTURED, ChargeStatus.AUTHORIZED, ChargeStatus.VALID, ChargeStatus.IN_PROGRESS -> {
                 if (::webViewHolder.isInitialized) {
                     showAnimatedButtonRegardingWebViewDismiss(viewToFadeOut = webViewHolder.view)
-                }else if (::webFrameLayout.isInitialized) {
+                } else if (::webFrameLayout.isInitialized) {
                     provideBackgroundtoBsLayout(7800)
                     showAnimatedButtonRegardingWebViewDismiss(viewToFadeOut = webFrameLayout)
                 } else {
@@ -1981,13 +1969,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
     }
 
-    fun provideBackgroundtoBsLayout(levelDuration: Int = 7000) {
+    fun provideBackgroundtoBsLayout(levelDuration: Int = 7200) {
         /**
          * needed to be enhanced according to the bottomSheetAnimation .
          *
          */
         bottomSheetLayout.background = context.resources.getDrawable(R.drawable.bkgd_level)
-        bottomSheetLayout.backgroundTintList = ColorStateList.valueOf(loadAppThemManagerFromPath(AppColorTheme.GlobalValuesColor))
+        bottomSheetLayout.backgroundTintList =
+            ColorStateList.valueOf(loadAppThemManagerFromPath(AppColorTheme.GlobalValuesColor))
         bottomSheetLayout.background.level = levelDuration
     }
 
@@ -2076,7 +2065,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
             else -> {
                 if (savedCardsModel != null) {
-                    println("savedCardsModel is>>" +   PaymentType.GOOGLE_PAY)
+                    println("savedCardsModel is>>" + PaymentType.GOOGLE_PAY)
                     if ((savedCardsModel as PaymentOption).paymentType == PaymentType.WEB) {
                         //  paymentInlineViewHolder.view.alpha = 0.95f
 
@@ -2084,8 +2073,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         activateActionButton((savedCardsModel as PaymentOption))
                         setPayButtonAction(PaymentType.WEB, savedCardsModel)
                     } else if ((savedCardsModel as PaymentOption).paymentType == PaymentType.GOOGLE_PAY) {
-                      //  removeViews(amountViewHolder, cardViewHolder, paymentInlineViewHolder)
-                       // checkoutFragment.checkOutActivity?.handleGooglePayApiCall(savedCardsModel as PaymentOption)
+                        //  removeViews(amountViewHolder, cardViewHolder, paymentInlineViewHolder)
+                        // checkoutFragment.checkOutActivity?.handleGooglePayApiCall(savedCardsModel as PaymentOption)
                         //activateActionButtonForGPay()
                         activateActionButton((savedCardsModel as PaymentOption))
                         setPayButtonAction(PaymentType.GOOGLE_PAY, savedCardsModel)
@@ -2274,8 +2263,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
          * on Click Redirect for Knet Redirection
          */
 
-
-        provideBackgroundtoSdkLayout()
         amountViewHolder.view.amount_section?.tapChipPopup?.slideFromLeftToRight()
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
         doAfterSpecificTime {
@@ -2944,7 +2931,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         PaymentDataProvider().getSelectedCurrency()
                     )
                 }
-                PaymentType.GOOGLE_PAY->{
+                PaymentType.GOOGLE_PAY -> {
                     checkoutFragment.checkOutActivity?.handleGooglePayApiCall(savedCardsModel as PaymentOption)
 
                 }
@@ -2955,7 +2942,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     }
 
-    fun changeButtonToLoading(){
+    fun changeButtonToLoading() {
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
     }
 
@@ -3046,7 +3033,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun payActionSavedCard(savedCardsModel: SavedCard?) {
-        provideBackgroundtoSdkLayout()
         amountViewHolder.view.amount_section?.tapChipPopup?.slideFromLeftToRight()
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
             ActionButtonState.LOADING
