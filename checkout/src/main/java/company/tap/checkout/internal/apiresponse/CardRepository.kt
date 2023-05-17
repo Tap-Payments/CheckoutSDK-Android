@@ -65,6 +65,8 @@ class CardRepository : APIRequestCallback {
     var assetsModel: AssetsModel? = null
 
     lateinit var chargeResponse: Charge
+    lateinit var chargeResponseForGoogle: Charge
+
     lateinit var listCardsResponse: ListCardsResponse
     lateinit var binLookupResponse: BINLookupResponse
     lateinit var authorizeActionResponse: Authorize
@@ -159,8 +161,12 @@ class CardRepository : APIRequestCallback {
     @RequiresApi(Build.VERSION_CODES.N)
     fun retrieveChargeRequest(context: Context, viewModel: CheckoutViewModel) {
         this.viewModel = viewModel
+//        context.showToast(chargeResponseForGoogle.id.toString())
+//        Log.e("chargeResponseForGoogle",chargeResponseForGoogle.id.toString())
+        Log.e("chargeResponseForGoogle",viewModel.globalChargeResponse?.id.toString())
+
         NetworkController.getInstance().processRequest(
-            TapMethodType.GET, ApiService.CHARGE_ID + chargeResponse?.id, null,
+            TapMethodType.GET, ApiService.CHARGE_ID + viewModel.globalChargeResponse?.id, null,
             this, CHARGE_RETRIEVE_CODE
         )
     }
@@ -709,10 +715,15 @@ class CardRepository : APIRequestCallback {
          * Charge response is a generic one whether you get response from ssaved card , otp or webpayments this is going to handle the cases**/
         if (chargeResponse == null) return
         Log.e("Charge status", (chargeResponse.status).name)
+        Log.e("Charge status", (chargeResponse.id))
+        chargeResponseForGoogle= chargeResponse
+        viewModel.globalChargeResponse = chargeResponse
+
         if (chargeResponse is Authorize) {
             handleAuthorizeResponse(chargeResponse)
         } else
             when (chargeResponse.status) {
+
                 /**
                  * Charge response is Initiated is first call if it should be otp or not s**/
                 ChargeStatus.INITIATED -> {
@@ -916,7 +927,7 @@ class CardRepository : APIRequestCallback {
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onFailure(requestCode: Int, errorDetails: GoSellError?) {
-        if (requestCode == CONFIG_CODE || requestCode == CHARGE_REQ_CODE || requestCode == INIT_CODE) {
+        if (requestCode == CONFIG_CODE || requestCode == CHARGE_REQ_CODE || requestCode == INIT_CODE || requestCode == CHARGE_RETRIEVE_CODE) {
             sdkSession.getListener()?.sdkError(errorDetails)
             SDKSession.sessionActive = false
           //  cardRepositoryContext?.showToast("Handle Fail")

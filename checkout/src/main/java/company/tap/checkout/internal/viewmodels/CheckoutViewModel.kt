@@ -1271,12 +1271,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
             }
-
-
         }
-
-        // removeViews(amountViewHolder, businessViewHolder)
-        // tabAnimatedActionButtonViewHolder?.view?.actionButton?.visibility = View.INVISIBLE
     }
 
     private fun showWebView() {
@@ -1792,7 +1787,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 if (::webViewHolder.isInitialized) {
                     showAnimatedButtonRegardingWebViewDismiss(viewToFadeOut = webViewHolder.view)
                 }else if (::webFrameLayout.isInitialized) {
-                    provideBackgroundtoBsLayout(7600)
+                    provideBackgroundtoBsLayout(7800)
                     showAnimatedButtonRegardingWebViewDismiss(viewToFadeOut = webFrameLayout)
                 } else {
                     saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = VISIBLE
@@ -1806,7 +1801,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             ChargeStatus.RESTRICTED, ChargeStatus.ABANDONED, ChargeStatus.VOID, ChargeStatus.INVALID -> {
 
                 if (::webFrameLayout.isInitialized) {
-                    provideBackgroundtoBsLayout(7600)
+                    provideBackgroundtoBsLayout(7800)
                     showAnimatedButtonRegardingWebViewDismiss(
                         viewToFadeOut = webFrameLayout,
                         isSuccess = false
