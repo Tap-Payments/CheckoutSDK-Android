@@ -1733,7 +1733,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )*/
 
         if (::webFrameLayout.isInitialized) {
-            businessViewHolder.view.visibility = VISIBLE
+        //    businessViewHolder.view.visibility = VISIBLE
         }
 
         /***
@@ -1765,10 +1765,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         if (response.contains("failure") && chargeResponse == null) {
 
             if (::webFrameLayout.isInitialized) {
-                provideBackgroundtoBsLayout(7000)
+                provideBackgroundtoBsLayout(7800)
                 showAnimatedButtonRegardingWebViewDismiss(
                     viewToFadeOut = webFrameLayout,
                     isSuccess = false
+                )
+            }else{
+                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = VISIBLE
+                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
+                    ActionButtonState.ERROR
                 )
             }
         }
@@ -1861,14 +1866,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun showAnimatedButtonRegardingWebViewDismiss(
         viewToFadeOut: View,
-        isSuccess: Boolean = true
+        isSuccess: Boolean = true,
+        tranisitionDuration:Long = 1000L
     ) {
 
         viewToFadeOut.addFadeOutAnimation {
             animateBS(
                 fromView = bottomSheetLayout,
                 toView = sdkLayout,
-                transitionAnimation = 1000L,
+                transitionAnimation = tranisitionDuration,
                 changeHeight = {},
                 onTransitionEnd = {
                     doAfterSpecificTime {
@@ -2122,7 +2128,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     ) {
         val payStringButton: String
 
-        provideBackgroundtoBsLayout()
+        provideBackgroundtoSdkLayout()
         when (PaymentDataSource.getTransactionMode()) {
             TransactionMode.TOKENIZE_CARD -> payStringButton = LocalizationManager.getValue(
                 "pay",
