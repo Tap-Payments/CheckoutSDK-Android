@@ -250,7 +250,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
          *
          * Discuss with aslm if it affected or not**/
 
-            topHeaderView?.backgroundHeader?.setBackgroundDrawable(
+          /*  topHeaderView?.backgroundHeader?.setBackgroundDrawable(
                 createDrawableGradientForBlurry(
                     intArrayOf(
                         Color.parseColor(newColorVal),
@@ -258,7 +258,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                         Color.parseColor(newColorVal)
                     )
                 )
-            )
+            )*/
             //topHeaderView?.backgroundHeader?.setBackgroundDrawable(null)
             headerLayout?.addView(topHeaderView, 0)
         }
