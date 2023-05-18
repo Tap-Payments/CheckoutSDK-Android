@@ -6,12 +6,14 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.ShapeDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.text.format.DateFormat
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.view.View.*
 import android.view.ViewGroup
@@ -22,7 +24,6 @@ import android.widget.LinearLayout
 import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
 import androidx.annotation.RestrictTo
-import androidx.cardview.widget.CardView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
@@ -36,7 +37,14 @@ import cards.pay.paycardsrecognizer.sdk.FrameManager
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import com.bugfender.sdk.Bugfender
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
+import com.bumptech.glide.request.target.Target.SIZE_ORIGINAL
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.android.gms.wallet.PaymentData
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -97,6 +105,7 @@ import company.tap.tapuilibrary.uikit.fragment.NFCFragment
 import company.tap.tapuilibrary.uikit.ktx.loadAppThemManagerFromPath
 import company.tap.tapuilibrary.uikit.ktx.makeLinks
 import company.tap.tapuilibrary.uikit.ktx.setTopBorders
+import company.tap.tapuilibrary.uikit.utils.MetricsUtil
 import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.businessview_layout.view.*
@@ -2228,27 +2237,40 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         image = ImageView(context)
         val params = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.MATCH_PARENT
+           LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
         )
-        params.setMargins(20)
+        /**
+         * will fix later to be dynamic*/
+ /*val params = LinearLayout.LayoutParams(
+           MetricsUtil.convertDpToPixel(130f,context).toInt(),
+        MetricsUtil.convertDpToPixel(18f,context).toInt()
+        )
+
+        params.setMargins(MetricsUtil.convertDpToPixel(132f,context).toInt(),MetricsUtil.convertDpToPixel(10f,context).toInt(),MetricsUtil.convertDpToPixel(132f,context).toInt(),0)
+      //  params.topMargin=MetricsUtil.convertDpToPixel(15f,context).toInt()
+        params.gravity = Gravity.CENTER*/
+        /**
+         *work around condition for small logo of knet*/
+        if(selectedPayOpt?.brand?.contains("KNET") == true) params.setMargins(4) else params.setMargins(16)
+
         image?.layoutParams = params
-        Glide.with(context)
+       Glide.with(context)
             .load(
                 getAssetName(
                     selectedPayOpt
                 )
-            )
-            //.thumbnail(0.5f)
-            //.override(200, 200)
+            ).fitCenter()
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .into(image!!)
+
+
+      //  println("asset size"+getAssetName(selectedPaymentOption))
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.addChildView(image!!)
 
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated = true
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isClickable = true
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isEnabled = true
-
 
     }
 
