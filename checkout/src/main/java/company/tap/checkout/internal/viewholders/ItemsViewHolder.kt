@@ -18,10 +18,15 @@ import company.tap.checkout.internal.api.models.SupportedCurrencies
 
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener
+import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.open.models.ItemsModel
+import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibrary.themekit.ThemeManager
 import company.tap.tapuilibrary.uikit.atoms.TapChipGroup
 import company.tap.tapuilibrary.uikit.atoms.TapSeparatorView
+import company.tap.tapuilibrary.uikit.utils.MetricsUtil
+import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
+import kotlinx.android.synthetic.main.itemviewholder_layout.view.*
 
 /**
  *
@@ -49,13 +54,20 @@ class ItemsViewHolder(private val context: Context, private val onCurrencyChange
     init {
         mainCurrencyChip = view.findViewById(R.id.mainCurrencyChip)
         mainCurrencyChip.groupAction.visibility = View.GONE
-        mainCurrencyChip.groupName.visibility = View.GONE
 
         itemsRecyclerView = view.findViewById(R.id.itemRecylerView)
         currencyRecyclerView = mainCurrencyChip.findViewById<View>(R.id.chip_recycler) as RecyclerView
         headerview = view.findViewById<View>(R.id.header_view) as ConstraintLayout
         itemSeparatorView = view.findViewById<View>(R.id.item_Separator) as TapSeparatorView
         headerview.visibility = View.GONE
+        mainCurrencyChip.groupName.text = LocalizationManager.getValue("currencyAlert","Common")
+        mainCurrencyChip.groupName.visibility = View.VISIBLE
+       /**
+        * Added for spacing alignment in ar**/
+        if(CustomUtils.getCurrentLocale(context).contains("ar")) mainCurrencyChip.setPaddingRelative( MetricsUtil.convertDpToPixel(-8f,context).toInt(),0, MetricsUtil.convertDpToPixel(-8f,context).toInt(),0)
+      //  else mainCurrencyChip.setPaddingRelative( MetricsUtil.convertDpToPixel(2f,context).toInt(),0, MetricsUtil.convertDpToPixel(2f,context).toInt(),0)
+
+        view.mainCurrencyChip.chipsRecycler.elevation = 0f
         itemsRecyclerViewAction(itemsRecyclerView)
         setRecyclerViewDivider(currencyRecyclerView)
         currencyRecyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)

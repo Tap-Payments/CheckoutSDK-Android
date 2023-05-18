@@ -2252,7 +2252,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         params.gravity = Gravity.CENTER*/
         /**
          *work around condition for small logo of knet*/
-        if(selectedPayOpt?.brand?.contains("KNET") == true) params.setMargins(4) else params.setMargins(16)
+        if(CustomUtils.getCurrentLocale(context).contains("ar"))
+        {
+            if(selectedPayOpt?.brand?.contains("KNET") == true) params.setMargins(4)
+        else params.setMargins(20)
+        }else {  if(selectedPayOpt?.brand?.contains("KNET") == true) params.setMargins(4)
+        else params.setMargins(16)
+
+        }
 
         image?.layoutParams = params
        Glide.with(context)
