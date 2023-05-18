@@ -155,8 +155,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         topHeaderView?.poweredByImage?.setImageResource(R.drawable.powered_by_tap)
         topHeaderView?.poweredByImage?.scaleType = ImageView.ScaleType.CENTER_CROP
         topHeaderView?.poweredByImage?.layoutParams?.width = context.getDimensionsInDp(120)
-        topHeaderView?.poweredByImage?.layoutParams?.height = context.getDimensionsInDp(22)
-        topHeaderView?.poweredByImage?.setMargins(0,0,0,10)
 
 
 
