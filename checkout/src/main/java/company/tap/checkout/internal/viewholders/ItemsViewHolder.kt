@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.marginTop
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -65,7 +66,7 @@ class ItemsViewHolder(private val context: Context, private val onCurrencyChange
        /**
         * Added for spacing alignment in ar**/
         if(CustomUtils.getCurrentLocale(context).contains("ar")) mainCurrencyChip.setPaddingRelative( MetricsUtil.convertDpToPixel(-8f,context).toInt(),0, MetricsUtil.convertDpToPixel(-8f,context).toInt(),0)
-      //  else mainCurrencyChip.setPaddingRelative( MetricsUtil.convertDpToPixel(2f,context).toInt(),0, MetricsUtil.convertDpToPixel(2f,context).toInt(),0)
+        else mainCurrencyChip.left =( MetricsUtil.convertDpToPixel(20f,context).toInt())
 
         view.mainCurrencyChip.chipsRecycler.elevation = 0f
         itemsRecyclerViewAction(itemsRecyclerView)
