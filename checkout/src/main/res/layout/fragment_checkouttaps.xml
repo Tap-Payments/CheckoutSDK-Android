@@ -40,14 +40,14 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_height="57dp" />
+                    android:layout_height="60dp" />
 
                 <LinearLayout
                     android:id="@+id/headerLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:layout_marginTop="-16dp"
+                    android:layout_marginTop="-21dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tab_brand_view"
                     app:layout_constraintEnd_toEndOf="parent"

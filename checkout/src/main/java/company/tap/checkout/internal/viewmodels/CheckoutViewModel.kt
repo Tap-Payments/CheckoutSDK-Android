@@ -485,9 +485,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 view = it1,
                 cornerRadius = 35f,
                 strokeWidth = 0.0f,
-                strokeColor = Color.parseColor("#1D1E1D"),// stroke color
-                tintColor =  Color.parseColor("#1D1E1D"),// tint color
-                shadowColor =  Color.parseColor("#1D1E1D")
+                strokeColor = loadAppThemManagerFromPath(AppColorTheme.PoweredByTapBackgroundColor),// stroke color
+                tintColor =   loadAppThemManagerFromPath(AppColorTheme.PoweredByTapBackgroundColor),// tint color
+                shadowColor =   loadAppThemManagerFromPath(AppColorTheme.PoweredByTapBackgroundColor)
             )
 
         }//
