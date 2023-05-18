@@ -2283,13 +2283,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     private fun logicTogetPayOptions(cardBrandString: String?): PaymentOption? {
+        println("cardBrandString>>>>"+cardBrandString)
         var selectedPayOption: PaymentOption? = null
-
+        var slectedBrand :String?=null
         for (i in 0 until paymentOptionsResponse.paymentOptions.size) {
-            if (paymentOptionsResponse.paymentOptions[i].brand?.replace("_","") == cardBrandString?.toUpperCase()) {
+            slectedBrand =paymentOptionsResponse.paymentOptions[i].brand?.replace("_","")
+            if (slectedBrand== cardBrandString?.toUpperCase()) {
                 selectedPayOption = paymentOptionsResponse.paymentOptions[i]
             }
         }
+        println("selectedPayOption>>"+selectedPayOption)
 
         return selectedPayOption
     }
@@ -3072,19 +3075,29 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun payActionSavedCard(savedCardsModel: SavedCard?) {
+        println("payActionSavedCard??????"+savedCardsModel)
+        var selectdSavedCard :PaymentOption?= null
         amountViewHolder.view.amount_section?.tapChipPopup?.slideFromLeftToRight()
+
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
             ActionButtonState.LOADING
         )
-        val selectdSavedCard = logicTogetPayOptions(savedCardsModel?.brand?.rawValue)
-        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
+
+        selectdSavedCard  = logicTogetPayOptions(savedCardsModel?.brand?.name)
+
+
+
+        println("modeeee"+selectdSavedCard)
+// TODO CHECK
+   if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
                 backgroundColor = Color.parseColor(
                     selectdSavedCard?.buttonStyle?.background?.darkModel?.baseColor
                 )
             )
 
-        } else saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
+        } else
+            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
             backgroundColor = Color.parseColor(selectdSavedCard?.buttonStyle?.background?.lightModel?.baseColor)
         )
 
