@@ -97,6 +97,7 @@ dependencies {
     implementation 'com.koushikdutta.ion:ion:3.1.0'
     implementation "com.google.android.gms:play-services-wallet:19.1.0"
     implementation project(":iosdialog")
+   // api project(":tapuilibraryy")
 
     api 'com.github.Tap-Payments:TapUIKit-Android:1.1.1.358.364'
     implementation 'com.github.2coffees1team:GlideToVectorYou:v2.0.0'
