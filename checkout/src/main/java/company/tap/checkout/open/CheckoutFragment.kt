@@ -19,6 +19,7 @@ import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.marginTop
+import androidx.core.view.setPadding
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -154,7 +155,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         topHeaderView?.poweredByImage?.setImageResource(R.drawable.powered_by_tap)
         topHeaderView?.poweredByImage?.scaleType = ImageView.ScaleType.CENTER_CROP
         topHeaderView?.poweredByImage?.layoutParams?.width = context.getDimensionsInDp(120)
-        topHeaderView?.poweredByImage?.layoutParams?.height = context.getDimensionsInDp(22)
+        topHeaderView?.poweredByImage?.setPadding(0,0,0,10)
+
 
 
 
