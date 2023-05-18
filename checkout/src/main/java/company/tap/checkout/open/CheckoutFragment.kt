@@ -18,6 +18,7 @@ import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.view.marginTop
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -92,7 +93,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     private var inLineCardLayout: FrameLayout? = null
     private var topHeaderView: TapBrandView? = null
-    var headerLayout: LinearLayout? =null
+    var headerLayout: LinearLayout? = null
     private var displayMetrics: Int? = 0
     var originalHeight: Int? = 0
 
@@ -131,10 +132,10 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         userRepository.getUserIpAddress()
         this.viewModel = viewModel
         _Context?.let { cardViewModel.getContext(it) }
-       // backgroundColor = (Color.parseColor(ThemeManager.getValue("tapBottomSheet.dimmedColor")))
+        // backgroundColor = (Color.parseColor(ThemeManager.getValue("tapBottomSheet.dimmedColor")))
 
         bottomSheetDialog.behavior.isDraggable = true
-      //  bottomSheetDialog.behavior.maxHeight = context?.getDeviceSpecs()?.first ?: 1000
+        //  bottomSheetDialog.behavior.maxHeight = context?.getDeviceSpecs()?.first ?: 1000
 
         val checkoutLayout: LinearLayout? = view.findViewById(R.id.fragment_all)
         val frameLayout: FrameLayout? = view.findViewById(R.id.fragment_container_nfc_lib)
@@ -147,13 +148,16 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         headerLayout = view.findViewById(R.id.headerLayout)
         initViews(view)
 
-        topHeaderView = context?.let { TapBrandView(it) }
+        topHeaderView = view.findViewById(R.id.tab_brand_view)
 
         topHeaderView?.visibility = View.GONE
         topHeaderView?.poweredByImage?.setImageResource(R.drawable.powered_by_tap)
         topHeaderView?.poweredByImage?.scaleType = ImageView.ScaleType.CENTER_CROP
         topHeaderView?.poweredByImage?.layoutParams?.width = context.getDimensionsInDp(120)
         topHeaderView?.poweredByImage?.layoutParams?.height = context.getDimensionsInDp(22)
+
+
+
 
         displayMetrics = CustomUtils.getDeviceDisplayMetrics(context as Activity)
         val heightscreen: Int = Resources.getSystem().displayMetrics.heightPixels
@@ -227,7 +231,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                                         this,
                                         it2,
                                         cardViewModel, this, headerLayout!!,
-                                        coordinatorLayout)
+                                        coordinatorLayout
+                                    )
                                 }
                             }
 
@@ -246,21 +251,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             Log.e("color", newColorVal.toString())
             enableSections()
             originalHeight = checkoutLayout.measuredHeight
-        /**
-         *
-         * Discuss with aslm if it affected or not**/
-
-            topHeaderView?.backgroundHeader?.setBackgroundDrawable(
-                createDrawableGradientForBlurry(
-                    intArrayOf(
-                        Color.parseColor(newColorVal),
-                        Color.parseColor(context?.getString(R.color.black_blur_12)),
-                        Color.parseColor(newColorVal)
-                    )
-                )
-            )
-            //topHeaderView?.backgroundHeader?.setBackgroundDrawable(null)
-            headerLayout?.addView(topHeaderView, 0)
         }
 
         topHeaderView?.visibility = View.GONE
@@ -272,6 +262,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             delayTime = PoweredByLayoutAnimationDelay,
             topHeaderView?.poweredByImage, onAnimationEnd = {
                 poweredByTapAnimationEnds(viewModel)
+
+
             }
         )
         bottomSheetDialog.setOnShowListener {
@@ -332,8 +324,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         closeImage = view.findViewById(R.id.closeImage)
         scrollView = view.findViewById(R.id.scrollView)
         coordinatorLayout = view.findViewById(R.id.coordinator)
-       // relativeLL = view.findViewById(R.id.relativeLL)
-       // mainCardLayout = view.findViewById(R.id.mainCardLayout)
+        // relativeLL = view.findViewById(R.id.relativeLL)
+        // mainCardLayout = view.findViewById(R.id.mainCardLayout)
         /**Added to init the lib of getting dynamic flags*/
         //        World.init(context)
     }
@@ -407,7 +399,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-         val dialog = super.onCreateDialog(savedInstanceState)
+        val dialog = super.onCreateDialog(savedInstanceState)
         (dialog as BottomSheetDialog).behavior.isFitToContents = true
         return dialog
     }
@@ -445,7 +437,12 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun resetTabAnimatedButton() {
-        checkOutActivity?.displayMetrics?.let { tabAnimatedActionButton?.setDisplayMetricsTheme(it,CustomUtils.getCurrentTheme()) }
+        checkOutActivity?.displayMetrics?.let {
+            tabAnimatedActionButton?.setDisplayMetricsTheme(
+                it,
+                CustomUtils.getCurrentTheme()
+            )
+        }
         SDKSession.sessionActive = false
         tabAnimatedActionButton?.changeButtonState(ActionButtonState.RESET)
         if (checkOutActivity?.isGooglePayClicked == false) {
@@ -458,13 +455,13 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         val nowString: String = LocalizationManager.getValue("now", "ActionButton")
         /**
          * Stopped reseting the view of button cz of loader will test if not required will remove this code*/
-     /*   tabAnimatedActionButton?.setButtonDataSource(
-            true,
-            context?.let { LocalizationManager.getLocale(it).language },
-            payString + " " + nowString,
-            Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
-        )*/
+        /*   tabAnimatedActionButton?.setButtonDataSource(
+               true,
+               context?.let { LocalizationManager.getLocale(it).language },
+               payString + " " + nowString,
+               Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
+               Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
+           )*/
         /*  tabAnimatedActionButton?.setOnClickListener {
               requireActivity().supportFragmentManager.let { it1 -> SDKSession.contextSDK?.let { it2 ->
                   SDKSession.startSDK(it1,
