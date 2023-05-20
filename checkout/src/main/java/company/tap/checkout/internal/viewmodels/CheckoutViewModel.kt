@@ -2237,7 +2237,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         image = ImageView(context)
         val params = LinearLayout.LayoutParams(
-           LinearLayout.LayoutParams.WRAP_CONTENT,
+           LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
         /**
@@ -2253,11 +2253,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         /**
          *work around condition for small logo of knet*/
         if(CustomUtils.getCurrentLocale(context).contains("ar"))
-        {
-            if(selectedPayOpt?.brand?.contains("KNET") == true) params.setMargins(4)
-        else params.setMargins(20)
-        }else {  if(selectedPayOpt?.brand?.contains("KNET") == true) params.setMargins(4)
-        else params.setMargins(16)
+        { if(selectedPayOpt?.brand?.contains("KNET") == true) params.setMargins(10)
+        else params.setMargins(28)
+        }else {  if(selectedPayOpt?.brand?.contains("KNET") == true) params.setMargins(4) else params.setMargins(26)
 
         }
 
