@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="header_color">#F7F7F7</color>
+    <color name="error_text_light_theme">#ffeb1c26</color>
+    <color name="error_text_dark_theme">#ffe85746</color>
+    <color name="button_green">#2ace00</color>
+    <color name="black_50">#80000000</color>
+    <color name="brown_grey_0">#a8a8a8</color>
+    <color name="white">#ffffff</color>
+    <color name="whiteTools">#ffffff</color>
+    <color name="toolsBackground">#000000</color>
+    <color name="black_27">#45000000</color>
+    <color name="gray">#ababab</color>
+    <color name="view_color">#dfdfdf</color>
+    <color name="chip_background">#f4f4f4</color>
+    <color name="chip_border">#dfdfdf</color>
+
+    <color name="bg_gray">#f4f4f4</color>
+    <color name="dark_gray">#ababab</color>
+    <color name="darker_gray">#a8a8a8</color>
+    <color name="light_gray">#cacacb</color>
+    <color name="blue">#007aff</color>
+    <color name="text_gray">#4b4847</color>
+    <color name="red_error">#e12131</color>
+
+
+        <color name="colorPrimary">#a8a8a8</color>
+        <color name="colorPrimaryDark">#a8a8a8</color>
+        <color name="colorAccent">#a8a8a8</color>
+        <color name="shadowcolor">#14000000</color>
+        <color name="glowingShadow">#2ACE00</color>
+        <color name="borderColor">#0066FF</color>
+
+        <color name="fill_card">#E1E1E1</color>
+        <color name="card_background">#4DFFFFFF</color>
+
+        <color name="black_color">#000000</color>
+
+        <color name="text_color">#4b4847</color>
+        <color name="text_color_light">#adacac</color>
+        <color name="text_color_light_">#b1b0b0</color>
+        <color name="selection_tab_color">#f4f4f4</color>
+        <color name="button_gray">#cccccc</color>
+
+        <color name="button_pay">#d7d7d7</color>
+        <color name="card_input">#ffffff</color>
+        <color name="chip_back">#ccffffff</color>
+        <color name="item_list">#FFFFFF</color>
+        <color name="header_gray">#FFFFFF</color>
+
+        <color name="colorBackground">#FFFFFF</color>
+        <color name="colorText">#000000</color>
+    <color name="warningAlertText">#ea611c</color>
+    <color name="warningBackground">#4cffbe60</color>
+    <color name="errorAlertText">#e12131</color>
+    <color name="errorBackground">#19e12131</color>
+
+    <color name="brown_grey_background">#4B4847</color>
+    <color name="paleLilac">#e4e4e5</color>
+    <color name="buttoncheckBox">#009AFF</color>
+    <color name="switchOnColor">#34C759</color>
+    <color name="InvalidBtnColor">#BBBABA</color>
+    <color name="InvalidBtntitleLabelColor">#FFFFFF</color>
+    <color name="ValidBtnColor">#2ace00</color>
+    <color name="ValidBtntitleLabelColor">#FFFFFF</color>
+    <color name="colorOverlay">#78ffffff</color>
+</resources>

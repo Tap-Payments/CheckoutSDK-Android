@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CardInputView">
+        <attr name="cardHintText" format="string" />
+        <attr name="cardTint" format="color"/>
+        <attr name="cardTextErrorColor" format="color"/>
+    </declare-styleable>
+
+    <declare-styleable name="CardElement">
+        <attr name="shouldShowHolderName" format="boolean" />
+        <attr name="shouldRequireHolderName" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="BecsDebitWidget">
+        <attr name="companyName" format="string" />
+    </declare-styleable>
+</resources>

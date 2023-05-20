@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="you_can_access_your_saved_cards_from_anywhere_with_gopay">You can access your saved cards from anywhere with goPay.</string>
+    <string name="msg_ok">تم</string>
+    <string name="msg_dismiss">اغلاق</string>
+    <string name="gopay">goPay</string>
+
+
+    <string name="titleText"> Payment in Progress.</string>
+    <string name="descText">With your Fawry Pay Reference.</string>
+    <string name="orderCodeText">Order Code.</string>
+    <string name="codeExpireText">Code Expires on.</string>
+    <string name="linkDescText">Please visit a Fawry Cash Location using the link below to complete your payment.</string>
+
+    <string name="payText">إدفع</string>
+
+</resources>

@@ -6,7 +6,7 @@
     android:id="@+id/mainView"
     android:orientation="vertical">
 
-    <company.tap.tapuilibrary.uikit.atoms.TapChipGroup
+    <company.tap.tapuilibraryy.uikit.atoms.TapChipGroup
         android:id="@+id/currencyLayout1"
         android:layout_width="match_parent"
         android:layout_height="80dp"
@@ -15,9 +15,9 @@
         android:background="@color/chip_background"
         android:orientation="horizontal">
 
-    </company.tap.tapuilibrary.uikit.atoms.TapChipGroup>
+    </company.tap.tapuilibraryy.uikit.atoms.TapChipGroup>
 
-    <company.tap.tapuilibrary.uikit.atoms.TapSeparatorView
+    <company.tap.tapuilibraryy.uikit.atoms.TapSeparatorView
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="@color/gray" />

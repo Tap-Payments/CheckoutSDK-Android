@@ -2,7 +2,6 @@ package company.tap.checkout.internal.viewholders
 
 import android.content.Context
 import android.graphics.Color
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import company.tap.checkout.R
@@ -14,12 +13,11 @@ import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.themekit.theme.ImageViewTheme
-import company.tap.tapuilibrary.uikit.adapters.context
-import company.tap.tapuilibrary.uikit.atoms.TapImageView
-import company.tap.tapuilibrary.uikit.datasource.HeaderDataSource
-import company.tap.tapuilibrary.uikit.ktx.setTopBorders
+import company.tap.tapuilibraryy.themekit.ThemeManager
+import company.tap.tapuilibraryy.themekit.theme.ImageViewTheme
+import company.tap.tapuilibraryy.uikit.atoms.TapImageView
+import company.tap.tapuilibraryy.uikit.datasource.HeaderDataSource
+import company.tap.tapuilibraryy.uikit.ktx.setTopBorders
 import kotlinx.android.synthetic.main.businessview_layout.view.*
 
 
@@ -68,7 +66,7 @@ class BusinessViewHolder(context: Context, private val checkoutViewModel: Checko
         view.headerView.tapChipIcon.setMargins(if (view.headerView.tapChipIcon.isRTL()) 0 else 20, 0, if (view.headerView.tapChipIcon.isRTL()) 20 else 20, 0)
 
         view.headerView.paymentFor.setMargins(10, 0, 0, 0)
-        view.headerView.businessName.setMargins(0, 2, 0, 0)
+      //  view.headerView.businessNameUsage.setMargins(0, 2, 0, 0)
 
 
         setTopBorders(

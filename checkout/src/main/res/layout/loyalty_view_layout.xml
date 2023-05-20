@@ -11,7 +11,7 @@ app:layout_constraintTop_toTopOf="parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
    >
-<company.tap.tapuilibrary.uikit.organisms.TapLoyaltyView
+<company.tap.tapuilibraryy.uikit.organisms.TapLoyaltyView
     android:id="@+id/loyaltyView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"

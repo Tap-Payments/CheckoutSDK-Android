@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="add_payment_method_pressed">#3332325d</color>
+    <color name="error_text_light_theme">#ffeb1c26</color>
+    <color name="error_text_dark_theme">#ffe85746</color>
+    <color name="underline_editext">#009AFF
+    </color> <color name="grayunderline">#dfdfdf</color>
+</resources>

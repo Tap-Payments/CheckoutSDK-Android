@@ -16,13 +16,13 @@ import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.PaymentCardComplete
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.uikit.atoms.TapSwitch
-import company.tap.tapuilibrary.uikit.atoms.TapTextView
-import company.tap.tapuilibrary.uikit.atoms.TextInputEditText
-import company.tap.tapuilibrary.uikit.datasource.LoyaltyHeaderDataSource
-import company.tap.tapuilibrary.uikit.ktx.makeLinks
-import company.tap.tapuilibrary.uikit.organisms.TapLoyaltyView
+import company.tap.tapuilibraryy.themekit.ThemeManager
+import company.tap.tapuilibraryy.uikit.atoms.TapSwitch
+import company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
+import company.tap.tapuilibraryy.uikit.atoms.TextInputEditText
+import company.tap.tapuilibraryy.uikit.datasource.LoyaltyHeaderDataSource
+import company.tap.tapuilibraryy.uikit.ktx.makeLinks
+import company.tap.tapuilibraryy.uikit.organisms.TapLoyaltyView
 import java.math.BigDecimal
 
 class LoyaltyViewHolder(private val context: Context, checkoutViewModel: CheckoutViewModel,
@@ -33,14 +33,14 @@ class LoyaltyViewHolder(private val context: Context, checkoutViewModel: Checkou
     override val type = SectionType.LOYALTY
      var loyaltyView: TapLoyaltyView= view.findViewById(R.id.loyaltyView)
 
-    lateinit var textViewTitle :TapTextView
-    lateinit var textViewClickable :TapTextView
+    lateinit var textViewTitle :TapTextViewNew
+    lateinit var textViewClickable :TapTextViewNew
     lateinit var switchLoyalty: TapSwitch
-    lateinit var textViewSubTitle :TapTextView
+    lateinit var textViewSubTitle :TapTextViewNew
     lateinit var editTextAmount :TextInputEditText
-    lateinit var textViewRemainPoints:TapTextView
-    lateinit var textViewRemainAmount :TapTextView
-    lateinit var textViewTouchPoints :TapTextView
+    lateinit var textViewRemainPoints:TapTextViewNew
+    lateinit var textViewRemainAmount :TapTextViewNew
+    lateinit var textViewTouchPoints :TapTextViewNew
     lateinit var constraintt :LinearLayout
 
     private var bankName: String? = null

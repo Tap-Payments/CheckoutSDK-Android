@@ -7,7 +7,6 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import android.text.InputFilter
 import android.text.InputFilter.AllCaps
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -23,16 +22,16 @@ import company.tap.checkout.internal.utils.animateBS
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.models.ItemsModel
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibrary.R
-import company.tap.tapuilibrary.fontskit.enums.TapFont
-import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.themekit.theme.SeparatorViewTheme
-import company.tap.tapuilibrary.themekit.theme.TextViewTheme
-import company.tap.tapuilibrary.uikit.atoms.TapSeparatorView
-import company.tap.tapuilibrary.uikit.atoms.TapTextView
-import company.tap.tapuilibrary.uikit.datasource.ItemViewDataSource
-import company.tap.tapuilibrary.uikit.ktx.setBorderedView
-import company.tap.tapuilibrary.uikit.views.TapItemListView
+import company.tap.tapuilibraryy.R
+import company.tap.tapuilibraryy.fontskit.enums.TapFont
+import company.tap.tapuilibraryy.themekit.ThemeManager
+import company.tap.tapuilibraryy.themekit.theme.SeparatorViewTheme
+import company.tap.tapuilibraryy.themekit.theme.TextViewTheme
+import company.tap.tapuilibraryy.uikit.atoms.TapSeparatorView
+import company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
+import company.tap.tapuilibraryy.uikit.datasource.ItemViewDataSource
+import company.tap.tapuilibraryy.uikit.ktx.setBorderedView
+import company.tap.tapuilibraryy.uikit.views.TapItemListView
 
 
 /**
@@ -51,7 +50,7 @@ class ItemAdapter(
     private lateinit var context: Context
 
     private var adapterContentItems: List<ItemsModel> = java.util.ArrayList()
-    lateinit var descriptionTextView: TapTextView
+    lateinit var descriptionTextView: TapTextViewNew
     override fun onCreateViewHolder(@NonNull parent: ViewGroup, viewType: Int): ItemHolder {
 
 
@@ -84,16 +83,16 @@ class ItemAdapter(
 
     @SuppressLint("SetTextI18n")
     private fun initView(holder: ItemHolder, position: Int) {
-        descriptionTextView = holder.itemView.findViewById<TapTextView>(R.id.description_textView)
-        val nameText = holder.itemView.findViewById<TapTextView>(R.id.brief_description)
+        descriptionTextView = holder.itemView.findViewById<TapTextViewNew>(R.id.description_textView)
+        val nameText = holder.itemView.findViewById<TapTextViewNew>(R.id.brief_description)
 
         val itemSeparator = holder.itemView.findViewById<TapSeparatorView>(R.id.itemseparator)
-        val totalQuantity = holder.itemView.findViewById<TapTextView>(R.id.total_quantity)
+        val totalQuantity = holder.itemView.findViewById<TapTextViewNew>(R.id.total_quantity)
         //  val discount = holder.itemView.findViewById<TapTextView>(R.id.discount_text)
         //  val quantityRelative = holder.itemView.findViewById<RelativeLayout>(R.id.quantityRelative)
-        val totalAmount = holder.itemView.findViewById<TapTextView>(R.id.total_amount)
+        val totalAmount = holder.itemView.findViewById<TapTextViewNew>(R.id.total_amount)
         val mainViewLinear = holder.itemView.findViewById<LinearLayout>(R.id.mainViewLinear)
-        val itemName = holder.itemView.findViewById<TapTextView>(R.id.item_title)
+        val itemName = holder.itemView.findViewById<TapTextViewNew>(R.id.item_title)
         itemName.filters = arrayOf<InputFilter>(AllCaps())
         val isExpanded = position == mExpandedPosition
         if (adapterContentItems.isNotEmpty()) {
@@ -175,7 +174,7 @@ class ItemAdapter(
         checkItemListPosition(position, totalAmount, itemName)
     }
 
-    private fun showHideDescText(isExpanded: Boolean, position: Int, descText: TapTextView?) {
+    private fun showHideDescText(isExpanded: Boolean, position: Int, descText: TapTextViewNew?) {
         if (isExpanded) {
             previousExpandedPosition = position
             // descText?.text = LocalizationManager.getValue("hideDesc", "ItemList")
@@ -216,8 +215,8 @@ class ItemAdapter(
     private fun checkItemListPosition(
         position: Int,
         // discount: TapTextView?,
-        totalAmount: TapTextView?,
-        itemName: TapTextView?
+        totalAmount: TapTextViewNew?,
+        itemName: TapTextViewNew?
     ) {
         if (adapterContentItems.isEmpty()) {
             if (position % 2 == 0) {
@@ -254,12 +253,12 @@ class ItemAdapter(
 
 
     private fun setTheme(
-        descriptionTextView: TapTextView?,
+        descriptionTextView: TapTextViewNew?,
         // discount: TapTextView?,
-        descText: TapTextView?,
-        totalQuantity: TapTextView?,
-        totalAmount: TapTextView?,
-        itemName: TapTextView?,
+        descText: TapTextViewNew?,
+        totalQuantity: TapTextViewNew?,
+        totalAmount: TapTextViewNew?,
+        itemName: TapTextViewNew?,
         itemSeparator: TapSeparatorView?,
         mainViewLinear: LinearLayout?,
         quantityRelative: RelativeLayout?
@@ -327,10 +326,10 @@ class ItemAdapter(
 
 
     private fun setFontsEnglish(
-        itemName: TapTextView?, totalAmount: TapTextView?,
+        itemName: TapTextViewNew?, totalAmount: TapTextViewNew?,
         // discount: TapTextView?,
-        descText: TapTextView?,
-        descriptionTextView: TapTextView?, totalQuantity: TapTextView?
+        descText: TapTextViewNew?,
+        descriptionTextView: TapTextViewNew?, totalQuantity: TapTextViewNew?
     ) {
         itemName?.typeface = Typeface.createFromAsset(
             context?.assets, TapFont.tapFontType(
@@ -366,10 +365,10 @@ class ItemAdapter(
     }
 
     private fun setFontsArabic(
-        itemName: TapTextView?, totalAmount: TapTextView?,
+        itemName: TapTextViewNew?, totalAmount: TapTextViewNew?,
         // discount: TapTextView?,
-        descText: TapTextView?,
-        descriptionTextView: TapTextView?, totalQuantity: TapTextView?
+        descText: TapTextViewNew?,
+        descriptionTextView: TapTextViewNew?, totalQuantity: TapTextViewNew?
     ) {
         itemName?.typeface = Typeface.createFromAsset(
             context?.assets, TapFont.tapFontType(

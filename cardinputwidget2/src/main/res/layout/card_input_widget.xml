@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:replace="android:supportsRtl"
+    android:layout_marginTop="5dp"
+    tools:ignore="WebViewLayout">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:padding="2dp"
+
+       >
+
+        <company.tap.tapuilibraryy.uikit.atoms.TapImageView
+            android:id="@+id/backView"
+            android:layout_width="30dp"
+            android:layout_height="22dp"
+            android:visibility="gone"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/back_arrow_light"
+            android:layout_gravity="center"
+            android:layoutDirection="locale"
+
+
+
+            />
+    <company.tap.cardinputwidget2.views.CardBrandView
+        android:id="@+id/card_brand_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="13dp"
+        android:layout_marginRight="@dimen/margin_basic_13dp"
+        android:layout_marginTop="1dp"
+        android:visibility="visible"
+        android:layout_gravity="center"
+
+
+        />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="3dp"
+
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="6dp"
+        android:layout_gravity="center"
+
+        >
+
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/card_number_text_input_layout"
+            style="@style/Tap.CardInputWidget.TextInputLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|end"
+            android:accessibilityLiveRegion="polite"
+            android:accessibilityTraversalBefore="@+id/text_input_expiry_date"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/acc_label_card_number"
+            android:labelFor="@id/card_number_edit_text"
+            android:nextFocusRight="@+id/text_input_expiry_date"
+            android:nextFocusDown="@+id/text_input_expiry_date"
+            android:nextFocusForward="@+id/text_input_expiry_date"
+            android:visibility="visible"
+            app:hintEnabled="false"
+            android:layoutDirection="locale"
+            android:gravity="start|end"
+            app:layout_constraintStart_toStartOf="parent"
+
+            tools:ignore="UnusedAttribute">
+
+            <company.tap.cardinputwidget2.views.CardNumberEditText
+                android:id="@+id/card_number_edit_text"
+                style="@style/Tap.CardInputWidget.EditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:nextFocusRight="@+id/expiry_date_text_input_layout"
+                android:hint="@string/card_number_hint"
+                android:fontFamily="sans-serif-light"
+                android:inputType="number"
+                android:layout_gravity="start|end"
+                android:textDirection="firstStrongLtr"
+                android:textAlignment="viewStart"
+                android:textSize="@dimen/font_size_14sp"
+                android:gravity="start|end"
+                android:maxLength="19" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/expiry_date_text_input_layout"
+            style="@style/Tap.CardInputWidget.TextInputLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="185dp"
+            android:accessibilityLiveRegion="polite"
+            android:accessibilityTraversalAfter="@+id/text_input_card_number"
+            android:accessibilityTraversalBefore="@+id/text_input_cvc"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/acc_label_expiry_date"
+            android:labelFor="@id/expiry_date_edit_text"
+            android:nextFocusLeft="@id/text_input_card_number"
+            android:nextFocusRight="@+id/text_input_cvc"
+            android:nextFocusUp="@id/text_input_card_number"
+            android:nextFocusDown="@+id/text_input_cvc"
+            android:nextFocusForward="@+id/text_input_cvc"
+            android:visibility="visible"
+            app:hintEnabled="false"
+            android:gravity="start|end"
+            android:imeOptions="actionNext"
+            app:layout_constraintEnd_toStartOf="@+id/cvc_text_input_layout"
+            android:layout_marginEnd="9dp"
+            tools:ignore="UnusedAttribute">
+
+            <company.tap.cardinputwidget2.views.ExpiryDateEditText
+                android:id="@+id/expiry_date_edit_text"
+                style="@style/Tap.CardInputWidget.EditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+android:background="@android:color/transparent"
+                android:fontFamily="sans-serif-light"
+                android:gravity="start|end"
+                android:textSize="@dimen/font_size_14sp"
+                android:hint="@string/expiry_date_hint"
+                android:imeOptions="actionNext"
+                android:inputType="date"
+                android:maxLength="5"
+
+                android:textDirection="locale" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/cvc_text_input_layout"
+            style="@style/Tap.CardInputWidget.TextInputLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|end"
+            android:layout_marginStart="245dp"
+            android:accessibilityLiveRegion="polite"
+            android:accessibilityTraversalAfter="@+id/text_input_expiry_date"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/cvc_number_hint"
+            android:labelFor="@id/cvc_edit_text"
+            android:nextFocusLeft="@id/text_input_expiry_date"
+            android:nextFocusUp="@id/text_input_expiry_date"
+            android:nextFocusDown="@id/holder_name_edit_text"
+            android:nextFocusRight="@id/holder_name_edit_text"
+            app:hintEnabled="false"
+            android:visibility="visible"
+
+
+            android:gravity="start|end"
+            app:layout_constraintEnd_toStartOf="@+id/linear_paylayout"
+            android:layout_marginEnd="23dp"
+            tools:ignore="UnusedAttribute">
+
+            <company.tap.cardinputwidget2.views.CvcEditText
+                android:id="@+id/cvc_edit_text"
+                style="@style/Tap.Base.CardInputWidget.EditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="start|end"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/acc_label_cvc_node"
+                android:fontFamily="sans-serif-light"
+                android:gravity="start|end"
+                android:hint="@string/cvc_number_hint"
+                android:imeOptions="actionNext"
+                android:inputType="numberPassword"
+                android:textDirection="locale"
+                android:textSize="@dimen/font_size_14sp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+
+
+                app:endIconDrawable="@drawable/cvv_icon" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_paylayout"
+            android:layout_width="wrap_content"
+            android:layout_height="22dp"
+            android:layout_gravity="end|center"
+            android:orientation="horizontal"
+            android:layoutDirection="locale"
+            app:layout_constraintEnd_toEndOf="parent"
+
+
+
+
+            >
+            <ImageView
+                android:id="@+id/cvvIcon"
+                android:layout_width="32dp"
+                android:layout_height="23dp"
+                android:layout_gravity="center"
+                android:padding="2dp"
+
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/nfc_button"
+                android:layout_width="32dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/card_scanner_button"
+                android:layout_width="32dp"
+                android:layout_height="20dp"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="center"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="3dp"
+
+                android:layout_toEndOf="@+id/nfc_button"
+
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/clear_text"
+                android:layout_width="32dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center"
+                android:layoutDirection="locale"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="7dp"
+                android:layout_marginRight="7dp"
+                android:src="@drawable/icon_close2"
+
+                android:visibility="visible" />
+
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    <company.tap.tapuilibraryy.uikit.views.TapAlertView
+        android:id="@+id/alertView1"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <company.tap.tapuilibraryy.uikit.atoms.TapSeparatorView
+        android:layout_marginTop="@dimen/activity_total_margin10"
+        android:id="@+id/separator_1"
+        android:layout_width="wrap_content"
+        android:layout_height="0.75dp"
+        android:visibility="gone"
+        android:background="@color/grayunderline" />
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/holder_name_text_input_layout"
+        style="@style/Tap.CardInputWidget.TextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:accessibilityLiveRegion="polite"
+        android:background="@android:color/transparent"
+        android:layout_marginStart="@dimen/margin_basic_10dp"
+        android:layout_marginEnd="@dimen/margin_basic_8dp"
+        android:layout_marginTop="@dimen/margin_basic_8dp"
+        android:contentDescription="@string/acc_label_holder_name"
+        android:labelFor="@id/holder_name_edit_text"
+        android:visibility="gone"
+        app:hintEnabled="false"
+        tools:ignore="UnusedAttribute"
+        android:nextFocusLeft="@id/cvc_text_input_layout"
+        android:nextFocusUp="@id/cvc_text_input_layout"
+        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ "
+        android:inputType="text"
+        android:textSize="@dimen/font_size_14sp"
+        tools:replace="android:supportsRtl">
+
+        <company.tap.cardinputwidget2.views.HolderNameEditText
+            android:id="@+id/holder_name_edit_text"
+            style="@style/Tap.CardInputWidget.EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:enabled="true"
+            android:fontFamily="sans-serif-light"
+            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ "
+            android:inputType="text"
+            android:imeOptions="actionDone"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textSize="@dimen/font_size_14sp"
+            android:textDirection="locale"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    </LinearLayout>
+    <company.tap.tapuilibraryy.uikit.atoms.TapSeparatorView
+        android:layout_marginTop="@dimen/activity_total_margin10"
+        android:id="@+id/separatorcard2"
+        android:layout_width="wrap_content"
+        android:layout_height="0.75dp"
+        android:visibility="visible"
+        android:background="@color/grayunderline" />
+
+    <WebView
+        android:id="@+id/webView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+</LinearLayout>

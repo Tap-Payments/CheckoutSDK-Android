@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Tap.Base.CardInputWidget.TextInputLayout"
+        parent="Widget.Design.TextInputLayout">
+    </style>
+
+    <style name="Tap.CardInputWidget.TextInputLayout"
+        parent="Tap.Base.CardInputWidget.TextInputLayout" />
+
+    <style name="Tap.CardInputWidget.EditText" parent="Tap.Base.CardInputWidget.EditText" />
+
+    <style name="Tap.Base.CardInputWidget.EditText" parent="Widget.AppCompat.EditText">
+      <!--  <item name="android:textSize">@dimen/ciw_stripe_edit_text_size</item>-->
+    </style>
+
+    <style name="Tap.Base.CardInputWidget.CvvEdit" parent="Widget.AppCompat.EditText">
+        <item name="colorControlNormal">@android:color/white</item>
+        <item name="colorControlActivated">@android:color/white</item>
+        <item name="colorControlHighlight">@android:color/white</item>
+        <item name="android:backgroundTint">@color/red_error</item>
+    </style>
+</resources>

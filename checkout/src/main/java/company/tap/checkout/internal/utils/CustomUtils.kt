@@ -23,9 +23,9 @@ import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.uikit.adapters.context
-import company.tap.tapuilibrary.uikit.ktx.loadAppThemManagerFromPath
+import company.tap.tapuilibraryy.themekit.ThemeManager
+import company.tap.tapuilibraryy.uikit.adapters.context
+import company.tap.tapuilibraryy.uikit.ktx.loadAppThemManagerFromPath
 
 
 /**

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <company.tap.tapuilibrary.uikit.atoms.TapChipGroup
+    <company.tap.tapuilibraryy.uikit.atoms.TapChipGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/goPayLoginView"/>
@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <company.tap.tapuilibrary.uikit.atoms.TapSeparatorView
+        <company.tap.tapuilibraryy.uikit.atoms.TapSeparatorView
             android:id="@+id/separator_"
             android:layout_width="wrap_content"
             android:layout_height="1dp"

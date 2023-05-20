@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 >
 
-                <company.tap.tapuilibrary.uikit.views.TapBrandView
+                <company.tap.tapuilibraryy.uikit.views.TapBrandView
                     android:id="@+id/tab_brand_view"
                     android:layout_width="match_parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -99,7 +99,7 @@
                             android:layout_height="500dp"
                             android:visibility="gone" />
 
-                        <company.tap.tapuilibrary.uikit.atoms.TapTextView
+                        <company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
                             android:id="@+id/closeText"
                             android:layout_width="48dp"
                             android:layout_height="40dp"
@@ -112,7 +112,7 @@
                             android:textSize="12sp"
                             android:visibility="gone" />
 
-                        <company.tap.tapuilibrary.uikit.atoms.TapImageView
+                        <company.tap.tapuilibraryy.uikit.atoms.TapImageView
                             android:id="@+id/closeImage"
                             android:layout_width="40dp"
                             android:layout_height="40dp"

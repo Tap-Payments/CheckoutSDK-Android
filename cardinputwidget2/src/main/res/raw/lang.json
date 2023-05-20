@@ -1,0 +1,302 @@
+{
+  "en": {
+    "TapCardInputKit": {
+      "cardNumberPlaceHolder": "Card number",
+      "cardNamePlaceHolder": "Card Holder name",
+      "cardCVVPlaceHolder": "CVV",
+      "cardExpiryPlaceHolder": "MM/YY",
+      "cardSaveLabel": "Save For Later",
+      "cardSaveForTapLabel": "Save for other stores powered by Tap",
+      "cardSaveForTapInfo":"Checkout everywhere in just one click.\nTap is a better and secure way to pay locally across 100k+ stores. Your details are encrypted and can only be accessed by you. You’ll receive an email to get started and manage your details.",
+      "emailPlaceHolder": "email@email.com",
+      "cardUseNFCLabel": "For faster and easier checkout,\nuse card scanner or NFC.",
+      "cardSaveLater": "For faster and easier checkout,\nsave the card for later."
+    },
+    "TapMobileInput": {
+      "mobileSaveLabel": "For faster and easier checkout,\nsave your mobile number.",
+      "mobileUseLabel": "For faster and easier checkout,\nuse your mobile number."
+    },
+    "TapMerchantSection": {
+      "paymentFor" : "PAYMENT FOR"
+    },
+    "HorizontalHeaders": {
+      "GatewayHeader":{
+        "leftTitle": "SELECT",
+        "rightTitle": "EDIT"
+      }
+    },
+    "ItemList": {
+      "showDesc": "Show Description",
+      "hideDesc": "Hide Description",
+      "Discount": "Discount"
+    },
+    "Hints": {
+      "Warning":
+      {
+        "missingExpiryCVV": "Expiry date & CVV number are missing.",
+        "missingCVV": "CVV number is missing."
+      },
+      "Error":
+      {
+        "wrongCardNumber": "Card number is invalid"
+      },
+      "Default":
+      {
+        "scan": "Ready to scan."
+      },
+      "Scanned":
+      {
+        "successFullScan" : "Your card has been scanned successfully."
+      },
+      "GoPayLogin":
+      {
+        "password": "Incorrect Password",
+        "otp": "OTP has been sent to"
+      },
+      "GoPayAlert": {
+        "goPayemailalert": "Please check your email and follow the steps",
+        "goPayphonealert": "Please check your SMS and follow the steps",
+        "goPayTitle": "goPay"
+      }
+    },
+    "TapOtpView": {
+      "Message": {
+        "Ready": "OTP has been sent to",
+        "Invalid": "Invalid OTP number! ",
+        "Expired": ""
+      }
+    },
+    "Common": {
+      "next": "Next",
+      "previous": "Previous",
+      "done": "Done",
+      "recent": "Recent",
+      "edit": "Edit",
+      "close": "CLOSE",
+      "items": "Items",
+      "item": "Item",
+      "email": "Email",
+      "phone": "Phone",
+      "password": "Password",
+      "change": "change",
+      "yes": "Yes",
+      "no": "No",
+      "ok": "OK",
+      "saveFor": "Save For",
+      "checkouts": "Checkouts"
+    },
+    "GoPay": {
+      "HintLabel": "You can access your saved cards from anywhere with goPay.",
+      "goPayTextLabel": "By enabling goPay, your {PHONE_OR_CARD} will be saved with Tap Payments to get faster and more secure checkouts in multiple apps and websites.",
+      "savegoPayLabel": "Save for goPay Checkouts",
+      "goPaySignupLabel": "Please check your email or SMS’s in order to complete the goPay Checkout signup process.",
+      "goPaySignOut": "Are you sure you would like to sign out?",
+      "goPaySaveCards": "The goPayCards will be hidden from the page and you will need to login again to use any of them.",
+      "deletegoPayCard": "Are you sure you want to delete this card?",
+      "deleteMessage": "The Cards once deleted cannot be undone."
+    },
+    "ActionButton":{
+      "pay": "Pay",
+      "confirm": "Confirm",
+      "resend": "Resend",
+      "next": "Next",
+      "signin": "Signin",
+      "savecard": "Save Card"
+    },
+    "SavedCardTitle": {
+      "saveCardTitle": "Enter Card Details",
+      "deleteSavedCardTitle": "Delete Card",
+      "deleteSavedCardButtonDelete": "Delete",
+      "deleteSavedCardButtonCancel": "Cancel",
+      "deleteSavedCardMsg": "Are you sure you would like to delete card ending with",
+      "saveCardCVV": "EnterCVV"
+
+    },
+    "ExtraFees": {
+      "extraFeesAlertTitle": "Confirm extra charges",
+      "extraFeesAlertMessagePart1": "You will be charged an additional fee of",
+      "extraFeesAlertMessagePart2": "for this type of payment, totaling an amount of",
+      "extraFeesAlertConfirm": "Confirm",
+      "extraFeesAlertCancel":"Cancel"
+    },
+    "AlertBox": {
+      "alertUnsupportedCardMessage": "This card is not supported",
+      "alertUnsupportedCardTitle": "Attention"
+    },
+    "NFC": {
+      "scan": "Ready to scan, add the card under the device to scan it.",
+      "nfcDescription": "Near-field communication is a set of communication protocols for communication between two electronic devices over a distance of 4 cm or less.",
+      "nfcUnsupported": "NFC is not supported!",
+      "enableNFC":"Please enable NFC",
+      "disabledNFC": "NFC not enabled",
+      "scanSuccess": "Scanned Successful!"
+    },
+    "TapLoyaltySection": {
+      "headerView": {
+        "tc": "T&C",
+        "redeem": "Redeem",
+        "balance": "Balance"
+      },
+      "amountView": {
+        "title" : "Amount to redeem"
+      },
+      "footerView": {
+        "points": "Remaining",
+        "amount": "Remaining amount to pay"
+      },
+      "hintView": {
+        "minimumWarning": "Minimum redemption is"
+      }
+    }
+  },
+  "ar": {
+    "TapCardInputKit": {
+      "cardNumberPlaceHolder": "رقم البطاق",
+      "cardNamePlaceHolder": "إسم صاحب البطاقة",
+      "cardCVVPlaceHolder": "الرمز الأمني",
+      "cardExpiryPlaceHolder": "شهر/سنة",
+      "cardSaveLabel": "إحفظ البطاقة،\n لدفع أسرع وأسهل.",
+      "cardSaveForTapLabel": "إحفظ للإستعمال في كل متاجر Tap",
+      "cardSaveForTapInfo":"يمكنك الدفع في كل مكان بنقرة واحدة فقط\n.يعد النقر طريقة أفضل وآمنة للدفع محليًا عبر أكثر من 100 ألف متجر. يتم تشفير بياناتك ولا يمكن الوصول إليها إلا بواسطتك. ستتلقى بريدًا إلكترونيًا للبدء وإدارة التفاصيل الخاصة بك.",
+      "emailPlaceHolder": "email@email.com",
+      "cardUseNFCLabel":"لدفع أسرع وأسهل،\n إستخدم الماسح الضوئي للبطاقة أو خاصية الــ NFC. ",
+      "cardSaveLater":"إحفظ البطاقة، \n لدفع أسرع وأسهل لاحقاً. "
+    },
+    "TapMobileInput": {
+      "mobileSaveLabel": "إحفظ رقم هاتفك،\n لدفع أسرع وأسهل.",
+      "mobileUseLabel": "إستخدم رقم هاتفك المحمول،\n لدفع أسرع وأسهل."
+    },
+    "TapMerchantSection": {
+      "paymentFor" : "إدفع لـ"
+    },
+    "HorizontalHeaders": {
+      "GatewayHeader":{
+        "leftTitle": "إختار",
+        "rightTitle": "تعديل"
+      }
+    },
+    "ItemList": {
+      "showDesc": "إظهار الوصف",
+      "hideDesc": "إخفاء الوصف",
+      "Discount": "خصم"
+    },
+    "TapOtpView": {
+      "Message": {
+        "Ready": "تم إرسال رمز الـ OTP لـ",
+        "Invalid": "رمز الـ OTP غير صحيح!",
+        "Expired": ""
+      }
+    },
+    "Hints":
+    {
+      "Warning":
+      {
+        "missingExpiryCVV": "أدخل تاريخ الإنتهاء و الرمز الأمني.",
+        "missingCVV": "الرمز الأمني مطلوب."
+      },
+      "Error":
+      {
+        "wrongCardNumber": "رقم البطاقة غير صحيح."
+      },
+      "Default":
+      {
+        "scan": "جاهز للمسح الضوئي."
+      },
+      "Scanned":
+      {
+        "successFullScan" : "تم المسح الضوئي للبطاقة بنجاح."
+      },
+      "GoPayLogin":
+      {
+        "password": "كلمة السر غير صحيحة.",
+        "otp": "تم إرسال رمز الـ OTP لـ"
+      },
+      "GoPayAlert": {
+        "goPayemailalert": "يرجى التحقق من بريدك الإلكتروني واتباع الخطوات",
+        "goPayphonealert": "يرجى التحقق من الرسائل النصية الخاصة بك واتباع الخطوات",
+        "goPayTitle": "goPay"
+      }
+    },
+    "Common": {
+      "next": "التالي",
+      "previous": "السابق",
+      "done": "تم",
+      "recent": "كروت سابقة",
+      "edit": "تعديل",
+      "close": "إغلاق",
+      "items": "منتجات",
+      "item": "منتج",
+      "email": "البريد الإلكتروني",
+      "phone": "رقم الهاتف",
+      "password": "كلمة السر",
+      "change": "تعديل",
+      "yes": "نعم",
+      "no": "لا",
+      "ok": "حسنا",
+      "saveFor": "حفظ لعمليات دفع",
+      "checkouts": "Checkouts"
+    },
+    "GoPay": {
+      "HintLabel": "يمكنك الوصول لبطاقات الدفع الخاصة بك من أي مكان مع goPay.",
+      "goPayTextLabel": "عند إختيارك لـ goPay، سيتم حفظ {PHONE_OR_CARD} في تاب للدفع الإلكتروني للحصول على خدمة دفع أسرع وأكثر أمانًا في العديد من التطبيقات والمواقع الإلكترونية.",
+      "savegoPayLabel": "حفظ بواسطة goPay Checkout",
+      "goPaySignupLabel": "يرجى التحقق من بريدك الإلكتروني أو الرسائل النصية لمتابعة عملية الاشتراك في goPay Checkout.",
+      "goPaySignOut": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
+      "goPaySaveCards": "سيتم إخفاء بطاقات goPayCards من الصفحة وستحتاج إلى تسجيل الدخول مرة أخرى لاستخدام أي منها.",
+      "deletegoPayCard": "هل أنت متأكد أنك تريد حذف هذه البطاقة؟",
+      "deleteMessage": "البطاقات التي تم حذفها مرة واحدة لا يمكن التراجع عنها."
+    },
+    "ActionButton":{
+      "pay": "إدفع",
+      "confirm": "تأكيد",
+      "resend": " إعادة إرسال رمز الـ OTP",
+      "next": "التالي",
+      "signin": "تسجيل الدخول",
+      "savecard": "احفظ البطاقة"
+    },
+    "SavedCardTitle": {
+      "saveCardTitle": "ادفع",
+      "deleteSavedCardTitle": "حذف البطاقة",
+      "deleteSavedCardButtonDelete": "حذف",
+      "deleteSavedCardButtonCancel": "إلغاء",
+      "deleteSavedCardMsg": "هل أنت متأكد من مسح البطاقة",
+      "saveCardCVV": "أدخل CVV"
+    },
+    "NFC": {
+      "scan": "جاهز للمسح الضوئي ، أضف البطاقة أسفل الجهاز لمسحها ضوئيًا.",
+      "nfcDescription": "الاتصال قريب المدى عبارة عن مجموعة من بروتوكولات الاتصال للاتصال بين جهازين إلكترونيين على مسافة 4 سم أو أقل.",
+      "nfcUnsupported": "NFC غير مدعوم!",
+      "enableNFC":"يرجى تمكين NFC",
+      "disabledNFC": "NFC غير ممكّن",
+      "scanSuccess": "تم المسح بنجاح!"
+    },
+    "ExtraFees": {
+      "extraFeesAlertTitle": "تأكيد الرسوم الإضافية",
+      "extraFeesAlertMessagePart1": "سوف تتم إضافة",
+      "extraFeesAlertMessagePart2": " لهذه العملية، إجمالي المبلغ المطلوب ",
+      "extraFeesAlertConfirm": "تأكيد",
+      "extraFeesAlertCancel":"إلغاء"
+    },
+    "AlertBox": {
+      "alertUnsupportedCardMessage": "نوع البطاقة غير مدعوم",
+      "alertUnsupportedCardTitle": "تنبيه"
+    }
+  },"TapLoyaltySection": {
+  "headerView": {
+    "tc": "شروط",
+    "redeem": "استخدام",
+    "balance": "الرصيد"
+  },
+  "amountView": {
+    "title" : "المبلغ المستبدل"
+  },
+  "footerView": {
+    "points": "متبقي",
+    "amount": "متبقي القيمة للدفع"
+  },
+  "hintView": {
+    "minimumWarning": "أقل قيمة للإستبدال"
+  }
+}
+
+}

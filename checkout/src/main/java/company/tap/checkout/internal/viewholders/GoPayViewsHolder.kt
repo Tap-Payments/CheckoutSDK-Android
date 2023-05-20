@@ -11,13 +11,13 @@ import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibrary.uikit.datasource.GoPayLoginDataSource
-import company.tap.tapuilibrary.uikit.interfaces.GoPayLoginInterface
-import company.tap.tapuilibrary.uikit.interfaces.OpenOTPInterface
-import company.tap.tapuilibrary.uikit.interfaces.OtpButtonConfirmationInterface
-import company.tap.tapuilibrary.uikit.organisms.GoPayLoginInput
-import company.tap.tapuilibrary.uikit.organisms.GoPayPasswordInput
-import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
+import company.tap.tapuilibraryy.uikit.datasource.GoPayLoginDataSource
+import company.tap.tapuilibraryy.uikit.interfaces.GoPayLoginInterface
+import company.tap.tapuilibraryy.uikit.interfaces.OpenOTPInterface
+import company.tap.tapuilibraryy.uikit.interfaces.OtpButtonConfirmationInterface
+import company.tap.tapuilibraryy.uikit.organisms.GoPayLoginInput
+import company.tap.tapuilibraryy.uikit.organisms.GoPayPasswordInput
+import company.tap.tapuilibraryy.uikit.views.TabAnimatedActionButton
 
 
 /**

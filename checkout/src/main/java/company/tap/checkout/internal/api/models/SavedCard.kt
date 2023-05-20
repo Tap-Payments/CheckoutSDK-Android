@@ -2,7 +2,7 @@ package company.tap.checkout.internal.api.models
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import company.tap.cardinputwidget.Card
+//import company.tap.cardinputwidget.Card
 import company.tap.checkout.internal.interfaces.CurrenciesSupport
 import company.tap.commonmodels.CardScheme
 import company.tap.tapcardvalidator_android.CardBrand

@@ -17,7 +17,6 @@ import company.tap.tapnetworkkit.controller.NetworkController
 import company.tap.tapnetworkkit.enums.TapMethodType
 import company.tap.tapnetworkkit.exception.GoSellError
 import company.tap.tapnetworkkit.interfaces.APIRequestCallback
-import company.tap.tapuilibrary.uikit.atoms.TapTextView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

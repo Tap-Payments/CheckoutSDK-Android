@@ -22,10 +22,10 @@ import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener
 import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.open.models.ItemsModel
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.uikit.atoms.TapChipGroup
-import company.tap.tapuilibrary.uikit.atoms.TapSeparatorView
-import company.tap.tapuilibrary.uikit.utils.MetricsUtil
+import company.tap.tapuilibraryy.themekit.ThemeManager
+import company.tap.tapuilibraryy.uikit.atoms.TapChipGroup
+import company.tap.tapuilibraryy.uikit.atoms.TapSeparatorView
+import company.tap.tapuilibraryy.uikit.utils.MetricsUtil
 import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
 import kotlinx.android.synthetic.main.itemviewholder_layout.view.*
 

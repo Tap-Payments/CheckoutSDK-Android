@@ -9,8 +9,6 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.annotation.DrawableRes
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.view.setPadding
 import company.tap.checkout.R
 import company.tap.checkout.internal.cache.SharedPrefManager
 import company.tap.checkout.internal.enums.SectionType
@@ -19,12 +17,12 @@ import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.checkout.internal.utils.*
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.themekit.theme.TextViewTheme
-import company.tap.tapuilibrary.uikit.atoms.TapChip
-import company.tap.tapuilibrary.uikit.atoms.TapTextView
-import company.tap.tapuilibrary.uikit.datasource.AmountViewDataSource
-import company.tap.tapuilibrary.uikit.ktx.setBorderedView
+import company.tap.tapuilibraryy.themekit.ThemeManager
+import company.tap.tapuilibraryy.themekit.theme.TextViewTheme
+import company.tap.tapuilibraryy.uikit.atoms.TapChip
+import company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
+import company.tap.tapuilibraryy.uikit.datasource.AmountViewDataSource
+import company.tap.tapuilibraryy.uikit.ktx.setBorderedView
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 
 
@@ -52,7 +50,7 @@ class AmountViewHolder(
     private var transactionCurrency: String? = null
     private var scannerLinearView: LinearLayout = view.findViewById(R.id.scannerLinearView)
     private var CustomCardViewStyle: TapChip = view.findViewById(R.id.CustomCardViewStyle)
-    private var readyToScanText: TapTextView = view.findViewById(R.id.cardscan_ready)
+    private var readyToScanText: TapTextViewNew = view.findViewById(R.id.cardscan_ready)
     var scannerClicked: Boolean? = false
 
     init {

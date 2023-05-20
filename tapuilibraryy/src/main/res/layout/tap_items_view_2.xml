@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/margin_basic_16dp"
+    android:layout_marginTop="@dimen/margin_basic_14dp"
+    android:layout_marginEnd="@dimen/margin_basic_16dp"
+    android:layoutDirection="locale"
+    android:textDirection="locale"
+    android:layout_marginBottom="@dimen/margin_basic_13dp"
+   >
+
+    <company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
+        android:id="@+id/item_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_basic_10dp"
+        android:layout_marginBottom="2dp"
+        android:ellipsize="marquee"
+        android:fontFamily="sans-serif"
+        android:gravity="start|top"
+        android:lineSpacingExtra="2sp"
+        android:maxLines="3"
+        android:textColor="#4b4847"
+        android:textSize="11sp"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toTopOf="@+id/brief_description"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="ITEMS" />
+
+
+
+    <company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
+        android:id="@+id/brief_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
+        android:textColor="#a8a8a8"
+        android:textSize="16sp"
+        android:textStyle="normal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item_title"
+        android:layout_marginTop="@dimen/margin_basic_8dp"
+        tools:text="Bange Backpack" />
+
+    <company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
+        android:id="@+id/total_amount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
+        android:textColor="#a8a8a8"
+        android:textSize="12sp"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/brief_description"
+        app:layout_constraintStart_toStartOf="parent"
+
+        tools:text="KD 1000,000.000" />
+
+
+    <company.tap.tapuilibraryy.uikit.atoms.TapImageView
+        android:id="@+id/add_image"
+        android:layout_width="13dp"
+        android:layout_height="13dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="sans-serif-light"
+        android:gravity="end"
+        android:visibility="gone"
+
+       android:textSize="12sp"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="@id/brief_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/brief_description"
+        app:layout_constraintVertical_bias="0.75"
+        />
+
+    <company.tap.tapuilibraryy.uikit.atoms.TapImageView
+        android:id="@+id/sub_image"
+        android:layout_width="13dp"
+        android:layout_height="@dimen/margin_basic_13dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="sans-serif-light"
+        android:gravity="end"
+        android:textSize="12sp"
+        android:textStyle="normal"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@id/brief_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/brief_description"
+      />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

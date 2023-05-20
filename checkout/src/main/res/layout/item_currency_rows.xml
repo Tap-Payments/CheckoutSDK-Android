@@ -20,7 +20,7 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <company.tap.tapuilibrary.uikit.atoms.TapImageView
+        <company.tap.tapuilibraryy.uikit.atoms.TapImageView
             android:id="@+id/imageView_currency"
             android:layout_width="28dp"
             android:layout_height="@dimen/margin_basic_23dp"
@@ -29,7 +29,7 @@
             android:adjustViewBounds="true"
             android:layout_marginBottom="7dp" />
 
-        <company.tap.tapuilibrary.uikit.atoms.TapTextView
+        <company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
             android:id="@+id/textView_currency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -18,15 +18,12 @@ import company.tap.checkout.internal.api.models.SupportedCurrencies
 import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener
 import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
-import company.tap.checkout.internal.viewmodels.CheckoutViewModel.Companion.currencySelectedForCheck
-import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.themekit.theme.TextViewTheme
-import company.tap.tapuilibrary.uikit.atoms.TapImageView
-import company.tap.tapuilibrary.uikit.atoms.TapTextView
-import company.tap.tapuilibrary.uikit.ktx.setBorderedView
+import company.tap.tapuilibraryy.themekit.ThemeManager
+import company.tap.tapuilibraryy.themekit.theme.TextViewTheme
+import company.tap.tapuilibraryy.uikit.atoms.TapImageView
+import company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
+import company.tap.tapuilibraryy.uikit.ktx.setBorderedView
 import kotlinx.android.synthetic.main.item_currency_rows.view.*
-import kotlinx.android.synthetic.main.item_frame_currencies.view.*
-import kotlinx.android.synthetic.main.item_save_cards.view.*
 import java.math.BigDecimal
 
 
@@ -120,7 +117,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
             .init()
             .with(holder.itemView.context)
             .load( adapterContentCurrencies[position]?.flag?.toUri(), imageViewCard)*/
-        val itemCurrencyText = holder.itemView.findViewById<TapTextView>(R.id.textView_currency)
+        val itemCurrencyText = holder.itemView.findViewById<TapTextViewNew>(R.id.textView_currency)
        //Replaced itemCurrencyText.text = adapterContentCurrencies[position].currency
         itemCurrencyText.text = adapterContentCurrencies[position].currency
         currencyRate = adapterContentCurrencies[position].amount

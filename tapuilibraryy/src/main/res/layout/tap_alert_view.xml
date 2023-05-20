@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <company.tap.tapuilibraryy.uikit.atoms.TapSeparatorView
+        android:id="@+id/topSeparator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
+
+    <LinearLayout
+        android:id="@+id/tapAlertLinear"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:orientation="vertical"
+        android:paddingStart="30dp"
+        android:background="@drawable/blurbackground"
+        android:paddingTop="@dimen/margin_basic_15dp"
+        android:paddingEnd="@dimen/margin_basic_25dp"
+        android:paddingBottom="@dimen/margin_basic_15dp">
+
+        <company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
+            android:id="@+id/textViewAlertMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:textSize="12sp"
+            android:textStyle="normal"
+            android:visibility="visible"
+            tools:text="Expiry date &amp; CVV number are missing." />
+
+
+    </LinearLayout>
+
+    <company.tap.tapuilibraryy.uikit.atoms.TapSeparatorView
+        android:id="@+id/bottomSeparator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
+
+</LinearLayout>

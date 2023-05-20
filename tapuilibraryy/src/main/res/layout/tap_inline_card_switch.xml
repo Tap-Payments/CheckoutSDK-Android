@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+
+
+    android:id="@+id/tapCardSwitchLinear"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:background="@color/blue"
+    android:layoutDirection="locale"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/switchesLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible"
+       >
+
+
+        <company.tap.tapuilibraryy.uikit.atoms.TapSwitch
+            android:id="@+id/switchSaveCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:checked="true"
+            android:fontFamily="sans-serif-light"
+            android:letterSpacing="-0.02"
+            android:textColor="#4b4847"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:theme="@style/SwitchPrimary"
+            tools:text="Save for Later" />
+
+        <company.tap.tapuilibraryy.uikit.atoms.TapSeparatorView
+            android:id="@+id/switch_Separator"
+            android:layout_width="match_parent"
+            android:layout_height="0.75dp"
+            tools:background="@color/red_error"
+            android:layout_marginTop="2dp"
+            android:layout_below="@+id/switchSaveCard"
+            android:layout_marginEnd="@dimen/margin_basic_16dp"
+            android:layout_marginStart="@dimen/margin_basic_16dp"
+            android:visibility="invisible" />
+
+
+        <LinearLayout
+            android:id="@+id/secondary_Layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/switch_Separator"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:visibility="invisible"
+            android:layout_marginBottom="15dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+
+            >
+
+            <CheckBox
+                android:id="@+id/saveForOtherCheckBox"
+                android:layout_width="26dp"
+                android:layout_height="22dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:buttonTint="@color/buttoncheckBox"
+                android:scaleX="0.8"
+                android:scaleY="0.8" />
+
+            <company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
+                android:id="@+id/saveForOtherTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:gravity="center"
+                android:text="Save for other stores powered by Tap"
+                android:textSize="@dimen/font_size_12sp" />
+
+
+
+                <company.tap.tapuilibraryy.uikit.atoms.TapImageView
+                    android:id="@+id/toolsTipImageView"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center"
+                    android:clickable="true"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:focusable="true"
+                    android:longClickable="true"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+
+
+
+
+
+    </RelativeLayout>
+
+
+    <company.tap.tapuilibraryy.uikit.views.TabAnimatedActionButton
+        android:id="@+id/payButton"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="22dp"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        android:layout_marginBottom="22dp"
+        android:layout_marginStart="@dimen/margin_basic_20dp"
+        android:layout_marginEnd="@dimen/margin_basic_20dp" />
+
+    <LinearLayout
+        android:id="@+id/brandingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layoutDirection="ltr"
+        android:textDirection="firstStrongLtr"
+        android:layout_marginTop="@dimen/margin_basic_10dp"
+        android:layout_marginBottom="30dp"
+        android:orientation="horizontal">
+
+        <company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
+            android:id="@+id/textViewPowered"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Powered by"
+            android:textColor="#626262"
+            android:visibility="gone"
+            android:textSize="@dimen/font_size_10sp"
+            />
+        <company.tap.tapuilibraryy.uikit.atoms.TapImageView
+            android:layout_width="92dp"
+            android:layout_height="18dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/margin_basic_4dp"
+            android:layout_marginEnd="@dimen/margin_basic_4dp"
+
+            android:id="@+id/tapLogoImage"
+            />
+
+    </LinearLayout>
+
+
+</LinearLayout>

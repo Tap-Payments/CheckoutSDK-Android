@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.webkit.WebView
@@ -23,8 +22,8 @@ import company.tap.checkout.internal.webview.TapCustomWebViewClient
 import company.tap.checkout.internal.webview.WebViewContract
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibrary.uikit.atoms.TapTextView
-import company.tap.tapuilibrary.uikit.ktx.loadAppThemManagerFromPath
+import company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
+import company.tap.tapuilibraryy.uikit.ktx.loadAppThemManagerFromPath
 import kotlinx.android.synthetic.main.fragment_web.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 import kotlin.math.roundToInt
@@ -49,7 +48,7 @@ class WebViewHolder(
     override val view: View = LayoutInflater.from(context).inflate(R.layout.web_view_layout, null)
     override val type = SectionType.FRAGMENT
     val web_view by lazy { view.findViewById<WebView>(R.id.web_view) }
-    val webViewTextTitle by lazy { view.findViewById<TapTextView>(R.id.webView_Header) }
+    val webViewTextTitle by lazy { view.findViewById<TapTextViewNew>(R.id.webView_Header) }
     val webViewLinear by lazy { view.findViewById<LinearLayout>(R.id.webViewLinear) }
     val topLinear by lazy { view.findViewById<LinearLayout>(R.id.topLinear1) }
     val webCardview by lazy { view.findViewById<CardView>(R.id.webCardview) }

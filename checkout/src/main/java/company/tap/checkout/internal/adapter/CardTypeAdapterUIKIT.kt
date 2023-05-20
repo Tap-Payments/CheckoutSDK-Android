@@ -30,14 +30,18 @@ import company.tap.checkout.internal.api.models.SavedCard
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
 import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.utils.PaymentsUtil
-import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.themekit.theme.TextViewTheme
-import company.tap.tapuilibrary.uikit.ktx.setBorderedView
+import company.tap.tapuilibraryy.themekit.ThemeManager
+import company.tap.tapuilibraryy.themekit.theme.TextViewTheme
+import company.tap.tapuilibraryy.uikit.ktx.setBorderedView
 import kotlinx.android.synthetic.main.googlepay_button.view.*
 import kotlinx.android.synthetic.main.item_benefit_pay.view.*
 import kotlinx.android.synthetic.main.item_googlepay.view.*
 import kotlinx.android.synthetic.main.item_knet.view.*
 import kotlinx.android.synthetic.main.item_save_cards.view.*
+import kotlinx.android.synthetic.main.item_saved_card.view.*
+import kotlinx.android.synthetic.main.item_saved_card.view.imageView_amex
+import kotlinx.android.synthetic.main.item_saved_card.view.tapCardChip2
+import kotlinx.android.synthetic.main.item_saved_card.view.tapCardChip2Constraints
 import mobi.foo.benefitinapp.data.Transaction
 import mobi.foo.benefitinapp.listener.BenefitInAppButtonListener
 import mobi.foo.benefitinapp.listener.CheckoutListener
@@ -406,11 +410,11 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                 ) {
                     Glide.with(holder.itemView.context)
                         .load(arrayListCards[position.minus(adapterContent.size)].logos?.dark?.png?.toUri())
-                        .into(holder.itemView.imageView_amex)
+                        .into(holder.itemView.imageView_amex as ImageView)
                 } else {
                     Glide.with(holder.itemView.context)
                         .load(arrayListCards[position.minus(adapterContent.size)].logos?.light?.png?.toUri())
-                        .into(holder.itemView.imageView_amex)
+                        .into(holder.itemView.imageView_amex as ImageView)
                 }
                 holder.itemView.textViewCardDetails.text = maskCardNumber(
                     arrayListCards[position.minus(adapterContent.size)].firstSix + arrayListCards[position.minus(

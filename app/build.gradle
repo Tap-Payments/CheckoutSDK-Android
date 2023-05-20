@@ -14,9 +14,13 @@ android {
         targetSdkVersion 31
         versionCode 53
         versionName "1.0.2.22"
-        multiDexEnabled true
+        multiDexEnabled false
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'proguard-rules.pro'
+    }
+    configurations.all {
+        exclude group:"com.github.Tap-Payments:TapUIKit-Android:1.1.1.358.228", module: "geronimo-servlet_2.5_spec"
+        exclude group:"ch.qos.logback", module:"logback-core"
     }
     signingConfigs {
         release {
@@ -63,8 +67,7 @@ dependencies {
 
     implementation 'com.koushikdutta.ion:ion:3.1.0'
 
-    implementation 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.36.214'
-    api 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.36.214'
+   // implementation 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.36.214'
     implementation 'company.tap:PayCards-Tap-Android:0.1.6.4'
     api 'company.tap:PayCards-Tap-Android:0.1.6.4'
 
@@ -77,7 +80,6 @@ dependencies {
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.preference:preference-ktx:1.2.0'
     implementation 'com.github.2coffees1team:GlideToVectorYou:v2.0.0'
-    // implementation files('libs/benefitinappsdk-1.0.23.aar')
 
     // Import the BoM for the Firebase platform
     implementation platform('com.google.firebase:firebase-bom:30.3.1')

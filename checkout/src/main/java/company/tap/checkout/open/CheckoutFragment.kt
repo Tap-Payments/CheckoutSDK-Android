@@ -16,10 +16,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
-import androidx.cardview.widget.CardView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.view.marginTop
-import androidx.core.view.setPadding
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -31,7 +28,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.apiresponse.CardViewModel
-import company.tap.checkout.internal.apiresponse.CardViewState
 import company.tap.checkout.internal.apiresponse.UserRepository
 import company.tap.checkout.internal.cache.SharedPrefManager
 import company.tap.checkout.internal.enums.SectionType
@@ -43,14 +39,14 @@ import company.tap.checkout.open.controller.SDKSession.sessionDelegate
 import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.uikit.atoms.TapImageView
-import company.tap.tapuilibrary.uikit.atoms.TapTextView
-import company.tap.tapuilibrary.uikit.enums.ActionButtonState
-import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
-import company.tap.tapuilibrary.uikit.ktx.setTopBorders
-import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
-import company.tap.tapuilibrary.uikit.views.TapBrandView
+import company.tap.tapuilibraryy.themekit.ThemeManager
+import company.tap.tapuilibraryy.uikit.atoms.TapImageView
+import company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
+import company.tap.tapuilibraryy.uikit.enums.ActionButtonState
+import company.tap.tapuilibraryy.uikit.interfaces.TapBottomDialogInterface
+import company.tap.tapuilibraryy.uikit.ktx.setTopBorders
+import company.tap.tapuilibraryy.uikit.views.TapBottomSheetDialog
+import company.tap.tapuilibraryy.uikit.views.TapBrandView
 import org.json.JSONObject
 import java.util.*
 
@@ -73,7 +69,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     var _activity: Activity? = null
     var checkOutActivity: CheckOutActivity? = null
-    lateinit var closeText: TapTextView
+    lateinit var closeText: TapTextViewNew
     lateinit var closeImage: TapImageView
     var hideAllView = false
     lateinit var status: ChargeStatus

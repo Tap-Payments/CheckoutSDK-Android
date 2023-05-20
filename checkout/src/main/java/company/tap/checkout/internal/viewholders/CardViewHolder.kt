@@ -5,7 +5,6 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.R
@@ -18,10 +17,10 @@ import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibrary.fontskit.enums.TapFont
-import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.themekit.theme.TextViewTheme
-import company.tap.tapuilibrary.uikit.atoms.TapTextView
+import company.tap.tapuilibraryy.fontskit.enums.TapFont
+import company.tap.tapuilibraryy.themekit.ThemeManager
+import company.tap.tapuilibraryy.themekit.theme.TextViewTheme
+import company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
 import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
 
 
@@ -36,7 +35,7 @@ class CardViewHolder(private val context: Context, private val onCardSelectedAct
     override val type = SectionType.CARD
     private var paymentCardsList: MutableList<PaymentOption>? = null
     private var saveCardsList: MutableList<SavedCard>? = null
-    lateinit var cardInfoHeaderText: TapTextView
+    lateinit var cardInfoHeaderText: TapTextViewNew
     lateinit var cardTypeAdapterUIKIT: CardTypeAdapterUIKIT
 
     init { bindViewComponents() }

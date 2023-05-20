@@ -25,7 +25,7 @@
       android:paddingEnd="18dp"
       android:paddingBottom="5dp">
 
-    <company.tap.tapuilibrary.uikit.atoms.TapImageView
+    <company.tap.tapuilibraryy.uikit.atoms.TapImageView
         android:id="@+id/imageView_amex"
         android:layout_width="25dp"
         android:layout_height="25dp"
@@ -35,7 +35,7 @@
         app:layout_constraintRight_toLeftOf="@+id/textView_carddetails"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <company.tap.tapuilibrary.uikit.atoms.TapTextView
+    <company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
         android:id="@+id/textView_carddetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import company.tap.checkout.R
 import company.tap.checkout.internal.enums.SectionType
-import company.tap.tapuilibrary.uikit.organisms.OTPView
+import company.tap.tapuilibraryy.uikit.organisms.OTPView
 
 /**
 Copyright (c) 2020    Tap Payments.

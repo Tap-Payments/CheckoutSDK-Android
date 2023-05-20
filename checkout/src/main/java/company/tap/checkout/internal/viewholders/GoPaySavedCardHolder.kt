@@ -13,8 +13,8 @@ import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.uikit.atoms.TapTextView
+import company.tap.tapuilibraryy.themekit.ThemeManager
+import company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
 import kotlinx.android.synthetic.main.gopayloginview_layout.view.*
 
 /**
@@ -34,7 +34,7 @@ class GoPaySavedCardHolder(
     override val type = SectionType.CARD
     private var goPaySavedCardsList: List<GoPaySavedCards>? = null
     private var chipRecyclerView: RecyclerView
-    private var groupAction: TapTextView
+    private var groupAction: TapTextViewNew
 
 
     init {

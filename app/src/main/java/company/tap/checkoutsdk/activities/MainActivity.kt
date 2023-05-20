@@ -40,10 +40,10 @@ import company.tap.checkoutsdk.R
 import company.tap.checkoutsdk.manager.SettingsManager
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapnetworkkit.exception.GoSellError
-import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.uikit.enums.ActionButtonState
-import company.tap.tapuilibrary.uikit.models.DialogConfigurations
-import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
+import company.tap.tapuilibraryy.themekit.ThemeManager
+import company.tap.tapuilibraryy.uikit.enums.ActionButtonState
+import company.tap.tapuilibraryy.uikit.models.DialogConfigurations
+import company.tap.tapuilibraryy.uikit.views.TabAnimatedActionButton
 import java.math.BigDecimal
 import java.util.*
 

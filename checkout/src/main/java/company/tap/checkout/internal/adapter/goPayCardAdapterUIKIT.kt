@@ -20,9 +20,9 @@ import company.tap.checkout.internal.apiresponse.testmodels.Chip1
 import company.tap.checkout.internal.apiresponse.testmodels.GoPaySavedCards
 
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
-import company.tap.tapuilibrary.themekit.ThemeManager
-import company.tap.tapuilibrary.uikit.atoms.TapTextView
-import company.tap.tapuilibrary.uikit.ktx.setBorderedView
+import company.tap.tapuilibraryy.themekit.ThemeManager
+import company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
+import company.tap.tapuilibraryy.uikit.ktx.setBorderedView
 import kotlinx.android.synthetic.main.item_gopay_signout.view.*
 import kotlinx.android.synthetic.main.item_knet.view.*
 import kotlinx.android.synthetic.main.item_save_cards.view.*
@@ -243,7 +243,7 @@ class GoPayCardAdapterUIKIT(
                 holder.itemView.alpha = 0.4f
             }
             val imageViewCard = holder.itemView.findViewById<ImageView>(R.id.imageView_amex)
-            val textViewCardDetails = holder.itemView.findViewById<TapTextView>(R.id.textViewCardDetails)
+            val textViewCardDetails = holder.itemView.findViewById<TapTextViewNew>(R.id.textViewCardDetails)
             Glide.with(holder.itemView.context)
                     .load(arrayListCards[i].icon)
                     .into(imageViewCard)
