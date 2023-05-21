@@ -50,7 +50,7 @@ android {
         implementation 'com.github.Tap-Payments:TapCardValidator-Android:2.1.11'
         implementation 'com.github.2coffees1team:GlideToVectorYou:v2.0.0'
         implementation 'com.tomergoldst.android:tooltips:1.0.10'
-        api project(":tapuilibraryy")
+        implementation project(":tapuilibraryy")
 
     }
 }
