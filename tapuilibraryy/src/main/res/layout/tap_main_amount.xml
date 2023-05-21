@@ -18,7 +18,6 @@
         android:textColor="#4b4847"
         android:textSize="24sp"
         android:gravity="center_vertical"
-        android:paddingTop="5dp"
         android:includeFontPadding="false"
         android:textStyle="normal"
         app:layout_constraintStart_toStartOf="parent"

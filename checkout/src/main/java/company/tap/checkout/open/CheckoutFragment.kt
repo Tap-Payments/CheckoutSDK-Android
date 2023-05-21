@@ -260,6 +260,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
         }
 
+        bottomSheetDialog.setCancelable(false)
+
 
         setTopBorders(
             checkoutLayout,

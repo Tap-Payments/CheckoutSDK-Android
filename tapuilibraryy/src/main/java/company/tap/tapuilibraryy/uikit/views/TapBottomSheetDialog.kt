@@ -1,34 +1,22 @@
 package company.tap.tapuilibraryy.uikit.views
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.BlendMode
-import android.graphics.BlendModeColorFilter
 import android.graphics.Color
-import android.graphics.PorterDuff
-import android.graphics.drawable.Drawable
-import android.graphics.drawable.ShapeDrawable
-import android.graphics.drawable.shapes.RoundRectShape
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.annotation.Nullable
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import company.tap.tapuilibraryy.R
 import company.tap.tapuilibraryy.themekit.ThemeManager
 import company.tap.tapuilibraryy.themekit.theme.SeparatorViewTheme
 import company.tap.tapuilibraryy.uikit.interfaces.TapBottomDialogInterface
-import company.tap.tapuilibraryy.uikit.models.DialogConfigurations
 import kotlinx.android.synthetic.main.modal_bottom_sheet.*
 
 
@@ -68,10 +56,6 @@ open class TapBottomSheetDialog : BottomSheetDialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         bottomSheetDialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
         bottomSheetDialog.setOnShowListener {
-            val dialog = it as BottomSheetDialog
-            bottomSheetDialog.behavior.peekHeight
-
-
             setSeparatorTheme()
         }
         return bottomSheetDialog
@@ -87,38 +71,9 @@ open class TapBottomSheetDialog : BottomSheetDialogFragment() {
         this.tapBottomDialogInterface = tapBottomDialogInterface
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-//        setDialogConfigurations()
-//        changeBackground()
-    }
-
-    private fun changeBackground() {
-        bottomSheetDialog.setOnShowListener {
-            bottomSheetLayout = bottomSheetDialog.findViewById(R.id.design_bottom_sheet)
-            tapBottomDialogInterface?.onShow()
-        }
-    }
-
-    private fun setDialogConfigurations() {
-        arguments?.let {
-            dialog?.setCanceledOnTouchOutside(it.getBoolean(DialogConfigurations.Cancelable, true))
-            dialog?.window?.setDimAmount(it.getFloat(DialogConfigurations.Dim, 1.5f))
-        }
-    }
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        view?.animate()
-            ?.translationY(0F)
-            ?.alpha(0.0f)
-            ?.setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
-                    super.onAnimationEnd(animation)
-                    view!!.visibility = View.GONE
-                }
-            })
-        tapBottomDialogInterface?.onDismiss()
     }
 
     companion object {
