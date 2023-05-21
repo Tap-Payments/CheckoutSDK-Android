@@ -43,6 +43,7 @@ import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibraryy.fontskit.enums.TapFont
 import company.tap.tapuilibraryy.themekit.ThemeManager
 import company.tap.tapuilibraryy.uikit.atoms.TapTextInput
+import company.tap.tapuilibraryy.uikit.utils.MetricsUtil
 import company.tap.tapuilibraryy.uikit.utils.TapTextWatcher
 import kotlinx.android.synthetic.main.card_input_widget.view.*
 import kotlin.properties.Delegates
@@ -374,7 +375,13 @@ class InlineCardInput2 @JvmOverloads constructor(
         closeButton.setImageResource(closeIcon)
         cvvIcon.setImageResource(cvvIconDrawable)
         if (LocalizationManager.getLocale(context).language == "ar") {
-          //  backArrow.scaleX=-1.0f
+            val params = LinearLayout.LayoutParams(
+                MetricsUtil.convertDpToPixel(30f,context).toInt(),
+                MetricsUtil.convertDpToPixel(30f,context).toInt())
+            params.topMargin = MetricsUtil.convertDpToPixel(-6f,context).toInt()
+            cvvIcon.layoutParams = params
+
+            //  backArrow.scaleX=-1.0f
             cvcNumberEditText.textAlignment =View.TEXT_ALIGNMENT_CENTER
             backArrow.setImageResource(backIconAr)
             backArrow.requestFocus()

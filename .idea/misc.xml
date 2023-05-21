@@ -24,6 +24,7 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/menu/menumain.xml" value="0.1" />
         <entry key="app/src/main/res/xml/root_preferences.xml" value="0.11317567567567567" />
+        <entry key="cardinputwidget2/src/main/res/layout/card_input_widget2.xml" value="0.25" />
         <entry key="checkout/src/main/res/drawable-mdpi/buy_with_googlepay_button_content_w.xml" value="0.2285" />
         <entry key="checkout/src/main/res/drawable-mdpi/checkout_with_googlepay_button_content.xml" value="0.125" />
         <entry key="checkout/src/main/res/drawable-mdpi/googlepay_button_background.xml" value="0.144" />
