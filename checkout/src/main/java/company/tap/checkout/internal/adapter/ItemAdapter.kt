@@ -88,8 +88,6 @@ class ItemAdapter(
 
         val itemSeparator = holder.itemView.findViewById<TapSeparatorView>(R.id.itemseparator)
         val totalQuantity = holder.itemView.findViewById<TapTextViewNew>(R.id.total_quantity)
-        //  val discount = holder.itemView.findViewById<TapTextView>(R.id.discount_text)
-        //  val quantityRelative = holder.itemView.findViewById<RelativeLayout>(R.id.quantityRelative)
         val totalAmount = holder.itemView.findViewById<TapTextViewNew>(R.id.total_amount)
         val mainViewLinear = holder.itemView.findViewById<LinearLayout>(R.id.mainViewLinear)
         val itemName = holder.itemView.findViewById<TapTextViewNew>(R.id.item_title)

@@ -25,6 +25,7 @@
     <dimen name="margin_basic_14dp">14dp</dimen>
     <dimen name="margin_basic_15dp">15dp</dimen>
     <dimen name="margin_basic_16dp">16dp</dimen>
+    <dimen name="margin_basic_18dp">18dp</dimen>
     <dimen name="margin_basic_19dp">19dp</dimen>
     <dimen name="margin_basic_20dp">20dp</dimen>
     <dimen name="margin_basic_23dp">23dp</dimen>

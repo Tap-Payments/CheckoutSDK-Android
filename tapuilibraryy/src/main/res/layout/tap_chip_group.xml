@@ -55,7 +55,7 @@
         android:nestedScrollingEnabled="true"
         android:orientation="horizontal"
         android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:layout_gravity="center"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
