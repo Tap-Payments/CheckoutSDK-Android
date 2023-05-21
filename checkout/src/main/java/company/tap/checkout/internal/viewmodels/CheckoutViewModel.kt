@@ -958,9 +958,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
         paymentInlineViewHolder.resetPaymentCardView()
-        //itemsViewHolder.resetView()
-        //I comment   itemsViewHolder.setItemsRecylerView()
-        //  itemsViewHolder?.view?.itemRecylerView?.adapter = itemAdapter
         frameLayout.visibility = GONE
     }
 
@@ -989,13 +986,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isEnabled = true
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isClickable = true
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated = true
-        // itemsViewHolder.resetView()
-        //  itemsViewHolder.setItemsRecylerView()
-        //   itemsViewHolder.setCurrencyRecylerView()
         itemsViewHolder.view.mainCurrencyChip.chipsRecycler.adapter = currencyAdapter
-        //  itemsViewHolder.view.itemRecylerView.adapter =itemAdapter
         frameLayout.visibility = GONE
-
 
     }
 

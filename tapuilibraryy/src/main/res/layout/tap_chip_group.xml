@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/header_view"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingTop="6dp"
         android:layout_marginStart="@dimen/margin_basic_16dp"
@@ -23,6 +23,7 @@
             android:layout_gravity="start"
             android:fontFamily="sans-serif"
             android:textAllCaps="true"
+            android:paddingTop="5dp"
             android:textColor="@color/brown_grey_0"
             android:textSize="@dimen/font_size_10sp"
             app:layout_constraintBottom_toBottomOf="parent"

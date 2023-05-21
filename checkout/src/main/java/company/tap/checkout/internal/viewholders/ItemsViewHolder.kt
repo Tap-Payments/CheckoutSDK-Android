@@ -59,14 +59,14 @@ class ItemsViewHolder(private val context: Context, private val onCurrencyChange
         itemsRecyclerView = view.findViewById(R.id.itemRecylerView)
         currencyRecyclerView = mainCurrencyChip.findViewById<View>(R.id.chip_recycler) as RecyclerView
         headerview = view.findViewById<View>(R.id.header_view) as ConstraintLayout
+       // headerview.visibility=View.GONE
         itemSeparatorView = view.findViewById<View>(R.id.item_Separator) as TapSeparatorView
-        headerview.visibility = View.GONE
         mainCurrencyChip.groupName.text = LocalizationManager.getValue("currencyAlert","Common")
         mainCurrencyChip.groupName.visibility = View.VISIBLE
        /**
         * Added for spacing alignment in ar**/
-        if(CustomUtils.getCurrentLocale(context).contains("ar")) mainCurrencyChip.setPaddingRelative( MetricsUtil.convertDpToPixel(-8f,context).toInt(),0, MetricsUtil.convertDpToPixel(-8f,context).toInt(),0)
-        else mainCurrencyChip.left =( MetricsUtil.convertDpToPixel(20f,context).toInt())
+//        if(CustomUtils.getCurrentLocale(context).contains("ar")) mainCurrencyChip.setPaddingRelative( MetricsUtil.convertDpToPixel(-8f,context).toInt(),0, MetricsUtil.convertDpToPixel(-8f,context).toInt(),0)
+//        else mainCurrencyChip.left =( MetricsUtil.convertDpToPixel(20f,context).toInt())
 
 
         view.mainCurrencyChip.chipsRecycler.elevation = 0f

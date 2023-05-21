@@ -44,6 +44,7 @@ open class CurrencyViewFragment : Fragment() {
         fillData()
 
         val currencyGroup = view.findViewById<TapChipGroup>(R.id.currencyLayout1)
+
         val headerView = view.findViewById<ConstraintLayout>(R.id.header_view)
 //        headerView.visibility=View.GONE
         currencyGroup.orientation = LinearLayout.HORIZONTAL
@@ -55,6 +56,9 @@ open class CurrencyViewFragment : Fragment() {
         chipRecycler.setHasFixedSize(true)
         chipRecycler.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         chipRecycler.adapter = CurrencyAdapter(currencyList)
+//        val marginLayoutParams = ViewGroup.MarginLayoutParams(chipRecycler.layoutParams)
+//        marginLayoutParams.setMargins(0, 0, 0, 0)
+//        chipRecycler.setLayoutParams(marginLayoutParams)
         itemsRecycler = view.findViewById<View>(R.id.items_recylerview) as RecyclerView
 //        itemsRecycler.setHasFixedSize(false)
         headerView.visibility = View.GONE
