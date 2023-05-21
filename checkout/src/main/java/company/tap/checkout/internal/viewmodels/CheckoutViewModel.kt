@@ -674,20 +674,19 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     fun setBottomSheetLayout(bottomSheetLayout: FrameLayout) {
         this.bottomSheetLayout = bottomSheetLayout
         bottomSheetLayout.clipToOutline = true
-        bottomSheetLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
-        // bottomSheetLayout.setBackgroundColor(Color.RED)
-        bottomSheetLayout.let { it1 ->
-            setTopBorders(
-                it1,
-                40f,// corner raduis
-                0.0f,
-                Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),// stroke color
-                Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),// tint color
-                Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
-            )
-
-
-        }
+//        bottomSheetLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
+//        bottomSheetLayout.let { it1 ->
+//            setTopBorders(
+//                it1,
+//                40f,// corner raduis
+//                0.0f,
+//                Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),// stroke color
+//                Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),// tint color
+//                Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
+//            )
+//
+//
+//        }
     }
 
     override fun displayGoPayLogin() {
@@ -1981,15 +1980,27 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
     }
 
-    fun provideBackgroundtoBsLayout(levelDuration: Int = 7200) {
+    fun provideBackgroundtoBsLayout(levelDuration: Int = 7000) {
         /**
          * needed to be enhanced according to the bottomSheetAnimation .
          *
          */
-        bottomSheetLayout.background = context.resources.getDrawable(R.drawable.bkgd_level)
-        bottomSheetLayout.backgroundTintList =
-            ColorStateList.valueOf(loadAppThemManagerFromPath(AppColorTheme.GlobalValuesColor))
-        bottomSheetLayout.background.level = levelDuration
+     //   bottomSheetLayout.background = context.resources.getDrawable(R.drawable.bkgd_level)
+
+//        bottomSheetLayout.setBackgroundDrawable(
+//            createDrawableGradientForBlurry(
+//                loadAppThemManagerFromPath(AppColorTheme.GlobalValuesColor).let { it1 ->
+//                    intArrayOf(
+//                        it1,
+//                        it1,
+//                        it1
+//                    )
+//                }
+//            )
+//        )
+       // createDrawableGradientForBlurry()
+     //   bottomSheetLayout.setBackgroundColor(loadAppThemManagerFromPath(AppColorTheme.GlobalValuesColor))
+       // bottomSheetLayout.background.level = levelDuration
     }
 
 
@@ -2577,10 +2588,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         val bottomSheet: FrameLayout? =
             bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet)
         BottomSheetBehavior.from(bottomSheet as View).state = BottomSheetBehavior.STATE_EXPANDED
-        /* Handler().postDelayed({
-             if (::bottomSheetLayout.isInitialized)
-                 translateViewToNewHeight(bottomSheetLayout.measuredHeight, true)
-         }, 400)*/
         checkSelectedAmountInitiated()
     }
 
@@ -2621,10 +2628,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         val bottomSheet: FrameLayout? =
             bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet)
         BottomSheetBehavior.from(bottomSheet as View).state = BottomSheetBehavior.STATE_EXPANDED
-//        Handler().postDelayed({
-//            if (::bottomSheetLayout.isInitialized)
-//                translateViewToNewHeight(bottomSheetLayout.measuredHeight, false)
-//        }, animationSpeed)
         checkSelectedAmountInitiated()
     }
 
