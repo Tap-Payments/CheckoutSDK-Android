@@ -68,6 +68,7 @@ class ItemsViewHolder(private val context: Context, private val onCurrencyChange
         if(CustomUtils.getCurrentLocale(context).contains("ar")) mainCurrencyChip.setPaddingRelative( MetricsUtil.convertDpToPixel(-8f,context).toInt(),0, MetricsUtil.convertDpToPixel(-8f,context).toInt(),0)
         else mainCurrencyChip.left =( MetricsUtil.convertDpToPixel(20f,context).toInt())
 
+
         view.mainCurrencyChip.chipsRecycler.elevation = 0f
         itemsRecyclerViewAction(itemsRecyclerView)
         setRecyclerViewDivider(currencyRecyclerView)

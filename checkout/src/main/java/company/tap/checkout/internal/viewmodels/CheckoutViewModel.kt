@@ -1674,7 +1674,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         cardId
                     )
                 }, viewToBeBLur = viewToBeBlurCardViewHolder)
-
+                val viewsToDisable = mutableListOf<View>(adapter.deleteImageView as View ,amountViewHolder.view.amount_section.constraint,amountViewHolder.view.amount_section.tapChipAmount, cardViewHolder.view, cardViewHolder.view.mainChipgroup,paymentInlineViewHolder.tapCardInputView)
+                viewsToDisable.disableViews()
 
             } else {
                 // println("else block is calle are")
@@ -1711,7 +1712,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             adapter.updateShaking(false)
             if (savedCardList.isNullOrEmpty()) cardViewHolder.view.mainChipgroup?.groupAction?.visibility =
                 GONE
-
+            val viewsToEnable = mutableListOf<View>(adapter.deleteImageView as View ,businessViewHolder.view ,amountViewHolder.view.amount_section.constraint, amountViewHolder.view.amount_section.tapChipAmount, cardViewHolder.view, cardViewHolder.view.mainChipgroup, paymentInlineViewHolder.view,paymentInlineViewHolder.tapCardInputView)
+            viewsToEnable.enableViews()
         }
     }
 
@@ -2238,7 +2240,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         image = ImageView(context)
         val params = LinearLayout.LayoutParams(
-           LinearLayout.LayoutParams.WRAP_CONTENT,
+           LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
         /**
@@ -2253,16 +2255,19 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         params.gravity = Gravity.CENTER*/
         /**
          *work around condition for small logo of knet*/
-        if(CustomUtils.getCurrentLocale(context).contains("ar"))
-        {
-            if(selectedPayOpt?.brand?.contains("KNET") == true) params.setMargins(4)
-        else params.setMargins(20)
-        }else {  if(selectedPayOpt?.brand?.contains("KNET") == true) params.setMargins(4)
-        else params.setMargins(16)
+        if(CustomUtils.getCurrentLocale(context).contains("ar")) {
+            if (selectedPayOpt?.brand?.contains("KNET") == true) params.setMargins(10)
+                else params.setMargins(28)
 
-        }
 
-        image?.layoutParams = params
+        }else {
+                if (selectedPayOpt?.brand?.contains("KNET") == true) params.setMargins(4) else params.setMargins(
+                    26
+                )
+
+            }
+
+            image?.layoutParams = params
        Glide.with(context)
             .load(
                 getAssetName(
@@ -3512,7 +3517,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun filterViewModels(currency: String) {
-        var savedCards: ArrayList<SavedCard> = arrayListOf()
+        var savedCards: java.util.ArrayList<SavedCard> =  java.util.ArrayList<SavedCard>()
         if (paymentOptionsResponse.paymentOptions != null)
             paymentOptionsWorker =
                 java.util.ArrayList<PaymentOption>(paymentOptionsResponse.paymentOptions)
@@ -3522,7 +3527,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             savedCards = filterByCurrenciesAndSortList(savedCardsWorker, currency)
 
         }
-        println("savedCards>>"+savedCards.toString())
+        println("savedCards>>"+savedCards)
         println("savedCards>>"+savedCards?.size)
 
 
@@ -3544,7 +3549,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         val hasWebPaymentOptions = webPaymentOptions.size > 0
         val hasCardPaymentOptions = cardPaymentOptions.size > 0
         val hasGooglePaymentOptions = googlePaymentOptions.size > 0
-        val hasSavedCards: Boolean = savedCards.size > 0
+
+            val hasSavedCards: Boolean = savedCards.size > 0
         // println("hasGooglePaymentOptions"+hasGooglePaymentOptions)
 
         //Added if else to update showing GooglePay button based on api

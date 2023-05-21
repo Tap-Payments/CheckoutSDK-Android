@@ -576,3 +576,21 @@ fun View.fadeVisibility(visibility: Int, duration: Long = 400) {
     TransitionManager.beginDelayedTransition(this.parent as ViewGroup, transition)
     this.visibility = visibility
 }
+
+fun MutableList<View>.disableViews() {
+    this.forEachIndexed { index, view ->
+        view.isEnabled = false
+        view.isClickable = false
+        view.isActivated = false
+
+    }
+}
+
+fun MutableList<View>.enableViews() {
+    this.forEachIndexed { index, view ->
+        view.isEnabled = true
+        view.isClickable = true
+        view.isActivated = true
+
+    }
+}
