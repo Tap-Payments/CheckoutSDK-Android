@@ -1815,8 +1815,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     )
                 } else {
                     println("is this called>>>")
-                    removeAllViews()
-                    if (ThemeManager.currentTheme != null && chargeResponse != null)
+                   // removeAllViews()
+                    removeViews(amountViewHolder,cardViewHolder,paymentInlineViewHolder)
+                    saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = VISIBLE
+                    saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
+                        ActionButtonState.ERROR
+                    )
+                    /*if (ThemeManager.currentTheme != null && chargeResponse != null)
                         tabAnimatedActionButton?.setInValidBackground(
                             false,
                             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor"))
@@ -1824,33 +1829,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     else
                         tabAnimatedActionButton?.changeButtonState(
                             ActionButtonState.ERROR
-                        )
+                        )*/
 
-                    if (::businessViewHolder.isInitialized && saveCardSwitchHolder != null) {
-                        addViews(businessViewHolder, saveCardSwitchHolder)
-                        businessViewHolder.view.headerView.constraint.visibility = GONE
-                        businessViewHolder.view.topSeparatorLinear.visibility = GONE
-                        saveCardSwitchHolder?.view?.visibility = VISIBLE
-                        saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
-                        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
-                            false,
-                            Color.RED
-                        )
 
-                        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
-                            false,
-                            "en",
-                            null,
-                            Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
-                            Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
 
-                            )
-                        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
-                            ActionButtonState.ERROR
-                        )
-                        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isEnabled = true
-                        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isClickable = true
-                    }
                 }
             }
         }
