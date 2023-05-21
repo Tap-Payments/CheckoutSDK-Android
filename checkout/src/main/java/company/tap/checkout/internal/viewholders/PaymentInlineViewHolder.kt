@@ -345,6 +345,7 @@ class PaymentInlineViewHolder(
                 getPreTypedCardData()?.expirationMonth = null
                 getPreTypedCardData()?.expirationYear = null
             }
+            savedCardsModel = null
         }
     }
 
@@ -1293,8 +1294,11 @@ class PaymentInlineViewHolder(
 
                 if (s?.trim()?.length == 3 || s?.trim()?.length == 4 && tapCardInputView.isExpDateValid) {
                     if (!PaymentDataSource.getCardHolderNameShowHide()) {
-                        var paymentTyper :PaymentType
-                        if(savedCardsModel ==null)paymentTyper = PaymentType.CARD else paymentTyper = PaymentType.SavedCard
+                        var paymentTyper :PaymentType ?= PaymentType.CARD
+                        println("savedCardsModel   hhshhs"+savedCardsModel)
+                        if(savedCardsModel ==null) {
+                            paymentTyper = PaymentType.CARD
+                        } else  paymentTyper = PaymentType.SavedCard
 
                         cardNumber.toString().let {
                             expiryDate?.let { it1 ->
