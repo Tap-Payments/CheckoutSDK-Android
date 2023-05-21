@@ -76,7 +76,7 @@
             android:id="@+id/paymentFor"
             style="@style/TextStyle"
             android:layout_width="0dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="8dp"
             android:includeFontPadding="false"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="@id/tapChipIcon"

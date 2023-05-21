@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
+        android:layoutDirection="ltr"
         android:padding="10dp"
         android:text="@string/titleText"
         android:textColor="@color/dark_gray"
