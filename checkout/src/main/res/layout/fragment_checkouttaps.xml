@@ -15,6 +15,8 @@
         android:layout_height="match_parent"
         android:fillViewport="true"
         android:orientation="vertical"
+        app:cardElevation="0dp"
+
         android:windowSoftInputMode="adjustResize|adjustPan"
         app:cardBackgroundColor="#07FFFFFF"
         tools:context=".open.CheckoutFragment">
