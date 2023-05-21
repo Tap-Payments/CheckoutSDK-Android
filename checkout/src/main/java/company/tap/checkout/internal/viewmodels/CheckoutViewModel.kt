@@ -3512,7 +3512,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun filterViewModels(currency: String) {
-        var savedCards: java.util.ArrayList<SavedCard>? = null
+        var savedCards: ArrayList<SavedCard> = arrayListOf()
         if (paymentOptionsResponse.paymentOptions != null)
             paymentOptionsWorker =
                 java.util.ArrayList<PaymentOption>(paymentOptionsResponse.paymentOptions)
@@ -3522,7 +3522,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             savedCards = filterByCurrenciesAndSortList(savedCardsWorker, currency)
 
         }
-        println("savedCards>>"+savedCards)
+        println("savedCards>>"+savedCards.toString())
         println("savedCards>>"+savedCards?.size)
 
 
@@ -3544,7 +3544,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         val hasWebPaymentOptions = webPaymentOptions.size > 0
         val hasCardPaymentOptions = cardPaymentOptions.size > 0
         val hasGooglePaymentOptions = googlePaymentOptions.size > 0
-        val hasSavedCards: Boolean = savedCards?.size!! > 0
+        val hasSavedCards: Boolean = savedCards.size > 0
         // println("hasGooglePaymentOptions"+hasGooglePaymentOptions)
 
         //Added if else to update showing GooglePay button based on api
