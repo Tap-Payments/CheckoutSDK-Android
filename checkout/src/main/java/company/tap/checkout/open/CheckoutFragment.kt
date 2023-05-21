@@ -13,7 +13,6 @@ import android.os.Handler
 import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -148,13 +147,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         topHeaderView = view.findViewById(R.id.tab_brand_view)
 
         topHeaderView?.visibility = View.GONE
-        topHeaderView?.poweredByImage?.setImageResource(R.drawable.powered_by_tap)
-        topHeaderView?.poweredByImage?.scaleType = ImageView.ScaleType.CENTER_CROP
-        topHeaderView?.poweredByImage?.layoutParams?.width = context.getDimensionsInDp(120)
-
-
-
-
 
         displayMetrics = CustomUtils.getDeviceDisplayMetrics(context as Activity)
         val heightscreen: Int = Resources.getSystem().displayMetrics.heightPixels
@@ -228,7 +220,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                                         this,
                                         it2,
                                         cardViewModel, this, headerLayout!!,
-                                        coordinatorLayout)
+                                        coordinatorLayout,topHeaderView)
                                 }
                             }
 

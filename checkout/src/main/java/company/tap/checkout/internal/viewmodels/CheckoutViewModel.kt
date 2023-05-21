@@ -6,14 +6,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.graphics.drawable.ShapeDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.text.format.DateFormat
 import android.util.Log
-import android.view.Gravity
 import android.view.View
 import android.view.View.*
 import android.view.ViewGroup
@@ -27,7 +25,6 @@ import androidx.annotation.RestrictTo
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
-import androidx.core.view.setMargins
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -37,14 +34,7 @@ import cards.pay.paycardsrecognizer.sdk.FrameManager
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import com.bugfender.sdk.Bugfender
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.Target
-import com.bumptech.glide.request.target.Target.SIZE_ORIGINAL
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.android.gms.wallet.PaymentData
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -107,6 +97,7 @@ import company.tap.tapuilibraryy.uikit.ktx.makeLinks
 import company.tap.tapuilibraryy.uikit.ktx.setTopBorders
 import company.tap.tapuilibraryy.uikit.utils.MetricsUtil
 import company.tap.tapuilibraryy.uikit.views.TabAnimatedActionButton
+import company.tap.tapuilibraryy.uikit.views.TapBrandView
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.businessview_layout.view.*
 import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
@@ -228,6 +219,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @SuppressLint("StaticFieldLeak")
     private lateinit var sdkLayout: LinearLayout
+    private  var topHeaderView: TapBrandView?=null
+
 
     private lateinit var checkoutFragment: CheckoutFragment
     private lateinit var itemList: List<ItemsModel>
@@ -311,6 +304,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         checkoutFragment: CheckoutFragment,
         headerLayout: LinearLayout,
         coordinatorLayout: CoordinatorLayout?,
+        topHeaderView: TapBrandView?,
     ) {
         this.context = context
         this.fragmentManager = fragmentManager
@@ -324,6 +318,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         this.cardViewModel = cardViewModel
         this.checkoutFragment = checkoutFragment
         this.headerLayout = headerLayout
+        this.topHeaderView = topHeaderView
 
         initializeScanner(this)
         initViewHolders()
@@ -1768,7 +1763,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         if (response.contains("failure") && chargeResponse == null) {
 
             if (::webFrameLayout.isInitialized) {
-                provideBackgroundtoBsLayout(7800)
+                provideBackgroundtoBsLayout(8000)
                 showAnimatedButtonRegardingWebViewDismiss(
                     viewToFadeOut = webFrameLayout,
                     isSuccess = false
@@ -1785,7 +1780,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 if (::webViewHolder.isInitialized) {
                     showAnimatedButtonRegardingWebViewDismiss(viewToFadeOut = webViewHolder.view)
                 } else if (::webFrameLayout.isInitialized) {
-                    provideBackgroundtoBsLayout(7800)
+                    provideBackgroundtoBsLayout(8000)
                     showAnimatedButtonRegardingWebViewDismiss(viewToFadeOut = webFrameLayout)
                 } else {
                     saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = VISIBLE
@@ -1799,7 +1794,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             ChargeStatus.RESTRICTED, ChargeStatus.ABANDONED, ChargeStatus.VOID, ChargeStatus.INVALID -> {
 
                 if (::webFrameLayout.isInitialized) {
-                    provideBackgroundtoBsLayout(7800)
+                    provideBackgroundtoBsLayout(8000)
                     showAnimatedButtonRegardingWebViewDismiss(
                         viewToFadeOut = webFrameLayout,
                         isSuccess = false
@@ -1980,27 +1975,19 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
     }
 
-    fun provideBackgroundtoBsLayout(levelDuration: Int = 7000) {
+    fun provideBackgroundtoBsLayout(levelDuration: Int = 7500) {
         /**
          * needed to be enhanced according to the bottomSheetAnimation .
          *
          */
-     //   bottomSheetLayout.background = context.resources.getDrawable(R.drawable.bkgd_level)
+       Log.e("height bs ",bottomSheetLayout.measuredHeight.toString())
+        Log.e("height topheader ", topHeaderView?.measuredHeight?.toString().toString())
+        Log.e("height bs after ",bottomSheetLayout.measuredHeight.minus(topHeaderView?.measuredHeight!!).toString())
 
-//        bottomSheetLayout.setBackgroundDrawable(
-//            createDrawableGradientForBlurry(
-//                loadAppThemManagerFromPath(AppColorTheme.GlobalValuesColor).let { it1 ->
-//                    intArrayOf(
-//                        it1,
-//                        it1,
-//                        it1
-//                    )
-//                }
-//            )
-//        )
-       // createDrawableGradientForBlurry()
-     //   bottomSheetLayout.setBackgroundColor(loadAppThemManagerFromPath(AppColorTheme.GlobalValuesColor))
-       // bottomSheetLayout.background.level = levelDuration
+        bottomSheetLayout.background = context.resources.getDrawable(R.drawable.bkgd_level)
+        bottomSheetLayout.backgroundTintList =
+            ColorStateList.valueOf(loadAppThemManagerFromPath(AppColorTheme.GlobalValuesColor))
+        bottomSheetLayout.background.level = levelDuration
     }
 
 

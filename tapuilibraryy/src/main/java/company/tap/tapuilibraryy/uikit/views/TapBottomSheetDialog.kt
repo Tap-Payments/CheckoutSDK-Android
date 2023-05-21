@@ -69,24 +69,8 @@ open class TapBottomSheetDialog : BottomSheetDialogFragment() {
         bottomSheetDialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
         bottomSheetDialog.setOnShowListener {
             val dialog = it as BottomSheetDialog
-            val bottomSheetLayout = dialog.findViewById<FrameLayout>(R.id.design_bottom_sheet)
-
-
-            val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetLayout!!)
-            bottomSheetBehavior.isDraggable
-            bottomSheetBehavior.isHideable = true
             bottomSheetDialog.behavior.peekHeight
 
-            bottomSheetBehavior.addBottomSheetCallback(object :
-                BottomSheetBehavior.BottomSheetCallback() {
-                override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                    tapBottomDialogInterface?.onSlide(slideOffset)
-                }
-
-                override fun onStateChanged(bottomSheet: View, newState: Int) {
-                    tapBottomDialogInterface?.onStateChanged(newState)
-                }
-            })
 
             setSeparatorTheme()
         }
@@ -105,14 +89,13 @@ open class TapBottomSheetDialog : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setDialogConfigurations()
-        changeBackground()
+//        setDialogConfigurations()
+//        changeBackground()
     }
 
     private fun changeBackground() {
         bottomSheetDialog.setOnShowListener {
             bottomSheetLayout = bottomSheetDialog.findViewById(R.id.design_bottom_sheet)
-         //   bottomSheetLayout?.background = getBackgroundDrawable()
             tapBottomDialogInterface?.onShow()
         }
     }
@@ -121,35 +104,7 @@ open class TapBottomSheetDialog : BottomSheetDialogFragment() {
         arguments?.let {
             dialog?.setCanceledOnTouchOutside(it.getBoolean(DialogConfigurations.Cancelable, true))
             dialog?.window?.setDimAmount(it.getFloat(DialogConfigurations.Dim, 1.5f))
-//            backgroundColor = it.getInt(
-//                DialogConfigurations.Color,
-//                Color.parseColor(ThemeManager.getValue("merchantHeaderView.backgroundColor"))
-//            )
-//            val corners = it.getFloatArray(DialogConfigurations.Corners)
-//            corners?.let { array ->
-//                topLeftCorner = array[0]
-//                topRightCorner = array[1]
-//                bottomRightCorner = array[2]
-//                bottomLeftCorner = array[3]
-//            }
         }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.Q)
-    private fun getBackgroundDrawable(): Drawable {
-        val shape = ShapeDrawable(
-            RoundRectShape(
-                floatArrayOf(
-                    topLeftCorner, topLeftCorner,
-                    topRightCorner, topRightCorner,
-                    bottomRightCorner, bottomRightCorner,
-                    bottomLeftCorner, bottomLeftCorner
-                ),
-                null, null
-            )
-        )
-        shape.colorFilter = BlendModeColorFilter(Color.parseColor("#343434"), BlendMode.SRC_ATOP)
-        return shape
     }
 
     override fun onDismiss(dialog: DialogInterface) {
