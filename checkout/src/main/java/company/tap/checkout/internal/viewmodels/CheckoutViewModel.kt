@@ -2241,31 +2241,22 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         image = ImageView(context)
         val params = LinearLayout.LayoutParams(
            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
+            LinearLayout.LayoutParams.MATCH_PARENT
         )
-        /**
-         * will fix later to be dynamic*/
- /*val params = LinearLayout.LayoutParams(
-           MetricsUtil.convertDpToPixel(130f,context).toInt(),
-        MetricsUtil.convertDpToPixel(18f,context).toInt()
-        )
-
-        params.setMargins(MetricsUtil.convertDpToPixel(132f,context).toInt(),MetricsUtil.convertDpToPixel(10f,context).toInt(),MetricsUtil.convertDpToPixel(132f,context).toInt(),0)
-      //  params.topMargin=MetricsUtil.convertDpToPixel(15f,context).toInt()
-        params.gravity = Gravity.CENTER*/
         /**
          *work around condition for small logo of knet*/
         if(CustomUtils.getCurrentLocale(context).contains("ar")) {
-            if (selectedPayOpt?.brand?.contains("KNET") == true) params.setMargins(10)
-                else params.setMargins(28)
-
+//            if (selectedPayOpt?.brand?.contains("KNET") == true) params.setMargins(10)
+//                else
+    params.setMargins(MetricsUtil.convertDpToPixel(100f,context).toInt(),MetricsUtil.convertDpToPixel(5f,context).toInt(),MetricsUtil.convertDpToPixel(100f,context).toInt(),MetricsUtil.convertDpToPixel(5f,context).toInt())
 
         }else {
-                if (selectedPayOpt?.brand?.contains("KNET") == true) params.setMargins(4) else params.setMargins(
-                    26
-                )
+                if (selectedPayOpt?.brand?.contains("KNET") == true)  params.setMargins(MetricsUtil.convertDpToPixel(80f,context).toInt(),MetricsUtil.convertDpToPixel(5f,context).toInt(),MetricsUtil.convertDpToPixel(80f,context).toInt(),MetricsUtil.convertDpToPixel(5f,context).toInt())
+                else
+                    params.setMargins(MetricsUtil.convertDpToPixel(120f,context).toInt(),MetricsUtil.convertDpToPixel(10f,context).toInt(),MetricsUtil.convertDpToPixel(120f,context).toInt(),MetricsUtil.convertDpToPixel(10f,context).toInt())
 
-            }
+
+        }
 
             image?.layoutParams = params
        Glide.with(context)
