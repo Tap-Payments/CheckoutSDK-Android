@@ -1763,7 +1763,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         if (response.contains("failure") && chargeResponse == null) {
 
             if (::webFrameLayout.isInitialized) {
-                provideBackgroundtoBsLayout(8000)
+                provideBackgroundtoBsLayout(8300)
                 showAnimatedButtonRegardingWebViewDismiss(
                     viewToFadeOut = webFrameLayout,
                     isSuccess = false
@@ -1794,7 +1794,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             ChargeStatus.RESTRICTED, ChargeStatus.ABANDONED, ChargeStatus.VOID, ChargeStatus.INVALID -> {
 
                 if (::webFrameLayout.isInitialized) {
-                    provideBackgroundtoBsLayout(8000)
+                    provideBackgroundtoBsLayout(8300)
                     showAnimatedButtonRegardingWebViewDismiss(
                         viewToFadeOut = webFrameLayout,
                         isSuccess = false
