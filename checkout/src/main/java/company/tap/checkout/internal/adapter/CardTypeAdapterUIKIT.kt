@@ -84,6 +84,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
     // A client for interacting with the Google Pay API.
     private var paymentsClient: PaymentsClient? = null
+     var deleteImageView: ImageView? = null
 
     companion object {
         private const val TYPE_SAVED_CARD = 5
@@ -438,7 +439,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     }
 
     private fun setSavedCardShakingAnimation(holder: RecyclerView.ViewHolder) {
-
+        deleteImageView = holder.itemView.deleteImageViewSaved
         holder.itemView.deleteImageViewSaved.setImageResource(deleteIcon)
         if (isShaking) {
             Log.d("isShaking", isShaking.toString())

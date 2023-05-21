@@ -72,6 +72,7 @@
         <entry key="checkout/src/main/res/layout/view_in_googlepay_button.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/view_in_googlepay_button_no_shadow.xml" value="0.13648648648648648" />
         <entry key="checkout/src/main/res/layout/web_view_layout.xml" value="0.21552604698672115" />
+        <entry key="tapuilibraryy/src/main/res/layout/tap_main_amount.xml" value="0.1" />
       </map>
     </option>
   </component>

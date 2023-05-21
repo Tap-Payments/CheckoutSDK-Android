@@ -1674,7 +1674,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         cardId
                     )
                 }, viewToBeBLur = viewToBeBlurCardViewHolder)
-
+                val viewsToDisable = mutableListOf<View>(adapter.deleteImageView as View ,amountViewHolder.view.amount_section.constraint,amountViewHolder.view.amount_section.tapChipAmount, cardViewHolder.view, cardViewHolder.view.mainChipgroup,paymentInlineViewHolder.tapCardInputView)
+                viewsToDisable.disableViews()
 
             } else {
                 // println("else block is calle are")
@@ -1711,7 +1712,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             adapter.updateShaking(false)
             if (savedCardList.isNullOrEmpty()) cardViewHolder.view.mainChipgroup?.groupAction?.visibility =
                 GONE
-
+            val viewsToEnable = mutableListOf<View>(adapter.deleteImageView as View ,businessViewHolder.view ,amountViewHolder.view.amount_section.constraint, amountViewHolder.view.amount_section.tapChipAmount, cardViewHolder.view, cardViewHolder.view.mainChipgroup, paymentInlineViewHolder.view,paymentInlineViewHolder.tapCardInputView)
+            viewsToEnable.enableViews()
         }
     }
 
@@ -3515,7 +3517,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun filterViewModels(currency: String) {
-        var savedCards: java.util.ArrayList<SavedCard>? = null
+        var savedCards: java.util.ArrayList<SavedCard> =  java.util.ArrayList<SavedCard>()
         if (paymentOptionsResponse.paymentOptions != null)
             paymentOptionsWorker =
                 java.util.ArrayList<PaymentOption>(paymentOptionsResponse.paymentOptions)
@@ -3547,7 +3549,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         val hasWebPaymentOptions = webPaymentOptions.size > 0
         val hasCardPaymentOptions = cardPaymentOptions.size > 0
         val hasGooglePaymentOptions = googlePaymentOptions.size > 0
-        val hasSavedCards: Boolean = savedCards?.size!! > 0
+
+            val hasSavedCards: Boolean = savedCards.size > 0
         // println("hasGooglePaymentOptions"+hasGooglePaymentOptions)
 
         //Added if else to update showing GooglePay button based on api
