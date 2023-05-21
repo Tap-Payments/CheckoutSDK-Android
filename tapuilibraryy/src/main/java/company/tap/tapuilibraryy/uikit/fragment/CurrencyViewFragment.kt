@@ -34,7 +34,9 @@ open class CurrencyViewFragment : Fragment() {
     lateinit var currencyList: ArrayList<CurrencyModel>
 
     private lateinit var itemsRecycler: RecyclerView
-    private val itemList: ArrayList<Int> = arrayListOf(1, 2, 3, 4, 5, 6,7,8,9,10,11,12,13,14,15,16,17,18,20,21,22)
+    private val itemList: ArrayList<Int> =
+        arrayListOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 21, 22)
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,18 +51,14 @@ open class CurrencyViewFragment : Fragment() {
 //        headerView.visibility=View.GONE
         currencyGroup.orientation = LinearLayout.HORIZONTAL
         val groupName = currencyGroup.findViewById<TapTextViewNew>(R.id.group_name)
-        groupName.visibility=View.GONE
+        groupName.visibility = View.GONE
         val groupAction = currencyGroup.findViewById<TapTextViewNew>(R.id.group_action)
-        groupAction.visibility=View.GONE
+        groupAction.visibility = View.GONE
         chipRecycler = currencyGroup.findViewById<View>(R.id.chip_recycler) as RecyclerView
         chipRecycler.setHasFixedSize(true)
         chipRecycler.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         chipRecycler.adapter = CurrencyAdapter(currencyList)
-//        val marginLayoutParams = ViewGroup.MarginLayoutParams(chipRecycler.layoutParams)
-//        marginLayoutParams.setMargins(0, 0, 0, 0)
-//        chipRecycler.setLayoutParams(marginLayoutParams)
         itemsRecycler = view.findViewById<View>(R.id.items_recylerview) as RecyclerView
-//        itemsRecycler.setHasFixedSize(false)
         headerView.visibility = View.GONE
 
         itemsRecycler.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
@@ -141,7 +139,6 @@ open class CurrencyViewFragment : Fragment() {
         )
 
     }
-
 
 
     fun setTheme() {

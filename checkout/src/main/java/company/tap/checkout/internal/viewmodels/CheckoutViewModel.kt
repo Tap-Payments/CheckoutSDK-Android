@@ -2132,7 +2132,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     ) {
         val payStringButton: String
 
-        provideBackgroundtoSdkLayout()
+        provideBackgroundtoBsLayout()
         when (PaymentDataSource.getTransactionMode()) {
             TransactionMode.TOKENIZE_CARD -> payStringButton = LocalizationManager.getValue(
                 "pay",
