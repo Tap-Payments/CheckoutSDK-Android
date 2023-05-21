@@ -1222,6 +1222,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         showWebView()
                     }
                 )
+                if(!fragmentManager.isDestroyed)
                 fragmentManager.beginTransaction()
                     .replace(R.id.webFrameLayout, fragment, "webFragment")
                     .addToBackStack("webFragment")
