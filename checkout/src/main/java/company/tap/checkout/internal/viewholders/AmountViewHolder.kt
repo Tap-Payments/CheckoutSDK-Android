@@ -67,18 +67,9 @@ class AmountViewHolder(
 
     override fun bindViewComponents() {
         view.amount_section.setAmountViewDataSource(getAmountDataSourceFromAPIs())
-        view.amount_section.tapChipAmount.layoutParams.width = view.context.getDimensionsInDp(97)
-        view.amount_section.tapChipAmount.layoutParams.height = view.context.getDimensionsInDp(22)
-        view.amount_section.tapChipPopup.layoutParams.width = view.context.getDimensionsInDp(97)
-        view.amount_section.tapChipPopup.layoutParams.height = view.context.getDimensionsInDp(22)
-        view.amount_section.tapChipPopup.layoutParams.height = view.context.getDimensionsInDp(22)
         view.amount_section.tapChipPopup.visibility = View.INVISIBLE
-
         view.amount_section.amountImageView.setImageResource(dropDownIcon)
-
         view.amount_section.findViewById<ConstraintLayout>(R.id.constraint).layoutParams.height = view.context.getDimensionsInDp(70)
-
-
         view.amount_section.mainKDAmountValue.setMargins(0,10,0,15)
 
 

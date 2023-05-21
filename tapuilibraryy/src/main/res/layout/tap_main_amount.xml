@@ -71,8 +71,8 @@
 
     <company.tap.tapuilibraryy.uikit.atoms.TapChip
         android:id="@+id/tapChipAmount"
-        android:layout_width="100dp"
-        android:layout_height="@dimen/margin_basic_24dp"
+        android:layout_width="97dp"
+        android:layout_height="22dp"
         app:cardElevation="@dimen/margin_basic_0dp"
         android:elevation="@dimen/margin_basic_0dp"
 
@@ -136,8 +136,8 @@
 
     <company.tap.tapuilibraryy.uikit.atoms.TapChip
         android:id="@+id/tapChipPopup"
-        android:layout_width="100dp"
-        android:layout_height="@dimen/margin_basic_24dp"
+        android:layout_width="97dp"
+        android:layout_height="22dp"
         app:cardElevation="@dimen/margin_basic_0dp"
         android:elevation="@dimen/margin_basic_0dp"
 

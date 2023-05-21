@@ -30,8 +30,8 @@ class TapAmountSectionView : LinearLayout {
     val itemAmountText by lazy { findViewById<TapTextViewNew>(R.id.itemAmountText) }
     val amountImageView by lazy { findViewById<TapImageView>(R.id.amountImageView) }
     val itemAmountLayout by lazy { findViewById<LinearLayout>(R.id.item_amount_Layout) }
-    val tapChipAmount by lazy { findViewById<TapChip>(R.id.tapChipAmount) } //todo framelayout changed to chip was giving error
-    val tapChipPopup by lazy { findViewById<TapChip>(R.id.tapChipPopup) }  //todo framelayout changed to chip was giving error
+    val tapChipAmount by lazy { findViewById<TapChip>(R.id.tapChipAmount) }
+    val tapChipPopup by lazy { findViewById<TapChip>(R.id.tapChipPopup) }
     val itemPopupLayout by lazy { findViewById<LinearLayout>(R.id.item_popup_Layout) }
     val flagImageView by lazy { findViewById<TapImageView>(R.id.flagImageView) }
     val popupTextView by lazy { findViewById<TapTextViewNew>(R.id.popupTextView) }
