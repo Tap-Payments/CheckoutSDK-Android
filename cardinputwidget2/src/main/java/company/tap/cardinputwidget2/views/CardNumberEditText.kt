@@ -250,8 +250,10 @@ class CardNumberEditText @JvmOverloads constructor(
 
                     isCardNumberValid = CardUtils.isValidCardNumber(fieldText)
                     textcard = fieldText
-
-                    shouldShowError = !isCardNumberValid
+/**
+ * Stopped red error for checkout*/
+                   // shouldShowError = !isCardNumberValid
+                    shouldShowError = false
                     if (!wasCardNumberValid && isCardNumberValid) {
                         backSpace = false
                         originalStr = s.toString()
