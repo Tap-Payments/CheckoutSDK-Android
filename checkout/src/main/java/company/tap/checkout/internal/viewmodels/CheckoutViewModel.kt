@@ -1784,7 +1784,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             ChargeStatus.CAPTURED, ChargeStatus.AUTHORIZED, ChargeStatus.VALID, ChargeStatus.IN_PROGRESS -> {
                 if (::webViewHolder.isInitialized) {
                     showAnimatedButtonRegardingWebViewDismiss(viewToFadeOut = webViewHolder.view)
-                } else if (::webFrameLayout.isInitialized) {
+                } else if (::webFrameLayout.isInitialized && webFrameLayout.isVisible) {
                     provideBackgroundtoBsLayout(8000)
                     showAnimatedButtonRegardingWebViewDismiss(viewToFadeOut = webFrameLayout)
                 } else {
@@ -1969,10 +1969,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
          * needed to be enhanced according to the bottomSheetAnimation .
          *
          */
-       Log.e("height bs ",bottomSheetLayout.measuredHeight.toString())
-        Log.e("height topheader ", topHeaderView?.measuredHeight?.toString().toString())
-        Log.e("height bs after ",bottomSheetLayout.measuredHeight.minus(topHeaderView?.measuredHeight!!).toString())
-
         bottomSheetLayout.background = context.resources.getDrawable(R.drawable.bkgd_level)
         bottomSheetLayout.backgroundTintList =
             ColorStateList.valueOf(loadAppThemManagerFromPath(AppColorTheme.GlobalValuesColor))
@@ -2780,7 +2776,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         } else {
             amountViewHolder.updateSelectedCurrency(
-                displayItemsOpen,
+                true,
                 selectedAmount,
                 selectedCurrency,
                 currentAmount,
@@ -2810,12 +2806,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
 
 
-        if (paymentInlineViewHolder.tapCardInputView.isNotEmpty()) {
-            paymentInlineViewHolder.tapCardInputView.clear()
-            paymentInlineViewHolder.tapAlertView?.fadeVisibility(GONE, 500)
-            paymentInlineViewHolder.acceptedCardText.visibility = VISIBLE
-            paymentInlineViewHolder.tabLayout.resetBehaviour()
-        }
+//        if (paymentInlineViewHolder.tapCardInputView.isNotEmpty()) {
+//            paymentInlineViewHolder.tapCardInputView.clear()
+//            paymentInlineViewHolder.tapAlertView?.fadeVisibility(GONE, 500)
+//            paymentInlineViewHolder.acceptedCardText.visibility = VISIBLE
+//            paymentInlineViewHolder.tabLayout.resetBehaviour()
+//        }
 
         adapter.resetSelection()
 

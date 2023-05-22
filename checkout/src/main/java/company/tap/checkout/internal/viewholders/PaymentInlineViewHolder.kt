@@ -417,7 +417,7 @@ class PaymentInlineViewHolder(
     fun clearCardInputAction() {
 
         if (selectedType == PaymentTypeEnum.card) {
-            tapCardInputView.clear()
+          //  tapCardInputView.clear()
             tapCardInputView.clearFocus()
             switchViewHolder?.setSwitchLocals(PaymentTypeEnum.card)
         } else if (selectedType == PaymentTypeEnum.telecom) {
@@ -427,6 +427,8 @@ class PaymentInlineViewHolder(
         tapCardInputView.setSingleCardInput(
             CardBrandSingle.Unknown, null
         )
+
+
 //        switchViewHolder11?.view?.cardSwitch?.switchesLayout?.visibility = View.VISIBLE
         switchViewHolder?.view?.mainSwitch?.mainSwitchLinear?.visibility = View.VISIBLE
         tapAlertView?.fadeVisibility(View.GONE, 500)
@@ -1142,7 +1144,7 @@ class PaymentInlineViewHolder(
 
                 if (cardInputUIStatus != CardInputUIStatus.SavedCard) {
                     onCardTextChange(s)
-                    cardNumAfterTextChangeListener(s, this)
+                   cardNumAfterTextChangeListener(s.toString().trim(), this)
 
                 }
 
@@ -1504,9 +1506,6 @@ class PaymentInlineViewHolder(
             cardBrandDetection(charSequence.toString())
             if (card != null) checkValidationState(card,charSequence.toString(),textWatcher)
         }
-        /* if(resetView){
-             resetTouchView()
-         }*/
 
     }
 
@@ -2005,7 +2004,7 @@ class PaymentInlineViewHolder(
 
         if (cardBrand != null && !cardBrandArrayList.contains(cardBrand.name)) {
             clearCardInputAction()
-            tapCardInputView.clear()
+          //  tapCardInputView.clear()
             tabLayout.resetBehaviour()
             /*CustomUtils.showDialog(
                 LocalizationManager.getValue(
