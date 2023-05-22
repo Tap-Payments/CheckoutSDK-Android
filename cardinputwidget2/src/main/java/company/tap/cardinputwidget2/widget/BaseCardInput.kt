@@ -59,7 +59,7 @@ internal interface BaseCardInput {
 
     fun clear()
 
-    fun cardFormHasFocus(hasFocus: Boolean)
+
 
     fun setCardNumber(cardNumber: String?, hasFocus: Boolean)
     fun setCardNumberMasked(cardNumber: String?)

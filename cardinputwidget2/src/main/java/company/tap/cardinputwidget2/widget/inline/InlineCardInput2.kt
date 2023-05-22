@@ -1056,7 +1056,7 @@ class InlineCardInput2 @JvmOverloads constructor(
           //  println("view>>"+findFocus().hasFocus())
 
             println("cardNumberEditText.isCardNumberValid"+cardNumberEditText.isCardNumberValid)
-            cardFormHasFocus(hasFocus)
+            cardInputListener?.cardFormHasFocus(hasFocus)
 
         if (hasFocus && cardNumberEditText.originalStr!=null ) {
 

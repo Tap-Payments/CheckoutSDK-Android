@@ -212,7 +212,7 @@ class PaymentInlineViewHolder(
         initializeIcons()
        // initializeCardBrandView()
         initCustomerDetailView()
-
+        tapCardInputView.setCardInputListener(this)
 
         /**
          * set separator background
@@ -1767,17 +1767,24 @@ class PaymentInlineViewHolder(
         if (view.layoutDirection == View.LAYOUT_DIRECTION_RTL) {
             cardNumber = cardNumber?.reversed()
         }
-        hideViewONScanNFC()
+
 
     }
 
     override fun onCvcComplete() {}
+    override fun cardFormHasFocus(hasFocus: Boolean) {
+        println("cardFormHasFocus>>>>" + hasFocus)
+       checkoutViewModel.resetViewHolder()
+    }
+
 
     override fun onExpirationComplete() {
-        if (cardInputUIStatus == CardInputUIStatus.SavedCard) {
+        /*if (cardInputUIStatus == CardInputUIStatus.SavedCard) {
             onFocusChange(CardInputListener.FocusField.FOCUS_CVC)
-        }
+        }*/
     }
+
+
 
     override fun onFocusChange(focusField: String) {
         lastFocusField = focusField

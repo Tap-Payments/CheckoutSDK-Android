@@ -1908,6 +1908,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     override fun resetViewHolder() {
         adapter.resetSelection()
+        cardViewHolder?.cardInfoHeaderText.text =  LocalizationManager.getValue("cardSectionTitleOr", "TapCardInputKit")
         unActivateActionButton()
     }
 
