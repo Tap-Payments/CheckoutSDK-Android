@@ -417,7 +417,7 @@ class PaymentInlineViewHolder(
     fun clearCardInputAction() {
 
         if (selectedType == PaymentTypeEnum.card) {
-          // tapCardInputView.clear()
+           tapCardInputView.clear()
             tapCardInputView.clearFocus()
             switchViewHolder?.setSwitchLocals(PaymentTypeEnum.card)
         } else if (selectedType == PaymentTypeEnum.telecom) {
@@ -2004,7 +2004,7 @@ class PaymentInlineViewHolder(
 
         if (cardBrand != null && !cardBrandArrayList.contains(cardBrand.name)) {
             clearCardInputAction()
-           // tapCardInputView.clear()
+            tapCardInputView.clear()
             tabLayout.resetBehaviour()
             /*CustomUtils.showDialog(
                 LocalizationManager.getValue(
