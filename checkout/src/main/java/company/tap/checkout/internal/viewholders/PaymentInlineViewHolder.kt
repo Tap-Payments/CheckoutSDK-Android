@@ -417,7 +417,7 @@ class PaymentInlineViewHolder(
     fun clearCardInputAction() {
 
         if (selectedType == PaymentTypeEnum.card) {
-            tapCardInputView.clear()
+          // tapCardInputView.clear()
             tapCardInputView.clearFocus()
             switchViewHolder?.setSwitchLocals(PaymentTypeEnum.card)
         } else if (selectedType == PaymentTypeEnum.telecom) {
@@ -1125,7 +1125,6 @@ class PaymentInlineViewHolder(
                 println("before>>" + before)
                 println("count>>" + count)
                 if (mPreviousCount > count) {
-                    println("calld>>" + mPreviousCount)
                     // delete character action have done
                     // do what ever you want
                     // Log.d("MainActivityTag", "Character deleted");
@@ -1140,7 +1139,7 @@ class PaymentInlineViewHolder(
                 mPreviousCount = count;
 
 
-                if (cardInputUIStatus != CardInputUIStatus.SavedCard) {
+                if (cardInputUIStatus != CardInputUIStatus.SavedCard ) {
                     onCardTextChange(s)
                     cardNumAfterTextChangeListener(s, this)
 
@@ -2005,7 +2004,7 @@ class PaymentInlineViewHolder(
 
         if (cardBrand != null && !cardBrandArrayList.contains(cardBrand.name)) {
             clearCardInputAction()
-            tapCardInputView.clear()
+           // tapCardInputView.clear()
             tabLayout.resetBehaviour()
             /*CustomUtils.showDialog(
                 LocalizationManager.getValue(
