@@ -1129,13 +1129,13 @@ class PaymentInlineViewHolder(
                     // delete character action have done
                     // do what ever you want
                     // Log.d("MainActivityTag", "Character deleted");
-                    //COmmented ToDO
-                    //  intertabLayout.visibility = View.VISIBLE
-                    // tabLayout.visibility = View.VISIBLE
-                    //  acceptedCardText.visibility = View.VISIBLE
+                   /* if(tapCardInputView.cardNumberIsValid()){
+                        tapCardInputView.setCardNumberTextWatcher(textWatcher)
+                    }else  tapCardInputView.removeCardNumberTextWatcher(textWatcher)*/
                     tabLayout?.fadeVisibility(View.VISIBLE)
                     intertabLayout?.fadeVisibility(View.VISIBLE)
                     acceptedCardText?.fadeVisibility(View.VISIBLE)
+
                 }
                 mPreviousCount = count;
 
@@ -1502,7 +1502,7 @@ class PaymentInlineViewHolder(
             shouldShowScannerOptions = it.isEmpty()
             controlScannerOptions()
             cardBrandDetection(charSequence.toString())
-            if (card != null) checkValidationState(card,charSequence.toString())
+            if (card != null) checkValidationState(card,charSequence.toString(),textWatcher)
         }
         /* if(resetView){
              resetTouchView()
@@ -1606,7 +1606,7 @@ class PaymentInlineViewHolder(
     }
 
 
-    private fun checkValidationState(card: DefinedCardBrand, charSequence :String) {
+    private fun checkValidationState(card: DefinedCardBrand, charSequence :String,textWatcher :TextWatcher) {
         if (card.cardBrand != null)
             when (card.validationState) {
 
@@ -2007,12 +2007,22 @@ class PaymentInlineViewHolder(
             clearCardInputAction()
             tapCardInputView.clear()
             tabLayout.resetBehaviour()
-            CustomUtils.showDialog(
+            /*CustomUtils.showDialog(
                 LocalizationManager.getValue(
                     "alertUnsupportedCardTitle",
                     "AlertBox"
                 ),
                 LocalizationManager.getValue("alertUnsupportedCardMessage", "AlertBox"),
+                context,
+                1,
+                baseLayoutManager,
+                null,
+                null,
+                true
+            )*/
+            CustomUtils.showDialog(
+                "alert",
+                "cardnot supported",
                 context,
                 1,
                 baseLayoutManager,

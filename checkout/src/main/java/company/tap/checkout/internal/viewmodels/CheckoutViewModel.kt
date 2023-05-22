@@ -1680,7 +1680,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             adapter.updateShaking(false)
             deleteCard = false
 
-        } else if (response == "OK") {
+        } else if (response == "DONE") {
             if (cardTypeDialog == true) {
                 paymentInlineViewHolder.tapCardInputView.clear()
                 paymentInlineViewHolder.tabLayout.resetBehaviour()
@@ -2162,46 +2162,51 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         } else selectedPayOpt = paymentOptObject
 
+      //  println("selectedPayOpt are"+selectedPayOpt)
 
-        if (CustomUtils.getCurrentTheme().contains("dark")) {
-            if (selectedPayOpt?.buttonStyle?.background?.darkModel?.backgroundColors?.size == 1) {
-                colorBackGround =
-                    selectedPayOpt.buttonStyle?.background?.darkModel?.backgroundColors?.get(0)
-            }
-            intColorArray = null
 
-        } else {
-            val bgArrayList: ArrayList<String>? =
-                selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors
-            if (bgArrayList?.size == 1) {
-                colorBackGround = bgArrayList[0]
+            if (CustomUtils.getCurrentTheme().contains("dark")) {
+                if (selectedPayOpt?.buttonStyle?.background?.darkModel?.backgroundColors?.size == 1) {
+                    colorBackGround =
+                        selectedPayOpt.buttonStyle?.background?.darkModel?.backgroundColors?.get(0)
+                }
                 intColorArray = null
+
             } else {
+                val bgArrayList: ArrayList<String>? =
+                    selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors
+                if (bgArrayList?.size == 1) {
+                    colorBackGround = bgArrayList[0]
+                    intColorArray = null
+                } else {
 
-                if (bgArrayList?.size == 2) {
-                    startColor = bgArrayList.get(1).replace("0x", "#")
-                    endColor = bgArrayList.get(0).replace("0x", "#")
+                    if (bgArrayList?.size == 2) {
+                        startColor = bgArrayList.get(1).replace("0x", "#")
+                        endColor = bgArrayList.get(0).replace("0x", "#")
 
-                    intColorArray =
-                        intArrayOf(Color.parseColor(startColor), Color.parseColor(endColor))
-                    colorBackGround = "0"
+                        intColorArray =
+                            intArrayOf(Color.parseColor(startColor), Color.parseColor(endColor))
+                        colorBackGround = "0"
 
-                } else if (bgArrayList?.size == 3) {
-                    startColor = bgArrayList[2].replace("0x", "#")
+                    } else if (bgArrayList?.size == 3) {
+                        startColor = bgArrayList[2].replace("0x", "#")
 
-                    middleColor = bgArrayList[1].replace("0x", "#")
-                    endColor = bgArrayList[0].replace("0x", "#")
+                        middleColor = bgArrayList[1].replace("0x", "#")
+                        endColor = bgArrayList[0].replace("0x", "#")
 
-                    intColorArray = intArrayOf(
-                        Color.parseColor(startColor),
-                        Color.parseColor(middleColor),
-                        Color.parseColor(endColor)
-                    )
-                    colorBackGround = "0"
+                        intColorArray = intArrayOf(
+                            Color.parseColor(startColor),
+                            Color.parseColor(middleColor),
+                            Color.parseColor(endColor)
+                        )
+                        colorBackGround = "0"
 
+                    }
                 }
             }
-        }
+
+
+
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.removeAllViewsInLayout()
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
             true,
@@ -2258,16 +2263,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     private fun logicTogetPayOptions(cardBrandString: String?): PaymentOption? {
-        println("cardBrandString>>>>"+cardBrandString)
+      //  println("cardBrandString inn>>>>"+cardBrandString)
         var selectedPayOption: PaymentOption? = null
         var slectedBrand :String?=null
         for (i in 0 until paymentOptionsResponse.paymentOptions.size) {
             slectedBrand =paymentOptionsResponse.paymentOptions[i].brand?.replace("_","")
-            if (slectedBrand== cardBrandString?.toUpperCase()) {
+            if (slectedBrand== cardBrandString?.replace("_","")?.toUpperCase()) {
                 selectedPayOption = paymentOptionsResponse.paymentOptions[i]
             }
         }
-        println("selectedPayOption>>"+selectedPayOption)
+       // println("selectedPayOption>>"+selectedPayOption)
 
         return selectedPayOption
     }

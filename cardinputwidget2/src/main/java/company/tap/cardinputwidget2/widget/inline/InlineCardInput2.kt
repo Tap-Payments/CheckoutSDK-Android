@@ -2151,5 +2151,10 @@ class InlineCardInput2 @JvmOverloads constructor(
     }
 
 
+    fun cardNumberIsValid() : Boolean{
+      return  cardNumberEditText.isCardNumberValid
+    }
+
+
 
 }

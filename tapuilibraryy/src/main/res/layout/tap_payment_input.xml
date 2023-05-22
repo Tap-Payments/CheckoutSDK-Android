@@ -81,8 +81,8 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         android:layout_gravity="start"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="2dp"
         android:layoutDirection="locale"
         android:layout_below="@+id/alertView"/>
     <company.tap.tapuilibraryy.uikit.views.TapSelectionTabLayout

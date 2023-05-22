@@ -114,9 +114,9 @@ object CustomUtils {
             }
                 .build().show()
         } else {
-            builder.setPositiveListener(LocalizationManager.getValue("ok", "Common")) { dialog ->
+            builder.setPositiveListener(LocalizationManager.getValue("done", "Common")) { dialog ->
                 dialog.dismiss()
-                baseLayoutManager?.didDialogueExecute("OK", cardTypeDialog)
+                baseLayoutManager?.didDialogueExecute("DONE", cardTypeDialog)
             }
                 .build().show()
 
