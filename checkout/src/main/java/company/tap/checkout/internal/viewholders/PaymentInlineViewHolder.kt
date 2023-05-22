@@ -1125,6 +1125,7 @@ class PaymentInlineViewHolder(
                 println("before>>" + before)
                 println("count>>" + count)
                 if (mPreviousCount > count) {
+                    println("calld>>" + mPreviousCount)
                     // delete character action have done
                     // do what ever you want
                     // Log.d("MainActivityTag", "Character deleted");
@@ -1501,7 +1502,7 @@ class PaymentInlineViewHolder(
             shouldShowScannerOptions = it.isEmpty()
             controlScannerOptions()
             cardBrandDetection(charSequence.toString())
-            if (card != null) checkValidationState(card)
+            if (card != null) checkValidationState(card,charSequence.toString())
         }
         /* if(resetView){
              resetTouchView()
@@ -1605,18 +1606,22 @@ class PaymentInlineViewHolder(
     }
 
 
-    private fun checkValidationState(card: DefinedCardBrand) {
+    private fun checkValidationState(card: DefinedCardBrand, charSequence :String) {
         if (card.cardBrand != null)
             when (card.validationState) {
 
                 CardValidationState.invalid -> {
                     println("cardBrand val" + card.cardBrand)
                     if (card.cardBrand != null)
-                        tabLayout.selectTab(card.cardBrand, false)
+                        tapCardInputView.setSingleCardInput(
+                            CardBrandSingle.Unknown, null
+                        )
+                       // tabLayout.selectTab(card.cardBrand, false)
                     tapAlertView?.fadeVisibility(View.VISIBLE,1000)
                     tapAlertView?.alertMessage?.text =
                         (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
                     cardNumValidation = false
+
                 }
                 CardValidationState.incomplete -> {
                     //tapAlertView?.visibility = View.VISIBLE
@@ -1630,8 +1635,18 @@ class PaymentInlineViewHolder(
                     cardNumValidation = false
                 }
                 CardValidationState.valid -> {
-                    if (schema != null) schema?.cardBrand?.let { tabLayout.selectTab(it, true) }
-                    else tabLayout.selectTab(card.cardBrand, true)
+                    if (schema != null){
+                        schema?.cardBrand?.let { tabLayout.selectTab(it, true)
+                          if( PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand != null)
+                              PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.let { it1 ->
+                                  logicTosetImageDynamic(
+                                      it1, charSequence.toString())
+                              }
+                        }
+                    }else{
+                        logicTosetImageDynamic(card.cardBrand, charSequence.toString())
+                        tabLayout.selectTab(card.cardBrand, true)
+                    }
 
                     tapAlertView?.fadeVisibility(View.VISIBLE,1000)
                     tapAlertView?.alertMessage?.text =
@@ -1643,6 +1658,7 @@ class PaymentInlineViewHolder(
                             it
                         )
                     })*/
+
                     intertabLayout.visibility = View.GONE
                     tabLayout.visibility = View.GONE
                     acceptedCardText.visibility = View.INVISIBLE
