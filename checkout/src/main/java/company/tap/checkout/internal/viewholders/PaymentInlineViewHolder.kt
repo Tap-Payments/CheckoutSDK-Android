@@ -175,11 +175,8 @@ class PaymentInlineViewHolder(
         secondaryLayout?.visibility = View.GONE
         tapInlineCardSwitch?.setSwitchDataSource(
             TapSwitchDataSource(
-                "dummy",
-                LocalizationManager.getValue("cardSaveLabel", "TapCardInputKit"),
-                "dummy",
-                "dummy",
-                "dummy"
+                switchSaveMerchantCheckout= LocalizationManager.getValue("cardSaveLabel", "TapCardInputKit")
+
             )
         )
         // tabLayout.visibility=View.VISIBLE
