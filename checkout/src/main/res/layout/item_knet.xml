@@ -10,7 +10,8 @@
     android:hardwareAccelerated="true"
     card_view:cardElevation="10dp"
     app:cardElevation="0dp"
-    android:layout_marginBottom="@dimen/margin_basic_10dp"
+    android:layout_marginTop="@dimen/margin_basic_10dp"
+    android:layout_marginBottom="@dimen/margin_basic_20dp"
     android:layout_gravity="center">
 
     <LinearLayout

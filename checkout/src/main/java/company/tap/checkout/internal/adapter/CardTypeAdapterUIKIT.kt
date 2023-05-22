@@ -225,7 +225,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
             holder.itemView.deleteImageViewSaved?.visibility = View.VISIBLE
             setUnSelectedCardTypeSavedShadowAndBackground(holder)
         } else {
-            holder.itemView.deleteImageViewSaved?.visibility = View.GONE
+            holder.itemView.deleteImageViewSaved?.visibility = View.INVISIBLE
         }
 
         holder.itemView.deleteImageViewSaved?.setOnClickListener {
@@ -447,7 +447,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                 AnimationUtils.loadAnimation(holder.itemView.context, R.anim.shake)
             holder.itemView.startAnimation(animShake)
             holder.itemView.deleteImageViewSaved?.visibility = View.VISIBLE
-        } else holder.itemView.deleteImageViewSaved?.visibility = View.GONE
+        } else holder.itemView.deleteImageViewSaved?.visibility = View.INVISIBLE
     }
 
     private fun setSelectedCardTypeSavedShadowAndBackground(holder: RecyclerView.ViewHolder) {
@@ -614,14 +614,9 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     private fun bindRedirectCardImage(holder: RecyclerView.ViewHolder) {
         for (i in 0 until arrayListRedirect.size) {
             val imageViewCard = holder.itemView.findViewById<ImageView>(R.id.imageView_knet)
-            //  arrayListRedirect[i].let { imageViewCard.loadSvg(it) }
             Glide.with(holder.itemView.context)
                 .load(arrayListRedirect[i].toUri())
                 .into(imageViewCard)
-            /* GlideToVectorYou
-                 .init()
-                 .with(holder.itemView.context)
-                 .load(arrayListRedirect[i].toUri(), imageViewCard)*/
         }
     }
 

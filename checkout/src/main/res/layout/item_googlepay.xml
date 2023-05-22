@@ -10,6 +10,7 @@ android:elevation="0dp"
 android:hardwareAccelerated="true"
 card_view:cardElevation="10dp"
 app:cardElevation="0dp"
+    android:layout_marginTop="@dimen/margin_basic_10dp"
 android:paddingTop="5dp"
     android:paddingBottom="5dp"
 android:layout_gravity="center">
