@@ -1055,6 +1055,7 @@ class PaymentInlineViewHolder(
                 "TapCardInputKit"
             )
         )
+        if(tapCardInputView.cardFormHasFocus) checkoutViewModel?.resetViewHolder()
         tapCardInputView.setCardNumberTextWatcher(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
 //                cardNumAfterTextChangeListener(s, this)
@@ -1124,6 +1125,7 @@ class PaymentInlineViewHolder(
                 println("start>>" + start)
                 println("before>>" + before)
                 println("count>>" + count)
+
                 if (mPreviousCount > count) {
                     // delete character action have done
                     // do what ever you want
@@ -1503,9 +1505,11 @@ class PaymentInlineViewHolder(
             cardBrandDetection(charSequence.toString())
             if (card != null) checkValidationState(card,charSequence.toString(),textWatcher)
         }
-        /* if(resetView){
-             resetTouchView()
-         }*/
+         if(charSequence.toString().isEmpty()){
+             tapCardInputView.setSingleCardInput(
+                 CardBrandSingle.Unknown, null
+             )
+         }
 
     }
 
@@ -2304,5 +2308,7 @@ class PaymentInlineViewHolder(
         tapCardInputView.onTouchView()
 
     }
+
+
 
 }

@@ -825,6 +825,10 @@ class InlineCardInput @JvmOverloads constructor(
         //cvcNumberEditText.hint = LocalizationManager.getValue("cardCVVPlaceHolder", "TapCardInputKit")
     }
 
+    override fun cardFormHasFocus(hasFocus: Boolean) {
+
+    }
+
     /**
      * Enable or disable text fields
      *
