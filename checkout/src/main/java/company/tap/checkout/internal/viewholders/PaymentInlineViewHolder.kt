@@ -1127,7 +1127,6 @@ class PaymentInlineViewHolder(
                 println("before>>" + before)
                 println("count>>" + count)
                 if (mPreviousCount > count) {
-                    println("calld>>" + mPreviousCount)
                     // delete character action have done
                     // do what ever you want
                     // Log.d("MainActivityTag", "Character deleted");
@@ -1142,7 +1141,7 @@ class PaymentInlineViewHolder(
                 mPreviousCount = count;
 
 
-                if (cardInputUIStatus != CardInputUIStatus.SavedCard) {
+                if (cardInputUIStatus != CardInputUIStatus.SavedCard ) {
                     onCardTextChange(s)
                    cardNumAfterTextChangeListener(s.toString().trim(), this)
 
