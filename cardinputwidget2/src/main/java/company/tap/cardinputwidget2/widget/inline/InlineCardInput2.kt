@@ -718,10 +718,7 @@ class InlineCardInput2 @JvmOverloads constructor(
 
     }
 
-    override fun cardFormHasFocus(hasFocus: Boolean) {
-       this.cardFormHasFocus = hasFocus
 
-    }
 
     /**
      * Enable or disable text fields
@@ -1158,6 +1155,7 @@ class InlineCardInput2 @JvmOverloads constructor(
         cvcNumberEditText.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
             println("hasFocus"+hasFocus)
             println("cardNumberEditText.text"+cardNumberEditText.text)
+            cardInputListener?.cvvFieldHasFocus(hasFocus)
             if (hasFocus) {
                 if(cardNumberEditText.text.isNullOrBlank() || cardNumberEditText.text.isNullOrEmpty() || !cardNumberEditText.isCardNumberValid) {
                     cardInputListener?.onFocusChange(

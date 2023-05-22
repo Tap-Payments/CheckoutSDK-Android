@@ -1409,9 +1409,12 @@ class PaymentInlineViewHolder(
                     if(cardInputUIStatus == CardInputUIStatus.NormalCard)
                         onPaymentCardComplete.onPayCardSwitchAction(
                         false, PaymentType.CARD
-                    )else  onPaymentCardComplete.onPayCardSwitchAction(
-                        false, PaymentType.SavedCard
-                    )
+                    )else {
+                        onPaymentCardComplete.onPayCardSwitchAction(
+                            false, PaymentType.SavedCard
+                        )
+
+                    }
                     //  tapAlertView?.visibility = View.VISIBLE
 
 
@@ -1773,8 +1776,23 @@ class PaymentInlineViewHolder(
 
     override fun onCvcComplete() {}
     override fun cardFormHasFocus(hasFocus: Boolean) {
-        println("cardFormHasFocus>>>>" + hasFocus)
+
        checkoutViewModel.resetViewHolder()
+    }
+
+    override fun cvvFieldHasFocus(hasFocus: Boolean) {
+       
+        if(hasFocus){
+            tapAlertView?.fadeVisibility(View.GONE, 500)
+        }else {
+            if(cvvNumber?.length!! <3) {
+                tapAlertView?.fadeVisibility(View.VISIBLE)
+                val alertMessage: String =
+                    LocalizationManager.getValue("Warning", "Hints", "missingCVV")
+                tapAlertView?.alertMessage?.text = alertMessage.replace("%i", "3")
+            }
+
+        }
     }
 
 
