@@ -212,7 +212,7 @@ class PaymentInlineViewHolder(
         initializeIcons()
        // initializeCardBrandView()
         initCustomerDetailView()
-
+        tapCardInputView.setCardInputListener(this)
 
         /**
          * set separator background
@@ -1057,6 +1057,7 @@ class PaymentInlineViewHolder(
                 "TapCardInputKit"
             )
         )
+        if(tapCardInputView.cardFormHasFocus) checkoutViewModel?.resetViewHolder()
         tapCardInputView.setCardNumberTextWatcher(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
 //                cardNumAfterTextChangeListener(s, this)
@@ -1126,6 +1127,7 @@ class PaymentInlineViewHolder(
                 println("start>>" + start)
                 println("before>>" + before)
                 println("count>>" + count)
+
                 if (mPreviousCount > count) {
                     // delete character action have done
                     // do what ever you want
@@ -1409,9 +1411,12 @@ class PaymentInlineViewHolder(
                     if(cardInputUIStatus == CardInputUIStatus.NormalCard)
                         onPaymentCardComplete.onPayCardSwitchAction(
                         false, PaymentType.CARD
-                    )else  onPaymentCardComplete.onPayCardSwitchAction(
-                        false, PaymentType.SavedCard
-                    )
+                    )else {
+                        onPaymentCardComplete.onPayCardSwitchAction(
+                            false, PaymentType.SavedCard
+                        )
+
+                    }
                     //  tapAlertView?.visibility = View.VISIBLE
 
 
@@ -1505,6 +1510,11 @@ class PaymentInlineViewHolder(
             cardBrandDetection(charSequence.toString())
             if (card != null) checkValidationState(card,charSequence.toString(),textWatcher)
         }
+         if(charSequence.toString().isEmpty()){
+             tapCardInputView.setSingleCardInput(
+                 CardBrandSingle.Unknown, null
+             )
+         }
 
     }
 
@@ -1762,17 +1772,39 @@ class PaymentInlineViewHolder(
         if (view.layoutDirection == View.LAYOUT_DIRECTION_RTL) {
             cardNumber = cardNumber?.reversed()
         }
-        hideViewONScanNFC()
+
 
     }
 
     override fun onCvcComplete() {}
+    override fun cardFormHasFocus(hasFocus: Boolean) {
 
-    override fun onExpirationComplete() {
-        if (cardInputUIStatus == CardInputUIStatus.SavedCard) {
-            onFocusChange(CardInputListener.FocusField.FOCUS_CVC)
+       checkoutViewModel.resetViewHolder()
+    }
+
+    override fun cvvFieldHasFocus(hasFocus: Boolean) {
+       
+        if(hasFocus){
+            tapAlertView?.fadeVisibility(View.GONE, 500)
+        }else {
+            if(cvvNumber?.length!! <3) {
+                tapAlertView?.fadeVisibility(View.VISIBLE)
+                val alertMessage: String =
+                    LocalizationManager.getValue("Warning", "Hints", "missingCVV")
+                tapAlertView?.alertMessage?.text = alertMessage.replace("%i", "3")
+            }
+
         }
     }
+
+
+    override fun onExpirationComplete() {
+        /*if (cardInputUIStatus == CardInputUIStatus.SavedCard) {
+            onFocusChange(CardInputListener.FocusField.FOCUS_CVC)
+        }*/
+    }
+
+
 
     override fun onFocusChange(focusField: String) {
         lastFocusField = focusField
@@ -2303,5 +2335,7 @@ class PaymentInlineViewHolder(
         tapCardInputView.onTouchView()
 
     }
+
+
 
 }

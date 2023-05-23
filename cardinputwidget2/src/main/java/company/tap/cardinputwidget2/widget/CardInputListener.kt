@@ -53,4 +53,8 @@ interface CardInputListener {
      * the user edits the CVC.
      */
     fun onCvcComplete()
+
+    fun cardFormHasFocus(hasFocus: Boolean)
+
+    fun cvvFieldHasFocus(hasFocus: Boolean)
 }

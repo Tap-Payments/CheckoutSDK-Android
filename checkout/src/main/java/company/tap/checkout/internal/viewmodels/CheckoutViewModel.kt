@@ -1908,6 +1908,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     override fun resetViewHolder() {
         adapter.resetSelection()
+        cardViewHolder?.cardInfoHeaderText.text =  LocalizationManager.getValue("cardSectionTitleOr", "TapCardInputKit")
         unActivateActionButton()
     }
 
@@ -2527,7 +2528,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         println("cardInput status>>" + paymentInlineViewHolder.cardInputUIStatus)
         println("paymentTypeEnum status>>" + paymentType)
         println("savedCardsModel status>>" + savedCardsModel)
-        if (isCompleted) activateActionButton(cardBrandString = cardBrandString)
+        if (isCompleted){
+            activateActionButton(cardBrandString = cardBrandString)
+            CustomUtils.hideKeyboardFrom(context ,paymentInlineViewHolder.view)
+        }
         if (savedCardsModel != null) {
             setPayButtonAction(paymentType, savedCardsModel)
         } else {

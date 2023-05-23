@@ -97,6 +97,8 @@ class InlineCardInput2 @JvmOverloads constructor(
     lateinit var closeButton : ImageView
 
      var brandIconUrl:String?=null
+    @JvmField
+     var cardFormHasFocus:Boolean = false
 
     @JvmField
 
@@ -716,6 +718,8 @@ class InlineCardInput2 @JvmOverloads constructor(
 
     }
 
+
+
     /**
      * Enable or disable text fields
      *
@@ -1049,6 +1053,7 @@ class InlineCardInput2 @JvmOverloads constructor(
           //  println("view>>"+findFocus().hasFocus())
 
             println("cardNumberEditText.isCardNumberValid"+cardNumberEditText.isCardNumberValid)
+            cardInputListener?.cardFormHasFocus(hasFocus)
 
         if (hasFocus && cardNumberEditText.originalStr!=null ) {
 
@@ -1150,6 +1155,7 @@ class InlineCardInput2 @JvmOverloads constructor(
         cvcNumberEditText.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
             println("hasFocus"+hasFocus)
             println("cardNumberEditText.text"+cardNumberEditText.text)
+            cardInputListener?.cvvFieldHasFocus(hasFocus)
             if (hasFocus) {
                 if(cardNumberEditText.text.isNullOrBlank() || cardNumberEditText.text.isNullOrEmpty() || !cardNumberEditText.isCardNumberValid) {
                     cardInputListener?.onFocusChange(
@@ -2151,9 +2157,7 @@ class InlineCardInput2 @JvmOverloads constructor(
     }
 
 
-    fun cardNumberIsValid() : Boolean{
-      return  cardNumberEditText.isCardNumberValid
-    }
+
 
 
 
