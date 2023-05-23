@@ -263,7 +263,7 @@ fun View.isRTL() = ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRE
 
 
 fun Context.twoThirdHeightView(): Double {
-    return getDeviceSpecs().first.times(2.3) / 3
+    return getDeviceSpecs().first.times(2.15) / 3
 }
 
 @SuppressLint("SetJavaScriptEnabled")
@@ -430,10 +430,10 @@ fun View.addSlideToBottom(onAnimationStart: () -> Unit? = {}) {
 }
 
 
-
 fun MutableList<View>.addFadeOutAnimationToViews(
     durationTime: Long = 500L,
-    onAnimationEnd: () -> Unit = {}
+    onAnimationStart: () -> Unit? = {},
+    onAnimationEnd: () -> Unit = {},
 ) {
     this.forEachIndexed { index, view ->
         val animation = AnimationUtils.loadAnimation(view.context, R.anim.fade_out)
@@ -441,6 +441,7 @@ fun MutableList<View>.addFadeOutAnimationToViews(
         view.startAnimation(animation)
         view.animation.setAnimationListener(object : AnimationListener {
             override fun onAnimationStart(p0: Animation?) {
+                onAnimationStart.invoke()
             }
 
             override fun onAnimationEnd(p0: Animation?) {
@@ -465,7 +466,7 @@ fun animateBS(
     fromView: ViewGroup,
     toView: ViewGroup,
     transitionAnimation: Long = 500L,
-    onTransitionEnd:()->Unit={}
+    onTransitionEnd: () -> Unit = {}
 ) {
     val transition = AutoTransition()
     transition.addTarget(fromView)

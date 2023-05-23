@@ -255,6 +255,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         topHeaderView?.startPoweredByAnimation(
             delayTime = PoweredByLayoutAnimationDelay,
             topHeaderView?.poweredByImage, onAnimationEnd = {
+
                 poweredByTapAnimationEnds(viewModel)
             }
         )
