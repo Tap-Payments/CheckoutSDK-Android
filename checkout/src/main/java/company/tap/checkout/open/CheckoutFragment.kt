@@ -39,9 +39,11 @@ import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibraryy.themekit.ThemeManager
+import company.tap.tapuilibraryy.uikit.animation.MorphingAnimation
 import company.tap.tapuilibraryy.uikit.atoms.TapImageView
 import company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
 import company.tap.tapuilibraryy.uikit.enums.ActionButtonState
+import company.tap.tapuilibraryy.uikit.interfaces.TabAnimatedButtonListener
 import company.tap.tapuilibraryy.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibraryy.uikit.ktx.setTopBorders
 import company.tap.tapuilibraryy.uikit.views.TapBottomSheetDialog
@@ -57,7 +59,7 @@ import java.util.*
  */
 
 
-class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, InlineViewCallback {
+class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, InlineViewCallback{
 
     private var _Context: Context? = null
 
@@ -220,7 +222,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                                         this,
                                         it2,
                                         cardViewModel, this, headerLayout!!,
-                                        coordinatorLayout,topHeaderView)
+                                        coordinatorLayout, topHeaderView
+                                    )
                                 }
                             }
 
@@ -241,7 +244,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             originalHeight = checkoutLayout.measuredHeight
 
             //topHeaderView?.backgroundHeader?.setBackgroundDrawable(null)
-         //   headerLayout?.addView(topHeaderView, 0)
+            //   headerLayout?.addView(topHeaderView, 0)
         }
 
         topHeaderView?.visibility = View.GONE
@@ -296,6 +299,9 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
         }
 
+
+
+
     }
 
     private fun poweredByTapAnimationEnds(viewModel: CheckoutViewModel) {
@@ -315,8 +321,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         closeImage = view.findViewById(R.id.closeImage)
         scrollView = view.findViewById(R.id.scrollView)
         coordinatorLayout = view.findViewById(R.id.coordinator)
-       // relativeLL = view.findViewById(R.id.relativeLL)
-       // mainCardLayout = view.findViewById(R.id.mainCardLayout)
+        // relativeLL = view.findViewById(R.id.relativeLL)
+        // mainCardLayout = view.findViewById(R.id.mainCardLayout)
         /**Added to init the lib of getting dynamic flags*/
         //        World.init(context)
     }
@@ -390,7 +396,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-         val dialog = super.onCreateDialog(savedInstanceState)
+        val dialog = super.onCreateDialog(savedInstanceState)
         (dialog as BottomSheetDialog).behavior.isFitToContents = true
         return dialog
     }
@@ -428,7 +434,12 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun resetTabAnimatedButton() {
-        checkOutActivity?.displayMetrics?.let { tabAnimatedActionButton?.setDisplayMetricsTheme(it,CustomUtils.getCurrentTheme()) }
+        checkOutActivity?.displayMetrics?.let {
+            tabAnimatedActionButton?.setDisplayMetricsTheme(
+                it,
+                CustomUtils.getCurrentTheme()
+            )
+        }
         SDKSession.sessionActive = false
         tabAnimatedActionButton?.changeButtonState(ActionButtonState.RESET)
         if (checkOutActivity?.isGooglePayClicked == false) {
@@ -441,13 +452,13 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         val nowString: String = LocalizationManager.getValue("now", "ActionButton")
         /**
          * Stopped reseting the view of button cz of loader will test if not required will remove this code*/
-     /*   tabAnimatedActionButton?.setButtonDataSource(
-            true,
-            context?.let { LocalizationManager.getLocale(it).language },
-            payString + " " + nowString,
-            Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
-        )*/
+        /*   tabAnimatedActionButton?.setButtonDataSource(
+               true,
+               context?.let { LocalizationManager.getLocale(it).language },
+               payString + " " + nowString,
+               Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
+               Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
+           )*/
         /*  tabAnimatedActionButton?.setOnClickListener {
               requireActivity().supportFragmentManager.let { it1 -> SDKSession.contextSDK?.let { it2 ->
                   SDKSession.startSDK(it1,
@@ -462,14 +473,15 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     fun dismissBottomSheetDialog() {
         //bottomSheetDialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
         ThemeManager.currentTheme = ""
+        sessionDelegate?.sessionCancelled()
         LocalizationManager.currentLocalized = JSONObject()
         bottomSheetDialog.dismissWithAnimation
         bottomSheetDialog.hide()
         bottomSheetDialog.dismiss()
         resetTabAnimatedButton()
-        sessionDelegate?.sessionCancelled()
 
     }
+
 
 
 }

@@ -26,9 +26,9 @@ import company.tap.tapuilibraryy.uikit.datasource.ActionButtonDataSource
 import company.tap.tapuilibraryy.uikit.datasource.AnimationDataSource
 import company.tap.tapuilibraryy.uikit.enums.ActionButtonState
 import company.tap.tapuilibraryy.uikit.enums.ActionButtonState.*
+import company.tap.tapuilibraryy.uikit.interfaces.TabAnimatedButtonListener
 import company.tap.tapuilibraryy.uikit.interfaces.TapActionButtonInterface
 import company.tap.tapuilibraryy.uikit.ktx.setImage
-import company.tap.tapuilibraryy.uikit.views.TapLoadingView
 
 
 /**
@@ -41,6 +41,8 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
     TapLoadingView.OnProgressCompletedListener {
 
     private lateinit var morphingAnimation: MorphingAnimation
+    private  var tabAnimatedButtonListener: TabAnimatedButtonListener?=null
+
     private lateinit var state: ActionButtonState
     private var dataSource: ActionButtonDataSource? = null
     private var backgroundDrawable: GradientDrawable = GradientDrawable()
@@ -48,33 +50,35 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
     private var displayMetrics: Int? = null
     private var currentSelectedTheme: String? = null
     private var tapLoadingView: TapLoadingView? = null
-    private val textView by lazy {TextView(context)  }
-    private var counter=0
-   private lateinit var animationDataSource :AnimationDataSource
+    private val textView by lazy { TextView(context) }
+    private var counter = 0
+    private lateinit var animationDataSource: AnimationDataSource
+
 
     @DrawableRes
     val loaderGif: Int =
-        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")){
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
             R.drawable.loader_black
-        }  else if (ThemeManager.currentTheme.isNotEmpty() && !ThemeManager.currentTheme.contains("dark")){
+        } else if (ThemeManager.currentTheme.isNotEmpty() && !ThemeManager.currentTheme.contains("dark")) {
             R.drawable.loader
-        }else    R.drawable.loader
+        } else R.drawable.loader
 
     @DrawableRes
     val loaderSuccessGif: Int =
-        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")){
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
             R.drawable.success_black
-        }  else if (ThemeManager.currentTheme.isNotEmpty() && !ThemeManager.currentTheme.contains("dark")){
+        } else if (ThemeManager.currentTheme.isNotEmpty() && !ThemeManager.currentTheme.contains("dark")) {
             R.drawable.success_white
-        }else    R.drawable.success_white
+        } else R.drawable.success_white
 
     @DrawableRes
     val loaderErrorGif: Int =
-        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")){
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
             R.drawable.error_gif_black
-        }  else if (ThemeManager.currentTheme.isNotEmpty() && !ThemeManager.currentTheme.contains("dark")){
+        } else if (ThemeManager.currentTheme.isNotEmpty() && !ThemeManager.currentTheme.contains("dark")) {
             R.drawable.error_gif_white
-        }else    R.drawable.error_gif_white
+        } else R.drawable.error_gif_white
+
     constructor(context: Context) : super(context) {
         init()
     }
@@ -92,43 +96,55 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
     }
 
     private fun init() {
-        morphingAnimation =
-            MorphingAnimation(this)
+        morphingAnimation = MorphingAnimation(this)
         morphingAnimation.setAnimationEndListener(this)
         initActionButtonDataSourceValid()
         this@TabAnimatedActionButton.isClickable = true
         this@TabAnimatedActionButton.isEnabled = true
 
+
     }
 
-    private fun initActionButtonDataSourceValid(backgroundColor: Int? = null, textColor:Int? = null, buttonText: String? = null,backgroundColorArray: IntArray?=null ){
-        val btnText:String
-        val _textColor:Int
-        val btnBackground:Int
-        if(buttonText ==null){
-            if(LocalizationManager.currentLocalized.length()!=0)
-            btnText = LocalizationManager.getValue("pay", "ActionButton")
+    fun setTabAnimatedInterface(tabAnimatedButtonListener: TabAnimatedButtonListener) {
+        this.tabAnimatedButtonListener = tabAnimatedButtonListener
+    }
+
+
+    private fun initActionButtonDataSourceValid(
+        backgroundColor: Int? = null,
+        textColor: Int? = null,
+        buttonText: String? = null,
+        backgroundColorArray: IntArray? = null
+    ) {
+        val btnText: String
+        val _textColor: Int
+        val btnBackground: Int
+        if (buttonText == null) {
+            if (LocalizationManager.currentLocalized.length() != 0)
+                btnText = LocalizationManager.getValue("pay", "ActionButton")
             else btnText = context.getString(R.string.payText)
-        }else {
-            btnText =buttonText
+        } else {
+            btnText = buttonText
         }
-        if(textColor ==null){
-            if(ThemeManager.currentTheme.isNotEmpty())
-            _textColor = Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
+        if (textColor == null) {
+            if (ThemeManager.currentTheme.isNotEmpty())
+                _textColor =
+                    Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
             else _textColor = R.color.ValidBtntitleLabelColor
-        }else {
-            _textColor =textColor
+        } else {
+            _textColor = textColor
         }
-        if(backgroundColor ==null){
-            if(ThemeManager.currentTheme.isNotEmpty())
-            btnBackground = Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor"))
-          //  else btnBackground = Color.parseColor(R.color.ValidBtnColor.toString())
+        if (backgroundColor == null) {
+            if (ThemeManager.currentTheme.isNotEmpty())
+                btnBackground =
+                    Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor"))
+            //  else btnBackground = Color.parseColor(R.color.ValidBtnColor.toString())
             else btnBackground = R.color.ValidBtnColor
-        }else {
-            btnBackground =backgroundColor
+        } else {
+            btnBackground = backgroundColor
         }
         dataSource = ActionButtonDataSource(
-            text = btnText ,
+            text = btnText,
             textSize = 16f,
             textColor = _textColor,
             cornerRadius = 100f,
@@ -140,33 +156,39 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
 
     }
 
-    private fun initActionButtonDataSourceInValid(backgroundColor: Int? = null, textColor:Int? = null, buttonText: String? = null ){
-        val btnText:String
-        val _textColor:Int
-        val btnBackground:Int
-        if(buttonText ==null){
-            if(LocalizationManager.currentLocalized.length()!=0)
-            btnText = LocalizationManager.getValue("pay", "ActionButton")
+    private fun initActionButtonDataSourceInValid(
+        backgroundColor: Int? = null,
+        textColor: Int? = null,
+        buttonText: String? = null
+    ) {
+        val btnText: String
+        val _textColor: Int
+        val btnBackground: Int
+        if (buttonText == null) {
+            if (LocalizationManager.currentLocalized.length() != 0)
+                btnText = LocalizationManager.getValue("pay", "ActionButton")
             else btnText = context.getString(R.string.payText)
-        }else {
-            btnText =buttonText
+        } else {
+            btnText = buttonText
         }
-        if(textColor ==null){
-            if(ThemeManager.currentTheme.isNotEmpty())
-            _textColor = Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
-           else _textColor = R.color.ValidBtntitleLabelColor
-        }else {
-            _textColor =textColor
+        if (textColor == null) {
+            if (ThemeManager.currentTheme.isNotEmpty())
+                _textColor =
+                    Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor"))
+            else _textColor = R.color.ValidBtntitleLabelColor
+        } else {
+            _textColor = textColor
         }
-        if(backgroundColor ==null){
-            if(ThemeManager.currentTheme.isNotEmpty())
-            btnBackground = Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor"))
+        if (backgroundColor == null) {
+            if (ThemeManager.currentTheme.isNotEmpty())
+                btnBackground =
+                    Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor"))
             else btnBackground = R.color.InvalidBtnColor
-        }else {
-            btnBackground =backgroundColor
+        } else {
+            btnBackground = backgroundColor
         }
         dataSource = ActionButtonDataSource(
-            text = btnText ,
+            text = btnText,
             textSize = 16f,
             textColor = _textColor,
             cornerRadius = 100f,
@@ -186,25 +208,38 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
     fun setButtonInterface(actionButtonInterface: TapActionButtonInterface) {
         this.actionButtonInterface = actionButtonInterface
     }
-    fun setDisplayMetricsTheme(displayMetrics: Int, themeString :String ) {
+
+    fun setDisplayMetricsTheme(displayMetrics: Int, themeString: String) {
         this.displayMetrics = displayMetrics
         this.currentSelectedTheme = themeString
     }
-    fun setButtonDataSource(isValid: Boolean = false,lang : String? = null, buttonText: String?= null, backgroundColor: Int, textColor:Int? = null , backgroundColorArray: IntArray?=null) {
-        if (isValid)
-        {
-            initValidBackground(backgroundColor,backgroundColorArray)
-            initActionButtonDataSourceValid(backgroundColor, textColor,buttonText,backgroundColorArray)
-        } else{
+
+    fun setButtonDataSource(
+        isValid: Boolean = false,
+        lang: String? = null,
+        buttonText: String? = null,
+        backgroundColor: Int,
+        textColor: Int? = null,
+        backgroundColorArray: IntArray? = null
+    ) {
+        if (isValid) {
+            initValidBackground(backgroundColor, backgroundColorArray)
+            initActionButtonDataSourceValid(
+                backgroundColor,
+                textColor,
+                buttonText,
+                backgroundColorArray
+            )
+        } else {
             initInvalidBackground(backgroundColor)
             initActionButtonDataSourceInValid(backgroundColor, textColor, buttonText)
         }
         removeAllViews()
-        addView(getTextView(lang?: "en"))
+        addView(getTextView(lang ?: "en"))
     }
 
-    fun setInValidBackground(isValid: Boolean =false,backgroundColor: Int){
-       dataSource?.backgroundColor = backgroundColor
+    fun setInValidBackground(isValid: Boolean = false, backgroundColor: Int) {
+        dataSource?.backgroundColor = backgroundColor
         backgroundDrawable.color = ColorStateList.valueOf(backgroundColor)
 
         elevation = 0F
@@ -217,23 +252,23 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
         addChildView(tapLoadingView!!)
     }
 
-    fun changeButtonState(state: ActionButtonState,loopCount:Int=0) {
+    fun changeButtonState(state: ActionButtonState, loopCount: Int = 0) {
         this.state = state
         when (state) {
             SUCCESS -> {
                 addTapLoadingView()
                 startStateAnimation()
-                addChildView(getImageView(loaderSuccessGif,loopCount) {})
+                addChildView(getImageView(loaderSuccessGif, loopCount) {})
             }
             ERROR -> {
                 addTapLoadingView()
                 startStateAnimation()
-                addChildView(getImageView(loaderErrorGif,loopCount) {})
+                addChildView(getImageView(loaderErrorGif, loopCount) {})
             }
-            LOADING ->{
+            LOADING -> {
                 addTapLoadingView()
                 startStateAnimation()
-                addChildView(getImageView(loaderGif,loopCount) {
+                addChildView(getImageView(loaderGif, loopCount) {
                     morphingAnimation.end(animationDataSource, WIDTH, HEIGHT, CORNERS)
 
                 })
@@ -244,49 +279,46 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     120
                 )
-                params.setMargins(60, 40,60,60)
+                params.setMargins(60, 40, 60, 60)
                 params.gravity = Gravity.CENTER
                 this.layoutParams = params
                 init()
-             }
+            }
             RESET -> {
-                removeView(getImageView(loaderSuccessGif,0) {})
-                removeView(getImageView(loaderErrorGif,0) {})
+                removeView(getImageView(loaderSuccessGif, 0) {})
+                removeView(getImageView(loaderErrorGif, 0) {})
                 addChildView(getTextView(LocalizationManager.getLocale(context).language))
-                if(displayMetrics == DisplayMetrics.DENSITY_450 ||displayMetrics == DisplayMetrics.DENSITY_420 ||displayMetrics == DisplayMetrics.DENSITY_400||displayMetrics == DisplayMetrics.DENSITY_440||displayMetrics == DisplayMetrics.DENSITY_XXHIGH||displayMetrics == DisplayMetrics.DENSITY_560)
-                {
+                if (displayMetrics == DisplayMetrics.DENSITY_450 || displayMetrics == DisplayMetrics.DENSITY_420 || displayMetrics == DisplayMetrics.DENSITY_400 || displayMetrics == DisplayMetrics.DENSITY_440 || displayMetrics == DisplayMetrics.DENSITY_XXHIGH || displayMetrics == DisplayMetrics.DENSITY_560) {
 
                     val params = LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         100
                     )
-                    params.setMargins(60, 40,60,60)
+                    params.setMargins(60, 40, 60, 60)
                     params.gravity = Gravity.CENTER
                     this.layoutParams = params
                     init()
 
 
-
-                }else if (displayMetrics == DisplayMetrics.DENSITY_280||displayMetrics == DisplayMetrics.DENSITY_260||displayMetrics == DisplayMetrics.DENSITY_300||displayMetrics == DisplayMetrics.DENSITY_XHIGH || displayMetrics == DisplayMetrics.DENSITY_340||displayMetrics == DisplayMetrics.DENSITY_360){
+                } else if (displayMetrics == DisplayMetrics.DENSITY_280 || displayMetrics == DisplayMetrics.DENSITY_260 || displayMetrics == DisplayMetrics.DENSITY_300 || displayMetrics == DisplayMetrics.DENSITY_XHIGH || displayMetrics == DisplayMetrics.DENSITY_340 || displayMetrics == DisplayMetrics.DENSITY_360) {
 
                     val params = LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         80
                     )
-                    params.setMargins(50, 40,50,40)
+                    params.setMargins(50, 40, 50, 40)
                     params.gravity = Gravity.CENTER
                     this.layoutParams = params
                     init()
 
 
-                } else if(displayMetrics == DisplayMetrics.DENSITY_560|| displayMetrics == DisplayMetrics.DENSITY_600)
-                {
+                } else if (displayMetrics == DisplayMetrics.DENSITY_560 || displayMetrics == DisplayMetrics.DENSITY_600) {
 
                     val params = LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         130
                     )
-                    params.setMargins(60, 40,60,60)
+                    params.setMargins(60, 40, 60, 60)
                     params.gravity = Gravity.CENTER
                     this.layoutParams = params
                     init()
@@ -297,7 +329,7 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
                 this.isClickable = true
                 this.isEnabled = true
             }
-            else ->{
+            else -> {
                 morphingAnimation.setAnimationEndListener(this)
                 init()
             }
@@ -306,21 +338,19 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
     }
 
 
-
-
     /**
      * setup the initValidBackground background drawable color and corner radius from datasource
      */
 
-    private fun initValidBackground(backgroundColor: Int ,backgroundColorArray: IntArray?=null) {
+    private fun initValidBackground(backgroundColor: Int, backgroundColorArray: IntArray? = null) {
 
-        if(backgroundColorArray!=null){
+        if (backgroundColorArray != null) {
             backgroundDrawable.colors = backgroundColorArray
             backgroundDrawable.gradientType = GradientDrawable.LINEAR_GRADIENT
-           backgroundDrawable= GradientDrawable(
+            backgroundDrawable = GradientDrawable(
                 GradientDrawable.Orientation.RIGHT_LEFT, backgroundColorArray,
-                )
-        }else {
+            )
+        } else {
             dataSource?.cornerRadius?.let {
                 backgroundDrawable.cornerRadius = it
             }
@@ -340,14 +370,15 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
         dataSource?.cornerRadius?.let {
             backgroundDrawable.cornerRadius = it
         }
-        backgroundDrawable.color = ColorStateList.valueOf(Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")))
-       // backgroundDrawable.color = backgroundColor?.let { ColorStateList.valueOf(it) } ?: ColorStateList.valueOf(Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")))
+        backgroundDrawable.color =
+            ColorStateList.valueOf(Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")))
+        // backgroundDrawable.color = backgroundColor?.let { ColorStateList.valueOf(it) } ?: ColorStateList.valueOf(Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")))
 
         background = backgroundDrawable
         elevation = 0F
     }
 
-    private fun getTextView(lang : String): TextView {
+    private fun getTextView(lang: String): TextView {
         if (lang == "en") setFontEnglish(textView)
         else setFontArabic(textView)
 
@@ -365,7 +396,7 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
         return textView
     }
 
-    private fun setFontEnglish(textView:TextView ){
+    private fun setFontEnglish(textView: TextView) {
         textView.typeface = Typeface.createFromAsset(
             context?.assets, TapFont.tapFontType(
                 TapFont.RobotoRegular
@@ -373,7 +404,7 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
         )
     }
 
-    private fun setFontArabic(textView:TextView){
+    private fun setFontArabic(textView: TextView) {
         textView.typeface = Typeface.createFromAsset(
             context?.assets, TapFont.tapFontType(
                 TapFont.TajawalLight
@@ -381,7 +412,11 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
         )
     }
 
-    fun getImageView(@DrawableRes imageRes: Int, gifLoopCount: Int,  actionAfterAnimationDone: ()-> Unit): ImageView {
+    fun getImageView(
+        @DrawableRes imageRes: Int,
+        gifLoopCount: Int,
+        actionAfterAnimationDone: () -> Unit
+    ): ImageView {
         val image = ImageView(context)
         val params = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
@@ -390,11 +425,11 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
         params.setMargins(20)
         image.layoutParams = params
 
-        return image.setImage(context,image,imageRes,gifLoopCount, actionAfterAnimationDone)
+        return image.setImage(context, image, imageRes, gifLoopCount, actionAfterAnimationDone)
     }
 
 
-    fun getImageViewUrl( imageRes: String): ImageView {
+    fun getImageViewUrl(imageRes: String): ImageView {
         val image = ImageView(context)
         val params = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
@@ -408,15 +443,16 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
             .into(image)
         return image
     }
+
     private fun startStateAnimation() {
 
-        if(displayMetrics == DisplayMetrics.DENSITY_450 ||displayMetrics == DisplayMetrics.DENSITY_420 ||displayMetrics == DisplayMetrics.DENSITY_400||displayMetrics == DisplayMetrics.DENSITY_440||displayMetrics == DisplayMetrics.DENSITY_XXHIGH||displayMetrics == DisplayMetrics.DENSITY_560){
+        if (displayMetrics == DisplayMetrics.DENSITY_450 || displayMetrics == DisplayMetrics.DENSITY_420 || displayMetrics == DisplayMetrics.DENSITY_400 || displayMetrics == DisplayMetrics.DENSITY_440 || displayMetrics == DisplayMetrics.DENSITY_XXHIGH || displayMetrics == DisplayMetrics.DENSITY_560) {
             animationDataSource =
                 AnimationDataSource(
                     fromHeight = height,
                     toHeight = 70,
                     fromWidth = width,
-                    toWidth = 70+40,
+                    toWidth = 70 + 40,
                     fromCorners = dataSource?.cornerRadius,
                     toCorners = MAX_CORNERS,
                     fromColor = dataSource?.backgroundColor,
@@ -424,7 +460,7 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
                     duration = MAX_DURATION,
                     background = backgroundDrawable
                 )
-        }else if (displayMetrics == DisplayMetrics.DENSITY_260||displayMetrics == DisplayMetrics.DENSITY_280||displayMetrics == DisplayMetrics.DENSITY_300||displayMetrics == DisplayMetrics.DENSITY_XHIGH || displayMetrics == DisplayMetrics.DENSITY_340||displayMetrics == DisplayMetrics.DENSITY_360) {
+        } else if (displayMetrics == DisplayMetrics.DENSITY_260 || displayMetrics == DisplayMetrics.DENSITY_280 || displayMetrics == DisplayMetrics.DENSITY_300 || displayMetrics == DisplayMetrics.DENSITY_XHIGH || displayMetrics == DisplayMetrics.DENSITY_340 || displayMetrics == DisplayMetrics.DENSITY_360) {
             animationDataSource =
                 AnimationDataSource(
                     fromHeight = height,
@@ -438,7 +474,7 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
                     duration = MAX_DURATION,
                     background = backgroundDrawable
                 )
-        }else if( displayMetrics == DisplayMetrics.DENSITY_560|| displayMetrics == DisplayMetrics.DENSITY_600){
+        } else if (displayMetrics == DisplayMetrics.DENSITY_560 || displayMetrics == DisplayMetrics.DENSITY_600) {
             animationDataSource =
                 AnimationDataSource(
                     fromHeight = height,
@@ -454,13 +490,8 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
                 )
 
         }
-
-
-
-
-                morphingAnimation.start(animationDataSource, WIDTH, HEIGHT, CORNERS)
+        morphingAnimation.start(animationDataSource, WIDTH, HEIGHT, CORNERS)
     }
-
 
 
     /**
@@ -476,88 +507,96 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
 
     override fun onMorphAnimationEnd() {
         tapLoadingView?.completeProgress()
+        tabAnimatedButtonListener?.onTabAnimatedEnded()
+
     }
 
     override fun onMorphAnimationReverted() {
-        println("onMorphAnimationReverted is called"+counter)
+        println("onMorphAnimationReverted is called" + counter)
         counter += 1
-      //  if(counter<=1) {
-            when (state) {
-                ERROR -> {
-                    /* dataSource?.errorImageResources?.let {
-                    addChildView(getImageView(it,1) {})
-                }
-                dataSource?.errorColor?.let {
+        //  if(counter<=1) {
+        when (state) {
+            ERROR -> {
+                /* dataSource?.errorImageResources?.let {
+                addChildView(getImageView(it,1) {})
+            }
+            dataSource?.errorColor?.let {
 //                    AnimationEngine.applyTransition(this)
-                    backgroundDrawable.color = ColorStateList.valueOf(it)
-                }*/
-                    morphingAnimation.setAnimationEndListener(this)
-                    this@TabAnimatedActionButton.isEnabled = true
-                    this@TabAnimatedActionButton.isClickable = true
-                    clearAnimation()
-                    changeButtonState(RESET)
+                backgroundDrawable.color = ColorStateList.valueOf(it)
+            }*/
+                morphingAnimation.setAnimationEndListener(this)
+                this@TabAnimatedActionButton.isEnabled = true
+                this@TabAnimatedActionButton.isClickable = true
+                clearAnimation()
+                changeButtonState(RESET)
 
-                    //   morphingAnimation.end(animationDataSource, WIDTH, HEIGHT, CORNERS)
-                }
-                SUCCESS ->{
-                    morphingAnimation.setAnimationEndListener(this)
-                    this@TabAnimatedActionButton.isEnabled = true
-                    this@TabAnimatedActionButton.isClickable = true
-                    clearAnimation()
-                    changeButtonState(RESET)
-                } /*dataSource?.successImageResources?.let {
+                //   morphingAnimation.end(animationDataSource, WIDTH, HEIGHT, CORNERS)
+            }
+            SUCCESS -> {
+                morphingAnimation.setAnimationEndListener(this)
+                this@TabAnimatedActionButton.isEnabled = true
+                this@TabAnimatedActionButton.isClickable = true
+                clearAnimation()
+                changeButtonState(RESET)
+            } /*dataSource?.successImageResources?.let {
 
                     addChildView(getImageView(it, 1) {})
                 }*/
 
-                else -> {
-                    morphingAnimation.setAnimationEndListener(this)
-                    this@TabAnimatedActionButton.isEnabled = true
-                    this@TabAnimatedActionButton.isClickable = true
-                    clearAnimation()
-                    changeButtonState(RESET)
-
-                }
+            else -> {
+                morphingAnimation.setAnimationEndListener(this)
+                this@TabAnimatedActionButton.isEnabled = true
+                this@TabAnimatedActionButton.isClickable = true
+                clearAnimation()
+                changeButtonState(RESET)
 
             }
-       /* } else {
-            morphingAnimation.setAnimationEndListener(this)
-            this@TabAnimatedActionButton.isEnabled = true
-            changeButtonState(RESET)
-           // init()
-        }*/
+
+        }
+        /* } else {
+             morphingAnimation.setAnimationEndListener(this)
+             this@TabAnimatedActionButton.isEnabled = true
+             changeButtonState(RESET)
+            // init()
+         }*/
         clearAnimation()
         clearFocus()
-        cleanupLayoutState( getImageView(loaderErrorGif,0){})
-        cleanupLayoutState(  getTextView(LocalizationManager.getLocale(context).language))
-        cleanupLayoutState( getImageView(loaderSuccessGif,0) {})
+        cleanupLayoutState(getImageView(loaderErrorGif, 0) {})
+        cleanupLayoutState(getTextView(LocalizationManager.getLocale(context).language))
+        cleanupLayoutState(getImageView(loaderSuccessGif, 0) {})
 
-        getImageView(loaderErrorGif,0) {}.clearAnimation();//This Line Added
-        getImageView(loaderSuccessGif,0) {}.clearAnimation();//This Line Added
+        getImageView(loaderErrorGif, 0) {}.clearAnimation();//This Line Added
+        getImageView(loaderSuccessGif, 0) {}.clearAnimation();//This Line Added
         getTextView(LocalizationManager.getLocale(context).language).clearAnimation();//This Line Added
+    }
+
+    override fun onMorphAnimationStarted() {
+        tabAnimatedButtonListener?.onTabAnimatedStarted()
+
     }
 
     override fun onProgressCompleted() {
         when (state) {
             ERROR -> {
                 dataSource?.errorImageResources?.let {
-                    addChildView(getImageView(it,1) {})
+                    addChildView(getImageView(it, 1) {})
                 }
                 dataSource?.errorColor?.let {
 //                    AnimationEngine.applyTransition(this)
                     backgroundDrawable.color = ColorStateList.valueOf(it)
                 }
-               // initActionButtonDataSource()
+                // initActionButtonDataSource()
                 morphingAnimation.end(animationDataSource, WIDTH, HEIGHT, CORNERS)
             }
             SUCCESS -> dataSource?.successImageResources?.let {
-                addChildView(getImageView(it,1) {})
+                addChildView(getImageView(it, 1) {})
                 morphingAnimation.end(animationDataSource, WIDTH, HEIGHT, CORNERS)
             }
 
-            else ->  morphingAnimation.end(animationDataSource, WIDTH, HEIGHT, CORNERS)
+            else -> morphingAnimation.end(animationDataSource, WIDTH, HEIGHT, CORNERS)
         }
     }
+
     /**
      * Constants values
      */
@@ -566,4 +605,5 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
         const val MAX_RADIUS = 40
         const val MAX_DURATION = 2000
     }
+
 }

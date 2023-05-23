@@ -35,6 +35,7 @@ import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.core.os.postDelayed
 import androidx.core.view.ViewCompat
+import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.transition.AutoTransition
@@ -162,6 +163,15 @@ fun View.slidefromRightToLeft() {
     this.startAnimation(animate)
     this.visibility = View.VISIBLE // Change visibility VISIBLE or GONE
 
+}
+
+fun ViewGroup.deepForEach(function: View.() -> Unit) {
+    this.forEach { child ->
+        child.function()
+        if (child is ViewGroup) {
+            child.deepForEach(function)
+        }
+    }
 }
 
 inline fun View.getDimensions(crossinline onDimensionsReady: (Int, Int) -> Unit) {

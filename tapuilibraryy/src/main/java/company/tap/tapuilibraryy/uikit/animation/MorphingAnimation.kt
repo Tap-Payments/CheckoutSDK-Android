@@ -49,16 +49,6 @@ class MorphingAnimation(private val animatedView: View) {
                             )
                         )
                 }
-//                HEIGHT -> {
-//                    if (dataSource.fromHeight != null && dataSource.toHeight != null)
-//                        animators.add(
-//                            getDimensionAnimation(
-//                                HEIGHT,
-//                                dataSource.fromHeight,
-//                                dataSource.toHeight
-//                            )
-//                        )
-//                }
                 WIDTH -> {
                     if (dataSource.fromWidth != null && dataSource.toWidth != null)
                         animators.add(
@@ -80,6 +70,15 @@ class MorphingAnimation(private val animatedView: View) {
         animatorSet.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator) {
                 animationEndListener?.onMorphAnimationEnd()
+            }
+
+            override fun onAnimationStart(animation: Animator?) {
+                super.onAnimationStart(animation)
+                animationEndListener?.onMorphAnimationStarted()
+            }
+
+            override fun onAnimationEnd(animation: Animator?, isReverse: Boolean) {
+                super.onAnimationEnd(animation, isReverse)
             }
         })
 
@@ -116,16 +115,6 @@ class MorphingAnimation(private val animatedView: View) {
                             )
                         )
                 }
-//                HEIGHT -> {
-//                    if (dataSource.fromHeight != null && dataSource.toHeight != null)
-//                        animators.add(
-//                            getDimensionAnimation(
-//                                HEIGHT,
-//                                dataSource.fromHeight,
-//                                dataSource.toHeight
-//                            )
-//                        )
-//                }
                 WIDTH -> {
                     if (dataSource.fromWidth != null && dataSource.toWidth != null)
                         animators.add(
@@ -151,8 +140,8 @@ class MorphingAnimation(private val animatedView: View) {
                     animationEndListener?.onMorphAnimationReverted()
 
                 }
-            }
 
+            }
 
         })
 
@@ -197,5 +186,8 @@ class MorphingAnimation(private val animatedView: View) {
     interface OnAnimationEndListener {
         fun onMorphAnimationEnd()
         fun onMorphAnimationReverted()
+
+        fun onMorphAnimationStarted()
+
     }
 }
