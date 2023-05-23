@@ -133,11 +133,6 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
             TYPE_GOOGLE_PAY -> {
                 view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_googlepay, parent, false)
-//                if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
-//                    view=   LayoutInflater.from(parent.context).inflate(R.layout.googlepay_button, parent, false)
-//                } else {
-//                    view =  LayoutInflater.from(parent.context).inflate(R.layout.googlepay_button_white, parent, false)
-//                }
 
                 GooglePayViewHolder(view)
             }
@@ -334,8 +329,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
     private fun typeSavedCard(holder: RecyclerView.ViewHolder, position: Int) {
         setSavedCardShakingAnimation(holder)
-        Log.e("selectedPosition savedCard", selectedPosition.toString())
-        Log.e("position viewholder savedCard", position.toString())
+
         if (selectedPosition == position) setSelectedCardTypeSavedShadowAndBackground(holder)
         else setUnSelectedCardTypeSavedShadowAndBackground(holder)
 
@@ -514,9 +508,6 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     private fun typeGooglePay(holder: RecyclerView.ViewHolder, position: Int) {
         if (selectedPosition == position) setSelectedGoogleShadowAndBackground(holder)
         else setUnSelectedCardTypeGoogleShadowAndBackground(holder)
-        println("typeGooglePay is called?????" + position)
-        Log.e("selectedPosition Google", selectedPosition.toString())
-        Log.e("position viewholder Google", position.toString())
 
         //  possiblyShowGooglePayButton(holder as GooglePayViewHolder)
         holder.itemView.googlePayButton.setOnClickListener {
