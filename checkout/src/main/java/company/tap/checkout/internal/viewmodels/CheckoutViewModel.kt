@@ -150,11 +150,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     val powerdByTapAnimationFinished = MutableLiveData<Boolean>()
 
     private var deleteCard: Boolean = false
-    private var isCardDeletedSuccessfully: Boolean = false
     private var displayItemsOpen: Boolean = false
     private var displayOtpIsOpen: Boolean = false
     private var saveCardSwitchHolder: SwitchViewHolder? = null
-    lateinit var userRepository: UserRepository
 
     private lateinit var title: String
     private lateinit var paymentInlineViewHolder: PaymentInlineViewHolder
@@ -188,7 +186,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     private var fee: BigDecimal? = BigDecimal.ZERO
-    val provider: IPaymentDataProvider = PaymentDataProvider()
     private var webPaymentOptions: java.util.ArrayList<PaymentOption> = ArrayList()
 
     @JvmField
@@ -247,15 +244,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private var textRecognitionML: TapTextRecognitionML? = null
     private lateinit var intent: Intent
     private lateinit var inlineViewCallback: InlineViewCallback
-    lateinit var tapCardPhoneListDataSource: ArrayList<TapCardPhoneListDataSource>
     lateinit var paymentOptionsResponse: PaymentOptionsResponse
-    lateinit var initResponseModel: InitResponseModel
     lateinit var redirectURL: String
     lateinit var cardId: String
     var currencyOldRate: BigDecimal? = null
-    var currentCalculatedAmount: BigDecimal? = null
     var lastSelectedCurrency: String? = null
-    var loyatFlag: Boolean? = false
 
     @JvmField
     var isSavedCardSelected: Boolean? = false
@@ -874,6 +867,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     fun addTitlePaymentAndFlag() {
         addDataToAmountView()
+        if (displayItemsOpen) {
+
+        }
         amountViewHolder.view.amount_section.tapChipPopup.slidefromRightToLeft()
         amountViewHolder.view.amount_section.itemPopupLayout.applyGlowingEffect(getCurrencyColors())
 
@@ -3110,18 +3106,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private fun payActionSavedCard(savedCardsModel: SavedCard?) {
         println("payActionSavedCard??????" + savedCardsModel)
         var selectdSavedCard: PaymentOption? = null
-        amountViewHolder.view.amount_section?.tapChipPopup?.slideFromLeftToRight()
-
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
-            ActionButtonState.LOADING
-        )
 
         selectdSavedCard = logicTogetPayOptions(savedCardsModel?.brand?.name)
 
 
-
-        println("modeeee" + selectdSavedCard)
-// TODO CHECK
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
                 backgroundColor = Color.parseColor(
@@ -3151,21 +3139,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         PaymentDataSource.setWebViewType(WebViewType.THREE_DS_WEBVIEW)
         amountViewHolder.view.amount_section?.tapChipPopup?.slideFromLeftToRight()
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
-        val viewsToDisable = mutableListOf<View>(
-            cardViewHolder.view.mainChipgroup.chipsRecycler as View,
-            paymentInlineViewHolder.tapCardInputView.backArrow as View,
-            amountViewHolder.view.amount_section.constraint,
-            amountViewHolder.view.amount_section.tapChipAmount,
-            cardViewHolder.view,
-            cardViewHolder.view.mainChipgroup,
-            paymentInlineViewHolder.tapCardInputView,
-            paymentInlineViewHolder.view,
-            paymentInlineViewHolder.nfcButton as View,
-            paymentInlineViewHolder.scannerButton as View,
-            saveCardSwitchHolder?.view as View,
-            saveCardSwitchHolder?.view?.cardSwitch?.payButton as View
-        )
-        viewsToDisable.disableViews()
+
         doAfterSpecificTime {
 
             CustomUtils.hideKeyboardFrom(context, paymentInlineViewHolder.view)
@@ -3180,14 +3154,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     val viewsToFadeOut = mutableListOf<View>(chipsRecycler, groupAction, groupName)
                     cardViewHolder.view.cardInfoHeaderText?.let { viewsToFadeOut.add(it) }
                     viewsToFadeOut.add(amountViewHolder.view)
+                    paymentInlineViewHolder.paymentInputContainer.applyBluryToView()
 
-                    doAfterSpecificTime(time = 500L) {
+                    doAfterSpecificTime(time = 100L) {
                         viewsToFadeOut.addFadeOutAnimationToViews(
-                            durationTime = 500L
-                        ) {
-                            translateHeightAnimationForWebViews()
-                        }
-                        paymentInlineViewHolder.paymentInputContainer.applyBluryToView()
+                            durationTime = 500L, onAnimationStart = {
+                            }, onAnimationEnd = {
+                                translateHeightAnimationForWebViews()
+                            })
+
                     }
 
                 }
