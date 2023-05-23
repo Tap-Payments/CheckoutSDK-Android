@@ -197,15 +197,6 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
                 R.drawable.border_shadow_white
         )
         else holder.itemView.tapcard_Chip.setBackgroundResource(R.drawable.border_shadow)
-//        setBorderedView(
-//                holder.itemView.CurrencyChipLinear,
-//                15.0f,// corner raduis
-//          //  (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),
-//                2.0f,
-//                Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.selected.shadow.color")),
-//                Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.backgroundColor")),
-//                Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.selected.shadow.color"))
-//        )
     }
 
 
@@ -215,29 +206,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
         } else {
             holder.itemView.tapcard_Chip.setBackgroundResource(R.drawable.border_unclick_white)
         }
-//        setBorderedView(
-//                holder.itemView.CurrencyChipLinear,
-//               15.0f,// corner raduis
-//            //(ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),
-//                0.0f,
-//                Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.unSelected.shadow.color")),
-//                Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.backgroundColor")),
-//                Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.unSelected.shadow.color"))
-//        )
-    }
 
-    private fun ImageView.loadSvg(url: String) {
-
-        val imageLoader = ImageLoader.Builder(this.context)
-            .componentRegistry { add(SvgDecoder(this@loadSvg.context)) }
-            .build()
-
-        val request = ImageRequest.Builder(this.context)
-            .data(url)
-            .target(this)
-            .build()
-
-        imageLoader.enqueue(request)
     }
 
 

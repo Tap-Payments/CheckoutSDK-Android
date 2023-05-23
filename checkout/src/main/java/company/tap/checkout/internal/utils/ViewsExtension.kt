@@ -406,28 +406,6 @@ fun View.addFadeOutAnimation(
     }
 }
 
-fun View.addSlideToBottom(onAnimationStart: () -> Unit? = {}) {
-
-    val slide_down = AnimationUtils.loadAnimation(
-        this.context,
-        R.anim.slide_down
-    )
-    this.startAnimation(slide_down)
-    this.animation.setAnimationListener(object : AnimationListener {
-        override fun onAnimationStart(p0: Animation?) {
-            onAnimationStart.invoke()
-        }
-
-        override fun onAnimationEnd(p0: Animation?) {
-            this@addSlideToBottom.visibility = View.GONE
-        }
-
-        override fun onAnimationRepeat(p0: Animation?) {
-        }
-
-    })
-
-}
 
 
 fun MutableList<View>.addFadeOutAnimationToViews(
