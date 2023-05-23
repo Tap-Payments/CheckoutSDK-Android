@@ -601,7 +601,12 @@ class PaymentInlineViewHolder(
         tabLayout?.fadeVisibility(View.GONE, 2000)
         intertabLayout?.fadeVisibility(View.GONE, 2000)
         savedCardsModel=null
-        if(getPreTypedCardData()!=null && getPreTypedCardData()?.cvc!=null) tapAlertView?.fadeVisibility(View.GONE, 2000)
+        if(getPreTypedCardData()!=null && getPreTypedCardData()?.cvc!=null){
+            tapAlertView?.fadeVisibility(View.GONE, 2000)
+            tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
+            onCvcComplete()
+            checkoutViewModel?.isSavedCardSelected = false
+        }
         //Added for opening as soon as cvv focus
       else  CustomUtils.showKeyboard(context)
     }
@@ -1773,7 +1778,11 @@ class PaymentInlineViewHolder(
 
     }
 
-    override fun onCvcComplete() {}
+    override fun onCvcComplete() {
+        checkoutViewModel.onPayCardCompleteAction(
+            true,PaymentType.CARD,fullCardNumber,expiryDatePrev,cvvNumberPrev,cardHolderNamePrev,prevSetCardBrand?.toString(),null
+        )
+    }
     override fun cardFormHasFocus(hasFocus: Boolean) {
 
        checkoutViewModel.resetViewHolder()

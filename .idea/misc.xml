@@ -73,6 +73,8 @@
         <entry key="checkout/src/main/res/layout/view_in_googlepay_button.xml" value="0.1" />
         <entry key="checkout/src/main/res/layout/view_in_googlepay_button_no_shadow.xml" value="0.13648648648648648" />
         <entry key="checkout/src/main/res/layout/web_view_layout.xml" value="0.21552604698672115" />
+        <entry key="tapuilibraryy/src/main/res/drawable/border_shadow_white.xml" value="1.4696307983398438" />
+        <entry key="tapuilibraryy/src/main/res/drawable/border_unclick_black.xml" value="0.159" />
         <entry key="tapuilibraryy/src/main/res/layout/tap_inline_card_switch.xml" value="0.1" />
         <entry key="tapuilibraryy/src/main/res/layout/tap_main_amount.xml" value="0.1" />
         <entry key="tapuilibraryy/src/main/res/layout/tap_payment_input.xml" value="0.12195945945945946" />

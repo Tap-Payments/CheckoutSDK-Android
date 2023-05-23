@@ -2417,7 +2417,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
             }
 
-
+            println("isSavedCardSelected"+isSavedCardSelected)
 
             if (isSavedCardSelected == true) {
                 cardViewModel.processEvent(
