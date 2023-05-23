@@ -592,9 +592,9 @@ class PaymentInlineViewHolder(
                     it
                 )
             }
-println("getPreTypedCardData()"+getPreTypedCardData()?.cvc)
+            println("getPreTypedCardData()"+getPreTypedCardData()?.cvc)
         val cardModel = company.tap.cardinputwidget2.Card(
-            number = getPreTypedCardData()?.cardNumber?.trim().toString(),
+            number = getPreTypedCardData()?.cardNumber,
             cvc = getPreTypedCardData()?.cvc,
            expMonth =  getPreTypedCardData()?.expirationMonth?.toInt(),
            expYear =  getPreTypedCardData()?.expirationYear?.toInt(),
@@ -1922,11 +1922,7 @@ println("getPreTypedCardData()"+getPreTypedCardData()?.cvc)
                       )
                   }*/
             println("imageURL are" + cardBrandType)
-            /**Temp fix need to fix in validator kit todo
-             * */
-            if(cardBrandType!=null && cardBrandType == "OMANNET"){
-                cardBrandType = "OMAN_NET"
-            }
+         
             itemsCardsList.add(
                 SectionTabItem(
                     imageURL,
