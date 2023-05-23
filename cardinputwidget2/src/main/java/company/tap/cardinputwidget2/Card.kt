@@ -40,44 +40,44 @@ data class Card(
     /**
      * @return Address line 1 (Street address/PO Box/Company name).
      */
-    val addressLine1: String?,
+    val addressLine1: String? =null,
 
     /**
      * @return If address_line1 was provided, results of the check: `pass`, `fail`, `unavailable`,
      * or `unchecked`.
      */
-    val addressLine1Check: String?,
+    val addressLine1Check: String? = null,
 
     /**
      * @return Address line 2 (Apartment/Suite/Unit/Building).
      */
-    val addressLine2: String?,
+    val addressLine2: String?= null,
 
     /**
      * @return City/District/Suburb/Town/Village.
      */
-    val addressCity: String?,
+    val addressCity: String?= null,
 
     /**
      * @return State/County/Province/Region.
      */
-    val addressState: String?,
+    val addressState: String?= null,
 
     /**
      * @return ZIP or postal code.
      */
-    val addressZip: String?,
+    val addressZip: String?= null,
 
     /**
      * @return If `address_zip` was provided, results of the check: `pass`, `fail`, `unavailable`,
      * or `unchecked`.
      */
-    val addressZipCheck: String?,
+    val addressZipCheck: String?= null,
 
     /**
      * @return Billing address country, if provided when creating card.
      */
-    val addressCountry: String?,
+    val addressCountry: String?= null,
 
     /**
      * @return The last four digits of the card.
@@ -97,31 +97,31 @@ data class Card(
      * check whether two customers who’ve signed up with you are using the same card number,
      * for example.
      */
-    val fingerprint: String?,
+    val fingerprint: String?= null,
 
     /**
      * @return Two-letter ISO code representing the country of the card. You could use this
      * attribute to get a sense of the international breakdown of cards you’ve collected.
      */
-    val country: String?,
+    val country: String?= null,
 
     /**
      * @return Three-letter ISO code for currency. Only
      * applicable on accounts (not customers or recipients). The card can be used as a transfer
      * destination for funds in this currency.
      */
-    val currency: String?,
+    val currency: String?= null,
 
     /**
      * @return The ID of the customer that this card belongs to.
      */
-    val customerId: String?,
+    val customerId: String?= null,
 
     /**
      * @return If a CVC was provided, results of the check: `pass`, `fail`, `unavailable`,
      * or `unchecked`.
      */
-    val cvcCheck: String?,
+    val cvcCheck: String?= null,
 
     /**
      * @return Set of key-value pairs that you can attach to an object. This can be useful fo

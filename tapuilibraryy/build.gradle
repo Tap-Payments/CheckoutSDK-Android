@@ -55,7 +55,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    api 'com.github.Tap-Payments:TapCardValidator-Android:2.1.11'
+    api 'com.github.Tap-Payments:TapCardValidator-Android:2.1.14'
     api 'com.google.android.material:material:1.3.0-alpha01'
     api 'com.github.Tap-Payments:TapGLKit-Android:1.18'
     annotationProcessor 'com.android.databinding:compiler:3.1.4'

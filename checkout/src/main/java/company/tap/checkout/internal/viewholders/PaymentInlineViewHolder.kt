@@ -85,7 +85,7 @@ class PaymentInlineViewHolder(
     var tabLayout: TapSelectionTabLayout = view.findViewById(R.id.sections_tablayout)
     private var intertabLayout: TabLayout = tabLayout.findViewById(R.id.tab_layout)
 
-     val paymentInputContainer: LinearLayout
+    val paymentInputContainer: LinearLayout
 
     // private val clearView: ImageView
     var selectedType = PaymentTypeEnum.card
@@ -144,6 +144,7 @@ class PaymentInlineViewHolder(
     var cardNumValidation: Boolean = false
     var mPreviousCount: Int = 0
     var saveLocalBinLookup: BINLookupResponse? = null
+    var prevSetCardBrand: CardBrand? = CardBrand.unknown
 
 
     init {
@@ -175,7 +176,10 @@ class PaymentInlineViewHolder(
         secondaryLayout?.visibility = View.GONE
         tapInlineCardSwitch?.setSwitchDataSource(
             TapSwitchDataSource(
-                switchSaveMerchantCheckout= LocalizationManager.getValue("cardSaveLabel", "TapCardInputKit")
+                switchSaveMerchantCheckout = LocalizationManager.getValue(
+                    "cardSaveLabel",
+                    "TapCardInputKit"
+                )
 
             )
         )
@@ -210,7 +214,7 @@ class PaymentInlineViewHolder(
         // tapMobileInputViewWatcher()
         initializeCardForm()
         initializeIcons()
-       // initializeCardBrandView()
+        // initializeCardBrandView()
         initCustomerDetailView()
         tapCardInputView.setCardInputListener(this)
 
@@ -219,7 +223,6 @@ class PaymentInlineViewHolder(
          */
         //  view.separator?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
         //setSeparatorTheme()
-
 
 
     }
@@ -342,7 +345,9 @@ class PaymentInlineViewHolder(
                 getPreTypedCardData()?.expirationMonth = null
                 getPreTypedCardData()?.expirationYear = null
             }
+            getPreTypedCardData()?.cvc
             savedCardsModel = null
+            prevSetCardBrand = CardBrand.unknown
         }
     }
 
@@ -417,7 +422,7 @@ class PaymentInlineViewHolder(
     fun clearCardInputAction() {
 
         if (selectedType == PaymentTypeEnum.card) {
-          //  tapCardInputView.clear()
+            //  tapCardInputView.clear()
             tapCardInputView.clearFocus()
             switchViewHolder?.setSwitchLocals(PaymentTypeEnum.card)
         } else if (selectedType == PaymentTypeEnum.telecom) {
@@ -440,7 +445,7 @@ class PaymentInlineViewHolder(
         switchViewHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
             false,
             "en",
-            payString + " " +nowString,
+            payString + " " + nowString,
             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
         )
@@ -498,8 +503,7 @@ class PaymentInlineViewHolder(
         switchCheckedState()
 
 
-
-        tapCardInputView.backArrow.setOnTouchListener(object : View.OnTouchListener {
+   tapCardInputView.backArrow.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
                 //  println("getPreTypedCardData data was there"+getPreTypedCardData())
                 checkoutViewModel.setTitleNormalCard()
@@ -543,7 +547,9 @@ class PaymentInlineViewHolder(
 
     }
 
+
     private fun setPrevTypedCard() {
+        println("setPrevTypedCard is called")
         cardInputUIStatus = CardInputUIStatus.NormalCard
         val updateCardString: String = getPreTypedCardData()?.cardNumber?.trim().toString()
             .substring(0, 6) + getPreTypedCardData()?.cardNumber?.length?.minus(4)
@@ -552,31 +558,18 @@ class PaymentInlineViewHolder(
                     it
                 )
             }
-
+            println("getPreTypedCardData()"+getPreTypedCardData()?.cvc)
         val cardModel = company.tap.cardinputwidget2.Card(
-            updateCardString,
-            getPreTypedCardData()?.cvc,
-            getPreTypedCardData()?.expirationMonth?.toInt(),
-            getPreTypedCardData()?.expirationYear?.toInt(),
-            getPreTypedCardData()?.cardholderName,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            getPreTypedCardData()?.cardNumber?.length?.minus(4)
+            number = getPreTypedCardData()?.cardNumber,
+            cvc = getPreTypedCardData()?.cvc,
+           expMonth =  getPreTypedCardData()?.expirationMonth?.toInt(),
+           expYear =  getPreTypedCardData()?.expirationYear?.toInt(),
+            name = getPreTypedCardData()?.cardholderName,
+            last4 = getPreTypedCardData()?.cardNumber?.length?.minus(4)
                 ?.let { getPreTypedCardData()?.cardNumber?.substring(it) },
-            company.tap.cardinputwidget2.CardBrand.fromCardNumber(getPreTypedCardData()?.cardNumber),
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-        )
+            brand = company.tap.cardinputwidget2.CardBrand.fromCardNumber(getPreTypedCardData()?.cardNumber),
+            metadata = null
+            )
 
 
         if (getPreTypedCardData()?.cardholderName != null) {
@@ -592,43 +585,25 @@ class PaymentInlineViewHolder(
         }
 
         tapCardInputView.setNormalCardDetails(cardModel, CardInputUIStatus.NormalCard)
-        /*  val alertMessage:String = LocalizationManager.getValue("Warning", "Hints", "missingCVV")
-           tapAlertView?.alertMessage?.text =alertMessage.replace("%i","3")
 
-           tapAlertView?.visibility =View.VISIBLE*/
-        if (CustomUtils.getCurrentTheme() != null && CustomUtils.getCurrentTheme()
-                .contains("dark")
-        ) {
-            /* tapCardInputView.setSingleCardInput(
-                    CardBrandSingle.fromCode(
-                        company.tap.cardinputwidget.CardBrand.fromCardNumber(getPreTypedCardData()?.cardNumber?.trim()?.substring(0,6))
-                            .toString()
-                    ), _savedCardsModel.logos?.dark?.png
-                )*/
-            val card = CardValidator.validate(getPreTypedCardData()?.cardNumber)
-            getPreTypedCardData()?.cardNumber?.let {
-                logicTosetImageDynamic(
-                    card.cardBrand,
-                    it
-                )
-            }
-        } else {
-            val card = CardValidator.validate(getPreTypedCardData()?.cardNumber)
-            getPreTypedCardData()?.cardNumber?.let {
-                logicTosetImageDynamic(
-                    card.cardBrand,
-                    it
-                )
-            }
+        val card = CardValidator.validate(getPreTypedCardData()?.cardNumber)
+        getPreTypedCardData()?.cardNumber?.let {
+            logicTosetImageDynamic(
+                card.cardBrand,
+                it
+            )
         }
 
+        prevSetCardBrand = card.cardBrand
         contactDetailsView?.visibility = View.GONE
         shippingDetailView?.visibility = View.GONE
         // intertabLayout.visibility = View.GONE
         tabLayout?.fadeVisibility(View.GONE, 2000)
         intertabLayout?.fadeVisibility(View.GONE, 2000)
+        savedCardsModel=null
+        if(getPreTypedCardData()!=null && getPreTypedCardData()?.cvc!=null) tapAlertView?.fadeVisibility(View.GONE, 2000)
         //Added for opening as soon as cvv focus
-        CustomUtils.showKeyboard(context)
+      else  CustomUtils.showKeyboard(context)
     }
 
 
@@ -791,6 +766,7 @@ class PaymentInlineViewHolder(
             }
         } else {
             val card = CardValidator.validate(tapCard?.cardNumber)
+            if( card.cardBrand!=null)
             tapCard.cardNumber?.let {
                 logicTosetImageDynamic(
                     card.cardBrand,
@@ -1297,32 +1273,53 @@ class PaymentInlineViewHolder(
                     if (!PaymentDataSource.getCardHolderNameShowHide()) {
                         var paymentTyper :PaymentType ?= PaymentType.CARD
                         println("savedCardsModel   hhshhs"+savedCardsModel)
+
                         if(savedCardsModel ==null) {
                             paymentTyper = PaymentType.CARD
                         } else  paymentTyper = PaymentType.SavedCard
+                        println("paymentTyper   hhshhs"+paymentTyper)
 
-                        cardNumber.toString().let {
-                            expiryDate?.let { it1 ->
-                                cvvNumber?.let { it2 ->
-                                    onPaymentCardComplete.onPayCardCompleteAction(
-                                        true, paymentTyper,
-                                        it, it1, it2, null,PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
-                                    )
+                        if(!prevSetCardBrand?.name?.contains(CardBrand.unknown.name)!!)
+                            fullCardNumber.toString().let {
+                                expiryDate?.let { it1 ->
+                                    cvvNumber?.let { it2 ->
+                                        onPaymentCardComplete.onPayCardCompleteAction(
+                                            true, paymentTyper,
+                                            it, it1, it2, null,prevSetCardBrand?.toString() , savedCardsModel
+                                        )
+                                        tapInlineCardSwitch?.switchSaveCard?.isChecked = true
 
-                                    /* tapCardInputView.separatorcard2.setBackgroundColor(
-                                         Color.parseColor(
-                                             ThemeManager.getValue("tapSeparationLine.backgroundColor")
-                                         )
-                                     )*/
-                                    //  tapCardInputView.separatorcard2.visibility = View.VISIBLE
-                                    tapInlineCardSwitch?.switchSaveCard?.isChecked = true
-                                    //  tapInlineCardSwitch?.visibility = View.VISIBLE
-                                    tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
-                                    Bugfender.d(
-                                        CustomUtils.tagEvent,
-                                        "Finished valid raw card data for:" + PaymentType.CARD
-                                    )
+                                        tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
+                                        Bugfender.d(
+                                            CustomUtils.tagEvent,
+                                            "Finished valid raw card data for:" + PaymentType.CARD
+                                        )
 
+                                    }
+                                }
+                            }else {
+                            cardNumber.toString().let {
+                                expiryDate?.let { it1 ->
+                                    cvvNumber?.let { it2 ->
+                                        onPaymentCardComplete.onPayCardCompleteAction(
+                                            true,
+                                            paymentTyper,
+                                            it,
+                                            it1,
+                                            it2,
+                                            null,
+                                            PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.rawValue,
+                                            savedCardsModel
+                                        )
+                                        tapInlineCardSwitch?.switchSaveCard?.isChecked = true
+
+                                        tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
+                                        Bugfender.d(
+                                            CustomUtils.tagEvent,
+                                            "Finished valid raw card data for:" + PaymentType.CARD
+                                        )
+
+                                    }
                                 }
                             }
                         }
@@ -1383,13 +1380,13 @@ class PaymentInlineViewHolder(
                                 }
                             }else {
                                 onPaymentCardComplete.onPayCardSwitchAction(
-                                    true, PaymentType.CARD , savedCardsModel?.brand?.name
+                                    true, PaymentType.CARD , PaymentDataSource?.getBinLookupResponse()?.cardBrand?.toString()
                                 )
                                 cardNumber?.let {
                                     expiryDate?.let { it1 ->
                                         onPaymentCardComplete.onPayCardCompleteAction(
                                             true, PaymentType.CARD,
-                                            it, it1, cvvNumber!!, cardHolderName, savedCardsModel?.brand?.name ,null
+                                            it, it1, cvvNumber!!, cardHolderName, PaymentDataSource?.getBinLookupResponse()?.cardBrand?.toString() ,null
                                         )
                                     }
                                 }
@@ -1914,11 +1911,7 @@ class PaymentInlineViewHolder(
                       )
                   }*/
             println("imageURL are" + cardBrandType)
-            /**Temp fix need to fix in validator kit todo
-             * */
-            if(cardBrandType!=null && cardBrandType == "OMANNET"){
-                cardBrandType = "OMAN_NET"
-            }
+
             itemsCardsList.add(
                 SectionTabItem(
                     imageURL,
