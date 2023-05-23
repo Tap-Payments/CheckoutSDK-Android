@@ -1095,20 +1095,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
-        val viewsToDisable = mutableListOf<View>(
-            paymentInlineViewHolder.tapCardInputView.backArrow as View,
-            amountViewHolder.view.amount_section.constraint,
-            amountViewHolder.view.amount_section.tapChipAmount,
-            cardViewHolder.view,
-            cardViewHolder.view.mainChipgroup,
-            paymentInlineViewHolder.tapCardInputView,
-            paymentInlineViewHolder.view,
-            paymentInlineViewHolder.nfcButton as View,
-            paymentInlineViewHolder.scannerButton as View,
-            saveCardSwitchHolder?.view as View,
-            saveCardSwitchHolder?.view?.cardSwitch?.payButton as View
-        )
-        viewsToDisable.disableViews()
+
         //start counter on open otpview
         otpViewHolder?.otpView?.startCounter()
         amountViewHolder?.view?.amountView_separator?.visibility = View.GONE
@@ -1705,15 +1692,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         cardId
                     )
                 }, viewToBeBLur = viewToBeBlurCardViewHolder)
-                val viewsToDisable = mutableListOf<View>(
-                    adapter.deleteImageView as View,
-                    amountViewHolder.view.amount_section.constraint,
-                    amountViewHolder.view.amount_section.tapChipAmount,
-                    cardViewHolder.view,
-                    cardViewHolder.view.mainChipgroup,
-                    paymentInlineViewHolder.tapCardInputView
-                )
-                viewsToDisable.disableViews()
+                sdkLayout.deepForEach { isEnabled = false }
+
 
             } else {
                 // println("else block is calle are")
@@ -1750,17 +1730,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             adapter.updateShaking(false)
             if (savedCardList.isNullOrEmpty()) cardViewHolder.view.mainChipgroup?.groupAction?.visibility =
                 GONE
-            val viewsToEnable = mutableListOf<View>(
-                adapter.deleteImageView as View,
-                businessViewHolder.view,
-                amountViewHolder.view.amount_section.constraint,
-                amountViewHolder.view.amount_section.tapChipAmount,
-                cardViewHolder.view,
-                cardViewHolder.view.mainChipgroup,
-                paymentInlineViewHolder.view,
-                paymentInlineViewHolder.tapCardInputView
-            )
-            viewsToEnable.enableViews()
+
+            sdkLayout.deepForEach { isEnabled = true }
+
         }
     }
 
@@ -1937,21 +1909,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     override fun displayAsynchronousPaymentView(chargeResponse: Charge) {
         if (chargeResponse != null) {
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
-            val viewsToDisable = mutableListOf<View>(
-                cardViewHolder.view.mainChipgroup.chipsRecycler as View,
-                paymentInlineViewHolder.tapCardInputView.backArrow as View,
-                amountViewHolder.view.amount_section.constraint,
-                amountViewHolder.view.amount_section.tapChipAmount,
-                cardViewHolder.view,
-                cardViewHolder.view.mainChipgroup,
-                paymentInlineViewHolder.tapCardInputView,
-                paymentInlineViewHolder.view,
-                paymentInlineViewHolder.nfcButton as View,
-                paymentInlineViewHolder.scannerButton as View,
-                saveCardSwitchHolder?.view as View,
-                saveCardSwitchHolder?.view?.cardSwitch?.payButton as View
-            )
-            viewsToDisable.disableViews()
+
             removeViews(
                 // businessViewHolder,
                 amountViewHolder,
@@ -2425,21 +2383,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         println("paymentInlineViewHolder.cardInputUIStatus" + paymentInlineViewHolder.cardInputUIStatus)
         PaymentDataSource.setWebViewType(WebViewType.THREE_DS_WEBVIEW)
         amountViewHolder.view.amount_section?.tapChipPopup?.slideFromLeftToRight()
-        val viewsToDisable = mutableListOf<View>(
-            cardViewHolder.view.mainChipgroup.chipsRecycler as View,
-            amountViewHolder.view.amount_section.constraint,
-            amountViewHolder.view.amount_section.tapChipAmount,
-            cardViewHolder.view,
-            cardViewHolder.view.mainChipgroup,
-            paymentInlineViewHolder.tapCardInputView,
-            paymentInlineViewHolder.view,
-            paymentInlineViewHolder.nfcButton as View,
-            paymentInlineViewHolder.tapCardInputView.backArrow as View,
-            paymentInlineViewHolder.scannerButton as View,
-            saveCardSwitchHolder?.view as View,
-            saveCardSwitchHolder?.view?.cardSwitch?.payButton as View
-        )
-        viewsToDisable.disableViews()
+
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
 
         doAfterSpecificTime(time = 100L) {
@@ -3073,22 +3017,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     fun changeButtonToLoading() {
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
-        val viewsToDisable = mutableListOf<View>(
-            cardViewHolder.view.mainChipgroup.chipsRecycler as View,
-            paymentInlineViewHolder.tapCardInputView.backArrow as View,
-            amountViewHolder.view.amount_section.constraint,
-            amountViewHolder.view.amount_section.tapChipAmount,
-            cardViewHolder.view,
-            cardViewHolder.view.mainChipgroup,
-            paymentInlineViewHolder.tapCardInputView,
-            paymentInlineViewHolder.view,
-            paymentInlineViewHolder.nfcButton as View,
-            paymentInlineViewHolder.scannerButton as View,
-            saveCardSwitchHolder?.view as View,
-            saveCardSwitchHolder?.view?.cardSwitch?.payButton as View
-        )
 
-        viewsToDisable.disableViews()
     }
 
 
@@ -3793,22 +3722,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     ) {
         if (response == "YES") {
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
-            val viewsToDisable = mutableListOf<View>(
-                cardViewHolder.view.mainChipgroup.chipsRecycler as View,
-                paymentInlineViewHolder.tapCardInputView.backArrow as View,
-                amountViewHolder.view.amount_section.constraint,
-                amountViewHolder.view.amount_section.tapChipAmount,
-                cardViewHolder.view,
-                cardViewHolder.view.mainChipgroup,
-                paymentInlineViewHolder.tapCardInputView,
-                paymentInlineViewHolder.view,
-                paymentInlineViewHolder.nfcButton as View,
-                paymentInlineViewHolder.scannerButton as View,
-                saveCardSwitchHolder?.view as View,
-                saveCardSwitchHolder?.view?.cardSwitch?.payButton as View
-            )
 
-            viewsToDisable.disableViews()
             println("savedCardsModel>>>>" + savedCardsModel)
             if (savedCardsModel != null) {
                 if (paymentType == PaymentType.CARD) {
