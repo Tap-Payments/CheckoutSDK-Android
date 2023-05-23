@@ -2577,7 +2577,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     ) {
         println("isCompleted aaa" + isCompleted)
-        println("expiryDate aaa" + expiryDate)
+        println("cardBrandString aaa" + cardBrandString)
+        println("cardNumber aaa" + cardNumber)
         println("cardInput status>>" + paymentInlineViewHolder.cardInputUIStatus)
         println("paymentTypeEnum status>>" + paymentType)
         println("savedCardsModel status>>" + savedCardsModel)
