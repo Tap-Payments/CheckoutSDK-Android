@@ -260,14 +260,14 @@ class GoPayCardAdapterUIKIT(
             } else {
                 holder.itemView.setBackgroundResource(R.drawable.border_shadow)
             }
-            setBorderedView(
-                holder.itemView.tapCardChip3Linear,
-                (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
-                0.0f,
-                parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
-                parseColor(ThemeManager.getValue("horizontalList.chips.gatewayChip.backgroundColor")),// tint color
-                parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
-            )// shadow color
+//            setBorderedView(
+//                holder.itemView.tapCardChip3Linear,
+//                (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
+//                0.0f,
+//                parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
+//                parseColor(ThemeManager.getValue("horizontalList.chips.gatewayChip.backgroundColor")),// tint color
+//                parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
+//            )// shadow color
 
         } else {
             if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
@@ -278,14 +278,14 @@ class GoPayCardAdapterUIKIT(
 
             }
 
-            setBorderedView(
-                holder.itemView.tapCardChip3Linear,
-                (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
-                0.0f,
-                parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
-                parseColor(ThemeManager.getValue("horizontalList.chips.gatewayChip.backgroundColor")),// tint color
-                parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
-            )// shadow color
+//            setBorderedView(
+//                holder.itemView.tapCardChip3Linear,
+//                (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
+//                0.0f,
+//                parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
+//                parseColor(ThemeManager.getValue("horizontalList.chips.gatewayChip.backgroundColor")),// tint color
+//                parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
+//            )// shadow color
 
         }
         (holder as SingleViewHolder)

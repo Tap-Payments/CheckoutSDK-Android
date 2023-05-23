@@ -7,12 +7,10 @@
     android:id="@+id/tapCardChip2"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="8dp"
-    android:elevation="0dp"
     android:layout_marginBottom="@dimen/margin_basic_10dp"
     android:hardwareAccelerated="true"
-    app:cardElevation="0dp"
-    android:layout_gravity="center">
+
+    >
 
 
   <androidx.constraintlayout.widget.ConstraintLayout

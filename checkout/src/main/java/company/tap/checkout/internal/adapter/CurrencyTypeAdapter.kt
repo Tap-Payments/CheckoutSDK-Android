@@ -84,14 +84,14 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
                 ThemeManager.getFontName("horizontalList.chips.currencyChip.labelTextFont")
             view.textView_currency.setTheme(totalQuantityTextViewTheme)
             view.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
-            setBorderedView(
-                    itemView.CurrencyChipLinear,
-                    15.0f,
-                    0.0f,
-                    Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.selected.shadow.color")),
-                    Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.backgroundColor")),
-                    Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.backgroundColor"))
-            )
+//            setBorderedView(
+//                    itemView.CurrencyChipLinear,
+//                    15.0f,
+//                    0.0f,
+//                    Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.selected.shadow.color")),
+//                    Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.backgroundColor")),
+//                    Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.backgroundColor"))
+//            )
         }
     }
 
@@ -196,16 +196,16 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
                // R.drawable.border_currency_black
                 R.drawable.border_shadow_white
         )
-        else holder.itemView.setBackgroundResource(R.drawable.border_shadow)
-        setBorderedView(
-                holder.itemView.CurrencyChipLinear,
-                15.0f,// corner raduis
-          //  (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),
-                2.0f,
-                Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.selected.shadow.color")),
-                Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.backgroundColor")),
-                Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.selected.shadow.color"))
-        )
+        else holder.itemView.tapcard_Chip.setBackgroundResource(R.drawable.border_shadow)
+//        setBorderedView(
+//                holder.itemView.CurrencyChipLinear,
+//                15.0f,// corner raduis
+//          //  (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),
+//                2.0f,
+//                Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.selected.shadow.color")),
+//                Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.backgroundColor")),
+//                Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.selected.shadow.color"))
+//        )
     }
 
 
@@ -213,17 +213,17 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
             holder.itemView.setBackgroundResource(R.drawable.border_unclick_black)
         } else {
-            holder.itemView.setBackgroundResource(R.drawable.border_unclick)
+            holder.itemView.tapcard_Chip.setBackgroundResource(R.drawable.border_unclick_white)
         }
-        setBorderedView(
-                holder.itemView.CurrencyChipLinear,
-               15.0f,// corner raduis
-            //(ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),
-                0.0f,
-                Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.unSelected.shadow.color")),
-                Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.backgroundColor")),
-                Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.unSelected.shadow.color"))
-        )
+//        setBorderedView(
+//                holder.itemView.CurrencyChipLinear,
+//               15.0f,// corner raduis
+//            //(ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),
+//                0.0f,
+//                Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.unSelected.shadow.color")),
+//                Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.backgroundColor")),
+//                Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.unSelected.shadow.color"))
+//        )
     }
 
     private fun ImageView.loadSvg(url: String) {

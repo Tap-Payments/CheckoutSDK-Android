@@ -1,31 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:card_view="http://schemas.android.com/tools"
-android:id="@+id/tapCardChip6"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-app:cardCornerRadius="12dp"
-android:elevation="0dp"
-android:hardwareAccelerated="true"
-card_view:cardElevation="10dp"
-app:cardElevation="0dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:id="@+id/tapCardChip6"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/margin_basic_10dp"
-android:paddingTop="5dp"
-    android:paddingBottom="5dp"
-android:layout_gravity="center">
-
-<LinearLayout
-    android:id="@+id/tapCardChip6Linear"
-    android:layout_width="100dp"
-    android:layout_height="40dp"
-    android:orientation="horizontal">
-   <!-- <ImageView
+    android:hardwareAccelerated="true"
+    >
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:scaleType="centerCrop"
+        android:padding="@dimen/margin_basic_20dp"
         android:id="@+id/googlePayButton"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible" />-->
-
-</LinearLayout>
+        android:duplicateParentState="true"
+        android:src="@drawable/googlepay_button_content_white"/>
 
 </FrameLayout>

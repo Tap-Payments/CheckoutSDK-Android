@@ -1,43 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/tools"
     android:id="@+id/tapCardChip3"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="12dp"
-    android:elevation="0dp"
-    android:hardwareAccelerated="true"
-    card_view:cardElevation="10dp"
-    app:cardElevation="0dp"
     android:layout_marginTop="@dimen/margin_basic_10dp"
     android:layout_marginBottom="@dimen/margin_basic_20dp"
-    android:layout_gravity="center">
+    android:elevation="0dp"
+    android:hardwareAccelerated="true">
 
-    <LinearLayout
-        android:id="@+id/tapCardChip3Linear"
+
+    <company.tap.tapuilibraryy.uikit.atoms.TapImageView
+        android:id="@+id/imageView_knet"
         android:layout_width="100dp"
         android:layout_height="40dp"
-        android:orientation="horizontal">
-
-        <company.tap.tapuilibraryy.uikit.atoms.TapImageView
-            android:id="@+id/imageView_knet"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:adjustViewBounds="true"
-            android:src="@drawable/knet" />
-
-        <company.tap.tapuilibraryy.uikit.atoms.TapImageView
-            android:id="@+id/imageView_benefit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="42dp"
-            android:layout_marginEnd="42dp"
-            android:src="@drawable/benefit"
-            android:visibility="gone" />
-
-    </LinearLayout>
+        android:layout_gravity="center"
+        android:src="@drawable/knet" />
 
 </FrameLayout>

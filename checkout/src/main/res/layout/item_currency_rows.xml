@@ -3,47 +3,45 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/tapcard_Chip"
-    android:layout_width="94dp"
-    android:layout_height="wrap_content"
+    android:layout_width="100dp"
+    android:layout_height="40dp"
     app:cardCornerRadius="10dp"
     android:layout_marginEnd="-7dp"
-    android:layout_marginTop="12dp"
-    android:layout_gravity="center"
     app:cardElevation="0dp"
   >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="38dp"
-        android:id="@+id/CurrencyChipLinear"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:orientation="horizontal">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         <company.tap.tapuilibraryy.uikit.atoms.TapImageView
             android:id="@+id/imageView_currency"
             android:layout_width="28dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_height="@dimen/margin_basic_23dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="7dp"
-            android:adjustViewBounds="true"
-            android:layout_marginBottom="7dp" />
+            android:layout_marginStart="15dp"
+            />
 
         <company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
             android:id="@+id/textView_currency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_basic_10dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="12dp"
-            android:layout_gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imageView_currency"
+            android:layout_marginStart="8dp"
             android:fontFamily="sans-serif"
+            android:textAlignment="center"
             android:gravity="center_horizontal"
             android:textColor="#4b4847"
             android:textSize="12sp"
             android:textStyle="normal"
             tools:text="KWD"
             />
-    </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

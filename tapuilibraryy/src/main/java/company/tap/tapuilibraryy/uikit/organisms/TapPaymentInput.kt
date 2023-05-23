@@ -22,7 +22,6 @@ import company.tap.tapuilibraryy.uikit.interfaces.TapView
 import company.tap.tapuilibraryy.uikit.models.TabSection
 import company.tap.tapuilibraryy.uikit.views.TapMobilePaymentView
 import company.tap.tapuilibraryy.uikit.views.TapSelectionTabLayout
-import kotlinx.android.synthetic.main.item_knet.view.*
 
 /**
  *

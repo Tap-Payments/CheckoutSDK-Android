@@ -1840,7 +1840,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 } else {
                     println("is this called>>>")
                     // removeAllViews()
-                    removeViews(amountViewHolder, cardViewHolder, paymentInlineViewHolder)
                     saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = VISIBLE
                     saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                         ActionButtonState.ERROR
@@ -1875,7 +1874,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private fun showAnimatedButtonRegardingWebViewDismiss(
         viewToFadeOut: View,
         isSuccess: Boolean = true,
-        tranisitionDuration: Long = 1000L
+        tranisitionDuration: Long = 500L
     ) {
 
         viewToFadeOut.addFadeOutAnimation {

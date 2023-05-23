@@ -8,5 +8,6 @@ object AppColorTheme {
     const val GlobalValuesColor = "GlobalValues.Colors.whiteTwo"
     const val ActionButtonBackgroundColor = "actionButton.Valid.paymentBackgroundColor"
     const val ActionButtonValidTitleLabelColor = "actionButton.Valid.titleLabelColor"
+    const val HorizontalShadowColors="horizontalList.chips.goPayChip.selected.shadow.color"
 
 }

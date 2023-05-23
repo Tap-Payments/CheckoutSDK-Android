@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingTop="6dp"
-        android:layout_marginStart="@dimen/margin_basic_16dp"
+        android:layout_marginStart="12dp"
         android:layout_marginEnd="@dimen/margin_basic_16dp">
 
         <company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
