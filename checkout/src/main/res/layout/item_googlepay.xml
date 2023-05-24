@@ -16,6 +16,6 @@
         android:padding="@dimen/margin_basic_20dp"
         android:id="@+id/googlePayButton"
         android:duplicateParentState="true"
-        android:src="@drawable/googlepay_button_content_white"/>
+      />
 
 </FrameLayout>

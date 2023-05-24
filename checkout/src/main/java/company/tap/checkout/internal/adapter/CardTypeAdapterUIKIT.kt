@@ -77,6 +77,11 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     val deleteIcon: Int =
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) R.drawable.icon_dark_closer else R.drawable.icon_light_closer
 
+    @DrawableRes
+    val googlePayIcon: Int =
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) R.drawable.googlepay_button_content else R.drawable.googlepay_button_content_white
+
+
     // A client for interacting with the Google Pay API.
     private var paymentsClient: PaymentsClient? = null
     var deleteImageView: ImageView? = null
@@ -505,7 +510,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     private fun typeGooglePay(holder: RecyclerView.ViewHolder, position: Int) {
         if (selectedPosition == position) setSelectedGoogleShadowAndBackground(holder)
         else setUnSelectedCardTypeGoogleShadowAndBackground(holder)
-
+        holder.itemView.googlePayButton.setImageResource(googlePayIcon)
         //  possiblyShowGooglePayButton(holder as GooglePayViewHolder)
         holder.itemView.googlePayButton.setOnClickListener {
             println("typeGooglePay is clicked")
