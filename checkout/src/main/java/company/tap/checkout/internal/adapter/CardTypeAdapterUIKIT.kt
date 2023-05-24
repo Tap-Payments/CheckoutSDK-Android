@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.graphics.Color
-import android.graphics.Color.parseColor
 import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
@@ -30,7 +29,6 @@ import company.tap.checkout.internal.api.models.SavedCard
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
 import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.utils.PaymentsUtil
-import company.tap.checkout.internal.utils.showToast
 import company.tap.tapuilibraryy.themekit.ThemeManager
 import company.tap.tapuilibraryy.themekit.theme.TextViewTheme
 import kotlinx.android.synthetic.main.item_benefit_pay.view.*
@@ -41,7 +39,6 @@ import mobi.foo.benefitinapp.data.Transaction
 import mobi.foo.benefitinapp.listener.BenefitInAppButtonListener
 import mobi.foo.benefitinapp.listener.CheckoutListener
 import mobi.foo.benefitinapp.utils.BenefitInAppCheckout
-import kotlin.collections.ArrayList
 
 
 /**
@@ -118,6 +115,31 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         notifyDataSetChanged()
     }
 
+
+    override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
+        super.onViewAttachedToWindow(holder)
+        if (holder is SavedViewHolder) {
+            if (isShaking) {
+                Log.d("isShaking", isShaking.toString())
+                val animShake: Animation =
+                    AnimationUtils.loadAnimation(holder.itemView.context, R.anim.shake)
+                holder.itemView.startAnimation(animShake)
+                animShake.setAnimationListener(object : Animation.AnimationListener {
+                    override fun onAnimationStart(p0: Animation?) {
+                    }
+
+                    override fun onAnimationEnd(p0: Animation?) {
+                        holder.itemView.setHasTransientState(false)
+                    }
+
+                    override fun onAnimationRepeat(p0: Animation?) {
+                    }
+
+                }) // messageHolder.message being the IncomingTextMessage kept in MyMessageViewHolder
+            }
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view: View
         __context = parent.context
@@ -181,16 +203,16 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                 return TYPE_GOOGLE_PAY
             }
 
-        if (position.minus(adapterContent.size.plus(`arrayListCards`.size)) < adapterGooglePay.size) {
-            val index = totalArraySize - adapterContent.size - adapterGooglePay.size
-            if (arrayListCards[index - 1].`object`.toUpperCase() == PaymentType.CARD.name) {
-                arrayListSaveCard.clear()
-                arrayListSaveCard.add(arrayListCards)
-                return TYPE_SAVED_CARD
-            }
-        }
+//        if (position.minus(adapterContent.size.plus(`arrayListCards`.size)) < adapterGooglePay.size) {
+//            val index = totalArraySize - adapterContent.size - adapterGooglePay.size
+//            if (arrayListCards[index - 1].`object`.toUpperCase() == PaymentType.CARD.name) {
+//                arrayListSaveCard.clear()
+//                arrayListSaveCard.add(arrayListCards)
+//                return TYPE_SAVED_CARD
+//            }
+//        }
 
-        return -1
+        return TYPE_SAVED_CARD
 
     }
 
@@ -349,66 +371,51 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                 //resetSelection()
                 onCardSelectedActionListener.onCardSelectedAction(true, arrayListCombined[position])
                 selectedPosition = position
-                //     notifyDataSetChanged()
             }
-//            tapActionButtonInterface.onSelectPaymentOptionActionListener()
         }
 
     }
 
 
     private fun bindSavedCardData(holder: RecyclerView.ViewHolder, position: Int) {
-        for (i in arrayListCards.indices) {
-            if (adapterGooglePay.isNotEmpty()) {
-                if (CustomUtils.getCurrentTheme() != null && CustomUtils.getCurrentTheme()
-                        .contains("dark")
-                ) {
-                    Glide.with(holder.itemView.context)
-                        .load(
-                            arrayListCards[position.minus(adapterContent.size)
-                                .minus(adapterGooglePay.size)].logos?.dark?.png?.toUri()
-                        )
-                        .into(holder.itemView.imageView_amex)
-                } else {
-                    Glide.with(holder.itemView.context)
-                        .load(
-                            arrayListCards[position.minus(adapterContent.size)
-                                .minus(adapterGooglePay.size)].logos?.light?.png?.toUri()
-                        )
-                        .into(holder.itemView.imageView_amex)
-                }
-
-                holder.itemView.textViewCardDetails.text = maskCardNumber(
-                    arrayListCards[position.minus(adapterContent.size)
-                        .minus(adapterGooglePay.size)].firstSix + arrayListCards[position.minus(
-                        adapterContent.size
-                    ).minus(adapterGooglePay.size)].lastFour
-                )
-                //Remove no  holder.itemView.textViewCardDetails.text = "   " +arrayListCards[position.minus(adapterContent.size).minus(adapterGooglePay.size)].lastFour
-                //holder.itemView.textViewCardDetails.text = adapterContent[holder.adapterPosition].chip1.title
-            } else {
-                // arrayListCards [position.minus(adapterContent.size)].image.let { holder.itemView.imageView_amex.loadSvg(it) }
-                if (CustomUtils.getCurrentTheme() != null && CustomUtils.getCurrentTheme()
-                        .contains("dark")
-                ) {
-                    Glide.with(holder.itemView.context)
-                        .load(arrayListCards[position.minus(adapterContent.size)].logos?.dark?.png?.toUri())
-                        .into(holder.itemView.imageView_amex as ImageView)
-                } else {
-                    Glide.with(holder.itemView.context)
-                        .load(arrayListCards[position.minus(adapterContent.size)].logos?.light?.png?.toUri())
-                        .into(holder.itemView.imageView_amex as ImageView)
-                }
-                holder.itemView.textViewCardDetails.text = maskCardNumber(
-                    arrayListCards[position.minus(adapterContent.size)].firstSix + arrayListCards[position.minus(
-                        adapterContent.size
-                    )].lastFour
-                )
-                //REmove no holder.itemView.textViewCardDetails.text = "   " +arrayListCards[position.minus(adapterContent.size)].lastFour
-                //holder.itemView.textViewCardDetails.text = adapterContent[holder.adapterPosition].chip1.title
-            }
-
+        val card =
+            if (adapterGooglePay.isNotEmpty()) arrayListCards[position.minus(adapterContent.size)
+                .minus(adapterGooglePay.size)] else arrayListCards[position.minus(adapterContent.size)]
+        // arrayListCards [position.minus(adapterContent.size)].image.let { holder.itemView.imageView_amex.loadSvg(it) }
+        if (CustomUtils.getCurrentTheme()
+                .contains("dark")
+        ) {
+            Glide.with(holder.itemView.context)
+                .load(card.logos?.dark?.png?.toUri())
+                .into(holder.itemView.imageView_amex as ImageView)
+        } else {
+            Glide.with(holder.itemView.context)
+                .load(card.logos?.light?.png?.toUri())
+                .into(holder.itemView.imageView_amex as ImageView)
         }
+        holder.itemView.textViewCardDetails.text = maskCardNumber(
+            card.firstSix + card.lastFour
+        )
+        if (isShaking) {
+            Log.d("isShaking", isShaking.toString())
+            val animShake: Animation =
+                AnimationUtils.loadAnimation(holder.itemView.context, R.anim.shake)
+            holder.itemView.startAnimation(animShake)
+            animShake.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(p0: Animation?) {
+                }
+
+                override fun onAnimationEnd(p0: Animation?) {
+                    holder.itemView.setHasTransientState(false)
+                }
+
+                override fun onAnimationRepeat(p0: Animation?) {
+                }
+
+            })
+            holder.itemView.deleteImageViewSaved?.visibility = View.VISIBLE
+        } else holder.itemView.deleteImageViewSaved?.visibility = View.INVISIBLE
+
         val saveCardTextViewTheme = TextViewTheme()
         saveCardTextViewTheme.textColor =
             Color.parseColor(ThemeManager.getValue("horizontalList.chips.savedCardChip.labelTextColor"))
@@ -423,13 +430,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     private fun setSavedCardShakingAnimation(holder: RecyclerView.ViewHolder) {
         deleteImageView = holder.itemView.deleteImageViewSaved
         holder.itemView.deleteImageViewSaved.setImageResource(deleteIcon)
-        if (isShaking) {
-            Log.d("isShaking", isShaking.toString())
-            val animShake: Animation =
-                AnimationUtils.loadAnimation(holder.itemView.context, R.anim.shake)
-            holder.itemView.startAnimation(animShake)
-            holder.itemView.deleteImageViewSaved?.visibility = View.VISIBLE
-        } else holder.itemView.deleteImageViewSaved?.visibility = View.INVISIBLE
+
     }
 
     private fun setSelectedCardTypeSavedShadowAndBackground(holder: RecyclerView.ViewHolder) {
