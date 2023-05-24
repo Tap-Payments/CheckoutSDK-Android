@@ -251,7 +251,7 @@ class TapSelectionTabLayout(context: Context?, attrs: AttributeSet?) :
                 tabItemMarginBottomValue
             )*/
 
-                params.marginEnd=tabItemMarginRightValue
+               // params.marginEnd=tabItemMarginRightValue
                params.marginStart=tabItemMarginLeftValue
 
             item.imageView?.layoutParams = params
