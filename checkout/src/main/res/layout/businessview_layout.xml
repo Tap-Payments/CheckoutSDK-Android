@@ -22,7 +22,7 @@
             android:visibility="visible"
             android:layout_marginStart="@dimen/default_padding"
             android:layout_marginEnd="@dimen/default_padding"
-            android:background="@color/separator_color" />
+            />
 
 
     </LinearLayout>

@@ -96,10 +96,7 @@ class BusinessViewHolder(context: Context, private val checkoutViewModel: Checko
                 }
 
             }
-        /**
-         * set separator background
-         */
-        view.topSeparatorLinear.setBackgroundColor((Color.parseColor(ThemeManager.getValue("merchantHeaderView.backgroundColor"))))
+
     }
 
     private fun getHeaderDataSourceFromAPI(): HeaderDataSource {

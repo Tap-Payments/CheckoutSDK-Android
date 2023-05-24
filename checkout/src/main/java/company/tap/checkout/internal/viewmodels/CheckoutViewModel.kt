@@ -3224,7 +3224,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         newBorderColor = "#" + borderOpacityVal + borderColor.substring(0, borderColor.length - 2)
             .replace("#", "")
 
-
+        /**
+         * Set the stroke width from json itself for business header*/
         val separatorViewTheme = SeparatorViewTheme()
         separatorViewTheme.strokeColor =
             Color.parseColor(ThemeManager.getValue("tapSeparationLine.backgroundColor"))
