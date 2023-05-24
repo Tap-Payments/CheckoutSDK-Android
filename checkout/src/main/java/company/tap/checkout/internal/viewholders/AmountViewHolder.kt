@@ -23,6 +23,7 @@ import company.tap.tapuilibraryy.uikit.atoms.TapChip
 import company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
 import company.tap.tapuilibraryy.uikit.datasource.AmountViewDataSource
 import company.tap.tapuilibraryy.uikit.ktx.setBorderedView
+import company.tap.tapuilibraryy.uikit.utils.MetricsUtil
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 
 
@@ -32,7 +33,7 @@ import kotlinx.android.synthetic.main.amountview_layout.view.*
  *
  */
 class AmountViewHolder(
-    context: Context,
+   private val context: Context,
     private val baseLayoutManager: BaseLayoutManager? = null,
     private var checkoutViewModel: CheckoutViewModel
 ) :
@@ -52,6 +53,7 @@ class AmountViewHolder(
     private var CustomCardViewStyle: TapChip = view.findViewById(R.id.CustomCardViewStyle)
     private var readyToScanText: TapTextViewNew = view.findViewById(R.id.cardscan_ready)
     var scannerClicked: Boolean? = false
+
 
     init {
         bindViewComponents()
@@ -73,7 +75,7 @@ class AmountViewHolder(
 
         setBorderedView(
             view.amount_section.tapChipPopup,
-            ThemeManager.getValue<Float>("amountSectionView.itemsNumberButtonCorner").toFloat() +5,// corner raduis
+            MetricsUtil.convertDpToPixel(ThemeManager.getValue<Float>("amountSectionView.itemsNumberButtonCorner").toFloat() +5,context),// corner raduis
             0.0f,
             Color.parseColor(ThemeManager.getValue("amountSectionView.itemsNumberButtonBackgroundColor")),
             Color.parseColor(ThemeManager.getValue("amountSectionView.itemsNumberButtonBackgroundColor")),
@@ -82,7 +84,7 @@ class AmountViewHolder(
 
         setBorderedView(
             view.amount_section.tapChipAmount,
-            ThemeManager.getValue<Float>("amountSectionView.itemsNumberButtonCorner").toFloat() +5,// corner raduis
+            MetricsUtil.convertDpToPixel(ThemeManager.getValue<Float>("amountSectionView.itemsNumberButtonCorner").toFloat() +5,context),// corner raduis
             0.0f,
             Color.parseColor(ThemeManager.getValue("amountSectionView.itemsNumberButtonBackgroundColor")),
             Color.parseColor(ThemeManager.getValue("amountSectionView.itemsNumberButtonBackgroundColor")),
