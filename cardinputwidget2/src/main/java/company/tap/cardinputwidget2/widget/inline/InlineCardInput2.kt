@@ -1040,7 +1040,6 @@ class InlineCardInput2 @JvmOverloads constructor(
         holderNameEditText.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
             println("holderNameEditText must call"+holderNameEditText.hasFocus())
             if (hasFocus) {
-
                 holderNameEditText.requestFocus()
                 cardInputListener?.onFocusChange(FOCUS_HOLDERNAME)
             }
@@ -2023,7 +2022,7 @@ class InlineCardInput2 @JvmOverloads constructor(
             holderNameEditText.isEnabled = true
             holderNameTextInputLayout.visibility = View.VISIBLE
             holderNameEditText.visibility = View.VISIBLE
-
+            holderNameEditText.requestFocus()
             cvcNumberEditText.imeOptions = EditorInfo.IME_ACTION_NEXT
         }else {
             holderNameEditText.isEnabled = true

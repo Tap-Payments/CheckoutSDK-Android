@@ -1335,11 +1335,7 @@ class PaymentInlineViewHolder(
                             if (PaymentDataSource.getCardHolderNameShowHide()) {
                                 tapCardInputView.holderNameEnabled = true
                                 tapCardInputView.setVisibilityOfHolderField(PaymentDataSource.getCardHolderNameShowHide())
-                                /* tapCardInputView.separatorcard2.setBackgroundColor(
-                                     Color.parseColor(
-                                         ThemeManager.getValue("tapSeparationLine.backgroundColor")
-                                     )
-                                 )*/
+                                onFocusChange(CardInputListener.FocusField.FOCUS_HOLDERNAME)
                                 // tapCardInputView.separatorcard2.visibility = View.VISIBLE
                                 separator1?.visibility = View.VISIBLE
                                 if (PaymentDataSource.getDefaultCardHolderName()
@@ -1816,6 +1812,7 @@ class PaymentInlineViewHolder(
         lastFocusField = focusField
 
         println("lastFocusField>>>>" + lastFocusField)
+        if(focusField == "focus_cardholder" && cardHolderName?.isNullOrEmpty()==true) CustomUtils.showKeyboard(context)
         /* if(resetView){
              tapCardInputView.onTouchView()
              resetView = false
