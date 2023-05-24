@@ -24,12 +24,12 @@ import java.nio.charset.StandardCharsets
 object ThemeManager {
 
     private lateinit var theme: JSONObject
-    private lateinit var themeString :String
-    var currentTheme :String = ""
+    private lateinit var themeString: String
+    var currentTheme: String = ""
 
     //// decide if we load json from path or assets
 
-    fun loadTapTheme(resources: Resources, resId: Int, themeName : String) {
+    fun loadTapTheme(resources: Resources, resId: Int, themeName: String) {
         currentTheme = themeName
         Log.d("currentTheme", currentTheme)
         val resourceReader = resources.openRawResource(resId)
@@ -43,14 +43,14 @@ object ThemeManager {
         try {
             themeString = writer.toString()
             theme = JSONObject(writer.toString())
-        } catch ( e : JSONException) {
+        } catch (e: JSONException) {
             Log.e("APP", "unexpected JSON exception", e);
             // Do something to recover ... or kill the app.
         }
     }
 
-    fun loadTapTheme(context: Context, url: String,themeName : String) {
-       currentTheme = themeName
+    fun loadTapTheme(context: Context, url: String, themeName: String) {
+        currentTheme = themeName
         Ion.with(context)
             .load(url)
             .asJsonObject()
@@ -61,10 +61,11 @@ object ThemeManager {
                     themeString = result.toString()
                     theme = JSONObject(result.toString())
                     currentTheme = url
-                  //  Toast.makeText(context, "Theme switched", Toast.LENGTH_SHORT).show()
+                    //  Toast.makeText(context, "Theme switched", Toast.LENGTH_SHORT).show()
                 }
             }
     }
+
 
 
     fun  <T>  getValue(path: String): T  {
@@ -78,12 +79,17 @@ object ThemeManager {
                 if(result.toString().contains("#")){ return result as T
                 }
                 else {
-                  //  Log.d("themeStringthemeString", themeString.toString())
-                      if(::themeString.isInitialized)
-                    if (result.toString() in (themeString.split("}")[0])) {
-                        return  valueFromJson("GlobalValues.Colors.${result}") as T
-                    }
+                    //  Log.d("themeStringthemeString", themeString.toString())
+                    val jsonObject = JSONObject(themeString)
+                    val jsonObjectGlobal = jsonObject.getJSONObject("GlobalValues")
+                    val colorListObject = jsonObjectGlobal.getJSONObject("Colors")
+
+                    if(::themeString.isInitialized)
+                        if (result.toString() in colorListObject.toString()) {
+                            return  valueFromJson("GlobalValues.Colors.${result}") as T
+                        }
                     return result
+
                 }
             }
         }catch ( e : JSONException) {
@@ -94,15 +100,16 @@ object ThemeManager {
     }
 
 
-    fun getFontName(path: String): String{
+    fun getFontName(path: String): String {
         // get font value and split with comma and return string and float
-        var fontName :String
+        var fontName: String
         var fontValue = getValue(path) as String
         fontName = fontValue.split(",")[0].toString()
         return fontName
     }
-    fun getFontSize(path: String): Double{
-        var fontSize :Double
+
+    fun getFontSize(path: String): Double {
+        var fontSize: Double
         var fontValue = getValue(path) as String
         fontSize = fontValue.split(",")[1].toDouble()
         return fontSize
@@ -135,9 +142,9 @@ object ThemeManager {
     }
 
     private fun <T> valueFromJson(path: String): T {
-        var view: JSONObject? =null
+        var view: JSONObject? = null
         val pathComponent = path.split('.')
-        if(::theme.isInitialized) view = theme.getJSONObject(pathComponent[0])
+        if (::theme.isInitialized) view = theme.getJSONObject(pathComponent[0])
         if (pathComponent.size > 2) {
             for (i in 1..pathComponent.size - 2) {
                 view = view?.getJSONObject(pathComponent[i])
@@ -146,10 +153,6 @@ object ThemeManager {
         val valueKey = pathComponent[pathComponent.lastIndex]
         return view?.get(valueKey) as T
     }
-
-
-
-
 
 
 }
