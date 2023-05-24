@@ -54,7 +54,7 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
     private val textView by lazy { TextView(context) }
     private var counter = 0
     private lateinit var animationDataSource: AnimationDataSource
-
+    private var maxCorners = MetricsUtil.convertDpToPixel(MAX_CORNERS, context)
 
     @DrawableRes
     val loaderGif: Int =
@@ -455,7 +455,7 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
                     fromWidth = width,
                     toWidth = 70 + 40,
                     fromCorners = dataSource?.cornerRadius,
-                    toCorners = MAX_CORNERS,
+                    toCorners = maxCorners,
                     fromColor = dataSource?.backgroundColor,
                     toColor = dataSource?.errorColor,
                     duration = MAX_DURATION,
@@ -469,7 +469,7 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
                     fromWidth = width,
                     toWidth = 40 + 40,
                     fromCorners = dataSource?.cornerRadius,
-                    toCorners = MAX_CORNERS,
+                    toCorners = maxCorners,
                     fromColor = dataSource?.backgroundColor,
                     toColor = dataSource?.errorColor,
                     duration = MAX_DURATION,
@@ -483,7 +483,7 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
                     fromWidth = width,
                     toWidth = 100 + 40,
                     fromCorners = dataSource?.cornerRadius,
-                    toCorners = MAX_CORNERS,
+                    toCorners = maxCorners,
                     fromColor = dataSource?.backgroundColor,
                     toColor = dataSource?.errorColor,
                     duration = MAX_DURATION,
