@@ -29,6 +29,7 @@ import company.tap.tapuilibraryy.uikit.enums.ActionButtonState.*
 import company.tap.tapuilibraryy.uikit.interfaces.TabAnimatedButtonListener
 import company.tap.tapuilibraryy.uikit.interfaces.TapActionButtonInterface
 import company.tap.tapuilibraryy.uikit.ktx.setImage
+import company.tap.tapuilibraryy.uikit.utils.MetricsUtil
 
 
 /**
@@ -191,7 +192,7 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
             text = btnText,
             textSize = 16f,
             textColor = _textColor,
-            cornerRadius = 100f,
+            cornerRadius = MetricsUtil.convertDpToPixel(100f,context),
             successImageResources = loaderSuccessGif,
             errorImageResources = loaderErrorGif,
             backgroundColor = btnBackground

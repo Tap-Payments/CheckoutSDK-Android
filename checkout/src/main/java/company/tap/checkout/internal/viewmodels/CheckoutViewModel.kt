@@ -56,14 +56,11 @@ import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.internal.api.requests.CreateTokenGPayRequest
 import company.tap.checkout.internal.api.responses.DeleteCardResponse
-import company.tap.checkout.internal.api.responses.InitResponseModel
 import company.tap.checkout.internal.api.responses.MerchantData
 import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
 import company.tap.checkout.internal.apiresponse.CardViewEvent
 import company.tap.checkout.internal.apiresponse.CardViewModel
-import company.tap.checkout.internal.apiresponse.UserRepository
 import company.tap.checkout.internal.apiresponse.testmodels.GoPaySavedCards
-import company.tap.checkout.internal.apiresponse.testmodels.TapCardPhoneListDataSource
 import company.tap.checkout.internal.cache.SharedPrefManager
 import company.tap.checkout.internal.cache.UserSupportedLocaleForTransactions
 import company.tap.checkout.internal.enums.PaymentTypeEnum
@@ -281,7 +278,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private var endColor: String? = null
     private var middleColor: String? = null
     private var image: ImageView? = null
-
+    var savedCardsBasedCurr: java.util.ArrayList<SavedCard> = java.util.ArrayList<SavedCard>()
     @JvmField
     var incrementalCount: Int = 0
 
@@ -1688,8 +1685,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         cardId
                     )
                 }, viewToBeBLur = selectedViewToBeDeletedFromCardViewHolder)
-                sdkLayout.deepForEach { isEnabled = false }
 
+              
 
             } else {
                 // println("else block is calle are")
@@ -1719,8 +1716,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     override fun deleteSelectedCardListener(delSelectedCard: DeleteCardResponse) {
         if (delSelectedCard.deleted) {
-            savedCardList?.removeAt(selectedItemsDel)
-            savedCardList?.let { adapter.updateAdapterDataSavedCard(it) }
+            savedCardsBasedCurr?.removeAt(selectedItemsDel)
+            savedCardsBasedCurr?.let { adapter.updateAdapterDataSavedCard(it) }
             cardViewHolder.view.mainChipgroup.chipsRecycler.adapter = adapter
             deleteCard = false
             adapter.updateShaking(false)
@@ -2504,6 +2501,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         selectedItemsDel = itemId
         deleteCard = true
         this.arrayListSavedCardSize = arrayListSavedCardSizes
+        sdkLayout.deepForEach { isEnabled = false }
 
     }
 
@@ -3537,18 +3535,18 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun filterViewModels(currency: String) {
-        var savedCards: java.util.ArrayList<SavedCard> = java.util.ArrayList<SavedCard>()
+
         if (paymentOptionsResponse.paymentOptions != null)
             paymentOptionsWorker =
                 java.util.ArrayList<PaymentOption>(paymentOptionsResponse.paymentOptions)
         if (paymentOptionsResponse.cards != null) {
             val savedCardsWorker: java.util.ArrayList<SavedCard> =
                 java.util.ArrayList<SavedCard>(paymentOptionsResponse.cards)
-            savedCards = filterByCurrenciesAndSortList(savedCardsWorker, currency)
+            savedCardsBasedCurr = filterByCurrenciesAndSortList(savedCardsWorker, currency)
 
         }
-        println("savedCards>>" + savedCards)
-        println("savedCards>>" + savedCards?.size)
+        println("savedCardsBasedCurr>>" + savedCardsBasedCurr)
+        println("savedCardsBasedCurr>>" + savedCardsBasedCurr?.size)
 
 
         webPaymentOptions =
@@ -3570,7 +3568,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         val hasCardPaymentOptions = cardPaymentOptions.size > 0
         val hasGooglePaymentOptions = googlePaymentOptions.size > 0
 
-        val hasSavedCards: Boolean = savedCards.size > 0
+        val hasSavedCards: Boolean = savedCardsBasedCurr.size > 0
         // println("hasGooglePaymentOptions"+hasGooglePaymentOptions)
 
         //Added if else to update showing GooglePay button based on api
@@ -3599,9 +3597,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             webPaymentOptions,
             cardPaymentOptions
         )
-        if (savedCards == null) savedCards = ArrayList()
+        if (savedCardsBasedCurr == null) savedCardsBasedCurr = ArrayList()
         if (hasSavedCards) {
-            adapter.updateAdapterDataSavedCard(savedCards)
+            adapter.updateAdapterDataSavedCard(savedCardsBasedCurr)
             // update RecentSectionViewModel data with only filtered cards. // added to fix filtering saved cards based on changed currency
 
         }
