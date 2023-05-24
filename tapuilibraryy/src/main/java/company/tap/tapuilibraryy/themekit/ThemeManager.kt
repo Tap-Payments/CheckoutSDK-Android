@@ -67,34 +67,32 @@ object ThemeManager {
     }
 
 
-    fun <T> getValue(path: String): T {
+
+    fun  <T>  getValue(path: String): T  {
         var result: T
-        try {
+        try
+        {
             result = valueFromJson(path)
-            if (isInteger(result.toString())) {
+            if (isInteger(result.toString())){
                 return result
-            } else {
-                if (result.toString().contains("#")) {
-                    return result as T
-                } else {
+            }else{
+                if(result.toString().contains("#")){ return result as T
+                }
+                else {
                     //  Log.d("themeStringthemeString", themeString.toString())
-                    if (::themeString.isInitialized) {
-                        val data = JSONObject(themeString)
-                        val colorValue = data.getJSONObject("GlobalValues").getJSONObject("Colors")
-                        if (::themeString.isInitialized) {
-                            try {
-                                if (colorValue.getString(result.toString()).isNotEmpty()) {
-                                    return valueFromJson("GlobalValues.Colors.${result}") as T
-                                }
-                            } catch (e: Exception) {
-                                return result
-                            }
+                    val jsonObject = JSONObject(themeString)
+                    val jsonObjectGlobal = jsonObject.getJSONObject("GlobalValues")
+                    val colorListObject = jsonObjectGlobal.getJSONObject("Colors")
+
+                    if(::themeString.isInitialized)
+                        if (result.toString() in colorListObject.toString()) {
+                            return  valueFromJson("GlobalValues.Colors.${result}") as T
                         }
-                        return result
-                    }
+                    return result
+
                 }
             }
-        } catch (e: JSONException) {
+        }catch ( e : JSONException) {
             Log.e("APP", "unexpected JSON exception", e);
             // Do something to recover ... or kill the app.
         }
