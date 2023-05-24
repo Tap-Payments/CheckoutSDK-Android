@@ -97,12 +97,12 @@ class ItemAdapter(
             for (i in adapterContentItems.indices) {
                 descriptionTextView.text = adapterContentItems[position].description
                 if (isExpanded) {
-                    animateBS(fromView = bottomSheetLayout, toView = sdkLayout, transitionAnimation = 50L, changeHeight = {
+                    animateBS(fromView = bottomSheetLayout, toView = sdkLayout, transitionAnimation = 150L, changeHeight = {
                         descriptionTextView.visibility = View.VISIBLE
                     })
 
                 } else {
-                    animateBS(fromView = bottomSheetLayout, toView = sdkLayout, transitionAnimation = 50L, changeHeight = {
+                    animateBS(fromView = bottomSheetLayout, toView = sdkLayout, transitionAnimation = 150L, changeHeight = {
                         descriptionTextView.visibility = View.GONE
                     })
                 }
@@ -175,12 +175,9 @@ class ItemAdapter(
     private fun showHideDescText(isExpanded: Boolean, position: Int, descText: TapTextViewNew?) {
         if (isExpanded) {
             previousExpandedPosition = position
-            // descText?.text = LocalizationManager.getValue("hideDesc", "ItemList")
             itemViewAdapter.collapseImageView?.visibility = View.VISIBLE
             itemViewAdapter.expandImageView?.visibility = View.GONE
-
         } else {
-
             itemViewAdapter.expandImageView?.visibility = View.VISIBLE
             itemViewAdapter.collapseImageView?.visibility = View.GONE
         }
@@ -195,15 +192,7 @@ class ItemAdapter(
     private fun onItemClickAction(holder: ItemHolder, position: Int, isExpanded: Boolean) {
         holder.itemView.setOnClickListener {
             itemViewAdapter.visibility = View.VISIBLE
-
             mExpandedPosition = if (isExpanded) -1 else position
-            if (isExpanded) {
-
-            } else {
-
-
-            }
-            notifyItemChanged(previousExpandedPosition)
             notifyItemChanged(position)
         }
     }
