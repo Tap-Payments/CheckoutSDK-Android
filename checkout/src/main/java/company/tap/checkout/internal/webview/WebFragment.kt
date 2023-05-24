@@ -157,6 +157,10 @@ class WebFragment(
                     }
                     progressBar?.visibility = View.INVISIBLE
                     web_view.visibility = View.VISIBLE
+//                    relative.layoutParams = LinearLayout.LayoutParams(
+//                        LinearLayout.LayoutParams.MATCH_PARENT,
+//                        context?.twoThirdHeightView()?.roundToInt()!!
+//                    )
                 }
             }
 

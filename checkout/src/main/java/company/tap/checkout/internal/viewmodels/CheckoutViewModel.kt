@@ -2374,14 +2374,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun onClickCardPayment(savedCardsModel: Any?) {
-        println("onClickCardPayment" + savedCardsModel)
-        println("paymentInlineViewHolder.cardInputUIStatus" + paymentInlineViewHolder.cardInputUIStatus)
         PaymentDataSource.setWebViewType(WebViewType.THREE_DS_WEBVIEW)
         amountViewHolder.view.amount_section?.tapChipPopup?.slideFromLeftToRight()
-
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
 
-        doAfterSpecificTime(time = 100L) {
+        doAfterSpecificTime {
             savedCardsModel as PaymentOption
             CustomUtils.hideKeyboardFrom(context, paymentInlineViewHolder.view)
             if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
@@ -2390,30 +2387,29 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         savedCardsModel.buttonStyle?.background?.darkModel?.baseColor
                     )
                 )
-
             } else saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
                 backgroundColor = Color.parseColor(savedCardsModel.buttonStyle?.background?.lightModel?.baseColor)
             )
-
-            saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
-
             if (paymentInlineViewHolder.cardInputUIStatus == CardInputUIStatus.NormalCard) {
-
+                paymentInlineViewHolder.paymentInputContainer.applyBluryToView()
                 with(cardViewHolder.view.mainChipgroup) {
-                    val viewsToFadeOut = mutableListOf<View>(chipsRecycler, groupAction, groupName)
+                    val viewsToFadeOut = mutableListOf<View>(
+                        chipsRecycler,
+                        groupAction,
+                        groupName,
+                    )
                     if (paymentInlineViewHolder.cardInputUIStatus == CardInputUIStatus.NormalCard) {
                         viewsToFadeOut.add(amountViewHolder.view)
                     }
-                    doAfterSpecificTime(time = 500L) {
-                        viewsToFadeOut.addFadeOutAnimationToViews {}
-                        paymentInlineViewHolder.paymentInputContainer.applyBluryToView()
+                    doAfterSpecificTime(time = 100L) {
+                        viewsToFadeOut.addFadeOutAnimationToViews(onAnimationStart = {
+                            removeVisibilityOfSwitch()
+                        }, durationTime = 500) {}
                     }
 
                 }
 
             }
-
-            println("isSavedCardSelected"+isSavedCardSelected)
 
             if (isSavedCardSelected == true) {
                 cardViewModel.processEvent(
@@ -2446,6 +2442,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
     }
+
+    private fun removeVisibilityOfSwitch() {
+        saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
+    }
+
 
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -3106,10 +3107,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private fun payActionSavedCard(savedCardsModel: SavedCard?) {
         println("payActionSavedCard??????" + savedCardsModel)
         var selectdSavedCard: PaymentOption? = null
-
         selectdSavedCard = logicTogetPayOptions(savedCardsModel?.brand?.name)
-
-
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
                 backgroundColor = Color.parseColor(
