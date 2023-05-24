@@ -15,9 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import company.tap.tapuilibraryy.themekit.ThemeManager
 import company.tap.tapuilibraryy.uikit.interfaces.OnCardSelectedActionListener
-import company.tap.tapuilibraryy.uikit.ktx.setBorderedView
 import company.tap.tapuilibraryy.R
-import kotlinx.android.synthetic.main.item_saved_card.view.*
 
 /**
 Copyright (c) 2020    Tap Payments.
@@ -43,8 +41,7 @@ class CardTypeAdapter(
         context_ = parent.context
         return when (viewType) {
             TYPE_SAVED_CARD -> {
-                view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_saved_card, parent, false)
+                view = LayoutInflater.from(parent.context).inflate(R.layout.item_gopay, parent, false)
                 SavedViewHolder(view)
             }
             TYPE_REDIRECT -> {
@@ -75,15 +72,15 @@ class CardTypeAdapter(
 
 
     private fun setOnClickActions(holder: ViewHolder) {
-        holder.itemView.deleteImageView2?.visibility = View.VISIBLE
-
-        holder.itemView.deleteImageView2?.setOnClickListener {
-            onCardSelectedActionListener.onDeleteIconClicked(true, holder.itemView.id)
-            arrayList.remove(holder.itemView.id)
-            holder.itemView.clearAnimation()
-            it.animate().cancel()
-            it.clearAnimation()
-        }
+//        holder.itemView.deleteImageView2?.visibility = View.VISIBLE
+//
+//        holder.itemView.deleteImageView2?.setOnClickListener {
+//            onCardSelectedActionListener.onDeleteIconClicked(true, holder.itemView.id)
+//            arrayList.remove(holder.itemView.id)
+//            holder.itemView.clearAnimation()
+//            it.animate().cancel()
+//            it.clearAnimation()
+//        }
 
     }
 
@@ -137,8 +134,8 @@ class CardTypeAdapter(
     }
 
     private fun typeSavedCard(holder: ViewHolder, position: Int) {
-        holder.itemView.textViewCardDetails.setTextColor(Color.parseColor(ThemeManager.getValue("horizontalList.chips.savedCardChip.labelTextColor")))
-        holder.itemView.textViewCardDetails.textSize = ThemeManager.getFontSize("horizontalList.chips.savedCardChip.labelTextFont").toFloat()
+     //   holder.itemView.textViewCardDetails.setTextColor(Color.parseColor(ThemeManager.getValue("horizontalList.chips.savedCardChip.labelTextColor")))
+      //  holder.itemView.textViewCardDetails.textSize = ThemeManager.getFontSize("horizontalList.chips.savedCardChip.labelTextFont").toFloat()
         if (isShaking) {
             val animShake: Animation = AnimationUtils.loadAnimation(context_, R.anim.shake)
             holder.itemView.startAnimation(animShake)
@@ -146,35 +143,35 @@ class CardTypeAdapter(
         }
         if (selectedPosition == position) {
             if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
-                holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.border_shadow_black)
+            //    holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.border_shadow_black)
             } else {
-                holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.border_shadow)
+          //      holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.border_shadow)
             }
-            setBorderedView(
-                holder.itemView.tapCardChip2Constraints,
-                (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
-                0.0f,
-                parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
-                Color.parseColor(ThemeManager.getValue("horizontalList.chips.savedCardChip.backgroundColor")),// tint color
-                parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
-            )// shadow color
+//            setBorderedView(
+//                holder.itemView.tapCardChip2Constraints,
+//                (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
+//                0.0f,
+//                parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
+//                Color.parseColor(ThemeManager.getValue("horizontalList.chips.savedCardChip.backgroundColor")),// tint color
+//                parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
+//            )// shadow color
 
         } else {
             if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
-                holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.border_unclick_black)
+         //       holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.border_unclick_black)
             } else {
-                holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.border_unclick)
+           //     holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.border_unclick)
             }
-
-
-            setBorderedView(
-                holder.itemView.tapCardChip2Constraints,
-                (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
-                0.0f,
-                parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
-                Color.parseColor(ThemeManager.getValue("horizontalList.chips.savedCardChip.backgroundColor")),// tint color
-                parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
-            )// shadow color
+//
+//
+//            setBorderedView(
+//                holder.itemView.tapCardChip2Constraints,
+//                (ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),// corner raduis
+//                0.0f,
+//                parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.selected.shadow.color")),// stroke color
+//                Color.parseColor(ThemeManager.getValue("horizontalList.chips.savedCardChip.backgroundColor")),// tint color
+//                parseColor(ThemeManager.getValue("horizontalList.chips.goPayChip.unSelected.shadow.color"))
+//            )// shadow color
 
         }
         (holder as SavedViewHolder)

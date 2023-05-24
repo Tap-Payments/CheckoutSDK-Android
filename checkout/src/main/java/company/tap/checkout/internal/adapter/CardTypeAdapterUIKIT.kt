@@ -37,9 +37,6 @@ import kotlinx.android.synthetic.main.item_benefit_pay.view.*
 import kotlinx.android.synthetic.main.item_googlepay.view.*
 import kotlinx.android.synthetic.main.item_knet.view.*
 import kotlinx.android.synthetic.main.item_save_cards.view.*
-import kotlinx.android.synthetic.main.item_saved_card.view.*
-import kotlinx.android.synthetic.main.item_saved_card.view.imageView_amex
-import kotlinx.android.synthetic.main.item_saved_card.view.tapCardChip2
 import mobi.foo.benefitinapp.data.Transaction
 import mobi.foo.benefitinapp.listener.BenefitInAppButtonListener
 import mobi.foo.benefitinapp.listener.CheckoutListener

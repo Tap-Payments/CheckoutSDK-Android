@@ -1687,7 +1687,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         PaymentDataSource.getCustomer().identifier,
                         cardId
                     )
-                }, viewToBeBLur = viewToBeBlurCardViewHolder)
+                }, viewToBeBLur = selectedViewToBeDeletedFromCardViewHolder)
                 sdkLayout.deepForEach { isEnabled = false }
 
 
