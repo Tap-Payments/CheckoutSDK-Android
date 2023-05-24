@@ -57,4 +57,6 @@ interface CardInputListener {
     fun cardFormHasFocus(hasFocus: Boolean)
 
     fun cvvFieldHasFocus(hasFocus: Boolean)
+
+    fun isCVCValid(isValid:Boolean)
 }

@@ -40,7 +40,7 @@ class CvcEditText @JvmOverloads constructor(
     private var cardBrand: CardBrand =
         CardBrand.Unknown
 
-    private val isValid: Boolean
+     val isValid: Boolean
         get() {
             return cardBrand.isValidCvc(rawCvcValue)
         }

@@ -1204,6 +1204,7 @@ class InlineCardInput2 @JvmOverloads constructor(
                 override fun onTextChanged(text: String) {
                     if (brand.isMaxCvc(text)) {
                         cardInputListener?.onCvcComplete()
+                        cardInputListener?.isCVCValid(cvcNumberEditText.isValid)
                         updateIconCvc(cvcNumberEditText.hasFocus(), text)
 
                     }

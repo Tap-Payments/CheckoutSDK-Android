@@ -145,6 +145,7 @@ class PaymentInlineViewHolder(
     var mPreviousCount: Int = 0
     var saveLocalBinLookup: BINLookupResponse? = null
     var prevSetCardBrand: CardBrand? = CardBrand.unknown
+    var isCVCLengthMax: Boolean? = false
 
 
     init {
@@ -863,6 +864,7 @@ class PaymentInlineViewHolder(
                 println("cardHolderName>>"+cardHolderName)
                 //On Details complete
                 if (s.toString().length > 3) {
+                    if(isCVCLengthMax == true)
                     cardNumber?.let {
                         expiryDate?.let { it1 ->
                             if(PaymentDataSource.getBinLookupResponse()!=null)
@@ -1303,6 +1305,7 @@ class PaymentInlineViewHolder(
                                     }
                                 }
                             }else {
+                            if(isCVCLengthMax == true)
                             cardNumber.toString().let {
                                 expiryDate?.let { it1 ->
                                     cvvNumber?.let { it2 ->
@@ -1367,10 +1370,11 @@ class PaymentInlineViewHolder(
 
                         if (s.trim().length == 3 || s.trim().length == 4) {
                             if(savedCardsModel!=null){
-
+                                if(isCVCLengthMax == true)
                                 onPaymentCardComplete.onPayCardSwitchAction(
                                     true, PaymentType.SavedCard , savedCardsModel?.brand?.name
                                 )
+                                if(isCVCLengthMax == true)
                                 cardNumber?.let {
                                     expiryDate?.let { it1 ->
                                         onPaymentCardComplete.onPayCardCompleteAction(
@@ -1380,9 +1384,11 @@ class PaymentInlineViewHolder(
                                     }
                                 }
                             }else {
+                                if(isCVCLengthMax == true)
                                 onPaymentCardComplete.onPayCardSwitchAction(
                                     true, PaymentType.CARD , PaymentDataSource?.getBinLookupResponse()?.cardBrand?.toString()
                                 )
+                                if(isCVCLengthMax == true)
                                 cardNumber?.let {
                                     expiryDate?.let { it1 ->
                                         onPaymentCardComplete.onPayCardCompleteAction(
@@ -1415,6 +1421,7 @@ class PaymentInlineViewHolder(
                         )
 
                     }
+                    isCVCLengthMax= false
                     //  tapAlertView?.visibility = View.VISIBLE
 
 
@@ -1797,6 +1804,11 @@ class PaymentInlineViewHolder(
             }
 
         }
+    }
+
+    override fun isCVCValid(isValid: Boolean) {
+        isCVCLengthMax = isValid
+
     }
 
 
