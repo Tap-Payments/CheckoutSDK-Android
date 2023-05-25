@@ -1269,7 +1269,8 @@ class PaymentInlineViewHolder(
                                     cvvNumber?.let { it2 ->
                                         onPaymentCardComplete.onPayCardCompleteAction(
                                             true, paymentTyper,
-                                            it, it1, it2, null,prevSetCardBrand?.toString() , savedCardsModel
+                                           // it, it1, it2, null,prevSetCardBrand?.toString() , savedCardsModel
+                                            it, it1, it2, null,savedCardsModel?.brand?.name , savedCardsModel
                                         )
                                         tapInlineCardSwitch?.switchSaveCard?.isChecked = true
 
@@ -1351,7 +1352,7 @@ class PaymentInlineViewHolder(
                                 onPaymentCardComplete.onPayCardSwitchAction(
                                     true, PaymentType.SavedCard , savedCardsModel?.brand?.name
                                 )
-                                if(isCVCLengthMax == true)
+                               // if(isCVCLengthMax == true) //check
                                 cardNumber?.let {
                                     expiryDate?.let { it1 ->
                                         onPaymentCardComplete.onPayCardCompleteAction(
@@ -1784,6 +1785,7 @@ class PaymentInlineViewHolder(
     }
 
     override fun isCVCValid(isValid: Boolean) {
+        println("isCVCValid ss"+isValid)
         isCVCLengthMax = isValid
 
     }
