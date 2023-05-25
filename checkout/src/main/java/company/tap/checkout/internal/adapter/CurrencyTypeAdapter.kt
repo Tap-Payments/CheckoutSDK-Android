@@ -84,14 +84,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
                 ThemeManager.getFontName("horizontalList.chips.currencyChip.labelTextFont")
             view.textView_currency.setTheme(totalQuantityTextViewTheme)
             view.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
-//            setBorderedView(
-//                    itemView.CurrencyChipLinear,
-//                    15.0f,
-//                    0.0f,
-//                    Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.selected.shadow.color")),
-//                    Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.backgroundColor")),
-//                    Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.backgroundColor"))
-//            )
+
         }
     }
 
