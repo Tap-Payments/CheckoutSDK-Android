@@ -2925,6 +2925,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         /**
          * payment from onSelectPaymentOptionActionListener
          */
+        WebFragment.isGooglePlayWebView=false
+
 
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setOnClickListener {
             when (paymentTypeEnum) {
@@ -3000,6 +3002,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     )
                 }
                 PaymentType.GOOGLE_PAY -> {
+                    WebFragment.isGooglePlayWebView=true
                     checkoutFragment.checkOutActivity?.handleGooglePayApiCall(savedCardsModel as PaymentOption)
 
                 }

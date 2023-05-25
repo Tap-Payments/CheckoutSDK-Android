@@ -56,6 +56,8 @@ class WebFragment(
 ) : DialogFragment(),
     CustomWebViewClientContract {
 
+
+
     private var webViewUrl: String? = null
     private var chargeResponse: Charge? = null
     val progressBar by lazy { view?.findViewById<ProgressBar>(R.id.progressBar) }
@@ -110,14 +112,16 @@ class WebFragment(
         web_view.webChromeClient = WebChromeClient()
         web_view.isVerticalScrollBarEnabled = true
         web_view.isHorizontalScrollBarEnabled = true
-
+        web_view.settings.loadWithOverviewMode = true
+        web_view.settings.layoutAlgorithm = WebSettings.LayoutAlgorithm.NORMAL
+        web_view.settings.useWideViewPort = true
+        web_view.settings.domStorageEnabled = true
         web_view.settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
         web_view.webViewClient =
             cardViewModel?.let { TapCustomWebViewClient(this, it, checkoutViewModel) }!!
         //  web_view.webViewClient = cardViewModel?.let { TapCustomWebViewClient2(this, it) }!!
-        web_view.settings.loadWithOverviewMode = true
-        web_view.settings.layoutAlgorithm = WebSettings.LayoutAlgorithm.NORMAL
-        web_view.settings.useWideViewPort = true
+
+
         webViewUrl?.let { web_view.loadUrl(it) }
 
         web_view.setOnKeyListener { _, keyCode, event ->
@@ -157,10 +161,13 @@ class WebFragment(
                     }
                     progressBar?.visibility = View.INVISIBLE
                     web_view.visibility = View.VISIBLE
-//                    relative.layoutParams = LinearLayout.LayoutParams(
-//                        LinearLayout.LayoutParams.MATCH_PARENT,
-//                        context?.twoThirdHeightView()?.roundToInt()!!
-//                    )
+                    if (isGooglePlayWebView){
+                        relative.layoutParams = LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            context?.twoThirdHeightView()?.roundToInt()!!
+                        )
+                    }
+
                 }
             }
 
@@ -214,6 +221,7 @@ class WebFragment(
     companion object {
         const val KEY_URL = "key:url"
         const val CHARGE = "charge_response"
+        var isGooglePlayWebView = false
 
         fun newInstance(
             url: String,
