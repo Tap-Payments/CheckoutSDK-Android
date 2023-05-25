@@ -31,6 +31,7 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.core.os.postDelayed
@@ -407,9 +408,9 @@ fun View.addFadeOutAnimation(
 }
 
 
-
 fun MutableList<View>.addFadeOutAnimationToViews(
     durationTime: Long = 500L,
+    headerLayout: LinearLayout? = null,
     onAnimationStart: () -> Unit? = {},
     onAnimationEnd: () -> Unit = {},
 ) {
@@ -425,6 +426,7 @@ fun MutableList<View>.addFadeOutAnimationToViews(
             override fun onAnimationEnd(p0: Animation?) {
                 view.visibility = View.GONE
                 view.setBackgroundColor(Color.WHITE)
+                headerLayout?.removeView(view)
                 onAnimationEnd.invoke()
 
 

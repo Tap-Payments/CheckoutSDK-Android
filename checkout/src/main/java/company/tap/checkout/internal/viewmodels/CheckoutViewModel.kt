@@ -279,6 +279,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private var middleColor: String? = null
     private var image: ImageView? = null
     var savedCardsBasedCurr: java.util.ArrayList<SavedCard> = java.util.ArrayList<SavedCard>()
+
     @JvmField
     var incrementalCount: Int = 0
 
@@ -1279,7 +1280,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 addViews(webViewHolder)
 
 
-                saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
+                //            saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                     ActionButtonState.LOADING
                 )
@@ -1686,7 +1687,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     )
                 }, viewToBeBLur = selectedViewToBeDeletedFromCardViewHolder)
 
-              
 
             } else {
                 // println("else block is calle are")
@@ -2363,7 +2363,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 paymentInlineViewHolder.view,
                 tabAnimatedActionButtonViewHolder!!.view
             ).addFadeOutAnimationToViews {
-
                 translateHeightAnimationForWebViews()
             }
 
@@ -2372,6 +2371,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun onClickCardPayment(savedCardsModel: Any?) {
+        removeVisibilityOfSwitch()
         PaymentDataSource.setWebViewType(WebViewType.THREE_DS_WEBVIEW)
         amountViewHolder.view.amount_section?.tapChipPopup?.slideFromLeftToRight()
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
@@ -2400,41 +2400,46 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         viewsToFadeOut.add(amountViewHolder.view)
                     }
                     doAfterSpecificTime(time = 100L) {
+
                         viewsToFadeOut.addFadeOutAnimationToViews(onAnimationStart = {
-                            removeVisibilityOfSwitch()
-                        }, durationTime = 500) {}
+                            paymentInlineViewHolder.paymentInputContainer.applyBluryToView()
+                        }, durationTime = 500, onAnimationEnd = {
+                            animateBS(
+                                fromView = bottomSheetLayout,
+                                toView = sdkLayout,
+                                transitionAnimation = 500, changeHeight = {})
+                        }, headerLayout = headerLayout)
+
+                        if (isSavedCardSelected == true) {
+                            cardViewModel.processEvent(
+                                CardViewEvent.CreateTokenExistingCardEvent,
+                                this@CheckoutViewModel,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                paymentInlineViewHolder.getSavedCardData()
+                            )
+
+                        } else {
+                            cardViewModel.processEvent(
+                                CardViewEvent.CreateTokenEvent,
+                                this@CheckoutViewModel,
+
+                                null,
+                                null,
+                                paymentInlineViewHolder.getCard(),
+                                null,
+                                saveCardValue = paymentInlineViewHolder.tapInlineCardSwitch?.switchSaveCard?.isChecked
+                            )
+                        }
                     }
 
                 }
 
             }
-
-            if (isSavedCardSelected == true) {
-                cardViewModel.processEvent(
-                    CardViewEvent.CreateTokenExistingCardEvent,
-                    this,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    paymentInlineViewHolder.getSavedCardData()
-                )
-
-            } else {
-                cardViewModel.processEvent(
-                    CardViewEvent.CreateTokenEvent,
-                    this,
-
-                    null,
-                    null,
-                    paymentInlineViewHolder.getCard(),
-                    null,
-                    saveCardValue = paymentInlineViewHolder.tapInlineCardSwitch?.switchSaveCard?.isChecked
-                )
-            }
-
 
         }
 
@@ -2443,8 +2448,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun removeVisibilityOfSwitch() {
         saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
+        paymentInlineViewHolder?.tapInlineCardSwitch?.addFadeOutAnimation()
+        animateBS(
+            fromView = bottomSheetLayout,
+            toView = sdkLayout,
+            transitionAnimation = 500, changeHeight = {})
     }
-
 
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -2926,7 +2935,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         /**
          * payment from onSelectPaymentOptionActionListener
          */
-        WebFragment.isGooglePlayWebView=false
+        WebFragment.isGooglePlayWebView = false
 
 
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setOnClickListener {
@@ -3003,7 +3012,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     )
                 }
                 PaymentType.GOOGLE_PAY -> {
-                    WebFragment.isGooglePlayWebView=true
+                    WebFragment.isGooglePlayWebView = true
                     checkoutFragment.checkOutActivity?.handleGooglePayApiCall(savedCardsModel as PaymentOption)
 
                 }
