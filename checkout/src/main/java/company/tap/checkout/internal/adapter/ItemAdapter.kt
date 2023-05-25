@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.internal.api.enums.AmountModificatorType
 import company.tap.checkout.internal.utils.CurrencyFormatter
 import company.tap.checkout.internal.utils.animateBS
+import company.tap.checkout.internal.utils.showToast
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.models.ItemsModel
 import company.tap.taplocalizationkit.LocalizationManager
@@ -27,6 +28,7 @@ import company.tap.tapuilibraryy.fontskit.enums.TapFont
 import company.tap.tapuilibraryy.themekit.ThemeManager
 import company.tap.tapuilibraryy.themekit.theme.SeparatorViewTheme
 import company.tap.tapuilibraryy.themekit.theme.TextViewTheme
+import company.tap.tapuilibraryy.uikit.atoms.TapImageView
 import company.tap.tapuilibraryy.uikit.atoms.TapSeparatorView
 import company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
 import company.tap.tapuilibraryy.uikit.datasource.ItemViewDataSource
@@ -81,8 +83,9 @@ class ItemAdapter(
         initView(holder, position)
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "CutPasteId")
     private fun initView(holder: ItemHolder, position: Int) {
+        var item = adapterContentItems.get(position)
         descriptionTextView = holder.itemView.findViewById<TapTextViewNew>(R.id.description_textView)
         val nameText = holder.itemView.findViewById<TapTextViewNew>(R.id.brief_description)
 
@@ -91,15 +94,31 @@ class ItemAdapter(
         val totalAmount = holder.itemView.findViewById<TapTextViewNew>(R.id.total_amount)
         val mainViewLinear = holder.itemView.findViewById<LinearLayout>(R.id.mainViewLinear)
         val itemName = holder.itemView.findViewById<TapTextViewNew>(R.id.item_title)
+        val collapseImageView = holder.itemView.findViewById<TapItemListView?>(R.id.amount_item_view).collapseImageView
+        val expandImageView = holder.itemView.findViewById<TapItemListView?>(R.id.amount_item_view).expandImageView
+
         itemName.filters = arrayOf<InputFilter>(AllCaps())
         val isExpanded = position == mExpandedPosition
+        item.isExpandedItem = isExpanded
+
+        if (item.isExpandedItem){
+            collapseImageView?.visibility = View.VISIBLE
+            expandImageView?.visibility = View.GONE
+
+        }else{
+            collapseImageView?.visibility = View.GONE
+            expandImageView?.visibility = View.VISIBLE
+
+        }
+
         if (adapterContentItems.isNotEmpty()) {
-            for (i in adapterContentItems.indices) {
+       //     for (i in adapterContentItems.indices) {
                 descriptionTextView.text = adapterContentItems[position].description
                 if (isExpanded) {
                     animateBS(fromView = bottomSheetLayout, toView = sdkLayout, transitionAnimation = 150L, changeHeight = {
                         descriptionTextView.visibility = View.VISIBLE
                     })
+
 
                 } else {
                     animateBS(fromView = bottomSheetLayout, toView = sdkLayout, transitionAnimation = 150L, changeHeight = {
@@ -134,7 +153,7 @@ class ItemAdapter(
                         it
                     )
                 }
-            }
+        //    }
             nameText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24F);
             nameText?.text = adapterContentItems[position].name
             // This to be handled in ui kit
@@ -174,12 +193,12 @@ class ItemAdapter(
 
     private fun showHideDescText(isExpanded: Boolean, position: Int, descText: TapTextViewNew?) {
         if (isExpanded) {
-            previousExpandedPosition = position
-            itemViewAdapter.collapseImageView?.visibility = View.VISIBLE
-            itemViewAdapter.expandImageView?.visibility = View.GONE
+          //  previousExpandedPosition = position
+//            itemViewAdapter.collapseImageView?.visibility = View.VISIBLE
+//            itemViewAdapter.expandImageView?.visibility = View.GONE
         } else {
-            itemViewAdapter.expandImageView?.visibility = View.VISIBLE
-            itemViewAdapter.collapseImageView?.visibility = View.GONE
+//            itemViewAdapter.expandImageView?.visibility = View.VISIBLE
+//            itemViewAdapter.collapseImageView?.visibility = View.GONE
         }
     }
 

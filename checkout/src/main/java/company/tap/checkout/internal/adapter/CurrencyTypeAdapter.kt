@@ -151,14 +151,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
             notifyItemChanged(selectedPosition)
             previousIndex = selectedPosition
            // selectedPosition = position
-            println("position of adapter"+ adapterContentCurrencies[position].amount)
-            Log.e("data",adapterContentCurrencies[position].rate.toString())
-            Log.e("data",adapterContentCurrencies[position].currency.toString())
-            Log.e("data",adapterContentCurrencies[position].amount.toString())
-            adapterContentCurrencies.forEachIndexed { index, supportedCurrencies ->
-                Log.e("data all ",supportedCurrencies.toString())
 
-            }
 
                adapterContentCurrencies[position].rate?.let { it1 ->
                 onCurrencyChangedActionListener.onCurrencyClicked(

@@ -82,6 +82,8 @@ data class ItemsModel(
     @Expose
     val metaData: MetaData?,
 
+    var isExpandedItem: Boolean = false,
+
     var totalAmount :BigDecimal? = null
 ) : Serializable {
 
