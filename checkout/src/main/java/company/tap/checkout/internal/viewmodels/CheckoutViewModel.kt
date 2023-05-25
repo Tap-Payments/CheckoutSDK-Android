@@ -1700,6 +1700,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         } else if (response == "NO") {
             adapter.updateShaking(false)
             deleteCard = false
+            sdkLayout.deepForEach { isEnabled = true }
 
         } else if (response == "DONE") {
             if (cardTypeDialog == true) {
