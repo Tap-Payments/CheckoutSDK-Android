@@ -57,8 +57,8 @@ class TapSelectionTabLayout(context: Context?, attrs: AttributeSet?) :
     private var tabItemMarginTopValue = 15
     private var tabItemMarginBottomValue = 15
     private var imageSaturationValue = 1f
-    private var tabItemMarginLeftValue = 5
-    private var tabItemMarginRightValue = 5
+    private var tabItemMarginLeftValue = MetricsUtil.convertDpToPixel(8f, context).toInt()
+    private var tabItemMarginRightValue = MetricsUtil.convertPixelsToDp(8f, context).toInt()
     val acceptedCardText by lazy { findViewById<TapTextViewNew>(R.id.acceptedCardText) }
 
     /**
@@ -244,14 +244,15 @@ class TapSelectionTabLayout(context: Context?, attrs: AttributeSet?) :
         )
       //  val parms = LayoutParams(width, height)
 
-       params.weight = 0.5f
+       params.weight = MetricsUtil.convertDpToPixel(0.5f,context)
         for (item in tabItems) {
            /* params.setMargins(
                 tabItemMarginLeftValue, tabItemMarginTopValue, tabItemMarginRightValue,
                 tabItemMarginBottomValue
             )*/
-            params.marginStart=tabItemMarginLeftValue
-            params.marginEnd=tabItemMarginRightValue
+
+               // params.marginEnd=tabItemMarginRightValue
+               params.marginStart=tabItemMarginLeftValue
 
             item.imageView?.layoutParams = params
         }
@@ -292,7 +293,7 @@ class TapSelectionTabLayout(context: Context?, attrs: AttributeSet?) :
             width, height
         )
      //   params.setMargins(tabItemMarginLeftValue, tabItemMarginTopValue, tabItemMarginRightValue, tabItemMarginBottomValue)
-       params.weight = 0.5f
+       params.weight = MetricsUtil.convertDpToPixel(0.5f, context).toInt().toFloat()
 
         val image = TapImageView(context, null)
         image.layoutParams = params

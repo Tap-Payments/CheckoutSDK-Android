@@ -190,7 +190,7 @@ class PaymentInlineViewHolder(
         // tapSeparatorViewLinear?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
         // tabLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.backgroundColor")))
         //tabLayout.changeTabItemMarginBottomValue(5)
-        tabLayout.changeTabItemMarginTopValue(5)
+       // tabLayout.changeTabItemMarginTopValue(5)
 
         constraintt = view.findViewById(R.id.constraintt)
         constraintt.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
@@ -352,30 +352,7 @@ class PaymentInlineViewHolder(
         }
     }
 
-    private fun initializeCardBrandView() {
-        // println("displayMetrics"+displayMetrics)
-        if (displayMetrics == DisplayMetrics.DENSITY_260 || displayMetrics == DisplayMetrics.DENSITY_280 || displayMetrics == DisplayMetrics.DENSITY_300 || displayMetrics == DisplayMetrics.DENSITY_XHIGH || displayMetrics == DisplayMetrics.DENSITY_340 || displayMetrics == DisplayMetrics.DENSITY_360) {
 
-            tabLayout.changeTabItemMarginBottomValue(25)
-            tabLayout.changeTabItemMarginTopValue(25)
-            //tabLayout.changeTabItemMarginBottomValue(30)
-            tabLayout.changeTabItemMarginLeftValue(-21)
-            tabLayout.changeTabItemMarginRightValue(-21)
-
-        } else if (displayMetrics == DisplayMetrics.DENSITY_400 || displayMetrics == DisplayMetrics.DENSITY_XXHIGH || displayMetrics == DisplayMetrics.DENSITY_450 || displayMetrics == DisplayMetrics.DENSITY_440) {
-            tabLayout.changeTabItemMarginBottomValue(35)
-            tabLayout.changeTabItemMarginTopValue(35)
-            tabLayout.changeTabItemMarginLeftValue(-35)
-            tabLayout.changeTabItemMarginRightValue(-35)
-        } else {
-            tabLayout.changeTabItemMarginBottomValue(12)
-            tabLayout.changeTabItemMarginTopValue(18)
-            tabLayout.changeTabItemMarginLeftValue(-25)
-            tabLayout.changeTabItemMarginRightValue(-25)
-        }
-
-
-    }
 
     fun resetView() {
         // clearView.visibility= View.VISIBLE
