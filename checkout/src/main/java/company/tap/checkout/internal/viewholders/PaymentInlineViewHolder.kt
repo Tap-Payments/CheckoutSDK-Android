@@ -682,16 +682,6 @@ class PaymentInlineViewHolder(
     fun setCardScanData(tapCard: TapCard, month :Int, year :Int)
     {
         cardInputUIStatus = CardInputUIStatus.NormalCard
-        val updateCardString: String = tapCard.cardNumber?.trim().toString()
-            .substring(0, 6) + tapCard.cardNumber?.length?.minus(4)
-            ?.let {
-                tapCard.cardNumber?.trim().toString().substring(
-                    it
-                )
-            }
-        println("updateCardString"+updateCardString)
-        println("cardnumber scanner"+tapCard.cardNumber)
-
         val cardModel = company.tap.cardinputwidget2.Card(
             tapCard.cardNumber,
             null,
@@ -1730,9 +1720,8 @@ class PaymentInlineViewHolder(
         val itemsMobilesList = ArrayList<SectionTabItem>()
         itemsCardsList = ArrayList<SectionTabItem>()
         intertabLayout.removeAllTabs()
-        //  intertabLayout.setPadding(-50, 0, 0, 0)
+
         PaymentDataSource.setBinLookupResponse(null)
-//        tabLayout.changeTabItemAlphaValue(1f)
         /**
          * Sorted cardpayment types based on orderBY*/
         decideTapSelection(imageURLApi.sortedBy { it.orderBy }, itemsMobilesList, itemsCardsList)
@@ -1783,6 +1772,8 @@ class PaymentInlineViewHolder(
             } else
                 imageURLApi[i].brand.toString()
 
+           /**
+            * was added for telecom payment types to be used future*/
             /// set payment option object for all payment types and send it to paymentcompletion action function and i will pass it to show extra fees
             /*      if (paymentType == PaymentType.telecom) {
                       itemsMobilesList.add(
@@ -1801,7 +1792,6 @@ class PaymentInlineViewHolder(
                           )
                       )
                   }*/
-            println("imageURL are" + cardBrandType)
 
             itemsCardsList.add(
                 SectionTabItem(
@@ -1816,7 +1806,7 @@ class PaymentInlineViewHolder(
 
     override fun showHideClearImage(show: Boolean) {
         if (show) {
-            // closeButton?.visibility = View.VISIBLE hiding for mobile view
+            // closeButton?.visibility = View.VISIBLE  hiding for mobile view
         } else {
             //  closeButton?.visibility = View.GONE
             tapAlertView?.fadeVisibility(View.GONE, 500)
