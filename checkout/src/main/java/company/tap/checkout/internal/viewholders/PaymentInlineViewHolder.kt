@@ -1700,11 +1700,8 @@ class PaymentInlineViewHolder(
         lastFocusField = focusField
 
         println("lastFocusField>>>>" + lastFocusField)
-        if(focusField == "focus_cardholder" && cardHolderName?.isNullOrEmpty()==true) CustomUtils.showKeyboard(context)
-        /* if(resetView){
-             tapCardInputView.onTouchView()
-             resetView = false
-         }*/
+        if(focusField == "focus_cardholder" && cardHolderName.isNullOrEmpty()) CustomUtils.showKeyboard(context)
+
 
     }
 
