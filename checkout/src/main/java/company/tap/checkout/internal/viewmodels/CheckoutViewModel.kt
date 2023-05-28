@@ -122,8 +122,6 @@ import kotlin.properties.Delegates
  *
  */
 
-const val animationSpeed = 50L
-
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedActionListener,
     PaymentCardComplete, onCardNFCCallListener, OnCurrencyChangedActionListener, WebViewContract,
@@ -145,6 +143,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private val isShaking = MutableLiveData<Boolean>()
     val localCurrencyReturned = MutableLiveData<Boolean>()
     val powerdByTapAnimationFinished = MutableLiveData<Boolean>()
+    val isItemsAreOpend = MutableLiveData<Boolean>()
 
     private var deleteCard: Boolean = false
     private var displayItemsOpen: Boolean = false
@@ -216,7 +215,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @SuppressLint("StaticFieldLeak")
     private lateinit var sdkLayout: LinearLayout
-    private var topHeaderView: TapBrandView? = null
+
+    @SuppressLint("StaticFieldLeak")
+    private lateinit var topHeaderView: TapBrandView
 
 
     private lateinit var checkoutFragment: CheckoutFragment
@@ -297,7 +298,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         cardViewModel: CardViewModel,
         checkoutFragment: CheckoutFragment,
         headerLayout: LinearLayout,
-        topHeaderView: TapBrandView?,
+         topHeaderView: TapBrandView?,
     ) {
         this.context = context
         this.fragmentManager = fragmentManager
@@ -311,7 +312,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         this.cardViewModel = cardViewModel
         this.checkoutFragment = checkoutFragment
         this.headerLayout = headerLayout
-        this.topHeaderView = topHeaderView
+        if (topHeaderView != null) {
+            this.topHeaderView = topHeaderView
+        }
 
         initializeScanner(this)
         initViewHolders()
@@ -334,11 +337,26 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         })
 
+        this.topHeaderView.startPoweredByAnimation(
+            delayTime = Constants.PoweredByLayoutAnimationDelay,
+            this.topHeaderView.poweredByImage, onAnimationEnd =
+            {
+                if (isItemsAreOpend.value==false){
+                    poweredByTapAnimationEnds()
+                }
+            }
+        )
 
+
+    }
+
+    private fun poweredByTapAnimationEnds() {
+        powerdByTapAnimationFinished.value = true
     }
 
     init {
         powerdByTapAnimationFinished.value = false
+        isItemsAreOpend.value = false
     }
 
     private fun initLoyaltyView() {
@@ -760,6 +778,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     override fun controlCurrency(display: Boolean) {
+        isItemsAreOpend.value = display
         if (display) caseDisplayControlCurrency()
         else caseNotDisplayControlCurrency()
 
@@ -1285,7 +1304,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 )
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = VISIBLE
                 saveCardSwitchHolder?.view?.cardSwitch?.tapLogoImage?.visibility = GONE
-               // checkoutFragment.closeText.visibility = GONE
+                // checkoutFragment.closeText.visibility = GONE
 
 
             }
@@ -2147,7 +2166,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
         }
 
-          println("cardBrandString before " + cardBrandString)
+        println("cardBrandString before " + cardBrandString)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             logicTogetButtonStyle(paymentOptObject, payStringButton, cardBrandString)
         }
@@ -2879,7 +2898,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
 
     }
-    
+
 
     @SuppressLint("ResourceType")
     override fun redirectLoadingFinished(

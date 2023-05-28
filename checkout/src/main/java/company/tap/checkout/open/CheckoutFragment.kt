@@ -2,27 +2,18 @@ package company.tap.checkout.open
 
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.Dialog
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.*
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
-import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.widget.NestedScrollView
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import cards.pay.paycardsrecognizer.sdk.Card
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
-import com.bumptech.glide.Glide
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.ChargeStatus
@@ -39,13 +30,8 @@ import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibraryy.themekit.ThemeManager
-import company.tap.tapuilibraryy.uikit.animation.MorphingAnimation
-import company.tap.tapuilibraryy.uikit.atoms.TapImageView
-import company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
 import company.tap.tapuilibraryy.uikit.enums.ActionButtonState
-import company.tap.tapuilibraryy.uikit.interfaces.TabAnimatedButtonListener
 import company.tap.tapuilibraryy.uikit.interfaces.TapBottomDialogInterface
-import company.tap.tapuilibraryy.uikit.ktx.setTopBorders
 import company.tap.tapuilibraryy.uikit.views.TapBottomSheetDialog
 import company.tap.tapuilibraryy.uikit.views.TapBrandView
 import kotlinx.android.synthetic.main.fragment_checkouttaps.*
@@ -53,18 +39,9 @@ import org.json.JSONObject
 import java.util.*
 
 
-/**
- * A simple [Fragment] subclass.
-// * Use the [CheckoutFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-
-
 class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, InlineViewCallback {
-
-    @JvmField
-    var viewModel: CheckoutViewModel? = null
-
+    val viewModel: CheckoutViewModel by viewModels()
+    val cardViewModel: CardViewModel by viewModels()
     lateinit var userRepository: UserRepository
     var checkOutActivity: CheckOutActivity? = null
     var hideAllView = false
@@ -72,21 +49,10 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     private var _resetFragment: Boolean = true
 
     @JvmField
-    var scrollView: NestedScrollView? = null
-
-    @JvmField
     var isNfcOpened: Boolean = false
 
     @JvmField
     var isScannerOpened: Boolean = false
-
-
-    private var inLineCardLayout: FrameLayout? = null
-    lateinit var topHeaderView: TapBrandView
-    lateinit var headerLayout: LinearLayout
-    lateinit var checkoutLayout: LinearLayout
-    lateinit var frameLayoutForNFc: FrameLayout
-    lateinit var webFrameLayout: FrameLayout
 
 
     override fun onCreateView(
@@ -103,20 +69,14 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val viewModel: CheckoutViewModel by viewModels()
-        val cardViewModel: CardViewModel by viewModels()
+
         cardViewModel.getContext(requireContext())
         userRepository = UserRepository(requireContext(), viewModel)
         userRepository.getUserIpAddress()
-        this.viewModel = viewModel
         initViews(view)
-        topHeaderView = view.findViewById(R.id.tab_brand_view)
-        topHeaderView.visibility = View.GONE
 
         sessionDelegate?.sessionHasStarted()
-        bottomSheetLayout?.let {
-            viewModel.setBottomSheetLayout(it)
-        }
+
 
         viewModel.localCurrencyReturned.observe(this, androidx.lifecycle.Observer {
             with(viewModel) {
@@ -141,35 +101,12 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
         })
 
-        viewModel.initLayoutManager(
-            bottomSheetDialog,
-            requireContext(),
-            childFragmentManager,
-            checkoutLayout,
-            frameLayoutForNFc,
-            webFrameLayout,
-            inLineCardLayout!!,
-            this,
-            requireActivity().intent,
-            cardViewModel, this,
-            headerLayout,
-            topHeaderView
-        )
         enableSections()
-        topHeaderView.startPoweredByAnimation(
-            delayTime = PoweredByLayoutAnimationDelay,
-            topHeaderView.poweredByImage, onAnimationEnd =
-            {
-                poweredByTapAnimationEnds(viewModel)
-            }
-        )
 
 
     }
 
-    private fun poweredByTapAnimationEnds(viewModel: CheckoutViewModel) {
-        viewModel.powerdByTapAnimationFinished.value = true
-    }
+
 
     /**
      * Logic to obtain ISO country code **/
@@ -178,20 +115,40 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun initViews(view: View) {
         bottomSheetLayout = bottomSheetDialog.findViewById(R.id.design_bottom_sheet)
-//        closeText = view.findViewById(R.id.closeText)
-//        closeImage = view.findViewById(R.id.closeImage)
-        scrollView = view.findViewById(R.id.scrollView)
-        inLineCardLayout = view.findViewById(R.id.inline_container)
-        headerLayout = view.findViewById(R.id.headerLayout)
-        checkoutLayout = view.findViewById(R.id.fragment_all)
-        frameLayoutForNFc = view.findViewById(R.id.fragment_container_nfc_lib)
-        webFrameLayout = view.findViewById(R.id.webFrameLayout)
+        val topHeaderView: TapBrandView = view.findViewById(R.id.tab_brand_view)
+        val inLineCardLayout: FrameLayout = view.findViewById(R.id.inline_container)
+        val headerLayout: LinearLayout = view.findViewById(R.id.headerLayout)
+        val checkoutLayout: LinearLayout = view.findViewById(R.id.fragment_all)
+        val frameLayoutForNFc: FrameLayout = view.findViewById(R.id.fragment_container_nfc_lib)
+        val webFrameLayout: FrameLayout = view.findViewById(R.id.webFrameLayout)
         webFrameLayout.layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
             requireContext().getDeviceSpecs().first - 100
         )
+
+        bottomSheetLayout?.let {
+            viewModel.setBottomSheetLayout(it)
+        }
+        viewModel.initLayoutManager(
+            bottomSheetDialog,
+            requireContext(),
+            childFragmentManager,
+            checkoutLayout,
+            frameLayoutForNFc,
+            webFrameLayout,
+            inLineCardLayout,
+            this,
+            requireActivity().intent,
+            cardViewModel = cardViewModel, this,
+            headerLayout,
+            topHeaderView
+        )
+
+
+
     }
 
 
@@ -214,7 +171,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         if (_resetFragment) {
             if (hideAllView) {
                 if (::status.isInitialized)
-                    viewModel?.showOnlyButtonView(
+                    viewModel.showOnlyButtonView(
                         status,
                         checkOutActivity,
                         this
@@ -222,8 +179,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
             } else {
 
-                viewModel?.displayStartupLayout(enabledSections)
-                viewModel?.getDatasfromAPIs(
+                viewModel.displayStartupLayout(enabledSections)
+                viewModel.getDatasfromAPIs(
                     PaymentDataSource.getMerchantData(),
                     PaymentDataSource.getPaymentOptionsResponse()
                 )
@@ -231,29 +188,13 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             }
         } else {
             if (::status.isInitialized)
-                viewModel?.showOnlyButtonView(status, checkOutActivity, this)
+                viewModel.showOnlyButtonView(status, checkOutActivity, this)
         }
 
         return enabledSections
     }
 
-
-    companion object {
-        // TODO: Rename and change types and number of parameters
-        const val RESET_FRAG = "resetFragment"
-
-        @JvmStatic
-        fun newInstance(context: Context, activity: Activity?, resetFragment: Boolean) =
-            CheckoutFragment().apply {
-                arguments = Bundle().apply {}
-                _resetFragment = resetFragment
-                requireArguments().putBoolean(RESET_FRAG, resetFragment)
-            }
-    }
-
     override fun onScanCardFailed(e: Exception?) {
-        println("onScanCardFailed")
-        // _viewModel?.handleScanFailedResult()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -265,11 +206,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onScanCardFinished(card: Card?, cardImage: ByteArray?) {
-        if (card != null) {
-            println("scanned card is$card")
-            //  _viewModel?.handleScanSuccessResult(card)
-
-        }
     }
 
 
@@ -278,25 +214,17 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         if (view == null) {
             return
         }
-        if (isNfcOpened) {
-        } else {
+        if (!isNfcOpened)
             checkOutActivity?.onBackPressed()
-        }
 
-        if (isScannerOpened) {
-
-        } else {
-            //_viewModel?.incrementalCount =0
+        if (!isScannerOpened)
             checkOutActivity?.onBackPressed()
-        }
-
 
     }
 
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun resetTabAnimatedButton() {
-
         SDKSession.sessionActive = false
         tabAnimatedActionButton?.changeButtonState(ActionButtonState.RESET)
         if (checkOutActivity?.isGooglePayClicked == false) {
@@ -310,12 +238,16 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun dismissBottomSheetDialog() {
+        resetSessionAndThemeManager()
+        resetTabAnimatedButton()
+
+    }
+
+    private fun resetSessionAndThemeManager() {
         ThemeManager.currentTheme = ""
         sessionDelegate?.sessionCancelled()
         LocalizationManager.currentLocalized = JSONObject()
         bottomSheetDialog.dismiss()
-        resetTabAnimatedButton()
-
     }
 
     @RequiresApi(Build.VERSION_CODES.N)

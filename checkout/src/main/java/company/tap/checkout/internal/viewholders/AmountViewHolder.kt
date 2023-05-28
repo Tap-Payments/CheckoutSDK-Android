@@ -201,7 +201,9 @@ class AmountViewHolder(
             view.amount_section.itemAmountText.visibility = View.GONE
             view.amount_section.viewSeparator.visibility = View.GONE
             view.amount_section.amountImageView.visibility = View.GONE
-            view.amount_section?.tapChipPopup?.addFadeOutAnimation()
+            doAfterSpecificTime(500) {
+                view.amount_section?.tapChipPopup?.addFadeOutAnimation()
+            }
 
 
         }
