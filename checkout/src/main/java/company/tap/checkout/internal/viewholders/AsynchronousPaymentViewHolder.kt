@@ -66,7 +66,7 @@ class AsynchronousPaymentViewHolder(private val context: Context,private  val vi
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
         )
 
-        fawryView?.payButton?.setOnClickListener {
+        fawryView.payButton?.setOnClickListener {
            viewModel.closeAsynchView()
         }
 

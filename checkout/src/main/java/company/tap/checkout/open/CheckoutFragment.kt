@@ -48,6 +48,7 @@ import company.tap.tapuilibraryy.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibraryy.uikit.ktx.setTopBorders
 import company.tap.tapuilibraryy.uikit.views.TapBottomSheetDialog
 import company.tap.tapuilibraryy.uikit.views.TapBrandView
+import kotlinx.android.synthetic.main.fragment_checkouttaps.*
 import org.json.JSONObject
 import java.util.*
 
@@ -59,28 +60,19 @@ import java.util.*
  */
 
 
-class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, InlineViewCallback{
-
-    private var _Context: Context? = null
+class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, InlineViewCallback {
 
     @JvmField
     var viewModel: CheckoutViewModel? = null
 
     lateinit var userRepository: UserRepository
-
-    var _activity: Activity? = null
     var checkOutActivity: CheckOutActivity? = null
-    lateinit var closeText: TapTextViewNew
-    lateinit var closeImage: TapImageView
     var hideAllView = false
     lateinit var status: ChargeStatus
     private var _resetFragment: Boolean = true
-    var newColorVal: String? = null
 
     @JvmField
     var scrollView: NestedScrollView? = null
-    var coordinatorLayout: CoordinatorLayout? = null
-
 
     @JvmField
     var isNfcOpened: Boolean = false
@@ -90,26 +82,11 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
 
     private var inLineCardLayout: FrameLayout? = null
-    private var topHeaderView: TapBrandView? = null
-    var headerLayout: LinearLayout? = null
-    private var displayMetrics: Int? = 0
-    var originalHeight: Int? = 0
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        _activity = activity?.parent
-        this._Context = context
-
-
-    }
-
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Glide.with(this).pauseRequests()
-        resetTabAnimatedButton()
-
-    }
+    lateinit var topHeaderView: TapBrandView
+    lateinit var headerLayout: LinearLayout
+    lateinit var checkoutLayout: LinearLayout
+    lateinit var frameLayoutForNFc: FrameLayout
+    lateinit var webFrameLayout: FrameLayout
 
 
     override fun onCreateView(
@@ -117,6 +94,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         savedInstanceState: Bundle?
     ): View? {
         dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        dialog?.window?.attributes?.windowAnimations = R.style.DialogAnimation
+
         return inflater.inflate(R.layout.fragment_checkouttaps, container, false)
     }
 
@@ -126,57 +105,15 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         super.onViewCreated(view, savedInstanceState)
         val viewModel: CheckoutViewModel by viewModels()
         val cardViewModel: CardViewModel by viewModels()
+        cardViewModel.getContext(requireContext())
         userRepository = UserRepository(requireContext(), viewModel)
         userRepository.getUserIpAddress()
         this.viewModel = viewModel
-        _Context?.let { cardViewModel.getContext(it) }
-        // backgroundColor = (Color.parseColor(ThemeManager.getValue("tapBottomSheet.dimmedColor")))
-
-        bottomSheetDialog.behavior.isDraggable = true
-        //  bottomSheetDialog.behavior.maxHeight = context?.getDeviceSpecs()?.first ?: 1000
-
-        val checkoutLayout: LinearLayout? = view.findViewById(R.id.fragment_all)
-        val frameLayout: FrameLayout? = view.findViewById(R.id.fragment_container_nfc_lib)
-        val webFrameLayout: FrameLayout? = view.findViewById(R.id.webFrameLayout)
-        webFrameLayout?.layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            requireContext().getDeviceSpecs().first - 100
-        )
-        inLineCardLayout = view.findViewById(R.id.inline_container)
-        headerLayout = view.findViewById(R.id.headerLayout)
         initViews(view)
-
         topHeaderView = view.findViewById(R.id.tab_brand_view)
+        topHeaderView.visibility = View.GONE
 
-        topHeaderView?.visibility = View.GONE
-
-        displayMetrics = CustomUtils.getDeviceDisplayMetrics(context as Activity)
-        val heightscreen: Int = Resources.getSystem().displayMetrics.heightPixels
-        if (LocalizationManager.currentLocalized.length() != 0)
-            closeText.text = LocalizationManager.getValue("close", "Common")
-
-        if (SDKSession.showCloseImage == true) {
-
-            if (!hideAllView) {
-                Handler().postDelayed({
-                    closeImage.visibility = View.GONE
-
-                }, 3000)
-            }
-
-        } else {
-            if (!hideAllView) {
-                Handler().postDelayed({
-                    closeText.visibility = View.GONE
-
-                }, 3000)
-            }
-
-        }
-
-        //LocalizationManager.loadTapLocale(resources, R.raw.lang)
         sessionDelegate?.sessionHasStarted()
-
         bottomSheetLayout?.let {
             viewModel.setBottomSheetLayout(it)
         }
@@ -204,103 +141,28 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
         })
 
-        if (checkoutLayout != null) {
-            context?.let {
-                if (frameLayout != null) {
-                    webFrameLayout?.let { it1 ->
-                        if (inLineCardLayout != null) {
-                            activity?.intent?.let { it2 ->
-                                if (headerLayout != null) {
-                                    viewModel.initLayoutManager(
-                                        bottomSheetDialog,
-                                        it,
-                                        childFragmentManager,
-                                        checkoutLayout,
-                                        frameLayout,
-                                        it1,
-                                        inLineCardLayout!!,
-                                        this,
-                                        it2,
-                                        cardViewModel, this, headerLayout!!,
-                                        coordinatorLayout, topHeaderView
-                                    )
-                                }
-                            }
-
-                        }
-                    }
-                }
-            }
-
-            val borderColor: String =
-                ThemeManager.getValue<String>("poweredByTap.backgroundColor").toString()
-            var borderOpacityVal: String? = null
-            //Workaround since we don't have direct method for extraction
-            borderOpacityVal = borderColor.substring(borderColor.length - 2)
-            newColorVal = "#" + borderOpacityVal + borderColor.substring(0, borderColor.length - 2)
-                .replace("#", "")
-            Log.e("color", newColorVal.toString())
-            enableSections()
-            originalHeight = checkoutLayout.measuredHeight
-
-            //topHeaderView?.backgroundHeader?.setBackgroundDrawable(null)
-            //   headerLayout?.addView(topHeaderView, 0)
-        }
-
-        topHeaderView?.visibility = View.GONE
-        inLineCardLayout?.minimumHeight = heightscreen - checkoutLayout?.height!!
-        dialog?.window?.attributes?.windowAnimations = R.style.DialogAnimation
-
-        adjustHeightAccToDensity(displayMetrics)
-        topHeaderView?.startPoweredByAnimation(
+        viewModel.initLayoutManager(
+            bottomSheetDialog,
+            requireContext(),
+            childFragmentManager,
+            checkoutLayout,
+            frameLayoutForNFc,
+            webFrameLayout,
+            inLineCardLayout!!,
+            this,
+            requireActivity().intent,
+            cardViewModel, this,
+            headerLayout,
+            topHeaderView
+        )
+        enableSections()
+        topHeaderView.startPoweredByAnimation(
             delayTime = PoweredByLayoutAnimationDelay,
-            topHeaderView?.poweredByImage, onAnimationEnd = {
-
+            topHeaderView.poweredByImage, onAnimationEnd =
+            {
                 poweredByTapAnimationEnds(viewModel)
             }
         )
-        bottomSheetDialog.setOnShowListener {
-            bottomSheetDialog.behavior.setState(BottomSheetBehavior.STATE_EXPANDED)
-
-        }
-
-        bottomSheetDialog.setCancelable(false)
-
-
-        setTopBorders(
-            checkoutLayout,
-            105f,
-            strokeColor = Color.parseColor(
-                newColorVal
-            ),
-            tintColor = Color.parseColor(
-                newColorVal
-            ),// tint color
-            shadowColor = Color.parseColor(
-                newColorVal
-            )
-        )
-
-
-
-        closeText.setOnClickListener {
-            bottomSheetDialog.dismissWithAnimation
-            bottomSheetDialog.hide()
-            bottomSheetDialog.dismiss()
-            viewModel.incrementalCount = 0
-            resetTabAnimatedButton()
-
-
-        }
-        closeImage.setOnClickListener {
-            bottomSheetDialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
-            bottomSheetDialog.hide()
-            resetTabAnimatedButton()
-            viewModel.incrementalCount = 0
-
-        }
-
-
 
 
     }
@@ -318,14 +180,18 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     private fun initViews(view: View) {
         bottomSheetLayout = bottomSheetDialog.findViewById(R.id.design_bottom_sheet)
-        closeText = view.findViewById(R.id.closeText)
-        closeImage = view.findViewById(R.id.closeImage)
+//        closeText = view.findViewById(R.id.closeText)
+//        closeImage = view.findViewById(R.id.closeImage)
         scrollView = view.findViewById(R.id.scrollView)
-        coordinatorLayout = view.findViewById(R.id.coordinator)
-        // relativeLL = view.findViewById(R.id.relativeLL)
-        // mainCardLayout = view.findViewById(R.id.mainCardLayout)
-        /**Added to init the lib of getting dynamic flags*/
-        //        World.init(context)
+        inLineCardLayout = view.findViewById(R.id.inline_container)
+        headerLayout = view.findViewById(R.id.headerLayout)
+        checkoutLayout = view.findViewById(R.id.fragment_all)
+        frameLayoutForNFc = view.findViewById(R.id.fragment_container_nfc_lib)
+        webFrameLayout = view.findViewById(R.id.webFrameLayout)
+        webFrameLayout.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            requireContext().getDeviceSpecs().first - 100
+        )
     }
 
 
@@ -345,8 +211,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         enabledSections.add(SectionType.FRAGMENT)
         enabledSections.add(SectionType.ActionButton)
 
-        println("_resetFragment>>" + _resetFragment)
-        println("hideAllView>>" + hideAllView)
         if (_resetFragment) {
             if (hideAllView) {
                 if (::status.isInitialized)
@@ -370,8 +234,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                 viewModel?.showOnlyButtonView(status, checkOutActivity, this)
         }
 
-        setBottomSheetInterface(this)
-
         return enabledSections
     }
 
@@ -384,8 +246,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         fun newInstance(context: Context, activity: Activity?, resetFragment: Boolean) =
             CheckoutFragment().apply {
                 arguments = Bundle().apply {}
-                _Context = context
-                _activity = activity
                 _resetFragment = resetFragment
                 requireArguments().putBoolean(RESET_FRAG, resetFragment)
             }
@@ -433,56 +293,36 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     }
 
+
     @RequiresApi(Build.VERSION_CODES.N)
     fun resetTabAnimatedButton() {
-        checkOutActivity?.displayMetrics?.let {
-            tabAnimatedActionButton?.setDisplayMetricsTheme(
-                it,
-                CustomUtils.getCurrentTheme()
-            )
-        }
+
         SDKSession.sessionActive = false
         tabAnimatedActionButton?.changeButtonState(ActionButtonState.RESET)
         if (checkOutActivity?.isGooglePayClicked == false) {
             checkOutActivity?.overridePendingTransition(0, R.anim.slide_down_exit)
             checkOutActivity?.finishAfterTransition()
         }
-        //  checkOutActivity?.finish()
-
-        val payString: String = LocalizationManager.getValue("pay", "ActionButton")
-        val nowString: String = LocalizationManager.getValue("now", "ActionButton")
-        /**
-         * Stopped reseting the view of button cz of loader will test if not required will remove this code*/
-        /*   tabAnimatedActionButton?.setButtonDataSource(
-               true,
-               context?.let { LocalizationManager.getLocale(it).language },
-               payString + " " + nowString,
-               Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-               Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
-           )*/
-        /*  tabAnimatedActionButton?.setOnClickListener {
-              requireActivity().supportFragmentManager.let { it1 -> SDKSession.contextSDK?.let { it2 ->
-                  SDKSession.startSDK(it1,
-                      it2,SDKSession.contextSDK as Activity)
-              } }
-          }*/
         tabAnimatedActionButton?.isClickable = true
         tabAnimatedActionButton?.isEnabled = true
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.N)
     fun dismissBottomSheetDialog() {
-        //bottomSheetDialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
         ThemeManager.currentTheme = ""
         sessionDelegate?.sessionCancelled()
         LocalizationManager.currentLocalized = JSONObject()
-        bottomSheetDialog.dismissWithAnimation
-        bottomSheetDialog.hide()
         bottomSheetDialog.dismiss()
         resetTabAnimatedButton()
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
+    override fun onDestroy() {
+        super.onDestroy()
+        resetTabAnimatedButton()
+    }
 
 
 }

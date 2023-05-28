@@ -297,7 +297,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         cardViewModel: CardViewModel,
         checkoutFragment: CheckoutFragment,
         headerLayout: LinearLayout,
-        coordinatorLayout: CoordinatorLayout?,
         topHeaderView: TapBrandView?,
     ) {
         this.context = context
@@ -1286,7 +1285,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 )
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = VISIBLE
                 saveCardSwitchHolder?.view?.cardSwitch?.tapLogoImage?.visibility = GONE
-                checkoutFragment.closeText.visibility = GONE
+               // checkoutFragment.closeText.visibility = GONE
 
 
             }
@@ -1780,8 +1779,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = INVISIBLE
             saveCardSwitchHolder?.view?.visibility = VISIBLE
         }
-        if (::checkoutFragment.isInitialized)
-            checkoutFragment.closeText.visibility = GONE
+//        if (::checkoutFragment.isInitialized)
+//            checkoutFragment.closeText.visibility = GONE
         println("chargeResponse are>>>>" + chargeResponse?.status)
         if (response.contains("failure") || response.contains("Cancelled Google Pay") && chargeResponse == null) {
 
@@ -3805,31 +3804,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     fun closeAsynchView() {
-        /*   removeViews(businessViewHolder, asynchronousPaymentViewHolder)
-           businessViewHolder.setDataFromAPI(
-               PaymentDataSource.getMerchantData()?.logo,
-               PaymentDataSource.getMerchantData()?.name
-           )
-           addViews(
-               businessViewHolder,
-               amountViewHolder,
-               cardViewHolder,
-               paymentInlineViewHolder,
-               saveCardSwitchHolder
-           )
-           saveCardSwitchHolder?.view?.visibility = View.VISIBLE
-           saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.RESET)
-           val payString: String = LocalizationManager.getValue("pay", "ActionButton")
-           saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
-               false,
-               "en",
-               if (::selectedAmount.isInitialized && ::selectedCurrency.isInitialized) {
-                   payString+" "+currentCurrencySymbol+" "+selectedAmount
-               }else{ payString+" "+currentCurrencySymbol+" "+currentAmount},
-               Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
-               Color.parseColor(ThemeManager.getValue("actionButton.Invalid.titleLabelColor")),
-           )*/
-        //  Stopped reset view and dismiss it.
         checkoutFragment?.dismissBottomSheetDialog()
     }
 
@@ -3838,8 +3812,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         checkOutActivity: CheckOutActivity?,
         _checkoutFragment: CheckoutFragment
     ) {
-        println("checkoutFragment>>>." + _checkoutFragment)
-        println("checkOutActivity>>>." + checkOutActivity)
         removeAllViews()
         addViews(saveCardSwitchHolder)
         val payString: String = LocalizationManager.getValue("pay", "ActionButton")
@@ -4101,7 +4073,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     fun dismissBottomSheet() {
-        checkoutFragment?.dismissBottomSheetDialog()
+        checkoutFragment.dismissBottomSheetDialog()
     }
 
     fun setTitleNormalCard() {
