@@ -129,7 +129,6 @@ class WebFragment(
 
                 //if (web_view.canGoBack()) {
                 web_view.goBack()
-                CheckoutViewModel().cancelledCall()
                 /**
                  * put here listener or delegate thT process cancelled **/
                 return@setOnKeyListener true
