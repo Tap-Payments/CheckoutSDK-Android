@@ -12,6 +12,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.cardview.widget.CardView
 import androidx.core.view.setMargins
@@ -289,7 +290,7 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
                 removeView(getImageView(loaderSuccessGif, 0) {})
                 removeView(getImageView(loaderErrorGif, 0) {})
                 addChildView(getTextView(LocalizationManager.getLocale(context).language))
-                if (displayMetrics == DisplayMetrics.DENSITY_450 || displayMetrics == DisplayMetrics.DENSITY_420 || displayMetrics == DisplayMetrics.DENSITY_400 || displayMetrics == DisplayMetrics.DENSITY_440 || displayMetrics == DisplayMetrics.DENSITY_XXHIGH || displayMetrics == DisplayMetrics.DENSITY_560) {
+                if (displayMetrics == DisplayMetrics.DENSITY_450 || displayMetrics == DisplayMetrics.DENSITY_420 || displayMetrics == DisplayMetrics.DENSITY_400 || displayMetrics == DisplayMetrics.DENSITY_440 || displayMetrics == DisplayMetrics.DENSITY_XXHIGH ) {
 
                     val params = LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
@@ -319,7 +320,7 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         130
                     )
-                    params.setMargins(60, 40, 60, 60)
+                    params.setMargins(40, 40, 40, 60)
                     params.gravity = Gravity.CENTER
                     this.layoutParams = params
                     init()
@@ -447,7 +448,7 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
 
     private fun startStateAnimation() {
 
-        if (displayMetrics == DisplayMetrics.DENSITY_450 || displayMetrics == DisplayMetrics.DENSITY_420 || displayMetrics == DisplayMetrics.DENSITY_400 || displayMetrics == DisplayMetrics.DENSITY_440 || displayMetrics == DisplayMetrics.DENSITY_XXHIGH || displayMetrics == DisplayMetrics.DENSITY_560) {
+        if (displayMetrics == DisplayMetrics.DENSITY_450 || displayMetrics == DisplayMetrics.DENSITY_420 || displayMetrics == DisplayMetrics.DENSITY_400 || displayMetrics == DisplayMetrics.DENSITY_440 || displayMetrics == DisplayMetrics.DENSITY_XXHIGH ) {
             animationDataSource =
                 AnimationDataSource(
                     fromHeight = height,
