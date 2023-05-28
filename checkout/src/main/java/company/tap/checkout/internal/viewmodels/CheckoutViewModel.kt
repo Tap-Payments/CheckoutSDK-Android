@@ -582,7 +582,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     )
                 }
             }
-
+        unActivateActionButton()
 
         }
         newColorVal = Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
@@ -2207,8 +2207,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             } else {
 
                 if (bgArrayList?.size == 2) {
-                    startColor = bgArrayList.get(1).replace("0x", "#")
-                    endColor = bgArrayList.get(0).replace("0x", "#")
+                    startColor = bgArrayList.get(0).replace("0x", "#")
+                    endColor = bgArrayList.get(1).replace("0x", "#")
 
                     intColorArray =
                         intArrayOf(Color.parseColor(startColor), Color.parseColor(endColor))

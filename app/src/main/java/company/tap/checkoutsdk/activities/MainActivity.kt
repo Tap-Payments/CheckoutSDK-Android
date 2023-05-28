@@ -367,7 +367,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
        // sdkSession.setMerchantID("1124340") // ** Optional ** you can pass merchant id or null
 
 
-       sdkSession.setCardType(CardType.ALL) // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
+       settingsManager?.getCardType("key_sdk_card_type")
+           ?.let { sdkSession.setCardType(it) } // ** Optional ** you can pass which cardType[CREDIT/DEBIT] you want.By default it loads all available cards for Merchant.
 
        settingsManager?.getTransactionsMode("key_sdk_transaction_mode")?.let {
            sdkSession.setTransactionMode(
