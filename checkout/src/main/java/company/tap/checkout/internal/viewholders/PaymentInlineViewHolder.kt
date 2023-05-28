@@ -1020,24 +1020,7 @@ class PaymentInlineViewHolder(
         if(tapCardInputView.cardFormHasFocus) checkoutViewModel?.resetViewHolder()
         tapCardInputView.setCardNumberTextWatcher(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-//                cardNumAfterTextChangeListener(s, this)
-                /*          if(cardNumber?.length!=null)
-                          if(cardNumber?.length!! >=19) {
-                              println("tapCardInputView no" + tapCardInputView.isDeleting)
-                              if (tapCardInputView.isDeleting == true) {
 
-                              } else {
-                                  println("full no" + cardNumber)
-
-                                  tapCardInputView.setCardNumberMasked(cardNumber?.let {
-                                      maskCardNumber(
-                                          it
-                                      )
-                                  })
-                              }
-                              tapCardInputView.removeCardNumberTextWatcher(this)
-                            //  tapCardInputView.setCardNumberTextWatcher(this)
-                          }*/
 
                 var length: Int? = s?.length;
 
@@ -1092,9 +1075,7 @@ class PaymentInlineViewHolder(
                     // delete character action have done
                     // do what ever you want
                     // Log.d("MainActivityTag", "Character deleted");
-                   /* if(tapCardInputView.cardNumberIsValid()){
-                        tapCardInputView.setCardNumberTextWatcher(textWatcher)
-                    }else  tapCardInputView.removeCardNumberTextWatcher(textWatcher)*/
+
                     tabLayout?.fadeVisibility(View.VISIBLE)
                     intertabLayout?.fadeVisibility(View.VISIBLE)
                     acceptedCardText?.fadeVisibility(View.VISIBLE)
@@ -1615,11 +1596,6 @@ class PaymentInlineViewHolder(
 
                 }
                 CardValidationState.incomplete -> {
-                    //tapAlertView?.visibility = View.VISIBLE
-                    // tapAlertView?.alertMessage?.text =
-                    //    (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
-                    // checkoutFragment.scrollView?.smoothScrollTo(0,height)
-                    //checkoutFragment.scrollView?.smoothScrollTo(0,0)
                     intertabLayout.visibility = View.VISIBLE
                     tabLayout.visibility = View.VISIBLE
                     acceptedCardText.visibility = View.VISIBLE
@@ -1643,12 +1619,6 @@ class PaymentInlineViewHolder(
                     tapAlertView?.alertMessage?.text =
                         (LocalizationManager.getValue("Warning", "Hints", "missingExpiryCVV"))
 
-                    // lastFocusField =CardInputListener.FocusField.FOCUS_EXPIRY
-                    /*tapCardInputView.setCardNumberMasked(cardNumber?.let {
-                        maskCardNumber(
-                            it
-                        )
-                    })*/
 
                     intertabLayout.visibility = View.GONE
                     tabLayout.visibility = View.GONE
