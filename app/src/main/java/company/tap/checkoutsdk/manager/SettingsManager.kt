@@ -12,6 +12,7 @@ import company.tap.checkout.internal.api.enums.AuthorizeActionType
 import company.tap.checkout.internal.api.models.AmountModificator
 import company.tap.checkout.internal.api.models.PhoneNumber
 import company.tap.checkout.internal.api.responses.UserLocalCurrencyModel
+import company.tap.checkout.open.enums.CardType
 import company.tap.checkout.open.enums.Category
 import company.tap.checkout.open.enums.SdkMode
 import company.tap.checkout.open.enums.TransactionMode
@@ -792,6 +793,31 @@ object SettingsManager {
         else return "en"
     }
 
+    /***
+     * AllowedCard Type
+     * **/
+
+    fun getCardType(key: String): CardType {
+        val card_type = pref?.getString(key, CardType.ALL.name)
+        //println("trx_mode are" + trx_mode)
+        if (card_type.equals(
+                CardType.ALL.name,
+                ignoreCase = true
+            )
+        ) return CardType.ALL
+        if (card_type.equals(
+                CardType.DEBIT.name,
+                ignoreCase = true
+            )
+        ) return CardType.DEBIT
+        if (card_type.equals(
+                CardType.CREDIT.name,
+                ignoreCase = true
+            )
+        ) return CardType.CREDIT
+
+        else return CardType.ALL
+    }
     /**
      * get transaction currency
      * @param key

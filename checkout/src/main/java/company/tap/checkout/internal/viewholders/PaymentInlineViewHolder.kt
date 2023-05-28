@@ -1880,11 +1880,13 @@ class PaymentInlineViewHolder(
         if (binLookupResponse != null && PaymentDataSource?.getCardType().toString() != null) {
             if (PaymentDataSource.getCardType().toString() != binLookupResponse.cardType) {
                 CustomUtils.showDialog(
-                    LocalizationManager.getValue(
+                  /*  LocalizationManager.getValue(
                         "alertUnsupportedCardTitle",
                         "AlertBox"
-                    ),
-                    LocalizationManager.getValue("alertUnsupportedCardMessage", "AlertBox"),
+                    ),*/
+                    "Alert",
+                   // LocalizationManager.getValue("alertUnsupportedCardMessage", "AlertBox"),
+                    "Card Not supported",
                     context,
                     1,
                     baseLayoutManager,
