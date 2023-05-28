@@ -2171,36 +2171,7 @@ class PaymentInlineViewHolder(
         }
     }
 
-    /*   override fun onClick(v: View?) {
 
-
-           if(v?.id == R.id.backView) {
-
-               Toast.makeText(context, "clicking!!", Toast.LENGTH_SHORT).show()
-               cardInputUIStatus = CardInputUIStatus.NormalCard
-               tabLayout.resetBehaviour()
-               tapCardInputView.clear()
-               closeButton?.visibility = View.GONE
-               controlScannerOptions()
-               cardInputUIStatus = CardInputUIStatus.NormalCard
-               *//* tapCardInputView.setSingleCardInput(
-                CardBrandSingle.Unknown, null
-            )*//*
-            tapInlineCardSwitch?.visibility = View.GONE
-            //  tapCardInputView.separatorcard2.visibility = View.INVISIBLE
-            // resetCardBrandIcon()
-            tapAlertView?.visibility = View.GONE
-            checkoutViewModel.resetCardSelection()
-
-            checkoutViewModel.isSavedCardSelected = false
-            //resetPaymentCardView()
-            intertabLayout.visibility = View.VISIBLE
-            tabLayout.visibility = View.VISIBLE
-            acceptedCardText.visibility = View.VISIBLE
-            checkoutViewModel.resetViewHolder()
-
-        }
-    }*/
 
     fun hideViewONScanNFC() {
         intertabLayout.visibility = View.GONE
