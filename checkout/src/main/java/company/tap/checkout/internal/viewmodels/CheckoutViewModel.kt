@@ -565,7 +565,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     )
                 }
             }
-
+        unActivateActionButton()
 
         }
         newColorVal = Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
