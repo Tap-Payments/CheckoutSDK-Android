@@ -603,7 +603,7 @@ class PaymentInlineViewHolder(
         println("updateCardString"+updateCardString)
 
         val cardModel = company.tap.cardinputwidget2.Card(
-            updateCardString,
+            emvCard?.cardNumber,
             null,
           month,
             year,
@@ -1774,6 +1774,7 @@ class PaymentInlineViewHolder(
         if(hasFocus){
             tapAlertView?.fadeVisibility(View.GONE, 500)
         }else {
+            if(cvvNumber!=null)
             if(cvvNumber?.length!! <3) {
                 tapAlertView?.fadeVisibility(View.VISIBLE)
                 val alertMessage: String =

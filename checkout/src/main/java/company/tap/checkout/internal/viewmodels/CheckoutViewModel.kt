@@ -2258,9 +2258,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             )
             else
                 params.setMargins(
-                    MetricsUtil.convertDpToPixel(110f, context).toInt(),
+                    MetricsUtil.convertDpToPixel(108f, context).toInt(),
                     MetricsUtil.convertDpToPixel(10f, context).toInt(),
-                    MetricsUtil.convertDpToPixel(110f, context).toInt(),
+                    MetricsUtil.convertDpToPixel(108f, context).toInt(),
                     MetricsUtil.convertDpToPixel(10f, context).toInt()
                 )
 
