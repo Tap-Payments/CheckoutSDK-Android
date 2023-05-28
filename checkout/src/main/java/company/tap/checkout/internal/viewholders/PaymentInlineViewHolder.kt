@@ -820,23 +820,7 @@ class PaymentInlineViewHolder(
             }
 
             override fun afterTextChanged(s: Editable?) {
-                /* if(s.toString().length>3){
-                     if(PaymentDataSource.getCardHolderNameShowHide()){
-                         tapInlineCardSwitch?.visibility = View.VISIBLE
-                         contactDetailsView?.visibility = View.GONE //temp visible to gone
-                         shippingDetailView?.visibility = View.GONE //temp visible to gone
-                         allFieldsValid = true
-                     }else {
-                         contactDetailsView?.visibility = View.GONE
-                         shippingDetailView?.visibility = View.GONE
-                     }
 
-                 }else {
-                     contactDetailsView?.visibility = View.GONE
-                     shippingDetailView?.visibility = View.GONE
-                     tapInlineCardSwitch?.visibility = View.GONE
-
-                 }*/
                 println("PaymentDataSource?.getBinLookupResponse()"+PaymentDataSource?.getBinLookupResponse())
                 println("cardHolderName>>"+cardHolderName)
                 //On Details complete
@@ -952,59 +936,6 @@ class PaymentInlineViewHolder(
 
     private fun addViewsToPaymentViewContainer() {
         displayMetrics = CustomUtils.getDeviceDisplayMetrics(context as Activity)
-        /*  val layoutParams = RelativeLayout.LayoutParams(
-              RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT
-          )
-          displayMetrics = CustomUtils.getDeviceDisplayMetrics(context as Activity)
-          println("displayMetrics>>")
-         if(displayMetrics == DisplayMetrics.DENSITY_420||displayMetrics == DisplayMetrics.DENSITY_450 ||displayMetrics == DisplayMetrics.DENSITY_440||displayMetrics == DisplayMetrics.DENSITY_560){
-              layoutParams.setMargins(0, -10, -115, 0) //for holder enabel
-
-          }else if (displayMetrics == DisplayMetrics.DENSITY_300||displayMetrics == DisplayMetrics.DENSITY_XHIGH || displayMetrics == DisplayMetrics.DENSITY_340||displayMetrics == DisplayMetrics.DENSITY_360){
-              layoutParams.setMargins(0, 0, -175, 0)
-          }else if(displayMetrics == DisplayMetrics.DENSITY_XXHIGH ){
-              layoutParams.setMargins(0, 0, -235, 0)
-          }else if(displayMetrics == DisplayMetrics.DENSITY_400){
-              if(TapNfcUtils.isNfcAvailable(context)){
-                  layoutParams.setMargins(0, -10, -80, 0)
-
-              }else layoutParams.setMargins(0, -10, 50, 0)
-          }*/
-        //   layoutParams.setMargins(0, -10, 50, 0)
-        // paymentInputContainer.layoutParams = layoutParams
-        /* if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
-          //   tapPaymentInput?.cardInputChipView?.setBackgroundResource(R.drawable.border_unclick_black)
-         } else {
-             tapPaymentInput?.cardInputChipView?.setBackgroundResource(R.drawable.border_unclick_cardinput)
-         }
-         tapPaymentInput?.cardInputChipView?.let {
-             setBorderedView(
-                 it,
-                 15.0f,// corner raduis
-                 0.0f,
-                 Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.shadow.color")),
-                 Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.shadow.color")),
-                 Color.parseColor(ThemeManager.getValue("inlineCard.commonAttributes.shadow.color"))
-
-             )
-         }
-         tapPaymentInput?.cardInputChipView?.cardElevation= 0.2f*/
-        /*  if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
-              tapPaymentInput?.cardInputChipView?.setBackgroundResource(R.drawable.border_unclick_black)
-          } else {
-              tapPaymentInput?.cardInputChipView?.setBackgroundResource(R.drawable.border_unclick_cardinput)
-          }
-          tapPaymentInput?.cardInputChipView?.let {
-              setBorderedView(
-                  it,
-                  15.0f,// corner raduis
-                  //(ThemeManager.getValue("horizontalList.chips.radius") as Int).toFloat(),
-                  0.0f,
-                  Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.unSelected.shadow.color")),
-                  Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.backgroundColor")),
-                  Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.unSelected.shadow.color"))
-              )
-          }*/
         paymentInputContainer.addView(tapCardInputView)
 
 
@@ -1040,11 +971,6 @@ class PaymentInlineViewHolder(
 
 
                 if (s != null) {
-                    /* if(s.isEmpty() || s.length!!  < 19 || s.length > 10 ){
-                         acceptedCardText.visibility = View.VISIBLE
-                         intertabLayout.visibility = View.VISIBLE
-                         tabLayout.visibility = View.VISIBLE
-                     }*/
                     if (s?.length!! >= 19) afterValidation()
                 }
 
