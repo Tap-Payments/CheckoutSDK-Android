@@ -70,7 +70,7 @@ enum class CardScheme {
     /**
      * Oman net card scheme.
      */
-    @SerializedName("OMAN_NET")
+    @SerializedName("OMANNET")
     OMAN_NET,
 
     /**

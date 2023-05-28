@@ -2044,14 +2044,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
         /**
-         * Clear card input text
+         * Clear card input text auto focus
          */
-        println("focussss" + paymentInlineViewHolder.tapCardInputView.hasFocus())
-        println("isSelected" + isSelected)
         paymentInlineViewHolder.tapCardInputView.clear()
         paymentInlineViewHolder.clearCardInputAction()
-
-        println("savedCardsModel is" + savedCardsModel)
+        //  println("savedCardsModel is" + savedCardsModel)
         unActivateActionButton()
         when (savedCardsModel) {
             is SavedCard -> {
@@ -2151,9 +2148,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
         }
 
-
-
-        println("cardBrandString before " + cardBrandString)
+          println("cardBrandString before " + cardBrandString)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             logicTogetButtonStyle(paymentOptObject, payStringButton, cardBrandString)
         }
@@ -2241,10 +2236,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             LinearLayout.LayoutParams.MATCH_PARENT
         )
         /**
-         *work around condition for small logo of knet*/
+         *work around condition for small logo of knet , set margins according to design figma*/
         if (CustomUtils.getCurrentLocale(context).contains("ar")) {
-//            if (selectedPayOpt?.brand?.contains("KNET") == true) params.setMargins(10)
-//                else
+
             params.setMargins(
                 MetricsUtil.convertDpToPixel(100f, context).toInt(),
                 MetricsUtil.convertDpToPixel(5f, context).toInt(),
@@ -2886,10 +2880,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
 
     }
-
-    fun cancelledCall() {
-        println("cancelledCall from webview")
-    }
+    
 
     @SuppressLint("ResourceType")
     override fun redirectLoadingFinished(
