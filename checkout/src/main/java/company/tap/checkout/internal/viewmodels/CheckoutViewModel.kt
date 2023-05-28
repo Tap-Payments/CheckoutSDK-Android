@@ -336,16 +336,20 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
 
         })
+//
+//        doAfterSpecificTime(50) {
+//            this.topHeaderView.startPoweredByAnimation(
+//                delayTime = Constants.PoweredByLayoutAnimationDelay,
+//                this.topHeaderView.poweredByImage, onAnimationEnd =
+//                {
+//                    if (isItemsAreOpend.value==false){
+//                        poweredByTapAnimationEnds()
+//                    }
+//                }
+//            )
+//
+//        }
 
-        this.topHeaderView.startPoweredByAnimation(
-            delayTime = Constants.PoweredByLayoutAnimationDelay,
-            this.topHeaderView.poweredByImage, onAnimationEnd =
-            {
-                if (isItemsAreOpend.value==false){
-                    poweredByTapAnimationEnds()
-                }
-            }
-        )
 
 
     }
@@ -4063,23 +4067,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
     }
 
-    fun onButtonClicked() {
-        println("onButtonClicked")
-        BenefitInAppCheckout.newInstance(
-            context as Activity,
-            appId,
-            "448544",
-            merchantId,
-            seceret,
-            "20.0",
-            "BH",
-            "048",
-            mcc,
-            "Tap",
-            "Manama",
-            this
-        )
-    }
 
 
     override fun onTransactionSuccess(p0: Transaction?) {

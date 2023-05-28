@@ -107,7 +107,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     }
 
 
-
     /**
      * Logic to obtain ISO country code **/
     fun getSimIsoCountryCurrency(): String? {
@@ -147,8 +146,25 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             topHeaderView
         )
 
+        topHeaderView.visibility = View.GONE
+        doAfterSpecificTime(50) {
+            topHeaderView.startPoweredByAnimation(
+                delayTime = Constants.PoweredByLayoutAnimationDelay,
+                topHeaderView.poweredByImage, onAnimationEnd =
+                {
+                    if (viewModel.isItemsAreOpend.value == false) {
+                        poweredByTapAnimationEnds()
+                    }
+                }
+            )
+        }
 
 
+
+    }
+
+    private fun poweredByTapAnimationEnds() {
+        viewModel.powerdByTapAnimationFinished.value = true
     }
 
 

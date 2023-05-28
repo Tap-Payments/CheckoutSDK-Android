@@ -176,41 +176,25 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
     }
 
     override fun getItemViewType(position: Int): Int {
-        /*  println("position value are>>>" + position)
-          println("totalArraySize value are>>>" + totalArraySize)*/
+
         if (position < adapterContent.size) {
             if (adapterContent[position].paymentType == PaymentType.WEB) {
-                //   println("adapterContent value are>>>" + adapterContent[position].brand?.name)
-                //BenefitPay condition for native removed
-                /* if(adapterContent[position].brand?.name?.equals("benefit") == true){
-                         return TYPE_3PPG
-                     }else {*/
                 if (CustomUtils.getCurrentTheme() != null && CustomUtils.getCurrentTheme()
                         .contains("dark")
                 ) {
                     (adapterContent[position]).logos?.dark?.png?.let { arrayListRedirect.add(it) }
                 } else (adapterContent[position]).logos?.light?.png?.let { arrayListRedirect.add(it) }
-                //  (adapterContent[position]).image?.let { arrayListRedirect.add(it) }
                 return TYPE_REDIRECT
-                // }
+
             }
 
         }
 
-        // println("gpay paymentType"+adapterGooglePay[0].paymentType)
         if (adapterGooglePay.isNotEmpty() && adapterGooglePay[0].paymentType == PaymentType.GOOGLE_PAY)
             if (position - adapterContent.size < adapterGooglePay.size) {
                 return TYPE_GOOGLE_PAY
             }
 
-//        if (position.minus(adapterContent.size.plus(`arrayListCards`.size)) < adapterGooglePay.size) {
-//            val index = totalArraySize - adapterContent.size - adapterGooglePay.size
-//            if (arrayListCards[index - 1].`object`.toUpperCase() == PaymentType.CARD.name) {
-//                arrayListSaveCard.clear()
-//                arrayListSaveCard.add(arrayListCards)
-//                return TYPE_SAVED_CARD
-//            }
-//        }
 
         return TYPE_SAVED_CARD
 
@@ -616,50 +600,6 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         val maskLen: Int = cardInput.length - 4
         if (maskLen <= 0) return cardInput // Nothing to mask
         return (cardInput).replaceRange(0, 6, "••• ")
-    }
-
-    /**
-     * Determine the viewer's ability to pay with a payment method supported by your app and display a
-     * Google Pay payment button.
-     *
-     * @see [](https://developers.google.com/android/reference/com/google/android/gms/wallet/
-    PaymentsClient.html.isReadyToPay
-    ) */
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    private fun possiblyShowGooglePayButton(holder: GooglePayViewHolder) {
-
-        val isReadyToPayJson = PaymentsUtil.isReadyToPayRequest() ?: return
-        val request = IsReadyToPayRequest.fromJson(isReadyToPayJson.toString()) ?: return
-        println("isReadyToPayJson" + request.toJson())
-        // The call to isReadyToPay is asynchronous and returns a Task. We need to provide an
-        // OnCompleteListener to be triggered when the result of the call is known.
-        val task = paymentsClient?.isReadyToPay(request)
-        task?.addOnCompleteListener { completedTask ->
-            try {
-                //  completedTask.getResult(ApiException::class.java)?.let(::setGooglePayAvailable)
-                setGooglePayAvailable(completedTask.getResult(ApiException::class.java), holder)
-            } catch (exception: ApiException) {
-                // Process error
-                Log.w("isReadyToPay failed", exception)
-            }
-        }
-    }
-
-    /**
-     * If isReadyToPay returned `true`, show the button and hide the "checking" text. Otherwise,
-     * notify the user that Google Pay is not available. Please adjust to fit in with your current
-     * user flow. You are not required to explicitly let the user know if isReadyToPay returns `false`.
-     *
-     * @param available isReadyToPay API response.
-     */
-    private fun setGooglePayAvailable(available: Boolean, holder: RecyclerView.ViewHolder) {
-        println("available$available")
-        if (available) {
-            holder.itemView.googlePayButton.setVisibility(View.VISIBLE)
-        } else {
-            holder.itemView.googlePayButton.setVisibility(View.GONE)
-            // Toast.makeText(holder.itemView.getContext(), R.string.googlepay_button_not_supported, Toast.LENGTH_LONG).show()
-        }
     }
 
 

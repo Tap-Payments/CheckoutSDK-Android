@@ -118,6 +118,6 @@ object Constants {
         }
 
 
-    const val PoweredByLayoutAnimationDelay = 2300L
+    const val PoweredByLayoutAnimationDelay = 2000L
 
 }
