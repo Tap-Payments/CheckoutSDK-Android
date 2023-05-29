@@ -87,7 +87,7 @@ class PaymentInlineViewHolder(
 
     val paymentInputContainer: LinearLayout
 
-    // private val clearView: ImageView
+
     var selectedType = PaymentTypeEnum.card
     private var shouldShowScannerOptions = true
     private var lastFocusField = CardInputListener.FocusField.FOCUS_CARD
@@ -95,8 +95,7 @@ class PaymentInlineViewHolder(
     private var cardScannerBtn: ImageView? = null
     private var savedCardsModel: SavedCard? = null
 
-    // private var nfcButton: ImageView? = null
-    //  var tapCardInputView: InlineCardInput
+
     var tapCardInputView: InlineCardInput2
     internal var tapMobileInputView: TapMobilePaymentView
     private var linearLayoutPay: LinearLayout? = null
