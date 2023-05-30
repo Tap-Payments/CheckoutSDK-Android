@@ -486,32 +486,18 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     private fun sendAuthorizeOTPCode(otpCode: String) {
         cardViewModel.processEvent(
-            CardViewEvent.AuthenticateAuthorizeTransaction,
-            this,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            otpCode
+            event = CardViewEvent.AuthenticateAuthorizeTransaction,
+            viewModel = this,
+            otpString = otpCode
         )
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun sendChargeOTPCode(otpCode: String) {
         cardViewModel.processEvent(
-            CardViewEvent.AuthenticateChargeTransaction,
-            this,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            otpCode
+           event= CardViewEvent.AuthenticateChargeTransaction,
+            viewModel = this,
+            otpString = otpCode
         )
     }
 

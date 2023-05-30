@@ -73,9 +73,9 @@ class CardViewModel : ViewModel() {
     fun processEvent(
         event: CardViewEvent,
         viewModel: CheckoutViewModel,
-        selectedPaymentOption: PaymentOption?,
+        selectedPaymentOption: PaymentOption?=null,
         binValue: String? = null,
-        cardDataRequest: CreateTokenCard?,
+        cardDataRequest: CreateTokenCard? =null,
         cardViewModel: CardViewModel? = null,
         customerId: String? = null,
         cardId: String? = null,

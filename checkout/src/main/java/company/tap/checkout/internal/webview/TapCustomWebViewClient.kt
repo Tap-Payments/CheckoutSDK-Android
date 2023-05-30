@@ -127,34 +127,22 @@ class TapCustomWebViewClient constructor(
             when {
                 url.contains("auth_ts") -> {
                     cardViewModel.processEvent(
-                        CardViewEvent.RetreiveAuthorizeEvent,
-                        checkoutViewModel,
-                        null,
-                        null,
-                        null,
-                        null
+                        event = CardViewEvent.RetreiveAuthorizeEvent,
+                        viewModel = checkoutViewModel
                     )
 
                 }
                 url.contains("auth") -> {
                     cardViewModel.processEvent(
-                        CardViewEvent.RetreiveSaveCardEvent,
-                        checkoutViewModel,
-                        null,
-                        null,
-                        null,
-                        null
+                        event= CardViewEvent.RetreiveSaveCardEvent,
+                       viewModel =  checkoutViewModel
                     )
 
                 }
                 else -> {
                     cardViewModel.processEvent(
-                        CardViewEvent.RetreiveChargeEvent,
-                        checkoutViewModel,
-                        null,
-                        null,
-                        null,
-                        null
+                       event= CardViewEvent.RetreiveChargeEvent,
+                        viewModel = checkoutViewModel
                     )
                 }
             }
