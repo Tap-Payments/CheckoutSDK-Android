@@ -471,32 +471,18 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     private fun sendAuthorizeOTPCode(otpCode: String) {
         cardViewModel.processEvent(
-            CardViewEvent.AuthenticateAuthorizeTransaction,
-            this,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            otpCode
+            event = CardViewEvent.AuthenticateAuthorizeTransaction,
+            viewModel = this,
+            otpString = otpCode
         )
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun sendChargeOTPCode(otpCode: String) {
         cardViewModel.processEvent(
-            CardViewEvent.AuthenticateChargeTransaction,
-            this,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            otpCode
+           event= CardViewEvent.AuthenticateChargeTransaction,
+            viewModel = this,
+            otpString = otpCode
         )
     }
 
@@ -2089,12 +2075,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         activateActionButton((savedCardsModel as PaymentOption))
                         setPayButtonAction(PaymentType.WEB, savedCardsModel)
                     } else if ((savedCardsModel as PaymentOption).paymentType == PaymentType.GOOGLE_PAY) {
-                        //  removeViews(amountViewHolder, cardViewHolder, paymentInlineViewHolder)
-                        // checkoutFragment.checkOutActivity?.handleGooglePayApiCall(savedCardsModel as PaymentOption)
-                        //activateActionButtonForGPay()
                         activateActionButton((savedCardsModel as PaymentOption))
                         setPayButtonAction(PaymentType.GOOGLE_PAY, savedCardsModel)
-                        PaymentDataSource.setWebViewType(WebViewType.REDIRECT)
+                        PaymentDataSource.setWebViewType(WebViewType.THREE_DS_WEBVIEW)
                     }
                     Bugfender.d(
                         CustomUtils.tagEvent,
@@ -2109,25 +2092,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
     }
 
-    private fun activateActionButtonForGPay() {
-        val payString: String = LocalizationManager.getValue("pay", "ActionButton")
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
-            true,
-            "en",
-            "",
-            Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
-        )
 
-        saveCardSwitchHolder?.view?.cardSwitch?.showOnlyPayButton()
-
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated
-        //saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
-
-
-    }
 
 
     private fun activateActionButton(
@@ -3956,19 +3921,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
              * ***/
             val createTokenGPayRequest = CreateTokenGPayRequest("googlepay", jsonToken)
             CardViewModel().processEvent(
-                CardViewEvent.CreateGoogleTokenEvent,
-                this,
-                selectedPaymentOption,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                context,
-                createTokenGPayRequest
+                event = CardViewEvent.CreateGoogleTokenEvent,
+                viewModel = this,
+               selectedPaymentOption= selectedPaymentOption,
+               context =  context,
+               createTokenGPayRequest= createTokenGPayRequest
             )
             // Logging token string.
             /* Log.e("GooglePaymentToken", paymentMethodData

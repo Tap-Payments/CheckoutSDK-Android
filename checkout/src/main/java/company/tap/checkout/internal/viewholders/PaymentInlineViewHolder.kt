@@ -162,7 +162,7 @@ class PaymentInlineViewHolder(
         separator1 = tapCardInputView.findViewById(R.id.separator_1)
         tapAlertView = tapPaymentInput?.findViewById(R.id.alertView)
         paymentInputContainer = view.findViewById(R.id.payment_input_layout)
-        tapCardInputView.backArrow?.visibility = View.GONE
+        tapCardInputView.backArrow.visibility = View.GONE
         contactDetailsView = view.findViewById(R.id.contact_detailsView)
         shippingDetailView = view.findViewById(R.id.ship_detailsView)
 
@@ -386,12 +386,7 @@ class PaymentInlineViewHolder(
         linearLayoutPay = view.findViewById(R.id.linear_paylayout)
         // clearView.visibility = View.INVISIBLE
         closeButton?.visibility = View.GONE
-        nfcButton?.setOnClickListener {
-            onCardNFCCallListener.onClickNFC()
-        }
-        cardScannerBtn?.setOnClickListener {
-            onCardNFCCallListener.onClickCardScanner(true)
-        }
+
 
     }
 
@@ -466,11 +461,7 @@ class PaymentInlineViewHolder(
         resetCardBrandIcon()
         tapInlineCardSwitch?.visibility = View.GONE
         tapPaymentInput?.separator?.visibility = View.GONE
-        /*  tapCardInputView.holderNameEnabled = PaymentDataSource.getCardHolderNameShowHide() != null && PaymentDataSource.getCardHolderNameShowHide()
-          if (PaymentDataSource.getDefaultCardHolderName() != null) {
-              tapCardInputView.setCardHolderName(PaymentDataSource.getDefaultCardHolderName())
-          }*/
-        height = Resources.getSystem().displayMetrics.heightPixels
+
         addViewsToPaymentViewContainer()
         tapCardInputView.clearFocus()
         cardNumberWatcher()
@@ -644,9 +635,7 @@ class PaymentInlineViewHolder(
            tapAlertView?.alertMessage?.text =alertMessage.replace("%i","3")
 
            tapAlertView?.visibility =View.VISIBLE*/
-        if (CustomUtils.getCurrentTheme() != null && CustomUtils.getCurrentTheme()
-                .contains("dark")
-        ) {
+
             val card = CardValidator.validate(emvCard?.cardNumber)
             emvCard.cardNumber?.let {
                 logicTosetImageDynamic(
@@ -654,15 +643,7 @@ class PaymentInlineViewHolder(
                     it
                 )
             }
-        } else {
-            val card = CardValidator.validate(emvCard?.cardNumber)
-            emvCard.cardNumber?.let {
-                logicTosetImageDynamic(
-                    card.cardBrand,
-                    it
-                )
-            }
-        }
+
 
         contactDetailsView?.visibility = View.GONE
         shippingDetailView?.visibility = View.GONE
@@ -726,9 +707,7 @@ class PaymentInlineViewHolder(
            tapAlertView?.alertMessage?.text =alertMessage.replace("%i","3")
 
            tapAlertView?.visibility =View.VISIBLE*/
-        if (CustomUtils.getCurrentTheme() != null && CustomUtils.getCurrentTheme()
-                .contains("dark")
-        ) {
+
             val card = CardValidator.validate(tapCard?.cardNumber)
             tapCard.cardNumber?.let {
                 logicTosetImageDynamic(
@@ -736,16 +715,7 @@ class PaymentInlineViewHolder(
                     it
                 )
             }
-        } else {
-            val card = CardValidator.validate(tapCard?.cardNumber)
-            if( card.cardBrand!=null)
-            tapCard.cardNumber?.let {
-                logicTosetImageDynamic(
-                    card.cardBrand,
-                    it
-                )
-            }
-        }
+
 
         contactDetailsView?.visibility = View.GONE
         shippingDetailView?.visibility = View.GONE
@@ -937,7 +907,7 @@ class PaymentInlineViewHolder(
                 "TapCardInputKit"
             )
         )
-        if(tapCardInputView.cardFormHasFocus) checkoutViewModel?.resetViewHolder()
+        if(tapCardInputView.cardFormHasFocus) checkoutViewModel.resetViewHolder()
         tapCardInputView.setCardNumberTextWatcher(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
 
@@ -960,7 +930,7 @@ class PaymentInlineViewHolder(
 
 
                 if (s != null) {
-                    if (s?.length!! >= 19) afterValidation()
+                    if (s.length >= 19) afterValidation()
                 }
 
 
@@ -972,9 +942,6 @@ class PaymentInlineViewHolder(
                 if (after < count) {
                     // delete character action have done
                     // do what ever you want
-                    /* intertabLayout.visibility = View.VISIBLE
-                     tabLayout.visibility = View.VISIBLE
-                     acceptedCardText.visibility = View.VISIBLE*/
                 }
 
             }
@@ -1013,8 +980,8 @@ class PaymentInlineViewHolder(
         if (!fullCardNumber.isNullOrBlank() && !fullCardNumber.isNullOrEmpty() && cardNumValidation && !expiryDate.isNullOrBlank() && !expiryDate.isNullOrEmpty() && !cvvNumber.isNullOrBlank() && !cvvNumber.isNullOrEmpty()
         ) {
 
-            if (PaymentDataSource?.getCardHolderNameShowHide()) {
-                tapCardInputView.setVisibilityOfHolderField(PaymentDataSource?.getCardHolderNameShowHide())
+            if (PaymentDataSource.getCardHolderNameShowHide()) {
+                tapCardInputView.setVisibilityOfHolderField(PaymentDataSource.getCardHolderNameShowHide())
                 tapCardInputView.holderNameEnabled = true
                 //  tapInlineCardSwitch?.visibility = View.VISIBLE
                 tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
@@ -1883,15 +1850,13 @@ class PaymentInlineViewHolder(
                         "alertUnsupportedCardTitle",
                         "AlertBox"
                     ),*/
-                    "Alert",
+                    title = "Alert",
                    // LocalizationManager.getValue("alertUnsupportedCardMessage", "AlertBox"),
-                    "Card Not supported",
-                    context,
-                    1,
-                    baseLayoutManager,
-                    null,
-                    null,
-                    true
+                    messageString = "Card Not supported",
+                    context = context,
+                    btnType = 1,
+                    baseLayoutManager =  baseLayoutManager,
+                    cardTypeDialog = true
                 )
 
             }
@@ -1926,14 +1891,12 @@ class PaymentInlineViewHolder(
                 true
             )*/
             CustomUtils.showDialog(
-                "alert",
-                "cardnot supported",
-                context,
-                1,
-                baseLayoutManager,
-                null,
-                null,
-                true
+                title = "alert",
+                messageString = "cardnot supported",
+                context=context,
+                btnType = 1,
+               baseLayoutManager= baseLayoutManager,
+                cardTypeDialog = true
             )
 
         }

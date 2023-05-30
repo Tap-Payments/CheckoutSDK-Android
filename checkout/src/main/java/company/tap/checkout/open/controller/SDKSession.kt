@@ -484,8 +484,8 @@ object  SDKSession : APIRequestCallback {
       //  if (tabAnimatedActionButton != null) tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
 
         tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
-        CardViewModel().processEvent(CardViewEvent.InitEvent, CheckoutViewModel(),null,null,null,null,null,null,null,null,
-            _supportFragmentManager,contextSDK)
+        CardViewModel().processEvent(event = CardViewEvent.InitEvent, viewModel = CheckoutViewModel(),
+            supportFragmentManager = _supportFragmentManager, context = contextSDK)
 
 
     }
