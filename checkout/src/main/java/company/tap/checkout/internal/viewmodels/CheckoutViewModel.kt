@@ -19,10 +19,10 @@ import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
 import androidx.annotation.RestrictTo
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
@@ -108,7 +108,6 @@ import kotlinx.android.synthetic.main.otpview_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 import mobi.foo.benefitinapp.data.Transaction
 import mobi.foo.benefitinapp.listener.CheckoutListener
-import mobi.foo.benefitinapp.utils.BenefitInAppCheckout
 import org.json.JSONException
 import org.json.JSONObject
 import java.math.BigDecimal
@@ -298,7 +297,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         cardViewModel: CardViewModel,
         checkoutFragment: CheckoutFragment,
         headerLayout: LinearLayout,
-         topHeaderView: TapBrandView?,
+        topHeaderView: TapBrandView?,
     ) {
         this.context = context
         this.fragmentManager = fragmentManager
@@ -336,20 +335,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
 
         })
-//
-//        doAfterSpecificTime(50) {
-//            this.topHeaderView.startPoweredByAnimation(
-//                delayTime = Constants.PoweredByLayoutAnimationDelay,
-//                this.topHeaderView.poweredByImage, onAnimationEnd =
-//                {
-//                    if (isItemsAreOpend.value==false){
-//                        poweredByTapAnimationEnds()
-//                    }
-//                }
-//            )
-//
-//        }
-
 
 
     }
@@ -586,7 +571,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     )
                 }
             }
-        unActivateActionButton()
+            unActivateActionButton()
 
         }
         newColorVal = Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
@@ -2948,7 +2933,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         /**
          * payment from onSelectPaymentOptionActionListener
          */
-        WebFragment.isGooglePlayWebView = false
 
 
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setOnClickListener {
@@ -3025,7 +3009,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     )
                 }
                 PaymentType.GOOGLE_PAY -> {
-                    WebFragment.isGooglePlayWebView = true
                     checkoutFragment.checkOutActivity?.handleGooglePayApiCall(savedCardsModel as PaymentOption)
 
                 }
@@ -4066,7 +4049,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             })
         )
     }
-
 
 
     override fun onTransactionSuccess(p0: Transaction?) {

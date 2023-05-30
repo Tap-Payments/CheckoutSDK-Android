@@ -31,6 +31,7 @@ import company.tap.checkout.R
 import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.utils.CustomUtils
+import company.tap.checkout.internal.utils.getDeviceSpecs
 import company.tap.checkout.internal.utils.showToast
 import company.tap.checkout.internal.utils.twoThirdHeightView
 import company.tap.checkout.internal.viewholders.SwitchViewHolder
@@ -55,7 +56,6 @@ class WebFragment(
     private val onLoadedWebView: () -> Unit
 ) : DialogFragment(),
     CustomWebViewClientContract {
-
 
 
     private var webViewUrl: String? = null
@@ -158,14 +158,13 @@ class WebFragment(
                         onLoadedWebView.invoke()
                         isFirstTimeLoadingInWeb = false
                     }
+
+                    Log.e("height device", context?.getDeviceSpecs()?.first.toString())
+                    isWebViewOpened = true
                     progressBar?.visibility = View.INVISIBLE
                     web_view.visibility = View.VISIBLE
-                    if (isGooglePlayWebView){
-                        web_view.layoutParams = RelativeLayout.LayoutParams(
-                            RelativeLayout.LayoutParams.MATCH_PARENT,
-                            context?.twoThirdHeightView()?.roundToInt()!!
-                        )
-                    }
+
+
 
                 }
             }
@@ -221,6 +220,7 @@ class WebFragment(
         const val KEY_URL = "key:url"
         const val CHARGE = "charge_response"
         var isGooglePlayWebView = false
+        var isWebViewOpened = false
 
         fun newInstance(
             url: String,

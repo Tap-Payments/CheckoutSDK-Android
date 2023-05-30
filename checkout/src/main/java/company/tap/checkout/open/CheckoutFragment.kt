@@ -14,6 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.viewModels
 import cards.pay.paycardsrecognizer.sdk.Card
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.ChargeStatus
@@ -24,6 +25,7 @@ import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.utils.*
 import company.tap.checkout.internal.utils.Constants.PoweredByLayoutAnimationDelay
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
+import company.tap.checkout.internal.webview.WebFragment.Companion.isWebViewOpened
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.controller.SDKSession.sessionDelegate
 import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
@@ -74,7 +76,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         userRepository = UserRepository(requireContext(), viewModel)
         userRepository.getUserIpAddress()
         initViews(view)
-
+        isWebViewOpened = false
         sessionDelegate?.sessionHasStarted()
 
 
@@ -103,7 +105,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
         enableSections()
 
-
     }
 
 
@@ -123,10 +124,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         val checkoutLayout: LinearLayout = view.findViewById(R.id.fragment_all)
         val frameLayoutForNFc: FrameLayout = view.findViewById(R.id.fragment_container_nfc_lib)
         val webFrameLayout: FrameLayout = view.findViewById(R.id.webFrameLayout)
-        webFrameLayout.layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            requireContext().getDeviceSpecs().first - 100
-        )
 
         bottomSheetLayout?.let {
             viewModel.setBottomSheetLayout(it)

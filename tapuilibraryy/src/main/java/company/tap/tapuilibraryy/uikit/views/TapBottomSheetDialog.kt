@@ -58,7 +58,10 @@ open class TapBottomSheetDialog : BottomSheetDialogFragment() {
         bottomSheetDialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
         bottomSheetDialog.setOnShowListener {
             bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+            bottomSheetDialog.behavior.isDraggable = false
+
             bottomSheetDialog.setCancelable(false)
+
         }
         return bottomSheetDialog
     }
