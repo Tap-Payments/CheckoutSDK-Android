@@ -2378,26 +2378,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
                         if (isSavedCardSelected == true) {
                             cardViewModel.processEvent(
-                                CardViewEvent.CreateTokenExistingCardEvent,
-                                this@CheckoutViewModel,
-                                null,
-                                null,
-                                null,
-                                null,
-                                null,
-                                null,
-                                paymentInlineViewHolder.getSavedCardData()
+                                event = CardViewEvent.CreateTokenExistingCardEvent,
+                                viewModel = this@CheckoutViewModel,
+                                createTokenWithExistingCardRequest = paymentInlineViewHolder.getSavedCardData()
                             )
 
                         } else {
                             cardViewModel.processEvent(
-                                CardViewEvent.CreateTokenEvent,
-                                this@CheckoutViewModel,
-
-                                null,
-                                null,
-                                paymentInlineViewHolder.getCard(),
-                                null,
+                                event = CardViewEvent.CreateTokenEvent,
+                                viewModel = this@CheckoutViewModel,
+                                cardDataRequest = paymentInlineViewHolder.getCard(),
                                 saveCardValue = paymentInlineViewHolder.tapInlineCardSwitch?.switchSaveCard?.isChecked
                             )
                         }
@@ -2696,12 +2686,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         selectedCurrency = currencySelected
         currencySelectedForCheck = currencySelected
         selectedTotalAmount = selectedAmount
-        println("selectedAmount final>>" + selectedAmount)
-        println("selectedCurrency final>>" + selectedCurrency.length)
-        println("currentAmount final>>" + currentAmount)
-        println("currentCurrency final>>" + currentCurrency)
-        println("selectedCurrencySymbol final>>" + selectedCurrencySymbol)
-        println("currentCurrencySymbol final>>" + currentCurrencySymbol)
+
+        /**
+         * Logic based on currency synbol , actual currency code etc note currentCurrency and finalCurrencySymbol passed in
+         * if-else separately ***/
+
         if (selectedCurrencySymbol.length == 2) {
             amountViewHolder.updateSelectedCurrency(
                 displayItemsOpen,
@@ -2786,7 +2775,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
         /**
-         * Why this check present ??!!  :/
+         * Why this check present ??!!  :
+         * Ans- This is logic to check symbol of currency was 2 digit or 3 like kwd or kd/
          */
         if (selectedCurrencySymbol.length == 2) {
             amountViewHolder.updateSelectedCurrency(
@@ -3155,15 +3145,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         val createTokenSavedCard =
             CreateTokenSavedCard(savedCard?.id, PaymentDataSource.getCustomer().identifier)
         cardViewModel.processEvent(
-            CardViewEvent.CreateTokenExistingCardEvent,
-            this,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            createTokenSavedCard
+            event = CardViewEvent.CreateTokenExistingCardEvent,
+            viewModel = this,
+            createTokenWithExistingCardRequest = createTokenSavedCard
         )
     }
 
@@ -3338,8 +3322,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     private fun callBinLookupApi(binLookUpStr: String?) {
         cardViewModel.processEvent(
-            CardViewEvent.RetreiveBinLookupEvent,
-            CheckoutViewModel(), null, binLookUpStr, null, null
+            event = CardViewEvent.RetreiveBinLookupEvent,
+            viewModel = CheckoutViewModel(),  binValue = binLookUpStr
         )
 
     }
