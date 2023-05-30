@@ -386,12 +386,7 @@ class PaymentInlineViewHolder(
         linearLayoutPay = view.findViewById(R.id.linear_paylayout)
         // clearView.visibility = View.INVISIBLE
         closeButton?.visibility = View.GONE
-        nfcButton?.setOnClickListener {
-            onCardNFCCallListener.onClickNFC()
-        }
-        cardScannerBtn?.setOnClickListener {
-            onCardNFCCallListener.onClickCardScanner(true)
-        }
+
 
     }
 

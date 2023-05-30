@@ -2110,7 +2110,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
     }
 
-  
+
 
 
     private fun activateActionButton(
