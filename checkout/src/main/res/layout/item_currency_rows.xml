@@ -5,9 +5,12 @@
     android:id="@+id/tapcard_Chip"
     android:layout_width="100dp"
     android:layout_height="40dp"
-    android:layout_marginStart="5dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="10dp"
+    android:layout_marginStart="@dimen/margin_basic_0dp"
+    android:layout_marginEnd="-1dp"
     app:cardCornerRadius="10dp"
-    android:layout_marginEnd="-7dp"
+
     app:cardElevation="0dp"
   >
 
