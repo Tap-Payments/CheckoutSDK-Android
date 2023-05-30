@@ -644,9 +644,7 @@ class PaymentInlineViewHolder(
            tapAlertView?.alertMessage?.text =alertMessage.replace("%i","3")
 
            tapAlertView?.visibility =View.VISIBLE*/
-        if (CustomUtils.getCurrentTheme() != null && CustomUtils.getCurrentTheme()
-                .contains("dark")
-        ) {
+
             val card = CardValidator.validate(emvCard?.cardNumber)
             emvCard.cardNumber?.let {
                 logicTosetImageDynamic(
@@ -654,15 +652,7 @@ class PaymentInlineViewHolder(
                     it
                 )
             }
-        } else {
-            val card = CardValidator.validate(emvCard?.cardNumber)
-            emvCard.cardNumber?.let {
-                logicTosetImageDynamic(
-                    card.cardBrand,
-                    it
-                )
-            }
-        }
+
 
         contactDetailsView?.visibility = View.GONE
         shippingDetailView?.visibility = View.GONE
