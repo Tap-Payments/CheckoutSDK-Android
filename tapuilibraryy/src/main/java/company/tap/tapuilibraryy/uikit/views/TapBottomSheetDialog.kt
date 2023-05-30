@@ -5,11 +5,13 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.annotation.Nullable
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -56,13 +58,42 @@ open class TapBottomSheetDialog : BottomSheetDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         bottomSheetDialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
-        bottomSheetDialog.setOnShowListener {
-            bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
-            bottomSheetDialog.behavior.isDraggable = false
-
-            bottomSheetDialog.setCancelable(false)
-
-        }
+//        bottomSheetDialog.setOnShowListener {
+//            bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+//            bottomSheetDialog.behavior.isDraggable = false
+//            bottomSheetDialog.setCancelable(false)
+//
+//
+//            val coordinator = (it as BottomSheetDialog)
+//                .findViewById<CoordinatorLayout>(com.google.android.material.R.id.coordinator)
+//            val containerLayout =
+//                it.findViewById<FrameLayout>(com.google.android.material.R.id.container)
+//           val buttons = bottomSheetDialog.layoutInflater.inflate(R.layout.view_buttons, null)
+//
+//            buttons.layoutParams = FrameLayout.LayoutParams(
+//                FrameLayout.LayoutParams.MATCH_PARENT,
+//                FrameLayout.LayoutParams.WRAP_CONTENT
+//            ).apply {
+//                gravity = Gravity.BOTTOM
+//            }
+//          //  containerLayout?.addView(buttons)
+//
+//
+//            /*
+//          * Dynamically update bottom sheet containerLayout bottom margin to buttons view height
+//          * */
+//            buttons.post {
+//                (coordinator?.layoutParams as ViewGroup.MarginLayoutParams).apply {
+//                    buttons.measure(
+//                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+//                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+//                    )
+//                    this.bottomMargin = buttons.measuredHeight
+//                    containerLayout?.requestLayout()
+//                }
+//            }
+//
+//        }
         return bottomSheetDialog
     }
 

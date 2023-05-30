@@ -12,6 +12,7 @@ import android.os.Build
 import android.os.Handler
 import android.text.format.DateFormat
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.view.View.*
 import android.view.ViewGroup
@@ -23,6 +24,7 @@ import android.widget.RelativeLayout
 import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
 import androidx.annotation.RestrictTo
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
@@ -143,11 +145,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     val localCurrencyReturned = MutableLiveData<Boolean>()
     val powerdByTapAnimationFinished = MutableLiveData<Boolean>()
     val isItemsAreOpend = MutableLiveData<Boolean>()
+    val isWebViewOpened = MutableLiveData<Boolean>()
 
     private var deleteCard: Boolean = false
     private var displayItemsOpen: Boolean = false
     private var displayOtpIsOpen: Boolean = false
     private var saveCardSwitchHolder: SwitchViewHolder? = null
+    private var bottomSheetContainer :FrameLayout?=null
 
     private lateinit var title: String
     private lateinit var paymentInlineViewHolder: PaymentInlineViewHolder
@@ -336,6 +340,56 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         })
 
+        bottomSheetDialog.setOnShowListener {
+            bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+            bottomSheetDialog.behavior.isDraggable = false
+            bottomSheetDialog.setCancelable(false)
+
+
+            val coordinator = (it as BottomSheetDialog)
+                .findViewById<CoordinatorLayout>(com.google.android.material.R.id.coordinator)
+           bottomSheetContainer= it.findViewById<FrameLayout>(com.google.android.material.R.id.container)
+           // val buttons = bottomSheetDialog.layoutInflater.inflate(company.tap.tapuilibraryy.R.layout.view_buttons, null)
+
+            saveCardSwitchHolder?.view?.layoutParams = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                gravity = Gravity.BOTTOM
+            }
+
+
+
+
+        //    containerLayout?.addView(saveCardSwitchHolder?.view)
+
+
+            /*
+          * Dynamically update bottom sheet containerLayout bottom margin to buttons view height
+          * */
+            saveCardSwitchHolder?.view?.post {
+                (coordinator?.layoutParams as ViewGroup.MarginLayoutParams).apply {
+                    saveCardSwitchHolder?.view?.measure(
+                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+                    )
+                    this.bottomMargin = saveCardSwitchHolder?.view?.measuredHeight!!
+                    bottomSheetContainer?.requestLayout()
+                }
+            }
+
+        }
+
+
+
+    }
+
+    fun addSaveCardSwitchViewHolder(){
+        bottomSheetContainer?.addView(saveCardSwitchHolder?.view)
+
+    }
+    fun removeSaveCardSwitchViewHolder(){
+        bottomSheetContainer?.removeView(saveCardSwitchHolder?.view)
 
     }
 
@@ -346,6 +400,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     init {
         powerdByTapAnimationFinished.value = false
         isItemsAreOpend.value = false
+        isWebViewOpened.value =false
     }
 
     private fun initLoyaltyView() {
@@ -1190,6 +1245,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.P)
     override fun displayRedirect(url: String, authenticate: Charge?) {
         this.redirectURL = url
+        isWebViewOpened.value  = true
 
         println("redirectURL before display>>" + url)
         if (::redirectURL.isInitialized && ::fragmentManager.isInitialized) {
@@ -1231,7 +1287,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     onLoadedWebView = {
                         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.addFadeOutAnimation(
                             durationTime = 5,
-                            isGone = true
+                            isGone = false
                         )
 
                         showWebView()
@@ -1929,9 +1985,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             changeHeight = {
                 viewHolders.forEach {
                     if (::sdkLayout.isInitialized) {
-                        sdkLayout.removeView(it?.view)
-                        provideBackgroundtoBsLayout()
-                        onRemoveEnd.invoke()
+                        if (it is SwitchViewHolder){
+                            sdkLayout.removeView(it.view)
+                        }else{
+                            sdkLayout.removeView(it?.view)
+                            provideBackgroundtoBsLayout()
+                            onRemoveEnd.invoke()
+                        }
+
 
                     }
                 }
@@ -1948,9 +2009,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         animateBS(fromView = bottomSheetLayout, toView = sdkLayout, changeHeight = {
             viewHolders.forEach {
                 if (::sdkLayout.isInitialized) {
-                    sdkLayout.removeView(it?.view)
-                    provideBackgroundtoBsLayout()
-                    sdkLayout.addView(it?.view)
+                    if (it is SwitchViewHolder){
+
+                    }else{
+                        sdkLayout.removeView(it?.view)
+                        provideBackgroundtoBsLayout()
+                        sdkLayout.addView(it?.view)
+                    }
+
 
 
                 }
@@ -3869,14 +3935,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 }
             }
         }
-        /*   Handler().postDelayed({
-               checkOutActivity?.onBackPressed()
-
-               if (::bottomSheetDialog.isInitialized)
-                   bottomSheetDialog.dismiss()
-               _checkoutFragment.activity?.onBackPressed()
-
-           }, 12000)*/
     }
 
 

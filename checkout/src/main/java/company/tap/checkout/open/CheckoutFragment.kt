@@ -76,7 +76,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         userRepository = UserRepository(requireContext(), viewModel)
         userRepository.getUserIpAddress()
         initViews(view)
-        isWebViewOpened = false
         sessionDelegate?.sessionHasStarted()
 
 
@@ -101,6 +100,18 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                 }
             }
 
+        })
+
+        viewModel.isWebViewOpened.observe(this, androidx.lifecycle.Observer {
+            if (it){
+                context?.showToast("webView Opend")
+                viewModel.removeSaveCardSwitchViewHolder()
+
+            }else{
+                context?.showToast("not opend webView")
+                viewModel.addSaveCardSwitchViewHolder()
+
+            }
         })
 
         enableSections()
