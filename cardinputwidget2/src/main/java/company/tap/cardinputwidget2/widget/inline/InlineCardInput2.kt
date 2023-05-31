@@ -71,45 +71,45 @@ class InlineCardInput2 @JvmOverloads constructor(
     internal val holderNameTextInputLayout = viewBinding.holderNameTextInputLayout
 
     @JvmSynthetic
-    internal val cardNumberEditText = viewBinding.cardNumberEditText
+    val cardNumberEditText = viewBinding.cardNumberEditText
 
     @JvmSynthetic
-    internal val expiryDateEditText = viewBinding.expiryDateEditText
+    val expiryDateEditText = viewBinding.expiryDateEditText
 
     @JvmSynthetic
-    internal val cvcNumberEditText = viewBinding.cvcEditText
+    val cvcNumberEditText = viewBinding.cvcEditText
 
     @JvmSynthetic
     internal val holderNameEditText = viewBinding.holderNameEditText
 
 
-
- //  val mainLL = viewBinding.mainLL
+    //  val mainLL = viewBinding.mainLL
 
     private var cardInputListener: CardInputListener? = null
     private var cardValidCallback: CardValidCallback? = null
 
 
-    lateinit var nfcButton : ImageView
-    lateinit var backArrow : ImageView
-    lateinit var backViewAr : ImageView
-    lateinit var scannerButton : ImageView
-    lateinit var closeButton : ImageView
+    lateinit var nfcButton: ImageView
+    lateinit var backArrow: ImageView
+    lateinit var backViewAr: ImageView
+    lateinit var scannerButton: ImageView
+    lateinit var closeButton: ImageView
 
-     var brandIconUrl:String?=null
-    @JvmField
-     var cardFormHasFocus:Boolean = false
+    var brandIconUrl: String? = null
 
     @JvmField
+    var cardFormHasFocus: Boolean = false
 
-    var isExpDateValid:Boolean = false
+    @JvmField
+
+    var isExpDateValid: Boolean = false
 
 
-    var closeIconDrawable: Drawable?     =
-        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")){
-            context.resources.getDrawable( R.drawable.icon_clear_dark_mode)
-        } else{
-            context.resources.getDrawable( R.drawable.icon_clear_light_mode)
+    var closeIconDrawable: Drawable? =
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
+            context.resources.getDrawable(R.drawable.icon_clear_dark_mode)
+        } else {
+            context.resources.getDrawable(R.drawable.icon_clear_light_mode)
         }
 
     @DrawableRes
@@ -119,6 +119,7 @@ class InlineCardInput2 @JvmOverloads constructor(
     @DrawableRes
     val scannerIcon: Int =
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) company.tap.tapuilibraryy.R.drawable.icon_scan_light else company.tap.tapuilibraryy.R.drawable.icon_scan
+
     @DrawableRes
     val nfcIcon: Int =
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) company.tap.tapuilibraryy.R.drawable.icon_nfc_light else company.tap.tapuilibraryy.R.drawable.icon_nfc
@@ -154,9 +155,9 @@ class InlineCardInput2 @JvmOverloads constructor(
     private val invalidFields: Set<CardValidCallback.Fields>
         get() {
             return listOfNotNull(
-               /* CardValidCallback.Fields.Number.takeIf {
-                    cardNumberEditText.cardNumber == null
-                },*/
+                /* CardValidCallback.Fields.Number.takeIf {
+                     cardNumberEditText.cardNumber == null
+                 },*/
                 CardValidCallback.Fields.Expiry.takeIf {
                     expiryDateEditText.validDateFields == null
                 },
@@ -210,7 +211,7 @@ class InlineCardInput2 @JvmOverloads constructor(
         }
 
     var shouldChangeIcon = true
-    var counter:Int=0
+    var counter: Int = 0
 
     @VisibleForTesting
     @JvmSynthetic
@@ -269,7 +270,7 @@ class InlineCardInput2 @JvmOverloads constructor(
             when {
                 cardNumber == null -> {
                     cardNumberEditText.shouldShowError
-                   // cardNumberEditText.requestFocus()
+                    // cardNumberEditText.requestFocus()
                 }
                 cardDate == null -> {
                     expiryDateEditText.requestFocus()
@@ -279,7 +280,7 @@ class InlineCardInput2 @JvmOverloads constructor(
                     //  cvcNumberEditText.inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD
 
                 }
-                holdernameval==null-> {
+                holdernameval == null -> {
                     holderNameEditText.requestFocus()
 
                 }
@@ -367,31 +368,31 @@ class InlineCardInput2 @JvmOverloads constructor(
     }
 
     private fun initV() {
-        nfcButton =findViewById(R.id.nfc_button)
-        scannerButton =findViewById(R.id.card_scanner_button)
-        backArrow =findViewById(R.id.backView)
+        nfcButton = findViewById(R.id.nfc_button)
+        scannerButton = findViewById(R.id.card_scanner_button)
+        backArrow = findViewById(R.id.backView)
         //backViewAr =findViewById(R.id.backView_Ar)
-        closeButton =findViewById(R.id.clear_text)
+        closeButton = findViewById(R.id.clear_text)
         //separatorcard2 =findViewById(R.id.separatorcard2)
         cardBrandView.iconView.setImageResource(cardBrandView.iconViewRes)
         closeButton.setImageResource(closeIcon)
         cvvIcon.setImageResource(cvvIconDrawable)
         if (LocalizationManager.getLocale(context).language == "ar") {
             val params = LinearLayout.LayoutParams(
-                MetricsUtil.convertDpToPixel(30f,context).toInt(),
-                MetricsUtil.convertDpToPixel(30f,context).toInt())
-            params.topMargin = MetricsUtil.convertDpToPixel(-6f,context).toInt()
+                MetricsUtil.convertDpToPixel(30f, context).toInt(),
+                MetricsUtil.convertDpToPixel(30f, context).toInt()
+            )
+            params.topMargin = MetricsUtil.convertDpToPixel(-6f, context).toInt()
             cvvIcon.layoutParams = params
 
             //  backArrow.scaleX=-1.0f
-            cvcNumberEditText.textAlignment =View.TEXT_ALIGNMENT_CENTER
+            cvcNumberEditText.textAlignment = View.TEXT_ALIGNMENT_CENTER
             backArrow.setImageResource(backIconAr)
             backArrow.requestFocus()
 
-        }else {
+        } else {
             backArrow.setImageResource(backIcon)
         }
-
 
 
         //backViewAr.setImageResource(backIconAr)
@@ -399,7 +400,7 @@ class InlineCardInput2 @JvmOverloads constructor(
         scannerButton.setImageResource(scannerIcon)
         nfcButton.setImageResource(nfcIcon)
 
-        backArrow.isFocusable= true
+        backArrow.isFocusable = true
         backArrow.isClickable = true
     }
 
@@ -432,14 +433,14 @@ class InlineCardInput2 @JvmOverloads constructor(
     override fun setSingleCardInput(cardBrand: CardBrandSingle, iconUrl: String?) {
         shouldChangeIcon = false
         if (iconUrl != null) {
-            cardBrandView.showBrandIconSingle(cardBrand, iconUrl ,shouldShowErrorIcon)
-        }else  cardBrandView.showBrandIconSingle(cardBrand, shouldShowErrorIcon)
-       // cardBrandView.showBrandIconSingle(cardBrand, shouldShowErrorIcon)
+            cardBrandView.showBrandIconSingle(cardBrand, iconUrl, shouldShowErrorIcon)
+        } else cardBrandView.showBrandIconSingle(cardBrand, shouldShowErrorIcon)
+        // cardBrandView.showBrandIconSingle(cardBrand, shouldShowErrorIcon)
     }
 
 
     override fun setCardNumberApiTextWatcher(cardApiNumberTextWatcher: TextValidator) {
-        cardNumberEditText.addTextChangedListener(object :TextValidator(cardNumberEditText){
+        cardNumberEditText.addTextChangedListener(object : TextValidator(cardNumberEditText) {
             override fun validate(cardNumberEditText: CardNumberEditText?, text: String?) {
             }
 
@@ -474,12 +475,43 @@ class InlineCardInput2 @JvmOverloads constructor(
     }
 
     override fun setCVVHint(cvvHint: String) {
-        cvcNumberEditText.hint =cvvHint
+        cvcNumberEditText.hint = cvvHint
+
+    }
+
+
+    fun hideCursor() {
+        cardNumberEditText.isCursorVisible = false
+        expiryDateEditText.isCursorVisible = false
+        cvcNumberEditText.isCursorVisible = false
+        cvcNumberEditText.isClickable=false
+        cardNumberEditText.showSoftInputOnFocus = false
+        expiryDateEditText.showSoftInputOnFocus = false
+        cvcNumberEditText.showSoftInputOnFocus = false
+        closeButton.isClickable = false
+        scannerButton.isClickable = false
+        nfcButton.isClickable = false
+
+
+    }
+
+    fun showCursor() {
+        cardNumberEditText.isCursorVisible = true
+        expiryDateEditText.isCursorVisible = true
+        cvcNumberEditText.isCursorVisible = true
+        cardNumberEditText.showSoftInputOnFocus = true
+        expiryDateEditText.showSoftInputOnFocus = true
+        cvcNumberEditText.showSoftInputOnFocus = true
+        closeButton.isClickable = true
+        scannerButton.isClickable = true
+        nfcButton.isClickable = true
+
+
 
     }
 
     override fun setExpiryHint(expiryHint: String) {
-        expiryDateEditText.hint =expiryHint
+        expiryDateEditText.hint = expiryHint
     }
 
     /**
@@ -525,38 +557,25 @@ class InlineCardInput2 @JvmOverloads constructor(
         cvcNumberEditText.isEnabled = true
 
 
-        cardNumberEditText.setText("•••• "+cardDetails.last4)
+        cardNumberEditText.setText("•••• " + cardDetails.last4)
         cardNumberEditText.isEnabled = false
-        if(cardDetails.expMonth.toString().length == 1){
-            if( cardDetails.expMonth!! < 10 ){
-                expiryDateEditText.setText("0"+cardDetails.expMonth.toString()+"/"+cardDetails?.expYear.toString())
+        if (cardDetails.expMonth.toString().length == 1) {
+            if (cardDetails.expMonth!! < 10) {
+                expiryDateEditText.setText("0" + cardDetails.expMonth.toString() + "/" + cardDetails?.expYear.toString())
 
             }
 
-        }else expiryDateEditText.setText(cardDetails.expMonth.toString()+"/"+cardDetails?.expYear.toString())
+        } else expiryDateEditText.setText(cardDetails.expMonth.toString() + "/" + cardDetails?.expYear.toString())
 
 
         cvcNumberEditText.updateBrand(cardDetails.brand)
-        cardBrandView.showBrandIcon(cardDetails.brand,false)
+        cardBrandView.showBrandIcon(cardDetails.brand, false)
 
         expiryDateEditText.shouldShowError = false
         expiryDateEditText.isEnabled = false
-      /*  if (LocalizationManager.getLocale(context).language == "ar") {
-            // backArrow.scaleX=-1.0f
-            // backArrow.isClickable = true
-            backViewAr.visibility = View.VISIBLE
-            backArrow.visibility = View.GONE
-            backViewAr.isClickable = true
-            backViewAr.isEnabled = true
-        }else{
-            backViewAr.visibility = View.GONE
-            backArrow.visibility = View.VISIBLE
-            backArrow.isClickable = true
-            backArrow.isEnabled = true
-        }*/
-        cvvIcon.visibility= View.VISIBLE
+        cvvIcon.visibility = View.VISIBLE
         if (LocalizationManager.getLocale(context).language == "ar") {
-          //  backArrow.scaleX=-0.7f
+            //  backArrow.scaleX=-0.7f
 
             backArrow.isClickable = true
             backArrow.isEnabled = true
@@ -565,13 +584,13 @@ class InlineCardInput2 @JvmOverloads constructor(
 
         }
         backArrow.visibility = View.VISIBLE
-       // frameLayout.visibility = View.VISIBLE
+        // frameLayout.visibility = View.VISIBLE
 
-       // frameLayout.isEnabled = true
+        // frameLayout.isEnabled = true
         setVisibilityOfHolderField(false)
-        nfcButton.visibility= View.GONE
-        scannerButton.visibility= View.GONE
-        closeButton.visibility= View.GONE
+        nfcButton.visibility = View.GONE
+        scannerButton.visibility = View.GONE
+        closeButton.visibility = View.GONE
     }
 
     override fun setNormalCardDetails(cardDetails: Any?, _cardInputUIStatus: CardInputUIStatus) {
@@ -583,27 +602,28 @@ class InlineCardInput2 @JvmOverloads constructor(
         cvcNumberEditText.visibility = View.VISIBLE
         cardInputListener?.onCardComplete()
         // cvcNumberEditText.requestFocus()
-        if(cardDetails.cvc!=null)  setCvcCode(cardDetails.cvc)
-        if(cardDetails.name!=null)  setCardHolderName(cardDetails.name)
+        if (cardDetails.cvc != null) setCvcCode(cardDetails.cvc)
+        if (cardDetails.name != null) setCardHolderName(cardDetails.name)
 
-        cardNumberEditText.setText("•••• "+cardDetails.last4)
+        cardNumberEditText.setText("•••• " + cardDetails.last4)
         cardNumberEditText.isEnabled = false
-        if(cardDetails.expMonth.toString().length == 1){
-            if( cardDetails.expMonth!! < 10 ){
-                expiryDateEditText.setText("0"+cardDetails.expMonth.toString()+"/"+cardDetails?.expYear.toString())
+        if (cardDetails.expMonth.toString().length == 1) {
+            if (cardDetails.expMonth!! < 10) {
+                expiryDateEditText.setText("0" + cardDetails.expMonth.toString() + "/" + cardDetails?.expYear.toString())
 
             }
 
-        }else expiryDateEditText.setText(cardDetails.expMonth.toString()+"/"+cardDetails?.expYear.toString())
+        } else expiryDateEditText.setText(cardDetails.expMonth.toString() + "/" + cardDetails?.expYear.toString())
 
 
         cvcNumberEditText.updateBrand(cardDetails.brand)
-        cardBrandView.showBrandIcon(cardDetails.brand,false)
+        cardBrandView.showBrandIcon(cardDetails.brand, false)
 
         expiryDateEditText.shouldShowError = false
         expiryDateEditText.isEnabled = false
 
-        if(holderNameEnabled) separator_1.visibility = View.VISIBLE else separator_1.visibility = View.GONE
+        if (holderNameEnabled) separator_1.visibility = View.VISIBLE else separator_1.visibility =
+            View.GONE
         if (LocalizationManager.getLocale(context).language == "ar") {
             //  backArrow.scaleX=-0.7f
 
@@ -618,9 +638,9 @@ class InlineCardInput2 @JvmOverloads constructor(
 
         // frameLayout.isEnabled = true
 
-        nfcButton.visibility= View.GONE
-        scannerButton.visibility= View.GONE
-        closeButton.visibility= View.VISIBLE
+        nfcButton.visibility = View.GONE
+        scannerButton.visibility = View.GONE
+        closeButton.visibility = View.VISIBLE
     }
 
     override fun setScanNFCCardDetails(cardDetails: Any?, _cardInputUIStatus: CardInputUIStatus) {
@@ -628,39 +648,43 @@ class InlineCardInput2 @JvmOverloads constructor(
         cardDetails as Card
         initFlag = true
         cardNumberIsViewed = false
-       // expiryDateEditText.visibility = View.VISIBLE
-      //  cvcNumberEditText.visibility = View.VISIBLE
+        // expiryDateEditText.visibility = View.VISIBLE
+        //  cvcNumberEditText.visibility = View.VISIBLE
         cardInputListener?.onCardComplete()
-        
-        println("cardDetails>>"+cardDetails.number)
-        setCardNumber(cardDetails.number,false)
-        if(cardDetails.cvc!=null)  setCvcCode(cardDetails.cvc)
-        if(cardDetails.name!=null)  setCardHolderName(cardDetails.name)
+
+        println("cardDetails>>" + cardDetails.number)
+        setCardNumber(cardDetails.number, false)
+        if (cardDetails.cvc != null) setCvcCode(cardDetails.cvc)
+        if (cardDetails.name != null) setCardHolderName(cardDetails.name)
 
 
 
-        if(cardDetails.expMonth.toString().length == 1){
-            if( cardDetails.expMonth!! < 10 ){
-               // expiryDateEditText.setText("0"+cardDetails.expMonth.toString()+"/"+cardDetails?.expYear.toString())
-                cardDetails?.expYear?.let { setExpiryDate(0+cardDetails.expMonth, it) }
+        if (cardDetails.expMonth.toString().length == 1) {
+            if (cardDetails.expMonth!! < 10) {
+                // expiryDateEditText.setText("0"+cardDetails.expMonth.toString()+"/"+cardDetails?.expYear.toString())
+                cardDetails?.expYear?.let { setExpiryDate(0 + cardDetails.expMonth, it) }
 
             }
 
-      //  }else expiryDateEditText.setText(cardDetails.expMonth.toString()+"/"+cardDetails?.expYear.toString())
-        }else cardDetails?.expMonth?.let { cardDetails?.expYear?.let { it1 ->
-            setExpiryDate(it,
-                it1
-            )
-        } }
+            //  }else expiryDateEditText.setText(cardDetails.expMonth.toString()+"/"+cardDetails?.expYear.toString())
+        } else cardDetails?.expMonth?.let {
+            cardDetails?.expYear?.let { it1 ->
+                setExpiryDate(
+                    it,
+                    it1
+                )
+            }
+        }
 
-        if(cardNumberEditText.text?.contains("•") == true) cvcNumberEditText.requestFocus()
+        if (cardNumberEditText.text?.contains("•") == true) cvcNumberEditText.requestFocus()
 
         cvcNumberEditText.updateBrand(cardDetails.brand)
-        cardBrandView.showBrandIcon(cardDetails.brand,false)
+        cardBrandView.showBrandIcon(cardDetails.brand, false)
 
         expiryDateEditText.shouldShowError = false
 
-        if(holderNameEnabled) separator_1.visibility = View.VISIBLE else separator_1.visibility = View.GONE
+        if (holderNameEnabled) separator_1.visibility = View.VISIBLE else separator_1.visibility =
+            View.GONE
         if (LocalizationManager.getLocale(context).language == "ar") {
             //  backArrow.scaleX=-0.7f
 
@@ -675,17 +699,11 @@ class InlineCardInput2 @JvmOverloads constructor(
 
         // frameLayout.isEnabled = true
 
-        nfcButton.visibility= View.GONE
-        scannerButton.visibility= View.GONE
-        closeButton.visibility= View.VISIBLE
+        nfcButton.visibility = View.GONE
+        scannerButton.visibility = View.GONE
+        closeButton.visibility = View.VISIBLE
     }
 
-
-    fun setOnclickLister(imageView: ImageView){
-        imageView.setOnClickListener {
-
-        }
-    }
 
     @JvmSynthetic
     internal fun setHolderName(holderName: String?) {
@@ -700,24 +718,23 @@ class InlineCardInput2 @JvmOverloads constructor(
 //        }
 
         currentFields.forEach { it.setText("") }
-       // currentFields.forEach { it.text?.clearSpans() }
+        // currentFields.forEach { it.text?.clearSpans() }
         currentFields.forEach { it.text?.clear() }
         currentFields.forEach { it.clearFocus() }
-        cardNumberEditText.originalStr=null
-        cardNumberEditText.textcard=null
+        cardNumberEditText.originalStr = null
+        cardNumberEditText.textcard = null
         cardNumberEditText.isEnabled = true
         cvcNumberEditText.isEnabled = true
         expiryDateEditText.isEnabled = true
-        backArrow.visibility= View.GONE
+        backArrow.visibility = View.GONE
         cardBrandView.showBrandIcon(brand, true)
         cardInputUIStatus = CardInputUIStatus.NormalCard
-        cvvIcon.visibility= View.GONE
-        shouldShowErrorIcon=true
+        cvvIcon.visibility = View.GONE
+        shouldShowErrorIcon = true
         expiryDateEditText.visibility = View.VISIBLE
         cvcNumberEditText.visibility = View.VISIBLE
 
     }
-
 
 
     /**
@@ -735,6 +752,7 @@ class InlineCardInput2 @JvmOverloads constructor(
     override fun setCardNumberTextWatcher(cardNumberTextWatcher: TextWatcher?) {
         cardNumberEditText.addTextChangedListener(cardNumberTextWatcher)
     }
+
     /**
      * Remove a `TextWatcher` to receive card number changes.
      */
@@ -779,28 +797,28 @@ class InlineCardInput2 @JvmOverloads constructor(
         return requiredFields.all { it.isEnabled }
     }
 
- /*   override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
-        if (ev.action != MotionEvent.ACTION_DOWN) {
-            return super.onInterceptTouchEvent(ev)
-        }
+    /*   override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
+           if (ev.action != MotionEvent.ACTION_DOWN) {
+               return super.onInterceptTouchEvent(ev)
+           }
 
-        return getFocusRequestOnTouch(ev.x.toInt())?.let {
-            it.requestFocus()
-            true
-        } ?: super.onInterceptTouchEvent(ev)
-    }*/
+           return getFocusRequestOnTouch(ev.x.toInt())?.let {
+               it.requestFocus()
+               true
+           } ?: super.onInterceptTouchEvent(ev)
+       }*/
 
     override fun onSaveInstanceState(): Parcelable {
         return Bundle().apply {
             putParcelable(STATE_SUPER_STATE, super.onSaveInstanceState())
             putBoolean(STATE_CARD_VIEWED, cardNumberIsViewed)
-           // putBoolean(STATE_POSTAL_CODE_ENABLED, holderNameEnabled)
+            // putBoolean(STATE_POSTAL_CODE_ENABLED, holderNameEnabled)
         }
     }
 
     override fun onRestoreInstanceState(state: Parcelable) {
         if (state is Bundle) {
-         //   holderNameEnabled = state.getBoolean(STATE_POSTAL_CODE_ENABLED, true)
+            //   holderNameEnabled = state.getBoolean(STATE_POSTAL_CODE_ENABLED, true)
             cardNumberIsViewed = state.getBoolean(STATE_CARD_VIEWED, true)
             updateSpaceSizes(cardNumberIsViewed)
             placementParameters.totalLengthInPixels = frameWidth
@@ -812,7 +830,8 @@ class InlineCardInput2 @JvmOverloads constructor(
                 cardStartMargin = 0
                 dateStartMargin = placementParameters.getDateStartMargin(isFullCard = true)
                 cvcStartMargin = placementParameters.getCvcStartMargin(isFullCard = true)
-                holderNameStartMargin = placementParameters.getHolderNameStartMargin(isFullCard = true)
+                holderNameStartMargin =
+                    placementParameters.getHolderNameStartMargin(isFullCard = true)
             } else {
                 cardStartMargin = -1 * placementParameters.hiddenCardWidth
                 dateStartMargin = placementParameters.getDateStartMargin(isFullCard = false)
@@ -840,11 +859,11 @@ class InlineCardInput2 @JvmOverloads constructor(
                 width = placementParameters.cvcWidth,
                 marginStart = cvcStartMargin
             )
-           /* updateFieldLayout(
-                view = holderNameTextInputLayout,
-                width = placementParameters.holderNameWidth,
-                marginStart = holderNameStartMargin
-            )*/
+            /* updateFieldLayout(
+                 view = holderNameTextInputLayout,
+                 width = placementParameters.holderNameWidth,
+                 marginStart = holderNameStartMargin
+             )*/
 
             super.onRestoreInstanceState(state.getParcelable(STATE_SUPER_STATE))
         } else {
@@ -868,7 +887,7 @@ class InlineCardInput2 @JvmOverloads constructor(
     @VisibleForTesting
     internal fun getFocusRequestOnTouch(touchX: Int): View? {
         //check this as it was constraint.left
-        val frameStart :Int= this.frameStart
+        val frameStart: Int = this.frameStart
 
         return when {
             cardNumberIsViewed -> {
@@ -886,32 +905,32 @@ class InlineCardInput2 @JvmOverloads constructor(
                         null
                 }
             }
-     /*       holderNameEnabled -> {
-                // Our view is
-                // |PEEK||space||DATE||space||CVC||space||POSTAL|
-                when {
-                    touchX < frameStart + placementParameters.peekCardWidth -> // This was a touch on the card number editor, so we don't need to handle it.
-                        null
-                    touchX < placementParameters.cardTouchBufferLimit -> // Then we need to act like the user touched the card editor
-                        cardNumberEditText
-                    touchX < placementParameters.dateStartPosition -> // Then we need to act like this was a touch on the date editor
-                        expiryDateEditText
-                    touchX < placementParameters.dateStartPosition + placementParameters.dateWidth -> // Just a regular touch on the date editor.
-                        null
-                    touchX < placementParameters.dateEndTouchBufferLimit -> // We need to act like this was a touch on the date editor
-                        expiryDateEditText
-                    touchX < placementParameters.cvcStartPosition -> // We need to act like this was a touch on the cvc editor.
-                        cvcNumberEditText
-                    touchX < placementParameters.cvcStartPosition + placementParameters.cvcWidth -> // Just a regular touch on the cvc editor.
-                        null
-                    touchX < placementParameters.cvcEndTouchBufferLimit -> // We need to act like this was a touch on the cvc editor.
-                        cvcNumberEditText
-                   // touchX < placementParameters.holderNameStartPosition -> // We need to act like this was a touch on the postal code editor.
-                   //     holderNameEditText
+            /*       holderNameEnabled -> {
+                       // Our view is
+                       // |PEEK||space||DATE||space||CVC||space||POSTAL|
+                       when {
+                           touchX < frameStart + placementParameters.peekCardWidth -> // This was a touch on the card number editor, so we don't need to handle it.
+                               null
+                           touchX < placementParameters.cardTouchBufferLimit -> // Then we need to act like the user touched the card editor
+                               cardNumberEditText
+                           touchX < placementParameters.dateStartPosition -> // Then we need to act like this was a touch on the date editor
+                               expiryDateEditText
+                           touchX < placementParameters.dateStartPosition + placementParameters.dateWidth -> // Just a regular touch on the date editor.
+                               null
+                           touchX < placementParameters.dateEndTouchBufferLimit -> // We need to act like this was a touch on the date editor
+                               expiryDateEditText
+                           touchX < placementParameters.cvcStartPosition -> // We need to act like this was a touch on the cvc editor.
+                               cvcNumberEditText
+                           touchX < placementParameters.cvcStartPosition + placementParameters.cvcWidth -> // Just a regular touch on the cvc editor.
+                               null
+                           touchX < placementParameters.cvcEndTouchBufferLimit -> // We need to act like this was a touch on the cvc editor.
+                               cvcNumberEditText
+                          // touchX < placementParameters.holderNameStartPosition -> // We need to act like this was a touch on the postal code editor.
+                          //     holderNameEditText
 
-                    else -> null
-                }
-            }*/
+                           else -> null
+                       }
+                   }*/
             else -> {
                 // Our view is
                 // |PEEK||space||DATE||space||CVC|
@@ -1018,14 +1037,16 @@ class InlineCardInput2 @JvmOverloads constructor(
             val a = context.theme.obtainStyledAttributes(
                 attrs,
                 R.styleable.CardInputView,
-                0, 0)
+                0, 0
+            )
 
             try {
                 cardBrandView.tintColorInt = a.getColor(
                     R.styleable.CardInputView_cardTint,
                     cardBrandView.tintColorInt
                 )
-                errorColorInt = a.getColor(R.styleable.CardInputView_cardTextErrorColor, errorColorInt)
+                errorColorInt =
+                    a.getColor(R.styleable.CardInputView_cardTextErrorColor, errorColorInt)
                 cardHintText = a.getString(R.styleable.CardInputView_cardHintText)
             } finally {
                 a.recycle()
@@ -1038,7 +1059,7 @@ class InlineCardInput2 @JvmOverloads constructor(
 
         //   currentFields.forEach { it.setErrorColor(errorColorInt) }
         holderNameEditText.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
-            println("holderNameEditText must call"+holderNameEditText.hasFocus())
+            println("holderNameEditText must call" + holderNameEditText.hasFocus())
             if (hasFocus) {
                 holderNameEditText.requestFocus()
                 cardInputListener?.onFocusChange(FOCUS_HOLDERNAME)
@@ -1047,76 +1068,78 @@ class InlineCardInput2 @JvmOverloads constructor(
 
         }
         cardNumberEditText.onFocusChangeListener = OnFocusChangeListener { v, hasFocus ->
-            println("hasffc"+holderNameEditText.hasFocus())
-            println("hasFocus"+hasFocus)
-          //  println("view>>"+findFocus().hasFocus())
+            println("hasffc" + holderNameEditText.hasFocus())
+            println("hasFocus" + hasFocus)
+            //  println("view>>"+findFocus().hasFocus())
 
-            println("cardNumberEditText.isCardNumberValid"+cardNumberEditText.isCardNumberValid)
+            println("cardNumberEditText.isCardNumberValid" + cardNumberEditText.isCardNumberValid)
             cardInputListener?.cardFormHasFocus(hasFocus)
 
-        if (hasFocus && cardNumberEditText.originalStr!=null ) {
+            if (hasFocus && cardNumberEditText.originalStr != null) {
 
-            cardInputListener?.onFocusChange(FOCUS_CARD)
-               // scrollStart()
+                cardInputListener?.onFocusChange(FOCUS_CARD)
+                // scrollStart()
                 cardNumberEditText.showFields = false
                 expiryDateEditText.visibility = View.GONE
                 cvcNumberEditText.visibility = View.INVISIBLE
-                setCardNumber(cardNumberEditText.originalStr,hasFocus)
-            //removed thos confition lets check
+                setCardNumber(cardNumberEditText.originalStr, hasFocus)
+                //removed thos confition lets check
                 holderNameTextInputLayout.visibility = View.GONE
                 holderNameEditText.visibility = View.GONE
                 separator_1.visibility = View.GONE
-            }else if (hasFocus || !cardNumberEditText.isCardNumberValid) {
+            } else if (hasFocus || !cardNumberEditText.isCardNumberValid) {
 
-                    cardInputListener?.onFocusChange(FOCUS_CARD)
-                   scrollStart()
-                    cardNumberEditText.showFields = false
-                    expiryDateEditText.visibility = View.GONE
-                    cvcNumberEditText.visibility = View.INVISIBLE
+                cardInputListener?.onFocusChange(FOCUS_CARD)
+                scrollStart()
+                cardNumberEditText.showFields = false
+                expiryDateEditText.visibility = View.GONE
+                cvcNumberEditText.visibility = View.INVISIBLE
                 cardNumberEditText.text?.clear() //Added to stop write null in text
                 cardBrandView.showBrandIcon(brand, true)
                 holderNameTextInputLayout.visibility = View.GONE
                 holderNameEditText.visibility = View.GONE
                 separator_1.visibility = View.GONE
-                }
-            else {
+            } else {
 
                 cardNumberEditText.showFields = true
                 expiryDateEditText.visibility = View.VISIBLE
                 cvcNumberEditText.visibility = View.VISIBLE
-              // scrollEnd()
-               setCardNumber(cardNumberEditText.maskCardNumber(cardNumberEditText.textcard.toString()),hasFocus)
+                // scrollEnd()
+                setCardNumber(
+                    cardNumberEditText.maskCardNumber(cardNumberEditText.textcard.toString()),
+                    hasFocus
+                )
 
-                if(holderNameEnabled && expiryDateEditText.isDateValid && !cvcNumberEditText.shouldShowError){
+                if (holderNameEnabled && expiryDateEditText.isDateValid && !cvcNumberEditText.shouldShowError) {
                     holderNameTextInputLayout.visibility = View.VISIBLE
                     holderNameEditText.visibility = View.VISIBLE
                     separator_1.visibility = View.VISIBLE
                 }
-                }
-
             }
+
+        }
 
 
 
         expiryDateEditText.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 isExpDateValid = expiryDateEditText.isDateValid
-                if(cardNumberEditText.text.isNullOrBlank() || cardNumberEditText.text.isNullOrEmpty() || !cardNumberEditText.isCardNumberValid) {
+                if (cardNumberEditText.text.isNullOrBlank() || cardNumberEditText.text.isNullOrEmpty() || !cardNumberEditText.isCardNumberValid) {
                     cardInputListener?.onFocusChange(
                         FOCUS_CARD
                     )
                     cardNumberEditText.requestFocus()
-                    updateIconCvc(false,"")
-                }else
-                scrollEnd()
+                    updateIconCvc(false, "")
+                } else
+                    scrollEnd()
 
-                if(holderNameEnabled && expiryDateEditText.isDateValid && !cvcNumberEditText.shouldShowError){
+                if (holderNameEnabled && expiryDateEditText.isDateValid && !cvcNumberEditText.shouldShowError) {
                     holderNameTextInputLayout.visibility = View.VISIBLE
                     holderNameEditText.visibility = View.VISIBLE
                     separator_1.visibility = View.VISIBLE
 
 
-                }else cardInputListener?.onFocusChange(FOCUS_EXPIRY)
+                } else cardInputListener?.onFocusChange(FOCUS_EXPIRY)
             }
 
         }
@@ -1140,59 +1163,58 @@ class InlineCardInput2 @JvmOverloads constructor(
 //Adding delete OnKeyListener for cvc
         cvcNumberEditText.setOnKeyListener(OnKeyListener { view, keyCode, keyEvent ->
             if (keyCode == KeyEvent.KEYCODE_DEL) {
-                    if(cardInputUIStatus==CardInputUIStatus.SavedCard && cvcNumberEditText.text?.isEmpty() == true){
-                        cvcNumberEditText.setBackgroundResource(R.drawable.underline_editext)
-                        cvvIcon.visibility = View.VISIBLE
-                    }else {
-                        cvcNumberEditText.setBackgroundResource(R.drawable.underline_editext_transparent)
-                        cvvIcon.visibility = View.GONE
-                    }
-
+                if (cardInputUIStatus == CardInputUIStatus.SavedCard && cvcNumberEditText.text?.isEmpty() == true) {
+                    cvcNumberEditText.setBackgroundResource(R.drawable.underline_editext)
+                    cvvIcon.visibility = View.VISIBLE
+                } else {
+                    cvcNumberEditText.setBackgroundResource(R.drawable.underline_editext_transparent)
+                    cvvIcon.visibility = View.GONE
                 }
+
+            }
             false
         })
         cvcNumberEditText.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
-            println("hasFocus"+hasFocus)
-            println("cardNumberEditText.text"+cardNumberEditText.text)
+            println("hasFocus" + hasFocus)
+            println("cardNumberEditText.text" + cardNumberEditText.text)
             cardInputListener?.cvvFieldHasFocus(hasFocus)
             if (hasFocus) {
-                if(cardNumberEditText.text.isNullOrBlank() || cardNumberEditText.text.isNullOrEmpty() || !cardNumberEditText.isCardNumberValid) {
+                if (cardNumberEditText.text.isNullOrBlank() || cardNumberEditText.text.isNullOrEmpty() || !cardNumberEditText.isCardNumberValid) {
                     cardInputListener?.onFocusChange(
                         FOCUS_CARD
                     )
                     cardNumberEditText.requestFocus()
-                    updateIconCvc(false,"")
+                    updateIconCvc(false, "")
                 }
-                if(expiryDateEditText.text.isNullOrBlank() || expiryDateEditText.text.isNullOrEmpty() || !expiryDateEditText.isDateValid) {
+                if (expiryDateEditText.text.isNullOrBlank() || expiryDateEditText.text.isNullOrEmpty() || !expiryDateEditText.isDateValid) {
                     cardInputListener?.onFocusChange(
                         FOCUS_EXPIRY
                     )
                     expiryDateEditText.requestFocus()
-                    updateIconCvc(false,"")
-                }
-                else
-                scrollEnd()
+                    updateIconCvc(false, "")
+                } else
+                    scrollEnd()
                 cardInputListener?.onFocusChange(FOCUS_CVC)
                 //holderNameEditText.requestFocus()
                 //Temp coment
-               /* if (holderNameEnabled) {
-                   // holderNameEditText.isEnabled = holderNameEditable
+                /* if (holderNameEnabled) {
+                    // holderNameEditText.isEnabled = holderNameEditable
 
-                    holderNameTextInputLayout.visibility = View.VISIBLE
-                    holderNameEditText.visibility = View.VISIBLE
-                    separator_1.visibility = View.VISIBLE
-                    cvcNumberEditText.imeOptions = EditorInfo.IME_ACTION_NEXT
-                    //holderNameEnabled = true
-                } else {
-                    holderNameEditText.isEnabled = true
-                    holderNameTextInputLayout.visibility = View.GONE
-                    holderNameEditText.visibility = View.GONE
-                    separator_1.visibility = View.GONE
-                    cvcNumberEditText.imeOptions = EditorInfo.IME_ACTION_DONE
-                }*/
+                     holderNameTextInputLayout.visibility = View.VISIBLE
+                     holderNameEditText.visibility = View.VISIBLE
+                     separator_1.visibility = View.VISIBLE
+                     cvcNumberEditText.imeOptions = EditorInfo.IME_ACTION_NEXT
+                     //holderNameEnabled = true
+                 } else {
+                     holderNameEditText.isEnabled = true
+                     holderNameTextInputLayout.visibility = View.GONE
+                     holderNameEditText.visibility = View.GONE
+                     separator_1.visibility = View.GONE
+                     cvcNumberEditText.imeOptions = EditorInfo.IME_ACTION_DONE
+                 }*/
 
 
-             //   cardBrandView.showBrandIcon(brand,true,null)
+                //   cardBrandView.showBrandIcon(brand,true,null)
                 updateIconCvc(hasFocus, cvcValue)
             }
 
@@ -1225,7 +1247,7 @@ class InlineCardInput2 @JvmOverloads constructor(
             }
         )
 
- expiryDateEditText.setAfterTextChangedListener(
+        expiryDateEditText.setAfterTextChangedListener(
             object : TapTextInput.AfterTextChangedListener {
                 override fun onTextChanged(text: String) {
                     isExpDateValid = expiryDateEditText.isDateValid
@@ -1233,7 +1255,6 @@ class InlineCardInput2 @JvmOverloads constructor(
                 }
             }
         )
-
 
 
         var holderNameEditable: Boolean by Delegates.observable(
@@ -1250,9 +1271,7 @@ class InlineCardInput2 @JvmOverloads constructor(
                 holderNameTextInputLayout.isEnabled = false
             }
         }
-        cardBrandView.onScanClicked = {
-            Toast.makeText(context, "Clicked", Toast.LENGTH_SHORT).show()
-        }
+
 
         cardNumberEditText.displayErrorCallback = {
 
@@ -1261,18 +1280,17 @@ class InlineCardInput2 @JvmOverloads constructor(
 
         cardNumberEditText.completionCallback = {
 
-                expiryDateEditText.visibility = View.VISIBLE
-                cvcNumberEditText.visibility = View.VISIBLE
-                cardNumberEditText?.showFields = true
+            expiryDateEditText.visibility = View.VISIBLE
+            cvcNumberEditText.visibility = View.VISIBLE
+            cardNumberEditText?.showFields = true
 //Adding cardNumber is view true too scroll
             cardNumberIsViewed = true
             scrollEnd()
-                cardInputListener?.onCardComplete()
+            cardInputListener?.onCardComplete()
 
 
-
-           // setCardNumberMasked(cardNumberEditText.maskedCardNumber)
-     //  setCardNumber(cardNumberEditText.cardNumber, false)
+            // setCardNumberMasked(cardNumberEditText.maskedCardNumber)
+            //  setCardNumber(cardNumberEditText.cardNumber, false)
 
 
         }
@@ -1291,21 +1309,21 @@ class InlineCardInput2 @JvmOverloads constructor(
         }
 
         cvcNumberEditText.completionCallback = {
-            cardBrandView.showBrandIcon(brand,false,brandIconUrl)
+            cardBrandView.showBrandIcon(brand, false, brandIconUrl)
             if (holderNameEnabled) {
                 holderNameEditText.requestFocus()
             }
         }
 
-           /* holderNameTextInputLayout.onFocusChangeListener=OnFocusChangeListener { _, hasFocus ->
-                holderNameEditText.requestFocus()
-            }
+        /* holderNameTextInputLayout.onFocusChangeListener=OnFocusChangeListener { _, hasFocus ->
+             holderNameEditText.requestFocus()
+         }
 
 */
 
 //        allFields.forEach { it.addTextChangedListener(inputChangeTextWatcher) }
 
-      //  cardNumberEditText.requestFocus()
+        //  cardNumberEditText.requestFocus()
 
         cardNumberEditText.setHintTextColor(Color.parseColor(ThemeManager.getValue("emailCard.textFields.placeHolderColor")))
         cardNumberEditText.setTextColor(Color.parseColor(ThemeManager.getValue("emailCard.textFields.textColor")))
@@ -1324,7 +1342,6 @@ class InlineCardInput2 @JvmOverloads constructor(
         setThemeForHints()
 
     }
-
 
 
     /**
@@ -1387,7 +1404,8 @@ class InlineCardInput2 @JvmOverloads constructor(
 
         val dateStartPosition = placementParameters.getCvcStartMargin(isFullCard = false)
         val cvcStartPosition = placementParameters.getCvcStartMargin(isFullCard = false)
-        val holderNameStartPosition = placementParameters.getHolderNameStartMargin(isFullCard = false)
+        val holderNameStartPosition =
+            placementParameters.getHolderNameStartMargin(isFullCard = false)
 
         updateSpaceSizes(isCardViewed = true)
 
@@ -1413,23 +1431,25 @@ class InlineCardInput2 @JvmOverloads constructor(
                 newWidth = placementParameters.cvcWidth
             )
         val holderNameDestination = holderNameStartPosition + (cvcDestination - cvcStartPosition)
-         val slideHolderNameStartAnimation = if (holderNameEnabled) {
-             HolderNameSlideStartAnimation(
-                 view = holderNameTextInputLayout,
-                 startPosition = frameStart,
-                 destination = holderNameDestination,
-                 newWidth = placementParameters.holderNameWidth
-             )
-         } else {
-             null
-         }
+        val slideHolderNameStartAnimation = if (holderNameEnabled) {
+            HolderNameSlideStartAnimation(
+                view = holderNameTextInputLayout,
+                startPosition = frameStart,
+                destination = holderNameDestination,
+                newWidth = placementParameters.holderNameWidth
+            )
+        } else {
+            null
+        }
 
-        startSlideAnimation(listOfNotNull(
-            slideCardStartAnimation,
-            slideDateStartAnimation,
-            slideCvcStartAnimation,
-             slideHolderNameStartAnimation
-        ))
+        startSlideAnimation(
+            listOfNotNull(
+                slideCardStartAnimation,
+                slideDateStartAnimation,
+                slideCvcStartAnimation,
+                slideHolderNameStartAnimation
+            )
+        )
 
         cardNumberIsViewed = true
     }
@@ -1475,15 +1495,15 @@ class InlineCardInput2 @JvmOverloads constructor(
             val holderNameStartMargin = holderNameDestination
 
             val slideHolderNameEndAnimation = if (holderNameEnabled) {
-              HolderNameSlideEndAnimation(
-                  view = holderNameTextInputLayout,
-                  startMargin = holderNameStartMargin,
-                  destination = holderNameDestination,
-                  newWidth = placementParameters.holderNameWidth
-              )
-          } else {
-              null
-          }
+                HolderNameSlideEndAnimation(
+                    view = holderNameTextInputLayout,
+                    startMargin = holderNameStartMargin,
+                    destination = holderNameDestination,
+                    newWidth = placementParameters.holderNameWidth
+                )
+            } else {
+                null
+            }
 
 
             startSlideAnimation(
@@ -1491,7 +1511,7 @@ class InlineCardInput2 @JvmOverloads constructor(
                     slideCardEndAnimation,
                     slideDateEndAnimation,
                     slideCvcEndAnimation,
-                     slideHolderNameEndAnimation
+                    slideHolderNameEndAnimation
                 )
             )
 
@@ -1501,6 +1521,7 @@ class InlineCardInput2 @JvmOverloads constructor(
         }
 
     }
+
     private fun startSlideAnimation(animations: List<Animation>) {
         val animationSet = AnimationSet(true).apply {
             animations.forEach { addAnimation(it) }
@@ -1526,7 +1547,7 @@ class InlineCardInput2 @JvmOverloads constructor(
             updateFieldLayout(
                 view = cardNumberTextInputLayout,
                 width = placementParameters.cardWidth,
-                marginStart  = if (cardNumberIsViewed) {
+                marginStart = if (cardNumberIsViewed) {
                     0
                 } else {
                     -1 * placementParameters.hiddenCardWidth
@@ -1594,8 +1615,8 @@ class InlineCardInput2 @JvmOverloads constructor(
                 updateIcon()
             }
             else -> {
-               if(cardInputUIStatus==CardInputUIStatus.NormalCard)
-                updateIconForCvcEntry()
+                if (cardInputUIStatus == CardInputUIStatus.NormalCard)
+                    updateIconForCvcEntry()
             }
         }
     }
@@ -1712,7 +1733,8 @@ class InlineCardInput2 @JvmOverloads constructor(
                     this.cardTouchBufferLimit = frameStart + peekCardWidth + cardDateSeparation / 2
                     this.dateStartPosition = frameStart + peekCardWidth + cardDateSeparation
 
-                    this.dateEndTouchBufferLimit = dateStartPosition + dateWidth + dateCvcSeparation / 2
+                    this.dateEndTouchBufferLimit =
+                        dateStartPosition + dateWidth + dateCvcSeparation / 2
                     this.cvcStartPosition = dateStartPosition + dateWidth + dateCvcSeparation
                 }
             }
@@ -1770,13 +1792,13 @@ class InlineCardInput2 @JvmOverloads constructor(
 
         override fun applyTransformation(interpolatedTime: Float, t: Transformation) {
             super.applyTransformation(interpolatedTime, t)
-            println("view latout"+view.layoutParams)
-            if(view.layoutParams is FrameLayout.LayoutParams){
+            println("view latout" + view.layoutParams)
+            if (view.layoutParams is FrameLayout.LayoutParams) {
                 view.layoutParams = (view.layoutParams as FrameLayout.LayoutParams).apply {
 
                     marginStart = (marginStart * (1 - interpolatedTime)).toInt()
                 }
-            }else
+            } else
                 view.layoutParams = (view.layoutParams as ConstraintLayout.LayoutParams).apply {
                     marginStart = (marginStart * (1 - interpolatedTime)).toInt()
                 }
@@ -1806,7 +1828,8 @@ class InlineCardInput2 @JvmOverloads constructor(
         override fun applyTransformation(interpolatedTime: Float, t: Transformation) {
             super.applyTransformation(interpolatedTime, t)
             view.layoutParams = (view.layoutParams as ConstraintLayout.LayoutParams).apply {
-                this.marginStart = (interpolatedTime * destination + (1 - interpolatedTime) * startPosition).toInt()
+                this.marginStart =
+                    (interpolatedTime * destination + (1 - interpolatedTime) * startPosition).toInt()
                 this.marginEnd = 0
                 this.width = newWidth
             }
@@ -1826,13 +1849,14 @@ class InlineCardInput2 @JvmOverloads constructor(
                 }
             })
         }
+
         override fun applyTransformation(interpolatedTime: Float, t: Transformation?) {
             super.applyTransformation(interpolatedTime, t)
-           /* view.layoutParams = (view.layoutParams as LinearLayout.LayoutParams).apply {
-                this.marginStart = (interpolatedTime * destination + (1 - interpolatedTime) * startPosition).toInt()
-                this.marginEnd = 0
-                this.width = newWidth
-            }*/
+            /* view.layoutParams = (view.layoutParams as LinearLayout.LayoutParams).apply {
+                 this.marginStart = (interpolatedTime * destination + (1 - interpolatedTime) * startPosition).toInt()
+                 this.marginEnd = 0
+                 this.width = newWidth
+             }*/
 
             view.layoutParams = (view.layoutParams as LinearLayout.LayoutParams).apply {
                 marginStart = (marginStart * (1 - interpolatedTime)).toInt()
@@ -1856,8 +1880,9 @@ class InlineCardInput2 @JvmOverloads constructor(
         override fun applyTransformation(interpolatedTime: Float, t: Transformation) {
             super.applyTransformation(interpolatedTime, t)
             view.layoutParams = (view.layoutParams as ConstraintLayout.LayoutParams).apply {
-              //  marginStart = (-1f * hiddenCardWidth.toFloat() * interpolatedTime).toInt()
-                marginStart = (0f * hiddenCardWidth.toFloat() * interpolatedTime).toInt() //Added as masked value was not showing
+                //  marginStart = (-1f * hiddenCardWidth.toFloat() * interpolatedTime).toInt()
+                marginStart =
+                    (0f * hiddenCardWidth.toFloat() * interpolatedTime).toInt() //Added as masked value was not showing
             }
         }
     }
@@ -1909,15 +1934,16 @@ class InlineCardInput2 @JvmOverloads constructor(
 
         override fun applyTransformation(interpolatedTime: Float, t: Transformation) {
             super.applyTransformation(interpolatedTime, t)
-           /* view.layoutParams = (view.layoutParams as LinearLayout.LayoutParams).apply {
-                this.marginStart =
-                    (interpolatedTime * destination + (1 - interpolatedTime) * startMargin).toInt()
-                this.marginEnd = 0
-                this.width = newWidth
-            }*/
+            /* view.layoutParams = (view.layoutParams as LinearLayout.LayoutParams).apply {
+                 this.marginStart =
+                     (interpolatedTime * destination + (1 - interpolatedTime) * startMargin).toInt()
+                 this.marginEnd = 0
+                 this.width = newWidth
+             }*/
             view.layoutParams = (view.layoutParams as LinearLayout.LayoutParams).apply {
                 //  marginStart = (-1f * hiddenCardWidth.toFloat() * interpolatedTime).toInt()
-                marginStart = (0f * destination.toFloat() * interpolatedTime).toInt() //Added as masked value was not showing
+                marginStart =
+                    (0f * destination.toFloat() * interpolatedTime).toInt() //Added as masked value was not showing
             }
         }
     }
@@ -1945,6 +1971,7 @@ class InlineCardInput2 @JvmOverloads constructor(
             return Layout.getDesiredWidth(text, paint).toInt()
         }
     }
+
     var holderNameEditable: Boolean by Delegates.observable(
         BaseCardInput.DEFAULT_HOLDER_NAME_ENABLED
     ) { _, _, isEnabled ->
@@ -1959,6 +1986,7 @@ class InlineCardInput2 @JvmOverloads constructor(
             holderNameTextInputLayout.isEnabled = false
         }
     }
+
     internal companion object {
         internal const val LOGGING_TOKEN = "CardInputView"
 
@@ -2004,12 +2032,12 @@ class InlineCardInput2 @JvmOverloads constructor(
         }
     }
 
-    fun onTouchView(){
+    fun onTouchView() {
         onTouchHandling()
 
     }
 
-    private fun onTouchHandling(){
+    private fun onTouchHandling() {
         expiryDateEditText.visibility = View.VISIBLE
         cvcNumberEditText.visibility = View.VISIBLE
 
@@ -2018,14 +2046,14 @@ class InlineCardInput2 @JvmOverloads constructor(
     }
 
     //Logic to showhide holdername
-    fun setVisibilityOfHolderField(holderNameEnable:Boolean){
-        if(holderNameEnable){
+    fun setVisibilityOfHolderField(holderNameEnable: Boolean) {
+        if (holderNameEnable) {
             holderNameEditText.isEnabled = true
             holderNameTextInputLayout.visibility = View.VISIBLE
             holderNameEditText.visibility = View.VISIBLE
             holderNameEditText.requestFocus()
             cvcNumberEditText.imeOptions = EditorInfo.IME_ACTION_NEXT
-        }else {
+        } else {
             holderNameEditText.isEnabled = true
             holderNameTextInputLayout.visibility = View.GONE
             holderNameEditText.visibility = View.GONE
@@ -2034,25 +2062,36 @@ class InlineCardInput2 @JvmOverloads constructor(
 
     }
 
-    fun setCardBrandUrl(iconUrl: String?){
-        this.brandIconUrl =iconUrl
+    fun setCardBrandUrl(iconUrl: String?) {
+        this.brandIconUrl = iconUrl
     }
+
     @SuppressLint("ClickableViewAccessibility")
-   private fun setDrawableForHolderName(){
+    private fun setDrawableForHolderName() {
         val displayMetrics = getDeviceDisplayMetrics(context as Activity)
-        println("displayMetrics"+displayMetrics)
+        println("displayMetrics" + displayMetrics)
         if (displayMetrics == DisplayMetrics.DENSITY_260 || displayMetrics == DisplayMetrics.DENSITY_280 || displayMetrics == DisplayMetrics.DENSITY_300 || displayMetrics == DisplayMetrics.DENSITY_XHIGH || displayMetrics == DisplayMetrics.DENSITY_340 || displayMetrics == DisplayMetrics.DENSITY_360) {
             closeIconDrawable?.setBounds(0, 0, 23, 23) // set size
-        }else  if (displayMetrics == DisplayMetrics.DENSITY_360|| displayMetrics == DisplayMetrics.DENSITY_400|| displayMetrics == DisplayMetrics.DENSITY_420|| displayMetrics == DisplayMetrics.DENSITY_440 ){
+        } else if (displayMetrics == DisplayMetrics.DENSITY_360 || displayMetrics == DisplayMetrics.DENSITY_400 || displayMetrics == DisplayMetrics.DENSITY_420 || displayMetrics == DisplayMetrics.DENSITY_440) {
             closeIconDrawable?.setBounds(0, 0, 32, 31) // set size}
-        }else {
+        } else {
             closeIconDrawable?.setBounds(0, 0, 34, 34) // set size}
         }
-        if (context?.let { LocalizationManager.getLocale(it).language } == "en"){
-            holderNameEditText.setCompoundDrawables(null,null,closeIconDrawable,null) // set position of drawable
+        if (context?.let { LocalizationManager.getLocale(it).language } == "en") {
+            holderNameEditText.setCompoundDrawables(
+                null,
+                null,
+                closeIconDrawable,
+                null
+            ) // set position of drawable
 
-        }else{
-            holderNameEditText.setCompoundDrawables(closeIconDrawable,null,null,null) // set position of drawable
+        } else {
+            holderNameEditText.setCompoundDrawables(
+                closeIconDrawable,
+                null,
+                null,
+                null
+            ) // set position of drawable
 
         }
 
@@ -2064,13 +2103,13 @@ class InlineCardInput2 @JvmOverloads constructor(
             val DRAWABLE_TOP = 1
             val DRAWABLE_RIGHT = 2
             val DRAWABLE_BOTTOM = 3
-            println("event>>>"+event.action)
-            println("v is>>>"+v)
+            println("event>>>" + event.action)
+            println("v is>>>" + v)
             holderNameEditText.requestFocus()
             if (event.action == MotionEvent.ACTION_DOWN) {
                 holderNameEditText.requestFocus()
                 if (context?.let { LocalizationManager.getLocale(it).language } == "en") {
-                    if( holderNameEditText.compoundDrawables[DRAWABLE_RIGHT]!=null )
+                    if (holderNameEditText.compoundDrawables[DRAWABLE_RIGHT] != null)
                         if (event.rawX >= holderNameEditText.right - holderNameEditText.compoundDrawables[DRAWABLE_RIGHT].bounds.width()
                         ) {
                             holderNameEditText.setText("")
@@ -2080,8 +2119,8 @@ class InlineCardInput2 @JvmOverloads constructor(
                         }
 
 
-                }else{
-                    if( holderNameEditText.compoundDrawables[DRAWABLE_LEFT]!=null )
+                } else {
+                    if (holderNameEditText.compoundDrawables[DRAWABLE_LEFT] != null)
                         if (event.rawX >= holderNameEditText.left - holderNameEditText.compoundDrawables[DRAWABLE_LEFT].bounds.width()
                         ) {
                             holderNameEditText.setText("")
@@ -2090,21 +2129,23 @@ class InlineCardInput2 @JvmOverloads constructor(
                             return@OnTouchListener true
                         }
                 }
-            }else if (event.action == MotionEvent.ACTION_UP){
-                if(!cardNumberEditText.hasFocus())
-                holderNameEditText.requestFocus()
+            } else if (event.action == MotionEvent.ACTION_UP) {
+                if (!cardNumberEditText.hasFocus())
+                    holderNameEditText.requestFocus()
                 return@OnTouchListener false
             }
             false
         })
     }
-    private  fun getDeviceDisplayMetrics(activity: Activity) : Int{
+
+    private fun getDeviceDisplayMetrics(activity: Activity): Int {
         // Determine density
         val metrics = DisplayMetrics()
         activity.windowManager.defaultDisplay.getMetrics(metrics)
         val density = metrics.densityDpi
         return density
     }
+
     private fun setThemeForHints() {
         if (context?.let { LocalizationManager.getLocale(it).language } == "en") setFontsEnglish() else setFontsArabic()
     }
@@ -2115,7 +2156,7 @@ class InlineCardInput2 @JvmOverloads constructor(
                 TapFont.TajawalLight
             )
         )
-   cvcNumberEditText.typeface = Typeface.createFromAsset(
+        cvcNumberEditText.typeface = Typeface.createFromAsset(
             context?.assets, TapFont.tapFontType(
                 TapFont.TajawalLight
             )
@@ -2155,10 +2196,6 @@ class InlineCardInput2 @JvmOverloads constructor(
             )
         )
     }
-
-
-
-
 
 
 }

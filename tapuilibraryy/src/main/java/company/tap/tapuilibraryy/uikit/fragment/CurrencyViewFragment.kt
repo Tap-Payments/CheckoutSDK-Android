@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.tapuilibraryy.R
 import company.tap.tapuilibraryy.themekit.ThemeManager
-import company.tap.tapuilibraryy.uikit.adapters.CurrencyAdapter
 import company.tap.tapuilibraryy.uikit.adapters.ItemAdapter
 import company.tap.tapuilibraryy.uikit.atoms.TapChipGroup
 import company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
@@ -57,7 +56,6 @@ open class CurrencyViewFragment : Fragment() {
         chipRecycler = currencyGroup.findViewById<View>(R.id.chip_recycler) as RecyclerView
         chipRecycler.setHasFixedSize(true)
         chipRecycler.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-        chipRecycler.adapter = CurrencyAdapter(currencyList)
         itemsRecycler = view.findViewById<View>(R.id.items_recylerview) as RecyclerView
         headerView.visibility = View.GONE
 

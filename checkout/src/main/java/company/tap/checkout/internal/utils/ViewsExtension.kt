@@ -166,6 +166,16 @@ fun View.slidefromRightToLeft() {
 
 }
 
+fun View.addShrinkAnimation(xDirection: Float, yDirection: Float,isDimmed:Boolean=false) {
+    this.animate().scaleX(xDirection).scaleY(yDirection).setDuration(600).start();
+    if (isDimmed){
+        this.alpha = 0.4f
+    }else{
+        this.alpha = 1.0f
+    }
+
+}
+
 fun ViewGroup.deepForEach(function: View.() -> Unit) {
     this.forEach { child ->
         child.function()

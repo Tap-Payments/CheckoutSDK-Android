@@ -69,15 +69,9 @@ class PaymentInlineViewHolder(
     private val context: Context,
     private val checkoutViewModel: CheckoutViewModel,
     private val onPaymentCardComplete: PaymentCardComplete,
-    private val onCardNFCCallListener: onCardNFCCallListener,
     private val switchViewHolder: SwitchViewHolder?,
     private val baseLayoutManager: BaseLayoutManager,
     private val cardViewModel: CardViewModel,
-    private val checkoutFragment: CheckoutFragment,
-    private val loyaltyViewHolder: LoyaltyViewHolder?,
-    private val sdkLayout: LinearLayout,
-    private val bottomSheetLayout: FrameLayout,
-    private val headerLayout: LinearLayout,
 ) : TapBaseViewHolder,
     TapSelectionTabLayoutInterface, CardInputListener, TapPaymentShowHideClearImage {
     override val view: View =
@@ -94,7 +88,7 @@ class PaymentInlineViewHolder(
     private var lastFocusField = CardInputListener.FocusField.FOCUS_CARD
     private var lastCardInput = ""
     private var cardScannerBtn: ImageView? = null
-    private var savedCardsModel: SavedCard? = null
+     var savedCardsModel: SavedCard? = null
 
 
     var tapCardInputView: InlineCardInput2
@@ -109,11 +103,11 @@ class PaymentInlineViewHolder(
     //  private  var paymentType: PaymentTypeEnum ?= null
     private var paymentType: PaymentType? = null
     private lateinit var cardBrandType: String
-    private var cardNumber: String? = null
+     var cardNumber: String? = null
     private var fullCardNumber: String? = null
-    private var expiryDate: String? = null
-    private var cvvNumber: String? = null
-    private var cardHolderName: String? = null
+     var expiryDate: String? = null
+     var cvvNumber: String? = null
+     var cardHolderName: String? = null
     private var cardHolderNamePrev: String? = null
     private var cvvNumberPrev: String? = null
     private var expiryDatePrev: String? = null

@@ -1,6 +1,7 @@
 package company.tap.tapuilibraryy.uikit.adapters
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
@@ -33,7 +34,7 @@ class ItemAdapter(private val itemList: ArrayList<Int>) :
     private var previousExpandedPosition = -1
     private var mExpandedPosition = -1
     private lateinit var itemViewAdapter: TapListItemView
-
+    private lateinit var context:Context
 
     override fun onCreateViewHolder(@NonNull parent: ViewGroup, viewType: Int): ItemHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.item_view_adapter, parent, false)
