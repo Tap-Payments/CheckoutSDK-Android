@@ -2185,6 +2185,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         } else selectedPayOpt = paymentOptObject
 
         //  println("selectedPayOpt are"+selectedPayOpt)
+        var  bgArrayList: ArrayList<String>? = arrayListOf()
 
         when(CustomUtils.getCurrentTheme()){
             ThemeMode.dark.name->{
@@ -2202,8 +2203,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 intColorArray = null
             }
             ThemeMode.light.name-> {
-                val bgArrayList: ArrayList<String>? =
-                    selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors
+                 bgArrayList = selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors
                 if (bgArrayList?.size == 1) {
                     colorBackGround = bgArrayList[0]
                     intColorArray = null
