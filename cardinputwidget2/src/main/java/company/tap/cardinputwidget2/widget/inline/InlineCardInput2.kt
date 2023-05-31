@@ -484,8 +484,9 @@ class InlineCardInput2 @JvmOverloads constructor(
         cardNumberEditText.isCursorVisible = false
         expiryDateEditText.isCursorVisible = false
         cvcNumberEditText.isCursorVisible = false
-        cardNumberEditText.isClickable = false
-        cardNumberEditText.showSoftInputOnFocus = false;
+        cardNumberEditText.showSoftInputOnFocus = false
+        expiryDateEditText.showSoftInputOnFocus = false
+        cvcNumberEditText.showSoftInputOnFocus = false
 
 
     }
@@ -495,8 +496,8 @@ class InlineCardInput2 @JvmOverloads constructor(
         expiryDateEditText.isCursorVisible = true
         cvcNumberEditText.isCursorVisible = true
         cardNumberEditText.showSoftInputOnFocus = true
-
-
+        expiryDateEditText.showSoftInputOnFocus = true
+        cvcNumberEditText.showSoftInputOnFocus = true
     }
 
     override fun setExpiryHint(expiryHint: String) {

@@ -511,7 +511,6 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                 adapterGooglePay[position]
             )
             selectedPosition = position
-            onCardSelectedActionListener.removePaymentInlineShrinkageAndDimmed()
             notifyDataSetChanged()
         }
     }

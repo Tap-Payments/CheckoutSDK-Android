@@ -480,7 +480,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     private fun sendChargeOTPCode(otpCode: String) {
         cardViewModel.processEvent(
-           event= CardViewEvent.AuthenticateChargeTransaction,
+            event = CardViewEvent.AuthenticateChargeTransaction,
             viewModel = this,
             otpString = otpCode
         )
@@ -546,6 +546,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         logicForLoyaltyProgram()
 
         amountViewHolder.view.amount_section.tapChipPopup.setOnClickListener {
+            removePaymentInlineShrinkageAndDimmed()
             amountViewHolder.view.amount_section.tapChipPopup.slideFromLeftToRight()
             with(SharedPrefManager.getUserSupportedLocaleForTransactions(context)!!) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -1831,15 +1832,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
                         ActionButtonState.ERROR
                     )
-                    /*if (ThemeManager.currentTheme != null && chargeResponse != null)
-                        tabAnimatedActionButton?.setInValidBackground(
-                            false,
-                            Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor"))
-                        )
-                    else
-                        tabAnimatedActionButton?.changeButtonState(
-                            ActionButtonState.ERROR
-                        )*/
 
 
                 }
@@ -1929,10 +1921,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             changeHeight = {
                 viewHolders.forEach {
                     if (::sdkLayout.isInitialized) {
+                        if (it is PaymentInlineViewHolder) {
+                            removePaymentInlineShrinkageAndDimmed()
+                        }
                         sdkLayout.removeView(it?.view)
                         provideBackgroundtoBsLayout()
                         onRemoveEnd.invoke()
-
                     }
                 }
 
@@ -1960,19 +1954,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     }
 
-    fun provideBackgroundtoSdkLayout() {
-        sdkLayout.setBackgroundDrawable(
-            createDrawableGradientForBlurry(
-                newColorVal?.let { it1 ->
-                    intArrayOf(
-                        it1,
-                        it1,
-                        it1
-                    )
-                }!!
-            )
-        )
-    }
 
     fun provideBackgroundtoBsLayout(levelDuration: Int = 7500) {
         /**
@@ -2066,48 +2047,57 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
             else -> {
                 if (savedCardsModel != null) {
-                    println("savedCardsModel is>>" + PaymentType.GOOGLE_PAY)
                     if ((savedCardsModel as PaymentOption).paymentType == PaymentType.WEB) {
 
-                        paymentInlineViewHolder.view.addShrinkAnimation(xDirection = 0.9f, yDirection = 0.9f,isDimmed = true)
-                        cardViewHolder.cardInfoHeaderText.addShrinkAnimation(xDirection = 0.9f, yDirection = 0.9f,isDimmed = true)
-                        paymentInlineViewHolder.view.isFocusableInTouchMode = true
+                        showShrinkageForPaymentInline()
 
-                        paymentInlineViewHolder.tapCardInputView.hideCursor()
-
-                        paymentInlineViewHolder.view.setOnTouchListener { _, _ ->
-                            paymentInlineViewHolder.view.isFocusableInTouchMode = false
-                            paymentInlineViewHolder.tapCardInputView.showCursor()
-                            resetViewToPaymentInline()
-                            resetCardSelection()
-                            unActivateActionButton()
-                            if (paymentInlineViewHolder.cvvNumber?.length ==3){
-                                with(paymentInlineViewHolder){
-                                    if (this.savedCardsModel != null){
-                                        onPayCardCompleteAction(
-                                            true, PaymentType.SavedCard,
-                                            cardNumber, expiryDate, cvvNumber!!, cardHolderName,this.savedCardsModel?.brand?.name ,this.savedCardsModel
-                                        )
-                                    }else{
-                                        onPayCardCompleteAction(
-                                            true, PaymentType.CARD,
-                                            cardNumber, expiryDate, cvvNumber!!, cardHolderName, PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.rawValue ,this.savedCardsModel
-                                        )
-                                    }
-
-                                }
-                            }
-                            return@setOnTouchListener true
-                        }
 
                         PaymentDataSource.setWebViewType(WebViewType.REDIRECT)
                         activateActionButton((savedCardsModel as PaymentOption))
                         setPayButtonAction(PaymentType.WEB, savedCardsModel)
                     } else if ((savedCardsModel as PaymentOption).paymentType == PaymentType.GOOGLE_PAY) {
+                        showShrinkageForPaymentInline()
+
                         activateActionButton((savedCardsModel as PaymentOption))
                         setPayButtonAction(PaymentType.GOOGLE_PAY, savedCardsModel)
                         PaymentDataSource.setWebViewType(WebViewType.THREE_DS_WEBVIEW)
                     }
+
+                    paymentInlineViewHolder.view.setOnTouchListener { _, _ ->
+                        resetViewToPaymentInline()
+                        resetCardSelection()
+                        unActivateActionButton()
+                        if (paymentInlineViewHolder.cvvNumber?.length == 3) {
+                            with(paymentInlineViewHolder) {
+                                if (this.savedCardsModel != null) {
+                                    onPayCardCompleteAction(
+                                        true,
+                                        PaymentType.SavedCard,
+                                        cardNumber,
+                                        expiryDate,
+                                        cvvNumber!!,
+                                        cardHolderName,
+                                        this.savedCardsModel?.brand?.name,
+                                        this.savedCardsModel
+                                    )
+                                } else {
+                                    onPayCardCompleteAction(
+                                        true,
+                                        PaymentType.CARD,
+                                        cardNumber,
+                                        expiryDate,
+                                        cvvNumber!!,
+                                        cardHolderName,
+                                        PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.rawValue,
+                                        this.savedCardsModel
+                                    )
+                                }
+
+                            }
+                        }
+                        return@setOnTouchListener true
+                    }
+
                     Bugfender.d(
                         CustomUtils.tagEvent,
                         "Payment scheme selected: title :" + (savedCardsModel as PaymentOption).brand + "& ID :" + (savedCardsModel as PaymentOption).id
@@ -2121,11 +2111,31 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
     }
 
+    private fun showShrinkageForPaymentInline() {
+        paymentInlineViewHolder.view.addShrinkAnimation(
+            xDirection = 0.9f,
+            yDirection = 0.9f,
+            isDimmed = true
+        )
+        cardViewHolder.cardInfoHeaderText.addShrinkAnimation(
+            xDirection = 0.9f,
+            yDirection = 0.9f,
+            isDimmed = true
+        )
+        paymentInlineViewHolder.view.isFocusableInTouchMode = true
+
+        paymentInlineViewHolder.tapCardInputView.hideCursor()
+    }
 
 
     private fun resetViewToPaymentInline() {
-        cardViewHolder.cardInfoHeaderText.addShrinkAnimation(xDirection = 1f, yDirection = 1f,isDimmed = false)
-
+        paymentInlineViewHolder.view.isFocusableInTouchMode = false
+        paymentInlineViewHolder.tapCardInputView.showCursor()
+        cardViewHolder.cardInfoHeaderText.addShrinkAnimation(
+            xDirection = 1f,
+            yDirection = 1f,
+            isDimmed = false
+        )
         paymentInlineViewHolder.view.addShrinkAnimation(
             xDirection = 1f,
             yDirection = 1f,
@@ -2176,14 +2186,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         var selectedPayOpt: PaymentOption? = null
 
-        if (cardBrandString != null) {
+        if (cardBrandString != null && cardBrandString != "Unknown") {
             selectedPayOpt = logicTogetPayOptions(cardBrandString)
 
         } else selectedPayOpt = paymentOptObject
 
         //  println("selectedPayOpt are"+selectedPayOpt)
 
-
+        var bgArrayList: ArrayList<String>? = arrayListOf()
         if (CustomUtils.getCurrentTheme().contains("dark")) {
             if (selectedPayOpt?.buttonStyle?.background?.darkModel?.backgroundColors?.size == 1) {
                 colorBackGround =
@@ -2192,8 +2202,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             intColorArray = null
 
         } else {
-            val bgArrayList: ArrayList<String>? =
-                selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors
+            bgArrayList = selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors
+            Log.e("backgroundColor", bgArrayList.toString())
             if (bgArrayList?.size == 1) {
                 colorBackGround = bgArrayList[0]
                 intColorArray = null
@@ -2227,16 +2237,20 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.removeAllViewsInLayout()
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
-            true,
-            LocalizationManager.getLocale(context).language,
-            payString,
-            if (colorBackGround.equals("0") || colorBackGround == null) 0 else Color.parseColor(
-                colorBackGround
-            ),
-            Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
-            intColorArray
-        )
+
+        if (bgArrayList?.isNotEmpty() == true) {
+            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
+                true,
+                LocalizationManager.getLocale(context).language,
+                payString,
+                if (colorBackGround.equals("0") || colorBackGround == null) 0 else Color.parseColor(
+                    colorBackGround
+                ),
+                Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
+                intColorArray
+            )
+        }
+
 
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.clearFocus()
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.clearAnimation()
@@ -2563,7 +2577,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             activateActionButton(cardBrandString = cardBrandString)
             paymentActionType = paymentType
         } else {
-//            saveCardSwitchHolder11?.view?.mainSwitch?.visibility = View.GONE
             saveCardSwitchHolder?.view?.mainSwitch?.switchSaveMobile?.visibility = GONE
             saveCardSwitchHolder?.setSwitchToggleData(paymentType)
             unActivateActionButton()
@@ -2867,13 +2880,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             CheckoutViewModel.currencySelectedForCheck = selectedCurrency
         }
 
-
-//        if (paymentInlineViewHolder.tapCardInputView.isNotEmpty()) {
-//            paymentInlineViewHolder.tapCardInputView.clear()
-//            paymentInlineViewHolder.tapAlertView?.fadeVisibility(GONE, 500)
-//            paymentInlineViewHolder.acceptedCardText.visibility = VISIBLE
-//            paymentInlineViewHolder.tabLayout.resetBehaviour()
-//        }
 
         adapter.resetSelection()
 
@@ -3367,7 +3373,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private fun callBinLookupApi(binLookUpStr: String?) {
         cardViewModel.processEvent(
             event = CardViewEvent.RetreiveBinLookupEvent,
-            viewModel = CheckoutViewModel(),  binValue = binLookUpStr
+            viewModel = CheckoutViewModel(), binValue = binLookUpStr
         )
 
     }
@@ -3951,9 +3957,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             CardViewModel().processEvent(
                 event = CardViewEvent.CreateGoogleTokenEvent,
                 viewModel = this,
-               selectedPaymentOption= selectedPaymentOption,
-               context =  context,
-               createTokenGPayRequest= createTokenGPayRequest
+                selectedPaymentOption = selectedPaymentOption,
+                context = context,
+                createTokenGPayRequest = createTokenGPayRequest
             )
             // Logging token string.
             /* Log.e("GooglePaymentToken", paymentMethodData
