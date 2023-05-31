@@ -16,6 +16,8 @@
         android:layout_gravity="center"
         android:foregroundGravity="center"
         android:textSize="@dimen/font_size_11sp"
+        android:clickable="false"
+        android:focusable="false"
         android:textColor="#9F9F9F"
         android:layout_marginTop="1dp"
         android:textAllCaps="true"

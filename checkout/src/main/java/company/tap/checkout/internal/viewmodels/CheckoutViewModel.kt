@@ -512,11 +512,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         paymentInlineViewHolder = PaymentInlineViewHolder(
             context, this,
             this,
-            this,
             saveCardSwitchHolder,
             this,
-            cardViewModel, checkoutFragment, loyaltyViewHolder,
-            sdkLayout, bottomSheetLayout, headerLayout
+            cardViewModel
         )
 
         itemsViewHolder = ItemsViewHolder(context, this)
@@ -1312,11 +1310,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             context,
             this,
             this,
-            this,
             saveCardSwitchHolder,
             this,
             cardViewModel,
-            checkoutFragment, loyaltyViewHolder, sdkLayout, bottomSheetLayout, headerLayout
         )
         //  paymentInlineViewHolder.tabLayout.setUnselectedAlphaLevel(1.0f)
         if (::paymentInlineViewHolder.isInitialized)
@@ -2050,20 +2046,17 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     if ((savedCardsModel as PaymentOption).paymentType == PaymentType.WEB) {
 
                         showShrinkageForPaymentInline()
-
-
                         PaymentDataSource.setWebViewType(WebViewType.REDIRECT)
                         activateActionButton((savedCardsModel as PaymentOption))
                         setPayButtonAction(PaymentType.WEB, savedCardsModel)
                     } else if ((savedCardsModel as PaymentOption).paymentType == PaymentType.GOOGLE_PAY) {
                         showShrinkageForPaymentInline()
-
                         activateActionButton((savedCardsModel as PaymentOption))
                         setPayButtonAction(PaymentType.GOOGLE_PAY, savedCardsModel)
                         PaymentDataSource.setWebViewType(WebViewType.THREE_DS_WEBVIEW)
                     }
 
-                    paymentInlineViewHolder.view.setOnTouchListener { _, _ ->
+                    paymentInlineViewHolder.view.setOnClickListener {
                         resetViewToPaymentInline()
                         resetCardSelection()
                         unActivateActionButton()
@@ -2095,7 +2088,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
                             }
                         }
-                        return@setOnTouchListener true
                     }
 
                     Bugfender.d(
@@ -2111,6 +2103,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun showShrinkageForPaymentInline() {
         paymentInlineViewHolder.view.addShrinkAnimation(
             xDirection = 0.9f,
@@ -2119,15 +2112,19 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
         cardViewHolder.cardInfoHeaderText.addShrinkAnimation(
             xDirection = 0.9f,
-            yDirection = 0.9f,
+            yDirection = 1f,
             isDimmed = true
         )
         paymentInlineViewHolder.view.isFocusableInTouchMode = true
-
         paymentInlineViewHolder.tapCardInputView.hideCursor()
+
+        with(paymentInlineViewHolder){
+            nfcButton?.isClickable = false
+        }
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun resetViewToPaymentInline() {
         paymentInlineViewHolder.view.isFocusableInTouchMode = false
         paymentInlineViewHolder.tapCardInputView.showCursor()
@@ -2141,6 +2138,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             yDirection = 1f,
             isDimmed = false
         )
+
+        with(paymentInlineViewHolder){
+            nfcButton?.isClickable = true
+            scannerButton?.isClickable = true
+            closeButton?.isClickable = true
+        }
     }
 
 

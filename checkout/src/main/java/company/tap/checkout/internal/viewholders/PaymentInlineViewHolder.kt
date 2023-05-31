@@ -68,15 +68,9 @@ class PaymentInlineViewHolder(
     private val context: Context,
     private val checkoutViewModel: CheckoutViewModel,
     private val onPaymentCardComplete: PaymentCardComplete,
-    private val onCardNFCCallListener: onCardNFCCallListener,
     private val switchViewHolder: SwitchViewHolder?,
     private val baseLayoutManager: BaseLayoutManager,
     private val cardViewModel: CardViewModel,
-    private val checkoutFragment: CheckoutFragment,
-    private val loyaltyViewHolder: LoyaltyViewHolder?,
-    private val sdkLayout: LinearLayout,
-    private val bottomSheetLayout: FrameLayout,
-    private val headerLayout: LinearLayout,
 ) : TapBaseViewHolder,
     TapSelectionTabLayoutInterface, CardInputListener, TapPaymentShowHideClearImage {
     override val view: View =

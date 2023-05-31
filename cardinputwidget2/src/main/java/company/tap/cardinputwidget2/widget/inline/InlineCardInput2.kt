@@ -487,6 +487,10 @@ class InlineCardInput2 @JvmOverloads constructor(
         cardNumberEditText.showSoftInputOnFocus = false
         expiryDateEditText.showSoftInputOnFocus = false
         cvcNumberEditText.showSoftInputOnFocus = false
+        closeButton.isClickable = false
+
+        scannerButton.isClickable = false
+        nfcButton.isClickable = false
 
 
     }
@@ -498,6 +502,11 @@ class InlineCardInput2 @JvmOverloads constructor(
         cardNumberEditText.showSoftInputOnFocus = true
         expiryDateEditText.showSoftInputOnFocus = true
         cvcNumberEditText.showSoftInputOnFocus = true
+        closeButton.isClickable = true
+        scannerButton.isClickable = true
+        nfcButton.isClickable = true
+
+
     }
 
     override fun setExpiryHint(expiryHint: String) {
