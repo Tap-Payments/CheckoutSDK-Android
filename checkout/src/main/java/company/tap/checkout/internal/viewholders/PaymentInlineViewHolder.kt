@@ -34,6 +34,7 @@ import company.tap.checkout.internal.apiresponse.CardViewEvent
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.SectionType
+import company.tap.checkout.internal.enums.ThemeMode
 import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.checkout.internal.interfaces.PaymentCardComplete
 import company.tap.checkout.internal.interfaces.onCardNFCCallListener
@@ -1726,11 +1727,21 @@ class PaymentInlineViewHolder(
         itemsCardsList: ArrayList<SectionTabItem>
     ) {
         for (i in imageURLApi.indices) {
-            if (CustomUtils.getCurrentTheme() != null && CustomUtils.getCurrentTheme()
-                    .contains("dark")
-            ) {
-                imageURL = imageURLApi[i].logos?.dark?.png.toString()
-            } else imageURL = imageURLApi[i].logos?.light?.png.toString()
+            when(CustomUtils.getCurrentTheme()){
+                ThemeMode.dark.name->{
+                   imageURL= imageURLApi[i].logos?.dark?.png?.toString().toString()
+                }
+
+                ThemeMode.dark_colored.name->{
+                    imageURL= imageURLApi[i].logos?.dark_colored?.png?.toString().toString()
+                }
+                ThemeMode.light.name->{
+                    imageURL= imageURLApi[i].logos?.light?.png?.toString().toString()
+                }
+                ThemeMode.light_mono.name->{
+                    imageURL= imageURLApi[i].logos?.light_mono?.png?.toString().toString()
+                }
+            }
             // imageURL = imageURLApi[i].image.toString()
             paymentType = imageURLApi[i].paymentType
             cardBrandType = if (imageURLApi[i].brand == null) {
@@ -1961,23 +1972,27 @@ class PaymentInlineViewHolder(
            tapAlertView?.alertMessage?.text =alertMessage.replace("%i","3")
 
            tapAlertView?.visibility =View.VISIBLE*/
-        if (CustomUtils.getCurrentTheme() != null && CustomUtils.getCurrentTheme()
-                .contains("dark")
-        ) {
-            tapCardInputView.setSingleCardInput(
-                CardBrandSingle.fromCode(
-                    company.tap.cardinputwidget2.CardBrand.fromCardNumber(_savedCardsModel.firstSix)
-                        .toString()
-                ), _savedCardsModel.logos?.dark?.png
-            )
-        } else {
-            tapCardInputView.setSingleCardInput(
-                CardBrandSingle.fromCode(
-                    company.tap.cardinputwidget2.CardBrand.fromCardNumber(_savedCardsModel.firstSix)
-                        .toString()
-                ), _savedCardsModel.logos?.light?.png
-            )
+        var loadUrlString : String ?=""
+        when(CustomUtils.getCurrentTheme()){
+            ThemeMode.dark.name->{
+                loadUrlString = _savedCardsModel.logos?.dark?.png
+            }
+            ThemeMode.dark_colored.name->{
+                loadUrlString = _savedCardsModel.logos?.dark_colored?.png
+            }
+            ThemeMode.light.name->{
+                loadUrlString = _savedCardsModel.logos?.light?.png
+            }
+            ThemeMode.light_mono.name->{
+                loadUrlString = _savedCardsModel.logos?.light_mono?.png
+            }
         }
+        tapCardInputView.setSingleCardInput(
+            CardBrandSingle.fromCode(
+                company.tap.cardinputwidget2.CardBrand.fromCardNumber(_savedCardsModel.firstSix)
+                    .toString()
+            ), loadUrlString
+        )
         tapInlineCardSwitch?.visibility = View.GONE
         separator1?.visibility = View.GONE
         acceptedCardText.visibility = View.INVISIBLE

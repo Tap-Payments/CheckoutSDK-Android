@@ -26,6 +26,7 @@ object ThemeManager {
     private lateinit var theme: JSONObject
     private lateinit var themeString: String
     var currentTheme: String = ""
+    var currentThemeName: String = ""
 
     //// decide if we load json from path or assets
 
@@ -80,16 +81,17 @@ object ThemeManager {
                 }
                 else {
                     //  Log.d("themeStringthemeString", themeString.toString())
-                    val jsonObject = JSONObject(themeString)
-                    val jsonObjectGlobal = jsonObject.getJSONObject("GlobalValues")
-                    val colorListObject = jsonObjectGlobal.getJSONObject("Colors")
+                    if(::themeString.isInitialized) {
+                        val jsonObject = JSONObject(themeString)
+                        val jsonObjectGlobal = jsonObject.getJSONObject("GlobalValues")
+                        val colorListObject = jsonObjectGlobal.getJSONObject("Colors")
 
-                    if(::themeString.isInitialized)
+
                         if (result.toString() in colorListObject.toString()) {
-                            return  valueFromJson("GlobalValues.Colors.${result}") as T
+                            return valueFromJson("GlobalValues.Colors.${result}") as T
                         }
-                    return result
-
+                        return result
+                    }
                 }
             }
         }catch ( e : JSONException) {
@@ -153,6 +155,8 @@ object ThemeManager {
         val valueKey = pathComponent[pathComponent.lastIndex]
         return view?.get(valueKey) as T
     }
+
+
 
 
 }

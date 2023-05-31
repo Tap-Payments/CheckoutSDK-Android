@@ -258,6 +258,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
     private fun resetSessionAndThemeManager() {
         ThemeManager.currentTheme = ""
+        ThemeManager.currentThemeName = ""
         sessionDelegate?.sessionCancelled()
         LocalizationManager.currentLocalized = JSONObject()
         bottomSheetDialog.dismiss()

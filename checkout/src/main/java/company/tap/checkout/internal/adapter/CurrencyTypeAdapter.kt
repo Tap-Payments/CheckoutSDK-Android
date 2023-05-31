@@ -15,6 +15,7 @@ import coil.request.ImageRequest
 import com.bumptech.glide.Glide
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.models.SupportedCurrencies
+import company.tap.checkout.internal.enums.ThemeMode
 import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener
 import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
@@ -118,27 +119,49 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
 
     private fun logicToLoadFlagIconsTheme(holder: CurrencyHolders, position: Int) {
         val imageViewCard = holder.itemView.findViewById<TapImageView>(R.id.imageView_currency)
-        if(adapterContentCurrencies[position].logos!=null) {
-            if (CustomUtils.getCurrentTheme() != null && CustomUtils.getCurrentTheme()
-                    .contains("dark")
-            ) {
+        var loadUrlString : String=""
+        if(adapterContentCurrencies[position].logos!=null)
+        when(CustomUtils.getCurrentTheme()){
+            ThemeMode.dark.name->{
+                loadUrlString = adapterContentCurrencies[position].logos?.dark?.png.toString()
                 Glide.with(holder.itemView.context)
-                    .load(adapterContentCurrencies[position].logos?.dark?.png).into(
-                        imageViewCard
-                    )
-            } else {
-                Glide.with(holder.itemView.context)
-                    .load(adapterContentCurrencies[position].logos?.light?.png).into(
+                    .load(loadUrlString).into(
                         imageViewCard
                     )
             }
-        } else{
-            //fallback
-            Glide.with(holder.itemView.context)
-                .load(adapterContentCurrencies[position].flag).into(
-                    imageViewCard
-                )
+            ThemeMode.dark_colored.name->{
+                loadUrlString = adapterContentCurrencies[position].logos?.dark_colored?.png.toString()
+                Glide.with(holder.itemView.context)
+                    .load(loadUrlString).into(
+                        imageViewCard
+                    )
+            }
+            ThemeMode.light.name->{
+                loadUrlString = adapterContentCurrencies[position].logos?.light?.png.toString()
+                Glide.with(holder.itemView.context)
+                    .load(loadUrlString).into(
+                        imageViewCard
+                    )
+            }
+            ThemeMode.light_mono.name->{
+                loadUrlString = adapterContentCurrencies[position].logos?.light_mono?.png.toString()
+                Glide.with(holder.itemView.context)
+                    .load(loadUrlString).into(
+                        imageViewCard
+                    )
+            }
+
+            else ->{
+                //fallback
+                Glide.with(holder.itemView.context)
+                    .load(adapterContentCurrencies[position].flag).into(
+                        imageViewCard
+                    )
+            }
         }
+
+
+
     }
 
     private fun onItemClickListener(holder: CurrencyHolders, position:   Int) {
@@ -194,6 +217,8 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
         }
 
     }
+
+
 
 
 

@@ -23,13 +23,21 @@
 
         <ListPreference
             android:defaultValue="default"
-            android:dialogTitle="SDK Theme"
-            android:entries="@array/pref_array_sdk_theme_entries"
-            android:entryValues="@array/pref_array_sdk_theme_values"
-            android:key="sdk_theme"
+            android:dialogTitle="SDK Theme Dark"
+            android:entries="@array/pref_array_sdk_theme_dark_entries"
+            android:entryValues="@array/pref_array_sdk_theme_dark_values"
+            android:key="sdk_theme_dark"
             android:summary="Choose your preferred Theming"
-            android:title="SDK Theme"/>
+            android:title="SDK Theme Dark"/>
 
+        <ListPreference
+            android:defaultValue="default"
+            android:dialogTitle="SDK Theme Light"
+            android:entries="@array/pref_array_sdk_theme_light_entries"
+            android:entryValues="@array/pref_array_sdk_theme_light_values"
+            android:key="sdk_theme_light"
+            android:summary="Choose your preferred Theming"
+            android:title="SDK Theme Light"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Session data source">
