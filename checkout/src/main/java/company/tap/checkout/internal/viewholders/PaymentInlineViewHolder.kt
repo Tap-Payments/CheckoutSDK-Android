@@ -93,7 +93,7 @@ class PaymentInlineViewHolder(
     private var lastFocusField = CardInputListener.FocusField.FOCUS_CARD
     private var lastCardInput = ""
     private var cardScannerBtn: ImageView? = null
-    private var savedCardsModel: SavedCard? = null
+     var savedCardsModel: SavedCard? = null
 
 
     var tapCardInputView: InlineCardInput2
@@ -108,11 +108,11 @@ class PaymentInlineViewHolder(
     //  private  var paymentType: PaymentTypeEnum ?= null
     private var paymentType: PaymentType? = null
     private lateinit var cardBrandType: String
-    private var cardNumber: String? = null
+     var cardNumber: String? = null
     private var fullCardNumber: String? = null
-    private var expiryDate: String? = null
-    private var cvvNumber: String? = null
-    private var cardHolderName: String? = null
+     var expiryDate: String? = null
+     var cvvNumber: String? = null
+     var cardHolderName: String? = null
     private var cardHolderNamePrev: String? = null
     private var cvvNumberPrev: String? = null
     private var expiryDatePrev: String? = null

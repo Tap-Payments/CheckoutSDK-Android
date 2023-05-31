@@ -188,6 +188,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
             }
 
+
         }
 
         if (adapterGooglePay.isNotEmpty() && adapterGooglePay[0].paymentType == PaymentType.GOOGLE_PAY)
@@ -355,6 +356,7 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                 //resetSelection()
                 onCardSelectedActionListener.onCardSelectedAction(true, arrayListCombined[position])
                 selectedPosition = position
+                onCardSelectedActionListener.removePaymentInlineShrinkageAndDimmed()
             }
         }
 
@@ -509,38 +511,11 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                 adapterGooglePay[position]
             )
             selectedPosition = position
+            onCardSelectedActionListener.removePaymentInlineShrinkageAndDimmed()
             notifyDataSetChanged()
         }
     }
 
-    /** Had kept if product team changes mind to get logos from api for device payments*/
-    /* private fun bindGooglePayImageData(holder: GooglePayViewHolder ,position: Int) {
-         if(position>0) {
-             if (CustomUtils.getCurrentTheme() != null && CustomUtils.getCurrentTheme()
-                     .contains("dark")
-             ) {
-                 Glide.with(holder.itemView.context)
-                     .load(adapterGooglePay[position - 1].logos?.dark?.png?.toUri())
-                     .into(holder.itemView.googlePayButton)
-             } else {
-                 Glide.with(holder.itemView.context)
-                     .load(adapterGooglePay[position - 1].logos?.light?.png?.toUri())
-                     .into(holder.itemView.googlePayButton)
-             }
-         }else{
-             if (CustomUtils.getCurrentTheme() != null && CustomUtils.getCurrentTheme()
-                     .contains("dark")
-             ) {
-                 Glide.with(holder.itemView.context)
-                     .load(adapterGooglePay[position].logos?.dark?.png?.toUri())
-                     .into(holder.itemView.googlePayButton)
-             } else {
-                 Glide.with(holder.itemView.context)
-                     .load(adapterGooglePay[position].logos?.light?.png?.toUri())
-                     .into(holder.itemView.googlePayButton)
-             }
-         }
-     }*/
 
     private fun setOnRedirectCardOnClickAction(holder: RecyclerView.ViewHolder, position: Int) {
         onCardSelectedActionListener.onCardSelectedAction(
