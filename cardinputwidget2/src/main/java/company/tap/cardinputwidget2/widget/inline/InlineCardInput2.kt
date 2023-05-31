@@ -484,11 +484,11 @@ class InlineCardInput2 @JvmOverloads constructor(
         cardNumberEditText.isCursorVisible = false
         expiryDateEditText.isCursorVisible = false
         cvcNumberEditText.isCursorVisible = false
+        cvcNumberEditText.isClickable=false
         cardNumberEditText.showSoftInputOnFocus = false
         expiryDateEditText.showSoftInputOnFocus = false
         cvcNumberEditText.showSoftInputOnFocus = false
         closeButton.isClickable = false
-
         scannerButton.isClickable = false
         nfcButton.isClickable = false
 
@@ -505,6 +505,7 @@ class InlineCardInput2 @JvmOverloads constructor(
         closeButton.isClickable = true
         scannerButton.isClickable = true
         nfcButton.isClickable = true
+
 
 
     }

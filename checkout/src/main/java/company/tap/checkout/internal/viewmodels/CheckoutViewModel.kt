@@ -2115,18 +2115,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             yDirection = 1f,
             isDimmed = true
         )
-        paymentInlineViewHolder.view.isFocusableInTouchMode = true
         paymentInlineViewHolder.tapCardInputView.hideCursor()
 
-        with(paymentInlineViewHolder){
-            nfcButton?.isClickable = false
-        }
     }
 
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun resetViewToPaymentInline() {
-        paymentInlineViewHolder.view.isFocusableInTouchMode = false
         paymentInlineViewHolder.tapCardInputView.showCursor()
         cardViewHolder.cardInfoHeaderText.addShrinkAnimation(
             xDirection = 1f,
@@ -2138,12 +2133,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             yDirection = 1f,
             isDimmed = false
         )
-
-        with(paymentInlineViewHolder){
-            nfcButton?.isClickable = true
-            scannerButton?.isClickable = true
-            closeButton?.isClickable = true
-        }
     }
 
 
