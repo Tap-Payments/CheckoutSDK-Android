@@ -13,6 +13,7 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.telephony.TelephonyManager
 import android.util.DisplayMetrics
 import android.util.Log
@@ -28,6 +29,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import company.tap.checkout.TapCheckOutSDK
 import company.tap.checkout.internal.api.enums.AmountModificatorType
 import company.tap.checkout.internal.api.models.*
+import company.tap.checkout.internal.enums.ThemeMode
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.enums.CardType
@@ -83,10 +85,13 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
             initializeLanguage()
         }
 
-        if(settingsManager?.getString("sdk_theme", "default").equals("custom")){
-            initializeTheme()
-        }
 
+        if(!settingsManager?.getString("sdk_theme_dark", "default").equals("default")){
+            initializeTheme(settingsManager?.getString("sdk_theme_dark", "default")?.toString())
+        }
+        if(!settingsManager?.getString("sdk_theme_light", "default").equals("default")){
+            initializeTheme(settingsManager?.getString("sdk_theme_light", "default")?.toString())
+        }
 
 
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
@@ -180,7 +185,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         }
     }
 
-    private fun initializeTheme() {
+    private fun initializeTheme(themeName: String?) {
         /**
          * Merchant select his choice if it needs Theme from Local Assets or Load it through a URL as below
          * */
@@ -188,19 +193,8 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         /** Configures the theme manager by setting the provided custom theme file names
         - Parameter customTheme: Please pass the tap checkout theme object with the names of your custom theme files if needed. If not set, the normal and default TAP theme will be used
          */
-        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark"))
-            ThemeManager.loadTapTheme(resources, R.raw.defaultdarktheme, "darktheme")
-        else if (ThemeManager.currentTheme.isNotEmpty() && !ThemeManager.currentTheme.contains("dark"))
-            ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "lighttheme")
-        else ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "lighttheme")
 
-
-        /** Configures the theme manager by passing the provided custom theme url
-        - Parameter urlString: Please pass the themeUrL
-         */
-
-
-
+        ThemeManager.currentThemeName = themeName.toString()
 
 
 
@@ -445,14 +439,17 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
        R.id.action_dark -> {
            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-           ThemeManager.loadTapTheme(resources, R.raw.defaultdarktheme, "defaultdarktheme")
-
+           ThemeManager.loadTapTheme(resources, R.raw.defaultdarktheme, "dark")
+           ThemeManager.currentThemeName = ThemeMode.dark.name
+           initializeTheme(ThemeMode.dark.name)
            recreate()
            true
        }
        R.id.action_light -> {
            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-           ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "defaultlighttheme")
+           ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "light")
+           ThemeManager.currentThemeName = ThemeMode.light.name
+           initializeTheme(ThemeMode.light.name)
            recreate()
            true
        }
@@ -460,7 +457,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
        R.id.action_settings -> {
            val intent = Intent(this, SettingsActivity::class.java)
            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NO_HISTORY or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-          finish()
+            finish()
            startActivity(intent)
 
 

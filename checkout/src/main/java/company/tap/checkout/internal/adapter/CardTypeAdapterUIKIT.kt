@@ -19,16 +19,14 @@ import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.wallet.IsReadyToPayRequest
 import com.google.android.gms.wallet.PaymentsClient
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.api.models.PaymentOption
 import company.tap.checkout.internal.api.models.SavedCard
+import company.tap.checkout.internal.enums.ThemeMode
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
 import company.tap.checkout.internal.utils.CustomUtils
-import company.tap.checkout.internal.utils.PaymentsUtil
 import company.tap.tapuilibraryy.themekit.ThemeManager
 import company.tap.tapuilibraryy.themekit.theme.TextViewTheme
 import kotlinx.android.synthetic.main.item_benefit_pay.view.*
@@ -179,11 +177,8 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
         if (position < adapterContent.size) {
             if (adapterContent[position].paymentType == PaymentType.WEB) {
-                if (CustomUtils.getCurrentTheme() != null && CustomUtils.getCurrentTheme()
-                        .contains("dark")
-                ) {
-                    (adapterContent[position]).logos?.dark?.png?.let { arrayListRedirect.add(it) }
-                } else (adapterContent[position]).logos?.light?.png?.let { arrayListRedirect.add(it) }
+
+                logicTosetLogoBasedOnTheme(position)
                 return TYPE_REDIRECT
 
             }
@@ -200,6 +195,25 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
     }
 
+    private fun logicTosetLogoBasedOnTheme(position: Int) {
+        if(adapterContent[position].logos!=null)
+            when(CustomUtils.getCurrentTheme()){
+                ThemeMode.dark.name->{
+                    (adapterContent[position]).logos?.dark?.png?.let { arrayListRedirect.add(it) }
+                }
+                ThemeMode.dark_colored.name->{
+                    (adapterContent[position]).logos?.dark_colored?.png?.let { arrayListRedirect.add(it) }
+                }
+                ThemeMode.light.name->{
+                    (adapterContent[position]).logos?.light?.png?.let { arrayListRedirect.add(it) }
+                }
+                ThemeMode.light_mono.name->{
+                    (adapterContent[position]).logos?.light_mono?.png?.let { arrayListRedirect.add(it) }
+                }
+
+            }
+
+    }
 
     override fun getItemCount(): Int {
         if (adapterGooglePay.isNotEmpty()) {
@@ -362,21 +376,33 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
 
 
     private fun bindSavedCardData(holder: RecyclerView.ViewHolder, position: Int) {
-        val card =
-            if (adapterGooglePay.isNotEmpty()) arrayListCards[position.minus(adapterContent.size)
+        val card = if (adapterGooglePay.isNotEmpty()) arrayListCards[position.minus(adapterContent.size)
                 .minus(adapterGooglePay.size)] else arrayListCards[position.minus(adapterContent.size)]
         // arrayListCards [position.minus(adapterContent.size)].image.let { holder.itemView.imageView_amex.loadSvg(it) }
-        if (CustomUtils.getCurrentTheme()
-                .contains("dark")
-        ) {
-            Glide.with(holder.itemView.context)
-                .load(card.logos?.dark?.png?.toUri())
-                .into(holder.itemView.imageView_amex as ImageView)
-        } else {
-            Glide.with(holder.itemView.context)
-                .load(card.logos?.light?.png?.toUri())
-                .into(holder.itemView.imageView_amex as ImageView)
+        var loadUrlString : String=""
+        when(CustomUtils.getCurrentTheme()){
+            ThemeMode.dark.name->{
+                loadUrlString = card.logos?.dark?.png.toString()
+            }
+            ThemeMode.dark_colored.name->{
+                loadUrlString = card.logos?.dark_colored?.png.toString()
+            }
+            ThemeMode.light.name->{
+                loadUrlString = card.logos?.light?.png.toString()
+
+            }
+            ThemeMode.light_mono.name->{
+                loadUrlString = card.logos?.light_mono?.png.toString()
+            }
+
         }
+        println("loadUrlString ll"+loadUrlString)
+        Glide.with(holder.itemView.context)
+            .load(loadUrlString).into(
+                holder.itemView.imageView_amex as ImageView
+            )
+
+
         holder.itemView.textViewCardDetails.text = maskCardNumber(
             card.firstSix + card.lastFour
         )
@@ -410,6 +436,8 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
         holder.itemView.textViewCardDetails.setTheme(saveCardTextViewTheme)
 
     }
+
+
 
     private fun setSavedCardShakingAnimation(holder: RecyclerView.ViewHolder) {
         deleteImageView = holder.itemView.deleteImageViewSaved

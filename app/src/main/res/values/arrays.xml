@@ -19,14 +19,23 @@
 
     </string-array>
 
-    <string-array name="pref_array_sdk_theme_entries">
+    <string-array name="pref_array_sdk_theme_dark_entries">
         <item>default</item>
-        <item>custom</item>
-    </string-array>
-    <string-array name="pref_array_sdk_theme_values">
-        <item>default</item>
-        <item>custom</item>
+        <item>dark_colored</item>
 
+    </string-array>
+    <string-array name="pref_array_sdk_theme_dark_values">
+        <item>default</item>
+        <item>dark_colored</item>
+    </string-array>
+
+    <string-array name="pref_array_sdk_theme_light_entries">
+        <item>default</item>
+        <item>light_mono</item>
+    </string-array>
+    <string-array name="pref_array_sdk_theme_light_values">
+        <item>default</item>
+        <item>light_mono</item>
     </string-array>
 
     <string-array name="pref_array_sdk_mode_entries">

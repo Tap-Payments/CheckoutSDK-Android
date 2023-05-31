@@ -177,8 +177,9 @@ object CustomUtils {
     }
 
     fun getCurrentTheme(): String {
+        println("currentThemeName name"+ThemeManager.currentThemeName)
 
-        return ThemeManager.currentTheme
+        return ThemeManager.currentThemeName
     }
     fun getCurrentLocale(context: Context): String {
 

@@ -13,6 +13,6 @@
         android:layout_width="100dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:src="@drawable/knet" />
+        />
 
 </FrameLayout>

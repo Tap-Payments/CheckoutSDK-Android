@@ -65,6 +65,7 @@ import company.tap.checkout.internal.cache.SharedPrefManager
 import company.tap.checkout.internal.cache.UserSupportedLocaleForTransactions
 import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.SectionType
+import company.tap.checkout.internal.enums.ThemeMode
 import company.tap.checkout.internal.enums.WebViewType
 import company.tap.checkout.internal.interfaces.*
 import company.tap.checkout.internal.utils.*
@@ -2144,46 +2145,59 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         //  println("selectedPayOpt are"+selectedPayOpt)
 
-
-        if (CustomUtils.getCurrentTheme().contains("dark")) {
-            if (selectedPayOpt?.buttonStyle?.background?.darkModel?.backgroundColors?.size == 1) {
-                colorBackGround =
-                    selectedPayOpt.buttonStyle?.background?.darkModel?.backgroundColors?.get(0)
-            }
-            intColorArray = null
-
-        } else {
-            val bgArrayList: ArrayList<String>? =
-                selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors
-            if (bgArrayList?.size == 1) {
-                colorBackGround = bgArrayList[0]
+        when(CustomUtils.getCurrentTheme()){
+            ThemeMode.dark.name->{
+                if (selectedPayOpt?.buttonStyle?.background?.darkModel?.backgroundColors?.size == 1) {
+                    colorBackGround =
+                        selectedPayOpt.buttonStyle?.background?.darkModel?.backgroundColors?.get(0)
+                }
                 intColorArray = null
-            } else {
+            }
+            ThemeMode.dark_colored.name->{
+                if (selectedPayOpt?.buttonStyle?.background?.darkModel?.backgroundColors?.size == 1) {
+                    colorBackGround =
+                        selectedPayOpt.buttonStyle?.background?.darkModel?.backgroundColors?.get(0)
+                }
+                intColorArray = null
+            }
+            ThemeMode.light.name-> {
+                val bgArrayList: ArrayList<String>? =
+                    selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors
+                if (bgArrayList?.size == 1) {
+                    colorBackGround = bgArrayList[0]
+                    intColorArray = null
+                } else {
 
-                if (bgArrayList?.size == 2) {
-                    startColor = bgArrayList.get(0).replace("0x", "#")
-                    endColor = bgArrayList.get(1).replace("0x", "#")
+                    if (bgArrayList?.size == 2) {
+                        startColor = bgArrayList.get(0).replace("0x", "#")
+                        endColor = bgArrayList.get(1).replace("0x", "#")
 
-                    intColorArray =
-                        intArrayOf(Color.parseColor(startColor), Color.parseColor(endColor))
-                    colorBackGround = "0"
+                        intColorArray =
+                            intArrayOf(Color.parseColor(startColor), Color.parseColor(endColor))
+                        colorBackGround = "0"
 
-                } else if (bgArrayList?.size == 3) {
-                    startColor = bgArrayList[2].replace("0x", "#")
+                    } else if (bgArrayList?.size == 3) {
+                        startColor = bgArrayList[2].replace("0x", "#")
 
-                    middleColor = bgArrayList[1].replace("0x", "#")
-                    endColor = bgArrayList[0].replace("0x", "#")
+                        middleColor = bgArrayList[1].replace("0x", "#")
+                        endColor = bgArrayList[0].replace("0x", "#")
 
-                    intColorArray = intArrayOf(
-                        Color.parseColor(startColor),
-                        Color.parseColor(middleColor),
-                        Color.parseColor(endColor)
-                    )
-                    colorBackGround = "0"
+                        intColorArray = intArrayOf(
+                            Color.parseColor(startColor),
+                            Color.parseColor(middleColor),
+                            Color.parseColor(endColor)
+                        )
+                        colorBackGround = "0"
 
+                    }
                 }
             }
+            ThemeMode.light_mono.name->{
+                println("see")
+            }
         }
+
+
 
 
 
@@ -4017,9 +4031,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         if (CustomUtils.getCurrentLocale(context) != null) {
             lang = CustomUtils.getCurrentLocale(context)
         } else lang = "en"
-        if (CustomUtils.getCurrentTheme().contains("dark")) {
-            theme = "dark"
-        } else theme = "light"
+
+         theme = CustomUtils.getCurrentTheme()
+
         val assetToLoad: String = paymentOptionOb?.buttonStyle?.titleAssets.toString()
         println(
             "<<<assetToLoad>>>" + assetToLoad.replace("{theme}", theme)
