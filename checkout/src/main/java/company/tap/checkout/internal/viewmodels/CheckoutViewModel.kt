@@ -683,19 +683,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     fun setBottomSheetLayout(bottomSheetLayout: FrameLayout) {
         this.bottomSheetLayout = bottomSheetLayout
         bottomSheetLayout.clipToOutline = true
-//        bottomSheetLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
-//        bottomSheetLayout.let { it1 ->
-//            setTopBorders(
-//                it1,
-//                40f,// corner raduis
-//                0.0f,
-//                Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),// stroke color
-//                Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")),// tint color
-//                Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
-//            )
-//
-//
-//        }
     }
 
     override fun displayGoPayLogin() {
