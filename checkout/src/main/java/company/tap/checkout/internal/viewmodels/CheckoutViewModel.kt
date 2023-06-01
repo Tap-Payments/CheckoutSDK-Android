@@ -211,6 +211,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @SuppressLint("StaticFieldLeak")
     private lateinit var headerLayout: LinearLayout
+    private lateinit var background: LinearLayout
 
     @SuppressLint("StaticFieldLeak")
     private lateinit var sdkLayout: LinearLayout
@@ -2149,6 +2150,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
 
         println("cardBrandString before " + cardBrandString)
+        println("paymentOptObject before " + paymentOptObject)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             logicTogetButtonStyle(paymentOptObject, payStringButton, cardBrandString)
         }
@@ -2171,25 +2173,19 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         } else selectedPayOpt = paymentOptObject
 
         //  println("selectedPayOpt are"+selectedPayOpt)
-        var bgArrayList: ArrayList<String>? = arrayListOf()
+        var  bgArrayList: ArrayList<String>? = arrayListOf()
+        println("CustomUtils.getCurrentTheme() on button"+CustomUtils.getCurrentTheme())
+        when(CustomUtils.getCurrentTheme()){
+            ThemeMode.dark.name->{
+                if (selectedPayOpt?.buttonStyle?.background?.darkModel?.backgroundColors?.size == 1) {
+                    colorBackGround =
+                        selectedPayOpt.buttonStyle?.background?.darkModel?.backgroundColors?.get(0)
+                }
+                intColorArray = null
+            }
+            ThemeMode.dark_colored.name->{
+                bgArrayList = selectedPayOpt?.buttonStyle?.background?.darkColorModel?.backgroundColors
 
-        when (CustomUtils.getCurrentTheme()) {
-            ThemeMode.dark.name -> {
-                if (selectedPayOpt?.buttonStyle?.background?.darkModel?.backgroundColors?.size == 1) {
-                    colorBackGround =
-                        selectedPayOpt.buttonStyle?.background?.darkModel?.backgroundColors?.get(0)
-                }
-                intColorArray = null
-            }
-            ThemeMode.dark_colored.name -> {
-                if (selectedPayOpt?.buttonStyle?.background?.darkModel?.backgroundColors?.size == 1) {
-                    colorBackGround =
-                        selectedPayOpt.buttonStyle?.background?.darkModel?.backgroundColors?.get(0)
-                }
-                intColorArray = null
-            }
-            ThemeMode.light.name -> {
-                bgArrayList = selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors
                 if (bgArrayList?.size == 1) {
                     colorBackGround = bgArrayList[0]
                     intColorArray = null
@@ -2199,8 +2195,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         startColor = bgArrayList.get(0).replace("0x", "#")
                         endColor = bgArrayList.get(1).replace("0x", "#")
 
-                        intColorArray =
-                            intArrayOf(Color.parseColor(startColor), Color.parseColor(endColor))
+                        intColorArray = intArrayOf(Color.parseColor(startColor), Color.parseColor(endColor))
                         colorBackGround = "0"
 
                     } else if (bgArrayList?.size == 3) {
@@ -2219,8 +2214,43 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     }
                 }
             }
-            ThemeMode.light_mono.name -> {
-                println("see")
+            ThemeMode.light.name-> {
+                 bgArrayList = selectedPayOpt?.buttonStyle?.background?.lightModel?.backgroundColors
+
+                if (bgArrayList?.size == 1) {
+                    colorBackGround = bgArrayList[0]
+                    intColorArray = null
+                } else {
+
+                    if (bgArrayList?.size == 2) {
+                        startColor = bgArrayList.get(0).replace("0x", "#")
+                        endColor = bgArrayList.get(1).replace("0x", "#")
+
+                        intColorArray = intArrayOf(Color.parseColor(startColor), Color.parseColor(endColor))
+                        colorBackGround = "0"
+
+                    } else if (bgArrayList?.size == 3) {
+                        startColor = bgArrayList[2].replace("0x", "#")
+
+                        middleColor = bgArrayList[1].replace("0x", "#")
+                        endColor = bgArrayList[0].replace("0x", "#")
+
+                        intColorArray = intArrayOf(
+                            Color.parseColor(startColor),
+                            Color.parseColor(middleColor),
+                            Color.parseColor(endColor)
+                        )
+                        colorBackGround = "0"
+
+                    }
+                }
+            }
+            ThemeMode.light_mono.name->{
+                if (selectedPayOpt?.buttonStyle?.background?.lightMonoModel?.backgroundColors?.size == 1) {
+                    colorBackGround =
+                        selectedPayOpt.buttonStyle?.background?.lightMonoModel?.backgroundColors?.get(0)
+                }
+                intColorArray = null
             }
         }
 
@@ -2229,20 +2259,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.removeAllViewsInLayout()
-        if (CustomUtils.getCurrentTheme() == ThemeMode.light.name || CustomUtils.getCurrentTheme() == ThemeMode.light_mono.name ){
-            if (bgArrayList?.isNotEmpty() == true){
-                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
-                    true,
-                    LocalizationManager.getLocale(context).language,
-                    payString,
-                    if (colorBackGround.equals("0") || colorBackGround == null) 0 else Color.parseColor(
-                        colorBackGround
-                    ),
-                    Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor")),
-                    intColorArray
-                )
-            }
-        }else{
+
+        if (bgArrayList?.isNotEmpty() == true) {
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
                 true,
                 LocalizationManager.getLocale(context).language,
@@ -2254,7 +2272,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 intColorArray
             )
         }
-
 
 
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.clearFocus()
@@ -2368,16 +2385,21 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 null,
                 null
             )
-            if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
-                saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
-                    backgroundColor = Color.parseColor(
-                        savedCardsModel.buttonStyle?.background?.darkModel?.baseColor
-                    )
-                )
 
-            } else saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
-                backgroundColor = Color.parseColor(savedCardsModel.buttonStyle?.background?.lightModel?.baseColor)
-            )
+            when(CustomUtils.getCurrentTheme()){
+                ThemeMode.dark.name->{
+                    saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
+                        backgroundColor = Color.parseColor(
+                            savedCardsModel.buttonStyle?.background?.darkModel?.baseColor
+                        )
+                    )
+                }
+                ThemeMode.light.name->{
+                    saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
+                        backgroundColor = Color.parseColor(savedCardsModel.buttonStyle?.background?.lightModel?.baseColor))
+                }
+            }
+
 
             saveCardSwitchHolder?.view?.mainSwitch?.mainTextSave?.visibility = View.INVISIBLE
 
@@ -4073,7 +4095,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             lang = CustomUtils.getCurrentLocale(context)
         } else lang = "en"
 
-        theme = CustomUtils.getCurrentTheme()
+         theme = CustomUtils.getCurrentTheme()
 
         val assetToLoad: String = paymentOptionOb?.buttonStyle?.titleAssets.toString()
         println(
