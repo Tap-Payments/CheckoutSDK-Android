@@ -2181,9 +2181,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         //  println("selectedPayOpt are"+selectedPayOpt)
         var  bgArrayList: ArrayList<String>? = arrayListOf()
-        println("CustomUtils.getCurrentTheme() on button"+CustomUtils.getCurrentTheme())
+        println("colorBackGround"+selectedPayOpt?.buttonStyle?.background?.darkModel?.backgroundColors?.size)
         when(CustomUtils.getCurrentTheme()){
             ThemeMode.dark.name->{
+                bgArrayList = selectedPayOpt?.buttonStyle?.background?.darkModel?.backgroundColors
                 if (selectedPayOpt?.buttonStyle?.background?.darkModel?.backgroundColors?.size == 1) {
                     colorBackGround =
                         selectedPayOpt.buttonStyle?.background?.darkModel?.backgroundColors?.get(0)
@@ -2253,6 +2254,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 }
             }
             ThemeMode.light_mono.name->{
+                bgArrayList = selectedPayOpt?.buttonStyle?.background?.lightMonoModel?.backgroundColors
                 if (selectedPayOpt?.buttonStyle?.background?.lightMonoModel?.backgroundColors?.size == 1) {
                     colorBackGround =
                         selectedPayOpt.buttonStyle?.background?.lightMonoModel?.backgroundColors?.get(0)
