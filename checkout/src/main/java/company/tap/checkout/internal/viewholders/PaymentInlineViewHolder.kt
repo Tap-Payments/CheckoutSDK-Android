@@ -1085,7 +1085,11 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
                             fullCardNumber.toString().let {
                                 expiryDate?.let { it1 ->
                                     cvvNumber?.let { it2 ->
-                                        cardBrandInString = savedCardsModel?.brand?.name
+                                        if (savedCardsModel?.brand?.name == null){
+                                            cardBrandInString =  PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
+                                        }else{
+                                            cardBrandInString = savedCardsModel?.brand?.name
+                                        }
                                         onPaymentCardComplete.onPayCardCompleteAction(
                                             true, paymentTyper,
                                            // it, it1, it2, null,prevSetCardBrand?.toString() , savedCardsModel
