@@ -8,6 +8,9 @@
     android:id="@+id/constraintt">
 
 
+
+
+
     <company.tap.tapuilibraryy.uikit.organisms.TapPaymentInput
         android:id="@+id/tap_payment_input_layout"
         android:layout_width="match_parent"
@@ -28,5 +31,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"/>
+
+    <View
+        android:id="@+id/touch_layer"
+        android:clickable="true"
+        android:background="@color/black_color"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true" />
+
 
 </LinearLayout>
