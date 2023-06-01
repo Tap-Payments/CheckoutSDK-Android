@@ -2413,6 +2413,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         backgroundColor = Color.parseColor(savedCardsModel.buttonStyle?.background?.lightModel?.baseColor)
                     )
                 }
+                ThemeMode.light_mono.name -> {
+                    saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
+                        backgroundColor = Color.parseColor(savedCardsModel.buttonStyle?.background?.lightMonoModel?.baseColor)
+                    )
+                }
+                ThemeMode.dark_colored.name -> {
+                    saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
+                        backgroundColor = Color.parseColor(savedCardsModel.buttonStyle?.background?.darkColorModel?.baseColor)
+                    )
+                }
             }
 
 
