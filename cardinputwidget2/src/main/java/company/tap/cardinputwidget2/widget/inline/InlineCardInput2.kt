@@ -482,7 +482,15 @@ class InlineCardInput2 @JvmOverloads constructor(
 
     fun hideCursor() {
         cardNumberEditText.isCursorVisible = false
+        cardNumberEditText.isCursorVisible = false
+        cardNumberEditText.inputType = InputType.TYPE_NULL;
+        cardNumberEditText.isClickable = false
+
         expiryDateEditText.isCursorVisible = false
+        expiryDateEditText.isClickable = false
+        expiryDateEditText.isFocusable = false
+
+
         cvcNumberEditText.isCursorVisible = false
         cvcNumberEditText.isClickable=false
         cardNumberEditText.showSoftInputOnFocus = false
@@ -497,7 +505,11 @@ class InlineCardInput2 @JvmOverloads constructor(
 
     fun showCursor() {
         cardNumberEditText.isCursorVisible = true
+        cardNumberEditText.inputType = InputType.TYPE_CLASS_NUMBER;
+        cardNumberEditText.isFocusableInTouchMode = true;
         expiryDateEditText.isCursorVisible = true
+        expiryDateEditText.isClickable = true
+        expiryDateEditText.isFocusableInTouchMode = true
         cvcNumberEditText.isCursorVisible = true
         cardNumberEditText.showSoftInputOnFocus = true
         expiryDateEditText.showSoftInputOnFocus = true

@@ -1093,7 +1093,7 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
                                         onPaymentCardComplete.onPayCardCompleteAction(
                                             true, paymentTyper,
                                            // it, it1, it2, null,prevSetCardBrand?.toString() , savedCardsModel
-                                            it, it1, it2, null,savedCardsModel?.brand?.name , savedCardsModel
+                                            it, it1, it2, null,cardBrandInString , savedCardsModel
                                         )
                                         tapInlineCardSwitch?.switchSaveCard?.isChecked = true
 

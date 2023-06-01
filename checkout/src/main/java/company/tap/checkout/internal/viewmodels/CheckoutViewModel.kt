@@ -2302,8 +2302,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
 
 
-
-
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.clearFocus()
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.clearAnimation()
 
@@ -2656,6 +2654,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         println("cardInput status>>" + paymentInlineViewHolder.cardInputUIStatus)
         println("paymentTypeEnum status>>" + paymentType)
         println("savedCardsModel status>>" + savedCardsModel)
+        if (cardBrandString == null) return
 
         if (isCompleted) {
             activateActionButton(cardBrandString = cardBrandString)
