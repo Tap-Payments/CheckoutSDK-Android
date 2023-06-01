@@ -34,13 +34,10 @@ class TapPaymentInput(context: Context?, attrs: AttributeSet?) :
 
     val tabLayout by lazy { findViewById<TapSelectionTabLayout>(R.id.sections_tablayout) }
     val paymentInputContainer by lazy { findViewById<LinearLayout>(R.id.payment_input_layout) }
+    val mainLinear by lazy { findViewById<LinearLayout>(R.id.mainLinear) }
+
     val tabLinear by lazy { findViewById<RelativeLayout>(R.id.tabLinear) }
-   // val clearView by lazy { findViewById<ImageView>(R.id.clear_text) }
     val separator by lazy { findViewById<TapSeparatorView>(R.id.separator) }
-    val separator4 by lazy { findViewById<TapSeparatorView>(R.id.separator4) }
-    val inlineProgressBar by lazy { findViewById<ProgressBar>(R.id.inlineProgressbar) }
-  //  val cardInputCardView by lazy { findViewById<CardView>(R.id.cardInput_cardView) }
-    val cardInputChipView by lazy { findViewById<CardView>(R.id.inline_CardView) }
     //var cardScannerButton :ImageView
    // var nfcButton :ImageView
     private  var tapMobileInputView: TapMobilePaymentView

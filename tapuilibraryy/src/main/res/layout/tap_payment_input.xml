@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/mainLinear"
-
+    android:focusable="true"
+    android:clickable="true"
     android:orientation="vertical">
 
 
@@ -15,11 +16,10 @@
         android:layout_height="wrap_content"
         app:cardCornerRadius="8dp"
         app:cardElevation="1dp"
-        android:clipToPadding="false"
-        android:clipChildren="false"
+        android:focusable="false"
+        android:clickable="false"
         app:cardPreventCornerOverlap="false"
         app:cardUseCompatPadding="true"
-        android:layout_margin="3dp"
 
         >
         <company.tap.tapuilibraryy.uikit.atoms.TapSeparatorView
@@ -33,7 +33,6 @@
             android:id="@+id/tabLinear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/header_gray"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -80,6 +79,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
+        android:focusable="false"
+        android:clickable="false"
         android:layout_gravity="start"
         android:layout_marginStart="2dp"
         android:layout_marginEnd="2dp"
@@ -87,13 +88,16 @@
         android:layout_below="@+id/alertView"/>
     <company.tap.tapuilibraryy.uikit.views.TapSelectionTabLayout
         android:id="@+id/sections_tablayout"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="1dp"
         android:layout_marginEnd="1dp"
-       android:layout_marginTop="-5dp"
         android:visibility="gone"
+        android:focusable="false"
+        android:clickable="false"
 
         />
+
+
 
 </LinearLayout>

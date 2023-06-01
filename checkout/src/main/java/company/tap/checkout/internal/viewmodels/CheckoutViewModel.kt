@@ -23,6 +23,8 @@ import android.widget.RelativeLayout
 import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
 import androidx.annotation.RestrictTo
+import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
@@ -39,6 +41,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.android.gms.wallet.PaymentData
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import company.tap.cardinputwidget2.CardBrandSingle
@@ -87,6 +90,7 @@ import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibraryy.themekit.ThemeManager
 import company.tap.tapuilibraryy.themekit.theme.SeparatorViewTheme
 import company.tap.tapuilibraryy.uikit.animation.MorphingAnimation
+import company.tap.tapuilibraryy.uikit.atoms.TapTextInput
 import company.tap.tapuilibraryy.uikit.datasource.LoyaltyHeaderDataSource
 import company.tap.tapuilibraryy.uikit.enums.ActionButtonState
 import company.tap.tapuilibraryy.uikit.enums.GoPayLoginMethod
@@ -2043,47 +2047,20 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         setPayButtonAction(PaymentType.GOOGLE_PAY, savedCardsModel)
                         PaymentDataSource.setWebViewType(WebViewType.THREE_DS_WEBVIEW)
                     }
-
-                    paymentInlineViewHolder.view.setOnClickListener {
-                        resetViewToPaymentInline()
-                        resetCardSelection()
-                        unActivateActionButton()
-                        if (paymentInlineViewHolder.cvvNumber?.length == 3) {
-                            with(paymentInlineViewHolder) {
-                                if (this.savedCardsModel != null) {
-                                    onPayCardCompleteAction(
-                                        true,
-                                        PaymentType.SavedCard,
-                                        cardNumber,
-                                        expiryDate,
-                                        cvvNumber!!,
-                                        cardHolderName,
-                                        this.savedCardsModel?.brand?.name,
-                                        this.savedCardsModel
-                                    )
-                                } else {
-                                    onPayCardCompleteAction(
-                                        true,
-                                        PaymentType.CARD,
-                                        cardNumber,
-                                        expiryDate,
-                                        cvvNumber!!,
-                                        cardHolderName,
-                                        PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.rawValue,
-                                        this.savedCardsModel
-                                    )
-                                }
-
-                            }
-                        }
+                    /**
+                     * needed to reset these setOnclick listener after refactoring
+                     * the payment Inline :S :S to avaid multible onClickListener .
+                     */
+                    paymentInlineViewHolder.intertabLayout.getTabAt(0)?.view?.setOnClickListener {
+                        performResetToPaymentInline()
                     }
-
-                    Bugfender.d(
-                        CustomUtils.tagEvent,
-                        "Payment scheme selected: title :" + (savedCardsModel as PaymentOption).brand + "& ID :" + (savedCardsModel as PaymentOption).id
-                    )
-
-
+                    paymentInlineViewHolder.tabLayout.getChildAt(0).setOnClickListener {
+                        performResetToPaymentInline()
+                    }
+                    paymentInlineViewHolder.mainLinear?.setOnTouchListener { view, motionEvent ->
+                        performResetToPaymentInline()
+                        return@setOnTouchListener true
+                    }
                 } else
 
                     displayGoPayLogin()
@@ -2091,9 +2068,44 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
     }
 
+    private fun performResetToPaymentInline() {
+        resetViewToPaymentInline()
+        resetCardSelection()
+        unActivateActionButton()
+        if (paymentInlineViewHolder.cvvNumber?.length == 3) {
+            with(paymentInlineViewHolder) {
+                if (this.savedCardsModel != null) {
+                    onPayCardCompleteAction(
+                        true,
+                        PaymentType.SavedCard,
+                        cardNumber,
+                        expiryDate,
+                        cvvNumber!!,
+                        cardHolderName,
+                        this.savedCardsModel?.brand?.name,
+                        this.savedCardsModel
+                    )
+                } else {
+                    onPayCardCompleteAction(
+                        true,
+                        PaymentType.CARD,
+                        cardNumber,
+                        expiryDate,
+                        cvvNumber!!,
+                        cardHolderName,
+                        PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.rawValue,
+                        this.savedCardsModel
+                    )
+                }
+
+            }
+        }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
     @RequiresApi(Build.VERSION_CODES.N)
     private fun showShrinkageForPaymentInline() {
-        paymentInlineViewHolder.view.addShrinkAnimation(
+        paymentInlineViewHolder.mainLinear?.addShrinkAnimation(
             xDirection = 0.9f,
             yDirection = 0.9f,
             isDimmed = true
@@ -2104,6 +2116,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             isDimmed = true
         )
         paymentInlineViewHolder.tapCardInputView.hideCursor()
+        paymentInlineViewHolder.mainLinear?.deepForEach {
+               isClickable=false
+        }
 
     }
 
@@ -2116,7 +2131,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             yDirection = 1f,
             isDimmed = false
         )
-        paymentInlineViewHolder.view.addShrinkAnimation(
+        paymentInlineViewHolder.mainLinear?.addShrinkAnimation(
             xDirection = 1f,
             yDirection = 1f,
             isDimmed = false

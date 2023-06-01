@@ -73,7 +73,7 @@ class TapSelectionTabLayout(context: Context?, attrs: AttributeSet?) :
 
         applyThemeView()
 
-        setSelectionBehaviour()
+      //  setSelectionBehaviour()
     }
 
     private fun applyThemeView() {
