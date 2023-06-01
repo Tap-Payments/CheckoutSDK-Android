@@ -345,7 +345,6 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
      */
 
     private fun initValidBackground(backgroundColor: Int, backgroundColorArray: IntArray? = null) {
-
         if (backgroundColorArray != null) {
             backgroundDrawable.colors = backgroundColorArray
             backgroundDrawable.gradientType = GradientDrawable.LINEAR_GRADIENT
