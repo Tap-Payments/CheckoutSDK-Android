@@ -2273,7 +2273,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.removeAllViewsInLayout()
 
-        if (CustomUtils.getCurrentTheme() == ThemeMode.light.name || CustomUtils.getCurrentTheme() == ThemeMode.light_mono.name) {
+        if (CustomUtils.getCurrentTheme() == ThemeMode.light.name ||
+            CustomUtils.getCurrentTheme() == ThemeMode.light_mono.name ||
+            CustomUtils.getCurrentTheme() == ThemeMode.dark_colored.name  ) {
             if (bgArrayList?.isNotEmpty() == true) {
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
                     true,
