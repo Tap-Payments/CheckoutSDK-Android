@@ -99,12 +99,13 @@ class PaymentInlineViewHolder(
 
     //  private  var paymentType: PaymentTypeEnum ?= null
     private var paymentType: PaymentType? = null
-    private lateinit var cardBrandType: String
+     lateinit var cardBrandType: String
      var cardNumber: String? = null
     private var fullCardNumber: String? = null
      var expiryDate: String? = null
      var cvvNumber: String? = null
      var cardHolderName: String? = null
+    var cardBrandInString:String?=null
     private var cardHolderNamePrev: String? = null
     private var cvvNumberPrev: String? = null
     private var expiryDatePrev: String? = null
@@ -493,6 +494,7 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
             )
 
 
+
         if (getPreTypedCardData()?.cardholderName != null) {
             tapInlineCardSwitch?.visibility = View.VISIBLE
             tapInlineCardSwitch?.switchesLayout?.visibility = View.VISIBLE
@@ -516,6 +518,8 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
         }
 
         prevSetCardBrand = card.cardBrand
+        cardBrandInString = cardModel.brand.name
+
         contactDetailsView?.visibility = View.GONE
         shippingDetailView?.visibility = View.GONE
         tabLayout.fadeVisibility(View.GONE, 2000)
@@ -1081,6 +1085,7 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
                             fullCardNumber.toString().let {
                                 expiryDate?.let { it1 ->
                                     cvvNumber?.let { it2 ->
+                                        cardBrandInString = savedCardsModel?.brand?.name
                                         onPaymentCardComplete.onPayCardCompleteAction(
                                             true, paymentTyper,
                                            // it, it1, it2, null,prevSetCardBrand?.toString() , savedCardsModel
@@ -1101,6 +1106,8 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
                             cardNumber.toString().let {
                                 expiryDate?.let { it1 ->
                                     cvvNumber?.let { it2 ->
+                                        cardBrandInString =  PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
+
                                         onPaymentCardComplete.onPayCardCompleteAction(
                                             true,
                                             paymentTyper,
@@ -1169,6 +1176,8 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
                                // if(isCVCLengthMax == true) //check
                                 cardNumber?.let {
                                     expiryDate?.let { it1 ->
+                                        cardBrandInString = savedCardsModel?.brand?.name
+
                                         onPaymentCardComplete.onPayCardCompleteAction(
                                             true, PaymentType.SavedCard,
                                             it, it1, cvvNumber!!, cardHolderName, savedCardsModel?.brand?.name ,savedCardsModel
@@ -1176,6 +1185,7 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
                                     }
                                 }
                             }else {
+                                cardBrandInString = PaymentDataSource?.getBinLookupResponse()?.cardBrand?.toString()
                                 if(isCVCLengthMax == true)
                                 onPaymentCardComplete.onPayCardSwitchAction(
                                     true, PaymentType.CARD , PaymentDataSource?.getBinLookupResponse()?.cardBrand?.toString()

@@ -1584,16 +1584,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
-    fun filterCardTypes(list: ArrayList<PaymentOption>) {
-        var filteredCardList: List<PaymentOption> =
-            list.filter { items -> items.paymentType == PaymentType.CARD }
-
-        // println("filteredCardList value " + filteredCardList.size)
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            paymentInlineViewHolder.setDataFromAPI(filteredCardList)
-        }
-    }
 
     private fun filterSavedCardTypes(savedCardList: List<SavedCard>) {
         val filteredSavedCardList: List<SavedCard> =
@@ -2068,12 +2058,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun performResetToPaymentInline() {
         resetViewToPaymentInline()
         resetCardSelection()
         unActivateActionButton()
         if (paymentInlineViewHolder.cvvNumber?.length == 3) {
             with(paymentInlineViewHolder) {
+                context.showToast(cardBrandInString.toString())
                 if (this.savedCardsModel != null) {
                     onPayCardCompleteAction(
                         true,
@@ -2093,7 +2085,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         expiryDate,
                         cvvNumber!!,
                         cardHolderName,
-                        PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.rawValue,
+                        cardBrandInString,
                         this.savedCardsModel
                     )
                 }
