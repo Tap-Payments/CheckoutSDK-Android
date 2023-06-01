@@ -231,7 +231,7 @@ class CheckOutActivity : AppCompatActivity(), APILoggInterface {
 
     override fun onLoggingEvent(logs: String?) {
         Bugfender.d(LogsModel.API.name, logs)
-        println("logs" + logs)
+      //  println("logs" + logs)
     }
 
 

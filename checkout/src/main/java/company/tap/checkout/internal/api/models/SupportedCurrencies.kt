@@ -37,7 +37,7 @@ data class SupportedCurrencies(
     var amount: BigDecimal,
     @SerializedName("logos")
     @Expose
-    var logos: Logos? = null,
+    var logos: LogosFlag? = null,
 
     @SerializedName("order_by")
     @Expose
