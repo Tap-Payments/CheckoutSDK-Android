@@ -162,6 +162,7 @@ class WebFragment(
                     Log.e("height device", context?.getDeviceSpecs()?.first.toString())
                     isWebViewOpened = true
                     progressBar?.visibility = View.INVISIBLE
+                    if(web_view!=null)
                     web_view.visibility = View.VISIBLE
 
 
