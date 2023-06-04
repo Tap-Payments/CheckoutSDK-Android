@@ -89,6 +89,7 @@ import company.tap.nfcreader.open.reader.TapEmvCard
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibraryy.themekit.ThemeManager
 import company.tap.tapuilibraryy.themekit.theme.SeparatorViewTheme
+import company.tap.tapuilibraryy.uikit.AppColorTheme
 import company.tap.tapuilibraryy.uikit.animation.MorphingAnimation
 import company.tap.tapuilibraryy.uikit.atoms.TapTextInput
 import company.tap.tapuilibraryy.uikit.datasource.LoyaltyHeaderDataSource

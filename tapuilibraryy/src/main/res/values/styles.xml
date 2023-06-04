@@ -120,4 +120,10 @@
         <item name="android:background">@android:color/transparent</item>
         <item name="android:colorBackground">@android:color/transparent</item>
     </style>
+
+
+    <style name="SpinnerTheme" parent="android:Widget.Spinner.DropDown">
+        <item name="android:dropDownSelector">@drawable/drop_down_icon</item>
+
+    </style>
 </resources>

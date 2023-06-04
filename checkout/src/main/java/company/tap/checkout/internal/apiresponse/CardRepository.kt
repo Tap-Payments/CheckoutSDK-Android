@@ -436,7 +436,7 @@ class CardRepository : APIRequestCallback {
                                 )
                             }
                             println("pre set theme value"+ThemeManager.currentThemeName)
-                            if (ThemeManager.currentTheme.isEmpty()) {
+                      //      if (ThemeManager.currentTheme.isEmpty()) {
                                 when (cardRepositoryContext.resources?.configuration?.uiMode?.and(
                                     Configuration.UI_MODE_NIGHT_MASK
                                 )) {
@@ -473,7 +473,7 @@ class CardRepository : APIRequestCallback {
 
                                     }
                                 }
-                            }
+                    //        }
 
                             NetworkApp.initNetworkToken(
                                 initResponseModel?.session,

@@ -7,7 +7,9 @@
         <item name="android:windowAnimationStyle">@style/DialogAnimation</item>
         <item name="android:windowIsTranslucent">true</item>
 
+
     </style>
+
 
     <style name="MaterialAlertDialog_rounded" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="buttonBarPositiveButtonStyle">@style/Alert.Button.Positive</item>

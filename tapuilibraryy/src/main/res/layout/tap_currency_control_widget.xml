@@ -2,18 +2,19 @@
 
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_currency_widget"
     android:layout_width="match_parent"
+    android:layout_height="@dimen/_128sdp"
     app:cardCornerRadius="@dimen/_8sdp"
-    app:cardUseCompatPadding="true"
     app:cardElevation="@dimen/_2sdp"
-    android:layout_height="@dimen/_128sdp">
+    app:cardUseCompatPadding="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingHorizontal="@dimen/_12sdp"
-        android:paddingTop="@dimen/_10sdp"
-        >
+        android:paddingTop="@dimen/_10sdp">
 
         <ImageView
             android:id="@+id/currency_widget_logo"
@@ -28,37 +29,72 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_16sdp"
-            android:text="PayPal is available after converting to the supported currency"
             android:textColor="#4b4847"
+            android:textSize="13sp"
             app:layout_constraintStart_toStartOf="@id/currency_widget_logo"
-            app:layout_constraintTop_toBottomOf="@id/currency_widget_logo" />
+            app:layout_constraintTop_toBottomOf="@id/currency_widget_logo"
+            tools:text="PayPal is available after converting to the supported currency" />
 
 
-        <company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
-            android:id="@+id/currency_widget_money_amount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_20sdp"
-            android:layout_marginBottom="@dimen/_8sdp"
-            android:drawableStart="@drawable/usa_flag"
-            android:drawablePadding="@dimen/_8sdp"
-            android:text="USD 326.53"
-            android:textColor="#4b4847"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@id/currency_widget_logo" />
+<!--        <company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew-->
+<!--            android:id="@+id/currency_widget_money_amount"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="@dimen/_20sdp"-->
+<!--            android:layout_marginBottom="@dimen/_8sdp"-->
+<!--            android:drawableStart="@drawable/usa_flag"-->
+<!--            android:drawablePadding="@dimen/_8sdp"-->
+<!--            android:text="USD 326.53"-->
+<!--            android:textColor="#4b4847"-->
+<!--            android:textSize="13sp"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="@id/currency_widget_logo" />-->
 
         <Button
-            android:layout_width="@dimen/_105sdp"
-            android:layout_height="@dimen/_30sdp"
-            android:text="Confirm"
             android:id="@+id/btn_confirm_tap_currency_control"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="@dimen/_30sdp"
             android:background="@drawable/rounded_currency_widget"
             android:textAllCaps="false"
             android:textColor="@color/white"
+            android:textSize="12sp"
             app:cornerRadius="@dimen/_24sdp"
-            app:layout_constraintBottom_toBottomOf="@id/currency_widget_money_amount"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintBottom_toBottomOf="@id/currency_widget_Frame"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Confirm" />
 
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/currency_widget_logo"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:id="@+id/currency_widget_Frame"
+            android:orientation="horizontal"
+
+            >
+        <Spinner
+            android:id="@+id/currency_widget_spinner"
+            android:layout_width="wrap_content"
+            android:overlapAnchor="false"
+            android:background="@null"
+            android:dropDownWidth="@dimen/_150sdp"
+            android:layout_height="@dimen/_18sdp"
+            android:popupBackground="@drawable/spinner_bg"
+             />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/drop_down_iv"
+
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/drop_down_icon"
+                />
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

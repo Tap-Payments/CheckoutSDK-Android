@@ -14,6 +14,7 @@ import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibraryy.themekit.ThemeManager
+import company.tap.tapuilibraryy.uikit.AppColorTheme
 import company.tap.tapuilibraryy.uikit.ktx.loadAppThemManagerFromPath
 
 
@@ -166,7 +167,6 @@ object CustomUtils {
     }
 
     fun getCurrentTheme(): String {
-        println("currentThemeName name"+ThemeManager.currentThemeName)
 
         return ThemeManager.currentThemeName
     }

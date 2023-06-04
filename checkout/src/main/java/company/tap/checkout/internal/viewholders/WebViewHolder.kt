@@ -22,6 +22,7 @@ import company.tap.checkout.internal.webview.TapCustomWebViewClient
 import company.tap.checkout.internal.webview.WebViewContract
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.taplocalizationkit.LocalizationManager
+import company.tap.tapuilibraryy.uikit.AppColorTheme
 import company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
 import company.tap.tapuilibraryy.uikit.ktx.loadAppThemManagerFromPath
 import kotlinx.android.synthetic.main.fragment_web.*
