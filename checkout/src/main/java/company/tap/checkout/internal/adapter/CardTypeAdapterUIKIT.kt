@@ -239,8 +239,14 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
             holder.itemView.deleteImageViewSaved?.visibility = View.INVISIBLE
         }
 
-        holder.itemView.deleteImageViewSaved?.setOnClickListener {
-            println("position>>>" + position)
+
+
+        /***
+         * Replaced deleteImageViewSaved close button click of chips with
+         * setOnLongClickListener as per new requirement
+        **/
+        holder.itemView.setOnLongClickListener {
+            println("position>>>$position")
             println("adapterContent>>>" + adapterContent.size)
             println("arraylistCards>>>" + arrayListCards.size)
             val cardNeeded =
@@ -255,6 +261,8 @@ class CardTypeAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelec
                 holder.itemView.findViewById(R.id.tapCardChip2Constraints),
                 holder.bindingAdapterPosition
             )
+
+            return@setOnLongClickListener true
         }
 
     }

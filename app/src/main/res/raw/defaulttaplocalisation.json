@@ -11,6 +11,7 @@
       "signin": "دخول"
     },
     "Common": {
+      "availableInOtherCurrencies": "متاح لعملات أخرى",
       "cancel": "إلغاء",
       "change": "تعديل",
       "close": "غلق",
@@ -26,6 +27,10 @@
       "phone": "الهاتف",
       "previous": "السابق",
       "recent": "كروت سابقة"
+    },
+    "CurrencyChangeWidget": {
+      "confirmButton": "تأكيد",
+      "header": "متاح بعد التحويل لهذه العملة"
     },
     "DeleteCard": {
       "cancel": "إلغاء",
@@ -180,6 +185,7 @@
       "signin": "Signin"
     },
     "Common": {
+      "availableInOtherCurrencies": "Available in another currency",
       "cancel": "Cancel",
       "change": "change",
       "close": "CLOSE",
@@ -195,6 +201,10 @@
       "phone": "phone",
       "previous": "Previous",
       "recent": "Recent"
+    },
+    "CurrencyChangeWidget": {
+      "confirmButton": "Confirm",
+      "header": "is available after converting to the supported currency"
     },
     "DeleteCard": {
       "cancel": "Cancel",

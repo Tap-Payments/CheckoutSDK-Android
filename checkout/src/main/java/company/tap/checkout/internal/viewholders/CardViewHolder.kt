@@ -46,11 +46,7 @@ class CardViewHolder(private val context: Context, private val onCardSelectedAct
             "HorizontalHeaders",
             "leftTitle"
         )
-        view.mainChipgroup.groupAction.text = LocalizationManager.getValue(
-            "GatewayHeader",
-            "HorizontalHeaders",
-            "rightTitle"
-        )
+        view.mainChipgroup.groupAction.text =LocalizationManager.getValue("availableInOtherCurrencies", "Common")
         view.mainChipgroup.chipsRecycler.layoutManager = LinearLayoutManager(
             context,
             RecyclerView.HORIZONTAL,
