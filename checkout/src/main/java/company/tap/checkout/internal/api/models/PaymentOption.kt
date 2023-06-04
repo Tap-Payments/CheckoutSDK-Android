@@ -16,12 +16,12 @@ All rights reserved.
  **/
 data class PaymentOption(
     @SerializedName("id") @Expose
-     var id: String? = null,
+    var id: String? = null,
 
 
     @SerializedName("name")
     @Expose
-     val brand: String? = null,
+    val brand: String? = null,
 
     @SerializedName("name_ar")
     @Expose
@@ -29,23 +29,23 @@ data class PaymentOption(
 
     @SerializedName("image")
     @Expose
-     val image: String? = null,
+    val image: String? = null,
 
     @SerializedName("payment_type")
     @Expose
-     val paymentType: PaymentType? = null,
+    val paymentType: PaymentType? = null,
 
     @SerializedName("source_id")
     @Expose
-     val sourceId: String? = null,
+    val sourceId: String? = null,
 
     @SerializedName("supported_card_brands")
     @Expose
-     val supportedCardBrands: ArrayList<CardBrand>? = null,
+    val supportedCardBrands: ArrayList<CardBrand>? = null,
 
     @SerializedName("extra_fees")
     @Expose
-     var extraFees: ArrayList<ExtraFee>? = null,
+    var extraFees: ArrayList<ExtraFee>? = null,
 
     @SerializedName("supported_currencies")
     @Expose
@@ -58,58 +58,66 @@ data class PaymentOption(
 
     @SerializedName("threeDS")
     @Expose
-     val threeDS: String? = null,
+    val threeDS: String? = null,
 
     @SerializedName("asynchronous")
     @Expose
-     val asynchronous: Boolean = false ,
+    val asynchronous: Boolean = false,
 
 
     @SerializedName("cc_markup")
-@Expose
- val cc_markup: Double? = null,
+    @Expose
+    val cc_markup: Double? = null,
 
 
-@SerializedName("allowed_auth_methods")
-@Expose
- val allowed_auth_methods: ArrayList<String>? = null,
+    @SerializedName("allowed_auth_methods")
+    @Expose
+    val allowed_auth_methods: ArrayList<String>? = null,
 
-@SerializedName("api_version")
-@Expose
- val apiVersion: Int? = null,
+    @SerializedName("api_version")
+    @Expose
+    val apiVersion: Int? = null,
 
-@SerializedName("api_version_minor")
-@Expose
- val apiVersionMinor: Int? = null,
+    @SerializedName("api_version_minor")
+    @Expose
+    val apiVersionMinor: Int? = null,
 
-@SerializedName("gateway_name")
-@Expose
- val gatewayName: String,
+    @SerializedName("gateway_name")
+    @Expose
+    val gatewayName: String,
 
-@SerializedName("gateway_merchant_id")
-@Expose
- val gatewayMerchantId: String,
+    @SerializedName("gateway_merchant_id")
+    @Expose
+    val gatewayMerchantId: String,
 
 
-@SerializedName("acquirer_country")
-@Expose
- val acquirerCountryCode: String? = null,
+    @SerializedName("acquirer_country")
+    @Expose
+    val acquirerCountryCode: String? = null,
 
-@SerializedName("logos")
-@Expose
- val logos: Logos? = null,
+    @SerializedName("logos")
+    @Expose
+    val logos: Logos? = null,
 
     @SerializedName("payment_order_type")
     @Expose
     val paymentOrderType: String? = null,
 
-@SerializedName("button_style")
-@Expose
-val buttonStyle: ButtonStyle? = null
+    @SerializedName("button_style")
+    @Expose
+    val buttonStyle: ButtonStyle? = null,
 
-):Comparable<PaymentOption>, CurrenciesSupport, Serializable {
+    @SerializedName("display_name")
+    @Expose
+    val displayName: String? = null,
+
+    @SerializedName("default_currency")
+    @Expose
+    val defaultCurrency: String? = null
+
+) : Comparable<PaymentOption>, CurrenciesSupport, Serializable {
     override fun getSupportedCurrencies(): ArrayList<String>? {
-       return supportedCurrencies
+        return supportedCurrencies
     }
 
     override fun compareTo(other: PaymentOption): Int {
