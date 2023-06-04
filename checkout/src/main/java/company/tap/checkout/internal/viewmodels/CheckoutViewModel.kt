@@ -1605,7 +1605,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             adapter.updateShaking(isShaking.value ?: false)
             goPayAdapter.updateShaking(isShaking.value ?: false)
             cardViewHolder.view.mainChipgroup.groupAction?.text =
-                LocalizationManager.getValue("edit", "Common")
+                LocalizationManager.getValue("availableInOtherCurrencies", "Common")
         } else {
             isShaking.value = true
             adapter.updateShaking(isShaking.value ?: true)
@@ -1626,7 +1626,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             adapter.updateShaking(isShaking.value ?: false)
             goPayAdapter.updateShaking(isShaking.value ?: false)
             goPaySavedCardHolder.view.goPayLoginView.groupAction?.text =
-                LocalizationManager.getValue("edit", "Common")
+                LocalizationManager.getValue("availableInOtherCurrencies", "Common")
             goPayAdapter.updateSignOut(goPayCardList.value as List<GoPaySavedCards>, false)
 
         } else {
@@ -2551,11 +2551,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         arrayListSavedCardSizes: ArrayList<SavedCard>
     ) {
         isShaking.value = false
-        cardViewHolder.view.mainChipgroup.groupAction?.text = LocalizationManager.getValue(
-            "GatewayHeader",
-            "HorizontalHeaders",
-            "rightTitle"
-        )
+        cardViewHolder.view.mainChipgroup.groupAction?.text =LocalizationManager.getValue("availableInOtherCurrencies", "Common")
         val title: String = LocalizationManager.getValue("title", "DeleteCard")
         val message: String = LocalizationManager.getValue(
             "message",
