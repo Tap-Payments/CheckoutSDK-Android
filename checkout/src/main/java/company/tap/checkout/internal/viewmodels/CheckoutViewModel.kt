@@ -1513,15 +1513,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         cardViewHolder.view.mainChipgroup.chipsRecycler.animation =
             AnimationUtils.loadAnimation(context, R.anim.fall_down_animation)
 
-        cardViewHolder.view.mainChipgroup.groupAction?.setOnClickListener {
-            setMainChipGroupActionListener()
-            paymentInlineViewHolder.tapCardInputView?.clear()
-            paymentInlineViewHolder.onFocusChange("")
-            paymentInlineViewHolder.tapCardInputView.setSingleCardInput(
-                CardBrandSingle.Unknown, null
-            )
-            CustomUtils.hideKeyboardFrom(context, paymentInlineViewHolder.view)
-        }
 
         paymentOptionsWorker =
             java.util.ArrayList<PaymentOption>(paymentOptionsResponse.paymentOptions)
@@ -1638,6 +1629,19 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 LocalizationManager.getValue("close", "Common")
             goPayAdapter.updateSignOut(goPayCardList.value as List<GoPaySavedCards>, true)
         }
+    }
+
+    /**
+     * Function ensures to clear the fields or unselect the not needed when
+     * delete is clicked on Long press**/
+    fun savedCardLongClickDelete() {
+        paymentInlineViewHolder.tapCardInputView?.clear()
+        paymentInlineViewHolder.onFocusChange("")
+        paymentInlineViewHolder.tapCardInputView.setSingleCardInput(
+            CardBrandSingle.Unknown, null
+        )
+        adapter.updateShaking(false)
+        CustomUtils.hideKeyboardFrom(context, paymentInlineViewHolder.view)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -2528,6 +2532,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         viewtoBeBlur: View,
         position: Int
     ) {
+        savedCardLongClickDelete()
+        resetViewToPaymentInline()
+        println("stopAnimation"+stopAnimation)
         this.cardId = cardId
         selectedViewToBeDeletedFromCardViewHolder = selectedViewToBeDeleted
         viewToBeBlurCardViewHolder = viewtoBeBlur
@@ -2551,7 +2558,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         arrayListSavedCardSizes: ArrayList<SavedCard>
     ) {
         isShaking.value = false
-        cardViewHolder.view.mainChipgroup.groupAction?.text =LocalizationManager.getValue("availableInOtherCurrencies", "Common")
+        cardViewHolder.view.mainChipgroup.groupAction?.text =
+            LocalizationManager.getValue("availableInOtherCurrencies", "Common")
         val title: String = LocalizationManager.getValue("title", "DeleteCard")
         val message: String = LocalizationManager.getValue(
             "message",
