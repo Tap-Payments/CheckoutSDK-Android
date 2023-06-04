@@ -19,6 +19,8 @@ object AppColorTheme {
     const val ControlCurrencyWidgetConfirmButtonTitleFontColor="CurrencyWidget.confirmButton.titleFontColor"
     const val ControlCurrencyWidgetAmountLabelColor="CurrencyWidget.amountLabel.color"
     const val ControlCurrencyWidgetAmountLabelFont="CurrencyWidget.amountLabel.font"
+    const val ControlCurrencyWidgetCurrencyDropDownLabelColor="CurrencyWidget.currencyDropDown.labelColor"
+
     const val ControlCurrencyWidgetMessageColor="CurrencyWidget.messageLabel.color"
 
 

@@ -5,19 +5,14 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Typeface
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
+import android.view.View
 import android.view.View.OnTouchListener
-import android.widget.Button
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 import androidx.cardview.widget.CardView
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibraryy.R
 import company.tap.tapuilibraryy.fontskit.enums.TapFont
-import company.tap.tapuilibraryy.themekit.ThemeManager
 import company.tap.tapuilibraryy.uikit.AppColorTheme
 import company.tap.tapuilibraryy.uikit.ktx.loadAppThemManagerFromPath
 
@@ -53,8 +48,7 @@ class TapCurrencyControlWidget : FrameLayout {
 
         val currencies = mutableListOf<currncyData>(
             currncyData(resources.getDrawable(R.drawable.usa_flag), "USD 100.00"),
-            (currncyData(resources.getDrawable(R.drawable.usa_flag), "EUR 93.93")),
-            (currncyData(resources.getDrawable(R.drawable.usa_flag), "GBP 80.99"))
+            (currncyData(resources.getDrawable(R.drawable.britian), "GBP 80.99"))
         )
         spinner.adapter = TapSpinnerAdapter(
             this.context,
@@ -63,9 +57,25 @@ class TapCurrencyControlWidget : FrameLayout {
             currencies
         )
 
+
+        spinner.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                if (position != 0){
+                    val currncyData = parent.getItemAtPosition(position) as currncyData
+                //    Toast.makeText(context,currncyData.toString(),Toast.LENGTH_SHORT).show()
+                  //  dropDownIv.clearAnimation()
+
+                }
+
+
+            } // to close the onItemSelected
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        })
+
         spinner.setOnTouchListener(OnTouchListener { v, event ->
             if (event.action === MotionEvent.ACTION_UP) {
-                dropDownIv.animate().rotation(180f).start();
+              //  dropDownIv.animate().rotation(-180f)sestart();
 
             }
             false
@@ -82,15 +92,8 @@ class TapCurrencyControlWidget : FrameLayout {
                 TapFont.RobotoRegular
             )
         )
-//        currencyWidgetAmount.setTextColor(loadAppThemManagerFromPath(AppColorTheme.ControlCurrencyWidgetAmountLabelColor))
-//        currencyWidgetAmount.typeface = Typeface.createFromAsset(
-//            context?.assets, TapFont.tapFontType(
-//                TapFont.RobotoRegular
-//            )
-//        )
         currencyWidgetDescription.setTextColor(loadAppThemManagerFromPath(AppColorTheme.ControlCurrencyWidgetMessageColor))
-        currencyWidgetDescription.text =
-            LocalizationManager.getValue("header", "CurrencyChangeWidget")
+        currencyWidgetDescription.text = "paypal " + LocalizationManager.getValue("header", "CurrencyChangeWidget")
         currencyWidgetDescription.typeface = Typeface.createFromAsset(
             context?.assets, TapFont.tapFontType(
                 TapFont.RobotoRegular

@@ -1,7 +1,9 @@
 package company.tap.tapuilibraryy.uikit.atoms
 
 import android.content.Context
+import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,10 +11,18 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import company.tap.tapuilibraryy.R
+import company.tap.tapuilibraryy.fontskit.enums.TapFont
+import company.tap.tapuilibraryy.themekit.ThemeManager
+import company.tap.tapuilibraryy.uikit.AppColorTheme
+import company.tap.tapuilibraryy.uikit.ktx.loadAppThemManagerFromPath
 
 
-
-class TapSpinnerAdapter(context: Context, resouceId: Int, textviewId: Int, list: List<currncyData>) :
+class TapSpinnerAdapter(
+    context: Context,
+    resouceId: Int,
+    textviewId: Int,
+    list: List<currncyData>
+) :
     ArrayAdapter<currncyData?>(context, resouceId, textviewId, list) {
     var flater: LayoutInflater? = null
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -39,6 +49,12 @@ class TapSpinnerAdapter(context: Context, resouceId: Int, textviewId: Int, list:
         }
         holder.imageView?.setImageDrawable(rowItem?.image)
         holder.txtTitle?.text = rowItem?.price
+        holder.txtTitle?.setTextColor(loadAppThemManagerFromPath(AppColorTheme.ControlCurrencyWidgetCurrencyDropDownLabelColor))
+        holder.txtTitle?.typeface = Typeface.createFromAsset(
+            context.assets, TapFont.tapFontType(
+                TapFont.RobotoRegular
+            )
+        )
         return rowview
     }
 
@@ -47,4 +63,5 @@ class TapSpinnerAdapter(context: Context, resouceId: Int, textviewId: Int, list:
         var imageView: ImageView? = null
     }
 }
-data class currncyData(var image: Drawable, var price:String)
+
+data class currncyData(var image: Drawable, var price: String)
