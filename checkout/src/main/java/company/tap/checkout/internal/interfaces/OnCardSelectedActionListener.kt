@@ -2,6 +2,7 @@ package company.tap.checkout.internal.interfaces
 
 import android.view.View
 import android.view.ViewGroup
+import company.tap.checkout.internal.api.models.PaymentOption
 import company.tap.checkout.internal.api.models.SavedCard
 
 /**
@@ -13,6 +14,8 @@ All rights reserved.
 
 interface OnCardSelectedActionListener {
     fun onCardSelectedAction(isSelected:Boolean , savedCardsModel : Any?)
+
+    fun onDisabledChipSelected(paymentOption: PaymentOption)
     fun onDeleteIconClicked(
         stopAnimation: Boolean,
         itemId: Int,

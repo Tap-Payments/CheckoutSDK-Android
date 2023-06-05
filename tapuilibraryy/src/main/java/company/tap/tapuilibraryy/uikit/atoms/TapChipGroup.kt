@@ -36,6 +36,8 @@ class TapChipGroup(context: Context?, attrs: AttributeSet?) : LinearLayout(conte
         if (context?.let { LocalizationManager.getLocale(it).language } == "en") setFontsEnglish() else setFontsArabic()
     }
 
+
+
     fun setTheme(
         groupName: TapTextViewNew?,
         groupAction: TapTextViewNew?,

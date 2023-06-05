@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.R
 import company.tap.checkout.internal.adapter.CurrencyTypeAdapter
 import company.tap.checkout.internal.adapter.ItemAdapter
-import company.tap.checkout.internal.api.models.SupportedCurrencies
+import SupportedCurrencies
 
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener

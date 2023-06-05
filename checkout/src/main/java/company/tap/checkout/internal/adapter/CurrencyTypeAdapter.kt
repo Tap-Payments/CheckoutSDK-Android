@@ -1,5 +1,6 @@
 package company.tap.checkout.internal.adapter
 
+import SupportedCurrencies
 import android.content.Context
 import android.graphics.Color
 import android.util.Log
@@ -14,7 +15,6 @@ import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import com.bumptech.glide.Glide
 import company.tap.checkout.R
-import company.tap.checkout.internal.api.models.SupportedCurrencies
 import company.tap.checkout.internal.enums.ThemeMode
 import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener
 import company.tap.checkout.internal.utils.CustomUtils

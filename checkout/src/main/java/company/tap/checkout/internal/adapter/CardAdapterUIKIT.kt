@@ -528,11 +528,6 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         if (selectedPosition == position) setSelectedCardTypeRedirectShadowAndBackground(holder)
         else setUnSelectedCardTypeRedirectShadowAndBackground(holder)
 
-        (holder as SingleViewHolder)
-        holder.itemView.setOnClickListener {
-            selectedPosition = position
-            notifyDataSetChanged()
-        }
         val typeDisabled = disabledPaymentOptions[position.minus(webArrayListContent.size)
             .minus(googlePayArrayList.size)]
         val imageViewCard = holder.itemView.findViewById<ImageView>(R.id.imageView_knet)
@@ -557,6 +552,13 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
                     .load(typeDisabled.logos?.light_mono?.disabled?.svg)
                     .into(imageViewCard)
             }
+        }
+
+        holder.itemView.setOnClickListener {
+            selectedPosition = position
+            notifyDataSetChanged()
+
+            onCardSelectedActionListener.onDisabledChipSelected(typeDisabled)
         }
 
 

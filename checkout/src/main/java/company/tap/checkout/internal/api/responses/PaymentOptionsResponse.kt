@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
 import company.tap.checkout.internal.api.models.OrderId
 import company.tap.checkout.internal.api.models.PaymentOption
 import company.tap.checkout.internal.api.models.SavedCard
-import company.tap.checkout.internal.api.models.SupportedCurrencies
+import SupportedCurrencies
 import company.tap.checkout.internal.interfaces.BaseResponse
 import java.util.*
 

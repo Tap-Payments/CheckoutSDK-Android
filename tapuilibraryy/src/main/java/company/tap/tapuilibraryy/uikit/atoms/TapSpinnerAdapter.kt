@@ -1,18 +1,19 @@
 package company.tap.tapuilibraryy.uikit.atoms
 
+import SupportedCurrencies
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import company.tap.tapuilibraryy.R
 import company.tap.tapuilibraryy.fontskit.enums.TapFont
-import company.tap.tapuilibraryy.themekit.ThemeManager
 import company.tap.tapuilibraryy.uikit.AppColorTheme
 import company.tap.tapuilibraryy.uikit.ktx.loadAppThemManagerFromPath
 
@@ -21,9 +22,11 @@ class TapSpinnerAdapter(
     context: Context,
     resouceId: Int,
     textviewId: Int,
-    list: List<currncyData>
+    list: MutableList<SupportedCurrencies>
 ) :
-    ArrayAdapter<currncyData?>(context, resouceId, textviewId, list) {
+    ArrayAdapter<SupportedCurrencies?>(context, resouceId, textviewId,
+        list as List<SupportedCurrencies?>
+    ) {
     var flater: LayoutInflater? = null
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         return rowview(convertView, position)!!
@@ -33,8 +36,9 @@ class TapSpinnerAdapter(
         return rowview(convertView, position)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun rowview(convertView: View?, position: Int): View? {
-        val rowItem: currncyData? = getItem(position)
+        val rowItem: SupportedCurrencies? = getItem(position)
         val holder: viewHolder
         var rowview = convertView
         if (rowview == null) {
@@ -47,8 +51,9 @@ class TapSpinnerAdapter(
         } else {
             holder = rowview.tag as viewHolder
         }
-        holder.imageView?.setImageDrawable(rowItem?.image)
-        holder.txtTitle?.text = rowItem?.price
+        Glide.with(context).load(rowItem?.flag).into(holder.imageView!!)
+//        holder.imageView?.setImageDrawable(rowItem?.flag)
+        holder.txtTitle?.text =  rowItem?.currency.toString() + " " +rowItem?.amount.toString()
         holder.txtTitle?.setTextColor(loadAppThemManagerFromPath(AppColorTheme.ControlCurrencyWidgetCurrencyDropDownLabelColor))
         holder.txtTitle?.typeface = Typeface.createFromAsset(
             context.assets, TapFont.tapFontType(

@@ -1,5 +1,6 @@
 package company.tap.checkout.internal.viewmodels
 
+import SupportedCurrencies
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -261,7 +262,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @JvmField
     var selectedCurrencyPos: String? = null
-
 
 
     val appId: String = "4530082749"
@@ -2026,6 +2026,52 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
     }
 
+    override fun onDisabledChipSelected(paymentOption: PaymentOption) {
+
+        with(paymentOption) {
+            val supportedCurrenciesRelatedToDisabledChip = mutableListOf<SupportedCurrencies>()
+            allCurrencies.value?.forEachIndexed { index, supportedCurrencies ->
+                this.getSupportedCurrencies().forEachIndexed { index, s ->
+                    if (s.toUpperCase() == supportedCurrencies.currency!!?.toUpperCase()) {
+                        supportedCurrenciesRelatedToDisabledChip.add(supportedCurrencies)
+                    }
+                }
+            }
+            cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.setCurrencyWidgetDescription(
+                this.displayName
+            )
+            cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.setSupportedCurrunciesForControlWidget(
+                supportedCurrenciesRelatedToDisabledChip
+            )
+
+            when (CustomUtils.getCurrentTheme()) {
+                ThemeMode.dark.name -> {
+                    Glide.with(context).load(this.logos?.dark?.png)
+                        .into(cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.currencyWidgetLogo)
+                }
+                ThemeMode.dark_colored.name -> {
+                    Glide.with(context).load(this.logos?.dark_colored?.png)
+                        .into(cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.currencyWidgetLogo)
+
+                }
+                ThemeMode.light.name -> {
+                    Glide.with(context).load(this.logos?.light?.png)
+                        .into(cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.currencyWidgetLogo)
+
+                }
+                ThemeMode.light_mono.name -> {
+                    Glide.with(context).load(this.logos?.light_mono?.png)
+                        .into(cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.currencyWidgetLogo)
+
+                }
+
+                else -> {}
+            }
+
+
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.N)
     private fun performResetToPaymentInline() {
         resetViewToPaymentInline()
@@ -3546,7 +3592,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     fun filterViewModels(currency: String) {
         savedCardsBasedCurr = filterByCurrenciesAndSortList(paymentOptionsResponse.cards, currency)
-        webPaymentOptions = filteredByPaymentTypeAndCurrencyAndSortedList(paymentOptionsResponse.paymentOptions, PaymentType.WEB, currency)
+        webPaymentOptions = filteredByPaymentTypeAndCurrencyAndSortedList(
+            paymentOptionsResponse.paymentOptions,
+            PaymentType.WEB,
+            currency
+        )
 
         val cardPaymentOptions: java.util.ArrayList<PaymentOption> =
             filteredByPaymentTypeAndCurrencyAndSortedList(
@@ -3557,11 +3607,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             filteredByPaymentTypeAndCurrencyAndSortedList(
                 paymentOptionsResponse.paymentOptions, PaymentType.GOOGLE_PAY, currency
             )
-        Log.e("currency",currency.toString())
-        Log.e("size list",paymentOptionsResponse.paymentOptions.size.toString())
-        val disabledPaymentOptionList = paymentOptionsResponse.paymentOptions.filter { !it.getSupportedCurrencies().contains(currency) }
+        Log.e("currency", currency.toString())
+        Log.e("size list", paymentOptionsResponse.paymentOptions.size.toString())
+        val disabledPaymentOptionList = paymentOptionsResponse.paymentOptions.filter {
+            !it.getSupportedCurrencies().contains(currency)
+        }
         disabledPaymentOptionList.forEachIndexed { index, paymentOption ->
-            Log.e("disabledList",paymentOption.displayName.toString())
+            Log.e("disabledList", paymentOption.displayName.toString())
 
         }
         adapter.updateDisabledPaymentOptions(disabledPaymentOptionList)
