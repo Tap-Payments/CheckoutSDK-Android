@@ -105,7 +105,7 @@ class TapCurrencyControlWidget : FrameLayout {
                     id: Long
                 ) {
                     if (position != 0) {
-                        val currncyData = parent.getItemAtPosition(position) as currncyData
+                       // val currncyData = parent.getItemAtPosition(position) as currncyData
 
                     }
                 } // to close the onItemSelected

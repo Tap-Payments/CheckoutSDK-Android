@@ -1,5 +1,6 @@
 package company.tap.checkout.internal.viewholders
 
+import SupportedCurrencies
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
@@ -8,15 +9,10 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.marginTop
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.R
-import company.tap.checkout.internal.adapter.CurrencyTypeAdapter
-import company.tap.checkout.internal.adapter.ItemAdapter
-import SupportedCurrencies
-
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener
 import company.tap.checkout.internal.utils.CustomUtils

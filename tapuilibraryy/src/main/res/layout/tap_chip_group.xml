@@ -63,6 +63,7 @@
     <company.tap.tapuilibraryy.uikit.atoms.TapCurrencyControlWidget
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_marginBottom="@dimen/_15sdp"
         android:layout_marginHorizontal="@dimen/_8sdp"
         android:id="@+id/tap_currency_widget"

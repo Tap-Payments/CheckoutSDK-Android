@@ -1,6 +1,8 @@
 package company.tap.checkout.internal.viewmodels
 
 import SupportedCurrencies
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -1960,7 +1962,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @SuppressLint("ClickableViewAccessibility")
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCardSelectedAction(isSelected: Boolean, savedCardsModel: Any?) {
-
+        dismisControlWidget()
         unActivateActionButton()
 
         when (savedCardsModel) {
@@ -2028,6 +2030,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     override fun onDisabledChipSelected(paymentOption: PaymentOption) {
 
+        showControlWidget()
         with(paymentOption) {
             val supportedCurrenciesRelatedToDisabledChip = mutableListOf<SupportedCurrencies>()
             allCurrencies.value?.forEachIndexed { index, supportedCurrencies ->
@@ -2070,6 +2073,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
         }
+    }
+
+
+    fun showControlWidget() {
+        cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.fadeVisibility(View.VISIBLE, duration = 1000)
+    }
+
+    fun dismisControlWidget() {
+        cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.fadeVisibility(View.GONE, duration = 1000)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)

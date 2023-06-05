@@ -29,6 +29,7 @@ import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.tapuilibraryy.themekit.ThemeManager
 import company.tap.tapuilibraryy.themekit.theme.TextViewTheme
 import kotlinx.android.synthetic.main.item_benefit_pay.view.*
+import kotlinx.android.synthetic.main.item_disabled.view.*
 import kotlinx.android.synthetic.main.item_googlepay.view.*
 import kotlinx.android.synthetic.main.item_knet.view.*
 import kotlinx.android.synthetic.main.item_save_cards.view.*
@@ -166,7 +167,7 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
 
             TYPE_DISABLED_PAYMENT_OPTIONS -> {
                 view =
-                    LayoutInflater.from(parent.context).inflate(R.layout.item_knet, parent, false)
+                    LayoutInflater.from(parent.context).inflate(R.layout.item_disabled, parent, false)
                 SingleViewHolder(view)
             }
             TYPE_3PPG -> {
@@ -525,12 +526,12 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
 
     private fun typeDisabled(holder: RecyclerView.ViewHolder, position: Int) {
 
-        if (selectedPosition == position) setSelectedCardTypeRedirectShadowAndBackground(holder)
-        else setUnSelectedCardTypeRedirectShadowAndBackground(holder)
+        if (selectedPosition == position) setSelectedCardTypeDisabledShadowAndBackground(holder)
+        else setUnSelectedCardTypeDisabledShadowAndBackground(holder)
 
         val typeDisabled = disabledPaymentOptions[position.minus(webArrayListContent.size)
             .minus(googlePayArrayList.size)]
-        val imageViewCard = holder.itemView.findViewById<ImageView>(R.id.imageView_knet)
+        val imageViewCard = holder.itemView.findViewById<ImageView>(R.id.imageView_disable)
         when (CustomUtils.getCurrentTheme()) {
             ThemeMode.dark.name -> {
                 Glide.with(holder.itemView.context)
@@ -557,7 +558,6 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         holder.itemView.setOnClickListener {
             selectedPosition = position
             notifyDataSetChanged()
-
             onCardSelectedActionListener.onDisabledChipSelected(typeDisabled)
         }
 
@@ -655,12 +655,30 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
 
     }
 
+    private fun setSelectedCardTypeDisabledShadowAndBackground(holder: RecyclerView.ViewHolder) {
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) (holder.itemView.tapCardChip3.setBackgroundResource(
+            R.drawable.border_shadow_white
+        ))
+        else holder.itemView.tapCardChip_disabled.setBackgroundResource(R.drawable.border_shadow_disabled)
+
+
+    }
+
+
     private fun setUnSelectedCardTypeRedirectShadowAndBackground(holder: RecyclerView.ViewHolder) {
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) holder.itemView.tapCardChip3.setBackgroundResource(
             R.drawable.border_unclick_black
         )
         else holder.itemView.tapCardChip3.setBackgroundResource(R.drawable.border_unclick_white)
     }
+
+    private fun setUnSelectedCardTypeDisabledShadowAndBackground(holder: RecyclerView.ViewHolder) {
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) holder.itemView.tapCardChip3.setBackgroundResource(
+            R.drawable.border_unclick_black
+        )
+        else holder.itemView.tapCardChip_disabled.setBackgroundResource(R.drawable.border_unclick_white)
+    }
+
 
 
     private fun setSelectedGoogleShadowAndBackground(holder: RecyclerView.ViewHolder) {
@@ -673,6 +691,7 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
     }
 
     internal class SavedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+
 
     internal class SingleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
