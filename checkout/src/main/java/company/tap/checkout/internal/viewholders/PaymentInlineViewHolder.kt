@@ -461,6 +461,9 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
                     cvvNumber = null
                     cardHolderName = null
                     fullCardNumber = null
+                    savedCardsModel = null
+
+
                 }
 
                 return false
