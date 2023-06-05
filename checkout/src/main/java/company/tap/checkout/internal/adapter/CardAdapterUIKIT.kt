@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.DrawableRes
@@ -656,7 +657,7 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
     }
 
     private fun setSelectedCardTypeDisabledShadowAndBackground(holder: RecyclerView.ViewHolder) {
-        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) (holder.itemView.tapCardChip3.setBackgroundResource(
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) (holder.itemView.tapCardChip_disabled.setBackgroundResource(
             R.drawable.border_shadow_white
         ))
         else holder.itemView.tapCardChip_disabled.setBackgroundResource(R.drawable.border_shadow_disabled)
@@ -673,10 +674,10 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
     }
 
     private fun setUnSelectedCardTypeDisabledShadowAndBackground(holder: RecyclerView.ViewHolder) {
-        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) holder.itemView.tapCardChip3.setBackgroundResource(
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) holder.itemView.tapCardChip_disabled.setBackgroundResource(
             R.drawable.border_unclick_black
         )
-        else holder.itemView.tapCardChip_disabled.setBackgroundResource(R.drawable.border_unclick_white)
+        else holder.itemView.findViewById<FrameLayout>(R.id.tapCardChip_disabled).setBackgroundResource(R.drawable.border_unclick_white)
     }
 
 
