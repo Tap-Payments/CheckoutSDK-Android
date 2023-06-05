@@ -1663,7 +1663,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     )
                 }, viewToBeBLur = selectedViewToBeDeletedFromCardViewHolder)
 
-
             } else {
                 // println("else block is calle are")
                 removeViews(goPaySavedCardHolder)
@@ -1693,8 +1692,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     override fun deleteSelectedCardListener(delSelectedCard: DeleteCardResponse) {
         if (delSelectedCard.deleted) {
-            savedCardsBasedCurr?.removeAt(selectedItemsDel)
-            savedCardsBasedCurr?.let { adapter.updateAdapterDataSavedCard(it) }
+            savedCardsBasedCurr.removeAt(selectedItemsDel)
+            savedCardsBasedCurr.let { adapter.updateAdapterDataSavedCard(it) }
             cardViewHolder.view.mainChipgroup.chipsRecycler.adapter = adapter
             deleteCard = false
             adapter.updateShaking(false)
@@ -2535,6 +2534,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         savedCardLongClickDelete()
         resetViewToPaymentInline()
         println("stopAnimation"+stopAnimation)
+        println("selectedViewToBeDeleted"+selectedViewToBeDeleted)
+        println("viewtoBeBlur"+viewtoBeBlur)
         this.cardId = cardId
         selectedViewToBeDeletedFromCardViewHolder = selectedViewToBeDeleted
         viewToBeBlurCardViewHolder = viewtoBeBlur
