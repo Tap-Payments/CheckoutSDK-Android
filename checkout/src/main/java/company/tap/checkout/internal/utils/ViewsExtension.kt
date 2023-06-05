@@ -43,6 +43,7 @@ import androidx.transition.AutoTransition
 import com.bumptech.glide.Glide
 import company.tap.checkout.R
 import company.tap.checkout.internal.cache.SharedPrefManager
+import company.tap.checkout.internal.enums.ThemeMode
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.tapuilibraryy.themekit.ThemeManager
 import company.tap.tapuilibraryy.uikit.AppColorTheme
@@ -166,6 +167,8 @@ fun View.slidefromRightToLeft() {
     this.visibility = View.VISIBLE // Change visibility VISIBLE or GONE
 
 }
+
+
 
 fun View.addShrinkAnimation(xDirection: Float, yDirection: Float,isDimmed:Boolean=false) {
     this.animate().scaleX(xDirection).scaleY(yDirection).setDuration(600).start();

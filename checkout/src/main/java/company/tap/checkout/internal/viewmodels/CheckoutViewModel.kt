@@ -19,12 +19,9 @@ import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
 import androidx.annotation.RestrictTo
-import androidx.cardview.widget.CardView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
@@ -41,7 +38,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.android.gms.wallet.PaymentData
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import company.tap.cardinputwidget2.CardBrandSingle
@@ -50,7 +46,7 @@ import company.tap.cardinputwidget2.widget.CardInputListener
 import company.tap.cardscanner.*
 import company.tap.checkout.R
 import company.tap.checkout.internal.PaymentDataProvider
-import company.tap.checkout.internal.adapter.CardTypeAdapterUIKIT
+import company.tap.checkout.internal.adapter.CardAdapterUIKIT
 import company.tap.checkout.internal.adapter.CurrencyTypeAdapter
 import company.tap.checkout.internal.adapter.GoPayCardAdapterUIKIT
 import company.tap.checkout.internal.adapter.ItemAdapter
@@ -91,7 +87,6 @@ import company.tap.tapuilibraryy.themekit.ThemeManager
 import company.tap.tapuilibraryy.themekit.theme.SeparatorViewTheme
 import company.tap.tapuilibraryy.uikit.AppColorTheme
 import company.tap.tapuilibraryy.uikit.animation.MorphingAnimation
-import company.tap.tapuilibraryy.uikit.atoms.TapTextInput
 import company.tap.tapuilibraryy.uikit.datasource.LoyaltyHeaderDataSource
 import company.tap.tapuilibraryy.uikit.enums.ActionButtonState
 import company.tap.tapuilibraryy.uikit.enums.GoPayLoginMethod
@@ -135,7 +130,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private var savedCardList: MutableList<SavedCard>? = mutableListOf()
     private var arrayListSavedCardSize = ArrayList<SavedCard>()
     private var supportedLoyalCards = MutableLiveData<List<LoyaltySupportedCurrency>>()
-    private var paymentOptionsList = MutableLiveData<List<PaymentOption>>()
     private var goPayCardList = MutableLiveData<List<GoPaySavedCards>>()
     private var selectedViewToBeDeletedFromCardViewHolder: ViewGroup? = null
     private var viewToBeBlurCardViewHolder: View? = null
@@ -201,7 +195,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @JvmField
     var currentAmount: String = ""
-    private lateinit var adapter: CardTypeAdapterUIKIT
+    private lateinit var adapter: CardAdapterUIKIT
     private lateinit var itemAdapter: ItemAdapter
     private lateinit var otpViewHolder: OTPViewHolder
 
@@ -268,7 +262,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @JvmField
     var selectedCurrencyPos: String? = null
 
-    lateinit var paymentOptionsWorker: java.util.ArrayList<PaymentOption>
 
 
     val appId: String = "4530082749"
@@ -1318,12 +1311,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         merchantData: MerchantData?,
         paymentOptionsResponse: PaymentOptionsResponse?
     ) {
-        println("if(::businessViewHolder.isInitialized getpay" + ::businessViewHolder.isInitialized)
-        println("merchantData name>>" + merchantData?.name)
-        println("merchantData logo>>" + merchantData?.logo)
         if (paymentOptionsResponse != null) {
             this.paymentOptionsResponse = paymentOptionsResponse
         }
+        Log.e("paymentOptions", this.paymentOptionsResponse.toString())
         if (::businessViewHolder.isInitialized && PaymentDataSource.getTransactionMode() != TransactionMode.TOKENIZE_CARD) {
             businessViewHolder.setDataFromAPI(
                 merchantData?.logo,
@@ -1337,18 +1328,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         // println("PaymentOptionsResponse on get$paymentOptionsResponse")
         allCurrencies.value =
             (paymentOptionsResponse?.supportedCurrencies as List<SupportedCurrencies>).sortedBy { it.orderBy }
-        Log.e(
-            "supportedCurrencyUser",
-            SharedPrefManager.getUserLocalCurrency(context).toString()
-        )
+
         cacheUserLocalCurrency()
 
 
 
 
-        savedCardList = paymentOptionsResponse?.cards
+        savedCardList = paymentOptionsResponse.cards
         currencyAdapter = CurrencyTypeAdapter(this)
-        if (paymentOptionsResponse.supportedCurrencies != null && ::amountViewHolder.isInitialized) {
+        if (::amountViewHolder.isInitialized) {
             currentCurrency = paymentOptionsResponse.currency
             val sortedList: List<SupportedCurrencies> =
                 (paymentOptionsResponse.supportedCurrencies).sortedBy { it.orderBy }
@@ -1394,15 +1382,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
         if (::itemsViewHolder.isInitialized) {
-            paymentOptionsResponse?.supportedCurrencies?.let {
+            paymentOptionsResponse.supportedCurrencies.let {
                 itemsViewHolder.setDataFromAPI(
                     it,
                     PaymentDataSource.getItems()
                 )
             }
-            //  itemsViewHolder.setItemsRecylerView()
-            //  itemsViewHolder.setCurrencyRecylerView()
-
 
         }
 
@@ -1412,22 +1397,17 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 paymentInlineViewHolder.selectedType
             )
         }
-        paymentOptionsList.value = paymentOptionsResponse?.paymentOptions
-        //println("paymentOptions value" + paymentOptionsResponse?.paymentOptions)
-        if (::context.isInitialized)
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                val divider = DividerItemDecoration(
-                    context,
-                    DividerItemDecoration.HORIZONTAL
-                )
-                divider.setDrawable(ShapeDrawable().apply {
-                    intrinsicWidth = 10
-                    paint.color = Color.TRANSPARENT
-                }) // note: currently (support version 28.0.0), we can not use tranparent color here, if we use transparent, we still see a small divider line. So if we want to display transparent space, we can set color = background color or we can create a custom ItemDecoration instead of DividerItemDecoration.
-                cardViewHolder.view.mainChipgroup.chipsRecycler.addItemDecoration(divider)
-                initAdaptersAction()
+        val divider = DividerItemDecoration(
+            context,
+            DividerItemDecoration.HORIZONTAL
+        )
+        divider.setDrawable(ShapeDrawable().apply {
+            intrinsicWidth = 10
+            paint.color = Color.TRANSPARENT
+        })
+        cardViewHolder.view.mainChipgroup.chipsRecycler.addItemDecoration(divider)
+        initAdaptersAction()
 
-            }
 
         //PaymentDataSource.setSelectedCurrency(currentCurrency, null)
         PaymentDataSource.setSelectedCurrency(currentCurrency, currentCurrencySymbol)
@@ -1484,21 +1464,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun initAdaptersAction() {
-        adapter = CardTypeAdapterUIKIT(this)
+        adapter = CardAdapterUIKIT(this)
         goPayAdapter = GoPayCardAdapterUIKIT(this)
         itemAdapter = ItemAdapter(bottomSheetLayout, headerLayout, sdkLayout)
-        // adapter?.possiblyShowGooglePayButton()
-        // val arrayList = ArrayList<String>()//Creating an empty arraylist
-        //  arrayList.add("Google Pay")//Adding object in arraylist
 
-
-        //adapter.updateAdapterGooglePay(arrayList)
-        //  goPayAdapter.updateAdapterData(goPayCardList.value as List<GoPaySavedCards>)
         if (allCurrencies.value?.isNotEmpty() == true) {
             currencyAdapter.updateAdapterData(allCurrencies.value as List<SupportedCurrencies>)
         }
         if (savedCardList?.isNotEmpty() == true) {
-            println("savedCardList.value" + PaymentDataSource.getCardType())
             if (PaymentDataSource.getCardType() != null && PaymentDataSource.getCardType() != CardType.ALL) {
                 filterSavedCardTypes(savedCardList as List<SavedCard>)
             } else adapter.updateAdapterDataSavedCard(savedCardList as List<SavedCard>)
@@ -1515,17 +1488,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             AnimationUtils.loadAnimation(context, R.anim.fall_down_animation)
 
 
-        paymentOptionsWorker =
-            java.util.ArrayList<PaymentOption>(paymentOptionsResponse.paymentOptions)
-
         filterViewModels(currentCurrency)
-        // filterModels(PaymentDataSource.getCurrency()?.isoCode.toString())
-        //  filterCardTypes(PaymentDataSource.getCurrency()?.isoCode.toString(),paymentOptionsWorker)
-
-        //    goPaySavedCardHolder.view.goPayLoginView.groupAction.setOnClickListener {
-        //       setGoPayLoginViewGroupActionListener()
-        //   }
-        //paymentInlineViewHolder.tabLayout.setOnTouchListener { v, _ ->
         touchHandlingForCardView()
     }
 
@@ -2535,7 +2498,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     ) {
         savedCardLongClickDelete()
         resetViewToPaymentInline()
-        println("stopAnimation"+stopAnimation)
+        println("stopAnimation" + stopAnimation)
         this.cardId = cardId
         selectedViewToBeDeletedFromCardViewHolder = selectedViewToBeDeleted
         viewToBeBlurCardViewHolder = viewtoBeBlur
@@ -3548,16 +3511,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         if (currencyFilter != null) {
             this.getCurrenciesFilter<PaymentOption>(currencyFilter)?.let { filters.add(it) }
         }
-        //  filters.add(getPaymentOptionsFilter(paymentType))
-        //  val filter: CompoundFilter<PaymentOption> = CompoundFilter(filters)
-        //  val filtered: ArrayList<PaymentOption> = Utils.List.filter(list)
-
-        var filtered: ArrayList<PaymentOption> =
-            list.filter { items ->
-                items.paymentType == paymentType && items.getSupportedCurrencies()?.contains(
-                    currencyFilter
-                ) == true
-            } as ArrayList<PaymentOption>
 
         return list.filter { items ->
             items.paymentType == paymentType && items.getSupportedCurrencies()?.contains(
@@ -3580,14 +3533,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         list: ArrayList<E>,
         currency: String
     ): ArrayList<SavedCard> where E : CurrenciesSupport?, E : Comparable<E>? {
-        println("currency filterByCurrenciesAndSortList" + currency)
-        println("list here" + list.size)
-        println("list here" + list)
-        //  val filter: Utils.List.Filter<E> = getCurrenciesFilter(currency)
-        // println("filter here"+filter)
-
-
-        // var filtered: ArrayList<E> = Utils.List.filter(list, filter)
         /**
          * Stopped generic for now to work the functionality**/
         return list.filter { items ->
@@ -3595,59 +3540,38 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 currency
             ) == true
         } as ArrayList<SavedCard>
-        /* Collections.sort(filtered)
-          return filtered*/
+
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun filterViewModels(currency: String) {
-
-        if (paymentOptionsResponse.paymentOptions != null)
-            paymentOptionsWorker =
-                java.util.ArrayList<PaymentOption>(paymentOptionsResponse.paymentOptions)
-        if (paymentOptionsResponse.cards != null) {
-            val savedCardsWorker: java.util.ArrayList<SavedCard> =
-                java.util.ArrayList<SavedCard>(paymentOptionsResponse.cards)
-            savedCardsBasedCurr = filterByCurrenciesAndSortList(savedCardsWorker, currency)
-
-        }
-        println("savedCardsBasedCurr>>" + savedCardsBasedCurr)
-        println("savedCardsBasedCurr>>" + savedCardsBasedCurr?.size)
-
-
-        webPaymentOptions =
-            filteredByPaymentTypeAndCurrencyAndSortedList(
-                paymentOptionsWorker, PaymentType.WEB, currency
-            )
+        savedCardsBasedCurr = filterByCurrenciesAndSortList(paymentOptionsResponse.cards, currency)
+        webPaymentOptions = filteredByPaymentTypeAndCurrencyAndSortedList(paymentOptionsResponse.paymentOptions, PaymentType.WEB, currency)
 
         val cardPaymentOptions: java.util.ArrayList<PaymentOption> =
             filteredByPaymentTypeAndCurrencyAndSortedList(
-                paymentOptionsWorker, PaymentType.CARD, currency
+                paymentOptionsResponse.paymentOptions, PaymentType.CARD, currency
             )
 
         val googlePaymentOptions: java.util.ArrayList<PaymentOption> =
             filteredByPaymentTypeAndCurrencyAndSortedList(
-                paymentOptionsWorker, PaymentType.GOOGLE_PAY, currency
+                paymentOptionsResponse.paymentOptions, PaymentType.GOOGLE_PAY, currency
             )
-        //  println("googlePaymentOptions"+googlePaymentOptions)
-        val hasWebPaymentOptions = webPaymentOptions.size > 0
-        val hasCardPaymentOptions = cardPaymentOptions.size > 0
+        Log.e("currency",currency.toString())
+        Log.e("size list",paymentOptionsResponse.paymentOptions.size.toString())
+        val disabledPaymentOptionList = paymentOptionsResponse.paymentOptions.filter { !it.getSupportedCurrencies().contains(currency) }
+        disabledPaymentOptionList.forEachIndexed { index, paymentOption ->
+            Log.e("disabledList",paymentOption.displayName.toString())
+
+        }
+        adapter.updateDisabledPaymentOptions(disabledPaymentOptionList)
+
         val hasGooglePaymentOptions = googlePaymentOptions.size > 0
-
         val hasSavedCards: Boolean = savedCardsBasedCurr.size > 0
-        // println("hasGooglePaymentOptions"+hasGooglePaymentOptions)
-
-        //Added if else to update showing GooglePay button based on api
         if (hasGooglePaymentOptions && googlePaymentOptions.isNotEmpty()) {
             adapter.updateAdapterGooglePay(googlePaymentOptions)
             PaymentDataSource.setGoogleCardPay(googlePaymentOptions)
-        } else {
-            adapter.updateAdapterGooglePay(googlePaymentOptions)
-            PaymentDataSource.setGoogleCardPay(googlePaymentOptions)
         }
-        println("hasWebPaymentOptions" + webPaymentOptions)
-        println("hasCardPaymentOptions" + hasCardPaymentOptions)
-        println("savedCardList" + savedCardList?.isNullOrEmpty())
         if (webPaymentOptions.size == 0) {
             adapter.updateAdapterData(ArrayList())
             if (savedCardList.isNullOrEmpty()) {
@@ -3663,11 +3587,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             webPaymentOptions,
             cardPaymentOptions
         )
-        if (savedCardsBasedCurr == null) savedCardsBasedCurr = ArrayList()
         if (hasSavedCards) {
             adapter.updateAdapterDataSavedCard(savedCardsBasedCurr)
-            // update RecentSectionViewModel data with only filtered cards. // added to fix filtering saved cards based on changed currency
-
         }
     }
 
@@ -3704,7 +3625,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 if (webPaymentOptions != null) {
                     adapter.updateAdapterData(webPaymentOptions)
                 }
-                if (!cardPaymentOptions.isEmpty()) {
+                if (cardPaymentOptions.isNotEmpty()) {
                     paymentInlineViewHolder.setDataFromAPI(cardPaymentOptions)
 
 

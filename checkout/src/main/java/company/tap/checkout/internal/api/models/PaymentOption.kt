@@ -116,7 +116,7 @@ data class PaymentOption(
     val defaultCurrency: String? = null
 
 ) : Comparable<PaymentOption>, CurrenciesSupport, Serializable {
-    override fun getSupportedCurrencies(): ArrayList<String>? {
+    override fun getSupportedCurrencies(): ArrayList<String> {
         return supportedCurrencies
     }
 
