@@ -268,7 +268,7 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
     }
 
 
-    private fun setOnClickActions(holder: RecyclerView.ViewHolder, position: Int) {
+    private fun setOnClickActions(holder: RecyclerView.ViewHolder, position: Int, card: SavedCard) {
         if (isShaking) {
             holder.itemView.deleteImageViewSaved?.visibility = View.VISIBLE
             setUnSelectedCardTypeSavedShadowAndBackground(holder)
@@ -282,17 +282,12 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
          * setOnLongClickListener as per new requirement
          **/
         holder.itemView.setOnLongClickListener {
-            println("position>>>$position")
-            println("adapterContent>>>" + webArrayListContent.size)
-            println("arraylistCards>>>" + savedCardsArrayList.size)
-            val cardNeeded =
-                savedCardsArrayList[position.minus(webArrayListContent.size)
-                    .minus(googlePayArrayList.size)]
+
             onCardSelectedActionListener.onDeleteIconClicked(
                 true,
-                position.minus(webArrayListContent.size).minus(googlePayArrayList.size),
-                cardNeeded.id,
-                cardNeeded.lastFour,
+                position.minus(webArrayListContent.size).minus(googlePayArrayList.size).minus(disabledPaymentOptions.size),
+                card.id,
+                card.lastFour,
                 savedCardsArrayList as ArrayList<SavedCard>,
                 holder.itemView.findViewById(R.id.tapCardChip2),
                 holder.itemView.findViewById(R.id.tapCardChip2Constraints),
@@ -403,26 +398,6 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
 
         if (selectedPosition == position) setSelectedCardTypeSavedShadowAndBackground(holder)
         else setUnSelectedCardTypeSavedShadowAndBackground(holder)
-        bindSavedCardData(holder, position)
-        setOnSavedCardOnClickAction(holder, position)
-        setOnClickActions(holder, position)
-    }
-
-
-    private fun setOnSavedCardOnClickAction(holder: RecyclerView.ViewHolder, position: Int) {
-
-        holder.itemView.setOnClickListener {
-            if (!isShaking) {
-                onCardSelectedActionListener.onCardSelectedAction(true, arrayListCombined[position])
-                selectedPosition = position
-                onCardSelectedActionListener.removePaymentInlineShrinkageAndDimmed()
-            }
-        }
-
-    }
-
-
-    private fun bindSavedCardData(holder: RecyclerView.ViewHolder, position: Int) {
         val card =
             if (googlePayArrayList.isNotEmpty()) {
                 Log.e("disabled", disabledPaymentOptions.size.toString())
@@ -431,6 +406,38 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
 
             } else savedCardsArrayList[position.minus(webArrayListContent.size)
                 .minus(disabledPaymentOptions.size)]
+        bindSavedCardData(holder, position,card)
+        setOnSavedCardOnClickAction(holder, position,card)
+        setOnClickActions(holder, position,card)
+    }
+
+
+    private fun setOnSavedCardOnClickAction(
+        holder: RecyclerView.ViewHolder,
+        position: Int,
+        card: SavedCard
+    ) {
+
+        holder.itemView.setOnClickListener {
+            if (!isShaking) {
+                onCardSelectedActionListener.onCardSelectedAction(true, card)
+                selectedPosition = position
+                onCardSelectedActionListener.removePaymentInlineShrinkageAndDimmed()
+            }
+        }
+
+    }
+
+
+    private fun bindSavedCardData(holder: RecyclerView.ViewHolder, position: Int, card: SavedCard) {
+//        val card =
+//            if (googlePayArrayList.isNotEmpty()) {
+//                Log.e("disabled", disabledPaymentOptions.size.toString())
+//                savedCardsArrayList[position.minus(webArrayListContent.size)
+//                    .minus(googlePayArrayList.size).minus(disabledPaymentOptions.size)]
+//
+//            } else savedCardsArrayList[position.minus(webArrayListContent.size)
+//                .minus(disabledPaymentOptions.size)]
 
         //    val card = savedCardsArrayList[position.minus(webArrayListContent.size).minus(googlePayArrayList.size).minus(disabledPaymentOptions.size)]
         var loadUrlString: String = ""
