@@ -3,10 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/tools"
     android:id="@+id/tapCardChip6"
-    android:layout_width="100dp"
-    android:layout_height="40dp"
+    android:layout_width="@dimen/_95sdp"
+    android:layout_height="@dimen/_35sdp"
     android:layout_marginStart="5dp"
-    android:layout_marginTop="@dimen/margin_basic_15dp"
     android:hardwareAccelerated="true"
     >
     <ImageView

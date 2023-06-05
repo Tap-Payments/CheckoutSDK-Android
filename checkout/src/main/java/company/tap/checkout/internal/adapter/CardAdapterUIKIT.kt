@@ -430,16 +430,6 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
 
 
     private fun bindSavedCardData(holder: RecyclerView.ViewHolder, position: Int, card: SavedCard) {
-//        val card =
-//            if (googlePayArrayList.isNotEmpty()) {
-//                Log.e("disabled", disabledPaymentOptions.size.toString())
-//                savedCardsArrayList[position.minus(webArrayListContent.size)
-//                    .minus(googlePayArrayList.size).minus(disabledPaymentOptions.size)]
-//
-//            } else savedCardsArrayList[position.minus(webArrayListContent.size)
-//                .minus(disabledPaymentOptions.size)]
-
-        //    val card = savedCardsArrayList[position.minus(webArrayListContent.size).minus(googlePayArrayList.size).minus(disabledPaymentOptions.size)]
         var loadUrlString: String = ""
         when (CustomUtils.getCurrentTheme()) {
             ThemeMode.dark.name -> {
