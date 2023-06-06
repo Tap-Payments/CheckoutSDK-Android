@@ -101,10 +101,10 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
     fun updateDisabledPaymentOptions(paymentOptionsDisable: List<PaymentOption>, position: Int?=null) {
         this.disabledPaymentOptions = paymentOptionsDisable
         notifyDataSetChanged()
-        position.apply {
-            notifyItemChanged(this!!)
+        position?.let {
+            selectedPosition = position
+            notifyItemChanged(it)
         }
-
     }
 
     @SuppressLint("NotifyDataSetChanged")

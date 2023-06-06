@@ -3671,7 +3671,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     .toString()
             )
         }
-        adapter.updateDisabledPaymentOptions(disabledPaymentOptionList, position)
+        adapter.updateDisabledPaymentOptions(disabledPaymentOptionList)
 
         val hasGooglePaymentOptions = googlePaymentOptions.size > 0
         val hasSavedCards: Boolean = savedCardsBasedCurr.size > 0
