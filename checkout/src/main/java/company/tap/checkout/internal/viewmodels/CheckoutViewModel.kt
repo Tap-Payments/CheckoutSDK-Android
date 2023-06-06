@@ -2088,13 +2088,32 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         with(cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget) {
             confitmButton.setOnClickListener {
                 dismisControlWidget()
-                submitNewLocalCurrency(
-                    currencySelected = getSelectedSupportedCurrency().currency.toString(),
-                    currencyRate = getSelectedSupportedCurrency().rate?.toBigDecimal()!!,
-                    totalSelectedAmount = getSelectedSupportedCurrency().amount,
-                    selectedCurrencySymbol = getSelectedSupportedCurrency().symbol ?: "",
-                    isClickFromDisabledViews = true
-                )
+                println("currenc here"+paymentOption.defaultCurrency)
+                println("suppored here"+paymentOptionsResponse?.supportedCurrencies)
+                var newRate :BigDecimal ?= BigDecimal.ZERO
+                var newAmount :BigDecimal ?= BigDecimal.ZERO
+                var newSymbol :String ?= ""
+
+                for (i in 0..paymentOptionsResponse?.supportedCurrencies.size ) {
+                    if(paymentOptionsResponse.supportedCurrencies[i].currency.equals(paymentOption.defaultCurrency)){
+                                newRate = paymentOptionsResponse.supportedCurrencies[i].rate?.toBigDecimal()!!
+                                newAmount = paymentOptionsResponse.supportedCurrencies[i].amount
+                                newSymbol =paymentOptionsResponse.supportedCurrencies[i].symbol
+                        break
+   }
+
+                }
+
+                if (newRate != null) {
+                        submitNewLocalCurrency(
+                            currencySelected = paymentOption.defaultCurrency.toString(),
+                            currencyRate = newRate!!,
+                            totalSelectedAmount = newAmount!!,
+                            selectedCurrencySymbol = newSymbol ?: "",
+                            isClickFromDisabledViews = true
+                        )
+                    }
+
                 onCardSelectedAction(true, paymentOption)
                 disabledPaymentOptionList.forEachIndexed { index, paymentOptionInList ->
                     paymentOptionInList.isDisabledClick = paymentOptionInList == paymentOption
@@ -3263,17 +3282,39 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         println("payActionSavedCard??????" + savedCardsModel)
         var selectdSavedCard: PaymentOption? = null
         selectdSavedCard = logicTogetPayOptions(savedCardsModel?.brand?.name)
-        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
+
+        when(CustomUtils.getCurrentTheme()){
+            ThemeMode.dark.name->{
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
                 backgroundColor = Color.parseColor(
                     selectdSavedCard?.buttonStyle?.background?.darkModel?.baseColor
                 )
             )
+            }
+                ThemeMode.dark_colored.name->{
+                    saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
+                        backgroundColor = Color.parseColor(
+                            selectdSavedCard?.buttonStyle?.background?.darkColorModel?.baseColor
+                        )
+                    )
+                }
+                ThemeMode.light.name->{
+                    saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
+                        backgroundColor = Color.parseColor(
+                            selectdSavedCard?.buttonStyle?.background?.lightModel?.baseColor
+                        )
+                    )
+                }
+                ThemeMode.light_mono.name->{
+                    saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
+                        backgroundColor = Color.parseColor(
+                            selectdSavedCard?.buttonStyle?.background?.lightMonoModel?.baseColor
+                        )
+                    )
+                }
+        }
 
-        } else
-            saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setInValidBackground(
-                backgroundColor = Color.parseColor(selectdSavedCard?.buttonStyle?.background?.lightModel?.baseColor)
-            )
+
 
         startSavedCardPaymentProcess(savedCardsModel as SavedCard)
 
@@ -3728,7 +3769,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             /**
              * first condition to get not supported currency
              */
-          ! it.getSupportedCurrencies().contains(currency)  && it.paymentType != PaymentType.CARD
+          ! it.getSupportedCurrencies().contains(currency)  && it.paymentType == PaymentType.WEB
         } as ArrayList<PaymentOption>
 
     }
