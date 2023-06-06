@@ -3615,14 +3615,20 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 paymentOptionsResponse.paymentOptions, PaymentType.CARD, currency
             )
 
+        cardPaymentOptions.forEachIndexed { index, paymentOption ->
+            Log.e("card option", paymentOption.displayName +   ">>" + paymentOption.getSupportedCurrencies())
+
+        }
         val googlePaymentOptions: java.util.ArrayList<PaymentOption> =
             filteredByPaymentTypeAndCurrencyAndSortedList(
                 paymentOptionsResponse.paymentOptions, PaymentType.GOOGLE_PAY, currency
             )
-        Log.e("currency", currency.toString())
-        Log.e("size list", paymentOptionsResponse.paymentOptions.size.toString())
+        paymentOptionsResponse.paymentOptions.forEachIndexed { index, paymentOption ->
+            Log.e("payment option", paymentOption.displayName +   ">>" + paymentOption.getSupportedCurrencies() + ">>" + paymentOption.paymentType.toString())
+
+        }
         val disabledPaymentOptionList = paymentOptionsResponse.paymentOptions.filter {
-            !it.getSupportedCurrencies().contains(currency)
+            !it.getSupportedCurrencies().contains(currency) && it.paymentType != PaymentType.CARD
         }
         disabledPaymentOptionList.forEachIndexed { index, paymentOption ->
             Log.e("disabledList", paymentOption.displayName.toString())
