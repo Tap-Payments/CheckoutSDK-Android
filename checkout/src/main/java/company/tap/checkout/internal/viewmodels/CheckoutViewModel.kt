@@ -568,7 +568,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun showCountryFlag(): String? {
         val currency = SharedPrefManager.getUserSupportedLocaleForTransactions(context)
-        Log.e("localNeeded", currency.toString())
+
         if (ThemeManager.currentTheme.contains("dark")) {
             return currency?.logos?.dark?.png
         } else {
@@ -1316,7 +1316,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         if (paymentOptionsResponse != null) {
             this.paymentOptionsResponse = paymentOptionsResponse
         }
-        Log.e("paymentOptions", this.paymentOptionsResponse.toString())
+
         if (::businessViewHolder.isInitialized && PaymentDataSource.getTransactionMode() != TransactionMode.TOKENIZE_CARD) {
             businessViewHolder.setDataFromAPI(
                 merchantData?.logo,
@@ -2943,7 +2943,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
         currentCurrencySymbol = selectedCurrencySymbol
 
-        Log.e("itemList", itemList.toString())
+
         val sortedList: List<SupportedCurrencies> =
             (paymentOptionsResponse.supportedCurrencies).sortedBy { it.orderBy }
         sortedList.forEachIndexed { index, supportedCurrencies ->
@@ -3616,7 +3616,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             )
 
         cardPaymentOptions.forEachIndexed { index, paymentOption ->
-            Log.e("card option", paymentOption.displayName +   ">>" + paymentOption.getSupportedCurrencies())
+
 
         }
         val googlePaymentOptions: java.util.ArrayList<PaymentOption> =
@@ -3624,14 +3624,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 paymentOptionsResponse.paymentOptions, PaymentType.GOOGLE_PAY, currency
             )
         paymentOptionsResponse.paymentOptions.forEachIndexed { index, paymentOption ->
-            Log.e("payment option", paymentOption.displayName +   ">>" + paymentOption.getSupportedCurrencies() + ">>" + paymentOption.paymentType.toString())
 
         }
         val disabledPaymentOptionList = paymentOptionsResponse.paymentOptions.filter {
             !it.getSupportedCurrencies().contains(currency) && it.paymentType != PaymentType.CARD
         }
         disabledPaymentOptionList.forEachIndexed { index, paymentOption ->
-            Log.e("disabledList", paymentOption.displayName.toString())
+         //   Log.e("disabledList", paymentOption.displayName.toString())
 
         }
         adapter.updateDisabledPaymentOptions(disabledPaymentOptionList)
