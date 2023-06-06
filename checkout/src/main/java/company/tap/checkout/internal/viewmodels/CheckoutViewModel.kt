@@ -29,6 +29,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.transition.*
 import cards.pay.paycardsrecognizer.sdk.FrameManager
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
@@ -114,6 +115,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.math.BigDecimal
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
 
 
@@ -130,6 +132,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     MorphingAnimation.OnAnimationEndListener {
     private var savedCardList: MutableList<SavedCard>? = mutableListOf()
     private var arrayListSavedCardSize = ArrayList<SavedCard>()
+    private var disabledPaymentOptionList = arrayListOf<PaymentOption>()
     private var supportedLoyalCards = MutableLiveData<List<LoyaltySupportedCurrency>>()
     private var goPayCardList = MutableLiveData<List<GoPaySavedCards>>()
     private var selectedViewToBeDeletedFromCardViewHolder: ViewGroup? = null
@@ -1477,14 +1480,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         } else {
             cardViewHolder.view.mainChipgroup.groupAction?.visibility = GONE
         }
-        //  itemsViewHolder.view.itemRecylerView.adapter = itemAdapter
-        itemsViewHolder.view.mainCurrencyChip.chipsRecycler.adapter = currencyAdapter
         if (PaymentDataSource.getItems() != null) {
             PaymentDataSource.getItems()?.let { itemAdapter.updateAdapterData(it) }
         }
         cardViewHolder.view.mainChipgroup.chipsRecycler.adapter = adapter
-        cardViewHolder.view.mainChipgroup.chipsRecycler.animation =
-            AnimationUtils.loadAnimation(context, R.anim.fall_down_animation)
+        (cardViewHolder.view.mainChipgroup.chipsRecycler?.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+
 
 
         filterViewModels(currentCurrency)
@@ -2026,7 +2027,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    override fun onDisabledChipSelected(paymentOption: PaymentOption, itemView: View) {
+    override fun onDisabledChipSelected(paymentOption: PaymentOption, position: Int) {
         unActivateActionButton()
         resetViewToPaymentInline()
         showControlWidget()
@@ -2084,7 +2085,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     isClickFromDisabledViews = true
                 )
                 onCardSelectedAction(true, paymentOption)
-                adapter.updateDisabledClickItem(itemView,paymentOption)
+                disabledPaymentOptionList.forEachIndexed { index, paymentOptionInList ->
+                    paymentOptionInList.isDisabledClick = paymentOptionInList == paymentOption
+                }
+                adapter.updateDisabledPaymentOptionsForSpecificItem(disabledPaymentOptionList,position)
+
 
 
             }
@@ -2102,10 +2107,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     fun dismisControlWidget() {
-        cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.fadeVisibility(
-            View.GONE,
-            duration = 1000
-        )
+        cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.visibility = View.GONE
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -2638,13 +2640,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     override fun onEditClicked(isClicked: Boolean) {
-        if (isClicked) {
-            adapter.updateShaking(true)
-            goPayAdapter.updateShaking(true)
-        } else {
-            adapter.updateShaking(false)
-            goPayAdapter.updateShaking(false)
-        }
 
     }
 
@@ -3656,14 +3651,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             )
 
         }
-        val disabledPaymentOptionList =
-            paymentOptionsResponse.paymentOptions.sortedBy { it.orderBy }.filter {
-                !it.getSupportedCurrencies()
-                    .contains(currency) && it.paymentType != PaymentType.CARD
-            }
-        disabledPaymentOptionList.forEachIndexed { index, paymentOption ->
-            Log.e("disabledList", paymentOption.displayName.toString())
+        disabledPaymentOptionList =getListOfDisabledChipsAccordingToSelectedCurrency(currency)
 
+        disabledPaymentOptionList.forEachIndexed { index, paymentOption ->
+            Log.e("updated",
+                paymentOption.displayName.toString() + ">>" + paymentOption.getSupportedCurrencies().toString())
         }
         adapter.updateDisabledPaymentOptions(disabledPaymentOptionList)
 
@@ -3691,6 +3683,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         if (hasSavedCards) {
             adapter.updateAdapterDataSavedCard(savedCardsBasedCurr)
         }
+    }
+
+    fun getListOfDisabledChipsAccordingToSelectedCurrency(currency: String): ArrayList<PaymentOption> {
+        return paymentOptionsResponse.paymentOptions.sortedBy { it.orderBy }.filter {
+            /**
+             * first condition to get not supported currency
+             */
+          ! it.getSupportedCurrencies().contains(currency)  && it.paymentType != PaymentType.CARD
+        } as ArrayList<PaymentOption>
+
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -3983,14 +3985,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 }
             }
         }
-        /*   Handler().postDelayed({
-               checkOutActivity?.onBackPressed()
-
-               if (::bottomSheetDialog.isInitialized)
-                   bottomSheetDialog.dismiss()
-               _checkoutFragment.activity?.onBackPressed()
-
-           }, 12000)*/
     }
 
 
