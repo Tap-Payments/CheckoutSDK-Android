@@ -2093,17 +2093,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
                     disabledPaymentOptionList.forEachIndexed { index, paymentOption ->
                         paymentOption.isPaymentOptionEnabled = this.getSelectedSupportedCurrency().currency in paymentOption.getSupportedCurrencies()
-                        Log.e(
-                            "updated",
-                            paymentOption.displayName.toString() + ">>" + paymentOption.getSupportedCurrencies()
-                                .toString()
-                        )
+
                     }
-                    adapter.updateDisabledPaymentOptions(disabledPaymentOptionList)
-                    adapter.updateDisabledPaymentOptionsForSpecificItem(
-                        disabledPaymentOptionList,
-                        position
-                    )
+                    adapter.updateDisabledPaymentOptions(disabledPaymentOptionList,position)
+
 
 
                 }
@@ -3678,7 +3671,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     .toString()
             )
         }
-        adapter.updateDisabledPaymentOptions(disabledPaymentOptionList)
+        adapter.updateDisabledPaymentOptions(disabledPaymentOptionList, position)
 
         val hasGooglePaymentOptions = googlePaymentOptions.size > 0
         val hasSavedCards: Boolean = savedCardsBasedCurr.size > 0
