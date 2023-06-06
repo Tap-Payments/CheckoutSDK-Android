@@ -2,7 +2,6 @@ package company.tap.checkout.internal.adapter
 
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.os.Build
@@ -14,14 +13,11 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import company.tap.checkout.R
-import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.api.models.PaymentOption
 import company.tap.checkout.internal.api.models.SavedCard
 import company.tap.checkout.internal.enums.ThemeMode
@@ -34,10 +30,6 @@ import kotlinx.android.synthetic.main.item_disabled.view.*
 import kotlinx.android.synthetic.main.item_googlepay.view.*
 import kotlinx.android.synthetic.main.item_knet.view.*
 import kotlinx.android.synthetic.main.item_save_cards.view.*
-import mobi.foo.benefitinapp.data.Transaction
-import mobi.foo.benefitinapp.listener.BenefitInAppButtonListener
-import mobi.foo.benefitinapp.listener.CheckoutListener
-import mobi.foo.benefitinapp.utils.BenefitInAppCheckout
 
 
 /**
@@ -49,9 +41,6 @@ All rights reserved.
 class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedActionListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var selectedPosition = -1
-    private var disabledClicked = false
-
-    private var arrayListRedirect: ArrayList<String> = ArrayList()
     private var savedCardsArrayList: List<SavedCard> = arrayListOf()
     private var webArrayListContent: List<PaymentOption> = arrayListOf()
     private var googlePayArrayList: List<PaymentOption> = arrayListOf()
@@ -60,13 +49,6 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
     private var goPayOpened: Boolean = false
     private var arrayModified: ArrayList<Any> = ArrayList()
     private var __context: Context? = null
-    private var totalArraySize: Int = 0
-
-    val appId: String = "4530082749"
-    val merchantId: String = "00000101"
-    val seceret: String = "3l5e0cstdim11skgwoha8x9vx9zo0kxxi4droryjp4eqd"
-    val countrycode: String = "1001"
-    val mcc: String = "4816"
 
     @DrawableRes
     val deleteIcon: Int =
@@ -80,9 +62,6 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
 
     companion object {
         private const val TYPE_SAVED_CARD = 5
-        private const val TYPE_REDIRECT = 2
-        private const val TYPE_GOOGLE_PAY = 4
-        private const val TYPE_3PPG = 1
         private const val TYPE_DISABLED_PAYMENT_OPTIONS = 6
 
     }
@@ -106,20 +85,17 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateDisabledPaymentOptions(paymentOptionsDisable: List<PaymentOption>) {
+    fun updateDisabledPaymentOptions(
+        paymentOptionsDisable: List<PaymentOption>,
+        position: Int? = null
+    ) {
         this.disabledPaymentOptions = paymentOptionsDisable
         notifyDataSetChanged()
-
+        position?.let {
+            selectedPosition = position
+            notifyItemChanged(it)
+        }
     }
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun updateDisabledPaymentOptionsForSpecificItem(paymentOptionsDisable: List<PaymentOption>,position: Int) {
-        this.disabledPaymentOptions = paymentOptionsDisable
-        selectedPosition = position
-        notifyItemChanged(position)
-
-    }
-
 
 
     fun updateShaking(isShaking: Boolean) {
@@ -161,34 +137,17 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
                     .inflate(R.layout.item_save_cards, parent, false)
                 SavedViewHolder(view)
             }
-            TYPE_REDIRECT -> {
-                view =
-                    LayoutInflater.from(parent.context).inflate(R.layout.item_knet, parent, false)
-                SingleViewHolder(view)
-            }
-            TYPE_GOOGLE_PAY -> {
-                view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_googlepay, parent, false)
-
-                GooglePayViewHolder(view)
-            }
-
             TYPE_DISABLED_PAYMENT_OPTIONS -> {
                 view =
                     LayoutInflater.from(parent.context)
                         .inflate(R.layout.item_disabled, parent, false)
                 SingleViewHolder(view)
             }
-            TYPE_3PPG -> {
-                view =
-                    LayoutInflater.from(parent.context)
-                        .inflate(R.layout.item_benefit_pay, parent, false)
-                GooglePayViewHolder(view)
-            }
             else -> {
                 view =
-                    LayoutInflater.from(parent.context).inflate(R.layout.item_gopay, parent, false)
-                GoPayViewHolder(view)
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.item_disabled, parent, false)
+                SingleViewHolder(view)
             }
         }
 
@@ -196,78 +155,24 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
 
     override fun getItemViewType(position: Int): Int {
 
-        if (position < webArrayListContent.size) {
-            if (webArrayListContent[position].paymentType == PaymentType.WEB) {
-                logicTosetLogoBasedOnTheme(position)
-                return TYPE_REDIRECT
-            }
-
-
-        }
-
-        if (googlePayArrayList.isNotEmpty() && googlePayArrayList[0].paymentType == PaymentType.GOOGLE_PAY)
-            if (position - webArrayListContent.size < googlePayArrayList.size) {
-                return TYPE_GOOGLE_PAY
-            }
 
         if (disabledPaymentOptions.isNotEmpty()) {
-            if (position.minus(webArrayListContent.size)
-                    .minus(googlePayArrayList.size) < disabledPaymentOptions.size
+            if (position < disabledPaymentOptions.size
             ) {
                 return TYPE_DISABLED_PAYMENT_OPTIONS
             }
         }
 
-        if (position.minus(webArrayListContent.size)
-                .minus(googlePayArrayList.size)
-                .minus(disabledPaymentOptions.size) < savedCardsArrayList.size
-        ) {
+        if (position.minus(disabledPaymentOptions.size) < savedCardsArrayList.size) {
             return TYPE_SAVED_CARD
         }
 
-
-        return TYPE_3PPG
-
-    }
-
-    private fun logicTosetLogoBasedOnTheme(position: Int) {
-        if (webArrayListContent[position].logos != null)
-            when (CustomUtils.getCurrentTheme()) {
-                ThemeMode.dark.name -> {
-                    (webArrayListContent[position]).logos?.dark?.png?.let { arrayListRedirect.add(it) }
-                }
-                ThemeMode.dark_colored.name -> {
-                    (webArrayListContent[position]).logos?.dark_colored?.png?.let {
-                        arrayListRedirect.add(
-                            it
-                        )
-                    }
-                }
-                ThemeMode.light.name -> {
-                    (webArrayListContent[position]).logos?.light?.png?.let {
-                        arrayListRedirect.add(
-                            it
-                        )
-                    }
-                }
-                ThemeMode.light_mono.name -> {
-                    (webArrayListContent[position]).logos?.light_mono?.png?.let {
-                        arrayListRedirect.add(
-                            it
-                        )
-                    }
-                }
-
-            }
+        return TYPE_SAVED_CARD
 
     }
 
     override fun getItemCount(): Int {
-        totalArraySize =
-            webArrayListContent.size.plus(googlePayArrayList.size).plus(savedCardsArrayList.size)
-                .plus(disabledPaymentOptions.size)
-
-        return totalArraySize
+        return savedCardsArrayList.size.plus(disabledPaymentOptions.size)
 
     }
 
@@ -289,8 +194,7 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
 
             onCardSelectedActionListener.onDeleteIconClicked(
                 true,
-                position.minus(webArrayListContent.size).minus(googlePayArrayList.size)
-                    .minus(disabledPaymentOptions.size),
+                position.minus(disabledPaymentOptions.size),
                 card.id,
                 card.lastFour,
                 savedCardsArrayList as ArrayList<SavedCard>,
@@ -325,47 +229,7 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
             getItemViewType(position) == TYPE_SAVED_CARD -> {
                 typeSavedCard(holder, position)
             }
-            /**
-             * 3Rd PartyPG Type
-             */
-            getItemViewType(position) == TYPE_3PPG -> {
-                setAlphaWhenShaking(isShaking, holder)
-                type3PPG(holder, position)
-            }
-            /**
-             * Knet Type
-             */
-            getItemViewType(position) == TYPE_REDIRECT -> {
-                setAlphaWhenShaking(isShaking, holder)
-                typeRedirect(holder, position)
-            }
-            /**
-             * GooglePay Type
-             */
-            getItemViewType(position) == TYPE_GOOGLE_PAY -> {
-                setAlphaWhenShaking(isShaking, holder)
-                typeGooglePay(holder, position)
-            }
-            /**
-             * GoPay Type
-             */
-            else -> {
-                setAlphaWhenShaking(isShaking, holder)
-                if (selectedPosition == position) holder.itemView.setBackgroundResource(R.drawable.border_gopay)
-                else holder.itemView.setBackgroundResource(R.drawable.border_gopay_unclick)
 
-                (holder as GoPayViewHolder)
-
-                holder.itemView.setOnClickListener {
-                    if (!isShaking) {
-                        selectedPosition = position
-                        println("goPay is clicked" + selectedPosition)
-                        onCardSelectedActionListener.onCardSelectedAction(true, null)
-                        goPayOpenedfromMain(goPayOpened)
-                        notifyDataSetChanged()
-                    }
-                }
-            }
         }
     }
 
@@ -388,24 +252,12 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
     }
 
 
-    private fun setAlphaWhenShaking(isShaking: Boolean, holder: RecyclerView.ViewHolder) {
-        if (isShaking) holder.itemView.alpha = 0.4f
-        else holder.itemView.alpha = 1.0f
-    }
-
     private fun typeSavedCard(holder: RecyclerView.ViewHolder, position: Int) {
         setSavedCardShakingAnimation(holder)
 
         if (selectedPosition == position) setSelectedCardTypeSavedShadowAndBackground(holder)
         else setUnSelectedCardTypeSavedShadowAndBackground(holder)
-        val card =
-            if (googlePayArrayList.isNotEmpty()) {
-                Log.e("disabled", disabledPaymentOptions.size.toString())
-                savedCardsArrayList[position.minus(webArrayListContent.size)
-                    .minus(googlePayArrayList.size).minus(disabledPaymentOptions.size)]
-
-            } else savedCardsArrayList[position.minus(webArrayListContent.size)
-                .minus(disabledPaymentOptions.size)]
+        val card = savedCardsArrayList[position.minus(disabledPaymentOptions.size)]
         bindSavedCardData(holder, position, card)
         setOnSavedCardOnClickAction(holder, position, card)
         setOnClickActions(holder, position, card)
@@ -509,27 +361,12 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         }
     }
 
-    private fun typeRedirect(holder: RecyclerView.ViewHolder, position: Int) {
-        if (selectedPosition == position) setSelectedCardTypeRedirectShadowAndBackground(holder)
-        else setUnSelectedCardTypeRedirectShadowAndBackground(holder)
 
-        (holder as SingleViewHolder)
-        holder.itemView.setOnClickListener {
-            if (!isShaking) {
-                setOnRedirectCardOnClickAction(holder, position)
-            }
-        }
-        bindRedirectCardImage(holder)
-    }
 
     private fun typeDisabled(holder: RecyclerView.ViewHolder, position: Int) {
-        val typeDisabled = disabledPaymentOptions[position.minus(webArrayListContent.size)
-            .minus(googlePayArrayList.size)]
-
-
-
+        val typeDisabled = disabledPaymentOptions[position]
         if (selectedPosition == position) {
-            if (typeDisabled.isDisabledClick) {
+            if (typeDisabled.isPaymentOptionEnabled) {
                 setSelectedCardTypeDisabledOne(holder)
             } else
                 setSelectedCardTypeDisabledShadowAndBackground(holder)
@@ -539,24 +376,44 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         val imageViewCard = holder.itemView.findViewById<ImageView>(R.id.imageView_disable)
         when (CustomUtils.getCurrentTheme()) {
             ThemeMode.dark.name -> {
-                Glide.with(holder.itemView.context)
-                    .load(typeDisabled.logos?.dark?.disabled?.png)
-                    .into(imageViewCard)
+                if (typeDisabled.isPaymentOptionEnabled) {
+                    Glide.with(holder.itemView.context)
+                        .load(typeDisabled.logos?.dark?.svg)
+                        .into(imageViewCard)
+                } else
+                    Glide.with(holder.itemView.context)
+                        .load(typeDisabled.logos?.dark?.disabled?.svg)
+                        .into(imageViewCard)
             }
             ThemeMode.dark_colored.name -> {
-                Glide.with(holder.itemView.context)
-                    .load(typeDisabled.logos?.dark_colored?.disabled?.png)
-                    .into(imageViewCard)
+                if (typeDisabled.isPaymentOptionEnabled) {
+                    Glide.with(holder.itemView.context)
+                        .load(typeDisabled.logos?.dark_colored?.svg)
+                        .into(imageViewCard)
+                } else
+                    Glide.with(holder.itemView.context)
+                        .load(typeDisabled.logos?.dark_colored?.disabled?.svg)
+                        .into(imageViewCard)
             }
             ThemeMode.light.name -> {
-                Glide.with(holder.itemView.context)
-                    .load(typeDisabled.logos?.light?.disabled?.png)
-                    .into(imageViewCard)
+                if (typeDisabled.isPaymentOptionEnabled) {
+                    Glide.with(holder.itemView.context)
+                        .load(typeDisabled.logos?.light?.svg)
+                        .into(imageViewCard)
+                } else
+                    Glide.with(holder.itemView.context)
+                        .load(typeDisabled.logos?.light?.disabled?.svg)
+                        .into(imageViewCard)
             }
             ThemeMode.light_mono.name -> {
-                Glide.with(holder.itemView.context)
-                    .load(typeDisabled.logos?.light_mono?.disabled?.png)
-                    .into(imageViewCard)
+                if (typeDisabled.isPaymentOptionEnabled) {
+                    Glide.with(holder.itemView.context)
+                        .load(typeDisabled.logos?.light_mono?.svg)
+                        .into(imageViewCard)
+                } else
+                    Glide.with(holder.itemView.context)
+                        .load(typeDisabled.logos?.light_mono?.disabled?.svg)
+                        .into(imageViewCard)
             }
         }
 
@@ -569,96 +426,6 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
 
     }
 
-    private fun type3PPG(holder: RecyclerView.ViewHolder, position: Int) {
-        holder.itemView.checkout_btn.setListener(object : BenefitInAppButtonListener,
-            CheckoutListener {
-            override fun onButtonClicked() {
-                Toast.makeText(__context, "type3ppg", Toast.LENGTH_SHORT).show()
-                BenefitInAppCheckout.newInstance(
-                    __context as Activity,
-                    appId,
-                    "445544",
-                    merchantId,
-                    seceret,
-                    "20.0",
-                    "BH",
-                    "048",
-                    mcc,
-                    "Tap",
-                    "Manama",
-                    this
-                )
-                println("values set in benefit checckout are ${"app val : " + appId + "merchant id :" + merchantId + "sceret : " + seceret + "countrycode are :" + countrycode + "mcc val : " + mcc} ")
-            }
-
-            override fun onFail(p0: Int) {
-                println("failed is value is  ${p0}")
-                Toast.makeText(__context, "onFail" + p0, Toast.LENGTH_SHORT).show()
-
-
-            }
-
-            override fun onTransactionSuccess(p0: Transaction?) {
-                Toast.makeText(__context, "onTransactionSuccess" + p0, Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onTransactionFail(p0: Transaction?) {
-                Toast.makeText(__context, "onTransactionFail" + p0, Toast.LENGTH_SHORT).show()
-            }
-
-
-        })
-
-    }
-
-    private fun typeGooglePay(holder: RecyclerView.ViewHolder, position: Int) {
-        if (selectedPosition == position) setSelectedGoogleShadowAndBackground(holder)
-        else setUnSelectedCardTypeGoogleShadowAndBackground(holder)
-        holder.itemView.googlePayButton.setImageResource(googlePayIcon)
-        holder.itemView.googlePayButton.setOnClickListener {
-            if (position > 0) {
-                onCardSelectedActionListener.onCardSelectedAction(
-                    true,
-                    googlePayArrayList[position - 1]
-                )
-            } else onCardSelectedActionListener.onCardSelectedAction(
-                true,
-                googlePayArrayList[position]
-            )
-            selectedPosition = position
-            notifyDataSetChanged()
-        }
-    }
-
-
-    private fun setOnRedirectCardOnClickAction(holder: RecyclerView.ViewHolder, position: Int) {
-        onCardSelectedActionListener.onCardSelectedAction(
-            true,
-            webArrayListContent[holder.bindingAdapterPosition]
-        )
-        selectedPosition = position
-        notifyDataSetChanged()
-        //Hide keyboard of any open
-        CustomUtils.hideKeyboardFrom(holder.itemView.context, holder.itemView)
-    }
-
-    private fun bindRedirectCardImage(holder: RecyclerView.ViewHolder) {
-        for (i in 0 until arrayListRedirect.size) {
-            val imageViewCard = holder.itemView.findViewById<ImageView>(R.id.imageView_knet)
-            Glide.with(holder.itemView.context)
-                .load(arrayListRedirect[i].toUri())
-                .into(imageViewCard)
-        }
-    }
-
-    private fun setSelectedCardTypeRedirectShadowAndBackground(holder: RecyclerView.ViewHolder) {
-        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) (holder.itemView.tapCardChip3.setBackgroundResource(
-            R.drawable.border_shadow_white
-        ))
-        else holder.itemView.tapCardChip3.setBackgroundResource(R.drawable.border_shadow)
-
-
-    }
 
     private fun setSelectedCardTypeDisabledOne(holder: RecyclerView.ViewHolder) {
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) (holder.itemView.tapCardChip_disabled.setBackgroundResource(
@@ -679,13 +446,6 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
     }
 
 
-    private fun setUnSelectedCardTypeRedirectShadowAndBackground(holder: RecyclerView.ViewHolder) {
-        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) holder.itemView.tapCardChip3.setBackgroundResource(
-            R.drawable.border_unclick_black
-        )
-        else holder.itemView.tapCardChip3.setBackgroundResource(R.drawable.border_unclick_white)
-    }
-
     private fun setUnSelectedCardTypeDisabledShadowAndBackground(holder: RecyclerView.ViewHolder) {
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) holder.itemView.tapCardChip_disabled.setBackgroundResource(
             R.drawable.border_unclick_black
@@ -695,23 +455,10 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
     }
 
 
-    private fun setSelectedGoogleShadowAndBackground(holder: RecyclerView.ViewHolder) {
-        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
-            holder.itemView.tapCardChip6.setBackgroundResource(R.drawable.border_shadow_white)
-        } else {
-            holder.itemView.tapCardChip6.setBackgroundResource(R.drawable.border_shadow)
-        }
-
-    }
-
     internal class SavedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
 
     internal class SingleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
-
-    internal class GoPayViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
-
-    internal class GooglePayViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     private fun maskCardNumber(cardInput: String): String {
         val maskLen: Int = cardInput.length - 4
@@ -719,14 +466,6 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         return (cardInput).replaceRange(0, 6, "••• ")
     }
 
-
-    private fun setUnSelectedCardTypeGoogleShadowAndBackground(holder: RecyclerView.ViewHolder) {
-        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
-            holder.itemView.tapCardChip6.setBackgroundResource(R.drawable.border_unclick_black)
-        } else {
-            holder.itemView.tapCardChip6.setBackgroundResource(R.drawable.border_unclick_white)
-        }
-    }
 
 }
 
