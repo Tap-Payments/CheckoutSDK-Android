@@ -13,15 +13,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingHorizontal="@dimen/_8sdp"
         android:paddingTop="@dimen/_10sdp">
 
         <ImageView
             android:id="@+id/currency_widget_logo"
-            android:layout_width="@dimen/_50sdp"
+            android:layout_width="@dimen/_57sdp"
             android:layout_height="@dimen/_20sdp"
             tools:src="@drawable/paypal_logo"
-            android:scaleType="fitStart"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,6 +30,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_16sdp"
+            android:paddingHorizontal="@dimen/_8sdp"
+
             android:textColor="#4b4847"
             android:textSize="13sp"
             app:layout_constraintStart_toStartOf="@id/currency_widget_logo"
@@ -42,6 +44,8 @@
             android:layout_height="@dimen/_30sdp"
             android:background="@drawable/rounded_currency_widget"
             android:textAllCaps="false"
+            android:paddingHorizontal="@dimen/_8sdp"
+
             android:textColor="@color/white"
             android:textSize="12sp"
             app:cornerRadius="@dimen/_24sdp"
@@ -66,19 +70,28 @@
             android:layout_width="wrap_content"
             android:overlapAnchor="false"
             android:background="@null"
+            android:paddingBottom="@dimen/_5sdp"
+            android:gravity="end"
+            android:paddingEnd="@dimen/_20sdp"
             android:dropDownWidth="@dimen/_150sdp"
             android:layout_height="@dimen/_18sdp"
             android:popupBackground="@drawable/spinner_bg"
              />
 
-            <ImageView
-                android:id="@+id/drop_down_iv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/drop_down_icon" />
+
 
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/drop_down_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-20dp"
+            app:layout_constraintStart_toEndOf="@id/currency_widget_Frame"
+            app:layout_constraintTop_toTopOf="@id/currency_widget_Frame"
+            app:layout_constraintBottom_toBottomOf="@id/currency_widget_Frame"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/drop_down_icon" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

@@ -15,6 +15,7 @@
     <color name="view_color">#dfdfdf</color>
     <color name="chip_background">#f4f4f4</color>
     <color name="chip_border">#dfdfdf</color>
+    <color name="dropdown_stroke">#e7e7e7</color>
 
     <color name="bg_gray">#f4f4f4</color>
     <color name="dark_gray">#ababab</color>

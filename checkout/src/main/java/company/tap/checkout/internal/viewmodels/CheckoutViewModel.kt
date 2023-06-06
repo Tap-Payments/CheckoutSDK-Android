@@ -1,8 +1,6 @@
 package company.tap.checkout.internal.viewmodels
 
 import SupportedCurrencies
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -568,7 +566,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun showCountryFlag(): String? {
         val currency = SharedPrefManager.getUserSupportedLocaleForTransactions(context)
-        Log.e("localNeeded", currency.toString())
         if (ThemeManager.currentTheme.contains("dark")) {
             return currency?.logos?.dark?.png
         } else {
@@ -1989,7 +1986,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 isSavedCardSelected = true
                 Bugfender.d(
                     CustomUtils.tagEvent,
-                    "Payment scheme selected: title :" + savedCardsModel?.brand + "& ID :" + savedCardsModel.paymentOptionIdentifier
+                    "Payment scheme selected: title :" + savedCardsModel.brand + "& ID :" + savedCardsModel.paymentOptionIdentifier
                 )
                 unActivateActionButton()
             }
@@ -2028,8 +2025,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
     }
 
-    override fun onDisabledChipSelected(paymentOption: PaymentOption) {
-
+    @RequiresApi(Build.VERSION_CODES.N)
+    override fun onDisabledChipSelected(paymentOption: PaymentOption, itemView: View) {
+        unActivateActionButton()
+        resetViewToPaymentInline()
         showControlWidget()
         with(paymentOption) {
             val supportedCurrenciesRelatedToDisabledChip = mutableListOf<SupportedCurrencies>()
@@ -2073,21 +2072,47 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
         }
+
+        with(cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget) {
+            confitmButton.setOnClickListener {
+                dismisControlWidget()
+                submitNewLocalCurrency(
+                    currencySelected = getSelectedSupportedCurrency().currency.toString(),
+                    currencyRate = getSelectedSupportedCurrency().rate?.toBigDecimal()!!,
+                    totalSelectedAmount = getSelectedSupportedCurrency().amount,
+                    selectedCurrencySymbol = getSelectedSupportedCurrency().symbol ?: "",
+                    isClickFromDisabledViews = true
+                )
+                onCardSelectedAction(true, paymentOption)
+                adapter.updateDisabledClickItem(itemView,paymentOption)
+
+
+            }
+        }
+
+
     }
 
 
     fun showControlWidget() {
-        cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.fadeVisibility(View.VISIBLE, duration = 1000)
+        cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.fadeVisibility(
+            View.VISIBLE,
+            duration = 1000
+        )
     }
 
     fun dismisControlWidget() {
-        cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.fadeVisibility(View.GONE, duration = 1000)
+        cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.fadeVisibility(
+            View.GONE,
+            duration = 1000
+        )
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun performResetToPaymentInline() {
         resetViewToPaymentInline()
         resetCardSelection()
+        dismisControlWidget()
         unActivateActionButton()
         if (paymentInlineViewHolder.cvvNumber?.length == 3) {
             with(paymentInlineViewHolder) {
@@ -2556,6 +2581,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     ) {
         savedCardLongClickDelete()
         resetViewToPaymentInline()
+        dismisControlWidget()
         println("stopAnimation" + stopAnimation)
         this.cardId = cardId
         selectedViewToBeDeletedFromCardViewHolder = selectedViewToBeDeleted
@@ -2631,6 +2657,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     override fun removePaymentInlineShrinkageAndDimmed() {
         resetViewToPaymentInline()
+        dismisControlWidget()
     }
 
 
@@ -2878,10 +2905,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         currencySelected: String,
         currencyRate: BigDecimal,
         totalSelectedAmount: BigDecimal,
-        selectedCurrencySymbol: String
+        selectedCurrencySymbol: String,
+        isClickFromDisabledViews: Boolean = false
     ) {
-
-
         currencyOldRate = currencyRate
         if (::unModifiedItemList.isInitialized)
             println("unModifiedItemList" + unModifiedItemList)
@@ -2899,9 +2925,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             itemAdapter.updateAdapterData(itemList)
 
         }
-
-        //  itemList[i].amount = (list[i].amount.toLong())
-        //  itemList[i].currency = currencySelected
 
         selectedAmount = CurrencyFormatter.currencyFormat(totalSelectedAmount.toString())
         if (currencySelected != null) {
@@ -2943,7 +2966,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
         currentCurrencySymbol = selectedCurrencySymbol
 
-        Log.e("itemList", itemList.toString())
         val sortedList: List<SupportedCurrencies> =
             (paymentOptionsResponse.supportedCurrencies).sortedBy { it.orderBy }
         sortedList.forEachIndexed { index, supportedCurrencies ->
@@ -2962,12 +2984,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         adapter.resetSelection()
 
-        if (::selectedCurrency.isInitialized) {
-            Bugfender.d(CustomUtils.tagEvent, "Currency changed to : " + selectedCurrencySymbol)
-            filterViewModels(selectedCurrency)
-        } else {
-            filterViewModels(currentCurrency)
-            //Bugfender.d("Currency changed to : "+currentCurrency ,CustomUtils.tagEvent)
+        if (!isClickFromDisabledViews) {
+            if (::selectedCurrency.isInitialized) {
+                Bugfender.d(CustomUtils.tagEvent, "Currency changed to : " + selectedCurrencySymbol)
+                filterViewModels(selectedCurrency)
+            } else {
+                filterViewModels(currentCurrency)
+            }
         }
 
     }
@@ -3616,7 +3639,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             )
 
         cardPaymentOptions.forEachIndexed { index, paymentOption ->
-            Log.e("card option", paymentOption.displayName +   ">>" + paymentOption.getSupportedCurrencies())
+            Log.e(
+                "card option",
+                paymentOption.displayName + ">>" + paymentOption.getSupportedCurrencies()
+            )
 
         }
         val googlePaymentOptions: java.util.ArrayList<PaymentOption> =
@@ -3624,12 +3650,17 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 paymentOptionsResponse.paymentOptions, PaymentType.GOOGLE_PAY, currency
             )
         paymentOptionsResponse.paymentOptions.forEachIndexed { index, paymentOption ->
-            Log.e("payment option", paymentOption.displayName +   ">>" + paymentOption.getSupportedCurrencies() + ">>" + paymentOption.paymentType.toString())
+            Log.e(
+                "payment option",
+                paymentOption.displayName + ">>" + paymentOption.getSupportedCurrencies() + ">>" + paymentOption.paymentType.toString()
+            )
 
         }
-        val disabledPaymentOptionList = paymentOptionsResponse.paymentOptions.filter {
-            !it.getSupportedCurrencies().contains(currency) && it.paymentType != PaymentType.CARD
-        }
+        val disabledPaymentOptionList =
+            paymentOptionsResponse.paymentOptions.sortedBy { it.orderBy }.filter {
+                !it.getSupportedCurrencies()
+                    .contains(currency) && it.paymentType != PaymentType.CARD
+            }
         disabledPaymentOptionList.forEachIndexed { index, paymentOption ->
             Log.e("disabledList", paymentOption.displayName.toString())
 

@@ -12,6 +12,8 @@ object AppColorTheme {
 
 
     const val ControlCurrencyWidgetBackground="CurrencyWidget.background.color"
+    const val ControlCurrencyWidgetColorTintOfStroke="CurrencyWidget.currencyDropDown.arrowDownTint"
+
     const val ControlCurrencyWidgetBackgroundRadius="CurrencyWidget.background.cornerRadius"
     const val ControlCurrencyWidgetConfirmButtonBackgroundColor="CurrencyWidget.confirmButton.backgroundColor"
     const val ControlCurrencyWidgetConfirmButtonCornerRadius="CurrencyWidget.confirmButton.cornerRadius"
