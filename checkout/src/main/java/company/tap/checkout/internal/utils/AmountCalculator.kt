@@ -3,7 +3,7 @@ package company.tap.checkout.internal.utils
 import company.tap.checkout.internal.api.enums.AmountModificatorType
 import company.tap.checkout.internal.api.models.AmountedCurrency
 import company.tap.checkout.internal.api.models.ExtraFee
-import SupportedCurrencies
+  import company.tap.checkout.internal.api.models.SupportedCurrencies
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.models.*
 import java.math.BigDecimal

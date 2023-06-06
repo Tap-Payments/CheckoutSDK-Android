@@ -1,6 +1,5 @@
-package company.tap.tapuilibraryy.uikit.atoms
+package company.tap.checkout.internal.adapter
 
-import SupportedCurrencies
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Typeface
@@ -12,6 +11,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import company.tap.checkout.internal.api.models.SupportedCurrencies
 import company.tap.tapuilibraryy.R
 import company.tap.tapuilibraryy.fontskit.enums.TapFont
 import company.tap.tapuilibraryy.uikit.AppColorTheme

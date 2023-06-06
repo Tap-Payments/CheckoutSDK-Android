@@ -3,7 +3,7 @@ package company.tap.checkout.internal.cache
 import android.content.Context
 import android.content.SharedPreferences
 import com.google.gson.Gson
-import SupportedCurrencies
+  import company.tap.checkout.internal.api.models.SupportedCurrencies
 import company.tap.checkout.internal.api.responses.UserLocalCurrencyModel
 
 const val UserLocalCurrencyModelKey = "userLocalCurrencyModel"

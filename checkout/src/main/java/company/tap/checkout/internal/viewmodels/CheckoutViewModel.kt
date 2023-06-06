@@ -1,8 +1,5 @@
 package company.tap.checkout.internal.viewmodels
 
-import SupportedCurrencies
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -19,6 +16,7 @@ import android.view.View
 import android.view.View.*
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.AdapterView
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -49,10 +47,7 @@ import company.tap.cardinputwidget2.widget.CardInputListener
 import company.tap.cardscanner.*
 import company.tap.checkout.R
 import company.tap.checkout.internal.PaymentDataProvider
-import company.tap.checkout.internal.adapter.CardAdapterUIKIT
-import company.tap.checkout.internal.adapter.CurrencyTypeAdapter
-import company.tap.checkout.internal.adapter.GoPayCardAdapterUIKIT
-import company.tap.checkout.internal.adapter.ItemAdapter
+import company.tap.checkout.internal.adapter.*
 import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.api.models.*
@@ -2043,9 +2038,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.setCurrencyWidgetDescription(
                 this.displayName
             )
-            cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.setSupportedCurrunciesForControlWidget(
-                supportedCurrenciesRelatedToDisabledChip
-            )
+           setSupportedCurrunciesForControlWidget(supportedCurrenciesRelatedToDisabledChip)
 
             when (CustomUtils.getCurrentTheme()) {
                 ThemeMode.dark.name -> {
@@ -2138,7 +2131,41 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
 
     }
+    fun setSupportedCurrunciesForControlWidget(displayNamePaymentOption: MutableList<SupportedCurrencies>) {
+        cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.spinner.let {
+            it.adapter = TapSpinnerAdapter(
+                this.context,
+                company.tap.tapuilibraryy.R.layout.custom_spinner,
+                company.tap.tapuilibraryy.R.id.tv_spinnervalue,
+                displayNamePaymentOption
+            )
 
+            it.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    if (position != 0) {
+                        val currncyData = parent.getItemAtPosition(position) as currncyData
+
+                    }
+                } // to close the onItemSelected
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
+
+
+            it.viewTreeObserver?.addOnWindowFocusChangeListener { hasFocus -> //This updates the arrow icon up/down depending on Spinner opening/closing
+                if (hasFocus) {
+                    cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.rotateImage(cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.dropDownIv, 0f)
+                } else {
+                    cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.rotateImage(cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.dropDownIv, -180F)
+                }
+            }
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun resetViewToPaymentInline() {

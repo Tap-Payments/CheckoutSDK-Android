@@ -1,6 +1,5 @@
 package company.tap.tapuilibraryy.uikit.atoms
 
-import SupportedCurrencies
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
@@ -10,7 +9,6 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.*
 import androidx.cardview.widget.CardView
-import company.tap.checkout.internal.api.models.Logos
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibraryy.R
 import company.tap.tapuilibraryy.fontskit.enums.TapFont
@@ -88,44 +86,10 @@ class TapCurrencyControlWidget : FrameLayout {
         currencyWidgetDescription.text = displayNamePaymentOption + " " + LocalizationManager.getValue("header", "CurrencyChangeWidget")
 
     }
-    fun setSupportedCurrunciesForControlWidget(displayNamePaymentOption: MutableList<SupportedCurrencies>) {
-        spinner.let {
-            it.adapter = TapSpinnerAdapter(
-                this.context,
-                R.layout.custom_spinner,
-                R.id.tv_spinnervalue,
-                displayNamePaymentOption
-            )
-
-            it.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    if (position != 0) {
-                       // val currncyData = parent.getItemAtPosition(position) as currncyData
-
-                    }
-                } // to close the onItemSelected
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
-            }
 
 
-            it.viewTreeObserver?.addOnWindowFocusChangeListener { hasFocus -> //This updates the arrow icon up/down depending on Spinner opening/closing
-                if (hasFocus) {
-                    rotateImage(dropDownIv, 0f)
-                } else {
-                    rotateImage(dropDownIv, -180F)
-                }
-            }
-        }
-    }
 
-
-    private fun rotateImage(view: View, rotation: Float) {
+     fun rotateImage(view: View, rotation: Float) {
         view.animate().rotation(rotation).setDuration(700).setInterpolator(
             AccelerateDecelerateInterpolator()
         ).start()
@@ -133,6 +97,6 @@ class TapCurrencyControlWidget : FrameLayout {
 }
 
 data class CurrencyWidgetData(
-    var paymentOption: String, var paymentOptionLogo: Logos?=null,
-    var mutableList: MutableList<currncyData>?=null
+    var paymentOption: String, var paymentOptionLogo: Any?=null,
+  //  var mutableList: MutableList<currncyData>?=null
 )

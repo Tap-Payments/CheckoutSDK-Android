@@ -1,10 +1,10 @@
 package company.tap.checkout.internal.api.responses
 
-import SupportedCurrencies
 import androidx.annotation.NonNull
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import company.tap.checkout.internal.api.models.PaymentOption
+import company.tap.checkout.internal.api.models.SupportedCurrencies
 import java.io.Serializable
 
 /**

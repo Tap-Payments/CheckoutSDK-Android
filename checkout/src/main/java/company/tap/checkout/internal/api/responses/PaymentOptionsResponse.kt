@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
 import company.tap.checkout.internal.api.models.OrderId
 import company.tap.checkout.internal.api.models.PaymentOption
 import company.tap.checkout.internal.api.models.SavedCard
-import SupportedCurrencies
+  import company.tap.checkout.internal.api.models.SupportedCurrencies
 import company.tap.checkout.internal.interfaces.BaseResponse
 import java.util.*
 
@@ -49,4 +49,4 @@ data class PaymentOptionsResponse(
     @Expose
     @Nullable  val settlement_currency: String? = null,
 
-) : BaseResponse
+    ) : BaseResponse

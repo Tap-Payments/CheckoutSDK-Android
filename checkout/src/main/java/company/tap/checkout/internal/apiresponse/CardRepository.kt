@@ -1,6 +1,6 @@
 package company.tap.checkout.internal.apiresponse
 
-import SupportedCurrencies
+  import company.tap.checkout.internal.api.models.SupportedCurrencies
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration

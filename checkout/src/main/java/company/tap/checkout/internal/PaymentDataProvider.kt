@@ -1,9 +1,9 @@
 package company.tap.checkout.internal
 
-import SupportedCurrencies
 import company.tap.checkout.internal.api.enums.AuthorizeActionType
 import company.tap.checkout.internal.api.models.AmountedCurrency
 import company.tap.checkout.internal.api.models.CardIssuer
+import company.tap.checkout.internal.api.models.SupportedCurrencies
 import company.tap.checkout.open.models.Merchant
 import company.tap.checkout.internal.enums.WebViewType
 import company.tap.checkout.internal.interfaces.IPaymentDataProvider
