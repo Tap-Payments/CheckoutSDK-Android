@@ -49,15 +49,13 @@ All rights reserved.
 class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedActionListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var selectedPosition = -1
-    private var arrayListRedirect: ArrayList<String> = ArrayList()
-    private var arrayListDisabled: ArrayList<String> = ArrayList()
+    private var disabledClicked = false
 
+    private var arrayListRedirect: ArrayList<String> = ArrayList()
     private var savedCardsArrayList: List<SavedCard> = arrayListOf()
     private var webArrayListContent: List<PaymentOption> = arrayListOf()
     private var googlePayArrayList: List<PaymentOption> = arrayListOf()
     private var disabledPaymentOptions: List<PaymentOption> = arrayListOf()
-
-    var arrayListCombined: ArrayList<Any> = ArrayList()
     private var isShaking: Boolean = false
     private var goPayOpened: Boolean = false
     private var arrayModified: ArrayList<Any> = ArrayList()
@@ -114,6 +112,15 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateDisabledPaymentOptionsForSpecificItem(paymentOptionsDisable: List<PaymentOption>,position: Int) {
+        this.disabledPaymentOptions = paymentOptionsDisable
+        selectedPosition = position
+        notifyItemChanged(position)
+
+    }
+
+
 
     fun updateShaking(isShaking: Boolean) {
         this.isShaking = isShaking
@@ -168,7 +175,8 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
 
             TYPE_DISABLED_PAYMENT_OPTIONS -> {
                 view =
-                    LayoutInflater.from(parent.context).inflate(R.layout.item_disabled, parent, false)
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.item_disabled, parent, false)
                 SingleViewHolder(view)
             }
             TYPE_3PPG -> {
@@ -211,7 +219,8 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         }
 
         if (position.minus(webArrayListContent.size)
-                .minus(googlePayArrayList.size).minus(disabledPaymentOptions.size) < savedCardsArrayList.size
+                .minus(googlePayArrayList.size)
+                .minus(disabledPaymentOptions.size) < savedCardsArrayList.size
         ) {
             return TYPE_SAVED_CARD
         }
@@ -280,7 +289,8 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
 
             onCardSelectedActionListener.onDeleteIconClicked(
                 true,
-                position.minus(webArrayListContent.size).minus(googlePayArrayList.size).minus(disabledPaymentOptions.size),
+                position.minus(webArrayListContent.size).minus(googlePayArrayList.size)
+                    .minus(disabledPaymentOptions.size),
                 card.id,
                 card.lastFour,
                 savedCardsArrayList as ArrayList<SavedCard>,
@@ -357,11 +367,6 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
                 }
             }
         }
-        arrayListCombined = ArrayList()
-        if (webArrayListContent.isNotEmpty()) arrayListCombined.addAll(webArrayListContent)
-        if (googlePayArrayList.isNotEmpty()) arrayListCombined.addAll(googlePayArrayList)
-        if (savedCardsArrayList.isNotEmpty()) arrayListCombined.addAll(savedCardsArrayList)
-        if (disabledPaymentOptions.isNotEmpty()) arrayListCombined.addAll(disabledPaymentOptions)
     }
 
     fun resetSelection() {
@@ -401,9 +406,9 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
 
             } else savedCardsArrayList[position.minus(webArrayListContent.size)
                 .minus(disabledPaymentOptions.size)]
-        bindSavedCardData(holder, position,card)
-        setOnSavedCardOnClickAction(holder, position,card)
-        setOnClickActions(holder, position,card)
+        bindSavedCardData(holder, position, card)
+        setOnSavedCardOnClickAction(holder, position, card)
+        setOnClickActions(holder, position, card)
     }
 
 
@@ -518,12 +523,19 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
     }
 
     private fun typeDisabled(holder: RecyclerView.ViewHolder, position: Int) {
-
-        if (selectedPosition == position) setSelectedCardTypeDisabledShadowAndBackground(holder)
-        else setUnSelectedCardTypeDisabledShadowAndBackground(holder)
-
         val typeDisabled = disabledPaymentOptions[position.minus(webArrayListContent.size)
             .minus(googlePayArrayList.size)]
+
+
+
+        if (selectedPosition == position) {
+            if (typeDisabled.isDisabledClick) {
+                setSelectedCardTypeDisabledOne(holder)
+            } else
+                setSelectedCardTypeDisabledShadowAndBackground(holder)
+        } else setUnSelectedCardTypeDisabledShadowAndBackground(holder)
+
+
         val imageViewCard = holder.itemView.findViewById<ImageView>(R.id.imageView_disable)
         when (CustomUtils.getCurrentTheme()) {
             ThemeMode.dark.name -> {
@@ -551,7 +563,7 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         holder.itemView.setOnClickListener {
             selectedPosition = position
             notifyDataSetChanged()
-            onCardSelectedActionListener.onDisabledChipSelected(typeDisabled,holder.itemView)
+            onCardSelectedActionListener.onDisabledChipSelected(typeDisabled, position)
         }
 
 
@@ -618,16 +630,6 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         }
     }
 
-    fun updateDisabledClickItem(itemView :View,paymentOption: PaymentOption){
-        val imageViewCard = itemView.findViewById<ImageView>(R.id.imageView_disable)
-
-        Glide.with(itemView.context)
-            .load(paymentOption.image)
-            .into(imageViewCard)
-      //  notifyItemChanged(selectedPosition)
-        notifyDataSetChanged()
-    }
-
 
     private fun setOnRedirectCardOnClickAction(holder: RecyclerView.ViewHolder, position: Int) {
         onCardSelectedActionListener.onCardSelectedAction(
@@ -658,6 +660,15 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
 
     }
 
+    private fun setSelectedCardTypeDisabledOne(holder: RecyclerView.ViewHolder) {
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) (holder.itemView.tapCardChip_disabled.setBackgroundResource(
+            R.drawable.border_shadow_white
+        ))
+        else holder.itemView.tapCardChip_disabled.setBackgroundResource(R.drawable.border_shadow)
+
+
+    }
+
     private fun setSelectedCardTypeDisabledShadowAndBackground(holder: RecyclerView.ViewHolder) {
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) (holder.itemView.tapCardChip_disabled.setBackgroundResource(
             R.drawable.border_shadow_white
@@ -679,9 +690,9 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) holder.itemView.tapCardChip_disabled.setBackgroundResource(
             R.drawable.border_unclick_black
         )
-        else holder.itemView.findViewById<FrameLayout>(R.id.tapCardChip_disabled).setBackgroundResource(R.drawable.border_unclick_white)
+        else holder.itemView.findViewById<FrameLayout>(R.id.tapCardChip_disabled)
+            .setBackgroundResource(R.drawable.border_unclick_white)
     }
-
 
 
     private fun setSelectedGoogleShadowAndBackground(holder: RecyclerView.ViewHolder) {
