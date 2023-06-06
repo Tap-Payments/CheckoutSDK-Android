@@ -528,22 +528,22 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         when (CustomUtils.getCurrentTheme()) {
             ThemeMode.dark.name -> {
                 Glide.with(holder.itemView.context)
-                    .load(typeDisabled.logos?.dark?.disabled?.svg)
+                    .load(typeDisabled.logos?.dark?.disabled?.png)
                     .into(imageViewCard)
             }
             ThemeMode.dark_colored.name -> {
                 Glide.with(holder.itemView.context)
-                    .load(typeDisabled.logos?.dark_colored?.disabled?.svg)
+                    .load(typeDisabled.logos?.dark_colored?.disabled?.png)
                     .into(imageViewCard)
             }
             ThemeMode.light.name -> {
                 Glide.with(holder.itemView.context)
-                    .load(typeDisabled.logos?.light?.disabled?.svg)
+                    .load(typeDisabled.logos?.light?.disabled?.png)
                     .into(imageViewCard)
             }
             ThemeMode.light_mono.name -> {
                 Glide.with(holder.itemView.context)
-                    .load(typeDisabled.logos?.light_mono?.disabled?.svg)
+                    .load(typeDisabled.logos?.light_mono?.disabled?.png)
                     .into(imageViewCard)
             }
         }

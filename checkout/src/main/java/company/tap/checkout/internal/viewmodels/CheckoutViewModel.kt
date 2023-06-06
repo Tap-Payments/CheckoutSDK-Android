@@ -563,11 +563,27 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun showCountryFlag(): String? {
         val currency = SharedPrefManager.getUserSupportedLocaleForTransactions(context)
-        if (ThemeManager.currentTheme.contains("dark")) {
-            return currency?.logos?.dark?.png
-        } else {
-            return currency?.logos?.light?.png
+        var countryFlag:String = ""
+        /**
+         * Flags had only dark and light theme check added missing**/
+        when(CustomUtils.getCurrentTheme()){
+            ThemeMode.dark.name->{
+                countryFlag= currency?.logos?.dark?.png.toString()
+            }
+            ThemeMode.dark_colored.name->{
+                countryFlag= currency?.logos?.dark_colored?.png.toString()
+
+            }
+            ThemeMode.light_mono.name->{
+                countryFlag= currency?.logos?.light_mono?.png.toString()
+            }
+            ThemeMode.light.name->{
+                countryFlag= currency?.logos?.light?.png.toString()
+            }
+
         }
+        return countryFlag
+
     }
 
     private fun initSwitchAction() {
@@ -2995,10 +3011,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
         currentCurrencySymbol = selectedCurrencySymbol
 
-<<<<<<< HEAD
 
-=======
->>>>>>> create_widget_control
         val sortedList: List<SupportedCurrencies> =
             (paymentOptionsResponse.supportedCurrencies).sortedBy { it.orderBy }
         sortedList.forEachIndexed { index, supportedCurrencies ->

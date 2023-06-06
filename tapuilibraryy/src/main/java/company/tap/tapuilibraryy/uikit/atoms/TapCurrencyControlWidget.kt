@@ -10,6 +10,10 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.*
 import androidx.cardview.widget.CardView
+import com.google.android.material.shape.CornerFamily
+import com.google.android.material.shape.MaterialShapeDrawable
+import com.google.android.material.shape.ShapeAppearanceModel
+import com.google.android.material.shape.TriangleEdgeTreatment
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibraryy.R
 import company.tap.tapuilibraryy.fontskit.enums.TapFont
@@ -26,7 +30,7 @@ class TapCurrencyControlWidget : FrameLayout {
     val currencyWidgetLogo by lazy { findViewById<ImageView>(R.id.currency_widget_logo) }
     val currencyWidgetDescription by lazy { findViewById<TapTextViewNew>(R.id.currency_widget_description) }
     val spinner: Spinner by lazy { findViewById<Spinner>(R.id.currency_widget_spinner) }
-    lateinit var selectedCurrency: SupportedCurrencies
+   // lateinit var selectedCurrency: SupportedCurrencies
 
     constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(
         context,
