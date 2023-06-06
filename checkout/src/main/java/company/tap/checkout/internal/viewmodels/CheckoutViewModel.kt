@@ -2204,7 +2204,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     id: Long
                 ) {
                     if (position != 0) {
-                        val currncyData = parent.getItemAtPosition(position) as currncyData
+                        val currncyData = parent.getItemAtPosition(position) as SupportedCurrencies
+
 
                     }
                 } // to close the onItemSelected
