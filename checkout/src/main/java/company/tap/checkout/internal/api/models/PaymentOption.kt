@@ -115,7 +115,7 @@ data class PaymentOption(
     @Expose
     val defaultCurrency: String? = null,
 
-    var isDisabledClick:Boolean= false
+    var isPaymentOptionEnabled:Boolean= false
 
 ) : Comparable<PaymentOption>, CurrenciesSupport, Serializable {
     override fun getSupportedCurrencies(): ArrayList<String> {

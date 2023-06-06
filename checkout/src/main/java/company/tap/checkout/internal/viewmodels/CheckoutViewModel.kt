@@ -16,7 +16,6 @@ import android.util.Log
 import android.view.View
 import android.view.View.*
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -1484,7 +1483,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             PaymentDataSource.getItems()?.let { itemAdapter.updateAdapterData(it) }
         }
         cardViewHolder.view.mainChipgroup.chipsRecycler.adapter = adapter
-        (cardViewHolder.view.mainChipgroup.chipsRecycler?.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        (cardViewHolder.view.mainChipgroup.chipsRecycler?.itemAnimator as SimpleItemAnimator).supportsChangeAnimations =
+            false
 
 
 
@@ -2028,73 +2028,81 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onDisabledChipSelected(paymentOption: PaymentOption, position: Int) {
-        unActivateActionButton()
-        resetViewToPaymentInline()
-        showControlWidget()
-        with(paymentOption) {
-            val supportedCurrenciesRelatedToDisabledChip = mutableListOf<SupportedCurrencies>()
-            allCurrencies.value?.forEachIndexed { index, supportedCurrencies ->
-                this.getSupportedCurrencies().forEachIndexed { index, s ->
-                    if (s.toUpperCase() == supportedCurrencies.currency!!?.toUpperCase()) {
-                        supportedCurrenciesRelatedToDisabledChip.add(supportedCurrencies)
+        if (paymentOption.isPaymentOptionEnabled) {
+            onCardSelectedAction(true, paymentOption)
+
+        } else {
+            unActivateActionButton()
+            resetViewToPaymentInline()
+            showControlWidget()
+            with(paymentOption) {
+                val supportedCurrenciesRelatedToDisabledChip = mutableListOf<SupportedCurrencies>()
+                allCurrencies.value?.forEachIndexed { index, supportedCurrencies ->
+                    this.getSupportedCurrencies().forEachIndexed { index, s ->
+                        if (s.toUpperCase() == supportedCurrencies.currency!!?.toUpperCase()) {
+                            supportedCurrenciesRelatedToDisabledChip.add(supportedCurrencies)
+                        }
                     }
                 }
-            }
-            cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.setCurrencyWidgetDescription(
-                this.displayName
-            )
-            cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.setSupportedCurrunciesForControlWidget(
-                supportedCurrenciesRelatedToDisabledChip
-            )
-
-            when (CustomUtils.getCurrentTheme()) {
-                ThemeMode.dark.name -> {
-                    Glide.with(context).load(this.logos?.dark?.png)
-                        .into(cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.currencyWidgetLogo)
-                }
-                ThemeMode.dark_colored.name -> {
-                    Glide.with(context).load(this.logos?.dark_colored?.png)
-                        .into(cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.currencyWidgetLogo)
-
-                }
-                ThemeMode.light.name -> {
-                    Glide.with(context).load(this.logos?.light?.png)
-                        .into(cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.currencyWidgetLogo)
-
-                }
-                ThemeMode.light_mono.name -> {
-                    Glide.with(context).load(this.logos?.light_mono?.png)
-                        .into(cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.currencyWidgetLogo)
-
-                }
-
-                else -> {}
-            }
-
-
-        }
-
-        with(cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget) {
-            confitmButton.setOnClickListener {
-                dismisControlWidget()
-                submitNewLocalCurrency(
-                    currencySelected = getSelectedSupportedCurrency().currency.toString(),
-                    currencyRate = getSelectedSupportedCurrency().rate?.toBigDecimal()!!,
-                    totalSelectedAmount = getSelectedSupportedCurrency().amount,
-                    selectedCurrencySymbol = getSelectedSupportedCurrency().symbol ?: "",
-                    isClickFromDisabledViews = true
+                cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.setCurrencyWidgetDescription(
+                    this.displayName
                 )
-                onCardSelectedAction(true, paymentOption)
-                disabledPaymentOptionList.forEachIndexed { index, paymentOptionInList ->
-                    paymentOptionInList.isDisabledClick = paymentOptionInList == paymentOption
-                }
-                adapter.updateDisabledPaymentOptionsForSpecificItem(disabledPaymentOptionList,position)
+                cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.setSupportedCurrunciesForControlWidget(
+                    supportedCurrenciesRelatedToDisabledChip
+                )
 
+                when (CustomUtils.getCurrentTheme()) {
+                    ThemeMode.dark.name -> {
+                        Glide.with(context).load(this.logos?.dark?.png)
+                            .into(cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.currencyWidgetLogo)
+                    }
+                    ThemeMode.dark_colored.name -> {
+                        Glide.with(context).load(this.logos?.dark_colored?.png)
+                            .into(cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.currencyWidgetLogo)
+
+                    }
+                    ThemeMode.light.name -> {
+                        Glide.with(context).load(this.logos?.light?.png)
+                            .into(cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.currencyWidgetLogo)
+
+                    }
+                    ThemeMode.light_mono.name -> {
+                        Glide.with(context).load(this.logos?.light_mono?.png)
+                            .into(cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.currencyWidgetLogo)
+
+                    }
+
+                    else -> {}
+                }
 
 
             }
-        }
 
+            with(cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget) {
+                confitmButton.setOnClickListener {
+                    dismisControlWidget()
+                    submitNewLocalCurrency(
+                        currencySelected = getSelectedSupportedCurrency().currency.toString(),
+                        currencyRate = getSelectedSupportedCurrency().rate?.toBigDecimal()!!,
+                        totalSelectedAmount = getSelectedSupportedCurrency().amount,
+                        selectedCurrencySymbol = getSelectedSupportedCurrency().symbol ?: "",
+                        isClickFromDisabledViews = true
+                    )
+                    onCardSelectedAction(true, paymentOption)
+                    disabledPaymentOptionList.forEachIndexed { index, paymentOptionInList ->
+                        paymentOptionInList.isPaymentOptionEnabled =
+                            paymentOptionInList == paymentOption
+                    }
+                    adapter.updateDisabledPaymentOptionsForSpecificItem(
+                        disabledPaymentOptionList,
+                        position
+                    )
+
+
+                }
+            }
+
+        }
 
     }
 
@@ -3651,11 +3659,17 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             )
 
         }
-        disabledPaymentOptionList =getListOfDisabledChipsAccordingToSelectedCurrency(currency)
+        disabledPaymentOptionList = getListOfDisabledChipsAccordingToSelectedCurrency(currency)
 
         disabledPaymentOptionList.forEachIndexed { index, paymentOption ->
-            Log.e("updated",
-                paymentOption.displayName.toString() + ">>" + paymentOption.getSupportedCurrencies().toString())
+            if (paymentOption.getSupportedCurrencies().contains(currency)) {
+                paymentOption.isPaymentOptionEnabled = true
+            }
+            Log.e(
+                "updated",
+                paymentOption.displayName.toString() + ">>" + paymentOption.getSupportedCurrencies()
+                    .toString()
+            )
         }
         adapter.updateDisabledPaymentOptions(disabledPaymentOptionList)
 
@@ -3690,7 +3704,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             /**
              * first condition to get not supported currency
              */
-          ! it.getSupportedCurrencies().contains(currency)  && it.paymentType != PaymentType.CARD
+            it.paymentType != PaymentType.CARD && it.displayName != "Apple Pay"
         } as ArrayList<PaymentOption>
 
     }
