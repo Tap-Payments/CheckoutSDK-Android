@@ -2097,8 +2097,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     }
                     adapter.updateDisabledPaymentOptions(disabledPaymentOptionList,position)
 
-
-
                 }
             }
 
