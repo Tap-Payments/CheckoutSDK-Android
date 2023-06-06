@@ -113,6 +113,7 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         selectedPosition = position
         notifyItemChanged(position)
 
+
     }
 
 
@@ -533,7 +534,6 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
                     Glide.with(holder.itemView.context)
                         .load(typeDisabled.logos?.light?.svg)
                         .into(imageViewCard)
-                    disabledClicked = !disabledClicked
                 } else
                     Glide.with(holder.itemView.context)
                         .load(typeDisabled.logos?.light?.disabled?.svg)

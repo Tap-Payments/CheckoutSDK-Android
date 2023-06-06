@@ -1482,6 +1482,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         if (PaymentDataSource.getItems() != null) {
             PaymentDataSource.getItems()?.let { itemAdapter.updateAdapterData(it) }
         }
+      cardViewHolder.view.mainChipgroup.chipsRecycler.adapter = currencyAdapter
         cardViewHolder.view.mainChipgroup.chipsRecycler.adapter = adapter
         (cardViewHolder.view.mainChipgroup.chipsRecycler?.itemAnimator as SimpleItemAnimator).supportsChangeAnimations =
             false
@@ -2089,10 +2090,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         isClickFromDisabledViews = true
                     )
                     onCardSelectedAction(true, paymentOption)
-                    disabledPaymentOptionList.forEachIndexed { index, paymentOptionInList ->
-                        paymentOptionInList.isPaymentOptionEnabled =
-                            paymentOptionInList == paymentOption
+
+                    disabledPaymentOptionList.forEachIndexed { index, paymentOption ->
+                        paymentOption.isPaymentOptionEnabled = this.getSelectedSupportedCurrency().currency in paymentOption.getSupportedCurrencies()
+                        Log.e(
+                            "updated",
+                            paymentOption.displayName.toString() + ">>" + paymentOption.getSupportedCurrencies()
+                                .toString()
+                        )
                     }
+                    adapter.updateDisabledPaymentOptions(disabledPaymentOptionList)
                     adapter.updateDisabledPaymentOptionsForSpecificItem(
                         disabledPaymentOptionList,
                         position
@@ -3659,7 +3666,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             )
 
         }
-        disabledPaymentOptionList = getListOfDisabledChipsAccordingToSelectedCurrency(currency)
+        disabledPaymentOptionList = getListOfDisabledChipsAccordingToSelectedCurrency()
 
         disabledPaymentOptionList.forEachIndexed { index, paymentOption ->
             if (paymentOption.getSupportedCurrencies().contains(currency)) {
@@ -3699,13 +3706,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
     }
 
-    fun getListOfDisabledChipsAccordingToSelectedCurrency(currency: String): ArrayList<PaymentOption> {
-        return paymentOptionsResponse.paymentOptions.sortedBy { it.orderBy }.filter {
-            /**
-             * first condition to get not supported currency
-             */
-            it.paymentType != PaymentType.CARD && it.displayName != "Apple Pay"
+    fun getListOfDisabledChipsAccordingToSelectedCurrency(): ArrayList<PaymentOption> {
+        return paymentOptionsResponse.paymentOptions.sortedBy { it.orderBy  }.filter {
+            it.paymentType == PaymentType.WEB || it.paymentType == PaymentType.GOOGLE_PAY
         } as ArrayList<PaymentOption>
+
+    }
+
+    fun getSortedListRegardingDisabledPaymentOptions(): List<PaymentOption> {
+        return disabledPaymentOptionList.sortedBy { !it.isPaymentOptionEnabled }
 
     }
 
