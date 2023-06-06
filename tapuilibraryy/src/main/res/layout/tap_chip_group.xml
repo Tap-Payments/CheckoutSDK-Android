@@ -36,6 +36,8 @@
             android:id="@+id/group_action"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/_4sdp"
+            android:drawableEnd="@drawable/available_icon"
             android:fontFamily="sans-serif-condensed"
             android:textAllCaps="true"
             android:textColor="@color/text_color_light_"

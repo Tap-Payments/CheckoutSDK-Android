@@ -3,6 +3,7 @@ package company.tap.tapuilibraryy.uikit.atoms
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
@@ -20,12 +21,12 @@ class TapCurrencyControlWidget : FrameLayout {
 
 
     val cardView by lazy { findViewById<CardView>(R.id.card_currency_widget) }
-    val button by lazy { findViewById<Button>(R.id.btn_confirm_tap_currency_control) }
+    val confitmButton by lazy { findViewById<Button>(R.id.btn_confirm_tap_currency_control) }
     val dropDownIv by lazy { findViewById<ImageView>(R.id.drop_down_iv) }
     val currencyWidgetLogo by lazy { findViewById<ImageView>(R.id.currency_widget_logo) }
-    // val currencyWidgetAmount = this.findViewById<TapTextViewNew>(R.id.currency_widget_money_amount)
     val currencyWidgetDescription by lazy { findViewById<TapTextViewNew>(R.id.currency_widget_description) }
     val spinner: Spinner by lazy { findViewById<Spinner>(R.id.currency_widget_spinner) }
+    lateinit var selectedCurrency: SupportedCurrencies
 
     constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(
         context,
@@ -46,13 +47,7 @@ class TapCurrencyControlWidget : FrameLayout {
     @SuppressLint("ClickableViewAccessibility")
     private fun initView() {
         inflate(context, R.layout.tap_currency_control_widget, this)
-
-
-
-
-
-
-        applyThemeForViews(cardView, button, currencyWidgetDescription)
+        applyThemeForViews(cardView, confitmButton, currencyWidgetDescription)
     }
 
     private fun applyThemeForViews(
@@ -79,11 +74,34 @@ class TapCurrencyControlWidget : FrameLayout {
                 TapFont.RobotoRegular
             )
         )
+
+        val shapeDrawable =
+            MaterialShapeDrawable(createSpinnerBackgroundShapeWithTrianleAtTopEdge())
+        shapeDrawable.apply {
+            strokeWidth = 1f
+            strokeColor =
+                ColorStateList.valueOf(resources.getColor(R.color.dropdown_stroke))
+            this.fillColor =
+                ColorStateList.valueOf(loadAppThemManagerFromPath(AppColorTheme.ControlCurrencyWidgetBackground))
+        }
+        spinner.setPopupBackgroundDrawable(shapeDrawable)
+    }
+
+    private fun createSpinnerBackgroundShapeWithTrianleAtTopEdge(): ShapeAppearanceModel {
+        return ShapeAppearanceModel()
+            .toBuilder()
+            .setAllCorners(CornerFamily.ROUNDED,8f)
+            .setTopEdge(TriangleEdgeTreatment(10f, false))
+            .build()
     }
 
     @SuppressLint("SetTextI18n")
     fun setCurrencyWidgetDescription(displayNamePaymentOption: String?) {
-        currencyWidgetDescription.text = displayNamePaymentOption + " " + LocalizationManager.getValue("header", "CurrencyChangeWidget")
+        currencyWidgetDescription.text =
+            "$displayNamePaymentOption " + LocalizationManager.getValue(
+                "header",
+                "CurrencyChangeWidget"
+            )
 
     }
 

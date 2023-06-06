@@ -254,11 +254,6 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
     }
 
     override fun getItemCount(): Int {
-//        if (adapterGooglePay.isNotEmpty()) {
-//            totalArraySize = adapterContent.size.plus(adapterGooglePay.size).plus(arrayListCards.size)
-//        } else {
-//            totalArraySize = adapterContent.size.plus(arrayListCards.size)
-//        }
         totalArraySize =
             webArrayListContent.size.plus(googlePayArrayList.size).plus(savedCardsArrayList.size)
                 .plus(disabledPaymentOptions.size)
@@ -556,7 +551,7 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         holder.itemView.setOnClickListener {
             selectedPosition = position
             notifyDataSetChanged()
-            onCardSelectedActionListener.onDisabledChipSelected(typeDisabled)
+            onCardSelectedActionListener.onDisabledChipSelected(typeDisabled,holder.itemView)
         }
 
 
@@ -621,6 +616,16 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
             selectedPosition = position
             notifyDataSetChanged()
         }
+    }
+
+    fun updateDisabledClickItem(itemView :View,paymentOption: PaymentOption){
+        val imageViewCard = itemView.findViewById<ImageView>(R.id.imageView_disable)
+
+        Glide.with(itemView.context)
+            .load(paymentOption.image)
+            .into(imageViewCard)
+      //  notifyItemChanged(selectedPosition)
+        notifyDataSetChanged()
     }
 
 
