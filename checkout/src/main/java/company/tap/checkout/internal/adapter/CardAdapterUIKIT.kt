@@ -3,6 +3,7 @@ package company.tap.checkout.internal.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Build
 import android.util.Log
@@ -11,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
@@ -36,6 +36,8 @@ import kotlinx.android.synthetic.main.item_save_cards.view.*
 Copyright (c) 2020    Tap Payments.
 All rights reserved.
  **/
+
+const val strokeWidthForProject = 2
 
 @Suppress("PrivatePropertyName")
 class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedActionListener) :
@@ -308,10 +310,15 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         val typeDisabled = disabledPaymentOptions[position]
         if (selectedPosition == position) {
             if (typeDisabled.isPaymentOptionEnabled) {
-                setSelectedCardTypeDisabledOne(holder)
-            } else
                 setSelectedCardTypeDisabledShadowAndBackground(holder)
-        } else setUnSelectedCardTypeDisabledShadowAndBackground(holder)
+            } else
+                setSelectedCardTypeDisabledShadowAndBackground(holder, isBackgroundDimmed = true)
+        } else {
+            if (typeDisabled.isPaymentOptionEnabled) {
+                setUnSelectedCardTypeDisabledShadowAndBackground(holder)
+            } else
+                setUnSelectedCardTypeDisabledShadowAndBackground(holder, isBackgroundDimmed = true)
+        }
 
 
         val imageViewCard = holder.itemView.findViewById<ImageView>(R.id.imageView_disable)
@@ -361,39 +368,67 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         holder.itemView.setOnClickListener {
             selectedPosition = position
             onCardSelectedActionListener.onDisabledChipSelected(typeDisabled, position)
-
             notifyDataSetChanged()
         }
 
 
     }
 
+    private fun setSelectedCardTypeDisabledShadowAndBackground(
+        holder: RecyclerView.ViewHolder,
+        isBackgroundDimmed: Boolean = false
+    ) {
 
-    private fun setSelectedCardTypeDisabledOne(holder: RecyclerView.ViewHolder) {
-        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) (holder.itemView.tapCardChip_disabled.setBackgroundResource(
-            R.drawable.border_shadow_white
-        ))
-        else holder.itemView.tapCardChip_disabled.setBackgroundResource(R.drawable.border_shadow)
+        with(holder.itemView.tapCardChip_disabled) {
+            strokeWidth = strokeWidthForProject
+            if (isBackgroundDimmed) {
+                alpha = 0.9f
+            }
+            if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
+                setStrokeColor(ColorStateList.valueOf(resources.getColor(R.color.white)))
+                setCardBackgroundColor(ColorStateList.valueOf(resources.getColor(R.color.black_color)))
+
+            } else {
+                setStrokeColor(ColorStateList.valueOf(resources.getColor(R.color.greencolor)))
+                setCardBackgroundColor(ColorStateList.valueOf(resources.getColor(R.color.white)))
+
+            }
+
+        }
 
 
     }
 
-    private fun setSelectedCardTypeDisabledShadowAndBackground(holder: RecyclerView.ViewHolder) {
-        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) (holder.itemView.tapCardChip_disabled.setBackgroundResource(
-            R.drawable.border_shadow_white
-        ))
-        else holder.itemView.tapCardChip_disabled.setBackgroundResource(R.drawable.border_shadow_disabled)
 
+    private fun setUnSelectedCardTypeDisabledShadowAndBackground(
+        holder: RecyclerView.ViewHolder,
+        isBackgroundDimmed: Boolean = false
+    ) {
 
-    }
+        with(holder.itemView.tapCardChip_disabled) {
+            strokeWidth = 0
+            if (isBackgroundDimmed) {
+                alpha = 0.9f
+            }
+            if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
+                setCardBackgroundColor(
+                    ColorStateList.valueOf(
+                        resources.getColor(
+                            R.color.black_color
+                        )
+                    )
+                )
+            } else holder.itemView.tapCardChip_disabled.apply {
+                setCardBackgroundColor(
+                    ColorStateList.valueOf(
+                        resources.getColor(
+                            R.color.white
+                        )
+                    )
+                )
+            }
+        }
 
-
-    private fun setUnSelectedCardTypeDisabledShadowAndBackground(holder: RecyclerView.ViewHolder) {
-        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) holder.itemView.tapCardChip_disabled.setBackgroundResource(
-            R.drawable.border_unclick_black
-        )
-        else holder.itemView.findViewById<FrameLayout>(R.id.tapCardChip_disabled)
-            .setBackgroundResource(R.drawable.border_unclick_white)
     }
 
 
