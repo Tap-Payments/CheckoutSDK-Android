@@ -37,7 +37,7 @@ Copyright (c) 2020    Tap Payments.
 All rights reserved.
  **/
 
-const val strokeWidth = 1.5
+const val strokeWidthForProject = 2
 
 @Suppress("PrivatePropertyName")
 class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedActionListener) :
@@ -380,7 +380,7 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
     ) {
 
         with(holder.itemView.tapCardChip_disabled) {
-            strokeWidth = strokeWidth
+            strokeWidth = strokeWidthForProject
             if (isBackgroundDimmed) {
                 alpha = 0.9f
             }
