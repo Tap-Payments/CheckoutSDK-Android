@@ -1,4 +1,3 @@
-
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.math.BigDecimal
@@ -41,4 +40,5 @@ data class SupportedCurrencies(
     @SerializedName("order_by")
     @Expose
     var orderBy: Int? = 0,
+    var isSelectedCurrency: Boolean? = false
 )

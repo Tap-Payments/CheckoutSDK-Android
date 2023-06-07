@@ -37,7 +37,7 @@ All rights reserved.
 
 var selectedPosition = -1
 var _context: Context? = null
- var currencyRate: BigDecimal= BigDecimal.ZERO
+var currencyRate: BigDecimal = BigDecimal.ZERO
 var previousIndex = 0
 
 class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrencyChangedActionListener) :
@@ -54,15 +54,14 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
     override fun getItemCount() = adapterContentCurrencies.size
 
     fun updateAdapterData(adapterContentCurrencies: List<SupportedCurrencies>) {
-        //println("list of currencies$adapterContentCurrencies")
         this.adapterContentCurrencies = adapterContentCurrencies
         notifyDataSetChanged()
 
     }
 
-    fun updateSelectedPosition(selectedPos:Int){
+    fun updateSelectedPosition(selectedPos: Int) {
         selectedPosition = selectedPos
-        previousIndex = selectedPos
+        notifyDataSetChanged()
     }
 
     class CurrencyHolders(v: View) : RecyclerView.ViewHolder(v) {
@@ -74,7 +73,7 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
 
         private fun setTheme() {
             val tapCardChip = view.findViewById<FrameLayout>(R.id.tapcard_Chip)
-            tapCardChip.elevation =0F
+            tapCardChip.elevation = 0F
             tapCardChip?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.chips.currencyChip.backgroundColor")))
             val totalQuantityTextViewTheme = TextViewTheme()
             totalQuantityTextViewTheme.textColor =
@@ -91,106 +90,89 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
 
     override fun onBindViewHolder(holder: CurrencyHolders, position: Int) {
         holder.bindTheme()
-      //  holder.itemView.isSelected = selectedPosition == position
-        for (i in adapterContentCurrencies.indices) {
-            bindItemData(holder, position)
-        }
+        bindItemData(holder, position)
         if (selectedPosition == position) {
             drawSelectedBorder(holder)
-        }
-         else drawUnSelectedBorder(holder)
+        } else drawUnSelectedBorder(holder)
         onItemClickListener(holder, position)
 
 
     }
 
     private fun bindItemData(holder: CurrencyHolders, position: Int) {
-        logicToLoadFlagIconsTheme(holder,position)
-
-       /* GlideToVectorYou
-            .init()
-            .with(holder.itemView.context)
-            .load( adapterContentCurrencies[position]?.flag?.toUri(), imageViewCard)*/
+        logicToLoadFlagIconsTheme(holder, position)
         val itemCurrencyText = holder.itemView.findViewById<TapTextViewNew>(R.id.textView_currency)
-       //Replaced itemCurrencyText.text = adapterContentCurrencies[position].currency
         itemCurrencyText.text = adapterContentCurrencies[position].currency
         currencyRate = adapterContentCurrencies[position].amount
     }
 
     private fun logicToLoadFlagIconsTheme(holder: CurrencyHolders, position: Int) {
         val imageViewCard = holder.itemView.findViewById<TapImageView>(R.id.imageView_currency)
-        var loadUrlString : String=""
-        if(adapterContentCurrencies[position].logos!=null)
-        when(CustomUtils.getCurrentTheme()){
-            ThemeMode.dark.name->{
-                loadUrlString = adapterContentCurrencies[position].logos?.dark?.png.toString()
-                Glide.with(holder.itemView.context)
-                    .load(loadUrlString).into(
-                        imageViewCard
-                    )
-            }
-            ThemeMode.dark_colored.name->{
-                loadUrlString = adapterContentCurrencies[position].logos?.dark_colored?.png.toString()
-                Glide.with(holder.itemView.context)
-                    .load(loadUrlString).into(
-                        imageViewCard
-                    )
-            }
-            ThemeMode.light.name->{
-                loadUrlString = adapterContentCurrencies[position].logos?.light?.png.toString()
-                Glide.with(holder.itemView.context)
-                    .load(loadUrlString).into(
-                        imageViewCard
-                    )
-            }
-            ThemeMode.light_mono.name->{
-                loadUrlString = adapterContentCurrencies[position].logos?.light_mono?.png.toString()
-                Glide.with(holder.itemView.context)
-                    .load(loadUrlString).into(
-                        imageViewCard
-                    )
-            }
+        var loadUrlString: String = ""
+        if (adapterContentCurrencies[position].logos != null)
+            when (CustomUtils.getCurrentTheme()) {
+                ThemeMode.dark.name -> {
+                    loadUrlString = adapterContentCurrencies[position].logos?.dark?.png.toString()
+                    Glide.with(holder.itemView.context)
+                        .load(loadUrlString).into(
+                            imageViewCard
+                        )
+                }
+                ThemeMode.dark_colored.name -> {
+                    loadUrlString =
+                        adapterContentCurrencies[position].logos?.dark_colored?.png.toString()
+                    Glide.with(holder.itemView.context)
+                        .load(loadUrlString).into(
+                            imageViewCard
+                        )
+                }
+                ThemeMode.light.name -> {
+                    loadUrlString = adapterContentCurrencies[position].logos?.light?.png.toString()
+                    Glide.with(holder.itemView.context)
+                        .load(loadUrlString).into(
+                            imageViewCard
+                        )
+                }
+                ThemeMode.light_mono.name -> {
+                    loadUrlString =
+                        adapterContentCurrencies[position].logos?.light_mono?.png.toString()
+                    Glide.with(holder.itemView.context)
+                        .load(loadUrlString).into(
+                            imageViewCard
+                        )
+                }
 
-            else ->{
-                //fallback
-                Glide.with(holder.itemView.context)
-                    .load(adapterContentCurrencies[position].flag).into(
-                        imageViewCard
-                    )
+                else -> {
+                    //fallback
+                    Glide.with(holder.itemView.context)
+                        .load(adapterContentCurrencies[position].flag).into(
+                            imageViewCard
+                        )
+                }
             }
-        }
-
 
 
     }
 
-    private fun onItemClickListener(holder: CurrencyHolders, position:   Int) {
-        holder.itemView.setOnClickListener(null)
-
-
+    private fun onItemClickListener(holder: CurrencyHolders, position: Int) {
         holder.itemView.setOnClickListener {
-            notifyItemChanged(selectedPosition)
-            selectedPosition = position
-            notifyItemChanged(selectedPosition)
-            previousIndex = selectedPosition
-           // selectedPosition = position
 
-
-               adapterContentCurrencies[position].rate?.let { it1 ->
+            adapterContentCurrencies[position].rate?.let { it1 ->
                 onCurrencyChangedActionListener.onCurrencyClicked(
-                        adapterContentCurrencies[position].currency.toString(), it1.toBigDecimal(),
-                adapterContentCurrencies[position].amount,adapterContentCurrencies[previousIndex].currency.toString(),
-                    adapterContentCurrencies[position].symbol.toString())
+                    adapterContentCurrencies[position].currency.toString(),
+                    it1.toBigDecimal(),
+                    adapterContentCurrencies[position].amount,
+                    adapterContentCurrencies[previousIndex].currency.toString(),
+                    adapterContentCurrencies[position].symbol.toString()
+                )
+                selectedPosition = position
+                notifyItemChanged(selectedPosition)
             }
-            println("selcted symbol"+adapterContentCurrencies[position].symbol)
-             CheckoutViewModel().selectedCurrencyPos = adapterContentCurrencies[position].currency.toString()
-             CheckoutViewModel().selectedAmountPos = adapterContentCurrencies[position].amount
+            CheckoutViewModel().selectedCurrencyPos =
+                adapterContentCurrencies[position].currency.toString()
+            CheckoutViewModel().selectedAmountPos = adapterContentCurrencies[position].amount
 
-
-
-
-            }
-
+        }
 
 
     }
@@ -202,8 +184,8 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
          * setBorderedView ( view: View, cornerRadius:Float,strokeWidth: Float, strokeColor: Int,tintColor: Int )
          */
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) holder.itemView.setBackgroundResource(
-               // R.drawable.border_currency_black
-                R.drawable.border_shadow_white
+            // R.drawable.border_currency_black
+            R.drawable.border_shadow_white
         )
         else holder.itemView.tapcard_Chip.setBackgroundResource(R.drawable.border_shadow)
     }
@@ -217,9 +199,6 @@ class CurrencyTypeAdapter(private val onCurrencyChangedActionListener: OnCurrenc
         }
 
     }
-
-
-
 
 
 }
