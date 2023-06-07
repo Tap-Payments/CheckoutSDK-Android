@@ -3508,17 +3508,20 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     fun filterViewModels(currency: String) {
         savedCardsBasedCurr = filterByCurrenciesAndSortList(paymentOptionsResponse.cards, currency)
+
+        val cardPaymentOptions: java.util.ArrayList<PaymentOption> =
+            filteredByPaymentTypeAndCurrencyAndSortedList(
+                paymentOptionsResponse.paymentOptions, PaymentType.CARD, currency
+            )
+
+        logicToHandlePaymentDataType(cardPaymentOptions = cardPaymentOptions)
+
         filterPaymentChipsAccordingToCurrency(currency, isSorting = true)
         val hasSavedCards: Boolean = savedCardsBasedCurr.size > 0
         if (hasSavedCards) {
             adapter.updateAdapterDataSavedCard(savedCardsBasedCurr)
         }
-//        if (hasGooglePaymentOptions && googlePaymentOptions.isNotEmpty()) {
-//            adapter.updateAdapterGooglePay(googlePaymentOptions)
-//        } else {
-//            adapter.updateAdapterGooglePay(googlePaymentOptions)
-//            PaymentDataSource.setGoogleCardPay(googlePaymentOptions)
-//        }
+
     }
 
     private fun filterPaymentChipsAccordingToCurrency(
@@ -3532,6 +3535,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 paymentOption.getSupportedCurrencies().contains(currency)
         }
         adapter.updateDisabledPaymentOptions(disabledPaymentOptionList, position = position)
+
 
     }
 
