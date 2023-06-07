@@ -745,7 +745,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         else caseNotDisplayControlCurrency()
 
         displayItemsOpen = !display
-        amountViewHolder.changeGroupAction(!display)
+        /**
+         * un comment after fix change currencies with disabled payment option
+         */
+     //   amountViewHolder.changeGroupAction(!display)
         if (this::selectedAmount.isInitialized && this::selectedCurrency.isInitialized) {
             if (selectedAmount == currentAmount && selectedCurrency == currentCurrency) {
                 amountViewHolder.view.amount_section.mainKDAmountValue.visibility = GONE
