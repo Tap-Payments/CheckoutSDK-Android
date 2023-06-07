@@ -41,10 +41,11 @@
         <Button
             android:id="@+id/btn_confirm_tap_currency_control"
             android:layout_width="@dimen/_100sdp"
+
             android:layout_height="@dimen/_30sdp"
             android:background="@drawable/rounded_currency_widget"
             android:textAllCaps="false"
-            android:paddingHorizontal="@dimen/_8sdp"
+            android:layout_marginHorizontal="@dimen/_8sdp"
 
             android:textColor="@color/white"
             android:textSize="12sp"

@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.util.AttributeSet
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibraryy.R
