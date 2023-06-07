@@ -254,7 +254,7 @@ fun <T> throttleFirst(
     }
 }
 
-fun View.slideFromLeftToRight() {
+fun View.slideFromEndToStart() {
 
     if (this.isVisible) {
         val animate =

@@ -22,7 +22,6 @@ import android.widget.LinearLayout
 import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
 import androidx.annotation.RestrictTo
-import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
@@ -88,6 +87,7 @@ import company.tap.tapuilibraryy.themekit.ThemeManager
 import company.tap.tapuilibraryy.themekit.theme.SeparatorViewTheme
 import company.tap.tapuilibraryy.uikit.AppColorTheme
 import company.tap.tapuilibraryy.uikit.animation.MorphingAnimation
+import company.tap.tapuilibraryy.uikit.datasource.AmountViewDataSource
 import company.tap.tapuilibraryy.uikit.datasource.LoyaltyHeaderDataSource
 import company.tap.tapuilibraryy.uikit.enums.ActionButtonState
 import company.tap.tapuilibraryy.uikit.enums.GoPayLoginMethod
@@ -546,7 +546,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         amountViewHolder.view.amount_section.tapChipPopup.setOnClickListener {
             removePaymentInlineShrinkageAndDimmed()
-            amountViewHolder.view.amount_section.tapChipPopup.slideFromLeftToRight()
+            amountViewHolder.view.amount_section.tapChipPopup.slideFromEndToStart()
             with(SharedPrefManager.getUserSupportedLocaleForTransactions(context)!!) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     submitNewLocalCurrency(
@@ -746,19 +746,19 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         displayItemsOpen = !display
         amountViewHolder.changeGroupAction(!display)
 
-        if (this::selectedAmount.isInitialized && this::selectedCurrency.isInitialized) {
-            if (selectedAmount == currentAmount && selectedCurrency == currentCurrency) {
-                amountViewHolder.view.amount_section.mainKDAmountValue.visibility = GONE
-            } else {
-                amountViewHolder.updateSelectedCurrency(
-                    displayItemsOpen,
-                    selectedAmount, selectedCurrency,
-                    currentAmount, finalCurrencySymbol, currentCurrencySymbol
-                )
-
-            }
-
-        }
+//        if (this::selectedAmount.isInitialized && this::selectedCurrency.isInitialized) {
+//            if (selectedAmount == currentAmount && selectedCurrency == currentCurrency) {
+//                amountViewHolder.view.amount_section.mainKDAmountValue.visibility = GONE
+//            } else {
+////                amountViewHolder.updateSelectedCurrency(
+////                    display,
+////                    selectedAmount, selectedCurrency,
+////                    currentAmount, finalCurrencySymbol, currentCurrencySymbol
+////                )
+//
+//            }
+//
+//        }
         if (otpViewHolder.otpView.isVisible) {
             removeViews(otpViewHolder)
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.RESET)
@@ -2417,7 +2417,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
          * on Click Redirect for Knet Redirection
          */
 
-        amountViewHolder.view.amount_section?.tapChipPopup?.slideFromLeftToRight()
+        amountViewHolder.view.amount_section?.tapChipPopup?.slideFromEndToStart()
         val viewsToDisable = mutableListOf<View>(
             cardViewHolder.view.mainChipgroup.chipsRecycler as View,
             paymentInlineViewHolder.tapCardInputView.backArrow as View,
@@ -2491,7 +2491,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private fun onClickCardPayment(savedCardsModel: Any?) {
         removeVisibilityOfSwitch()
         PaymentDataSource.setWebViewType(WebViewType.THREE_DS_WEBVIEW)
-        amountViewHolder.view.amount_section?.tapChipPopup?.slideFromLeftToRight()
+        amountViewHolder.view.amount_section?.tapChipPopup?.slideFromEndToStart()
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
 
         doAfterSpecificTime {
@@ -2777,11 +2777,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun checkSelectedAmountInitiated() {
         if (this::selectedAmount.isInitialized && this::selectedCurrency.isInitialized) {
-            amountViewHolder.updateSelectedCurrency(
-                displayItemsOpen,
-                selectedAmount, selectedCurrency,
-                currentAmount, currentCurrency, currentCurrencySymbol
-            )
+
         }
     }
 
@@ -2794,6 +2790,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         previousSelectedCurrency: String,
         selectedCurrencySymbol: String
     ) {
+
+        amountViewHolder.changeDataSource(
+            AmountViewDataSource(
+                selectedCurr = selectedAmount,
+                selectedCurrText = selectedCurrencySymbol,
+                currentCurr = currentAmount,
+                currentCurrText = currentCurrency,
+                itemCount =  LocalizationManager.getValue("confirm", "Common")
+            )
+        )
         /**
          * need to be refactored to one function
          */
@@ -2839,15 +2845,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         selectedCurrency = currencySelected
         selectedTotalAmount = selectedAmount
 
-        amountViewHolder.updateSelectedCurrency(
-            displayItemsOpen,
-            selectedAmount,
-            selectedCurrency,
-            currentAmount,
-            finalCurrencySymbol,
-            selectedCurrencySymbol,
-            isChangingCurrencyFromOutside = false
-        )
         PaymentDataSource.setSelectedCurrency(selectedCurrency, selectedCurrencySymbol)
         currentCurrencySymbol = selectedCurrencySymbol
 
@@ -3130,7 +3127,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
 
         PaymentDataSource.setWebViewType(WebViewType.THREE_DS_WEBVIEW)
-        amountViewHolder.view.amount_section?.tapChipPopup?.slideFromLeftToRight()
+        amountViewHolder.view.amount_section?.tapChipPopup?.slideFromEndToStart()
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
 
         doAfterSpecificTime {
