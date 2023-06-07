@@ -2094,14 +2094,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
     fun showControlWidget() {
-        cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.fadeVisibility(
-            View.VISIBLE,
-            duration = 1000
-        )
+        cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.visibility = View.VISIBLE
+        cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.slideView(310)
+
     }
 
     fun dismisControlWidget() {
-        cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.visibility = View.GONE
+        cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.slideView(0)
+
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
