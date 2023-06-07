@@ -3513,6 +3513,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         if (hasSavedCards) {
             adapter.updateAdapterDataSavedCard(savedCardsBasedCurr)
         }
+//        if (hasGooglePaymentOptions && googlePaymentOptions.isNotEmpty()) {
+//            adapter.updateAdapterGooglePay(googlePaymentOptions)
+//        } else {
+//            adapter.updateAdapterGooglePay(googlePaymentOptions)
+//            PaymentDataSource.setGoogleCardPay(googlePaymentOptions)
+//        }
     }
 
     private fun filterPaymentChipsAccordingToCurrency(
@@ -3530,9 +3536,20 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     fun getListOfDisabledChipsAccordingToSelectedCurrency(): ArrayList<PaymentOption> {
-        return paymentOptionsResponse.paymentOptions.sortedBy { it.orderBy }.filter {
-            it.paymentType == PaymentType.WEB || it.paymentType == PaymentType.GOOGLE_PAY
-        } as ArrayList<PaymentOption>
+        val googlePaymentOptions: ArrayList<PaymentOption> = arrayListOf<PaymentOption>()
+        val filterdPaymentOptions =
+            paymentOptionsResponse.paymentOptions.sortedBy { it.orderBy }.filter {
+                it.paymentType == PaymentType.WEB || it.paymentType == PaymentType.GOOGLE_PAY
+            }
+
+        filterdPaymentOptions.forEachIndexed { index, paymentOption ->
+            if (paymentOption.paymentType == PaymentType.GOOGLE_PAY) {
+                googlePaymentOptions.add(paymentOption)
+            }
+        }
+        PaymentDataSource.setGoogleCardPay(googlePaymentOptions)
+        return filterdPaymentOptions as ArrayList<PaymentOption>
+
 
     }
 
