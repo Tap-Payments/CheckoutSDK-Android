@@ -56,8 +56,8 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
     var deleteImageView: ImageView? = null
 
     companion object {
-        private const val TYPE_SAVED_CARD = 5
-        private const val TYPE_DISABLED_PAYMENT_OPTIONS = 6
+        private const val TYPE_SAVED_CARD = 2
+        private const val TYPE_DISABLED_PAYMENT_OPTIONS = 1
 
     }
 
@@ -92,30 +92,6 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         notifyDataSetChanged()
     }
 
-
-    override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
-        super.onViewAttachedToWindow(holder)
-        if (holder is SavedViewHolder) {
-            if (isShaking) {
-                Log.d("isShaking", isShaking.toString())
-                val animShake: Animation =
-                    AnimationUtils.loadAnimation(holder.itemView.context, R.anim.shake)
-                holder.itemView.startAnimation(animShake)
-                animShake.setAnimationListener(object : Animation.AnimationListener {
-                    override fun onAnimationStart(p0: Animation?) {
-                    }
-
-                    override fun onAnimationEnd(p0: Animation?) {
-                        holder.itemView.setHasTransientState(false)
-                    }
-
-                    override fun onAnimationRepeat(p0: Animation?) {
-                    }
-
-                })
-            }
-        }
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view: View
@@ -159,40 +135,7 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
 
     override fun getItemCount(): Int {
         return savedCardsArrayList.size.plus(disabledPaymentOptions.size)
-
     }
-
-
-    private fun setOnClickActions(holder: RecyclerView.ViewHolder, position: Int, card: SavedCard) {
-        if (isShaking) {
-            holder.itemView.deleteImageViewSaved?.visibility = View.VISIBLE
-            setUnSelectedCardTypeSavedShadowAndBackground(holder)
-        } else {
-            holder.itemView.deleteImageViewSaved?.visibility = View.INVISIBLE
-        }
-
-
-        /***
-         * Replaced deleteImageViewSaved close button click of chips with
-         * setOnLongClickListener as per new requirement
-         **/
-        holder.itemView.setOnLongClickListener {
-            onCardSelectedActionListener.onDeleteIconClicked(
-                true,
-                position.minus(disabledPaymentOptions.size),
-                card.id,
-                card.lastFour,
-                savedCardsArrayList as ArrayList<SavedCard>,
-                holder.itemView.findViewById(R.id.tapCardChip2),
-                holder.itemView.findViewById(R.id.tapCardChip2Constraints),
-                holder.bindingAdapterPosition
-            )
-
-            return@setOnLongClickListener true
-        }
-
-    }
-
 
     @SuppressLint("ResourceAsColor")
     @RequiresApi(Build.VERSION_CODES.P)
@@ -203,7 +146,7 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         when {
 
             /**
-             * Saved Cards Type
+             * PaymentOptions All Type
              */
             getItemViewType(position) == TYPE_DISABLED_PAYMENT_OPTIONS -> {
                 typeDisabled(holder, position)
@@ -245,7 +188,21 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         val card = savedCardsArrayList[position.minus(disabledPaymentOptions.size)]
         bindSavedCardData(holder, position, card)
         setOnSavedCardOnClickAction(holder, position, card)
-        setOnClickActions(holder, position, card)
+
+        holder.itemView.setOnLongClickListener {
+            onCardSelectedActionListener.onDeleteIconClicked(
+                true,
+                position.minus(disabledPaymentOptions.size),
+                card.id,
+                card.lastFour,
+                savedCardsArrayList as ArrayList<SavedCard>,
+                holder.itemView.findViewById(R.id.tapCardChip2),
+                holder.itemView.findViewById(R.id.tapCardChip2Constraints),
+                holder.bindingAdapterPosition
+            )
+
+            return@setOnLongClickListener true
+        }
     }
 
 
