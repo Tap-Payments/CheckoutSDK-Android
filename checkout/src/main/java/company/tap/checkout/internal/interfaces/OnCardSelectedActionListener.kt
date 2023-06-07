@@ -27,8 +27,6 @@ interface OnCardSelectedActionListener {
         position: Int
     )
     fun onGoPayLogoutClicked(isClicked:Boolean)
-    fun onEditClicked(isClicked:Boolean)
-    fun onGooglePayClicked(isClicked: Boolean)
 
     fun removePaymentInlineShrinkageAndDimmed()
 }
