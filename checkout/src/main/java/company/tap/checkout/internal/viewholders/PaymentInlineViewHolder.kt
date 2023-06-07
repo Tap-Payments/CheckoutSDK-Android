@@ -188,7 +188,6 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
         constraintt.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
         acceptedCardText = view.findViewById(R.id.acceptedCardText)
 
-        acceptedCardText.isEnabled =false
 
         acceptedCardText.text = LocalizationManager.getValue("weSupport", "TapCardInputKit")
         saveForOtherCheckBox?.text =
