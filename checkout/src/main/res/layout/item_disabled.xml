@@ -9,10 +9,6 @@
     android:clipToPadding="false"
     android:hardwareAccelerated="true">
 
-
-
-
-
     <company.tap.tapuilibraryy.uikit.atoms.TapImageView
         android:id="@+id/imageView_disable"
         android:layout_width="match_parent"
