@@ -746,7 +746,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         displayItemsOpen = !display
         /**
-         * un comment after fix change currencies with disabled payment option
+         * @TODO un comment after fix change currencies with disabled payment option
          */
      //   amountViewHolder.changeGroupAction(!display)
         if (this::selectedAmount.isInitialized && this::selectedCurrency.isInitialized) {
