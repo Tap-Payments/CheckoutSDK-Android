@@ -551,7 +551,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         currencySelected = currency.toString(),
                         currencyRate = rate?.toBigDecimal()!!,
                         totalSelectedAmount = amount,
-                        selectedCurrencySymbol = symbol ?: ""
+                        selectedCurrencySymbol = symbol ?: "",
+                        isSortingList = false
                     )
                 }
             }
@@ -758,8 +759,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         else caseNotDisplayControlCurrency()
 
         displayItemsOpen = !display
-        amountViewHolder.changeGroupAction(!display)
-        //   if (this::currentAmount.isInitialized)
+        /**
+         * un comment after fix change currencies with disabled payment option
+         */
+     //   amountViewHolder.changeGroupAction(!display)
         if (this::selectedAmount.isInitialized && this::selectedCurrency.isInitialized) {
             if (selectedAmount == currentAmount && selectedCurrency == currentCurrency) {
                 amountViewHolder.view.amount_section.mainKDAmountValue.visibility = GONE
@@ -1493,10 +1496,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         } else {
             cardViewHolder.view.mainChipgroup.groupAction?.visibility = GONE
         }
+        //itemsViewHolder.view.itemRecylerView.adapter = itemAdapter
+        itemsViewHolder.view.mainCurrencyChip.chipsRecycler.adapter = currencyAdapter
         if (PaymentDataSource.getItems() != null) {
             PaymentDataSource.getItems()?.let { itemAdapter.updateAdapterData(it) }
         }
-        cardViewHolder.view.mainChipgroup.chipsRecycler.adapter = currencyAdapter
         cardViewHolder.view.mainChipgroup.chipsRecycler.adapter = adapter
         (cardViewHolder.view.mainChipgroup.chipsRecycler?.itemAnimator as SimpleItemAnimator).supportsChangeAnimations =
             false
@@ -2868,86 +2872,95 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         selectedCurrencySymbol: String
     ) {
 
+
         /**
-         * case currencyClicked @TODO:EGP /
+         * need to be refactored to one function
          */
 
-        currencyOldRate = currencyRate
-        lastSelectedCurrency = previousSelectedCurrency
-        if (::unModifiedItemList.isInitialized)
-            println("unModifiedItemList" + unModifiedItemList)
-        if (::itemList.isInitialized) {
-            for (i in itemList.indices) {
-                itemList[i].amount = unModifiedItemList[i].amount?.times(currencyRate)
-                //itemList[i].totalAmount = currencyOldRate?.div(currencyRate)
-                itemList[i].totalAmount =
-                    unModifiedItemList[i].getPlainAmount()?.times(currencyRate)
+        submitNewLocalCurrency(
+            currencySelected = currencySelected.toString(),
+            currencyRate = currencyRate,
+            totalSelectedAmount = totalSelectedAmount,
+            selectedCurrencySymbol = selectedCurrencySymbol ?: "",
+            isSortingList = false
+        )
 
-
-                println("item per unit >>" + itemList[i].amount)
-
-
-            }
-
-            itemsViewHolder.view.itemRecylerView.adapter = itemAdapter
-            itemAdapter.updateAdapterData(itemList)
-
-        }
-
-        //  itemList[i].amount = (list[i].amount.toLong())
-        //  itemList[i].currency = currencySelected
-
-        selectedAmount = CurrencyFormatter.currencyFormat(totalSelectedAmount.toString())
-        selectedCurrency = currencySelected
-        currencySelectedForCheck = currencySelected
-        selectedTotalAmount = selectedAmount
-
-        /**
-         * Logic based on currency synbol , actual currency code etc note currentCurrency and finalCurrencySymbol passed in
-         * if-else separately ***/
-
-        if (selectedCurrencySymbol.length == 2) {
-            amountViewHolder.updateSelectedCurrency(
-                displayItemsOpen,
-                selectedAmount, selectedCurrency,
-                currentAmount, currentCurrency, selectedCurrencySymbol
-            )
-            //  PaymentDataSource.setSelectedCurrency(selectedCurrency = selectedCurrency, null) // changed from null to symbol
-            PaymentDataSource.setSelectedCurrency(selectedCurrency, selectedCurrencySymbol)
-            //  PaymentDataSource.setSelectedCurrency(selectedCurrency = selectedCurrencySymbol, selectedCurrencySymbol) //commented
-
-        } else {
-            amountViewHolder.updateSelectedCurrency(
-                displayItemsOpen,
-                selectedAmount, selectedCurrency,
-                currentAmount, finalCurrencySymbol, selectedCurrencySymbol
-            )
-            PaymentDataSource.setSelectedCurrency(selectedCurrency, selectedCurrencySymbol)
-
-        }
-        currentCurrencySymbol = selectedCurrencySymbol
-
-
-        // PaymentDataSource.setSelectedCurrency(selectedCurrency = selectedCurrency)
-        PaymentDataSource.setSelectedAmount(currencyRate)
-        if (paymentInlineViewHolder.tapCardInputView.isNotEmpty()) {
-            paymentInlineViewHolder.tapCardInputView.clear()
-            paymentInlineViewHolder.tapAlertView?.fadeVisibility(GONE, 500)
-            paymentInlineViewHolder.acceptedCardText.visibility = VISIBLE
-            paymentInlineViewHolder.tabLayout.resetBehaviour()
-        }
+//        currencyOldRate = currencyRate
+//        lastSelectedCurrency = previousSelectedCurrency
+//        if (::unModifiedItemList.isInitialized)
+//            println("unModifiedItemList" + unModifiedItemList)
+//        if (::itemList.isInitialized) {
+//            for (i in itemList.indices) {
+//                itemList[i].amount = unModifiedItemList[i].amount?.times(currencyRate)
+//                //itemList[i].totalAmount = currencyOldRate?.div(currencyRate)
+//                itemList[i].totalAmount =
+//                    unModifiedItemList[i].getPlainAmount()?.times(currencyRate)
+//
+//
+//                println("item per unit >>" + itemList[i].amount)
+//
+//
+//            }
+//
+//            itemsViewHolder.view.itemRecylerView.adapter = itemAdapter
+//            itemAdapter.updateAdapterData(itemList)
+//
+//        }
+//
+//        //  itemList[i].amount = (list[i].amount.toLong())
+//        //  itemList[i].currency = currencySelected
+//
+//        selectedAmount = CurrencyFormatter.currencyFormat(totalSelectedAmount.toString())
+//        selectedCurrency = currencySelected
+//        currencySelectedForCheck = currencySelected
+//        selectedTotalAmount = selectedAmount
+//
+//        /**
+//         * Logic based on currency synbol , actual currency code etc note currentCurrency and finalCurrencySymbol passed in
+//         * if-else separately ***/
+//
+//        if (selectedCurrencySymbol.length == 2) {
+//            amountViewHolder.updateSelectedCurrency(
+//                displayItemsOpen,
+//                selectedAmount, selectedCurrency,
+//                currentAmount, currentCurrency, selectedCurrencySymbol
+//            )
+//            //  PaymentDataSource.setSelectedCurrency(selectedCurrency = selectedCurrency, null) // changed from null to symbol
+//            PaymentDataSource.setSelectedCurrency(selectedCurrency, selectedCurrencySymbol)
+//            //  PaymentDataSource.setSelectedCurrency(selectedCurrency = selectedCurrencySymbol, selectedCurrencySymbol) //commented
+//
+//        } else {
+//            amountViewHolder.updateSelectedCurrency(
+//                displayItemsOpen,
+//                selectedAmount, selectedCurrency,
+//                currentAmount, finalCurrencySymbol, selectedCurrencySymbol
+//            )
+//            PaymentDataSource.setSelectedCurrency(selectedCurrency, selectedCurrencySymbol)
+//
+//        }
+//        currentCurrencySymbol = selectedCurrencySymbol
+//
+//
+//        // PaymentDataSource.setSelectedCurrency(selectedCurrency = selectedCurrency)
+//        PaymentDataSource.setSelectedAmount(currencyRate)
+//        if (paymentInlineViewHolder.tapCardInputView.isNotEmpty()) {
+//            paymentInlineViewHolder.tapCardInputView.clear()
+//            paymentInlineViewHolder.tapAlertView?.fadeVisibility(GONE, 500)
+//            paymentInlineViewHolder.acceptedCardText.visibility = VISIBLE
+//            paymentInlineViewHolder.tabLayout.resetBehaviour()
+//        }
 
         adapter.resetSelection()
-
-        if (::selectedCurrency.isInitialized) {
-            println("selectedCurrency he" + selectedCurrency)
-            Bugfender.d(CustomUtils.tagEvent, "Currency changed to : " + selectedCurrencySymbol)
-            filterViewModels(selectedCurrency)
-        } else {
-            filterViewModels(currentCurrency)
-            //Bugfender.d("Currency changed to : "+currentCurrency ,CustomUtils.tagEvent)
-
-        }
+//
+//        if (::selectedCurrency.isInitialized) {
+//            println("selectedCurrency he" + selectedCurrency)
+//            Bugfender.d(CustomUtils.tagEvent, "Currency changed to : " + selectedCurrencySymbol)
+//            filterViewModels(selectedCurrency)
+//        } else {
+//            filterViewModels(currentCurrency)
+//            //Bugfender.d("Currency changed to : "+currentCurrency ,CustomUtils.tagEvent)
+//
+//        }
 
     }
 
@@ -2958,8 +2971,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         currencyRate: BigDecimal,
         totalSelectedAmount: BigDecimal,
         selectedCurrencySymbol: String,
-        isClickFromDisabledViews: Boolean = false
+        isClickFromDisabledViews: Boolean = false,
+        position: Int? = null,
+        isSortingList: Boolean? = false
     ) {
+
+        /**
+         * need to be refactored
+         */
         currencyOldRate = currencyRate
         if (::unModifiedItemList.isInitialized)
             println("unModifiedItemList" + unModifiedItemList)
@@ -2979,9 +2998,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
 
         selectedAmount = CurrencyFormatter.currencyFormat(totalSelectedAmount.toString())
-        if (currencySelected != null) {
-            selectedCurrency = currencySelected
-        }
+        selectedCurrency = currencySelected
         selectedTotalAmount = selectedAmount
 
 
@@ -3031,21 +3048,19 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             /**
              * here we update currency selected check to avoid it's appearance when selected currency is same
              */
-            CheckoutViewModel.currencySelectedForCheck = selectedCurrency
+            currencySelectedForCheck = selectedCurrency
         }
 
 
         adapter.resetSelection()
 
         if (!isClickFromDisabledViews) {
-            if (::selectedCurrency.isInitialized) {
-                Bugfender.d(CustomUtils.tagEvent, "Currency changed to : " + selectedCurrencySymbol)
-                filterViewModels(selectedCurrency)
-            } else {
-                filterViewModels(currentCurrency)
-            }
+            filterPaymentChipsAccordingToCurrency(
+                selectedCurrency,
+                position = position,
+                isSorting = isSortingList
+            )
         }
-
     }
 
 
@@ -3702,80 +3717,36 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     fun filterViewModels(currency: String) {
         savedCardsBasedCurr = filterByCurrenciesAndSortList(paymentOptionsResponse.cards, currency)
-        webPaymentOptions = filteredByPaymentTypeAndCurrencyAndSortedList(
-            paymentOptionsResponse.paymentOptions,
-            PaymentType.WEB,
-            currency
-        )
-
-        val cardPaymentOptions: java.util.ArrayList<PaymentOption> =
-            filteredByPaymentTypeAndCurrencyAndSortedList(
-                paymentOptionsResponse.paymentOptions, PaymentType.CARD, currency
-            )
-
-        cardPaymentOptions.forEachIndexed { index, paymentOption ->
-
-        }
-        val googlePaymentOptions: java.util.ArrayList<PaymentOption> =
-            filteredByPaymentTypeAndCurrencyAndSortedList(
-                paymentOptionsResponse.paymentOptions, PaymentType.GOOGLE_PAY, currency
-            )
-        paymentOptionsResponse.paymentOptions.forEachIndexed { index, paymentOption ->
-
-        }
-        disabledPaymentOptionList = getListOfDisabledChipsAccordingToSelectedCurrency()
-
-        disabledPaymentOptionList.forEachIndexed { index, paymentOption ->
-            if (paymentOption.getSupportedCurrencies().contains(currency)) {
-                paymentOption.isPaymentOptionEnabled = true
-            }
-            Log.e(
-                "updated",
-                paymentOption.displayName.toString() + ">>" + paymentOption.getSupportedCurrencies()
-                    .toString()
-            )
-        }
-        adapter.updateDisabledPaymentOptions(disabledPaymentOptionList)
-
-        val hasGooglePaymentOptions = googlePaymentOptions.size > 0
+        filterPaymentChipsAccordingToCurrency(currency, isSorting = true)
         val hasSavedCards: Boolean = savedCardsBasedCurr.size > 0
-        if (hasGooglePaymentOptions && googlePaymentOptions.isNotEmpty()) {
-            adapter.updateAdapterGooglePay(googlePaymentOptions)
-            PaymentDataSource.setGoogleCardPay(googlePaymentOptions)
-        }
-        if (webPaymentOptions.size == 0) {
-            adapter.updateAdapterData(ArrayList())
-            if (savedCardList.isNullOrEmpty()) {
-                cardViewHolder.view.mainChipgroup?.groupName?.visibility = View.GONE
-            } else {
-                cardViewHolder.view.mainChipgroup?.groupName?.visibility = VISIBLE
-            }
-
-
-        }
-
-        logicToHandlePaymentDataType(
-            webPaymentOptions,
-            cardPaymentOptions
-        )
         if (hasSavedCards) {
             adapter.updateAdapterDataSavedCard(savedCardsBasedCurr)
         }
     }
 
+    private fun filterPaymentChipsAccordingToCurrency(
+        currency: String,
+        isSorting: Boolean? = false,
+        position: Int? = null
+    ) {
+        disabledPaymentOptionList = getListOfDisabledChipsAccordingToSelectedCurrency()
+        disabledPaymentOptionList.forEachIndexed { index, paymentOption ->
+            paymentOption.isPaymentOptionEnabled =
+                paymentOption.getSupportedCurrencies().contains(currency)
+        }
+     adapter.updateDisabledPaymentOptions(disabledPaymentOptionList, position = position)
+
+    }
+
 
     fun getListOfDisabledChipsAccordingToSelectedCurrency(): ArrayList<PaymentOption> {
-        return paymentOptionsResponse.paymentOptions.sortedBy { it.orderBy  }.filter {
+        return paymentOptionsResponse.paymentOptions.sortedBy { it.orderBy }.filter {
             it.paymentType == PaymentType.WEB || it.paymentType == PaymentType.GOOGLE_PAY
 
         } as ArrayList<PaymentOption>
 
     }
 
-    fun getSortedListRegardingDisabledPaymentOptions(): List<PaymentOption> {
-        return disabledPaymentOptionList.sortedBy { !it.isPaymentOptionEnabled }
-
-    }
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun logicToHandlePaymentDataType(
