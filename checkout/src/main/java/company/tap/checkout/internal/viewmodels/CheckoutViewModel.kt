@@ -1986,7 +1986,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         } else {
             unActivateActionButton()
-            resetViewToPaymentInline()
             showControlWidget()
             with(paymentOption) {
                 val supportedCurrenciesRelatedToDisabledChip = mutableListOf<SupportedCurrencies>()
@@ -2006,21 +2005,21 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
                 when (CustomUtils.getCurrentTheme()) {
                     ThemeMode.dark.name -> {
-                        Glide.with(context).load(this.logos?.dark?.png)
+                        Glide.with(context).load(this.logos?.dark?.currencyWidget?.png)
                             .into(cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.currencyWidgetLogo)
                     }
                     ThemeMode.dark_colored.name -> {
-                        Glide.with(context).load(this.logos?.dark_colored?.png)
+                        Glide.with(context).load(this.logos?.dark_colored?.currencyWidget?.png)
                             .into(cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.currencyWidgetLogo)
 
                     }
                     ThemeMode.light.name -> {
-                        Glide.with(context).load(this.logos?.light?.png)
+                        Glide.with(context).load(this.logos?.light?.currencyWidget?.png)
                             .into(cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.currencyWidgetLogo)
 
                     }
                     ThemeMode.light_mono.name -> {
-                        Glide.with(context).load(this.logos?.light_mono?.png)
+                        Glide.with(context).load(this.logos?.light_mono?.currencyWidget?.png)
                             .into(cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.currencyWidgetLogo)
 
                     }
