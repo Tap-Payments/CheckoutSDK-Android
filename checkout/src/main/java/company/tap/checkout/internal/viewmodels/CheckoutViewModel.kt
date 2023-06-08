@@ -1544,50 +1544,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
 
-    private fun setMainChipGroupActionListener() {
-        if (cardViewHolder.view.mainChipgroup.groupAction?.text == LocalizationManager.getValue(
-                "close",
-                "Common"
-            )
-        ) {
-            isShaking.value = false
-            adapter.updateShaking(isShaking.value ?: false)
-            goPayAdapter.updateShaking(isShaking.value ?: false)
-            cardViewHolder.view.mainChipgroup.groupAction?.text =
-                LocalizationManager.getValue("availableInOtherCurrencies", "Common")
-        } else {
-            isShaking.value = true
-            adapter.updateShaking(isShaking.value ?: true)
-            goPayAdapter.updateShaking(isShaking.value ?: true)
-            goPayAdapter.updateShaking(false)
-            cardViewHolder.view.mainChipgroup.groupAction?.text =
-                LocalizationManager.getValue("close", "Common")
-        }
-    }
-
-    private fun setGoPayLoginViewGroupActionListener() {
-        if (goPaySavedCardHolder.view.goPayLoginView.groupAction?.text == LocalizationManager.getValue(
-                "close",
-                "Common"
-            )
-        ) {
-            isShaking.value = false
-            adapter.updateShaking(isShaking.value ?: false)
-            goPayAdapter.updateShaking(isShaking.value ?: false)
-            goPaySavedCardHolder.view.goPayLoginView.groupAction?.text =
-                LocalizationManager.getValue("availableInOtherCurrencies", "Common")
-            goPayAdapter.updateSignOut(goPayCardList.value as List<GoPaySavedCards>, false)
-
-        } else {
-            isShaking.value = true
-            adapter.updateShaking(isShaking.value ?: true)
-            Log.d("isShaking.value", isShaking.value.toString())
-            goPayAdapter.updateShaking(false)
-            goPaySavedCardHolder.view.goPayLoginView.groupAction?.text =
-                LocalizationManager.getValue("close", "Common")
-            goPayAdapter.updateSignOut(goPayCardList.value as List<GoPaySavedCards>, true)
-        }
-    }
 
     /**
      * Function ensures to clear the fields or unselect the not needed when
@@ -2777,7 +2733,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun checkSelectedAmountInitiated() {
         if (this::selectedAmount.isInitialized && this::selectedCurrency.isInitialized) {
-
+            amountViewHolder.updateSelectedCurrency(
+                displayItemsOpen,
+                selectedAmount, selectedCurrency,
+                currentAmount, currentCurrency, currentCurrencySymbol
+            )
         }
     }
 
@@ -2791,15 +2751,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         selectedCurrencySymbol: String
     ) {
 
-        amountViewHolder.changeDataSource(
-            AmountViewDataSource(
-                selectedCurr = selectedAmount,
-                selectedCurrText = selectedCurrencySymbol,
-                currentCurr = currentAmount,
-                currentCurrText = currentCurrency,
-                itemCount =  LocalizationManager.getValue("confirm", "Common")
-            )
-        )
+
         /**
          * need to be refactored to one function
          */
@@ -2841,10 +2793,22 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         }
 
+
         selectedAmount = CurrencyFormatter.currencyFormat(totalSelectedAmount.toString())
         selectedCurrency = currencySelected
         selectedTotalAmount = selectedAmount
 
+
+
+        amountViewHolder.updateSelectedCurrency(
+            displayItemsOpen,
+            selectedAmount,
+            selectedCurrency,
+            currentAmount,
+            finalCurrencySymbol,
+            selectedCurrencySymbol,
+            isChangingCurrencyFromOutside = false
+        )
         PaymentDataSource.setSelectedCurrency(selectedCurrency, selectedCurrencySymbol)
         currentCurrencySymbol = selectedCurrencySymbol
 
