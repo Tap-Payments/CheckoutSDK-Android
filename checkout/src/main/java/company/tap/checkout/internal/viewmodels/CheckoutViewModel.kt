@@ -746,19 +746,19 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         displayItemsOpen = !display
         amountViewHolder.changeGroupAction(!display)
 
-//        if (this::selectedAmount.isInitialized && this::selectedCurrency.isInitialized) {
-//            if (selectedAmount == currentAmount && selectedCurrency == currentCurrency) {
-//                amountViewHolder.view.amount_section.mainKDAmountValue.visibility = GONE
-//            } else {
-////                amountViewHolder.updateSelectedCurrency(
-////                    display,
-////                    selectedAmount, selectedCurrency,
-////                    currentAmount, finalCurrencySymbol, currentCurrencySymbol
-////                )
-//
-//            }
-//
-//        }
+        if (this::selectedAmount.isInitialized && this::selectedCurrency.isInitialized) {
+            if (selectedAmount == currentAmount && selectedCurrency == currentCurrency) {
+                amountViewHolder.view.amount_section.mainKDAmountValue.visibility = GONE
+            } else {
+                amountViewHolder.updateSelectedCurrency(
+                   display,
+                    selectedAmount, selectedCurrency,
+                    currentAmount, finalCurrencySymbol, currentCurrencySymbol
+                )
+
+            }
+
+        }
         if (otpViewHolder.otpView.isVisible) {
             removeViews(otpViewHolder)
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.RESET)
