@@ -553,6 +553,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         currencyRate = rate?.toBigDecimal()!!,
                         totalSelectedAmount = amount,
                         selectedCurrencySymbol = symbol ?: "",
+                        isChangeingCurrencyFromOutside = true
                     )
                 }
             }
@@ -2038,7 +2039,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         currencyRate = getSelectedSupportedCurrency().rate?.toBigDecimal()!!,
                         totalSelectedAmount = getSelectedSupportedCurrency().amount,
                         selectedCurrencySymbol = getSelectedSupportedCurrency().symbol ?: "",
-                        position = position
+                        position = position,
+                        isChangeingCurrencyFromOutside = true
                     )
                     onCardSelectedAction(true, paymentOption)
 
@@ -2834,8 +2836,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
 
 
-        val userCurrency = SharedPrefManager.getUserSupportedLocaleForTransactions(context)?.currency
-        isUserCurrencySameAsCurrencyOfApplication.value = userCurrency == selectedCurrency
+        if (isChangeingCurrencyFromOutside == true){
+            val userCurrency = SharedPrefManager.getUserSupportedLocaleForTransactions(context)?.currency
+            isUserCurrencySameAsCurrencyOfApplication.value = userCurrency == selectedCurrency
+        }
+
 
 
         adapter.resetSelection()

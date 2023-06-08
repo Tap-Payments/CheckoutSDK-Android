@@ -178,9 +178,11 @@ class AmountViewHolder(
             if (CheckoutViewModel.currencySelectedForCheck != SharedPrefManager.getUserSupportedLocaleForTransactions(
                     view.amount_section.context
                 )?.currency
-            )
+            ){
                 checkoutViewModel.addDataToAmountView()
-            view.amount_section?.tapChipPopup?.fadeVisibility(View.VISIBLE)
+                view.amount_section?.tapChipPopup?.fadeVisibility(View.VISIBLE)
+            }
+
         } else {
             /**
              * opening The Items Currencies to choose from

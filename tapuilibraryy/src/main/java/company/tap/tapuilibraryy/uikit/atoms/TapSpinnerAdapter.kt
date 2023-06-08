@@ -52,7 +52,6 @@ class TapSpinnerAdapter(
             holder = rowview.tag as viewHolder
         }
         Glide.with(context).load(rowItem?.flag).into(holder.imageView!!)
-//        holder.imageView?.setImageDrawable(rowItem?.flag)
         holder.txtTitle?.text =  rowItem?.currency.toString() + " " +rowItem?.amount.toString()
         holder.txtTitle?.setTextColor(loadAppThemManagerFromPath(AppColorTheme.ControlCurrencyWidgetCurrencyDropDownLabelColor))
         holder.txtTitle?.typeface = Typeface.createFromAsset(
