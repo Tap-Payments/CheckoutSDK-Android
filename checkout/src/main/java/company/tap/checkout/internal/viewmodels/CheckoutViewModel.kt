@@ -87,7 +87,6 @@ import company.tap.tapuilibraryy.themekit.ThemeManager
 import company.tap.tapuilibraryy.themekit.theme.SeparatorViewTheme
 import company.tap.tapuilibraryy.uikit.AppColorTheme
 import company.tap.tapuilibraryy.uikit.animation.MorphingAnimation
-import company.tap.tapuilibraryy.uikit.datasource.AmountViewDataSource
 import company.tap.tapuilibraryy.uikit.datasource.LoyaltyHeaderDataSource
 import company.tap.tapuilibraryy.uikit.enums.ActionButtonState
 import company.tap.tapuilibraryy.uikit.enums.GoPayLoginMethod
@@ -131,7 +130,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     MorphingAnimation.OnAnimationEndListener {
     private var savedCardList: MutableList<SavedCard>? = mutableListOf()
     private var arrayListSavedCardSize = ArrayList<SavedCard>()
-    private var disabledPaymentOptionList = arrayListOf<PaymentOption>()
+    private var allPaymentOptionsList = arrayListOf<PaymentOption>()
     private var supportedLoyalCards = MutableLiveData<List<LoyaltySupportedCurrency>>()
     private var goPayCardList = MutableLiveData<List<GoPaySavedCards>>()
     private var selectedViewToBeDeletedFromCardViewHolder: ViewGroup? = null
@@ -554,7 +553,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         currencyRate = rate?.toBigDecimal()!!,
                         totalSelectedAmount = amount,
                         selectedCurrencySymbol = symbol ?: "",
-                        isSortingList = false
                     )
                 }
             }
@@ -762,7 +760,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 amountViewHolder.view.amount_section.mainKDAmountValue.visibility = GONE
             } else {
                 amountViewHolder.updateSelectedCurrency(
-                   display,
+                    displayItemsOpen,
                     selectedAmount, selectedCurrency,
                     currentAmount, finalCurrencySymbol, currentCurrencySymbol
                 )
@@ -1555,7 +1553,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
 
-
     /**
      * Function ensures to clear the fields or unselect the not needed when
      * delete is clicked on Long press**/
@@ -2047,7 +2044,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         currencyRate = getSelectedSupportedCurrency().rate?.toBigDecimal()!!,
                         totalSelectedAmount = getSelectedSupportedCurrency().amount,
                         selectedCurrencySymbol = getSelectedSupportedCurrency().symbol ?: "",
-                        isSortingList = false,
                         position = position
                     )
                     onCardSelectedAction(true, paymentOption)
@@ -2771,7 +2767,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             currencyRate = currencyRate,
             totalSelectedAmount = totalSelectedAmount,
             selectedCurrencySymbol = selectedCurrencySymbol ?: "",
-            isSortingList = false
         )
         adapter.resetSelection()
     }
@@ -2783,9 +2778,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         currencyRate: BigDecimal,
         totalSelectedAmount: BigDecimal,
         selectedCurrencySymbol: String,
-        isClickFromDisabledViews: Boolean = false,
         position: Int? = null,
-        isSortingList: Boolean? = false
+        isChangeingCurrencyFromOutside: Boolean? = false
     ) {
 
         /**
@@ -2818,7 +2812,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             currentAmount,
             finalCurrencySymbol,
             selectedCurrencySymbol,
-            isChangingCurrencyFromOutside = false
+            isChangingCurrencyFromOutside = isChangeingCurrencyFromOutside
         )
         PaymentDataSource.setSelectedCurrency(selectedCurrency, selectedCurrencySymbol)
         currentCurrencySymbol = selectedCurrencySymbol
@@ -2842,13 +2836,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         adapter.resetSelection()
 
-        if (!isClickFromDisabledViews) {
             filterPaymentChipsAccordingToCurrency(
                 selectedCurrency,
                 position = position,
-                isSorting = isSortingList
             )
-        }
     }
 
 
@@ -3488,7 +3479,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         logicToHandlePaymentDataType(cardPaymentOptions = cardPaymentOptions)
 
-        filterPaymentChipsAccordingToCurrency(currency, isSorting = true)
+        filterPaymentChipsAccordingToCurrency(currency)
         val hasSavedCards: Boolean = savedCardsBasedCurr.size > 0
         if (hasSavedCards) {
             adapter.updateAdapterDataSavedCard(savedCardsBasedCurr)
@@ -3498,20 +3489,32 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun filterPaymentChipsAccordingToCurrency(
         currency: String,
-        isSorting: Boolean? = false,
         position: Int? = null
     ) {
-        disabledPaymentOptionList = getListOfDisabledChipsAccordingToSelectedCurrency()
-        disabledPaymentOptionList.forEachIndexed { index, paymentOption ->
+        allPaymentOptionsList = getListOfAllPaymentOptionsFilterdWithWebAndGooglePay()
+        val enabledPaymentList = mutableListOf<PaymentOption>()
+        val disabledPaymentList = mutableListOf<PaymentOption>()
+
+        allPaymentOptionsList.forEachIndexed { index, paymentOption ->
             paymentOption.isPaymentOptionEnabled =
                 paymentOption.getSupportedCurrencies().contains(currency)
+            if (paymentOption.isPaymentOptionEnabled) {
+                enabledPaymentList.add(paymentOption)
+            } else {
+                disabledPaymentList.add(paymentOption)
+            }
         }
-        adapter.updateDisabledPaymentOptions(disabledPaymentOptionList, position = position)
+        if (position != null) {
+            adapter.updateThisSelected(position)
+        } else {
+            adapter.updateEnabledPaymentOptions(enabledPaymentList)
+            adapter.updateDisabledPaymentOptions(disabledPaymentList)
+        }
 
 
     }
 
-    fun getListOfDisabledChipsAccordingToSelectedCurrency(): ArrayList<PaymentOption> {
+    fun getListOfAllPaymentOptionsFilterdWithWebAndGooglePay(): ArrayList<PaymentOption> {
         val googlePaymentOptions: ArrayList<PaymentOption> = arrayListOf<PaymentOption>()
         val filterdPaymentOptions =
             paymentOptionsResponse.paymentOptions.sortedBy { it.orderBy }.filter {
