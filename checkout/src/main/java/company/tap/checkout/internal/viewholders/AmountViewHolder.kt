@@ -230,7 +230,7 @@ class AmountViewHolder(
 
 
         isOpenedList = isOpen
-        if (selectedAmount == currentAmount && selectedCurrency == currentCurrency) {
+        if (selectedAmount == currentAmount) {
             view.amount_section.mainKDAmountValue.visibility = View.GONE
         } else {
             view.amount_section.mainKDAmountValue.visibility = View.VISIBLE
