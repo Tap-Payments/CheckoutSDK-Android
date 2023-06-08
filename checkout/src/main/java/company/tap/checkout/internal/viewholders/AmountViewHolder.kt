@@ -231,6 +231,56 @@ class AmountViewHolder(
 
     }
 
+    fun updateSelectedCurrency(
+        isOpen: Boolean,
+        selectedAmount: String,
+        selectedCurrency: String,
+        currentAmount: String,
+        currentCurrency: String,
+        selectedCurrencySymbol: String? = null,
+        isChangingCurrencyFromOutside: Boolean? = false
+    ) {
+
+
+        isOpenedList = isOpen
+        if (selectedAmount == currentAmount && selectedCurrency == currentCurrency) {
+            view.amount_section.mainKDAmountValue.visibility = View.GONE
+        } else {
+            view.amount_section.mainKDAmountValue.visibility = View.VISIBLE
+        }
+        if (isOpen) {
+            changeDataSource(
+                AmountViewDataSource(
+                    selectedCurr = selectedAmount,
+                    selectedCurrText = selectedCurrencySymbol,
+                    currentCurr = currentAmount,
+                    currentCurrText = currentCurrency,
+                    itemCount = itemCountt + "  " + LocalizationManager.getValue(
+                        "items",
+                        "Common"
+                    )
+                )
+            )
+        } else {
+            changeDataSource(
+                AmountViewDataSource(
+                    selectedCurr = selectedAmount,
+                    selectedCurrText = selectedCurrencySymbol,
+                    currentCurr = currentAmount,
+                    currentCurrText = currentCurrency,
+                    itemCount = if (isChangingCurrencyFromOutside == true) itemCountt + "  " + LocalizationManager.getValue(
+                        "items",
+                        "Common"
+                    ) else itemCountt + "  " + LocalizationManager.getValue(
+                        "items",
+                        "Common"
+                )
+            ))
+        }
+
+    }
+
+
     /**
      * Sets data from API through LayoutManager
      * @param transactionCurrencyApi represents the currency which by default.
