@@ -271,8 +271,8 @@ class AmountViewHolder(
                     itemCount = if (isChangingCurrencyFromOutside == true) itemCountt + "  " + LocalizationManager.getValue(
                         "items",
                         "Common"
-                    ) else itemCountt + "  " + LocalizationManager.getValue(
-                        "items",
+                    ) else LocalizationManager.getValue(
+                        "confirm",
                         "Common"
                 )
             ))

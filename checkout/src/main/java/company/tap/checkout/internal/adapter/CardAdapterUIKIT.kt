@@ -44,11 +44,11 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var selectedPosition = -1
     private var savedCardsArrayList: List<SavedCard> = arrayListOf()
-    private var webArrayListContent: List<PaymentOption> = arrayListOf()
     private var disabledPaymentOptions: List<PaymentOption> = arrayListOf()
+    private var enabledPaymentOptions: List<PaymentOption> = arrayListOf()
+
     private var isShaking: Boolean = false
     private var goPayOpened: Boolean = false
-    private var arrayModified: ArrayList<Any> = ArrayList()
     private var __context: Context? = null
 
     @DrawableRes
@@ -59,13 +59,12 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
 
     companion object {
         private const val TYPE_SAVED_CARD = 2
-        private const val TYPE_DISABLED_PAYMENT_OPTIONS = 1
+        private const val TYPE_DISABLED_PAYMENT_OPTIONS = 3
+        private const val TYPE_ENABLED_PAYMENT_OPTIONS = 1
 
     }
 
     fun updateAdapterData(adapterContent: List<PaymentOption>) {
-        this.webArrayListContent = adapterContent
-        notifyDataSetChanged()
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -76,18 +75,24 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
     }
 
     @SuppressLint("NotifyDataSetChanged")
+    fun updateEnabledPaymentOptions(
+        paymentOptionsDisable: List<PaymentOption>,
+    ) {
+        this.enabledPaymentOptions = paymentOptionsDisable
+        notifyDataSetChanged()
+    }
+    fun updateThisSelected(position: Int){
+        selectedPosition = position
+        notifyItemChanged(position)
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
     fun updateDisabledPaymentOptions(
         paymentOptionsDisable: List<PaymentOption>,
-        position: Int? = null
     ) {
         this.disabledPaymentOptions = paymentOptionsDisable
         notifyDataSetChanged()
-        position?.let {
-            selectedPosition = position
-            notifyItemChanged(it)
-        }
     }
-
 
     fun updateShaking(isShaking: Boolean) {
         this.isShaking = isShaking
@@ -99,6 +104,12 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         val view: View
         __context = parent.context
         return when (viewType) {
+            TYPE_ENABLED_PAYMENT_OPTIONS -> {
+                view =
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.item_disabled, parent, false)
+                SingleViewHolder(view)
+            }
             TYPE_SAVED_CARD -> {
                 view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_save_cards, parent, false)
@@ -122,14 +133,20 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
 
     override fun getItemViewType(position: Int): Int {
 
-        if (disabledPaymentOptions.isNotEmpty()) {
-            if (position < disabledPaymentOptions.size
+        if (enabledPaymentOptions.isNotEmpty()) {
+            if (position < enabledPaymentOptions.size
             ) {
-                return TYPE_DISABLED_PAYMENT_OPTIONS
+                return TYPE_ENABLED_PAYMENT_OPTIONS
             }
         }
-        if (position.minus(disabledPaymentOptions.size) < savedCardsArrayList.size) {
+        if (position.minus(enabledPaymentOptions.size) < savedCardsArrayList.size) {
             return TYPE_SAVED_CARD
+        }
+
+        if (position.minus(enabledPaymentOptions.size)
+                .minus(savedCardsArrayList.size) < disabledPaymentOptions.size
+        ) {
+            return TYPE_DISABLED_PAYMENT_OPTIONS
         }
         return TYPE_SAVED_CARD
 
@@ -137,6 +154,7 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
 
     override fun getItemCount(): Int {
         return savedCardsArrayList.size.plus(disabledPaymentOptions.size)
+            .plus(enabledPaymentOptions.size)
     }
 
     @SuppressLint("ResourceAsColor")
@@ -147,18 +165,27 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
     ) {
         when {
 
+
             /**
-             * PaymentOptions All Type
+             * Enabled PaymentOptions
              */
-            getItemViewType(position) == TYPE_DISABLED_PAYMENT_OPTIONS -> {
-                typeDisabled(holder, position)
+            getItemViewType(position) == TYPE_ENABLED_PAYMENT_OPTIONS -> {
+                typeEnabled(holder, position)
             }
+
             /**
              * Saved Cards Type
              */
             getItemViewType(position) == TYPE_SAVED_CARD -> {
                 typeSavedCard(holder, position)
             }
+            /**
+             * Disabled PaymentOptions
+             */
+            getItemViewType(position) == TYPE_DISABLED_PAYMENT_OPTIONS -> {
+                typeDisabled(holder, position)
+            }
+
 
         }
     }
@@ -170,8 +197,8 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
 
 
     fun removeItems() {
-        if (goPayOpened) arrayModified = ArrayList(webArrayListContent)
-        arrayModified.removeAt(0)
+//        if (goPayOpened) arrayModified = ArrayList(webArrayListContent)
+//        arrayModified.removeAt(0)
         notifyDataSetChanged()
     }
 
@@ -187,14 +214,14 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
 
         if (selectedPosition == position) setSelectedCardTypeSavedShadowAndBackground(holder)
         else setUnSelectedCardTypeSavedShadowAndBackground(holder)
-        val card = savedCardsArrayList[position.minus(disabledPaymentOptions.size)]
+        val card = savedCardsArrayList[position.minus(enabledPaymentOptions.size)]
         bindSavedCardData(holder, position, card)
         setOnSavedCardOnClickAction(holder, position, card)
 
         holder.itemView.setOnLongClickListener {
             onCardSelectedActionListener.onDeleteIconClicked(
                 true,
-                position.minus(disabledPaymentOptions.size),
+                position.minus(enabledPaymentOptions.size),
                 card.id,
                 card.lastFour,
                 savedCardsArrayList as ArrayList<SavedCard>,
@@ -307,7 +334,8 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
 
 
     private fun typeDisabled(holder: RecyclerView.ViewHolder, position: Int) {
-        val typeDisabled = disabledPaymentOptions[position]
+        val typeDisabled = disabledPaymentOptions[position.minus(enabledPaymentOptions.size)
+            .minus(savedCardsArrayList.size)]
         if (selectedPosition == position) {
             if (typeDisabled.isPaymentOptionEnabled) {
                 setSelectedCardTypeDisabledShadowAndBackground(holder)
@@ -368,6 +396,76 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         holder.itemView.setOnClickListener {
             selectedPosition = position
             onCardSelectedActionListener.onDisabledChipSelected(typeDisabled, position)
+            notifyDataSetChanged()
+        }
+
+
+    }
+
+
+    private fun typeEnabled(holder: RecyclerView.ViewHolder, position: Int) {
+        val typeEnabled = enabledPaymentOptions[position]
+        if (selectedPosition == position) {
+            if (typeEnabled.isPaymentOptionEnabled) {
+                setSelectedCardTypeDisabledShadowAndBackground(holder)
+            } else
+                setSelectedCardTypeDisabledShadowAndBackground(holder, isBackgroundDimmed = true)
+        } else {
+            if (typeEnabled.isPaymentOptionEnabled) {
+                setUnSelectedCardTypeDisabledShadowAndBackground(holder)
+
+            } else
+                setUnSelectedCardTypeDisabledShadowAndBackground(holder, isBackgroundDimmed = true)
+        }
+
+
+        val imageViewCard = holder.itemView.findViewById<ImageView>(R.id.imageView_disable)
+        when (CustomUtils.getCurrentTheme()) {
+            ThemeMode.dark.name -> {
+                if (typeEnabled.isPaymentOptionEnabled) {
+                    Glide.with(holder.itemView.context)
+                        .load(typeEnabled.logos?.dark?.svg)
+                        .into(imageViewCard)
+                } else
+                    Glide.with(holder.itemView.context)
+                        .load(typeEnabled.logos?.dark?.disabled?.svg)
+                        .into(imageViewCard)
+            }
+            ThemeMode.dark_colored.name -> {
+                if (typeEnabled.isPaymentOptionEnabled) {
+                    Glide.with(holder.itemView.context)
+                        .load(typeEnabled.logos?.dark_colored?.svg)
+                        .into(imageViewCard)
+                } else
+                    Glide.with(holder.itemView.context)
+                        .load(typeEnabled.logos?.dark_colored?.disabled?.svg)
+                        .into(imageViewCard)
+            }
+            ThemeMode.light.name -> {
+                if (typeEnabled.isPaymentOptionEnabled) {
+                    Glide.with(holder.itemView.context)
+                        .load(typeEnabled.logos?.light?.svg)
+                        .into(imageViewCard)
+                } else
+                    Glide.with(holder.itemView.context)
+                        .load(typeEnabled.logos?.light?.disabled?.svg)
+                        .into(imageViewCard)
+            }
+            ThemeMode.light_mono.name -> {
+                if (typeEnabled.isPaymentOptionEnabled) {
+                    Glide.with(holder.itemView.context)
+                        .load(typeEnabled.logos?.light_mono?.svg)
+                        .into(imageViewCard)
+                } else
+                    Glide.with(holder.itemView.context)
+                        .load(typeEnabled.logos?.light_mono?.disabled?.svg)
+                        .into(imageViewCard)
+            }
+        }
+
+        holder.itemView.setOnClickListener {
+            selectedPosition = position
+            onCardSelectedActionListener.onDisabledChipSelected(typeEnabled, position)
             notifyDataSetChanged()
         }
 
