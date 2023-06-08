@@ -326,41 +326,41 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
             ThemeMode.dark.name -> {
                 if (typeDisabled.isPaymentOptionEnabled) {
                     Glide.with(holder.itemView.context)
-                        .load(typeDisabled.logos?.dark?.svg)
+                        .load(typeDisabled.logos?.dark?.png)
                         .into(imageViewCard)
                 } else
                     Glide.with(holder.itemView.context)
-                        .load(typeDisabled.logos?.dark?.disabled?.svg)
+                        .load(typeDisabled.logos?.dark?.disabled?.png)
                         .into(imageViewCard)
             }
             ThemeMode.dark_colored.name -> {
                 if (typeDisabled.isPaymentOptionEnabled) {
                     Glide.with(holder.itemView.context)
-                        .load(typeDisabled.logos?.dark_colored?.svg)
+                        .load(typeDisabled.logos?.dark_colored?.png)
                         .into(imageViewCard)
                 } else
                     Glide.with(holder.itemView.context)
-                        .load(typeDisabled.logos?.dark_colored?.disabled?.svg)
+                        .load(typeDisabled.logos?.dark_colored?.disabled?.png)
                         .into(imageViewCard)
             }
             ThemeMode.light.name -> {
                 if (typeDisabled.isPaymentOptionEnabled) {
                     Glide.with(holder.itemView.context)
-                        .load(typeDisabled.logos?.light?.svg)
+                        .load(typeDisabled.logos?.light?.png)
                         .into(imageViewCard)
                 } else
                     Glide.with(holder.itemView.context)
-                        .load(typeDisabled.logos?.light?.disabled?.svg)
+                        .load(typeDisabled.logos?.light?.disabled?.png)
                         .into(imageViewCard)
             }
             ThemeMode.light_mono.name -> {
                 if (typeDisabled.isPaymentOptionEnabled) {
                     Glide.with(holder.itemView.context)
-                        .load(typeDisabled.logos?.light_mono?.svg)
+                        .load(typeDisabled.logos?.light_mono?.png)
                         .into(imageViewCard)
                 } else
                     Glide.with(holder.itemView.context)
-                        .load(typeDisabled.logos?.light_mono?.disabled?.svg)
+                        .load(typeDisabled.logos?.light_mono?.disabled?.png)
                         .into(imageViewCard)
             }
         }
