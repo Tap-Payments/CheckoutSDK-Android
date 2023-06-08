@@ -132,7 +132,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private var arrayListSavedCardSize = ArrayList<SavedCard>()
     private var allPaymentOptionsList = arrayListOf<PaymentOption>()
     private var supportedLoyalCards = MutableLiveData<List<LoyaltySupportedCurrency>>()
-    private var goPayCardList = MutableLiveData<List<GoPaySavedCards>>()
     private var selectedViewToBeDeletedFromCardViewHolder: ViewGroup? = null
     private var viewToBeBlurCardViewHolder: View? = null
     var newColorVal: Int? = null
@@ -145,6 +144,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     val localCurrencyReturned = MutableLiveData<Boolean>()
     val powerdByTapAnimationFinished = MutableLiveData<Boolean>()
     val isItemsAreOpend = MutableLiveData<Boolean>()
+    val isUserCurrencySameAsCurrencyOfApplication = MutableLiveData<Boolean>()
 
     private var deleteCard: Boolean = false
     private var displayItemsOpen: Boolean = false
@@ -212,7 +212,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @SuppressLint("StaticFieldLeak")
     private lateinit var headerLayout: LinearLayout
-    private lateinit var background: LinearLayout
 
     @SuppressLint("StaticFieldLeak")
     private lateinit var sdkLayout: LinearLayout
@@ -346,6 +345,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     init {
         powerdByTapAnimationFinished.value = false
         isItemsAreOpend.value = false
+        isUserCurrencySameAsCurrencyOfApplication.value= false
     }
 
     private fun initLoyaltyView() {
@@ -753,7 +753,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         if (display) caseDisplayControlCurrency()
         else caseNotDisplayControlCurrency()
         displayItemsOpen = !display
-        amountViewHolder.changeGroupAction(!display)
+        amountViewHolder.changeGroupAction(displayItemsOpen)
 
         if (this::selectedAmount.isInitialized && this::selectedCurrency.isInitialized) {
             if (selectedAmount == currentAmount && selectedCurrency == currentCurrency) {
@@ -762,7 +762,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 amountViewHolder.updateSelectedCurrency(
                     displayItemsOpen,
                     selectedAmount, selectedCurrency,
-                    currentAmount, finalCurrencySymbol, currentCurrencySymbol
+                    currentAmount, finalCurrencySymbol, currentCurrencySymbol,
                 )
 
             }
@@ -851,10 +851,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     fun addTitlePaymentAndFlag() {
         addDataToAmountView()
-        if (displayItemsOpen) {
-
-        }
-        amountViewHolder.view.amount_section.tapChipPopup.slidefromRightToLeft()
+        amountViewHolder.view.amount_section.tapChipPopup.slideFromStartToEnd()
         amountViewHolder.view.amount_section.itemPopupLayout.applyGlowingEffect(getCurrencyColors())
 
     }
@@ -863,14 +860,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         val currencyAlert: String = LocalizationManager.getValue("currencyAlert", "Common")
         amountViewHolder.view.amount_section.popupTextView.text =
             currencyAlert + " " + checkoutFragment.getSimIsoCountryCurrency()
-        Glide.with(context).load(showCountryFlag())
-            .into(amountViewHolder.view.amount_section.flagImageView);
+        Glide.with(context).load(showCountryFlag()).into(amountViewHolder.view.amount_section.flagImageView);
         amountViewHolder.view.amount_section.tapChipAmount.bringToFront()
 
     }
 
     fun removevisibiltyCurrency() {
-        amountViewHolder.view.amount_section.tapChipPopup.visibility = GONE
+        amountViewHolder.view.amount_section.tapChipPopup.fadeVisibility(View.GONE)
+    }
+    fun showVisibiltyOfCurrency() {
+        amountViewHolder.view.amount_section.tapChipPopup.fadeVisibility(View.VISIBLE)
     }
 
     fun getCurrencyColors(): Pair<Int, Int> {
@@ -926,10 +925,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun caseNotDisplayControlCurrency() {
 
-//        if (goPayViewsHolder.goPayopened || itemsViewHolder.itemsdisplayed)
-//        else setActionNotGoPayOpenedNotItemsDisplayed()
-
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             setActionGoPayOpenedItemsDisplayed()
         }
@@ -960,7 +955,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
         paymentInlineViewHolder.resetPaymentCardView()
-//        frameLayout.visibility = GONE
     }
 
     private fun setActionNotGoPayOpenedNotItemsDisplayed() {
@@ -2527,6 +2521,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
 
+    fun removeVisibilityTapChipAmount() {
+        amountViewHolder.view.amount_section.tapChipPopup.fadeVisibility(View.GONE)
+    }
+
+
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onDeleteIconClicked(
         stopAnimation: Boolean,
@@ -2825,6 +2824,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
              */
             if (supportedCurrencies.currency == selectedCurrency) {
                 currencyAdapter.updateSelectedPosition(index)
+
             }
 
             /**
@@ -2834,12 +2834,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
 
 
+        val userCurrency = SharedPrefManager.getUserSupportedLocaleForTransactions(context)?.currency
+        isUserCurrencySameAsCurrencyOfApplication.value = userCurrency == selectedCurrency
+
+
         adapter.resetSelection()
 
-            filterPaymentChipsAccordingToCurrency(
-                selectedCurrency,
-                position = position,
-            )
+        filterPaymentChipsAccordingToCurrency(
+            selectedCurrency,
+            position = position,
+        )
     }
 
 
@@ -3720,7 +3724,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         } else BigDecimal.ZERO
     }
 
-    fun View.fadeVisibility(visibility: Int, duration: Long = 3000) {
+    fun View.fadeVisibility(visibility: Int, duration: Long = 1000) {
         val transition: Transition = Fade()
         transition.duration = duration
         transition.addTarget(this)

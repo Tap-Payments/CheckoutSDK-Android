@@ -14,7 +14,6 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.viewModels
 import cards.pay.paycardsrecognizer.sdk.Card
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.ChargeStatus
@@ -23,7 +22,6 @@ import company.tap.checkout.internal.apiresponse.UserRepository
 import company.tap.checkout.internal.cache.SharedPrefManager
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.utils.*
-import company.tap.checkout.internal.utils.Constants.PoweredByLayoutAnimationDelay
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.internal.webview.WebFragment.Companion.isWebViewOpened
 import company.tap.checkout.open.controller.SDKSession
@@ -86,11 +84,20 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                  * check if data cached and different currency present
                  * should put : @for check !isUserCurrencySameToMainCurrency()
                  */
-                if (cacheUserLocalCurrency() && !requireActivity().isUserCurrencySameToMainCurrency()) {
+                if (cacheUserLocalCurrency() && !requireActivity().isUserCurrencySameToMainCurrency(
+                        viewModel.isUserCurrencySameAsCurrencyOfApplication
+                    )
+                ) {
                     viewModel.powerdByTapAnimationFinished.observe(this@CheckoutFragment) {
                         if (it == true) {
                             doAfterSpecificTime {
                                 viewModel.addTitlePaymentAndFlag()
+                                viewModel.isUserCurrencySameAsCurrencyOfApplication.observe(
+                                    this@CheckoutFragment
+                                ) {
+                                    if (it) viewModel.removevisibiltyCurrency()
+                                    else viewModel.showVisibiltyOfCurrency()
+                                }
                             }
                         } else {
                             viewModel.removevisibiltyCurrency()
@@ -102,6 +109,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             }
 
         })
+
+
 
         enableSections()
 
@@ -155,7 +164,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                 }
             )
         }
-
 
 
     }

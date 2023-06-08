@@ -144,7 +144,7 @@ class AmountViewHolder(
         }
     }
 
-     fun changeDataSource(amountViewDataSource: AmountViewDataSource) {
+    fun changeDataSource(amountViewDataSource: AmountViewDataSource) {
         view.amount_section.setAmountViewDataSource(amountViewDataSource)
     }
 
@@ -156,18 +156,7 @@ class AmountViewHolder(
             /**
              * Second time opening The Items Currencies after choosing one Currency
              */
-            if (itemCountt?.contentEquals("1") == true) {
-                changeDataSource(
-                    AmountViewDataSource(
-                        selectedCurr = originalAmount,
-                        selectedCurrText = transactionCurrency,
-                        itemCount = itemCountt + "  " + LocalizationManager.getValue(
-                            "item",
-                            "Common"
-                        )
-                    )
-                )
-            } else changeDataSource(
+            changeDataSource(
                 AmountViewDataSource(
                     selectedCurr = originalAmount,
                     selectedCurrText = transactionCurrency,
@@ -190,10 +179,8 @@ class AmountViewHolder(
                     view.amount_section.context
                 )?.currency
             )
-                doAfterSpecificTime(500) {
-                    checkoutViewModel.addDataToAmountView()
-                    view.amount_section?.tapChipPopup?.addFadeInAnimation(durationTime = 500)
-                }
+                checkoutViewModel.addDataToAmountView()
+            view.amount_section?.tapChipPopup?.fadeVisibility(View.VISIBLE)
         } else {
             /**
              * opening The Items Currencies to choose from
@@ -212,9 +199,7 @@ class AmountViewHolder(
             view.amount_section.itemAmountText.visibility = View.GONE
             view.amount_section.viewSeparator.visibility = View.GONE
             view.amount_section.amountImageView.visibility = View.GONE
-            doAfterSpecificTime(500) {
-                view.amount_section?.tapChipPopup?.addFadeOutAnimation(isGone = false)
-            }
+            view.amount_section?.tapChipPopup?.fadeVisibility(View.GONE)
 
 
         }
@@ -274,8 +259,9 @@ class AmountViewHolder(
                     ) else LocalizationManager.getValue(
                         "confirm",
                         "Common"
+                    )
                 )
-            ))
+            )
         }
 
     }

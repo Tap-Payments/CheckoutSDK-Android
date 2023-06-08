@@ -38,6 +38,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+import androidx.lifecycle.MutableLiveData
 import androidx.transition.AutoTransition
 import com.bumptech.glide.Glide
 import company.tap.checkout.R
@@ -122,10 +123,10 @@ fun View.applyGlowingEffect(colorPairs: Pair<Int, Int>, durationTime: Long = 100
 }
 
 fun View.addFadeInAnimation(durationTime: Long = 1000L) {
+    this.visibility = View.VISIBLE
     val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
     animation.duration = durationTime
     this.startAnimation(animation)
-    this.visibility = View.VISIBLE
 
 }
 
@@ -147,13 +148,14 @@ fun View.addSlideUpAnimation(durationTime: Long = 1000L, onAnimationEnd: () -> U
     })
 }
 
-fun Context.isUserCurrencySameToMainCurrency(): Boolean {
+fun Context.isUserCurrencySameToMainCurrency(userCurrencySameAsCurrencyOfApplication: MutableLiveData<Boolean>): Boolean {
     val userCurrency = SharedPrefManager.getUserSupportedLocaleForTransactions(this)?.currency
     val paymentCurrency = PaymentDataSource.getCurrency()?.isoCode
-    return userCurrency.equals(paymentCurrency, ignoreCase = true)
+    userCurrencySameAsCurrencyOfApplication.value = userCurrency.equals(paymentCurrency, ignoreCase = true)
+    return userCurrencySameAsCurrencyOfApplication.value == true
 }
 
-fun View.slidefromRightToLeft() {
+fun View.slideFromStartToEnd() {
     val animate = TranslateAnimation(
         if (isRTL()) -this.width.toFloat() else this.width.toFloat(),
         0f,
@@ -161,7 +163,6 @@ fun View.slidefromRightToLeft() {
         0f
     ) // View for animation
     animate.duration = 1000
-    animate.fillAfter = true
     this.startAnimation(animate)
     this.visibility = View.VISIBLE // Change visibility VISIBLE or GONE
 
