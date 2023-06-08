@@ -569,11 +569,22 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun showCountryFlag(): String? {
         val currency = SharedPrefManager.getUserSupportedLocaleForTransactions(context)
-        if (ThemeManager.currentTheme.contains("dark")) {
-            return currency?.logos?.dark?.png
-        } else {
-            return currency?.logos?.light?.png
+        var flagString : String = ""
+        when(CustomUtils.getCurrentTheme()){
+            ThemeMode.dark.name->{
+                flagString= currency?.logos?.dark?.png.toString()
+            }
+            ThemeMode.dark_colored.name->{
+                flagString= currency?.logos?.dark_colored?.png.toString()
+            }
+            ThemeMode.light_mono.name->{
+                flagString= currency?.logos?.light_mono?.png.toString()
+            }
+            ThemeMode.light.name->{
+                flagString= currency?.logos?.light?.png.toString()
+            }
         }
+        return flagString
     }
 
     private fun initSwitchAction() {
