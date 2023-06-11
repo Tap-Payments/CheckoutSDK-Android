@@ -2008,14 +2008,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 }, onDarkColoredTheme = {
                     Glide.with(context).load(paymentOption.logos?.dark_colored?.currencyWidget?.png)
                         .into(currencyWidgetLogo)
-
                 }, onLightMonoTheme = {
                     Glide.with(context).load(paymentOption.logos?.light_mono?.currencyWidget?.png)
                         .into(currencyWidgetLogo)
                 }, onLightTheme = {
                     Glide.with(context).load(paymentOption.logos?.light?.currencyWidget?.png)
                         .into(currencyWidgetLogo)
-
                 })
                 confitmButton.setOnClickListener {
                     dismisControlWidget()
