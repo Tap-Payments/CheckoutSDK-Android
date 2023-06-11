@@ -32,6 +32,9 @@ Copyright (c) 2020    Tap Payments.
 All rights reserved.
  **/
 
+/**
+ * This is special adapter for goPAY process to be used in Future
+ * DONT REMOVE*/
 const val shakeAnimationStrength= 0.2f
 @Suppress("PrivatePropertyName")
 class GoPayCardAdapterUIKIT(

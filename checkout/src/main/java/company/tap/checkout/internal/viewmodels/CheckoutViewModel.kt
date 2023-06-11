@@ -1483,7 +1483,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             false
 
 
-
+        /*** filtering based on base currency*/
         filterViewModels(currentCurrency)
         touchHandlingForCardView()
     }
