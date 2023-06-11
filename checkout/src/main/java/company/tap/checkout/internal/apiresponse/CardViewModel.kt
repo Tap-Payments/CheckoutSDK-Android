@@ -68,6 +68,15 @@ class CardViewModel : ViewModel() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun getCurrencyAPI(_context: Context?, viewModel: CheckoutViewModel){
+        if(_context!=null){
+
+            repository.getCurrencyAPI(_context , viewModel)
+        }
+
+    }
+
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun processEvent(
@@ -87,6 +96,7 @@ class CardViewModel : ViewModel() {
         saveCardValue:Boolean?=true
     ) {
         when (event) {
+            CardViewEvent.CurrencyEvent->getCurrencyAPI(context,viewModel)
             CardViewEvent.InitEvent -> getINITData(
                 context,
                 viewModel,
