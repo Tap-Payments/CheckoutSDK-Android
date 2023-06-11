@@ -343,7 +343,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     init {
         powerdByTapAnimationFinished.value = false
         isItemsAreOpend.value = false
-        isUserCurrencySameAsCurrencyOfApplication.value= false
+        isUserCurrencySameAsCurrencyOfApplication.value = false
     }
 
     private fun initLoyaltyView() {
@@ -566,19 +566,19 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun showCountryFlag(): String? {
         val currency = SharedPrefManager.getUserSupportedLocaleForTransactions(context)
-        var flagString : String = ""
-        when(CustomUtils.getCurrentTheme()){
-            ThemeMode.dark.name->{
-                flagString= currency?.logos?.dark?.png.toString()
+        var flagString: String = ""
+        when (CustomUtils.getCurrentTheme()) {
+            ThemeMode.dark.name -> {
+                flagString = currency?.logos?.dark?.png.toString()
             }
-            ThemeMode.dark_colored.name->{
-                flagString= currency?.logos?.dark_colored?.png.toString()
+            ThemeMode.dark_colored.name -> {
+                flagString = currency?.logos?.dark_colored?.png.toString()
             }
-            ThemeMode.light_mono.name->{
-                flagString= currency?.logos?.light_mono?.png.toString()
+            ThemeMode.light_mono.name -> {
+                flagString = currency?.logos?.light_mono?.png.toString()
             }
-            ThemeMode.light.name->{
-                flagString= currency?.logos?.light?.png.toString()
+            ThemeMode.light.name -> {
+                flagString = currency?.logos?.light?.png.toString()
             }
         }
         return flagString
@@ -859,7 +859,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         val currencyAlert: String = LocalizationManager.getValue("currencyAlert", "Common")
         amountViewHolder.view.amount_section.popupTextView.text =
             currencyAlert + " " + checkoutFragment.getSimIsoCountryCurrency()
-        Glide.with(context).load(showCountryFlag()).into(amountViewHolder.view.amount_section.flagImageView);
+        Glide.with(context).load(showCountryFlag())
+            .into(amountViewHolder.view.amount_section.flagImageView);
         amountViewHolder.view.amount_section.tapChipAmount.bringToFront()
 
     }
@@ -867,6 +868,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     fun removevisibiltyCurrency() {
         amountViewHolder.view.amount_section.tapChipPopup.fadeVisibility(View.GONE)
     }
+
     fun showVisibiltyOfCurrency() {
         amountViewHolder.view.amount_section.tapChipPopup.fadeVisibility(View.VISIBLE)
     }
@@ -1321,7 +1323,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
             }
         }
-        allCurrencies.value = (paymentOptionsResponse?.supportedCurrencies as List<SupportedCurrencies>).sortedBy { it.orderBy }
+        allCurrencies.value =
+            (paymentOptionsResponse?.supportedCurrencies as List<SupportedCurrencies>).sortedBy { it.orderBy }
 
         cacheUserLocalCurrency()
 
@@ -1986,43 +1989,34 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 val supportedCurrenciesRelatedToDisabledChip = mutableListOf<SupportedCurrencies>()
                 allCurrencies.value?.forEachIndexed { index, supportedCurrencies ->
                     this.getSupportedCurrencies().forEachIndexed { index, s ->
-                        if (s.toUpperCase() == supportedCurrencies.currency!!?.toUpperCase()) {
+                        if (s.equals(supportedCurrencies.currency!!, ignoreCase = true)) {
                             supportedCurrenciesRelatedToDisabledChip.add(supportedCurrencies)
                         }
                     }
                 }
-                cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.setCurrencyWidgetDescription(
-                    this.displayName
-                )
                 cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.setSupportedCurrunciesForControlWidget(
                     supportedCurrenciesRelatedToDisabledChip
                 )
-
-                when (CustomUtils.getCurrentTheme()) {
-                    ThemeMode.dark.name -> {
-                        Glide.with(context).load(this.logos?.dark?.currencyWidget?.png)
-                            .into(cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.currencyWidgetLogo)
-                    }
-                    ThemeMode.dark_colored.name -> {
-                        Glide.with(context).load(this.logos?.dark_colored?.currencyWidget?.png)
-                            .into(cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.currencyWidgetLogo)
-
-                    }
-                    ThemeMode.light.name -> {
-                        Glide.with(context).load(this.logos?.light?.currencyWidget?.png)
-                            .into(cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.currencyWidgetLogo)
-
-                    }
-                    ThemeMode.light_mono.name -> {
-                        Glide.with(context).load(this.logos?.light_mono?.currencyWidget?.png)
-                            .into(cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.currencyWidgetLogo)
-
-                    }
-                    else -> {}
-                }
-
             }
             with(cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget) {
+                setCurrencyWidgetDescription(
+                    paymentOption.displayName
+                )
+                context.applyOnDifferentThemes(onDarkTheme = {
+                    Glide.with(context).load(paymentOption.logos?.dark?.currencyWidget?.png)
+                        .into(currencyWidgetLogo)
+                }, onDarkColoredTheme = {
+                    Glide.with(context).load(paymentOption.logos?.dark_colored?.currencyWidget?.png)
+                        .into(currencyWidgetLogo)
+
+                }, onLightMonoTheme = {
+                    Glide.with(context).load(paymentOption.logos?.light_mono?.currencyWidget?.png)
+                        .into(currencyWidgetLogo)
+                }, onLightTheme = {
+                    Glide.with(context).load(paymentOption.logos?.light?.currencyWidget?.png)
+                        .into(currencyWidgetLogo)
+
+                })
                 confitmButton.setOnClickListener {
                     dismisControlWidget()
                     submitNewLocalCurrency(
@@ -2045,9 +2039,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     fun showControlWidget() {
         cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.visibility = View.VISIBLE
+
         cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.post(Runnable {
-            cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED)
-            val height: Int = cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.measuredHeight
+            cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.measure(
+                MeasureSpec.UNSPECIFIED,
+                MeasureSpec.UNSPECIFIED
+            )
+            val height: Int =
+                cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.measuredHeight
             cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.slideView(height)
         })
 
@@ -2831,8 +2830,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
 
 
-        if (isChangeingCurrencyFromOutside == true){
-            val userCurrency = SharedPrefManager.getUserSupportedLocaleForTransactions(context)?.currency
+        if (isChangeingCurrencyFromOutside == true) {
+            val userCurrency =
+                SharedPrefManager.getUserSupportedLocaleForTransactions(context)?.currency
             isUserCurrencySameAsCurrencyOfApplication.value = userCurrency == selectedCurrency
         }
 

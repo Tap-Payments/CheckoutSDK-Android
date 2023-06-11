@@ -43,6 +43,7 @@ import androidx.transition.AutoTransition
 import com.bumptech.glide.Glide
 import company.tap.checkout.R
 import company.tap.checkout.internal.cache.SharedPrefManager
+import company.tap.checkout.internal.enums.ThemeMode
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.tapuilibraryy.themekit.ThemeManager
 import company.tap.tapuilibraryy.uikit.AppColorTheme
@@ -151,7 +152,8 @@ fun View.addSlideUpAnimation(durationTime: Long = 1000L, onAnimationEnd: () -> U
 fun Context.isUserCurrencySameToMainCurrency(userCurrencySameAsCurrencyOfApplication: MutableLiveData<Boolean>): Boolean {
     val userCurrency = SharedPrefManager.getUserSupportedLocaleForTransactions(this)?.currency
     val paymentCurrency = PaymentDataSource.getCurrency()?.isoCode
-    userCurrencySameAsCurrencyOfApplication.value = userCurrency.equals(paymentCurrency, ignoreCase = true)
+    userCurrencySameAsCurrencyOfApplication.value =
+        userCurrency.equals(paymentCurrency, ignoreCase = true)
     return userCurrencySameAsCurrencyOfApplication.value == true
 }
 
@@ -166,6 +168,29 @@ fun View.slideFromStartToEnd() {
     this.startAnimation(animate)
     this.visibility = View.VISIBLE // Change visibility VISIBLE or GONE
 
+}
+
+fun Context.applyOnDifferentThemes(
+    onDarkTheme: () -> Unit,
+    onDarkColoredTheme: () -> Unit,
+    onLightTheme: () -> Unit,
+    onLightMonoTheme: () -> Unit
+) {
+    when (CustomUtils.getCurrentTheme()) {
+        ThemeMode.dark.name -> {
+            onDarkTheme.invoke()
+        }
+        ThemeMode.dark_colored.name -> {
+            onDarkColoredTheme.invoke()
+        }
+        ThemeMode.light.name -> {
+            onLightTheme.invoke()
+        }
+        ThemeMode.light_mono.name -> {
+            onLightMonoTheme.invoke()
+
+        }
+    }
 }
 
 
@@ -473,6 +498,7 @@ fun View.slideView(
     animationSet.play(slideAnimator);
     animationSet.start()
 }
+
 fun animateBS(
     changeHeight: () -> Unit,
     fromView: ViewGroup,

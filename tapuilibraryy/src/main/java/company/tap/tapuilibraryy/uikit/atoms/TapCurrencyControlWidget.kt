@@ -11,11 +11,7 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.*
 import androidx.cardview.widget.CardView
-import androidx.core.view.marginStart
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.shape.*
-import company.tap.checkout.internal.api.models.Logos
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibraryy.R
 import company.tap.tapuilibraryy.fontskit.enums.TapFont
@@ -81,7 +77,8 @@ class TapCurrencyControlWidget : FrameLayout {
                 TapFont.RobotoRegular
             )
         )
-        dropDownIv.backgroundTintList = ColorStateList.valueOf(loadAppThemManagerFromPath(AppColorTheme.ControlCurrencyWidgetCurrencyDropDownTintColorOfIcon))
+        dropDownIv.backgroundTintList =
+            ColorStateList.valueOf(loadAppThemManagerFromPath(AppColorTheme.ControlCurrencyWidgetCurrencyDropDownTintColorOfIcon))
 
         val shapeDrawable =
             MaterialShapeDrawable(createSpinnerBackgroundShapeWithTrianleAtTopEdge())
@@ -95,11 +92,10 @@ class TapCurrencyControlWidget : FrameLayout {
         }
 
         spinner.setPopupBackgroundDrawable(shapeDrawable)
-        spinner.dropDownHorizontalOffset = 50
+        spinner.dropDownHorizontalOffset = 35
 
 
     }
-
     private fun createSpinnerBackgroundShapeWithTrianleAtTopEdge(): ShapeAppearanceModel {
         return ShapeAppearanceModel()
             .toBuilder()
@@ -153,7 +149,7 @@ class TapCurrencyControlWidget : FrameLayout {
         if (displayNamePaymentOption.size <= 1) {
             spinner.isEnabled = false
             dropDownIv.visibility = View.GONE
-        }else{
+        } else {
             spinner.isEnabled = true
             dropDownIv.visibility = View.VISIBLE
         }
@@ -168,3 +164,8 @@ class TapCurrencyControlWidget : FrameLayout {
         ).start()
     }
 }
+
+data class TapCurrencyControlWidgetModel(
+    var logo:String,
+    var currencyWidgetDescription:String
+)
