@@ -18,11 +18,12 @@
 
         <ImageView
             android:id="@+id/currency_widget_logo"
-            android:layout_width="@dimen/_57sdp"
+            android:layout_width="wrap_content"
             android:layout_height="@dimen/_20sdp"
-            android:autoMirrored="false"
             tools:src="@drawable/paypal_logo"
-            android:scaleType="fitStart"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+
             android:layout_marginStart="@dimen/_8sdp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

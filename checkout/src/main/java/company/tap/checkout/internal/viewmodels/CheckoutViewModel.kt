@@ -2012,7 +2012,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     Glide.with(context).load(paymentOption.logos?.light_mono?.currencyWidget?.png)
                         .into(currencyWidgetLogo)
                 }, onLightTheme = {
-                    Glide.with(context).load(paymentOption.logos?.light?.currencyWidget?.png)
+                    Glide.with(context).load(paymentOption.logos?.light?.currencyWidget?.svg)
                         .into(currencyWidgetLogo)
                 })
                 confitmButton.setOnClickListener {
