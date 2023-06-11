@@ -61,6 +61,7 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         private const val TYPE_SAVED_CARD = 2
         private const val TYPE_DISABLED_PAYMENT_OPTIONS = 3
         private const val TYPE_ENABLED_PAYMENT_OPTIONS = 1
+        var isFirstSelected: Boolean = true
 
     }
 
@@ -81,7 +82,8 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         this.enabledPaymentOptions = paymentOptionsDisable
         notifyDataSetChanged()
     }
-    fun updateThisSelected(position: Int){
+
+    fun updateThisSelected(position: Int) {
         selectedPosition = position
         notifyItemChanged(position)
     }
@@ -240,11 +242,14 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
     ) {
 
         holder.itemView.setOnClickListener {
-            if (!isShaking) {
-                onCardSelectedActionListener.onCardSelectedAction(true, card)
-                selectedPosition = position
-                onCardSelectedActionListener.removePaymentInlineShrinkageAndDimmed()
+            holder.isSingleClicked {
+                if (!isShaking) {
+                    onCardSelectedActionListener.onCardSelectedAction(true, card)
+                    selectedPosition = position
+                    onCardSelectedActionListener.removePaymentInlineShrinkageAndDimmed()
+                }
             }
+
         }
 
     }
@@ -392,12 +397,25 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         }
 
         holder.itemView.setOnClickListener {
-            selectedPosition = position
-            notifyDataSetChanged()
-            onCardSelectedActionListener.onDisabledChipSelected(typeDisabled, position)
+            holder.isSingleClicked {
+                selectedPosition = position
+                onCardSelectedActionListener.onDisabledChipSelected(typeDisabled, position)
+                notifyDataSetChanged()
+            }
+
         }
 
 
+    }
+
+    fun RecyclerView.ViewHolder.isSingleClicked(doOnSingleClicked: () -> Unit) {
+        if (selectedPosition == this.bindingAdapterPosition) {
+            selectedPosition = RecyclerView.NO_POSITION;
+            notifyDataSetChanged();
+            onCardSelectedActionListener.onDeselectionOfItem()
+            return
+        }
+        doOnSingleClicked.invoke()
     }
 
 
@@ -462,9 +480,12 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         }
 
         holder.itemView.setOnClickListener {
-            selectedPosition = position
-            onCardSelectedActionListener.onDisabledChipSelected(typeEnabled, position)
-            notifyDataSetChanged()
+            holder.isSingleClicked {
+                selectedPosition = position
+                onCardSelectedActionListener.onDisabledChipSelected(typeEnabled, position)
+                notifyDataSetChanged()
+            }
+
         }
 
 

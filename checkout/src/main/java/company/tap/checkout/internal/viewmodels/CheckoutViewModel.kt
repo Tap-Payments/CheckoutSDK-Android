@@ -2034,6 +2034,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     }
 
+    override fun onDeselectionOfItem() {
+        resetViewsToNormal()
+    }
+
 
     fun showControlWidget() {
         cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.visibility = View.VISIBLE
@@ -2051,16 +2055,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     fun dismisControlWidget() {
-        cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.slideView(0)
+        if (cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.isVisible){
+            cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.slideView(0)
+        }
 
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun performResetToPaymentInline() {
-        resetViewToPaymentInline()
-        resetCardSelection()
-        dismisControlWidget()
-        unActivateActionButton()
+        resetViewsToNormal()
         if (paymentInlineViewHolder.cvvNumber?.length == 3) {
             with(paymentInlineViewHolder) {
                 if (this.savedCardsModel != null) {
@@ -2089,6 +2092,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
             }
         }
+    }
+
+    private fun resetViewsToNormal() {
+        resetViewToPaymentInline()
+        resetCardSelection()
+        dismisControlWidget()
+        unActivateActionButton()
+        paymentInlineViewHolder.clearTextInput()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -2829,8 +2840,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
         if (isChangeingCurrencyFromOutside == true) {
-            val userCurrency =
-                SharedPrefManager.getUserSupportedLocaleForTransactions(context)?.currency
+            val userCurrency = SharedPrefManager.getUserSupportedLocaleForTransactions(context)?.currency
             isUserCurrencySameAsCurrencyOfApplication.value = userCurrency == selectedCurrency
         }
 

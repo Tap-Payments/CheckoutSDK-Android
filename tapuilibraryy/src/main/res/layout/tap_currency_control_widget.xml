@@ -20,6 +20,7 @@
             android:id="@+id/currency_widget_logo"
             android:layout_width="@dimen/_57sdp"
             android:layout_height="@dimen/_20sdp"
+            android:autoMirrored="false"
             tools:src="@drawable/paypal_logo"
             android:scaleType="fitStart"
             android:layout_marginStart="@dimen/_8sdp"

@@ -11,12 +11,15 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.*
 import androidx.cardview.widget.CardView
+import androidx.core.text.TextUtilsCompat
+import androidx.core.view.ViewCompat
 import com.google.android.material.shape.*
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibraryy.R
 import company.tap.tapuilibraryy.fontskit.enums.TapFont
 import company.tap.tapuilibraryy.uikit.AppColorTheme
 import company.tap.tapuilibraryy.uikit.ktx.loadAppThemManagerFromPath
+import java.util.*
 
 
 class TapCurrencyControlWidget : FrameLayout {
