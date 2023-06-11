@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_currency_widget"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/_128sdp"
+    android:layout_height="@dimen/_124sdp"
     app:cardCornerRadius="@dimen/_8sdp"
     app:cardElevation="@dimen/_2sdp"
     app:cardUseCompatPadding="true">
@@ -13,6 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="start"
         android:paddingTop="@dimen/_10sdp">
 
         <ImageView
@@ -20,6 +21,7 @@
             android:layout_width="@dimen/_57sdp"
             android:layout_height="@dimen/_20sdp"
             tools:src="@drawable/paypal_logo"
+            android:scaleType="fitStart"
             android:layout_marginStart="@dimen/_8sdp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -28,8 +30,7 @@
             android:id="@+id/currency_widget_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_16sdp"
-
+            android:layout_marginTop="@dimen/_12sdp"
             android:textColor="#4b4847"
             android:textSize="13sp"
             app:layout_constraintStart_toStartOf="@id/currency_widget_logo"
@@ -48,48 +49,39 @@
             android:textColor="@color/white"
             android:textSize="12sp"
             app:cornerRadius="@dimen/_24sdp"
-            app:layout_constraintBottom_toBottomOf="@id/currency_widget_Frame"
+            app:layout_constraintBottom_toBottomOf="@id/currency_widget_spinner"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="Confirm" />
 
 
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/currency_widget_logo"
-            android:layout_marginBottom="@dimen/_8sdp"
-            android:id="@+id/currency_widget_Frame"
-            android:orientation="horizontal"
 
-            >
         <Spinner
             android:id="@+id/currency_widget_spinner"
-            android:layout_width="wrap_content"
-            android:overlapAnchor="false"
+            android:layout_width="@dimen/_90sdp"
             android:background="@null"
-            android:paddingBottom="@dimen/_5sdp"
-            android:gravity="end"
-            android:paddingEnd="@dimen/_20sdp"
+            android:overlapAnchor="false"
+            android:layout_marginStart="-10dp"
+            android:spinnerMode="dropdown"
+            android:layout_marginEnd="-5dp"
+            android:dropDownVerticalOffset="5dp"
+            app:layout_constraintStart_toStartOf="@+id/currency_widget_logo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="@dimen/_5sdp"
             android:dropDownWidth="@dimen/_150sdp"
             android:layout_height="@dimen/_18sdp"
-            android:popupBackground="@drawable/spinner_bg"
              />
 
-
-
-        </LinearLayout>
 
         <ImageView
             android:id="@+id/drop_down_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="-20dp"
-            app:layout_constraintStart_toEndOf="@id/currency_widget_Frame"
-            app:layout_constraintTop_toTopOf="@id/currency_widget_Frame"
-            app:layout_constraintBottom_toBottomOf="@id/currency_widget_Frame"
+            app:layout_constraintStart_toEndOf="@id/currency_widget_spinner"
+            app:layout_constraintTop_toTopOf="@id/currency_widget_spinner"
+            app:layout_constraintBottom_toBottomOf="@id/currency_widget_spinner"
             android:layout_gravity="center_vertical"
+            android:backgroundTint="#626262"
             android:src="@drawable/drop_down_icon" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

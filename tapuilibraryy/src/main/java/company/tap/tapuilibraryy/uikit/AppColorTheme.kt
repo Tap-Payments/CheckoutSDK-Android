@@ -22,6 +22,7 @@ object AppColorTheme {
     const val ControlCurrencyWidgetAmountLabelColor="CurrencyWidget.amountLabel.color"
     const val ControlCurrencyWidgetAmountLabelFont="CurrencyWidget.amountLabel.font"
     const val ControlCurrencyWidgetCurrencyDropDownLabelColor="CurrencyWidget.currencyDropDown.labelColor"
+    const val ControlCurrencyWidgetCurrencyDropDownTintColorOfIcon="CurrencyWidget.currencyDropDown.arrowDownTint"
 
     const val ControlCurrencyWidgetMessageColor="CurrencyWidget.messageLabel.color"
 

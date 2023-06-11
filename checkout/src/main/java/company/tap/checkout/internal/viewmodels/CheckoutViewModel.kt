@@ -59,7 +59,6 @@ import company.tap.checkout.internal.api.responses.MerchantData
 import company.tap.checkout.internal.api.responses.PaymentOptionsResponse
 import company.tap.checkout.internal.apiresponse.CardViewEvent
 import company.tap.checkout.internal.apiresponse.CardViewModel
-import company.tap.checkout.internal.apiresponse.testmodels.GoPaySavedCards
 import company.tap.checkout.internal.cache.SharedPrefManager
 import company.tap.checkout.internal.cache.UserSupportedLocaleForTransactions
 import company.tap.checkout.internal.enums.PaymentTypeEnum
@@ -113,7 +112,6 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.math.BigDecimal
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
 
 
@@ -1313,7 +1311,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         if (paymentOptionsResponse != null) {
             this.paymentOptionsResponse = paymentOptionsResponse
         }
-        Log.e("paymentOptions", this.paymentOptionsResponse.toString())
         if (::businessViewHolder.isInitialized && PaymentDataSource.getTransactionMode() != TransactionMode.TOKENIZE_CARD) {
             businessViewHolder.setDataFromAPI(
                 merchantData?.logo,
@@ -1324,9 +1321,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
             }
         }
-        // println("PaymentOptionsResponse on get$paymentOptionsResponse")
-        allCurrencies.value =
-            (paymentOptionsResponse?.supportedCurrencies as List<SupportedCurrencies>).sortedBy { it.orderBy }
+        allCurrencies.value = (paymentOptionsResponse?.supportedCurrencies as List<SupportedCurrencies>).sortedBy { it.orderBy }
 
         cacheUserLocalCurrency()
 
@@ -2023,13 +2018,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                             .into(cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.currencyWidgetLogo)
 
                     }
-
                     else -> {}
                 }
 
-
             }
-
             with(cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget) {
                 confitmButton.setOnClickListener {
                     dismisControlWidget()
@@ -2053,7 +2045,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     fun showControlWidget() {
         cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.visibility = View.VISIBLE
-        cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.slideView(310)
+        cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.post(Runnable {
+            cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED)
+            val height: Int = cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.measuredHeight
+            cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.slideView(height)
+        })
 
     }
 

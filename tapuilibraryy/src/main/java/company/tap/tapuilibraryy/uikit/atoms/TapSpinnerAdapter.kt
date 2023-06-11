@@ -41,6 +41,7 @@ class TapSpinnerAdapter(
         val rowItem: SupportedCurrencies? = getItem(position)
         val holder: viewHolder
         var rowview = convertView
+
         if (rowview == null) {
             holder = viewHolder()
             flater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -51,6 +52,7 @@ class TapSpinnerAdapter(
         } else {
             holder = rowview.tag as viewHolder
         }
+        rowview.setPadding(0,convertView?.paddingTop?: 0, 0,convertView?.paddingBottom ?: 0)
         Glide.with(context).load(rowItem?.flag).into(holder.imageView!!)
         holder.txtTitle?.text =  rowItem?.currency.toString() + " " +rowItem?.amount.toString()
         holder.txtTitle?.setTextColor(loadAppThemManagerFromPath(AppColorTheme.ControlCurrencyWidgetCurrencyDropDownLabelColor))

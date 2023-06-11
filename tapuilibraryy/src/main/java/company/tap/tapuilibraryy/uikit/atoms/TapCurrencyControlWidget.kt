@@ -4,14 +4,18 @@ import SupportedCurrencies
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.graphics.Typeface
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.*
 import androidx.cardview.widget.CardView
+import androidx.core.view.marginStart
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.shape.*
+import company.tap.checkout.internal.api.models.Logos
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibraryy.R
 import company.tap.tapuilibraryy.fontskit.enums.TapFont
@@ -68,6 +72,7 @@ class TapCurrencyControlWidget : FrameLayout {
                 TapFont.RobotoRegular
             )
         )
+
         currencyWidgetDescription.setTextColor(loadAppThemManagerFromPath(AppColorTheme.ControlCurrencyWidgetMessageColor))
         currencyWidgetDescription.text =
             LocalizationManager.getValue("header", "CurrencyChangeWidget")
@@ -76,6 +81,7 @@ class TapCurrencyControlWidget : FrameLayout {
                 TapFont.RobotoRegular
             )
         )
+        dropDownIv.backgroundTintList = ColorStateList.valueOf(loadAppThemManagerFromPath(AppColorTheme.ControlCurrencyWidgetCurrencyDropDownTintColorOfIcon))
 
         val shapeDrawable =
             MaterialShapeDrawable(createSpinnerBackgroundShapeWithTrianleAtTopEdge())
@@ -85,14 +91,19 @@ class TapCurrencyControlWidget : FrameLayout {
                 ColorStateList.valueOf(resources.getColor(R.color.dropdown_stroke))
             this.fillColor =
                 ColorStateList.valueOf(loadAppThemManagerFromPath(AppColorTheme.ControlCurrencyWidgetBackground))
+
         }
+
         spinner.setPopupBackgroundDrawable(shapeDrawable)
+        spinner.dropDownHorizontalOffset = 50
+
+
     }
 
     private fun createSpinnerBackgroundShapeWithTrianleAtTopEdge(): ShapeAppearanceModel {
         return ShapeAppearanceModel()
             .toBuilder()
-            .setAllCorners(CornerFamily.ROUNDED,8f)
+            .setAllCorners(CornerFamily.ROUNDED, 8f)
             .setTopEdge(TriangleEdgeTreatment(10f, false))
             .build()
     }
@@ -124,7 +135,7 @@ class TapCurrencyControlWidget : FrameLayout {
                     id: Long
                 ) {
                     selectedCurrency = parent.getItemAtPosition(position) as SupportedCurrencies
-                } // to close the onItemSelected
+                }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
@@ -138,13 +149,21 @@ class TapCurrencyControlWidget : FrameLayout {
                 }
             }
         }
+
+        if (displayNamePaymentOption.size <= 1) {
+            spinner.isEnabled = false
+            dropDownIv.visibility = View.GONE
+        }else{
+            spinner.isEnabled = true
+            dropDownIv.visibility = View.VISIBLE
+        }
     }
 
 
     fun getSelectedSupportedCurrency() = selectedCurrency
 
     private fun rotateImage(view: View, rotation: Float) {
-        view.animate().rotation(rotation).setDuration(700).setInterpolator(
+        view.animate().rotation(rotation).setDuration(300).setInterpolator(
             AccelerateDecelerateInterpolator()
         ).start()
     }
