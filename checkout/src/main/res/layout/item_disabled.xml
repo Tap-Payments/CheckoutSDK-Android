@@ -11,7 +11,7 @@
     app:cardPreventCornerOverlap="false"
     app:cardCornerRadius="@dimen/_8sdp"
     app:cardElevation="@dimen/_1sdp"
-    android:hardwareAccelerated="true">
+    >
 
     <ImageView
         android:id="@+id/imageView_disable"

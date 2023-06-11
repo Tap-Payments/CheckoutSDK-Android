@@ -197,8 +197,6 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
 
 
     fun removeItems() {
-//        if (goPayOpened) arrayModified = ArrayList(webArrayListContent)
-//        arrayModified.removeAt(0)
         notifyDataSetChanged()
     }
 
