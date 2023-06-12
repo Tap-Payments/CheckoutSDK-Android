@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,7 +32,7 @@ class TapSpinnerAdapter(
     ) {
     var flater: LayoutInflater? = null
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        return rowview(convertView, position)!!
+        return rowview(convertView, position)
     }
 
     override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View? {
@@ -39,7 +40,7 @@ class TapSpinnerAdapter(
     }
 
     @SuppressLint("SetTextI18n")
-    private fun rowview(convertView: View?, position: Int): View? {
+    private fun rowview(convertView: View?, position: Int): View {
         val rowItem: SupportedCurrencies? = getItem(position)
         val holder: viewHolder
         var rowview = convertView
@@ -56,13 +57,13 @@ class TapSpinnerAdapter(
         }
         rowview.setPadding(0, convertView?.paddingTop ?: 0, 0, convertView?.paddingBottom ?: 0)
         Glide.with(context).load(rowItem?.flag).into(holder.imageView!!)
-        holder.txtTitle?.text = rowItem?.currency.toString() + " " + rowItem?.amount.toString()
+        holder.txtTitle?.text = rowItem?.currency.toString() + " " + rowItem?.amount?.toDouble().toString()
         holder.txtTitle?.setTextColor(loadAppThemManagerFromPath(AppColorTheme.ControlCurrencyWidgetCurrencyDropDownLabelColor))
-        holder.txtTitle?.typeface = Typeface.createFromAsset(
-            context.assets, TapFont.tapFontType(
-                TapFont.RobotoRegular
+         holder.txtTitle?.typeface = Typeface.createFromAsset(
+                context.assets, TapFont.tapFontType(
+                    TapFont.RobotoRegular
+                )
             )
-        )
         return rowview
     }
 

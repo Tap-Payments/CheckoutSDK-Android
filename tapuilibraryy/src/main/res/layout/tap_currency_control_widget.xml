@@ -66,7 +66,6 @@
             android:overlapAnchor="false"
             android:layout_marginStart="-10dp"
             android:spinnerMode="dropdown"
-            android:layout_marginEnd="-5dp"
             android:dropDownVerticalOffset="5dp"
             app:layout_constraintStart_toStartOf="@+id/currency_widget_logo"
             app:layout_constraintBottom_toBottomOf="parent"
