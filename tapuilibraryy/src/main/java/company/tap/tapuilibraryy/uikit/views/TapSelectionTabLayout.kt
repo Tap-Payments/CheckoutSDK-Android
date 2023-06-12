@@ -73,7 +73,7 @@ class TapSelectionTabLayout(context: Context?, attrs: AttributeSet?) :
 
         applyThemeView()
 
-      //  setSelectionBehaviour()
+        //  setSelectionBehaviour()
     }
 
     private fun applyThemeView() {
@@ -83,11 +83,11 @@ class TapSelectionTabLayout(context: Context?, attrs: AttributeSet?) :
             Color.parseColor(ThemeManager.getValue("cardPhoneList.weAcceptLabel.textColor"))
         acceptedCardTextViewTheme.textSize =
             ThemeManager.getFontSize("cardPhoneList.weAcceptLabel.textFont")
-        acceptedCardTextViewTheme.font = ThemeManager.getFontName("cardPhoneList.weAcceptLabel.textFont")
+        acceptedCardTextViewTheme.font =
+            ThemeManager.getFontName("cardPhoneList.weAcceptLabel.textFont")
         acceptedCardText.setTheme(acceptedCardTextViewTheme)
 
         tabLayout.setBackgroundColor(Color.parseColor(ThemeManager.getValue("cardPhoneList.backgroundColor")))
-       // acceptedCardText?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("cardPhoneList.backgroundColor")))
         if (context?.let { LocalizationManager.getLocale(it).language } == "en") setFontsEnglish() else setFontsArabic()
     }
 
@@ -111,18 +111,22 @@ class TapSelectionTabLayout(context: Context?, attrs: AttributeSet?) :
     //    fun clearInvalidIndicatorColor(){
 //        indicatorHeight= MetricsUtil.convertDpToPixel(INDICATOR_HEIGHT, context).toInt()
 //    }
-    fun changeTabItemAlphaValue(tabItemAlphaValue : Float){
+    fun changeTabItemAlphaValue(tabItemAlphaValue: Float) {
         this.tabItemAlphaValue = tabItemAlphaValue
     }
-    fun changeTabItemMarginTopValue(tabItemMarginTopValue : Int){
+
+    fun changeTabItemMarginTopValue(tabItemMarginTopValue: Int) {
         this.tabItemMarginTopValue = tabItemMarginTopValue
     }
-    fun changeTabItemMarginBottomValue(tabItemMarginBottomValue : Int){
+
+    fun changeTabItemMarginBottomValue(tabItemMarginBottomValue: Int) {
         this.tabItemMarginBottomValue = tabItemMarginBottomValue
     }
-    fun changeTabItemMarginLeftValue(tabItemMarginLeftValue : Int){
+
+    fun changeTabItemMarginLeftValue(tabItemMarginLeftValue: Int) {
         this.tabItemMarginLeftValue = tabItemMarginLeftValue
     }
+
     /**
      * Setter fot the callback interface
      *
@@ -187,7 +191,8 @@ class TapSelectionTabLayout(context: Context?, attrs: AttributeSet?) :
     fun setMaxItemWidth(maxItemWidth: Int) {
         this.maxItemWidth = maxItemWidth
     }
-   fun changeTabItemMarginRightValue(tabItemMarginRightValue : Int){
+
+    fun changeTabItemMarginRightValue(tabItemMarginRightValue: Int) {
         this.tabItemMarginRightValue = tabItemMarginRightValue
     }
 
@@ -200,18 +205,20 @@ class TapSelectionTabLayout(context: Context?, attrs: AttributeSet?) :
         itemsCount.clear()
         tabsView.clear()
         itemsCount.add(items.size)
-        if(itemsCount.size == 1)
+        if (itemsCount.size == 1)
             tabLayout.setSelectedTabIndicatorHeight(0)
-        else  tabLayout.setSelectedTabIndicatorHeight(indicatorHeight)
+        else tabLayout.setSelectedTabIndicatorHeight(indicatorHeight)
 
         val sectionLayout = getSectionLayout()
         for (item in items) {
             sectionLayout.addView(getSectionItem(item))
             editExistItemsSize()
         }
-        if(LocalizationManager.getLocale(context).language == "ar") acceptedCardText.setPadding(0,0,15,0)
-        else acceptedCardText.setPadding(15,0,0,0)
-        sectionLayout.setPadding(-7,0,0,0)
+        if (LocalizationManager.getLocale(context).language == "ar") {
+            sectionLayout.setPadding(0, 0, -10, 0)
+        } else {
+            sectionLayout.setPadding(-10, 0, 0, 0)
+        }
         if (tabsView.size != 0)
             sectionLayout.alpha = unselectedAlphaLevel
         tabsView.add(sectionLayout)
@@ -225,7 +232,7 @@ class TapSelectionTabLayout(context: Context?, attrs: AttributeSet?) :
             }
         } else tabLayout.visibility = View.VISIBLE
     }
-    
+
 
     fun selectSection(index: Int) {
         val tab = tabLayout.getTabAt(index)
@@ -237,22 +244,22 @@ class TapSelectionTabLayout(context: Context?, attrs: AttributeSet?) :
      */
     private fun editExistItemsSize() {
 
-        val  height = MetricsUtil.convertDpToPixel(26f, context).toInt()
-        val  width = MetricsUtil.convertDpToPixel(26f, context).toInt()
+        val height = MetricsUtil.convertDpToPixel(26f, context).toInt()
+        val width = MetricsUtil.convertDpToPixel(26f, context).toInt()
         val params = LayoutParams(
             width, height
         )
-      //  val parms = LayoutParams(width, height)
+        //  val parms = LayoutParams(width, height)
 
-       params.weight = MetricsUtil.convertDpToPixel(0.5f,context)
+        params.weight = MetricsUtil.convertDpToPixel(0.5f, context)
         for (item in tabItems) {
-           /* params.setMargins(
-                tabItemMarginLeftValue, tabItemMarginTopValue, tabItemMarginRightValue,
-                tabItemMarginBottomValue
-            )*/
+            /* params.setMargins(
+                 tabItemMarginLeftValue, tabItemMarginTopValue, tabItemMarginRightValue,
+                 tabItemMarginBottomValue
+             )*/
 
-               // params.marginEnd=tabItemMarginRightValue
-               params.marginStart=tabItemMarginLeftValue
+            // params.marginEnd=tabItemMarginRightValue
+            params.marginStart = tabItemMarginLeftValue
 
             item.imageView?.layoutParams = params
         }
@@ -272,8 +279,8 @@ class TapSelectionTabLayout(context: Context?, attrs: AttributeSet?) :
 
 
         linearLayout.layoutParams = params
-       // linearLayout.setPadding(-5,0,0,0)
-       // linearLayout.setPaddingRelative(-5,0,0,0)
+        // linearLayout.setPadding(-5,0,0,0)
+        // linearLayout.setPaddingRelative(-5,0,0,0)
         linearLayout.orientation = HORIZONTAL
         return linearLayout
     }
@@ -287,25 +294,25 @@ class TapSelectionTabLayout(context: Context?, attrs: AttributeSet?) :
     private fun getSectionItem(item: SectionTabItem): LinearLayout {
         val layout = getSectionItemLayout()
         val indicator = getTabSelectionIndicator()
-      val  height = MetricsUtil.convertDpToPixel(26f, context).toInt()
-      val  width = MetricsUtil.convertDpToPixel(26f, context).toInt()
+        val height = MetricsUtil.convertDpToPixel(26f, context).toInt()
+        val width = MetricsUtil.convertDpToPixel(26f, context).toInt()
         val params = LayoutParams(
             width, height
         )
-     //   params.setMargins(tabItemMarginLeftValue, tabItemMarginTopValue, tabItemMarginRightValue, tabItemMarginBottomValue)
-       params.weight = MetricsUtil.convertDpToPixel(0.5f, context).toInt().toFloat()
+        //   params.setMargins(tabItemMarginLeftValue, tabItemMarginTopValue, tabItemMarginRightValue, tabItemMarginBottomValue)
+        params.weight = MetricsUtil.convertDpToPixel(0.5f, context).toInt().toFloat()
 
         val image = TapImageView(context, null)
         image.layoutParams = params
 
         Glide.with(this)
             .load(item.selectedImageURL)
-            .override(width , height)
+            .override(width, height)
             .into(image)
-      /*  GlideToVectorYou
-            .init()
-            .with(context)
-            .load(item.selectedImageURL.toUri(), image)*/
+        /*  GlideToVectorYou
+              .init()
+              .with(context)
+              .load(item.selectedImageURL.toUri(), image)*/
 
         image.layoutParams = params
         item.imageView = image
@@ -313,10 +320,9 @@ class TapSelectionTabLayout(context: Context?, attrs: AttributeSet?) :
         tabItems.add(item)
         layout.addView(image)
         //Commented adding indicator as per new design 12feb23
-      //  layout.addView(indicator)
+        //  layout.addView(indicator)
         return layout
     }
-
 
 
     /**
@@ -332,7 +338,7 @@ class TapSelectionTabLayout(context: Context?, attrs: AttributeSet?) :
         )
         linearLayout.layoutParams = params
         linearLayout.orientation = VERTICAL
-      //  linearLayout.weightSum = 0.5f
+        //  linearLayout.weightSum = 0.5f
         return linearLayout
     }
 
@@ -376,6 +382,7 @@ class TapSelectionTabLayout(context: Context?, attrs: AttributeSet?) :
             override fun onTabUnselected(tab: TabLayout.Tab?) {
 
             }
+
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 resetBehaviour()
                 fadeOtherTabs(tab?.position)
@@ -440,46 +447,48 @@ class TapSelectionTabLayout(context: Context?, attrs: AttributeSet?) :
         tabItems.forEach {
             if (it.type != type) {
                 it.imageView?.let { it1 ->
-                    if(it.unSelectedImage.contains(".png")){
+                    if (it.unSelectedImage.contains(".png")) {
                         Glide.with(this)
                             .load(it.unSelectedImage)
                             .into(it1)
                         val paint = Paint()
-                        val colorFilter = PorterDuffColorFilter(Color.DKGRAY, PorterDuff.Mode.SRC_ATOP)
+                        val colorFilter =
+                            PorterDuffColorFilter(Color.DKGRAY, PorterDuff.Mode.SRC_ATOP)
                         paint.colorFilter = colorFilter
-                      //  it1.setLayerPaint(paint)
-                      //  it1.setColorFilter(colorFilter)
-                    }else if(it.unSelectedImage.contains(".svg")){
-                       // GlideToVectorYou.justLoadImage(context as Activity, it.unSelectedImage.toUri(), it1)
+                        //  it1.setLayerPaint(paint)
+                        //  it1.setColorFilter(colorFilter)
+                    } else if (it.unSelectedImage.contains(".svg")) {
+                        // GlideToVectorYou.justLoadImage(context as Activity, it.unSelectedImage.toUri(), it1)
                         GlideToVectorYou
                             .init()
                             .with(context)
                             .load(it.unSelectedImage.toUri(), it1)
                         val paint = Paint()
-                        val colorFilter = PorterDuffColorFilter(Color.DKGRAY, PorterDuff.Mode.SRC_ATOP)
-                      //  paint.colorFilter = colorFilter
-                       // it1.setLayerPaint(paint)
+                        val colorFilter =
+                            PorterDuffColorFilter(Color.DKGRAY, PorterDuff.Mode.SRC_ATOP)
+                        //  paint.colorFilter = colorFilter
+                        // it1.setLayerPaint(paint)
                         it1.setColorFilter(null)
                     }
 
-                   /* GlideToVectorYou
-                        .init()
-                        .with(context)
-                        .load(it.unSelectedImage.toUri(), it1)*/
-                  /*  val matrix = ColorMatrix()
-                    matrix.setSaturation(0.0f)
-                    val filter = ColorMatrixColorFilter(matrix)
-                    it1.colorFilter = filter*/
+                    /* GlideToVectorYou
+                         .init()
+                         .with(context)
+                         .load(it.unSelectedImage.toUri(), it1)*/
+                    /*  val matrix = ColorMatrix()
+                      matrix.setSaturation(0.0f)
+                      val filter = ColorMatrixColorFilter(matrix)
+                      it1.colorFilter = filter*/
 
                 }
                 it.indicator?.visibility = View.INVISIBLE
             } else {
                 it.imageView?.let { it1 ->
-                    if(it.selectedImageURL.contains(".png")){
+                    if (it.selectedImageURL.contains(".png")) {
                         Glide.with(this)
                             .load(it.selectedImageURL)
                             .into(it1)
-                    }else {
+                    } else {
                         GlideToVectorYou
                             .init()
                             .with(context)
@@ -489,10 +498,10 @@ class TapSelectionTabLayout(context: Context?, attrs: AttributeSet?) :
                 }
 
                 //stopped gray for selected url
-    /*            val matrix = ColorMatrix()
-                matrix.setSaturation(0f)
-                val filter = ColorMatrixColorFilter(matrix)
-                it.imageView?.colorFilter = filter*/
+                /*            val matrix = ColorMatrix()
+                            matrix.setSaturation(0f)
+                            val filter = ColorMatrixColorFilter(matrix)
+                            it.imageView?.colorFilter = filter*/
                 it.indicator?.visibility = View.VISIBLE
                 it.indicator?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("GlobalValues.Colors.vibrantGreen")))
             }
@@ -507,64 +516,71 @@ class TapSelectionTabLayout(context: Context?, attrs: AttributeSet?) :
         changeClickableState(true)
         tabLayout.setSelectedTabIndicatorColor(INDICATOR_COLOR)
         tabItems.forEach {
-            if(it.unSelectedImage.contains(".png")){
+            if (it.unSelectedImage.contains(".png")) {
 
-                it.imageView?.let {
-                        it1 ->
+                it.imageView?.let { it1 ->
 
 
                     Glide.with(this)
                         .load(it.unSelectedImage)
                         .into(it1)
-                    val colorMatrix =  ColorMatrix()
+                    val colorMatrix = ColorMatrix()
                     colorMatrix.setSaturation(0.0f)
                     val filter = ColorMatrixColorFilter(colorMatrix)
-                 //  it1.colorFilter = filter
-                   val greyFilter = PorterDuffColorFilter(Color.DKGRAY, PorterDuff.Mode.SRC_ATOP)
+                    //  it1.colorFilter = filter
+                    val greyFilter = PorterDuffColorFilter(Color.DKGRAY, PorterDuff.Mode.SRC_ATOP)
                     it1.setColorFilter(null)
 
                 }
-            }else if (it.unSelectedImage.contains(".svg")){
+            } else if (it.unSelectedImage.contains(".svg")) {
 
 
-                GlideToVectorYou.justLoadImage(context as Activity, it.unSelectedImage.toUri(), it.imageView)
-                 /*   .init()
-                    .with(context)
-                    .load(it.unSelectedImage.toUri(), it.imageView)*/
+                GlideToVectorYou.justLoadImage(
+                    context as Activity,
+                    it.unSelectedImage.toUri(),
+                    it.imageView
+                )
+                /*   .init()
+                   .with(context)
+                   .load(it.unSelectedImage.toUri(), it.imageView)*/
 
-                val colorMatrix =  ColorMatrix()
+                val colorMatrix = ColorMatrix()
                 colorMatrix.setSaturation(0.0f)
                 val filter = ColorMatrixColorFilter(colorMatrix)
-              //  it.imageView?.colorFilter = filter
-               // val paint = Paint()
-              //  val colorFilter = PorterDuffColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP)
-              //  paint.colorFilter = colorFilter
+                //  it.imageView?.colorFilter = filter
+                // val paint = Paint()
+                //  val colorFilter = PorterDuffColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP)
+                //  paint.colorFilter = colorFilter
                 it.imageView?.setLayerPaint(null)
 
             }
 
 
 
-            if(it.selectedImageURL.contains(".png")){
+            if (it.selectedImageURL.contains(".png")) {
                 it.imageView?.let { it1 ->
                     Glide.with(this)
                         .load(it.selectedImageURL)
                         .into(it1)
                 }
-            }else{
+            } else {
 
-                GlideToVectorYou.justLoadImage(context as Activity, it.selectedImageURL.toUri(), it.imageView)
-                    /*.init()
-                    .with(context)
-                    .load(it.selectedImageURL.toUri(), it.imageView)*/
+                GlideToVectorYou.justLoadImage(
+                    context as Activity,
+                    it.selectedImageURL.toUri(),
+                    it.imageView
+                )
+                /*.init()
+                .with(context)
+                .load(it.selectedImageURL.toUri(), it.imageView)*/
             }
 
-                   // .into(it1)
+            // .into(it1)
 
-              /*  GlideToVectorYou
-                    .init()
-                    .with(context)
-                    .load(it.selectedImageURL.toUri(), it1)*/
+            /*  GlideToVectorYou
+                  .init()
+                  .with(context)
+                  .load(it.selectedImageURL.toUri(), it1)*/
 
             it.indicator?.visibility = View.INVISIBLE
         }
@@ -590,14 +606,20 @@ class TapSelectionTabLayout(context: Context?, attrs: AttributeSet?) :
     companion object {
         const val SCREEN_MARGINS = 140
         const val INDICATOR_HEIGHT = 2f
+
         //        const val INDICATOR_COLOR = "#2ace00"
-        val INDICATOR_COLOR = Color.parseColor(ThemeManager.getValue("cardPhoneList.underline.selected.backgroundColor"))
+        val INDICATOR_COLOR =
+            Color.parseColor(ThemeManager.getValue("cardPhoneList.underline.selected.backgroundColor"))
+
         //        const val INVALID_INDICATOR_COLOR = "#a8a8a8"
-        val INVALID_INDICATOR_COLOR = Color.parseColor(ThemeManager.getValue("cardPhoneList.underline.unselected.backgroundColor"))
-        val UNSELECTED_ALPHA = (ThemeManager.getValue("cardPhoneList.icon.otherSegmentSelected.alpha") as Double).toFloat()
+        val INVALID_INDICATOR_COLOR =
+            Color.parseColor(ThemeManager.getValue("cardPhoneList.underline.unselected.backgroundColor"))
+        val UNSELECTED_ALPHA =
+            (ThemeManager.getValue("cardPhoneList.icon.otherSegmentSelected.alpha") as Double).toFloat()
         val MAX_ITEM_WIDTH = (ThemeManager.getValue("cardPhoneList.maxWidth") as Int).toFloat()
 
     }
+
     private fun ImageView.loadSvg(url: String) {
 
         val imageLoader = ImageLoader.Builder(this.context)

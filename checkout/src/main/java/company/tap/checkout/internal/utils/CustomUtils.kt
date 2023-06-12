@@ -154,13 +154,13 @@ object CustomUtils {
         return density
     }
 
-    fun hideSoftKeyboard(activity: Activity) {
-        val inputMethodManager = activity.getSystemService(
+    fun hideSoftKeyboard(context: Context) {
+        val inputMethodManager = context.getSystemService(
             Activity.INPUT_METHOD_SERVICE
         ) as InputMethodManager
         if (inputMethodManager.isAcceptingText) {
             inputMethodManager.hideSoftInputFromWindow(
-                activity.currentFocus?.windowToken,
+                (context as Activity).currentFocus?.windowToken,
                 0
             )
         }

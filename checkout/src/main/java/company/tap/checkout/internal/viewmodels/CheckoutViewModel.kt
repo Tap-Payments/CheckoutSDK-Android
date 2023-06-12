@@ -2100,6 +2100,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         dismisControlWidget()
         unActivateActionButton()
         paymentInlineViewHolder.clearTextInput()
+        CustomUtils.hideKeyboardFrom(context, paymentInlineViewHolder.view)
     }
 
     @SuppressLint("ClickableViewAccessibility")

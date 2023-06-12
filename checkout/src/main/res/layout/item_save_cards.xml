@@ -5,7 +5,7 @@
 
     android:gravity="center"
     android:layout_width="@dimen/_95sdp"
-    android:layout_height="@dimen/_35sdp"
+    android:layout_height="@dimen/_37sdp"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_centerInParent="true"
     android:layoutDirection="locale"
@@ -52,11 +52,10 @@
             android:layout_height="match_parent"
             android:id="@+id/tapCardChip2Constraints"
             android:orientation="horizontal"
-            android:paddingTop="5dp"
 
             android:layoutDirection="locale"
             android:textDirection="locale"
-            android:paddingBottom="5dp">
+            >
 
             <company.tap.tapuilibraryy.uikit.atoms.TapImageView
                 android:id="@+id/imageView_amex"
