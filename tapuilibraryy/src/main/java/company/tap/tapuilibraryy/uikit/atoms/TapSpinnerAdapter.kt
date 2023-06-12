@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide
 import company.tap.tapuilibraryy.R
 import company.tap.tapuilibraryy.fontskit.enums.TapFont
 import company.tap.tapuilibraryy.uikit.AppColorTheme
+import company.tap.tapuilibraryy.uikit.isLayoutRTL
 import company.tap.tapuilibraryy.uikit.ktx.loadAppThemManagerFromPath
 
 
@@ -24,7 +25,8 @@ class TapSpinnerAdapter(
     textviewId: Int,
     list: MutableList<SupportedCurrencies>
 ) :
-    ArrayAdapter<SupportedCurrencies?>(context, resouceId, textviewId,
+    ArrayAdapter<SupportedCurrencies?>(
+        context, resouceId, textviewId,
         list as List<SupportedCurrencies?>
     ) {
     var flater: LayoutInflater? = null
@@ -52,9 +54,9 @@ class TapSpinnerAdapter(
         } else {
             holder = rowview.tag as viewHolder
         }
-        rowview.setPadding(0,convertView?.paddingTop?: 0, 0,convertView?.paddingBottom ?: 0)
+        rowview.setPadding(0, convertView?.paddingTop ?: 0, 0, convertView?.paddingBottom ?: 0)
         Glide.with(context).load(rowItem?.flag).into(holder.imageView!!)
-        holder.txtTitle?.text =  rowItem?.currency.toString() + " " +rowItem?.amount.toString()
+        holder.txtTitle?.text = rowItem?.currency.toString() + " " + rowItem?.amount.toString()
         holder.txtTitle?.setTextColor(loadAppThemManagerFromPath(AppColorTheme.ControlCurrencyWidgetCurrencyDropDownLabelColor))
         holder.txtTitle?.typeface = Typeface.createFromAsset(
             context.assets, TapFont.tapFontType(

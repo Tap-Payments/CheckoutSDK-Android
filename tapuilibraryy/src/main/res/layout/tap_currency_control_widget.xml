@@ -34,6 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_12sdp"
             android:textColor="#4b4847"
+            android:textDirection="locale"
             android:textSize="13sp"
             app:layout_constraintStart_toStartOf="@id/currency_widget_logo"
             app:layout_constraintTop_toBottomOf="@id/currency_widget_logo"

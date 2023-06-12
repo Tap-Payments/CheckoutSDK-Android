@@ -61,7 +61,6 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         private const val TYPE_SAVED_CARD = 2
         private const val TYPE_DISABLED_PAYMENT_OPTIONS = 3
         private const val TYPE_ENABLED_PAYMENT_OPTIONS = 1
-        var isFirstSelected: Boolean = true
 
     }
 

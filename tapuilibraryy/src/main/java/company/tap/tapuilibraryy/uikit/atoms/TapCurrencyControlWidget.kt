@@ -18,6 +18,7 @@ import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibraryy.R
 import company.tap.tapuilibraryy.fontskit.enums.TapFont
 import company.tap.tapuilibraryy.uikit.AppColorTheme
+import company.tap.tapuilibraryy.uikit.isLayoutRTL
 import company.tap.tapuilibraryy.uikit.ktx.loadAppThemManagerFromPath
 import java.util.*
 
@@ -99,6 +100,7 @@ class TapCurrencyControlWidget : FrameLayout {
 
 
     }
+
     private fun createSpinnerBackgroundShapeWithTrianleAtTopEdge(): ShapeAppearanceModel {
         return ShapeAppearanceModel()
             .toBuilder()
@@ -109,11 +111,22 @@ class TapCurrencyControlWidget : FrameLayout {
 
     @SuppressLint("SetTextI18n")
     fun setCurrencyWidgetDescription(displayNamePaymentOption: String?) {
+
+
         currencyWidgetDescription.text =
             "$displayNamePaymentOption " + LocalizationManager.getValue(
                 "header",
                 "CurrencyChangeWidget"
             )
+
+        if (isLayoutRTL()) {
+            currencyWidgetDescription?.typeface = Typeface.createFromAsset(
+                context.assets, TapFont.tapFontType(
+                    TapFont.TajawalMedium
+                )
+            )
+        }
+
 
     }
 
@@ -169,6 +182,6 @@ class TapCurrencyControlWidget : FrameLayout {
 }
 
 data class TapCurrencyControlWidgetModel(
-    var logo:String,
-    var currencyWidgetDescription:String
+    var logo: String,
+    var currencyWidgetDescription: String
 )

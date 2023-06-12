@@ -57,7 +57,8 @@
         android:layout_marginHorizontal="@dimen/_12sdp"
         android:nestedScrollingEnabled="true"
         android:orientation="horizontal"
-        android:layout_marginTop="4dp"
+        android:layout_marginBottom="@dimen/_4sdp"
+        android:layout_marginTop="@dimen/_4sdp"
         android:layout_gravity="center"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
@@ -66,7 +67,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        android:layout_marginBottom="@dimen/_15sdp"
+        android:layout_marginBottom="@dimen/_4sdp"
         android:layout_marginHorizontal="@dimen/_8sdp"
         android:id="@+id/tap_currency_widget"
         />
