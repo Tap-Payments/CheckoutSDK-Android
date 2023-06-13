@@ -67,5 +67,6 @@ object ApiService {
     const val INIT_AR = "https://run.mocky.io/v3/491462af-994e-4d99-9218-041289a1ae5d"
     const val CURRENCY_API = "currency"
     const val CHECKOUT_PROFILE_API = "checkoutprofileapi"
-
+    const val BASE_URL_IP = "https://geolocation-db.com"
+    const val GET_IP_VAL = "/json/"
 }

@@ -17,6 +17,7 @@ import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.ChargeStatus
+import company.tap.checkout.internal.apiresponse.CardViewEvent
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.apiresponse.UserRepository
 import company.tap.checkout.internal.cache.SharedPrefManager
@@ -71,8 +72,9 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         super.onViewCreated(view, savedInstanceState)
 
         cardViewModel.getContext(requireContext())
-        userRepository = UserRepository(requireContext(), viewModel)
-        userRepository.getUserIpAddress()
+           //  userRepository = UserRepository(requireContext(), viewModel)
+        //userRepository.getUserIpAddress()
+        cardViewModel.processEvent(event = CardViewEvent.IpAddressEvent,viewModel= viewModel, context = context)
         initViews(view)
         isWebViewOpened = false
         sessionDelegate?.sessionHasStarted()

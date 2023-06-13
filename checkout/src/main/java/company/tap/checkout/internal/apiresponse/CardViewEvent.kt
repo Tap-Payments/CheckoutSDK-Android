@@ -11,6 +11,7 @@ All rights reserved.
 sealed class CardViewEvent {
     object InitEvent : CardViewEvent()
     object ConfigEvent : CardViewEvent()
+    object IpAddressEvent : CardViewEvent()
     object CurrencyEvent : CardViewEvent()
     object ChargeEvent :CardViewEvent()
     object PaymentEvent :CardViewEvent()

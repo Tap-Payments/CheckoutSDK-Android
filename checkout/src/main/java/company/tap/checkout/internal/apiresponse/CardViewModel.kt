@@ -77,6 +77,15 @@ class CardViewModel : ViewModel() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun getUserIpAddress(_context: Context?, viewModel: CheckoutViewModel){
+        if(_context!=null){
+
+            repository.getUserIpAddress(_context , viewModel)
+        }
+
+    }
+
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun processEvent(
@@ -96,6 +105,7 @@ class CardViewModel : ViewModel() {
         saveCardValue:Boolean?=true
     ) {
         when (event) {
+            CardViewEvent.IpAddressEvent->getUserIpAddress(context,viewModel)
             CardViewEvent.CurrencyEvent->getCurrencyAPI(context,viewModel)
             CardViewEvent.InitEvent -> getINITData(
                 context,

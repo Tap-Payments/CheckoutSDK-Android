@@ -1,6 +1,7 @@
 package company.tap.checkout.internal.apiresponse
 
 import SupportedCurrencies
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -8,6 +9,7 @@ import android.os.Build
 import android.os.Handler
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import com.google.gson.Gson
 import com.google.gson.JsonElement
@@ -426,7 +428,15 @@ class CardRepository : APIRequestCallback {
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onSuccess(responseCode: Int, requestCode: Int, response: Response<JsonElement>?) {
-        if (requestCode == CURRENCY_CODE) {
+        if (requestCode == USER_IP_CODE) {
+            if (response?.body() != null) {
+                val userIpAddressResponse = Gson().fromJson(response.body(), UserIpAddressResponse::class.java)
+                NetworkApp.setUserIpAddress(userIpAddressResponse.IPv4 ?: "")
+                CardViewModel().processEvent(event = CardViewEvent.CurrencyEvent ,viewModel= viewModel, context = cardRepositoryContext)
+            }
+
+        }
+       else if (requestCode == CURRENCY_CODE) {
             if (response?.body() != null) {
                 response.body().let {
                     val userLocalCurrencyModel = Gson().fromJson(it, UserLocalCurrencyModel::class.java)
@@ -1030,6 +1040,7 @@ class CardRepository : APIRequestCallback {
         private const val LIST_ALL_CARD_CODE = 15
         private const val CREATE_GOOGLE_TOKEN = 16
         private const val CURRENCY_CODE = 17
+        private const val USER_IP_CODE = 18
 
 
     }
@@ -1224,12 +1235,13 @@ class CardRepository : APIRequestCallback {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun fireWebPaymentCallBack(charge: Charge?) {
         when (charge?.status) {
             ChargeStatus.CAPTURED, ChargeStatus.AUTHORIZED -> try {
                 // closePaymentActivity()
                 println("fireWebPaymentCallBack>>" + charge?.status)
-                viewModel?.handleSuccessFailureResponseButton(
+                viewModel.handleSuccessFailureResponseButton(
                     "success",
                     chargeResponse.authenticate,
                     chargeResponse,
@@ -1251,7 +1263,7 @@ class CardRepository : APIRequestCallback {
             }
             ChargeStatus.FAILED, ChargeStatus.ABANDONED, ChargeStatus.CANCELLED, ChargeStatus.DECLINED, ChargeStatus.RESTRICTED, ChargeStatus.UNKNOWN, ChargeStatus.TIMEDOUT -> try {
                 //closePaymentActivity()
-                viewModel?.handleSuccessFailureResponseButton(
+                viewModel.handleSuccessFailureResponseButton(
                     "failure",
                     chargeResponse.authenticate,
                     chargeResponse,
@@ -1271,14 +1283,19 @@ class CardRepository : APIRequestCallback {
     }
 
 
-    fun getUserIpAddress(){
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun getUserIpAddress(_context: Context, _viewModel: CheckoutViewModel){
+       /* NetworkApp.initNetwork(
+            _context,
+            "token",
+            "app",
+            ApiService.BASE_URL_IP,
+            "android-checkout-sdk",true,"string",_context as AppCompatActivity)*/
+        this.viewModel =_viewModel
+        this.cardRepositoryContext =_context
         NetworkController.getInstance().processRequest(
-            TapMethodType.GET,
-            ApiService.SAVE_CARD,
-            jsonString,
-            this,
-            CardRepository.CREATE_SAVE_CARD
-        )
+            TapMethodType.GET,  ApiService.BASE_URL_IP+ApiService.GET_IP_VAL,null,this, USER_IP_CODE)
+
     }
 
 
