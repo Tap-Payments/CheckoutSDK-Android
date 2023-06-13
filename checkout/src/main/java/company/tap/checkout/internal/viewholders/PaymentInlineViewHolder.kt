@@ -1671,8 +1671,7 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
 
         hideTabLayoutWhenOnlyOnePayment(itemsCardsList, itemsMobilesList)
         tabLayout.addSection(itemsCardsList)
-        // tabLayout.addSection(itemsMobilesList)
-//        tabLayout.
+
 
         if (itemsMobilesList.size != 0) tabLayout.addSection(itemsMobilesList)
 
