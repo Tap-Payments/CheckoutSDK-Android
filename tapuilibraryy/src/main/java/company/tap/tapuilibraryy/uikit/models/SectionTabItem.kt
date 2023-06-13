@@ -14,6 +14,7 @@ data class SectionTabItem(
     val selectedImageURL: String,
     val unSelectedImage: String,
     val type: CardBrand,
+    val disabledImageUrl: String?=null,
     var imageView: ImageView? = null,
     var indicator: View? = null
 )

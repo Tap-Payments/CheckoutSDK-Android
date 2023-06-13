@@ -3457,6 +3457,37 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         } as ArrayList<PaymentOption>
     }
 
+    private fun filteredByPaymentTypeAndCurrencyAndSortedListDisabled(
+        list: java.util.ArrayList<PaymentOption>, paymentType: PaymentType, currency: String
+    ): java.util.ArrayList<PaymentOption> {
+        var currencyFilter: String? = currency.toUpperCase()
+        val filters: java.util.ArrayList<Utils.List.Filter<PaymentOption>> =
+            java.util.ArrayList<Utils.List.Filter<PaymentOption>>()
+
+        /**
+         * if trx currency not included inside supported currencies <i.e Merchant pass transaction currency that he is not allowed for>
+         * set currency to first supported currency
+        </i.e> */
+        var trxCurrencySupported = false
+        for (amountedCurrency in paymentOptionsResponse.supportedCurrencies) {
+            if (amountedCurrency.currency == currencyFilter) {
+                trxCurrencySupported = true
+                break
+            }
+        }
+        if (!trxCurrencySupported) currencyFilter =
+            paymentOptionsResponse.supportedCurrencies[0].currency
+
+
+        if (currencyFilter != null) {
+            this.getCurrenciesFilter<PaymentOption>(currencyFilter)?.let { filters.add(it) }
+        }
+
+        return list.filter { items ->
+            items.paymentType == paymentType && !items.getSupportedCurrencies()?.contains(currencyFilter)
+        } as ArrayList<PaymentOption>
+    }
+
     private fun <E : CurrenciesSupport> getCurrenciesFilter(
         currency: String
     ): Utils.List.Filter<E> {
@@ -3490,7 +3521,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 paymentOptionsResponse.paymentOptions, PaymentType.CARD, currency
             )
 
-        logicToHandlePaymentDataType(cardPaymentOptions = cardPaymentOptions)
+        val cardPaymentOptionsDisabled: java.util.ArrayList<PaymentOption> =
+            filteredByPaymentTypeAndCurrencyAndSortedListDisabled(
+                paymentOptionsResponse.paymentOptions, PaymentType.CARD, currency
+            )
+        println("cardPaymentOptionsDisabled list>>"+cardPaymentOptionsDisabled)
+        logicToHandlePaymentDataType(cardPaymentOptions = cardPaymentOptions , disabledCardPaymentOptions = cardPaymentOptionsDisabled)
 
         filterPaymentChipsAccordingToCurrency(currency)
         val hasSavedCards: Boolean = savedCardsBasedCurr.size > 0
@@ -3549,7 +3585,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     private fun logicToHandlePaymentDataType(
         webPaymentOptions: ArrayList<PaymentOption>? = null,
-        cardPaymentOptions: ArrayList<PaymentOption>
+        cardPaymentOptions: ArrayList<PaymentOption> , disabledCardPaymentOptions: ArrayList<PaymentOption>
 
     ) {
         cardViewHolder.view.mainChipgroup?.groupName?.visibility = VISIBLE
@@ -3566,7 +3602,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             saveCardSwitchHolder?.view?.cardSwitch?.showOnlyPayButton()
         } else if (PaymentDataSource.getPaymentDataType() != null && PaymentDataSource.getPaymentDataType() == "CARD") {
             adapter.updateAdapterData(ArrayList())
-            paymentInlineViewHolder.setDataFromAPI(cardPaymentOptions)
+            paymentInlineViewHolder.setDataFromAPI(cardPaymentOptions, disabledCardPaymentOptions)
             saveCardSwitchHolder?.view?.cardSwitch?.showOnlyPayButton()
         } else {
             /**
@@ -3574,13 +3610,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
              * **/
             if (PaymentDataSource.getTransactionMode() == TransactionMode.AUTHORIZE_CAPTURE) {
                 adapter.updateAdapterData(ArrayList())
-                paymentInlineViewHolder.setDataFromAPI(cardPaymentOptions)
+                paymentInlineViewHolder.setDataFromAPI(cardPaymentOptions, disabledCardPaymentOptions)
             } else {
                 if (webPaymentOptions != null) {
                     adapter.updateAdapterData(webPaymentOptions)
                 }
                 if (cardPaymentOptions.isNotEmpty()) {
-                    paymentInlineViewHolder.setDataFromAPI(cardPaymentOptions)
+                    paymentInlineViewHolder.setDataFromAPI(cardPaymentOptions, disabledCardPaymentOptions)
 
 
                 } else {

@@ -95,6 +95,7 @@ class PaymentInlineViewHolder(
     var mainLinear: LinearLayout? = null
 
     private var imageURL: String = ""
+    private var disabledImageURL: String = ""
     private var selectedImageURL: String = ""
 
     //  private  var paymentType: PaymentTypeEnum ?= null
@@ -1644,21 +1645,24 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
 
     /**
      * Sets data from API through LayoutManager
-     * @param imageURLApi represents the images of payment methods.
+     * @param enabledPaymentsList represents the images of payment methods.
      * */
     @RequiresApi(Build.VERSION_CODES.N)
-    fun setDataFromAPI(imageURLApi: List<PaymentOption>) {
-        println("imageURLApi>>" + imageURLApi)
+    fun setDataFromAPI(enabledPaymentsList: List<PaymentOption> ,  disabledPaymentList :List<PaymentOption>) {
+        println("enabledPaymentsList>>" + enabledPaymentsList)
 //        tabLayout.resetBehaviour()
 
         val itemsMobilesList = ArrayList<SectionTabItem>()
+        val totalList  : MutableList<PaymentOption> = ArrayList()
         itemsCardsList = ArrayList<SectionTabItem>()
         intertabLayout.removeAllTabs()
 
         PaymentDataSource.setBinLookupResponse(null)
         /**
          * Sorted cardpayment types based on orderBY*/
-        decideTapSelection(imageURLApi.sortedBy { it.orderBy }, itemsMobilesList, itemsCardsList)
+        //totalList.addAll(enabledPaymentsList.sortedBy { it.orderBy})
+       // totalList.addAll(disabledPaymentList.sortedBy { it.orderBy})
+        decideTapSelection(enabledPaymentsList.sortedBy { it.orderBy}, itemsMobilesList, itemsCardsList , disabledPaymentList.sortedBy { it.orderBy})
         /**
          * if there is only one payment method we will set visibility gone for tablayout
          * and set the payment method icon for inline input card
@@ -1689,32 +1693,37 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
     }
 
     private fun decideTapSelection(
-        imageURLApi: List<PaymentOption>,
+        enabledPaymentList: List<PaymentOption>,
         itemsMobilesList: ArrayList<SectionTabItem>,
-        itemsCardsList: ArrayList<SectionTabItem>
+        itemsCardsList: ArrayList<SectionTabItem>,
+        disabledPaymentList: List<PaymentOption>
     ) {
-        for (i in imageURLApi.indices) {
+        println("enabledPaymentList>>"+enabledPaymentList.size)
+        println("disabledPaymentList>>"+disabledPaymentList.size)
+
+        for (i in enabledPaymentList.indices) {
             when(CustomUtils.getCurrentTheme()){
                 ThemeMode.dark.name->{
-                   imageURL= imageURLApi[i].logos?.dark?.png?.toString().toString()
+                   imageURL= enabledPaymentList[i].logos?.dark?.png?.toString().toString()
                 }
 
                 ThemeMode.dark_colored.name->{
-                    imageURL= imageURLApi[i].logos?.dark_colored?.png?.toString().toString()
+                    imageURL= enabledPaymentList[i].logos?.dark_colored?.png?.toString().toString()
                 }
                 ThemeMode.light.name->{
-                    imageURL= imageURLApi[i].logos?.light?.png?.toString().toString()
+                    imageURL= enabledPaymentList[i].logos?.light?.png?.toString().toString()
+                  //  disabledImageURL = disabledPaymentList[0].logos?.light?.disabled?.png.toString()
                 }
                 ThemeMode.light_mono.name->{
-                    imageURL= imageURLApi[i].logos?.light_mono?.png?.toString().toString()
+                    imageURL= enabledPaymentList[i].logos?.light_mono?.png?.toString().toString()
                 }
             }
             // imageURL = imageURLApi[i].image.toString()
-            paymentType = imageURLApi[i].paymentType
-            cardBrandType = if (imageURLApi[i].brand == null) {
+            paymentType = enabledPaymentList[i].paymentType
+            cardBrandType = if (enabledPaymentList[i].brand == null) {
                 "unknown"
             } else
-                imageURLApi[i].brand.toString()
+                enabledPaymentList[i].brand.toString()
 
            /**
             * was added for telecom payment types to be used future*/
@@ -1736,6 +1745,40 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
                           )
                       )
                   }*/
+
+            itemsCardsList.add(
+                SectionTabItem(
+                    imageURL,
+                    imageURL,
+                    CardBrand.fromString(cardBrandType)
+                )
+            )
+        }
+
+        for (i in disabledPaymentList.indices) {
+            when(CustomUtils.getCurrentTheme()){
+                ThemeMode.dark.name->{
+                    imageURL= disabledPaymentList[i].logos?.dark?.disabled?.png?.toString().toString()
+                }
+
+                ThemeMode.dark_colored.name->{
+                    imageURL= disabledPaymentList[i].logos?.dark_colored?.disabled?.png?.toString().toString()
+                }
+                ThemeMode.light.name->{
+                    imageURL= disabledPaymentList[i].logos?.light?.disabled?.png?.toString().toString()
+                    //  disabledImageURL = disabledPaymentList[0].logos?.light?.disabled?.png.toString()
+                }
+                ThemeMode.light_mono.name->{
+                    imageURL= disabledPaymentList[i].logos?.light_mono?.disabled?.png?.toString().toString()
+                }
+            }
+            // imageURL = imageURLApi[i].image.toString()
+            paymentType = disabledPaymentList[i].paymentType
+            cardBrandType = if (disabledPaymentList[i].brand == null) {
+                "unknown"
+            } else
+                disabledPaymentList[i].brand.toString()
+
 
             itemsCardsList.add(
                 SectionTabItem(
