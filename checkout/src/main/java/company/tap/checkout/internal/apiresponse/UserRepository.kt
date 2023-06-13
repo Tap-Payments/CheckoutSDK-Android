@@ -38,8 +38,8 @@ class UserRepository constructor(var context: Context,var checkoutViewModel: Che
             ) {
                 Log.e("error",response.body().toString())
                 NetworkApp.setUserIpAddress(response.body()?.IPv4 ?: "")
-                getCurrencyApi()
 
+                CardViewModel().processEvent(event = CardViewEvent.CurrencyEvent , viewModel = checkoutViewModel , context = context)
             }
 
             override fun onFailure(call: Call<UserIpAddressResponse>, t: Throwable) {
@@ -53,38 +53,6 @@ class UserRepository constructor(var context: Context,var checkoutViewModel: Che
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.N)
-    fun getCurrencyApi() {
-        NetworkController.getInstance().processRequest(
-            TapMethodType.GET, ApiService.CURRENCY_API, null, object : APIRequestCallback {
-                override fun onSuccess(
-                    responseCode: Int,
-                    requestCode: Int,
-                    response: Response<JsonElement>?
-                ) {
-                    response?.body().let {
-                        val userLocalCurrencyModel = Gson().fromJson(it, UserLocalCurrencyModel::class.java)
-                       val isSaved =  SharedPrefManager.saveModelLocally(
-                            context = context,
-                            dataToBeSaved = userLocalCurrencyModel,
-                            keyValueToBeSaved = UserLocalCurrencyModelKey
-                        )
-                        if (isSaved){
-                            checkoutViewModel.localCurrencyReturned.value = true
-                        }
-                    }
-                }
-
-                override fun onFailure(requestCode: Int, errorDetails: GoSellError?) {
-                    /**
-                     * needed to handle error
-                     */
-                    Log.e("error currency", errorDetails.toString())
-                }
-            },
-            1
-        )
-    }
 
 }
 

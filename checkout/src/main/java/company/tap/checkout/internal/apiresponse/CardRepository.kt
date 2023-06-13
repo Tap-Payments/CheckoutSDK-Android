@@ -1,5 +1,6 @@
 package company.tap.checkout.internal.apiresponse
 
+import SupportedCurrencies
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -16,6 +17,8 @@ import company.tap.checkout.internal.api.models.*
 import company.tap.checkout.open.models.Merchant
 import company.tap.checkout.internal.api.requests.*
 import company.tap.checkout.internal.api.responses.*
+import company.tap.checkout.internal.cache.SharedPrefManager
+import company.tap.checkout.internal.cache.UserLocalCurrencyModelKey
 import company.tap.checkout.internal.enums.PaymentTypeEnum
 import company.tap.checkout.internal.enums.ThemeMode
 import company.tap.checkout.internal.interfaces.IPaymentDataProvider
@@ -132,6 +135,13 @@ class CardRepository : APIRequestCallback {
         tabAnimatedActionButton?.changeButtonState(ActionButtonState.LOADING)
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun getCurrencyAPI(_context: Context,_viewModel: CheckoutViewModel){
+        this.viewModel = _viewModel
+        this.cardRepositoryContext = _context
+        NetworkController.getInstance().processRequest(
+            TapMethodType.GET, ApiService.CURRENCY_API,null,this, CURRENCY_CODE)
+    }
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun createChargeRequest(
@@ -416,7 +426,25 @@ class CardRepository : APIRequestCallback {
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onSuccess(responseCode: Int, requestCode: Int, response: Response<JsonElement>?) {
-        if (requestCode == INIT_CODE) {
+        if (requestCode == CURRENCY_CODE) {
+            if (response?.body() != null) {
+                response.body().let {
+                    val userLocalCurrencyModel = Gson().fromJson(it, UserLocalCurrencyModel::class.java)
+                    val isSaved = cardRepositoryContext.let { it1 ->
+                        SharedPrefManager.saveModelLocally(
+                            context = cardRepositoryContext,
+                            dataToBeSaved = userLocalCurrencyModel,
+                            keyValueToBeSaved = UserLocalCurrencyModelKey
+                        )
+                    }
+                    if (isSaved){
+                        viewModel.localCurrencyReturned.value = true
+                    }
+                }
+            }
+
+        }
+       else if (requestCode == INIT_CODE) {
             if (response?.body() != null) {
                 response.body().let {
 
@@ -436,7 +464,7 @@ class CardRepository : APIRequestCallback {
                                 )
                             }
                             println("pre set theme value"+ThemeManager.currentThemeName)
-                            if (ThemeManager.currentTheme.isEmpty()) {
+                      //      if (ThemeManager.currentTheme.isEmpty()) {
                                 when (cardRepositoryContext.resources?.configuration?.uiMode?.and(
                                     Configuration.UI_MODE_NIGHT_MASK
                                 )) {
@@ -473,7 +501,7 @@ class CardRepository : APIRequestCallback {
 
                                     }
                                 }
-                            }
+                    //        }
 
                             NetworkApp.initNetworkToken(
                                 initResponseModel?.session,
@@ -1001,6 +1029,7 @@ class CardRepository : APIRequestCallback {
         private const val AUTHENTICATE_CODE = 14
         private const val LIST_ALL_CARD_CODE = 15
         private const val CREATE_GOOGLE_TOKEN = 16
+        private const val CURRENCY_CODE = 17
 
 
     }

@@ -14,6 +14,7 @@ import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibraryy.themekit.ThemeManager
+import company.tap.tapuilibraryy.uikit.AppColorTheme
 import company.tap.tapuilibraryy.uikit.ktx.loadAppThemManagerFromPath
 
 
@@ -153,20 +154,19 @@ object CustomUtils {
         return density
     }
 
-    fun hideSoftKeyboard(activity: Activity) {
-        val inputMethodManager = activity.getSystemService(
+    fun hideSoftKeyboard(context: Context) {
+        val inputMethodManager = context.getSystemService(
             Activity.INPUT_METHOD_SERVICE
         ) as InputMethodManager
         if (inputMethodManager.isAcceptingText) {
             inputMethodManager.hideSoftInputFromWindow(
-                activity.currentFocus?.windowToken,
+                (context as Activity).currentFocus?.windowToken,
                 0
             )
         }
     }
 
     fun getCurrentTheme(): String {
-        println("currentThemeName name"+ThemeManager.currentThemeName)
 
         return ThemeManager.currentThemeName
     }

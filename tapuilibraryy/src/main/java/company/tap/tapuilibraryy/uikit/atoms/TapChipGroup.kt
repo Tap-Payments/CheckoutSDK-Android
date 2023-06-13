@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.util.AttributeSet
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibraryy.R
@@ -26,26 +27,35 @@ class TapChipGroup(context: Context?, attrs: AttributeSet?) : LinearLayout(conte
     val groupAction by lazy { findViewById<TapTextViewNew>(R.id.group_action) }
     val chipsRecycler by lazy { findViewById<RecyclerView>(R.id.chip_recycler) }
     val headerView by lazy { findViewById<RecyclerView>(R.id.header_view) }
+    val tapCurrencyControlWidget by lazy { findViewById<TapCurrencyControlWidget>(R.id.tap_currency_widget) }
 
 
     //Initialize views
     init {
         inflate(context, R.layout.tap_chip_group, this)
-        setTheme(groupName,groupAction,chipsRecycler)
+        setTheme(groupName, groupAction, chipsRecycler)
         if (context?.let { LocalizationManager.getLocale(it).language } == "en") setFontsEnglish() else setFontsArabic()
     }
 
-    fun setTheme(groupName: TapTextViewNew?, groupAction: TapTextViewNew?, chipsRecycler: RecyclerView?) {
+
+
+    fun setTheme(
+        groupName: TapTextViewNew?,
+        groupAction: TapTextViewNew?,
+        chipsRecycler: RecyclerView?
+    ) {
         val groupNameTextViewTheme = TextViewTheme()
         groupNameTextViewTheme.textColor =
             Color.parseColor(ThemeManager.getValue("horizontalList.headers.gatewayHeader.leftButton.labelTextColor"))
-        groupNameTextViewTheme.textSize =  ThemeManager.getFontSize("horizontalList.headers.gatewayHeader.leftButton.labelTextFont")
+        groupNameTextViewTheme.textSize =
+            ThemeManager.getFontSize("horizontalList.headers.gatewayHeader.leftButton.labelTextFont")
         groupName?.setTheme(groupNameTextViewTheme)
 
         val groupActionTextViewTheme = TextViewTheme()
         groupActionTextViewTheme.textColor =
             Color.parseColor(ThemeManager.getValue("horizontalList.headers.gatewayHeader.rightButton.labelTextColor"))
-        groupActionTextViewTheme.textSize =  ThemeManager.getFontSize("horizontalList.headers.gatewayHeader.rightButton.labelTextFont")
+        groupActionTextViewTheme.textSize =
+            ThemeManager.getFontSize("horizontalList.headers.gatewayHeader.rightButton.labelTextFont")
         groupAction?.setTheme(groupActionTextViewTheme)
 
         linearMainView.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))

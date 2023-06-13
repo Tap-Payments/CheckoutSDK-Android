@@ -1,0 +1,7 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="true" android:drawable="@drawable/drop_down_icon" />
+    <item android:state_checked="false" android:drawable="@drawable/drop_down_icon" />
+    <item android:drawable="@drawable/drop_down_icon" />
+
+
+</selector>

@@ -162,13 +162,13 @@ class CheckOutActivity : AppCompatActivity(), APILoggInterface {
                     RESULT_OK -> {
                         val paymentData = data?.let { PaymentData.getFromIntent(it) }
                         if (paymentData != null) {
-                            tapCheckoutFragment.viewModel?.handlePaymentSuccess(
+                            tapCheckoutFragment.viewModel.handlePaymentSuccess(
                                 paymentData,
                                 selectedPaymentOption
                             )
                         } else {
                             AutoResolveHelper.getStatusFromIntent(data)?.statusCode?.let {
-                                tapCheckoutFragment.viewModel?.handleError(
+                                tapCheckoutFragment.viewModel.handleError(
                                     it
                                 )
                             }
@@ -178,7 +178,7 @@ class CheckOutActivity : AppCompatActivity(), APILoggInterface {
 
                     }
                     RESULT_CANCELED -> {
-                        tapCheckoutFragment.viewModel?.handleSuccessFailureResponseButton(
+                        tapCheckoutFragment.viewModel.handleSuccessFailureResponseButton(
                             "Cancelled Google Pay",
                             null,
                             null,

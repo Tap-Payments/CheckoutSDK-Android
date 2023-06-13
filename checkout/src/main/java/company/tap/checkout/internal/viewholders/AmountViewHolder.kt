@@ -33,7 +33,7 @@ import kotlinx.android.synthetic.main.amountview_layout.view.*
  *
  */
 class AmountViewHolder(
-   private val context: Context,
+    private val context: Context,
     private val baseLayoutManager: BaseLayoutManager? = null,
     private var checkoutViewModel: CheckoutViewModel
 ) :
@@ -61,11 +61,11 @@ class AmountViewHolder(
 
     @DrawableRes
     val dropDownIcon: Int =
-        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")){
+        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
             R.drawable.dark_dropwdonw
         } else if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("light")) {
             R.drawable.light_dropdown
-        }else R.drawable.light_dropdown
+        } else R.drawable.light_dropdown
 
     override fun bindViewComponents() {
         view.amount_section.setAmountViewDataSource(getAmountDataSourceFromAPIs())
@@ -75,7 +75,10 @@ class AmountViewHolder(
 
         setBorderedView(
             view.amount_section.tapChipPopup,
-            MetricsUtil.convertDpToPixel(ThemeManager.getValue<Float>("amountSectionView.itemsNumberButtonCorner").toFloat() +5,context),// corner raduis
+            MetricsUtil.convertDpToPixel(
+                ThemeManager.getValue<Float>("amountSectionView.itemsNumberButtonCorner")
+                    .toFloat() + 5, context
+            ),// corner raduis
             0.0f,
             Color.parseColor(ThemeManager.getValue("amountSectionView.itemsNumberButtonBackgroundColor")),
             Color.parseColor(ThemeManager.getValue("amountSectionView.itemsNumberButtonBackgroundColor")),
@@ -84,7 +87,10 @@ class AmountViewHolder(
 
         setBorderedView(
             view.amount_section.tapChipAmount,
-            MetricsUtil.convertDpToPixel(ThemeManager.getValue<Float>("amountSectionView.itemsNumberButtonCorner").toFloat() +5,context),// corner raduis
+            MetricsUtil.convertDpToPixel(
+                ThemeManager.getValue<Float>("amountSectionView.itemsNumberButtonCorner")
+                    .toFloat() + 5, context
+            ),// corner raduis
             0.0f,
             Color.parseColor(ThemeManager.getValue("amountSectionView.itemsNumberButtonBackgroundColor")),
             Color.parseColor(ThemeManager.getValue("amountSectionView.itemsNumberButtonBackgroundColor")),
@@ -138,7 +144,7 @@ class AmountViewHolder(
         }
     }
 
-    private fun changeDataSource(amountViewDataSource: AmountViewDataSource) {
+    fun changeDataSource(amountViewDataSource: AmountViewDataSource) {
         view.amount_section.setAmountViewDataSource(amountViewDataSource)
     }
 
@@ -150,18 +156,7 @@ class AmountViewHolder(
             /**
              * Second time opening The Items Currencies after choosing one Currency
              */
-            if (itemCountt?.contentEquals("1") == true) {
-                changeDataSource(
-                    AmountViewDataSource(
-                        selectedCurr = originalAmount,
-                        selectedCurrText = transactionCurrency,
-                        itemCount = itemCountt + "  " + LocalizationManager.getValue(
-                            "item",
-                            "Common"
-                        )
-                    )
-                )
-            } else changeDataSource(
+            changeDataSource(
                 AmountViewDataSource(
                     selectedCurr = originalAmount,
                     selectedCurrText = transactionCurrency,
@@ -175,14 +170,19 @@ class AmountViewHolder(
              * if same currency selected as Currency of user , not show local prompt
              */
 
-            Log.e("currency Selected ", CheckoutViewModel.currencySelectedForCheck.toString())
-            Log.e("saved Currency", SharedPrefManager.getUserSupportedLocaleForTransactions(view.amount_section.context)?.currency.toString())
+            Log.e(
+                "saved Currency",
+                SharedPrefManager.getUserSupportedLocaleForTransactions(view.amount_section.context)?.currency.toString()
+            )
 
-            if (CheckoutViewModel.currencySelectedForCheck != SharedPrefManager.getUserSupportedLocaleForTransactions(view.amount_section.context)?.currency)
-                doAfterSpecificTime(500) {
-                   checkoutViewModel.addDataToAmountView()
-                    view.amount_section?.tapChipPopup?.addFadeInAnimation(durationTime = 500)
-                }
+            if (CheckoutViewModel.currencySelectedForCheck != SharedPrefManager.getUserSupportedLocaleForTransactions(
+                    view.amount_section.context
+                )?.currency
+            ){
+                checkoutViewModel.addDataToAmountView()
+                view.amount_section?.tapChipPopup?.fadeVisibility(View.VISIBLE)
+            }
+
         } else {
             /**
              * opening The Items Currencies to choose from
@@ -201,9 +201,7 @@ class AmountViewHolder(
             view.amount_section.itemAmountText.visibility = View.GONE
             view.amount_section.viewSeparator.visibility = View.GONE
             view.amount_section.amountImageView.visibility = View.GONE
-            doAfterSpecificTime(500) {
-                view.amount_section?.tapChipPopup?.addFadeOutAnimation(isGone = false)
-            }
+            view.amount_section?.tapChipPopup?.fadeVisibility(View.GONE)
 
 
         }
@@ -212,30 +210,12 @@ class AmountViewHolder(
 
     @SuppressLint("ClickableViewAccessibility")
     fun setOnItemsClickListener() {
-        /* view.amount_section.itemAmountLayout.setOnClickListener {
-             //onItemsClickListener()
-             baseLayoutManager?.controlCurrency(isOpenedList)
-         }*/
-
-        /*view.amount_section.itemAmountLayout.setOnTouchListener(object : View.OnTouchListener {
-            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                baseLayoutManager?.controlCurrency(isOpenedList)
-                return false
-            }
-        })*/
         view.amount_section.constraint.setOnTouchListener { v, event ->
             baseLayoutManager?.controlCurrency(isOpenedList)
 
             false
         }
 
-        /**Adding to get back to sdk when clicked closed ***/
-//        view.amount_section.itemPopupLayout.setOnTouchListener(object : View.OnTouchListener {
-//            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-//                baseLayoutManager?.reOpenSDKState()
-//                return false
-//            }
-//        })
     }
 
     fun updateSelectedCurrency(
@@ -250,100 +230,40 @@ class AmountViewHolder(
 
 
         isOpenedList = isOpen
-        //  if (selectedCurrency == get)
-        if (selectedAmount == currentAmount && selectedCurrency == currentCurrency) {
+        if (selectedAmount == currentAmount) {
             view.amount_section.mainKDAmountValue.visibility = View.GONE
         } else {
             view.amount_section.mainKDAmountValue.visibility = View.VISIBLE
         }
         if (isOpen) {
-            if (selectedCurrencySymbol?.isNotBlank() == true || selectedCurrencySymbol?.isNotEmpty() == true) {
-                /**
-                 * here changed all symbols  to needed symbol currency
-                 */
-                if (itemCountt?.equals("1") == true) {
-                    changeDataSource(
-                        AmountViewDataSource(
-                            selectedCurr = selectedAmount,
-                            selectedCurrText = selectedCurrencySymbol,
-                            currentCurr = currentAmount,
-                            currentCurrText = currentCurrency,
-                            itemCount = itemCountt + "  " + LocalizationManager.getValue(
-                                "item",
-                                "Common"
-                            )
-                        )
+            changeDataSource(
+                AmountViewDataSource(
+                    selectedCurr = selectedAmount,
+                    selectedCurrText = selectedCurrencySymbol,
+                    currentCurr = currentAmount,
+                    currentCurrText = currentCurrency,
+                    itemCount = itemCountt + "  " + LocalizationManager.getValue(
+                        "items",
+                        "Common"
                     )
-                } else {
-                    changeDataSource(
-                        AmountViewDataSource(
-                            selectedCurr = selectedAmount,
-                            selectedCurrText = selectedCurrencySymbol,
-                            currentCurr = currentAmount,
-                            currentCurrText = currentCurrency,
-                            itemCount = itemCountt + "  " + LocalizationManager.getValue(
-                                "items",
-                                "Common"
-                            )
-                        )
-                    )
-                }
-
-            } else {
-                if (itemCountt?.equals("1") == true) {
-                    changeDataSource(
-                        AmountViewDataSource(
-                            selectedCurr = selectedAmount,
-                            selectedCurrText = selectedCurrency,
-                            currentCurr = currentAmount,
-                            currentCurrText = currentCurrency,
-                            itemCount = itemCountt + "  " + LocalizationManager.getValue(
-                                "item",
-                                "Common"
-                            )
-                        )
-                    )
-                } else {
-                    changeDataSource(
-                        AmountViewDataSource(
-                            selectedCurr = selectedAmount,
-                            selectedCurrText = selectedCurrency,
-                            currentCurr = currentAmount,
-                            currentCurrText = currentCurrency,
-                            itemCount = itemCountt + "  " + LocalizationManager.getValue(
-                                "items",
-                                "Common"
-                            )
-                        )
-                    )
-                }
-            }
-
-
+                )
+            )
         } else {
-            if (selectedCurrencySymbol?.isNotBlank() == true || selectedCurrencySymbol?.isNotEmpty() == true) {
-                changeDataSource(
-                    AmountViewDataSource(
-                        selectedCurr = selectedAmount,
-                        selectedCurrText = selectedCurrencySymbol,
-                        currentCurr = currentAmount,
-                        currentCurrText = currentCurrency,
-                        itemCount = if (isChangingCurrencyFromOutside == true) itemCountt + "  " + LocalizationManager.getValue(
-                            "items",
-                            "Common"
-                        ) else LocalizationManager.getValue("confirm", "Common")
+            changeDataSource(
+                AmountViewDataSource(
+                    selectedCurr = selectedAmount,
+                    selectedCurrText = selectedCurrencySymbol,
+                    currentCurr = currentAmount,
+                    currentCurrText = currentCurrency,
+                    itemCount = if (isChangingCurrencyFromOutside == true) itemCountt + "  " + LocalizationManager.getValue(
+                        "items",
+                        "Common"
+                    ) else LocalizationManager.getValue(
+                        "confirm",
+                        "Common"
                     )
                 )
-            } else
-                changeDataSource(
-                    AmountViewDataSource(
-                        selectedCurr = selectedAmount,
-                        selectedCurrText = selectedCurrency,
-                        currentCurr = currentAmount,
-                        currentCurrText = currentCurrency,
-                        itemCount = LocalizationManager.getValue("confirm", "Common")
-                    )
-                )
+            )
         }
 
     }

@@ -2,11 +2,10 @@
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+
     android:gravity="center"
-    android:layout_marginStart="5dp"
-    android:layout_marginTop="5dp"
+    android:layout_width="@dimen/_95sdp"
+    android:layout_height="@dimen/_37sdp"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_centerInParent="true"
     android:layoutDirection="locale"
@@ -21,37 +20,42 @@
         app:layout_constraintEnd_toEndOf="@id/tapCardChip2"
         app:layout_constraintBottom_toTopOf="@id/tapCardChip2"
         android:elevation="15dp"
+
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         app:layout_constraintVertical_bias="1"
-        android:visibility="visible"
+        android:visibility="gone"
         android:layout_above="@+id/tapCardChip2" />
 
-    <FrameLayout
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/tapCardChip2"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:elevation="0dp"
-        android:layout_marginBottom="@dimen/margin_basic_20dp"
+        android:clipToPadding="false"
+        android:layout_margin="@dimen/_1sdp"
+        app:rippleColor="@android:color/transparent"
+        app:cardPreventCornerOverlap="false"
+        app:cardCornerRadius="@dimen/_8sdp"
+        app:cardElevation="@dimen/_1sdp"
         tools:background="@color/red_error"
         android:hardwareAccelerated="true"
         android:layout_gravity="center">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="100dp"
-            android:layout_height="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:id="@+id/tapCardChip2Constraints"
             android:orientation="horizontal"
-            android:paddingTop="5dp"
 
             android:layoutDirection="locale"
             android:textDirection="locale"
-            android:paddingBottom="5dp">
+            >
 
             <company.tap.tapuilibraryy.uikit.atoms.TapImageView
                 android:id="@+id/imageView_amex"
@@ -90,7 +94,7 @@ android:layout_marginEnd="@dimen/margin_basic_10dp"
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </FrameLayout>
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

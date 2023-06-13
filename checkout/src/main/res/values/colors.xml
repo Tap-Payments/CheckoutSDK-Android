@@ -17,5 +17,9 @@
     <color name="colorOverlay">#78ffffff</color>
     <color name="french_gray">#A8B5B5B5</color>
     <color name="test">#0F000000</color>
+    <color name="gray">#F1F1F1</color>
+
+    <color name="greencolor">#95e796</color>
+
 
 </resources>

@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardLinearLayout"
     android:layoutDirection="locale"
+    android:animateLayoutChanges="true"
     android:orientation="vertical">
     <company.tap.tapuilibraryy.uikit.atoms.TapChipGroup
         android:id="@+id/mainChipgroup"
@@ -16,7 +17,6 @@
         android:id="@+id/tapSeparatorViewLinear1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-23dp"
 
         >
 
@@ -31,9 +31,9 @@
             android:id="@+id/cardInfoHeaderText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_basic_16dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginHorizontal="@dimen/_12sdp"
+            android:layout_marginTop="@dimen/_1sdp"
+            android:layout_marginBottom="@dimen/_4sdp"
             android:textAllCaps="true"
             android:textSize="@dimen/font_size_10sp"
             android:textColor="#9F9F9F"

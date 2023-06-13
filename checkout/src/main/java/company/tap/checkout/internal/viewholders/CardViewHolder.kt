@@ -3,12 +3,13 @@ package company.tap.checkout.internal.viewholders
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.R
-import company.tap.checkout.internal.adapter.CardTypeAdapterUIKIT
+import company.tap.checkout.internal.adapter.CardAdapterUIKIT
 import company.tap.checkout.internal.api.models.PaymentOption
 import company.tap.checkout.internal.api.models.SavedCard
 
@@ -36,7 +37,7 @@ class CardViewHolder(private val context: Context, private val onCardSelectedAct
     private var paymentCardsList: MutableList<PaymentOption>? = null
     private var saveCardsList: MutableList<SavedCard>? = null
     lateinit var cardInfoHeaderText: TapTextViewNew
-    lateinit var cardTypeAdapterUIKIT: CardTypeAdapterUIKIT
+    lateinit var cardAdapterUIKIT: CardAdapterUIKIT
 
     init { bindViewComponents() }
 
@@ -52,18 +53,15 @@ class CardViewHolder(private val context: Context, private val onCardSelectedAct
             RecyclerView.HORIZONTAL,
             false
         )
-        cardTypeAdapterUIKIT = CardTypeAdapterUIKIT(onCardSelectedActionListener )
-        view.mainChipgroup.chipsRecycler.adapter = cardTypeAdapterUIKIT
+        cardAdapterUIKIT = CardAdapterUIKIT(onCardSelectedActionListener )
+        view.mainChipgroup.chipsRecycler.adapter = cardAdapterUIKIT
         view.mainChipgroup.chipsRecycler.elevation = 0f
 
         println("saveCardsList >>"+saveCardsList?.size)
 
         if(saveCardsList?.isEmpty() == true) view.mainChipgroup.groupAction.visibility = View.GONE
 
-        paymentCardsList?.let { cardTypeAdapterUIKIT.updateAdapterData(it) }
-      //  println("saveCardsList in adapter"+saveCardsList)
-        //println("paymentCardsList in adapter"+paymentCardsList)
-        saveCardsList?.let { cardTypeAdapterUIKIT.updateAdapterDataSavedCard(it) }
+        saveCardsList?.let { cardAdapterUIKIT.updateAdapterDataSavedCard(it) }
         /**
          * set separator background
          */
@@ -88,13 +86,6 @@ class CardViewHolder(private val context: Context, private val onCardSelectedAct
             if(saveCardsList?.isEmpty() == true)  cardInfoHeaderText.text =  LocalizationManager.getValue("cardSectionTitle", "TapCardInputKit")
       else  cardInfoHeaderText.text =  LocalizationManager.getValue("cardSectionTitleOr", "TapCardInputKit")
         }
-       /* var cardInfoTextTheme = TextViewTheme()
-        cardInfoTextTheme.textColor =
-            Color.parseColor(ThemeManager.getValue("horizontalList.headers.labelTextColor"))
-        cardInfoTextTheme.textSize =
-            ThemeManager.getFontSize("horizontalList.headers.labelTextFont")
-        cardInfoTextTheme.font = ThemeManager.getFontName("horizontalList.headers.labelTextFont")
-        cardInfoHeaderText.setTheme(cardInfoTextTheme)*/
     }
 
     private fun setFontsArabic() {
@@ -113,12 +104,4 @@ class CardViewHolder(private val context: Context, private val onCardSelectedAct
         )
     }
 
-    /**
-     * Sets data from API through LayoutManager
-     * @param savedCardMethodsApi represents the list of payment methods available from API
-     * */
-    fun setDatafromAPI(paymentCardMethodsApi: MutableList<PaymentOption>) {
-        paymentCardsList = paymentCardMethodsApi
-        bindViewComponents()
-    }
 }

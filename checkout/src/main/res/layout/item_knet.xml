@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/tapCardChip3"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/margin_basic_15dp"
+
+    android:layout_width="@dimen/_95sdp"
+    android:layout_height="@dimen/_35sdp"
     android:elevation="0dp"
+    android:padding="@dimen/_1sdp"
     android:hardwareAccelerated="true">
+
 
 
     <company.tap.tapuilibraryy.uikit.atoms.TapImageView
         android:id="@+id/imageView_knet"
-        android:layout_width="100dp"
-        android:layout_height="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"
         android:layout_gravity="center"
         />
 

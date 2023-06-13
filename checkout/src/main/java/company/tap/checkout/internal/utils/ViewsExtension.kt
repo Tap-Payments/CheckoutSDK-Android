@@ -1,5 +1,6 @@
 package company.tap.checkout.internal.utils
 
+import android.animation.AnimatorSet
 import android.animation.ArgbEvaluator
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
@@ -22,10 +23,8 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.util.TypedValue
 import android.view.*
-import android.view.animation.Animation
+import android.view.animation.*
 import android.view.animation.Animation.AnimationListener
-import android.view.animation.AnimationUtils
-import android.view.animation.TranslateAnimation
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -39,15 +38,19 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+import androidx.lifecycle.MutableLiveData
 import androidx.transition.AutoTransition
 import com.bumptech.glide.Glide
 import company.tap.checkout.R
 import company.tap.checkout.internal.cache.SharedPrefManager
+import company.tap.checkout.internal.enums.ThemeMode
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.tapuilibraryy.themekit.ThemeManager
+import company.tap.tapuilibraryy.uikit.AppColorTheme
 import company.tap.tapuilibraryy.uikit.ktx.loadAppThemManagerFromPath
 import jp.wasabeef.blurry.Blurry
 import kotlinx.android.synthetic.main.amountview_layout.view.*
+import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -121,10 +124,10 @@ fun View.applyGlowingEffect(colorPairs: Pair<Int, Int>, durationTime: Long = 100
 }
 
 fun View.addFadeInAnimation(durationTime: Long = 1000L) {
+    this.visibility = View.VISIBLE
     val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
     animation.duration = durationTime
     this.startAnimation(animation)
-    this.visibility = View.VISIBLE
 
 }
 
@@ -146,13 +149,15 @@ fun View.addSlideUpAnimation(durationTime: Long = 1000L, onAnimationEnd: () -> U
     })
 }
 
-fun Context.isUserCurrencySameToMainCurrency(): Boolean {
+fun Context.isUserCurrencySameToMainCurrency(userCurrencySameAsCurrencyOfApplication: MutableLiveData<Boolean>): Boolean {
     val userCurrency = SharedPrefManager.getUserSupportedLocaleForTransactions(this)?.currency
     val paymentCurrency = PaymentDataSource.getCurrency()?.isoCode
-    return userCurrency.equals(paymentCurrency, ignoreCase = true)
+    userCurrencySameAsCurrencyOfApplication.value =
+        userCurrency.equals(paymentCurrency, ignoreCase = true)
+    return userCurrencySameAsCurrencyOfApplication.value == true
 }
 
-fun View.slidefromRightToLeft() {
+fun View.slideFromStartToEnd() {
     val animate = TranslateAnimation(
         if (isRTL()) -this.width.toFloat() else this.width.toFloat(),
         0f,
@@ -160,17 +165,40 @@ fun View.slidefromRightToLeft() {
         0f
     ) // View for animation
     animate.duration = 1000
-    animate.fillAfter = true
     this.startAnimation(animate)
     this.visibility = View.VISIBLE // Change visibility VISIBLE or GONE
 
 }
 
-fun View.addShrinkAnimation(xDirection: Float, yDirection: Float,isDimmed:Boolean=false) {
+fun Context.applyOnDifferentThemes(
+    onDarkTheme: () -> Unit,
+    onDarkColoredTheme: () -> Unit,
+    onLightTheme: () -> Unit,
+    onLightMonoTheme: () -> Unit
+) {
+    when (CustomUtils.getCurrentTheme()) {
+        ThemeMode.dark.name -> {
+            onDarkTheme.invoke()
+        }
+        ThemeMode.dark_colored.name -> {
+            onDarkColoredTheme.invoke()
+        }
+        ThemeMode.light.name -> {
+            onLightTheme.invoke()
+        }
+        ThemeMode.light_mono.name -> {
+            onLightMonoTheme.invoke()
+
+        }
+    }
+}
+
+
+fun View.addShrinkAnimation(xDirection: Float, yDirection: Float, isDimmed: Boolean = false) {
     this.animate().scaleX(xDirection).scaleY(yDirection).setDuration(600).start();
-    if (isDimmed){
+    if (isDimmed) {
         this.alpha = 0.4f
-    }else{
+    } else {
         this.alpha = 1.0f
     }
 
@@ -252,7 +280,7 @@ fun <T> throttleFirst(
     }
 }
 
-fun View.slideFromLeftToRight() {
+fun View.slideFromEndToStart() {
 
     if (this.isVisible) {
         val animate =
@@ -449,6 +477,26 @@ fun MutableList<View>.addFadeOutAnimationToViews(
     }
 
 
+}
+
+fun View.slideView(
+    newHeight: Int
+) {
+
+    val slideAnimator = ValueAnimator
+        .ofInt(this.measuredHeight, newHeight)
+        .setDuration(500)
+
+    slideAnimator.addUpdateListener {
+        this.layoutParams.height = it.animatedValue as Int
+        this.requestLayout()
+    }
+
+    /*  We use an animationSet to play the animation  */
+    val animationSet = AnimatorSet();
+    animationSet.interpolator = DecelerateInterpolator();
+    animationSet.play(slideAnimator);
+    animationSet.start()
 }
 
 fun animateBS(

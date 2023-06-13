@@ -188,7 +188,6 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
         constraintt.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
         acceptedCardText = view.findViewById(R.id.acceptedCardText)
 
-        acceptedCardText.isEnabled =false
 
         acceptedCardText.text = LocalizationManager.getValue("weSupport", "TapCardInputKit")
         saveForOtherCheckBox?.text =
@@ -442,34 +441,35 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
                 if (getPreTypedCardData() != null) setPrevTypedCard()
                 else {
 
-                    tabLayout.resetBehaviour()
-                    cardInputUIStatus = CardInputUIStatus.NormalCard
-                    tabLayout.resetBehaviour()
-                    tabLayout.getChildAt(0).minimumHeight=15
-                    tapCardInputView.clear()
-                    closeButton?.visibility = View.GONE
-                    controlScannerOptions()
-                    tapInlineCardSwitch?.visibility = View.GONE
-                    tapAlertView?.fadeVisibility(View.GONE, 500)
-                    checkoutViewModel.resetCardSelection()
-                    checkoutViewModel.isSavedCardSelected = false
-                    tabLayout.fadeVisibility(View.VISIBLE)
-                    intertabLayout.fadeVisibility(View.VISIBLE)
-                    acceptedCardText.fadeVisibility(View.VISIBLE)
-                    checkoutViewModel.resetViewHolder()
-                    expiryDate = null
-                    cvvNumber = null
-                    cardHolderName = null
-                    fullCardNumber = null
-                    savedCardsModel = null
-
-
+                    clearTextInput()
                 }
 
                 return false
             }
         })
 
+    }
+
+     fun clearTextInput() {
+        tabLayout.resetBehaviour()
+        cardInputUIStatus = CardInputUIStatus.NormalCard
+        tabLayout.resetBehaviour()
+        tabLayout.getChildAt(0).minimumHeight = 15
+        tapCardInputView.clear()
+        closeButton?.visibility = View.GONE
+        controlScannerOptions()
+        tapInlineCardSwitch?.visibility = View.GONE
+        tapAlertView?.fadeVisibility(View.GONE, 500)
+        checkoutViewModel.resetCardSelection()
+        checkoutViewModel.isSavedCardSelected = false
+        tabLayout.fadeVisibility(View.VISIBLE)
+        intertabLayout.fadeVisibility(View.VISIBLE)
+        acceptedCardText.fadeVisibility(View.VISIBLE)
+        checkoutViewModel.resetViewHolder()
+        expiryDate = null
+        cvvNumber = null
+        cardHolderName = null
+        fullCardNumber = null
     }
 
 
