@@ -345,9 +345,9 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
                 setSelectedCardTypeDisabledShadowAndBackground(holder, isBackgroundDimmed = true)
         } else {
             if (typeDisabled.isPaymentOptionEnabled) {
-                setUnSelectedCardTypeDisabledShadowAndBackground(holder)
+                setUnSelectedCardTypePaymentOptionShadowAndBackground(holder)
             } else
-                setUnSelectedCardTypeDisabledShadowAndBackground(holder, isBackgroundDimmed = true)
+                setUnSelectedCardTypePaymentOptionShadowAndBackground(holder, isBackgroundDimmed = true)
         }
 
 
@@ -410,7 +410,7 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
     fun RecyclerView.ViewHolder.isSingleClicked(doOnSingleClicked: () -> Unit) {
         if (selectedPosition == this.bindingAdapterPosition) {
             selectedPosition = RecyclerView.NO_POSITION;
-            notifyDataSetChanged();
+            notifyDataSetChanged()
             onCardSelectedActionListener.onDeselectionOfItem()
             return
         }
@@ -423,14 +423,13 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         if (selectedPosition == position) {
             if (typeEnabled.isPaymentOptionEnabled) {
                 setSelectedCardTypeDisabledShadowAndBackground(holder)
-            } else
-                setSelectedCardTypeDisabledShadowAndBackground(holder, isBackgroundDimmed = true)
+            }
+            else setSelectedCardTypeDisabledShadowAndBackground(holder, isBackgroundDimmed = true)
         } else {
             if (typeEnabled.isPaymentOptionEnabled) {
-                setUnSelectedCardTypeDisabledShadowAndBackground(holder)
-
-            } else
-                setUnSelectedCardTypeDisabledShadowAndBackground(holder, isBackgroundDimmed = true)
+                setUnSelectedCardTypePaymentOptionShadowAndBackground(holder)
+            }
+            else setUnSelectedCardTypePaymentOptionShadowAndBackground(holder, isBackgroundDimmed = true)
         }
 
 
@@ -516,7 +515,7 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
     }
 
 
-    private fun setUnSelectedCardTypeDisabledShadowAndBackground(
+    private fun setUnSelectedCardTypePaymentOptionShadowAndBackground(
         holder: RecyclerView.ViewHolder,
         isBackgroundDimmed: Boolean = false
     ) {
