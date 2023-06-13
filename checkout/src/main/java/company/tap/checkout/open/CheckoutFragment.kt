@@ -84,27 +84,24 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                  * check if data cached and different currency present
                  * should put : @for check !isUserCurrencySameToMainCurrency()
                  */
-                if (cacheUserLocalCurrency() && !requireActivity().isUserCurrencySameToMainCurrency(
-                        viewModel.isUserCurrencySameAsCurrencyOfApplication
-                    )
-                ) {
-                    viewModel.powerdByTapAnimationFinished.observe(this@CheckoutFragment) {
+                if (cacheUserLocalCurrency()) {
+                   powerdByTapAnimationFinished.observe(this@CheckoutFragment) {
                         if (it == true) {
                             doAfterSpecificTime {
-                                viewModel.addTitlePaymentAndFlag()
-                                viewModel.isUserCurrencySameAsCurrencyOfApplication.observe(
+                               addTitlePaymentAndFlag()
+                                isUserCurrencySameAsCurrencyOfApplication.observe(
                                     this@CheckoutFragment
                                 ) {
-                                    if (it) viewModel.removevisibiltyCurrency()
-                                    else viewModel.showVisibiltyOfCurrency()
+                                    if (it) removevisibiltyCurrency()
+                                    else showVisibiltyOfCurrency()
                                 }
                             }
                         } else {
-                            viewModel.removevisibiltyCurrency()
+                            removevisibiltyCurrency()
                         }
                     }
                 } else {
-                    viewModel.removevisibiltyCurrency()
+                    removevisibiltyCurrency()
                 }
             }
 

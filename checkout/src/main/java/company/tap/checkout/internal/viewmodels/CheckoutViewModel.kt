@@ -551,7 +551,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         currencyRate = rate?.toBigDecimal()!!,
                         totalSelectedAmount = amount,
                         selectedCurrencySymbol = symbol ?: "",
-                        isChangeingCurrencyFromOutside = true
                     )
                 }
             }
@@ -850,8 +849,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     fun addTitlePaymentAndFlag() {
         addDataToAmountView()
-        amountViewHolder.view.amount_section.tapChipPopup.slideFromStartToEnd()
         amountViewHolder.view.amount_section.itemPopupLayout.applyGlowingEffect(getCurrencyColors())
+        if (isUserCurrencySameAsCurrencyOfApplication() == false){
+            amountViewHolder.view.amount_section.tapChipPopup.slideFromStartToEnd()
+        }
+
 
     }
 
@@ -859,14 +861,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         val currencyAlert: String = LocalizationManager.getValue("currencyAlert", "Common")
         amountViewHolder.view.amount_section.popupTextView.text =
             currencyAlert + " " + checkoutFragment.getSimIsoCountryCurrency()
-        Glide.with(context).load(showCountryFlag())
-            .into(amountViewHolder.view.amount_section.flagImageView);
+        Glide.with(context).load(showCountryFlag()).into(amountViewHolder.view.amount_section.flagImageView);
         amountViewHolder.view.amount_section.tapChipAmount.bringToFront()
 
     }
 
     fun removevisibiltyCurrency() {
-        amountViewHolder.view.amount_section.tapChipPopup.fadeVisibility(View.GONE)
+        if (amountViewHolder.view.amount_section.tapChipPopup.isVisible){
+            amountViewHolder.view.amount_section.tapChipPopup.fadeVisibility(View.GONE)
+        }
     }
 
     fun showVisibiltyOfCurrency() {
@@ -2054,7 +2057,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     totalSelectedAmount = getSelectedSupportedCurrency().amount,
                     selectedCurrencySymbol = getSelectedSupportedCurrency().symbol ?: "",
                     position = position,
-                    isChangeingCurrencyFromOutside = true
                 )
                 onCardSelectedAction(true, paymentOption)
 
@@ -2782,6 +2784,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             currencyRate = currencyRate,
             totalSelectedAmount = totalSelectedAmount,
             selectedCurrencySymbol = selectedCurrencySymbol ?: "",
+            isChangeingCurrencyFromOutside = false
         )
         adapter.resetSelection()
     }
@@ -2794,7 +2797,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         totalSelectedAmount: BigDecimal,
         selectedCurrencySymbol: String,
         position: Int? = null,
-        isChangeingCurrencyFromOutside: Boolean? = false
+        isChangeingCurrencyFromOutside: Boolean? = true
     ) {
 
         /**
@@ -2851,9 +2854,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
         if (isChangeingCurrencyFromOutside == true) {
-            val userCurrency =
-                SharedPrefManager.getUserSupportedLocaleForTransactions(context)?.currency
-            isUserCurrencySameAsCurrencyOfApplication.value = userCurrency == selectedCurrency
+            isUserCurrencySameAsCurrencyOfApplication()
         }
 
 
@@ -2864,6 +2865,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             selectedCurrency,
             position = position,
         )
+    }
+
+    fun isUserCurrencySameAsCurrencyOfApplication(): Boolean? {
+        val userCurrency = SharedPrefManager.getUserSupportedLocaleForTransactions(context)?.currency
+        isUserCurrencySameAsCurrencyOfApplication.value = userCurrency ==PaymentDataSource.getSelectedCurrency()
+        return  isUserCurrencySameAsCurrencyOfApplication.value
     }
 
 
