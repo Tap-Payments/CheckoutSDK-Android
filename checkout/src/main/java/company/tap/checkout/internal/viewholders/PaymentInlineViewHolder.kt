@@ -1294,18 +1294,23 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
 
                 println("card brand value is>>>" + card.cardBrand)
 
-                val binLookupResponse: BINLookupResponse? =
-                    PaymentDataSource.getBinLookupResponse()
+                val binLookupResponse: BINLookupResponse? = PaymentDataSource.getBinLookupResponse()
                 // println("binLookupResponse" + binLookupResponse)
                 if (charSequence.length > 4) checkIfCardTypeExistInList(card.cardBrand)
                 if (PaymentDataSource.getCardType() != null && PaymentDataSource.getCardType() == CardType.ALL) {
 
-                    if(charSequence.length == 8) // added length check to avoid flickering
-                    setTabLayoutBasedOnApiResponse(binLookupResponse, card)
+                    if(charSequence.length ==8) // added length check to avoid flickering
+                   doAfterSpecificTime(time = 1400L){ //delay added as response from api needs time
+                       setTabLayoutBasedOnApiResponse(PaymentDataSource.getBinLookupResponse(), card)
+
+                   }
                 } else {
                     checkAllowedCardTypes(binLookupResponse)
                     if(charSequence.length == 8)// added length check to avoid flickering
-                    setTabLayoutBasedOnApiResponse(binLookupResponse, card)
+                        doAfterSpecificTime(time = 1400L){ //delay added as response from api needs time
+                            setTabLayoutBasedOnApiResponse(PaymentDataSource.getBinLookupResponse(), card)
+
+                        }
                 }
             }
             println("charSequence.le" + charSequence.length)
@@ -1341,7 +1346,7 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
         cardBrand: DefinedCardBrand
     ) {
 
-        if (_binLookupResponse?.cardBrand?.name == _binLookupResponse?.scheme?.name) {
+        if (_binLookupResponse?.cardBrand?.name.equals(_binLookupResponse?.scheme?.name , ignoreCase = true)) {
             // we will send card brand to validator
             _binLookupResponse?.cardBrand?.let { it1 ->
                 tabLayout.selectTab(
@@ -1351,11 +1356,11 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
 
             }
 
-                isDisabledBrandSelected =
+            isDisabledBrandSelected =
                     _disabledPaymentList?.any { it.brand.equals(_binLookupResponse?.cardBrand?.name, ignoreCase = true) }
 
             println("isDisabledBrandSelected > " + isDisabledBrandSelected)
-            println("isDisabledBrandSelecteddd > " + _disabledPaymentList)
+            println("isDisabledBrandSelecteddd > " + _disabledPaymentList?.get(2)?.brand)
             println("isDisabledBrandSelectedd > " + _binLookupResponse)
             if (itemsCardsList.isNotEmpty()) {
                 for (i in itemsCardsList.indices) {
@@ -1393,7 +1398,7 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
             _binLookupResponse?.scheme?.cardBrand?.let { it1 ->
                 tabLayout.selectTab(it1, false)
             }
-            isDisabledBrandSelected = _disabledPaymentList?.any { it.brand.equals(_binLookupResponse?.scheme?.cardBrand?.name, ignoreCase = true) }
+            isDisabledBrandSelected = _disabledPaymentList?.any { it.brand?.replace("_","").equals(_binLookupResponse?.scheme?.cardBrand?.name, ignoreCase = true) }
             println("isDisabledBrandSelected " + isDisabledBrandSelected)
             if (itemsCardsList.isNotEmpty()) {
                 for (i in itemsCardsList.indices) {
@@ -1761,7 +1766,6 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
                 }
                 ThemeMode.light.name->{
                     imageURL= disabledPaymentList[i].logos?.light?.disabled?.png?.toString().toString()
-                    //  disabledImageURL = disabledPaymentList[0].logos?.light?.disabled?.png.toString()
                 }
                 ThemeMode.light_mono.name->{
                     imageURL= disabledPaymentList[i].logos?.light_mono?.disabled?.png?.toString().toString()
