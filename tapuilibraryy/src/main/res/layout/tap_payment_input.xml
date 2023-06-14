@@ -86,6 +86,14 @@
         android:layout_marginEnd="2dp"
         android:layoutDirection="locale"
         android:layout_below="@+id/alertView"/>
+
+    <company.tap.tapuilibraryy.uikit.atoms.TapCurrencyControlWidget
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginBottom="@dimen/_4sdp"
+        android:id="@+id/tap_currency_widget_payment_inline"
+        />
     <company.tap.tapuilibraryy.uikit.views.TapSelectionTabLayout
         android:id="@+id/sections_tablayout"
         android:layout_width="wrap_content"
@@ -97,6 +105,8 @@
         android:clickable="false"
 
         />
+
+
 
 
 
