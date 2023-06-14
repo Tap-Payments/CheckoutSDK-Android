@@ -1273,8 +1273,6 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
 
             if (charSequence.length > 2) {
                 callCardBinNumberApi(charSequence, textWatcher)
-                if(card.cardBrand!=null)
-                    isDisabledBrandSelected = _disabledPaymentList?.any{ it.brand == card.cardBrand.rawValue}
 
             }else {
                 tabLayout.resetBehaviour()
@@ -1338,24 +1336,29 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
     }
 
     private fun setTabLayoutBasedOnApiResponse(
-        binLookupResponse: BINLookupResponse?,
+        _binLookupResponse: BINLookupResponse?,
         cardBrand: DefinedCardBrand
     ) {
 
-        if (binLookupResponse?.cardBrand?.name == binLookupResponse?.scheme?.name) {
+        if (_binLookupResponse?.cardBrand?.name == _binLookupResponse?.scheme?.name) {
             // we will send card brand to validator
-            binLookupResponse?.cardBrand?.let { it1 ->
+            _binLookupResponse?.cardBrand?.let { it1 ->
                 tabLayout.selectTab(
                     it1,
                     true
                 )
 
             }
+
+                isDisabledBrandSelected =
+                    _disabledPaymentList?.any { it.brand.equals(_binLookupResponse?.cardBrand?.name, ignoreCase = true) }
+
+            println("isDisabledBrandSelected > " + isDisabledBrandSelected)
             if (itemsCardsList.isNotEmpty()) {
                 for (i in itemsCardsList.indices) {
                     //   println("binLookupResponse>>>"+binLookupResponse?.cardBrand?.name)
                     //    println("selectedImageURL>>>"+itemsCardsList[i].selectedImageURL)
-                    if (binLookupResponse?.cardBrand?.name?.let {
+                    if (_binLookupResponse?.cardBrand?.name?.let {
                             itemsCardsList[i].selectedImageURL.contains(
                                 it
                             )
@@ -1364,7 +1367,7 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
 
                         tapCardInputView.setSingleCardInput(
                             CardBrandSingle.fromCode(
-                                binLookupResponse?.cardBrand.toString()
+                                _binLookupResponse?.cardBrand.toString()
                             ), selectedImageURL
                         )
 
@@ -1381,23 +1384,25 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
 //            tabLayout.setUnselectedAlphaLevel(0.5f)
         } else {
             //we will send scheme
-            schema = binLookupResponse?.scheme
+            schema = _binLookupResponse?.scheme
 
 
-            binLookupResponse?.scheme?.cardBrand?.let { it1 ->
+            _binLookupResponse?.scheme?.cardBrand?.let { it1 ->
                 tabLayout.selectTab(it1, false)
             }
+            isDisabledBrandSelected = _disabledPaymentList?.any { it.brand.equals(_binLookupResponse?.scheme?.cardBrand?.name, ignoreCase = true) }
+            println("isDisabledBrandSelected " + isDisabledBrandSelected)
             if (itemsCardsList.isNotEmpty()) {
                 for (i in itemsCardsList.indices) {
                     // println("binLookupResponse/////"+binLookupResponse?.scheme?.cardBrand?.name)
                     // println("selectedImageURL////"+itemsCardsList[i].selectedImageURL)
-                    if (binLookupResponse?.scheme?.cardBrand?.name?.toLowerCase()
+                    if (_binLookupResponse?.scheme?.cardBrand?.name?.toLowerCase()
                             ?.let { itemsCardsList[i].selectedImageURL?.contains(it) } == true
                     ) {
                         selectedImageURL = itemsCardsList[i].selectedImageURL
                         tapCardInputView.setSingleCardInput(
                             CardBrandSingle.fromCode(
-                                binLookupResponse?.scheme?.cardBrand.toString()
+                                _binLookupResponse?.scheme?.cardBrand.toString()
                             ), selectedImageURL
                         )
 
@@ -1412,6 +1417,8 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
 
         }
 
+
+        println("_disabledPaymentList " + _disabledPaymentList)
         // PaymentDataSource.setBinLookupResponse(null)
     }
 
@@ -1661,12 +1668,12 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
         itemsCardsList = ArrayList<SectionTabItem>()
         intertabLayout.removeAllTabs()
 
-        _enabledPaymentsList = enabledPaymentsList as MutableList<PaymentOption>
-        _disabledPaymentList = disabledPaymentList  as MutableList<PaymentOption>
+        _enabledPaymentsList = enabledPaymentsList.sortedBy { it.orderBy} as MutableList<PaymentOption>
+        _disabledPaymentList =  disabledPaymentList.sortedBy { it.orderBy}  as MutableList<PaymentOption>
         PaymentDataSource.setBinLookupResponse(null)
         /**
          * Sorted cardpayment types based on orderBY*/
-        decideTapSelection(enabledPaymentsList.sortedBy { it.orderBy}, itemsMobilesList, itemsCardsList , disabledPaymentList.sortedBy { it.orderBy})
+        decideTapSelection(_enabledPaymentsList as List<PaymentOption>, itemsMobilesList, itemsCardsList , _disabledPaymentList as List<PaymentOption>)
         /**
          * if there is only one payment method we will set visibility gone for tablayout
          * and set the payment method icon for inline input card
