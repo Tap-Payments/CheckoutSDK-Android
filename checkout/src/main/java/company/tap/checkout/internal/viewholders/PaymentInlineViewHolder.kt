@@ -144,7 +144,8 @@ class PaymentInlineViewHolder(
     var prevSetCardBrand: CardBrand? = CardBrand.unknown
     var isCVCLengthMax: Boolean? = false
     var isDisabledBrandSelected: Boolean? = false
-
+   var _enabledPaymentsList: MutableList<PaymentOption> ? = ArrayList()
+   var _disabledPaymentList: MutableList<PaymentOption> ? = ArrayList()
 
     init {
 
@@ -1268,11 +1269,12 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
             if (charSequence.length <=2) {
                 if (card.cardBrand != null)
                     logicTosetImageDynamic(card.cardBrand, charSequence.toString())
-
             }
 
             if (charSequence.length > 2) {
                 callCardBinNumberApi(charSequence, textWatcher)
+                if(card.cardBrand!=null)
+                    isDisabledBrandSelected = _disabledPaymentList?.any{ it.brand == card.cardBrand.rawValue}
 
             }else {
                 tabLayout.resetBehaviour()
@@ -1659,6 +1661,8 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
         itemsCardsList = ArrayList<SectionTabItem>()
         intertabLayout.removeAllTabs()
 
+        _enabledPaymentsList = enabledPaymentsList as MutableList<PaymentOption>
+        _disabledPaymentList = disabledPaymentList  as MutableList<PaymentOption>
         PaymentDataSource.setBinLookupResponse(null)
         /**
          * Sorted cardpayment types based on orderBY*/

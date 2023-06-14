@@ -4040,7 +4040,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     fun getAssetName(paymentOptionOb: PaymentOption?): String {
-        println("paymentOptionOb" + paymentOptionOb)
+      //  println("paymentOptionOb" + paymentOptionOb)
         var lang: String = "en"
         var theme: String = "light"
         if (CustomUtils.getCurrentLocale(context) != null) {
