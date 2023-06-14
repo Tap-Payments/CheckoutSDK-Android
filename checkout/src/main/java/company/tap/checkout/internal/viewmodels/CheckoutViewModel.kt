@@ -2865,6 +2865,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             selectedCurrency,
             position = position,
         )
+        filterViewModels(selectedCurrency)
     }
 
     fun isUserCurrencySameAsCurrencyOfApplication(): Boolean? {

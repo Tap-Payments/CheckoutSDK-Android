@@ -341,6 +341,7 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
             getPreTypedCardData()?.cvc
             savedCardsModel = null
             prevSetCardBrand = CardBrand.unknown
+            isDisabledBrandSelected = false
         }
     }
 
@@ -1354,6 +1355,8 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
                     _disabledPaymentList?.any { it.brand.equals(_binLookupResponse?.cardBrand?.name, ignoreCase = true) }
 
             println("isDisabledBrandSelected > " + isDisabledBrandSelected)
+            println("isDisabledBrandSelecteddd > " + _disabledPaymentList)
+            println("isDisabledBrandSelectedd > " + _binLookupResponse)
             if (itemsCardsList.isNotEmpty()) {
                 for (i in itemsCardsList.indices) {
                     //   println("binLookupResponse>>>"+binLookupResponse?.cardBrand?.name)
