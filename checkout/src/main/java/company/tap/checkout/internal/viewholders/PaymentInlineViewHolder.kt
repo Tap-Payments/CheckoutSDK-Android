@@ -1660,8 +1660,6 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
         PaymentDataSource.setBinLookupResponse(null)
         /**
          * Sorted cardpayment types based on orderBY*/
-        //totalList.addAll(enabledPaymentsList.sortedBy { it.orderBy})
-       // totalList.addAll(disabledPaymentList.sortedBy { it.orderBy})
         decideTapSelection(enabledPaymentsList.sortedBy { it.orderBy}, itemsMobilesList, itemsCardsList , disabledPaymentList.sortedBy { it.orderBy})
         /**
          * if there is only one payment method we will set visibility gone for tablayout
@@ -1724,26 +1722,7 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
             } else
                 enabledPaymentList[i].brand.toString()
 
-           /**
-            * was added for telecom payment types to be used future*/
-            /// set payment option object for all payment types and send it to paymentcompletion action function and i will pass it to show extra fees
-            /*      if (paymentType == PaymentType.telecom) {
-                      itemsMobilesList.add(
-                          SectionTabItem(
-                              imageURL, imageURL, CardBrand.valueOf(
-                                  cardBrandType
-                              )
-                          )
-                      )
-                  } else if (paymentType?.name == PaymentType.CARD.name) {
-                      itemsCardsList.add(
-                          SectionTabItem(
-                              imageURL,
-                              imageURL,
-                              CardBrand.valueOf(cardBrandType)
-                          )
-                      )
-                  }*/
+
 
             itemsCardsList.add(
                 SectionTabItem(
