@@ -9,6 +9,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.transition.Fade
 import android.transition.TransitionManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -47,6 +48,7 @@ import company.tap.tapcardvalidator_android.CardValidator
 import company.tap.tapcardvalidator_android.DefinedCardBrand
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibraryy.themekit.ThemeManager
+import company.tap.tapuilibraryy.uikit.atoms.TapCurrencyControlWidget
 import company.tap.tapuilibraryy.uikit.atoms.TapSeparatorView
 import company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
 import company.tap.tapuilibraryy.uikit.datasource.TapSwitchDataSource
@@ -59,6 +61,9 @@ import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 
 
+/**
+ * This class needed to be refactored ASAP :/
+ */
 @RequiresApi(Build.VERSION_CODES.N)
 class PaymentInlineViewHolder(
     private val context: Context,
@@ -73,7 +78,13 @@ class PaymentInlineViewHolder(
         LayoutInflater.from(context).inflate(R.layout.payment_inline_viewholder, null)
     override val type = SectionType.PAYMENT_INPUT
     var tabLayout: TapSelectionTabLayout = view.findViewById(R.id.sections_tablayout)
-     var intertabLayout: TabLayout = tabLayout.findViewById(R.id.tab_layout)
+    var intertabLayout: TabLayout = tabLayout.findViewById(R.id.tab_layout)
+    val tapCurrencyControlWidgetPaymentInline by lazy {
+        tapPaymentInput?.findViewById<TapCurrencyControlWidget>(
+            R.id.tap_currency_widget_payment_inline
+        )
+    }
+
 
     val paymentInputContainer: LinearLayout
 
@@ -83,7 +94,7 @@ class PaymentInlineViewHolder(
     private var lastFocusField = CardInputListener.FocusField.FOCUS_CARD
     private var lastCardInput = ""
     private var cardScannerBtn: ImageView? = null
-     var savedCardsModel: SavedCard? = null
+    var savedCardsModel: SavedCard? = null
 
 
     var tapCardInputView: InlineCardInput2
@@ -95,18 +106,17 @@ class PaymentInlineViewHolder(
     var mainLinear: LinearLayout? = null
 
     private var imageURL: String = ""
-    private var disabledImageURL: String = ""
     private var selectedImageURL: String = ""
 
     //  private  var paymentType: PaymentTypeEnum ?= null
     private var paymentType: PaymentType? = null
-     lateinit var cardBrandType: String
-     var cardNumber: String? = null
+    lateinit var cardBrandType: String
+    var cardNumber: String? = null
     private var fullCardNumber: String? = null
-     var expiryDate: String? = null
-     var cvvNumber: String? = null
-     var cardHolderName: String? = null
-    var cardBrandInString:String?=null
+    var expiryDate: String? = null
+    var cvvNumber: String? = null
+    var cardHolderName: String? = null
+    var cardBrandInString: String? = null
     private var cardHolderNamePrev: String? = null
     private var cvvNumberPrev: String? = null
     private var expiryDatePrev: String? = null
@@ -126,8 +136,8 @@ class PaymentInlineViewHolder(
     var saveForOtherCheckBox: CheckBox? = null
     var nfcButton: ImageView? = null
     var scannerButton: ImageView? = null
-    var touchLayer:View
-    var outerFrame:LinearLayout
+    var touchLayer: View
+    var outerFrame: LinearLayout
 
     var cardBrandView: CardBrandView? = null
     var closeButton: ImageView? = null
@@ -143,13 +153,11 @@ class PaymentInlineViewHolder(
     var saveLocalBinLookup: BINLookupResponse? = null
     var prevSetCardBrand: CardBrand? = CardBrand.unknown
     var isCVCLengthMax: Boolean? = false
-    var isDisabledBrandSelected: Boolean? = false
-   var _enabledPaymentsList: MutableList<PaymentOption> ? = ArrayList()
-   var _disabledPaymentList: MutableList<PaymentOption> ? = ArrayList()
+
 
     init {
 
-    //    tabLayout.setTabLayoutInterface(this)
+        //    tabLayout.setTabLayoutInterface(this)
         tapMobileInputView = TapMobilePaymentView(context, null)
         tapMobileInputView.setTapPaymentShowHideClearImage(this)
         tapCardInputView = InlineCardInput2(context, null)
@@ -171,7 +179,7 @@ class PaymentInlineViewHolder(
         tapInlineCardSwitch?.brandingLayout?.visibility = View.GONE
         tapPaymentInput?.separator?.visibility = View.GONE
         touchLayer = tapCardInputView?.findViewById(R.id.touch_layer_inside)
-outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
+        outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
         secondaryLayout = tapCardInputView.findViewById(R.id.secondary_Layout)
         textViewPowered = tapCardInputView.findViewById(R.id.textViewPowered)
         saveForOtherCheckBox = tapCardInputView.findViewById(R.id.saveForOtherCheckBox)
@@ -199,8 +207,6 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
         bindViewComponents()
 
     }
-
-
 
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -302,6 +308,7 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
             tapCardInputView.clear()
             closeButton?.visibility = View.GONE
             controlScannerOptions()
+            checkoutViewModel.dismisControlWidget()
             cardInputUIStatus = CardInputUIStatus.NormalCard
             /*tapCardInputView.setSingleCardInput(
                   CardBrandSingle.Unknown, null
@@ -341,10 +348,8 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
             getPreTypedCardData()?.cvc
             savedCardsModel = null
             prevSetCardBrand = CardBrand.unknown
-            isDisabledBrandSelected = false
         }
     }
-
 
 
     private fun initializeCardForm() {
@@ -352,7 +357,6 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
         nfcButton = view.findViewById(R.id.nfc_button)
         cardScannerBtn?.visibility = View.VISIBLE
         linearLayoutPay = view.findViewById(R.id.linear_paylayout)
-        // clearView.visibility = View.INVISIBLE
         closeButton?.visibility = View.GONE
 
 
@@ -403,26 +407,6 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
         checkoutViewModel.incrementalCount = 0
     }
 
-    private fun initMobileInput() {
-        tapMobileInputView.mobileNumber.doAfterTextChanged {
-            it?.let {
-                println("is this called")
-                if (it.isEmpty()) {
-                    closeButton?.visibility = View.INVISIBLE
-                } else {
-                    closeButton?.visibility = View.VISIBLE
-                }
-                //check if editable start with number of oridoo or zain etc
-                // onPaymentCardComplete.onPaycardSwitchAction(true, PaymentType.MOBILE)
-                if (tapMobileInputView.mobileNumber.text.length > 7)
-                    baseLayoutManager.displayOTPView(
-                        PaymentDataSource.getCustomer().getPhone(),
-                        PaymentTypeEnum.telecom.name
-                    )
-
-            }
-        }
-    }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initCardInput() {
@@ -439,7 +423,7 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
         switchCheckedState()
 
 
-   tapCardInputView.backArrow.setOnTouchListener(object : View.OnTouchListener {
+        tapCardInputView.backArrow.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
                 checkoutViewModel.setTitleNormalCard()
                 if (getPreTypedCardData() != null) setPrevTypedCard()
@@ -454,11 +438,11 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
 
     }
 
-     fun clearTextInput() {
+    fun clearTextInput() {
         tabLayout.resetBehaviour()
         cardInputUIStatus = CardInputUIStatus.NormalCard
         tabLayout.resetBehaviour()
-        tabLayout.getChildAt(0).minimumHeight = 15
+        tabLayout.getChildAt(0).minimumHeight = 2
         tapCardInputView.clear()
         closeButton?.visibility = View.GONE
         controlScannerOptions()
@@ -469,6 +453,7 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
         tabLayout.fadeVisibility(View.VISIBLE)
         intertabLayout.fadeVisibility(View.VISIBLE)
         acceptedCardText.fadeVisibility(View.VISIBLE)
+        checkoutViewModel.dismisControlWidget()
         checkoutViewModel.resetViewHolder()
         expiryDate = null
         cvvNumber = null
@@ -487,18 +472,18 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
                     it
                 )
             }
-            println("getPreTypedCardData()"+getPreTypedCardData()?.cvc)
+        println("getPreTypedCardData()" + getPreTypedCardData()?.cvc)
         val cardModel = company.tap.cardinputwidget2.Card(
             number = getPreTypedCardData()?.cardNumber,
             cvc = getPreTypedCardData()?.cvc,
-           expMonth =  getPreTypedCardData()?.expirationMonth?.toInt(),
-           expYear =  getPreTypedCardData()?.expirationYear?.toInt(),
+            expMonth = getPreTypedCardData()?.expirationMonth?.toInt(),
+            expYear = getPreTypedCardData()?.expirationYear?.toInt(),
             name = getPreTypedCardData()?.cardholderName,
             last4 = getPreTypedCardData()?.cardNumber?.length?.minus(4)
                 ?.let { getPreTypedCardData()?.cardNumber?.substring(it) },
             brand = company.tap.cardinputwidget2.CardBrand.fromCardNumber(getPreTypedCardData()?.cardNumber),
             metadata = null
-            )
+        )
 
 
 
@@ -531,20 +516,19 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
         shippingDetailView?.visibility = View.GONE
         tabLayout.fadeVisibility(View.GONE, 2000)
         intertabLayout.fadeVisibility(View.GONE, 2000)
-        savedCardsModel=null
-        if(getPreTypedCardData()!=null && getPreTypedCardData()?.cvc!=null){
+        savedCardsModel = null
+        if (getPreTypedCardData() != null && getPreTypedCardData()?.cvc != null) {
             tapAlertView?.fadeVisibility(View.GONE, 2000)
             tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
             onCvcComplete()
             checkoutViewModel.isSavedCardSelected = false
         }
         //Added for opening as soon as cvv focus
-      else  CustomUtils.showKeyboard(context)
+        else CustomUtils.showKeyboard(context)
     }
 
 
-    fun setNFCCardData(emvCard: TapEmvCard , month :Int , year :Int)
-    {
+    fun setNFCCardData(emvCard: TapEmvCard, month: Int, year: Int) {
         cardInputUIStatus = CardInputUIStatus.NormalCard
         val updateCardString: String = emvCard.cardNumber?.trim().toString()
             .substring(0, 6) + emvCard.cardNumber?.length?.minus(4)
@@ -553,12 +537,12 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
                     it
                 )
             }
-        println("updateCardString"+updateCardString)
+        println("updateCardString" + updateCardString)
 
         val cardModel = company.tap.cardinputwidget2.Card(
             emvCard?.cardNumber,
             null,
-          month,
+            month,
             year,
             emvCard.holderFirstname,
             null,
@@ -599,13 +583,13 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
 
            tapAlertView?.visibility =View.VISIBLE*/
 
-            val card = CardValidator.validate(emvCard?.cardNumber)
-            emvCard.cardNumber?.let {
-                logicTosetImageDynamic(
-                    card.cardBrand,
-                    it
-                )
-            }
+        val card = CardValidator.validate(emvCard?.cardNumber)
+        emvCard.cardNumber?.let {
+            logicTosetImageDynamic(
+                card.cardBrand,
+                it
+            )
+        }
 
 
         contactDetailsView?.visibility = View.GONE
@@ -613,16 +597,15 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
         tabLayout.fadeVisibility(View.GONE, 2000)
         intertabLayout.fadeVisibility(View.GONE, 2000)
 
-        fullCardNumber= emvCard.cardNumber
-       expiryDate = month.toString()+"/"+year.toString()
+        fullCardNumber = emvCard.cardNumber
+        expiryDate = month.toString() + "/" + year.toString()
         cardHolderName = emvCard.holderFirstname
         //Added for opening as soon as cvv focus
         CustomUtils.showKeyboard(context)
 
     }
 
-    fun setCardScanData(tapCard: TapCard, month :Int, year :Int)
-    {
+    fun setCardScanData(tapCard: TapCard, month: Int, year: Int) {
         cardInputUIStatus = CardInputUIStatus.NormalCard
         val cardModel = company.tap.cardinputwidget2.Card(
             tapCard.cardNumber,
@@ -662,7 +645,7 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
             cardHolderName = tapCard.cardHolder
 
         }
-        println("cardNumValidation is"+cardNumValidation)
+        println("cardNumValidation is" + cardNumValidation)
 
         tapCardInputView.setScanNFCCardDetails(cardModel, CardInputUIStatus.NormalCard)
         /*  val alertMessage:String = LocalizationManager.getValue("Warning", "Hints", "missingCVV")
@@ -670,13 +653,13 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
 
            tapAlertView?.visibility =View.VISIBLE*/
 
-            val card = CardValidator.validate(tapCard?.cardNumber)
-            tapCard.cardNumber?.let {
-                logicTosetImageDynamic(
-                    card.cardBrand,
-                    it
-                )
-            }
+        val card = CardValidator.validate(tapCard?.cardNumber)
+        tapCard.cardNumber?.let {
+            logicTosetImageDynamic(
+                card.cardBrand,
+                it
+            )
+        }
 
 
         contactDetailsView?.visibility = View.GONE
@@ -684,9 +667,9 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
         // intertabLayout.visibility = View.GONE
         tabLayout?.fadeVisibility(View.GONE, 2000)
         intertabLayout?.fadeVisibility(View.GONE, 2000)
-        println("tapCard val"+tapCard.cardNumber.trim())
-        fullCardNumber= tapCard.cardNumber
-        expiryDate = month.toString()+"/"+year.toString()
+        println("tapCard val" + tapCard.cardNumber.trim())
+        fullCardNumber = tapCard.cardNumber
+        expiryDate = month.toString() + "/" + year.toString()
         cardHolderName = tapCard.cardHolder
         //Added for opening as soon as cvv focus
         CustomUtils.showKeyboard(context)
@@ -699,6 +682,11 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
         } else if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("light")) {
             cardBrandView?.iconView?.setImageResource(R.drawable.card_icon_light)
         }
+    }
+
+    fun setCardBrandViewIcon(){
+        cardBrandView?.iconView?.setImageResource(R.drawable.card_icon_dark)
+
     }
 
     private fun cardHolderNameWatcher() {
@@ -723,7 +711,11 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
                 if (s.toString().length > 3) {
                     if (PaymentDataSource.getCardHolderNameShowHide()) {
                         // tapInlineCardSwitch?.visibility = View.VISIBLE
-                        tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
+                        if (isCardEnterdShouldBeDisabledPaymentOptions()){
+                            tapInlineCardSwitch?.cardviewSwitch?.visibility = (View.GONE)
+                        }else{
+                            tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
+                        }
                         contactDetailsView?.visibility = View.GONE //temp visible to gone
                         shippingDetailView?.visibility = View.GONE //temp visible to gone
                         allFieldsValid = true
@@ -735,27 +727,37 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
                 } else {
                     contactDetailsView?.visibility = View.GONE
                     shippingDetailView?.visibility = View.GONE
-                    // tapInlineCardSwitch?.visibility = View.GONE
+                    tapCurrencyControlWidgetPaymentInline?.fadeVisibility(View.GONE)
                     tapInlineCardSwitch?.fadeVisibility(View.GONE, 2000)
                 }
             }
 
             override fun afterTextChanged(s: Editable?) {
 
-                println("PaymentDataSource?.getBinLookupResponse()"+PaymentDataSource?.getBinLookupResponse())
-                println("cardHolderName>>"+cardHolderName)
+                println("PaymentDataSource?.getBinLookupResponse()" + PaymentDataSource?.getBinLookupResponse())
+                println("cardHolderName>>" + cardHolderName)
                 //On Details complete
                 if (s.toString().length > 3) {
-                    if(isCVCLengthMax == true)
-                    cardNumber?.let {
-                        expiryDate?.let { it1 ->
-                            if(PaymentDataSource.getBinLookupResponse()!=null)
-                            onPaymentCardComplete.onPayCardCompleteAction(
-                                true, PaymentType.CARD,
-                                it, it1, cvvNumber, cardHolderName ,PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
-                            )
+                    if (isCVCLengthMax == true)
+                        cardNumber?.let {
+                            expiryDate?.let { it1 ->
+                                if (PaymentDataSource.getBinLookupResponse() != null) {
+                                    cardBrandInString = PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
+                                    doOnCurrencySupported {
+                                        onPaymentCardComplete.onPayCardCompleteAction(
+                                            true,
+                                            PaymentType.CARD,
+                                            it,
+                                            it1,
+                                            cvvNumber,
+                                            cardHolderName,
+                                            PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
+                                        )
+                                    }
+                                }
+
+                            }
                         }
-                    }
                     Bugfender.d(
                         LogsModel.EVENT.name,
                         "Finished valid raw card data for:" + PaymentType.CARD
@@ -869,7 +871,7 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
                 "TapCardInputKit"
             )
         )
-        if(tapCardInputView.cardFormHasFocus) checkoutViewModel.resetViewHolder()
+        if (tapCardInputView.cardFormHasFocus) checkoutViewModel.resetViewHolder()
         tapCardInputView.setCardNumberTextWatcher(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
 
@@ -928,9 +930,9 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
                 mPreviousCount = count;
 
 
-                if (cardInputUIStatus != CardInputUIStatus.SavedCard ) {
+                if (cardInputUIStatus != CardInputUIStatus.SavedCard) {
                     onCardTextChange(s)
-                   cardNumAfterTextChangeListener(s.toString().trim(), this)
+                    cardNumAfterTextChangeListener(s.toString().trim(), this)
 
                 }
 
@@ -974,10 +976,11 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
         tapCardInputView.setExpiryDateTextWatcher(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
+
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if(!tapCardInputView.isExpDateValid){
+                if (!tapCardInputView.isExpDateValid) {
                     checkoutViewModel.unActivateActionButton()
-                    tapInlineCardSwitch?.visibility =View.GONE
+                    tapInlineCardSwitch?.visibility = View.GONE
                 }
 
             }
@@ -999,8 +1002,8 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
              */
             expiryDate = s.toString()
 
-            println("isExpDateValid>>>"+tapCardInputView.isExpDateValid)
-            if (s.length >= 5 ) {
+            println("isExpDateValid>>>" + tapCardInputView.isExpDateValid)
+            if (s.length >= 5) {
                 if (cardInputUIStatus?.equals(CardInputUIStatus.SavedCard) == true) {
                     tapAlertView?.fadeVisibility(View.GONE, 500)
                 } else {
@@ -1009,11 +1012,19 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
                         tapAlertView?.fadeVisibility(View.VISIBLE)
                         val alertMessage: String =
                             LocalizationManager.getValue("Warning", "Hints", "missingCVV")
-                        tapAlertView?.alertMessage?.text = alertMessage.replace("%i", "3")
-                    } else{
+                        cardBrandInString = PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
+                        Log.e("card",cardBrandInString.toString())
+                        if (cardBrandInString == "AMERICAN_EXPRESS"){
+                            tapAlertView?.alertMessage?.text = alertMessage.replace("%i", "4")
+                        }
+                        else{
+                            tapAlertView?.alertMessage?.text = alertMessage.replace("%i", "3")
+
+                        }
+                    } else {
                         checkoutViewModel.unActivateActionButton()
-                        tapInlineCardSwitch?.visibility =View.GONE
-                       // tapAlertView?.fadeVisibility(View.GONE, 500)
+                        tapInlineCardSwitch?.visibility = View.GONE
+                        // tapAlertView?.fadeVisibility(View.GONE, 500)
                     }
                 }
                 // tapAlertView?.visibility = View.VISIBLE
@@ -1021,7 +1032,7 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
                 // checkoutFragment.scrollView?.scrollTo(0,height)
                 tapInlineCardSwitch?.switchSaveCard?.isChecked = true
             } else {
-              tapAlertView?.fadeVisibility(View.GONE, 500)
+                tapAlertView?.fadeVisibility(View.GONE, 500)
             }
 
 
@@ -1078,29 +1089,30 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
                  */
                 cvvNumber = s.toString()
 
-                if (s?.trim()?.length == 3 || s?.trim()?.length == 4 && tapCardInputView.isExpDateValid) {
+                if (isCVCLengthMax == true && tapCardInputView.isExpDateValid) {
                     if (!PaymentDataSource.getCardHolderNameShowHide()) {
-                        var paymentTyper :PaymentType ?= PaymentType.CARD
-                        println("savedCardsModel   hhshhs"+savedCardsModel)
+                        var paymentTyper: PaymentType? = PaymentType.CARD
+                        println("savedCardsModel   hhshhs" + savedCardsModel)
 
-                        if(savedCardsModel ==null) {
+                        if (savedCardsModel == null) {
                             paymentTyper = PaymentType.CARD
-                        } else  paymentTyper = PaymentType.SavedCard
-                        println("paymentTyper   hhshhs"+paymentTyper)
+                        } else paymentTyper = PaymentType.SavedCard
+                        println("paymentTyper   hhshhs" + paymentTyper)
 
-                        if(!prevSetCardBrand?.name?.contains(CardBrand.unknown.name)!!)
+                        if (!prevSetCardBrand?.name?.contains(CardBrand.unknown.name)!!)
                             fullCardNumber.toString().let {
                                 expiryDate?.let { it1 ->
                                     cvvNumber?.let { it2 ->
-                                        if (savedCardsModel?.brand?.name == null){
-                                            cardBrandInString =  PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
-                                        }else{
+                                        if (savedCardsModel?.brand?.name == null) {
+                                            cardBrandInString =
+                                                PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
+                                        } else {
                                             cardBrandInString = savedCardsModel?.brand?.name
                                         }
                                         onPaymentCardComplete.onPayCardCompleteAction(
                                             true, paymentTyper,
-                                           // it, it1, it2, null,prevSetCardBrand?.toString() , savedCardsModel
-                                            it, it1, it2, null,cardBrandInString , savedCardsModel
+                                            // it, it1, it2, null,prevSetCardBrand?.toString() , savedCardsModel
+                                            it, it1, it2, null, cardBrandInString, savedCardsModel
                                         )
                                         tapInlineCardSwitch?.switchSaveCard?.isChecked = true
 
@@ -1112,34 +1124,31 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
 
                                     }
                                 }
-                            }else {
-                            if(isCVCLengthMax == true)
-                            cardNumber.toString().let {
-                                expiryDate?.let { it1 ->
-                                    cvvNumber?.let { it2 ->
-                                        cardBrandInString =  PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
-                                        //TODO: show the currency widget
-                                        onPaymentCardComplete.onPayCardCompleteAction(
-                                            true,
-                                            paymentTyper,
-                                            it,
-                                            it1,
-                                            it2,
-                                            null,
-                                            PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.rawValue,
-                                            savedCardsModel
-                                        )
-                                        tapInlineCardSwitch?.switchSaveCard?.isChecked = true
-
-                                        tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
-                                        Bugfender.d(
-                                            CustomUtils.tagEvent,
-                                            "Finished valid raw card data for:" + PaymentType.CARD
-                                        )
-
+                            } else {
+                            if (isCVCLengthMax == true)
+                                cardNumber.toString().let {
+                                    expiryDate?.let { it1 ->
+                                        cvvNumber?.let { it2 ->
+                                            cardBrandInString =
+                                                PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
+                                            doOnCurrencySupported {
+                                                onPaymentCardComplete.onPayCardCompleteAction(
+                                                    true,
+                                                    paymentTyper,
+                                                    it,
+                                                    it1,
+                                                    it2,
+                                                    null,
+                                                    cardBrandInString,
+                                                    savedCardsModel
+                                                )
+                                                tapInlineCardSwitch?.switchSaveCard?.isChecked =
+                                                    true
+                                                tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
+                                            }
+                                        }
                                     }
                                 }
-                            }
                         }
                         allFieldsValid = true
 
@@ -1149,7 +1158,6 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
                                 tapCardInputView.holderNameEnabled = true
                                 tapCardInputView.setVisibilityOfHolderField(PaymentDataSource.getCardHolderNameShowHide())
                                 onFocusChange(CardInputListener.FocusField.FOCUS_HOLDERNAME)
-                                // tapCardInputView.separatorcard2.visibility = View.VISIBLE
                                 separator1?.visibility = View.VISIBLE
                                 if (PaymentDataSource.getDefaultCardHolderName()
                                         ?.isNotEmpty() == true || PaymentDataSource.getDefaultCardHolderName()
@@ -1170,47 +1178,61 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
                     tapAlertView?.visibility = View.GONE
 
                     if (cardInputUIStatus != null && cardInputUIStatus == CardInputUIStatus.SavedCard) {
-                        println("avedCardsModel?.brand?.name"+savedCardsModel?.brand?.name)
                         tapAlertView?.fadeVisibility(View.GONE, 500)
-                        //  tapCardInputView.setVisibilityOfHolderField(false)
                         tapCardInputView.holderNameEnabled = false
                         separator1?.visibility = View.GONE
-                        //tapCardInputView.separatorcard2.visibility = View.INVISIBLE
                         tapInlineCardSwitch?.visibility = View.GONE
 
-                        if (s.trim().length == 3 || s.trim().length == 4) {
-                            if(savedCardsModel!=null){
-                                if(isCVCLengthMax == true)
-                                onPaymentCardComplete.onPayCardSwitchAction(
-                                    true, PaymentType.SavedCard , savedCardsModel?.brand?.name
-                                )
-                               // if(isCVCLengthMax == true) //check
+                        if (s?.trim()?.length == 3 || s?.trim()?.length == 4) {
+                            if (savedCardsModel != null) {
+                                if (isCVCLengthMax == true)
+                                    onPaymentCardComplete.onPayCardSwitchAction(
+                                        true, PaymentType.SavedCard, savedCardsModel?.brand?.name
+                                    )
+                                // if(isCVCLengthMax == true) //check
                                 cardNumber?.let {
                                     expiryDate?.let { it1 ->
                                         cardBrandInString = savedCardsModel?.brand?.name
 
                                         onPaymentCardComplete.onPayCardCompleteAction(
-                                            true, PaymentType.SavedCard,
-                                            it, it1, cvvNumber!!, cardHolderName, savedCardsModel?.brand?.name ,savedCardsModel
+                                            true,
+                                            PaymentType.SavedCard,
+                                            it,
+                                            it1,
+                                            cvvNumber!!,
+                                            cardHolderName,
+                                            savedCardsModel?.brand?.name,
+                                            savedCardsModel
                                         )
                                     }
                                 }
-                            }else {
-                                cardBrandInString = PaymentDataSource?.getBinLookupResponse()?.cardBrand?.toString()
-                                if(isCVCLengthMax == true)
-                                onPaymentCardComplete.onPayCardSwitchAction(
-                                    true, PaymentType.CARD , PaymentDataSource?.getBinLookupResponse()?.cardBrand?.toString()
-                                )
-                                if(isCVCLengthMax == true)
-                                cardNumber?.let {
-                                    expiryDate?.let { it1 ->
-                                        //TODO: show the currency widget
-                                        onPaymentCardComplete.onPayCardCompleteAction(
-                                            true, PaymentType.CARD,
-                                            it, it1, cvvNumber!!, cardHolderName, PaymentDataSource?.getBinLookupResponse()?.cardBrand?.toString() ,null
-                                        )
+                            } else {
+                                cardBrandInString =
+                                    PaymentDataSource?.getBinLookupResponse()?.cardBrand?.toString()
+                                if (isCVCLengthMax == true)
+                                    onPaymentCardComplete.onPayCardSwitchAction(
+                                        true,
+                                        PaymentType.CARD,
+                                        PaymentDataSource?.getBinLookupResponse()?.cardBrand?.toString()
+                                    )
+                                if (isCVCLengthMax == true)
+                                    cardNumber?.let {
+                                        expiryDate?.let { it1 ->
+                                            //TODO: show the currency widget
+//                                        onPaymentCardComplete.onPaymentCompletedShowingCurrencyWidget(PaymentDataSource?.getBinLookupResponse()?.cardBrand?.toString().toString()
+//                                        )
+                                            onPaymentCardComplete.onPayCardCompleteAction(
+                                                true,
+                                                PaymentType.CARD,
+                                                it,
+                                                it1,
+                                                cvvNumber!!,
+                                                cardHolderName,
+                                                PaymentDataSource?.getBinLookupResponse()?.cardBrand?.toString(),
+                                                null
+                                            )
+                                        }
                                     }
-                                }
                             }
                             tapAlertView?.fadeVisibility(View.GONE, 500)
                             CustomUtils.hideKeyboardFrom(context, view)
@@ -1226,17 +1248,16 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
                     cvvNumberPrev = s.toString()
                 } else {
 
-                    if(cardInputUIStatus == CardInputUIStatus.NormalCard)
+                    if (cardInputUIStatus == CardInputUIStatus.NormalCard)
                         onPaymentCardComplete.onPayCardSwitchAction(
-                        false, PaymentType.CARD
-                    )else {
+                            false, PaymentType.CARD
+                        ) else {
                         onPaymentCardComplete.onPayCardSwitchAction(
                             false, PaymentType.SavedCard
                         )
 
                     }
-                    isCVCLengthMax= false
-                    //  tapAlertView?.visibility = View.VISIBLE
+                    isCVCLengthMax = false
 
 
                 }
@@ -1267,15 +1288,16 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
             baseLayoutManager.resetViewHolder()
 
 
-            if (charSequence.length <=2) {
+            if (charSequence.length <= 2) {
                 if (card.cardBrand != null)
                     logicTosetImageDynamic(card.cardBrand, charSequence.toString())
+
             }
 
             if (charSequence.length > 2) {
                 callCardBinNumberApi(charSequence, textWatcher)
 
-            }else {
+            } else {
                 tabLayout.resetBehaviour()
                 PaymentDataSource.setBinLookupResponse(null)
             }
@@ -1297,15 +1319,15 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
                 val binLookupResponse: BINLookupResponse? =
                     PaymentDataSource.getBinLookupResponse()
                 // println("binLookupResponse" + binLookupResponse)
-                if (charSequence.length > 4) checkIfCardTypeExistInList(card.cardBrand)
+                //  if (charSequence.length > 4) checkIfCardTypeExistInList(card.cardBrand)
                 if (PaymentDataSource.getCardType() != null && PaymentDataSource.getCardType() == CardType.ALL) {
 
-                    if(charSequence.length == 8) // added length check to avoid flickering
-                    setTabLayoutBasedOnApiResponse(binLookupResponse, card)
+                    if (charSequence.length == 8) // added length check to avoid flickering
+                        setTabLayoutBasedOnApiResponse(binLookupResponse, card)
                 } else {
                     checkAllowedCardTypes(binLookupResponse)
-                    if(charSequence.length == 8)// added length check to avoid flickering
-                    setTabLayoutBasedOnApiResponse(binLookupResponse, card)
+                    if (charSequence.length == 8)// added length check to avoid flickering
+                        setTabLayoutBasedOnApiResponse(binLookupResponse, card)
                 }
             }
             println("charSequence.le" + charSequence.length)
@@ -1326,51 +1348,44 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
             shouldShowScannerOptions = it.isEmpty()
             controlScannerOptions()
             cardBrandDetection(charSequence.toString())
-            if (card != null) checkValidationState(card,charSequence.toString(),textWatcher)
+            if (card != null) checkValidationState(card, charSequence.toString(), textWatcher)
         }
-         if(charSequence.toString().isEmpty()){
-             tapCardInputView.setSingleCardInput(
-                 CardBrandSingle.Unknown, null
-             )
-         }
+        if (charSequence.toString().isEmpty()) {
+            tapCardInputView.setSingleCardInput(
+                CardBrandSingle.Unknown, null
+            )
+        }
 
     }
 
     private fun setTabLayoutBasedOnApiResponse(
-        _binLookupResponse: BINLookupResponse?,
+        binLookupResponse: BINLookupResponse?,
         cardBrand: DefinedCardBrand
     ) {
 
-        if (_binLookupResponse?.cardBrand?.name == _binLookupResponse?.scheme?.name) {
+        if (binLookupResponse?.cardBrand?.name == binLookupResponse?.scheme?.name) {
             // we will send card brand to validator
-            _binLookupResponse?.cardBrand?.let { it1 ->
+            binLookupResponse?.cardBrand?.let { it1 ->
                 tabLayout.selectTab(
                     it1,
                     true
                 )
 
             }
-
-                isDisabledBrandSelected =
-                    _disabledPaymentList?.any { it.brand.equals(_binLookupResponse?.cardBrand?.name, ignoreCase = true) }
-
-            println("isDisabledBrandSelected > " + isDisabledBrandSelected)
-            println("isDisabledBrandSelecteddd > " + _disabledPaymentList)
-            println("isDisabledBrandSelectedd > " + _binLookupResponse)
             if (itemsCardsList.isNotEmpty()) {
                 for (i in itemsCardsList.indices) {
                     //   println("binLookupResponse>>>"+binLookupResponse?.cardBrand?.name)
                     //    println("selectedImageURL>>>"+itemsCardsList[i].selectedImageURL)
-                    if (_binLookupResponse?.cardBrand?.name?.let {
+                    if (binLookupResponse?.cardBrand?.name?.let {
                             itemsCardsList[i].selectedImageURL.contains(
                                 it
                             )
-                        } == true  ) {
+                        } == true) {
                         selectedImageURL = itemsCardsList[i].selectedImageURL
 
                         tapCardInputView.setSingleCardInput(
                             CardBrandSingle.fromCode(
-                                _binLookupResponse?.cardBrand.toString()
+                                binLookupResponse?.cardBrand.toString()
                             ), selectedImageURL
                         )
 
@@ -1382,35 +1397,31 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
             }
 
 
-
-
 //            tabLayout.setUnselectedAlphaLevel(0.5f)
         } else {
             //we will send scheme
-            schema = _binLookupResponse?.scheme
+            schema = binLookupResponse?.scheme
 
 
-            _binLookupResponse?.scheme?.cardBrand?.let { it1 ->
+            binLookupResponse?.scheme?.cardBrand?.let { it1 ->
                 tabLayout.selectTab(it1, false)
             }
-            isDisabledBrandSelected = _disabledPaymentList?.any { it.brand.equals(_binLookupResponse?.scheme?.cardBrand?.name, ignoreCase = true) }
-            println("isDisabledBrandSelected " + isDisabledBrandSelected)
             if (itemsCardsList.isNotEmpty()) {
                 for (i in itemsCardsList.indices) {
                     // println("binLookupResponse/////"+binLookupResponse?.scheme?.cardBrand?.name)
                     // println("selectedImageURL////"+itemsCardsList[i].selectedImageURL)
-                    if (_binLookupResponse?.scheme?.cardBrand?.name?.toLowerCase()
+                    if (binLookupResponse?.scheme?.cardBrand?.name?.toLowerCase()
                             ?.let { itemsCardsList[i].selectedImageURL?.contains(it) } == true
                     ) {
                         selectedImageURL = itemsCardsList[i].selectedImageURL
                         tapCardInputView.setSingleCardInput(
                             CardBrandSingle.fromCode(
-                                _binLookupResponse?.scheme?.cardBrand.toString()
+                                binLookupResponse?.scheme?.cardBrand.toString()
                             ), selectedImageURL
                         )
 
                         tabLayout?.visibility = View.GONE
-                      tapAlertView?.fadeVisibility(View.GONE, 500)
+                        tapAlertView?.fadeVisibility(View.GONE, 500)
 
                     }
                 }
@@ -1420,8 +1431,6 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
 
         }
 
-
-        println("_disabledPaymentList " + _disabledPaymentList)
         // PaymentDataSource.setBinLookupResponse(null)
     }
 
@@ -1443,7 +1452,11 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
     }
 
 
-    private fun checkValidationState(card: DefinedCardBrand, charSequence :String,textWatcher :TextWatcher) {
+    private fun checkValidationState(
+        card: DefinedCardBrand,
+        charSequence: String,
+        textWatcher: TextWatcher
+    ) {
         if (card.cardBrand != null)
             when (card.validationState) {
 
@@ -1453,8 +1466,8 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
                         tapCardInputView.setSingleCardInput(
                             CardBrandSingle.Unknown, null
                         )
-                       // tabLayout.selectTab(card.cardBrand, false)
-                    tapAlertView?.fadeVisibility(View.VISIBLE,1000)
+                    // tabLayout.selectTab(card.cardBrand, false)
+                    tapAlertView?.fadeVisibility(View.VISIBLE, 1000)
                     tapAlertView?.alertMessage?.text =
                         (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
                     cardNumValidation = false
@@ -1467,27 +1480,29 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
                     cardNumValidation = false
                 }
                 CardValidationState.valid -> {
-                    if (schema != null){
-                        schema?.cardBrand?.let { tabLayout.selectTab(it, true)
-                          if( PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand != null)
-                              PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.let { it1 ->
-                                  logicTosetImageDynamic(
-                                      it1, charSequence.toString())
-                              }
+                    if (schema != null) {
+                        schema?.cardBrand?.let {
+                            tabLayout.selectTab(it, true)
+                            if (PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand != null)
+                                PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.let { it1 ->
+                                    logicTosetImageDynamic(
+                                        it1, charSequence.toString()
+                                    )
+                                }
                         }
-                    }else{
+                    } else {
                         logicTosetImageDynamic(card.cardBrand, charSequence.toString())
                         tabLayout.selectTab(card.cardBrand, true)
                     }
 
-                    tapAlertView?.fadeVisibility(View.VISIBLE,1000)
+                    tapAlertView?.fadeVisibility(View.VISIBLE, 1000)
                     tapAlertView?.alertMessage?.text =
                         (LocalizationManager.getValue("Warning", "Hints", "missingExpiryCVV"))
 
 
                     intertabLayout.visibility = View.GONE
                     tabLayout.visibility = View.GONE
-                    acceptedCardText.visibility = View.INVISIBLE
+                    acceptedCardText.visibility = View.GONE
                     cardNumValidation = true
                 }
                 else -> {
@@ -1537,18 +1552,6 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
         //  position?.let { swapInputViews(it) }
     }
 
-    private fun swapInputViews(position: Int) {
-        // TransitionManager.beginDelayedTransition(paymentLayoutContainer, Fade())
-        TransitionManager.beginDelayedTransition(paymentInputContainer, Fade())
-        paymentInputContainer.removeAllViews()
-        if (position == 0) {
-            println("call 1")
-            swapInputViewsPosition0()
-        } else {
-            swapInputViewsPositionNot0()
-        }
-        tabPosition = position
-    }
 
     private fun swapInputViewsPositionNot0() {
         selectedType = PaymentTypeEnum.telecom
@@ -1596,32 +1599,40 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
 
     override fun onCvcComplete() {
         checkoutViewModel.onPayCardCompleteAction(
-            true,PaymentType.CARD,fullCardNumber,expiryDatePrev,cvvNumberPrev,cardHolderNamePrev,prevSetCardBrand?.toString(),null
+            true,
+            PaymentType.CARD,
+            fullCardNumber,
+            expiryDatePrev,
+            cvvNumberPrev,
+            cardHolderNamePrev,
+            prevSetCardBrand?.toString(),
+            null
         )
     }
+
     override fun cardFormHasFocus(hasFocus: Boolean) {
 
-       checkoutViewModel.resetViewHolder()
+        checkoutViewModel.resetViewHolder()
     }
 
     override fun cvvFieldHasFocus(hasFocus: Boolean) {
-       
-        if(hasFocus){
+
+        if (hasFocus) {
             tapAlertView?.fadeVisibility(View.GONE, 500)
-        }else {
-            if(cvvNumber!=null)
-            if(cvvNumber?.length!! <3) {
-                tapAlertView?.fadeVisibility(View.VISIBLE)
-                val alertMessage: String =
-                    LocalizationManager.getValue("Warning", "Hints", "missingCVV")
-                tapAlertView?.alertMessage?.text = alertMessage.replace("%i", "3")
-            }
+        } else {
+            if (cvvNumber != null)
+                if (cvvNumber?.length!! < 3) {
+                    tapAlertView?.fadeVisibility(View.VISIBLE)
+                    val alertMessage: String =
+                        LocalizationManager.getValue("Warning", "Hints", "missingCVV")
+                    tapAlertView?.alertMessage?.text = alertMessage.replace("%i", "3")
+                }
 
         }
     }
 
     override fun isCVCValid(isValid: Boolean) {
-        println("isCVCValid ss"+isValid)
+        println("isCVCValid ss" + isValid)
         isCVCLengthMax = isValid
 
     }
@@ -1634,12 +1645,13 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
     }
 
 
-
     override fun onFocusChange(focusField: String) {
         lastFocusField = focusField
 
         println("lastFocusField>>>>" + lastFocusField)
-        if(focusField == "focus_cardholder" && cardHolderName.isNullOrEmpty()) CustomUtils.showKeyboard(context)
+        if (focusField == "focus_cardholder" && cardHolderName.isNullOrEmpty()) CustomUtils.showKeyboard(
+            context
+        )
 
 
     }
@@ -1662,21 +1674,25 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
      * @param enabledPaymentsList represents the images of payment methods.
      * */
     @RequiresApi(Build.VERSION_CODES.N)
-    fun setDataFromAPI(enabledPaymentsList: List<PaymentOption> ,  disabledPaymentList :List<PaymentOption>) {
+    fun setDataFromAPI(
+        enabledPaymentsList: List<PaymentOption>,
+        disabledPaymentList: List<PaymentOption>
+    ) {
         println("enabledPaymentsList>>" + enabledPaymentsList)
 //        tabLayout.resetBehaviour()
 
         val itemsMobilesList = ArrayList<SectionTabItem>()
-        val totalList  : MutableList<PaymentOption> = ArrayList()
+        val totalList: MutableList<PaymentOption> = ArrayList()
         itemsCardsList = ArrayList<SectionTabItem>()
         intertabLayout.removeAllTabs()
 
-        _enabledPaymentsList = enabledPaymentsList.sortedBy { it.orderBy} as MutableList<PaymentOption>
-        _disabledPaymentList =  disabledPaymentList.sortedBy { it.orderBy}  as MutableList<PaymentOption>
         PaymentDataSource.setBinLookupResponse(null)
         /**
          * Sorted cardpayment types based on orderBY*/
-        decideTapSelection(_enabledPaymentsList as List<PaymentOption>, itemsMobilesList, itemsCardsList , _disabledPaymentList as List<PaymentOption>)
+        decideTapSelection(
+            enabledPaymentsList.sortedBy { it.orderBy },
+            itemsCardsList,
+            disabledPaymentList.sortedBy { it.orderBy })
         /**
          * if there is only one payment method we will set visibility gone for tablayout
          * and set the payment method icon for inline input card
@@ -1707,28 +1723,27 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
 
     private fun decideTapSelection(
         enabledPaymentList: List<PaymentOption>,
-        itemsMobilesList: ArrayList<SectionTabItem>,
         itemsCardsList: ArrayList<SectionTabItem>,
         disabledPaymentList: List<PaymentOption>
     ) {
-        println("enabledPaymentList>>"+enabledPaymentList.size)
-        println("disabledPaymentList>>"+disabledPaymentList.size)
+        println("enabledPaymentList>>" + enabledPaymentList.size)
+        println("disabledPaymentList>>" + disabledPaymentList.size)
 
         for (i in enabledPaymentList.indices) {
-            when(CustomUtils.getCurrentTheme()){
-                ThemeMode.dark.name->{
-                   imageURL= enabledPaymentList[i].logos?.dark?.png?.toString().toString()
+            when (CustomUtils.getCurrentTheme()) {
+                ThemeMode.dark.name -> {
+                    imageURL = enabledPaymentList[i].logos?.dark?.png?.toString().toString()
                 }
 
-                ThemeMode.dark_colored.name->{
-                    imageURL= enabledPaymentList[i].logos?.dark_colored?.png?.toString().toString()
+                ThemeMode.dark_colored.name -> {
+                    imageURL = enabledPaymentList[i].logos?.dark_colored?.png?.toString().toString()
                 }
-                ThemeMode.light.name->{
-                    imageURL= enabledPaymentList[i].logos?.light?.png?.toString().toString()
-                  //  disabledImageURL = disabledPaymentList[0].logos?.light?.disabled?.png.toString()
+                ThemeMode.light.name -> {
+                    imageURL = enabledPaymentList[i].logos?.light?.png?.toString().toString()
+                    //  disabledImageURL = disabledPaymentList[0].logos?.light?.disabled?.png.toString()
                 }
-                ThemeMode.light_mono.name->{
-                    imageURL= enabledPaymentList[i].logos?.light_mono?.png?.toString().toString()
+                ThemeMode.light_mono.name -> {
+                    imageURL = enabledPaymentList[i].logos?.light_mono?.png?.toString().toString()
                 }
             }
             // imageURL = imageURLApi[i].image.toString()
@@ -1749,41 +1764,47 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
             )
         }
 
-        if(disabledPaymentList.isNotEmpty())
+        if (disabledPaymentList.isNotEmpty())
             for (i in disabledPaymentList.indices) {
-            when(CustomUtils.getCurrentTheme()){
-                ThemeMode.dark.name->{
-                    imageURL= disabledPaymentList[i].logos?.dark?.disabled?.png?.toString().toString()
-                }
+                when (CustomUtils.getCurrentTheme()) {
+                    ThemeMode.dark.name -> {
+                        imageURL =
+                            disabledPaymentList[i].logos?.dark?.disabled?.png?.toString().toString()
+                    }
 
-                ThemeMode.dark_colored.name->{
-                    imageURL= disabledPaymentList[i].logos?.dark_colored?.disabled?.png?.toString().toString()
+                    ThemeMode.dark_colored.name -> {
+                        imageURL =
+                            disabledPaymentList[i].logos?.dark_colored?.disabled?.png?.toString()
+                                .toString()
+                    }
+                    ThemeMode.light.name -> {
+                        imageURL = disabledPaymentList[i].logos?.light?.disabled?.png?.toString()
+                            .toString()
+                        //  disabledImageURL = disabledPaymentList[0].logos?.light?.disabled?.png.toString()
+                    }
+                    ThemeMode.light_mono.name -> {
+                        imageURL =
+                            disabledPaymentList[i].logos?.light_mono?.disabled?.png?.toString()
+                                .toString()
+                    }
                 }
-                ThemeMode.light.name->{
-                    imageURL= disabledPaymentList[i].logos?.light?.disabled?.png?.toString().toString()
-                    //  disabledImageURL = disabledPaymentList[0].logos?.light?.disabled?.png.toString()
-                }
-                ThemeMode.light_mono.name->{
-                    imageURL= disabledPaymentList[i].logos?.light_mono?.disabled?.png?.toString().toString()
-                }
-            }
-            // imageURL = imageURLApi[i].image.toString()
-            paymentType = disabledPaymentList[i].paymentType
-            cardBrandType = if (disabledPaymentList[i].brand == null) {
-                "unknown"
-            } else
-                disabledPaymentList[i].brand.toString()
+                // imageURL = imageURLApi[i].image.toString()
+                paymentType = disabledPaymentList[i].paymentType
+                cardBrandType = if (disabledPaymentList[i].brand == null) {
+                    "unknown"
+                } else
+                    disabledPaymentList[i].brand.toString()
 
 
-            itemsCardsList.add(
-                SectionTabItem(
-                    imageURL,
-                    imageURL,
-                    CardBrand.fromString(cardBrandType)
+                itemsCardsList.add(
+                    SectionTabItem(
+                        imageURL,
+                        imageURL,
+                        CardBrand.fromString(cardBrandType)
+                    )
                 )
-            )
-                
-        }
+
+            }
     }
 
 
@@ -1794,6 +1815,25 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
             //  closeButton?.visibility = View.GONE
             tapAlertView?.fadeVisibility(View.GONE, 500)
         }
+    }
+
+
+    fun TapBaseViewHolder.doOnCurrencySupported(onCurrencySupported: () -> Unit) {
+
+        if (isCardEnterdShouldBeDisabledPaymentOptions()) {
+            onPaymentCardComplete.onPaymentCompletedShowingCurrencyWidget(
+                cardBrandInString.toString()
+            )
+        } else {
+            onCurrencySupported.invoke()
+        }
+    }
+
+    fun isCardEnterdShouldBeDisabledPaymentOptions(): Boolean {
+        val isCardEnterdDisabledPaymentOption = checkoutViewModel.getDisabledCardPaymentList(
+            PaymentDataSource.getSelectedCurrency().toString()
+        ).any { it.brand == PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue }
+        return isCardEnterdDisabledPaymentOption
     }
 
     fun getCard(): CreateTokenCard? {
@@ -1862,19 +1902,19 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
     fun checkAllowedCardTypes(binLookupResponse: BINLookupResponse?) {
         if (binLookupResponse != null && PaymentDataSource?.getCardType().toString() != null) {
             if (PaymentDataSource.getCardType().toString() != binLookupResponse.cardType) {
-                CustomUtils.showDialog(
-                  /*  LocalizationManager.getValue(
-                        "alertUnsupportedCardTitle",
-                        "AlertBox"
-                    ),*/
-                    title = "Alert",
-                   // LocalizationManager.getValue("alertUnsupportedCardMessage", "AlertBox"),
-                    messageString = "Card Not supported",
-                    context = context,
-                    btnType = 1,
-                    baseLayoutManager =  baseLayoutManager,
-                    cardTypeDialog = true
-                )
+//                CustomUtils.showDialog(
+//                  /*  LocalizationManager.getValue(
+//                        "alertUnsupportedCardTitle",
+//                        "AlertBox"
+//                    ),*/
+//                    title = "Alert",
+//                   // LocalizationManager.getValue("alertUnsupportedCardMessage", "AlertBox"),
+//                    messageString = "Card Not supported",
+//                    context = context,
+//                    btnType = 1,
+//                    baseLayoutManager =  baseLayoutManager,
+//                    cardTypeDialog = true
+//                )
 
             }
         }
@@ -1892,7 +1932,7 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
 
         if (cardBrand != null && !cardBrandArrayList.contains(cardBrand.name)) {
             clearCardInputAction()
-          //  tapCardInputView.clear()
+            //  tapCardInputView.clear()
             tabLayout.resetBehaviour()
             /*CustomUtils.showDialog(
                 LocalizationManager.getValue(
@@ -1910,9 +1950,9 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
             CustomUtils.showDialog(
                 title = "alert",
                 messageString = "cardnot supported",
-                context=context,
+                context = context,
                 btnType = 1,
-               baseLayoutManager= baseLayoutManager,
+                baseLayoutManager = baseLayoutManager,
                 cardTypeDialog = true
             )
 
@@ -1978,18 +2018,18 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
            tapAlertView?.alertMessage?.text =alertMessage.replace("%i","3")
 
            tapAlertView?.visibility =View.VISIBLE*/
-        var loadUrlString : String ?=""
-        when(CustomUtils.getCurrentTheme()){
-            ThemeMode.dark.name->{
+        var loadUrlString: String? = ""
+        when (CustomUtils.getCurrentTheme()) {
+            ThemeMode.dark.name -> {
                 loadUrlString = _savedCardsModel.logos?.dark?.png
             }
-            ThemeMode.dark_colored.name->{
+            ThemeMode.dark_colored.name -> {
                 loadUrlString = _savedCardsModel.logos?.dark_colored?.png
             }
-            ThemeMode.light.name->{
+            ThemeMode.light.name -> {
                 loadUrlString = _savedCardsModel.logos?.light?.png
             }
-            ThemeMode.light_mono.name->{
+            ThemeMode.light_mono.name -> {
                 loadUrlString = _savedCardsModel.logos?.light_mono?.png
             }
         }
@@ -2157,7 +2197,6 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
     }
 
 
-
     fun hideViewONScanNFC() {
         intertabLayout.visibility = View.GONE
         tabLayout.visibility = View.GONE
@@ -2165,7 +2204,6 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
         tapCardInputView.onTouchView()
 
     }
-
 
 
 }
