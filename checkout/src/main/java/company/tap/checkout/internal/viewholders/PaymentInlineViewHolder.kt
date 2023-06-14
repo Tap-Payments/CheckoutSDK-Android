@@ -143,6 +143,7 @@ class PaymentInlineViewHolder(
     var saveLocalBinLookup: BINLookupResponse? = null
     var prevSetCardBrand: CardBrand? = CardBrand.unknown
     var isCVCLengthMax: Boolean? = false
+    var isDisabledBrandSelected: Boolean? = false
 
 
     init {
@@ -1734,7 +1735,8 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
             )
         }
 
-        for (i in disabledPaymentList.indices) {
+        if(disabledPaymentList.isNotEmpty())
+            for (i in disabledPaymentList.indices) {
             when(CustomUtils.getCurrentTheme()){
                 ThemeMode.dark.name->{
                     imageURL= disabledPaymentList[i].logos?.dark?.disabled?.png?.toString().toString()
@@ -1766,6 +1768,7 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
                     CardBrand.fromString(cardBrandType)
                 )
             )
+                
         }
     }
 
