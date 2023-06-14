@@ -153,7 +153,9 @@ class PaymentInlineViewHolder(
     var saveLocalBinLookup: BINLookupResponse? = null
     var prevSetCardBrand: CardBrand? = CardBrand.unknown
     var isCVCLengthMax: Boolean? = false
-
+    var isDisabledBrandSelected: Boolean? = false
+    var _enabledPaymentsList: MutableList<PaymentOption> ? = ArrayList()
+    var _disabledPaymentList: MutableList<PaymentOption> ? = ArrayList()
 
     init {
 
@@ -1364,13 +1366,13 @@ class PaymentInlineViewHolder(
     }
 
     private fun setTabLayoutBasedOnApiResponse(
-        binLookupResponse: BINLookupResponse?,
+        _binLookupResponse: BINLookupResponse?,
         cardBrand: DefinedCardBrand
     ) {
 
         if (_binLookupResponse?.cardBrand?.name.equals(_binLookupResponse?.scheme?.name , ignoreCase = true)) {
             // we will send card brand to validator
-            binLookupResponse?.cardBrand?.let { it1 ->
+            _binLookupResponse?.cardBrand?.let { it1 ->
                 tabLayout.selectTab(
                     it1,
                     true
@@ -1388,7 +1390,7 @@ class PaymentInlineViewHolder(
                 for (i in itemsCardsList.indices) {
                     //   println("binLookupResponse>>>"+binLookupResponse?.cardBrand?.name)
                     //    println("selectedImageURL>>>"+itemsCardsList[i].selectedImageURL)
-                    if (binLookupResponse?.cardBrand?.name?.let {
+                    if (_binLookupResponse?.cardBrand?.name?.let {
                             itemsCardsList[i].selectedImageURL.contains(
                                 it
                             )
@@ -1397,7 +1399,7 @@ class PaymentInlineViewHolder(
 
                         tapCardInputView.setSingleCardInput(
                             CardBrandSingle.fromCode(
-                                binLookupResponse?.cardBrand.toString()
+                                _binLookupResponse?.cardBrand.toString()
                             ), selectedImageURL
                         )
 
@@ -1412,10 +1414,10 @@ class PaymentInlineViewHolder(
 //            tabLayout.setUnselectedAlphaLevel(0.5f)
         } else {
             //we will send scheme
-            schema = binLookupResponse?.scheme
+            schema = _binLookupResponse?.scheme
 
 
-            binLookupResponse?.scheme?.cardBrand?.let { it1 ->
+            _binLookupResponse?.scheme?.cardBrand?.let { it1 ->
                 tabLayout.selectTab(it1, false)
             }
             isDisabledBrandSelected = _disabledPaymentList?.any { it.brand?.replace("_","").equals(_binLookupResponse?.scheme?.cardBrand?.name, ignoreCase = true) }
@@ -1424,13 +1426,13 @@ class PaymentInlineViewHolder(
                 for (i in itemsCardsList.indices) {
                     // println("binLookupResponse/////"+binLookupResponse?.scheme?.cardBrand?.name)
                     // println("selectedImageURL////"+itemsCardsList[i].selectedImageURL)
-                    if (binLookupResponse?.scheme?.cardBrand?.name?.toLowerCase()
+                    if (_binLookupResponse?.scheme?.cardBrand?.name?.toLowerCase()
                             ?.let { itemsCardsList[i].selectedImageURL?.contains(it) } == true
                     ) {
                         selectedImageURL = itemsCardsList[i].selectedImageURL
                         tapCardInputView.setSingleCardInput(
                             CardBrandSingle.fromCode(
-                                binLookupResponse?.scheme?.cardBrand.toString()
+                                _binLookupResponse?.scheme?.cardBrand.toString()
                             ), selectedImageURL
                         )
 
@@ -1699,14 +1701,13 @@ class PaymentInlineViewHolder(
         val totalList: MutableList<PaymentOption> = ArrayList()
         itemsCardsList = ArrayList<SectionTabItem>()
         intertabLayout.removeAllTabs()
+        _enabledPaymentsList = enabledPaymentsList.sortedBy { it.orderBy} as MutableList<PaymentOption>
+        _disabledPaymentList =  disabledPaymentList.sortedBy { it.orderBy}  as MutableList<PaymentOption>
 
         PaymentDataSource.setBinLookupResponse(null)
         /**
          * Sorted cardpayment types based on orderBY*/
-        decideTapSelection(
-            enabledPaymentsList.sortedBy { it.orderBy },
-            itemsCardsList,
-            disabledPaymentList.sortedBy { it.orderBy })
+        decideTapSelection(_enabledPaymentsList as List<PaymentOption>, itemsMobilesList, itemsCardsList ,_disabledPaymentList as List<PaymentOption>)
         /**
          * if there is only one payment method we will set visibility gone for tablayout
          * and set the payment method icon for inline input card
@@ -1737,27 +1738,28 @@ class PaymentInlineViewHolder(
 
     private fun decideTapSelection(
         enabledPaymentList: List<PaymentOption>,
+        itemsMobilesList: ArrayList<SectionTabItem>,
         itemsCardsList: ArrayList<SectionTabItem>,
         disabledPaymentList: List<PaymentOption>
     ) {
-        println("enabledPaymentList>>" + enabledPaymentList.size)
-        println("disabledPaymentList>>" + disabledPaymentList.size)
+        println("enabledPaymentList>>"+enabledPaymentList.size)
+        println("disabledPaymentList>>"+disabledPaymentList.size)
 
         for (i in enabledPaymentList.indices) {
-            when (CustomUtils.getCurrentTheme()) {
-                ThemeMode.dark.name -> {
-                    imageURL = enabledPaymentList[i].logos?.dark?.png?.toString().toString()
+            when(CustomUtils.getCurrentTheme()){
+                ThemeMode.dark.name->{
+                    imageURL= enabledPaymentList[i].logos?.dark?.png?.toString().toString()
                 }
 
-                ThemeMode.dark_colored.name -> {
-                    imageURL = enabledPaymentList[i].logos?.dark_colored?.png?.toString().toString()
+                ThemeMode.dark_colored.name->{
+                    imageURL= enabledPaymentList[i].logos?.dark_colored?.png?.toString().toString()
                 }
-                ThemeMode.light.name -> {
-                    imageURL = enabledPaymentList[i].logos?.light?.png?.toString().toString()
+                ThemeMode.light.name->{
+                    imageURL= enabledPaymentList[i].logos?.light?.png?.toString().toString()
                     //  disabledImageURL = disabledPaymentList[0].logos?.light?.disabled?.png.toString()
                 }
-                ThemeMode.light_mono.name -> {
-                    imageURL = enabledPaymentList[i].logos?.light_mono?.png?.toString().toString()
+                ThemeMode.light_mono.name->{
+                    imageURL= enabledPaymentList[i].logos?.light_mono?.png?.toString().toString()
                 }
             }
             // imageURL = imageURLApi[i].image.toString()
@@ -1778,22 +1780,22 @@ class PaymentInlineViewHolder(
             )
         }
 
-        if (disabledPaymentList.isNotEmpty())
+        if(disabledPaymentList.isNotEmpty())
             for (i in disabledPaymentList.indices) {
-                when (CustomUtils.getCurrentTheme()) {
-                    ThemeMode.dark.name -> {
-                        imageURL =
-                            disabledPaymentList[i].logos?.dark?.disabled?.png?.toString().toString()
+                when(CustomUtils.getCurrentTheme()){
+                    ThemeMode.dark.name->{
+                        imageURL= disabledPaymentList[i].logos?.dark?.disabled?.png?.toString().toString()
                     }
 
-                ThemeMode.dark_colored.name->{
-                    imageURL= disabledPaymentList[i].logos?.dark_colored?.disabled?.png?.toString().toString()
-                }
-                ThemeMode.light.name->{
-                    imageURL= disabledPaymentList[i].logos?.light?.disabled?.png?.toString().toString()
-                }
-                ThemeMode.light_mono.name->{
-                    imageURL= disabledPaymentList[i].logos?.light_mono?.disabled?.png?.toString().toString()
+                    ThemeMode.dark_colored.name->{
+                        imageURL= disabledPaymentList[i].logos?.dark_colored?.disabled?.png?.toString().toString()
+                    }
+                    ThemeMode.light.name->{
+                        imageURL= disabledPaymentList[i].logos?.light?.disabled?.png?.toString().toString()
+                    }
+                    ThemeMode.light_mono.name->{
+                        imageURL= disabledPaymentList[i].logos?.light_mono?.disabled?.png?.toString().toString()
+                    }
                 }
                 // imageURL = imageURLApi[i].image.toString()
                 paymentType = disabledPaymentList[i].paymentType
@@ -1814,101 +1816,101 @@ class PaymentInlineViewHolder(
             }
     }
 
-
-    override fun showHideClearImage(show: Boolean) {
-        if (show) {
-            // closeButton?.visibility = View.VISIBLE  hiding for mobile view
-        } else {
-            //  closeButton?.visibility = View.GONE
-            tapAlertView?.fadeVisibility(View.GONE, 500)
-        }
-    }
-
-
-    fun TapBaseViewHolder.doOnCurrencySupported(onCurrencySupported: () -> Unit) {
-
-        if (isCardEnterdShouldBeDisabledPaymentOptions()) {
-            onPaymentCardComplete.onPaymentCompletedShowingCurrencyWidget(
-                cardBrandInString.toString()
-            )
-        } else {
-            onCurrencySupported.invoke()
-        }
-    }
-
-    fun isCardEnterdShouldBeDisabledPaymentOptions(): Boolean {
-        val isCardEnterdDisabledPaymentOption = checkoutViewModel.getDisabledCardPaymentList(
-            PaymentDataSource.getSelectedCurrency().toString()
-        ).any { it.brand == PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue }
-        return isCardEnterdDisabledPaymentOption
-    }
-
-    fun getCard(): CreateTokenCard? {
-        val number: String? = fullCardNumber
-        val expiryDate: String? = expiryDate
-        val cvc: String? = cvvNumber
-        //temporrary    val cardholderName: String? = cardholderName
-        var cardholderName: String? = null
-        if (PaymentDataSource.getDefaultCardHolderName() != null) {
-            cardholderName = PaymentDataSource.getDefaultCardHolderName()
-            tapCardInputView.setCardHolderName(cardholderName)
-        } else {
-            cardholderName = "cardholderName"
-        }
-        // val cardholderName: String = "cardholder"
-        return if (number == null || expiryDate == null || cvc == null) {
-            null
-        } else {
-            val dateParts: List<String> = expiryDate.split("/")
-
-            return dateParts.get(0).let {
-                CreateTokenCard(
-                    number.replace(" ", ""),
-                    it,
-                    dateParts[1],
-                    cvc,
-                    cardholderName, null
-                )
+        override fun showHideClearImage(show: Boolean) {
+            if (show) {
+                // closeButton?.visibility = View.VISIBLE  hiding for mobile view
+            } else {
+                //  closeButton?.visibility = View.GONE
+                tapAlertView?.fadeVisibility(View.GONE, 500)
             }
         }
-        // TODO: Add address handling here.
-    }
 
-    fun getPreTypedCardData(): NormalCardData? {
-        val number: String? = fullCardNumber
-        val expiryDate: String? = expiryDatePrev
-        val cvc: String? = cvvNumberPrev
-        val holderName: String? = cardHolderNamePrev
 
-        return if (number == null || expiryDate == null || cvc == null) {
-            null
-        } else {
-            val dateParts: List<String> = expiryDate.split("/")
+        fun TapBaseViewHolder.doOnCurrencySupported(onCurrencySupported: () -> Unit) {
 
-            return dateParts.get(0).let {
-                cvvNumberPrev?.let { it1 ->
-                    NormalCardData(
+            if (isCardEnterdShouldBeDisabledPaymentOptions()) {
+                onPaymentCardComplete.onPaymentCompletedShowingCurrencyWidget(
+                    cardBrandInString.toString()
+                )
+            } else {
+                onCurrencySupported.invoke()
+            }
+        }
+
+        fun isCardEnterdShouldBeDisabledPaymentOptions(): Boolean {
+            val isCardEnterdDisabledPaymentOption = checkoutViewModel.getDisabledCardPaymentList(
+                PaymentDataSource.getSelectedCurrency().toString()
+            )
+                .any { it.brand == PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue }
+            return isCardEnterdDisabledPaymentOption
+        }
+
+        fun getCard(): CreateTokenCard? {
+            val number: String? = fullCardNumber
+            val expiryDate: String? = expiryDate
+            val cvc: String? = cvvNumber
+            //temporrary    val cardholderName: String? = cardholderName
+            var cardholderName: String? = null
+            if (PaymentDataSource.getDefaultCardHolderName() != null) {
+                cardholderName = PaymentDataSource.getDefaultCardHolderName()
+                tapCardInputView.setCardHolderName(cardholderName)
+            } else {
+                cardholderName = "cardholderName"
+            }
+            // val cardholderName: String = "cardholder"
+            return if (number == null || expiryDate == null || cvc == null) {
+                null
+            } else {
+                val dateParts: List<String> = expiryDate.split("/")
+
+                return dateParts.get(0).let {
+                    CreateTokenCard(
                         number.replace(" ", ""),
                         it,
                         dateParts[1],
-                        it1,
-                        holderName
+                        cvc,
+                        cardholderName, null
                     )
                 }
             }
+            // TODO: Add address handling here.
         }
 
-    }
+        fun getPreTypedCardData(): NormalCardData? {
+            val number: String? = fullCardNumber
+            val expiryDate: String? = expiryDatePrev
+            val cvc: String? = cvvNumberPrev
+            val holderName: String? = cardHolderNamePrev
+
+            return if (number == null || expiryDate == null || cvc == null) {
+                null
+            } else {
+                val dateParts: List<String> = expiryDate.split("/")
+
+                return dateParts.get(0).let {
+                    cvvNumberPrev?.let { it1 ->
+                        NormalCardData(
+                            number.replace(" ", ""),
+                            it,
+                            dateParts[1],
+                            it1,
+                            holderName
+                        )
+                    }
+                }
+            }
+
+        }
 
 
-    fun setCurrentBinData(binLookupResponse: BINLookupResponse?) {
-        //  cardNumberWatcher()
-        cardSchema = binLookupResponse?.scheme.toString()
-    }
+        fun setCurrentBinData(binLookupResponse: BINLookupResponse?) {
+            //  cardNumberWatcher()
+            cardSchema = binLookupResponse?.scheme.toString()
+        }
 
-    fun checkAllowedCardTypes(binLookupResponse: BINLookupResponse?) {
-        if (binLookupResponse != null && PaymentDataSource?.getCardType().toString() != null) {
-            if (PaymentDataSource.getCardType().toString() != binLookupResponse.cardType) {
+        fun checkAllowedCardTypes(binLookupResponse: BINLookupResponse?) {
+            if (binLookupResponse != null && PaymentDataSource?.getCardType().toString() != null) {
+                if (PaymentDataSource.getCardType().toString() != binLookupResponse.cardType) {
 //                CustomUtils.showDialog(
 //                  /*  LocalizationManager.getValue(
 //                        "alertUnsupportedCardTitle",
@@ -1923,25 +1925,25 @@ class PaymentInlineViewHolder(
 //                    cardTypeDialog = true
 //                )
 
+                }
             }
+
         }
 
-    }
+        private fun checkIfCardTypeExistInList(cardBrand: CardBrand?) {
+            val cardBrandArrayList = ArrayList<String>()
 
-    private fun checkIfCardTypeExistInList(cardBrand: CardBrand?) {
-        val cardBrandArrayList = ArrayList<String>()
+            for (i in 0 until itemsCardsList.size) {
+                cardBrandArrayList.add(itemsCardsList[i].type.name)
+            }
+            // println("cardBrand is>>"+cardBrand?.name)
+            // println("cardBrandArrayList is>>"+cardBrandArrayList)
 
-        for (i in 0 until itemsCardsList.size) {
-            cardBrandArrayList.add(itemsCardsList[i].type.name)
-        }
-        // println("cardBrand is>>"+cardBrand?.name)
-        // println("cardBrandArrayList is>>"+cardBrandArrayList)
-
-        if (cardBrand != null && !cardBrandArrayList.contains(cardBrand.name)) {
-            clearCardInputAction()
-            //  tapCardInputView.clear()
-            tabLayout.resetBehaviour()
-            /*CustomUtils.showDialog(
+            if (cardBrand != null && !cardBrandArrayList.contains(cardBrand.name)) {
+                clearCardInputAction()
+                //  tapCardInputView.clear()
+                tabLayout.resetBehaviour()
+                /*CustomUtils.showDialog(
                 LocalizationManager.getValue(
                     "alertUnsupportedCardTitle",
                     "AlertBox"
@@ -1954,263 +1956,267 @@ class PaymentInlineViewHolder(
                 null,
                 true
             )*/
-            CustomUtils.showDialog(
-                title = "alert",
-                messageString = "cardnot supported",
-                context = context,
-                btnType = 1,
-                baseLayoutManager = baseLayoutManager,
-                cardTypeDialog = true
+                CustomUtils.showDialog(
+                    title = "alert",
+                    messageString = "cardnot supported",
+                    context = context,
+                    btnType = 1,
+                    baseLayoutManager = baseLayoutManager,
+                    cardTypeDialog = true
+                )
+
+            }
+        }
+
+
+        fun maskCardNumber(cardInput: String): String {
+            val maskLen: Int = cardInput.length - 4
+            if (maskLen <= 0) return cardInput // Nothing to mask
+            return (cardInput).replaceRange(0, maskLen, "•••• ")
+        }
+
+        private fun maskCardNumber2(cardInput: String): String {
+            val maskLen: Int = cardInput.length - 4
+            if (maskLen <= 0) return cardInput // Nothing to mask
+            return (cardInput).replaceRange(0, 6, "•••• ")
+        }
+
+        /**
+         * here when user enter CVV in input Credit Card
+         */
+        fun setDataForSavedCard(_savedCardsModel: SavedCard, cardInputUIStatus: CardInputUIStatus) {
+            println("cardInputUIStatus>>" + cardInputUIStatus)
+            tapCardInputView.holderNameEnabled = false
+            // tapCardInputView.setVisibilityOfHolderField(false)
+            this.cardInputUIStatus = cardInputUIStatus
+            this.savedCardsModel = _savedCardsModel
+            val cardModel = company.tap.cardinputwidget2.Card(
+                maskCardNumber2(_savedCardsModel.firstSix + _savedCardsModel.lastFour),
+                null,
+                _savedCardsModel.expiry?.month?.toInt(),
+                _savedCardsModel.expiry?.year?.toInt(),
+                _savedCardsModel.cardholderName,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                _savedCardsModel.lastFour,
+                company.tap.cardinputwidget2.CardBrand.fromCardNumber(_savedCardsModel.firstSix),
+                null,
+                null,
+                _savedCardsModel.currency,
+                _savedCardsModel.customer,
+                null,
+                null
             )
 
-        }
-    }
-
-
-    fun maskCardNumber(cardInput: String): String {
-        val maskLen: Int = cardInput.length - 4
-        if (maskLen <= 0) return cardInput // Nothing to mask
-        return (cardInput).replaceRange(0, maskLen, "•••• ")
-    }
-
-    private fun maskCardNumber2(cardInput: String): String {
-        val maskLen: Int = cardInput.length - 4
-        if (maskLen <= 0) return cardInput // Nothing to mask
-        return (cardInput).replaceRange(0, 6, "•••• ")
-    }
-
-    /**
-     * here when user enter CVV in input Credit Card
-     */
-    fun setDataForSavedCard(_savedCardsModel: SavedCard, cardInputUIStatus: CardInputUIStatus) {
-        println("cardInputUIStatus>>" + cardInputUIStatus)
-        tapCardInputView.holderNameEnabled = false
-        // tapCardInputView.setVisibilityOfHolderField(false)
-        this.cardInputUIStatus = cardInputUIStatus
-        this.savedCardsModel = _savedCardsModel
-        val cardModel = company.tap.cardinputwidget2.Card(
-            maskCardNumber2(_savedCardsModel.firstSix + _savedCardsModel.lastFour),
-            null,
-            _savedCardsModel.expiry?.month?.toInt(),
-            _savedCardsModel.expiry?.year?.toInt(),
-            _savedCardsModel.cardholderName,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            _savedCardsModel.lastFour,
-            company.tap.cardinputwidget2.CardBrand.fromCardNumber(_savedCardsModel.firstSix),
-            null,
-            null,
-            _savedCardsModel.currency,
-            _savedCardsModel.customer,
-            null,
-            null
-        )
-
-        expiryDate = _savedCardsModel.expiry?.month + "/" + _savedCardsModel.expiry?.year
-        println("expiryDate saved" + expiryDate)
-        //  tapCardInputView.isSavedCard = true
-        /* tapCardInputView.updateIconCvc(
+            expiryDate = _savedCardsModel.expiry?.month + "/" + _savedCardsModel.expiry?.year
+            println("expiryDate saved" + expiryDate)
+            //  tapCardInputView.isSavedCard = true
+            /* tapCardInputView.updateIconCvc(
              false,
              cvvNumber,
              company.tap.cardinputwidget.CardBrand.fromCardNumber(_savedCardsModel.firstSix)
          )*/
-        tapCardInputView.setSavedCardDetails(cardModel, cardInputUIStatus)
-        /*  val alertMessage:String = LocalizationManager.getValue("Warning", "Hints", "missingCVV")
+            tapCardInputView.setSavedCardDetails(cardModel, cardInputUIStatus)
+            /*  val alertMessage:String = LocalizationManager.getValue("Warning", "Hints", "missingCVV")
            tapAlertView?.alertMessage?.text =alertMessage.replace("%i","3")
 
            tapAlertView?.visibility =View.VISIBLE*/
-        var loadUrlString: String? = ""
-        when (CustomUtils.getCurrentTheme()) {
-            ThemeMode.dark.name -> {
-                loadUrlString = _savedCardsModel.logos?.dark?.png
+            var loadUrlString: String? = ""
+            when (CustomUtils.getCurrentTheme()) {
+                ThemeMode.dark.name -> {
+                    loadUrlString = _savedCardsModel.logos?.dark?.png
+                }
+                ThemeMode.dark_colored.name -> {
+                    loadUrlString = _savedCardsModel.logos?.dark_colored?.png
+                }
+                ThemeMode.light.name -> {
+                    loadUrlString = _savedCardsModel.logos?.light?.png
+                }
+                ThemeMode.light_mono.name -> {
+                    loadUrlString = _savedCardsModel.logos?.light_mono?.png
+                }
             }
-            ThemeMode.dark_colored.name -> {
-                loadUrlString = _savedCardsModel.logos?.dark_colored?.png
-            }
-            ThemeMode.light.name -> {
-                loadUrlString = _savedCardsModel.logos?.light?.png
-            }
-            ThemeMode.light_mono.name -> {
-                loadUrlString = _savedCardsModel.logos?.light_mono?.png
-            }
-        }
-        tapCardInputView.setSingleCardInput(
-            CardBrandSingle.fromCode(
-                company.tap.cardinputwidget2.CardBrand.fromCardNumber(_savedCardsModel.firstSix)
-                    .toString()
-            ), loadUrlString
-        )
-        tapInlineCardSwitch?.visibility = View.GONE
-        separator1?.visibility = View.GONE
-        acceptedCardText.visibility = View.INVISIBLE
-        contactDetailsView?.visibility = View.GONE
-        shippingDetailView?.visibility = View.GONE
-        //  intertabLayout.visibility = View.GONE
-        tabLayout.fadeVisibility(View.GONE, 2000)
-        //Added for opening as soon as cvv focus
-        CustomUtils.showKeyboard(context)
-    }
-
-    fun getSavedCardData(): CreateTokenSavedCard? {
-        return if (savedCardsModel == null && PaymentDataSource.getCustomer().identifier != null) {
-            null
-        } else {
-            CreateTokenSavedCard(
-                savedCardsModel?.id,
-                PaymentDataSource.getCustomer().identifier
+            tapCardInputView.setSingleCardInput(
+                CardBrandSingle.fromCode(
+                    company.tap.cardinputwidget2.CardBrand.fromCardNumber(_savedCardsModel.firstSix)
+                        .toString()
+                ), loadUrlString
             )
+            tapInlineCardSwitch?.visibility = View.GONE
+            separator1?.visibility = View.GONE
+            acceptedCardText.visibility = View.INVISIBLE
+            contactDetailsView?.visibility = View.GONE
+            shippingDetailView?.visibility = View.GONE
+            //  intertabLayout.visibility = View.GONE
+            tabLayout.fadeVisibility(View.GONE, 2000)
+            //Added for opening as soon as cvv focus
+            CustomUtils.showKeyboard(context)
+        }
 
+        fun getSavedCardData(): CreateTokenSavedCard? {
+            return if (savedCardsModel == null && PaymentDataSource.getCustomer().identifier != null) {
+                null
+            } else {
+                CreateTokenSavedCard(
+                    savedCardsModel?.id,
+                    PaymentDataSource.getCustomer().identifier
+                )
+
+
+            }
 
         }
 
-    }
-
-    fun resetPaymentCardView() {
+        fun resetPaymentCardView() {
 
 
-        tapCardInputView.clearFocus()
-        tapCardInputView.clear()
-        closeButton?.visibility = View.GONE
-        controlScannerOptions()
-        cardInputUIStatus = CardInputUIStatus.NormalCard
-        checkoutViewModel.setTitleNormalCard()
-        /*tapCardInputView.setSingleCardInput(
+            tapCardInputView.clearFocus()
+            tapCardInputView.clear()
+            closeButton?.visibility = View.GONE
+            controlScannerOptions()
+            cardInputUIStatus = CardInputUIStatus.NormalCard
+            checkoutViewModel.setTitleNormalCard()
+            /*tapCardInputView.setSingleCardInput(
               CardBrandSingle.Unknown, null
           )*/
-        tapInlineCardSwitch?.visibility = View.GONE
-        // tapCardInputView.separatorcard2.visibility = View.INVISIBLE
-        separator1?.visibility = View.GONE
-        // resetCardBrandIcon()
-        if (PaymentDataSource.getBinLookupResponse() != null) {
-            PaymentDataSource.setBinLookupResponse(null)
+            tapInlineCardSwitch?.visibility = View.GONE
+            // tapCardInputView.separatorcard2.visibility = View.INVISIBLE
+            separator1?.visibility = View.GONE
+            // resetCardBrandIcon()
+            if (PaymentDataSource.getBinLookupResponse() != null) {
+                PaymentDataSource.setBinLookupResponse(null)
 
-        }
-        if (getPreTypedCardData()?.cardholderName != null) {
-            tapCardInputView.setVisibilityOfHolderField(false)
-            tapCardInputView.holderNameEnabled = false
-        }
-        if (getPreTypedCardData() != null) {
-            getPreTypedCardData()?.cardholderName = null
-            getPreTypedCardData()?.cardNumber = null
-            getPreTypedCardData()?.expirationYear = null
-            getPreTypedCardData()?.expirationMonth = null
-            getPreTypedCardData()?.cvc = null
+            }
+            if (getPreTypedCardData()?.cardholderName != null) {
+                tapCardInputView.setVisibilityOfHolderField(false)
+                tapCardInputView.holderNameEnabled = false
+            }
+            if (getPreTypedCardData() != null) {
+                getPreTypedCardData()?.cardholderName = null
+                getPreTypedCardData()?.cardNumber = null
+                getPreTypedCardData()?.expirationYear = null
+                getPreTypedCardData()?.expirationMonth = null
+                getPreTypedCardData()?.cvc = null
 
-        }
+            }
 
 
-        /*  if(tapCardInputView.fullCardNumber!=null){
+            /*  if(tapCardInputView.fullCardNumber!=null){
               tapCardInputView.fullCardNumber= null
               tabLayout.resetBehaviour()
           }*/
 
-        tapInlineCardSwitch?.saveForOtherCheckBox?.isChecked = false
-        tapInlineCardSwitch?.switchSaveCard?.isChecked = false
-        contactDetailsView?.visibility = View.GONE
-        shippingDetailView?.visibility = View.GONE
-        closeButton?.visibility = View.GONE
-        // tapCardInputView.setVisibilityOfHolderField(false)
-        tapCardInputView.holderNameEnabled = false
-        checkoutViewModel.incrementalCount = 0
-        //  tabLayout.visibility =View.VISIBLE
-        //   intertabLayout.visibility =View.VISIBLE
-        allFieldsValid = false
-        tapAlertView?.fadeVisibility(View.GONE, 500)
-        //  acceptedCardText.visibility = View.VISIBLE
-        tabLayout.fadeVisibility(View.VISIBLE)
-        acceptedCardText.fadeVisibility(View.VISIBLE)
-        intertabLayout.fadeVisibility(View.VISIBLE)
+            tapInlineCardSwitch?.saveForOtherCheckBox?.isChecked = false
+            tapInlineCardSwitch?.switchSaveCard?.isChecked = false
+            contactDetailsView?.visibility = View.GONE
+            shippingDetailView?.visibility = View.GONE
+            closeButton?.visibility = View.GONE
+            // tapCardInputView.setVisibilityOfHolderField(false)
+            tapCardInputView.holderNameEnabled = false
+            checkoutViewModel.incrementalCount = 0
+            //  tabLayout.visibility =View.VISIBLE
+            //   intertabLayout.visibility =View.VISIBLE
+            allFieldsValid = false
+            tapAlertView?.fadeVisibility(View.GONE, 500)
+            //  acceptedCardText.visibility = View.VISIBLE
+            tabLayout.fadeVisibility(View.VISIBLE)
+            acceptedCardText.fadeVisibility(View.VISIBLE)
+            intertabLayout.fadeVisibility(View.VISIBLE)
 
-
-    }
-
-    fun logicTosetImageDynamic(card: CardBrand, cardCharSeq: String) {
-        for (i in itemsCardsList.indices) {
-
-            if (itemsCardsList[i].selectedImageURL != null && itemsCardsList[i].selectedImageURL.contentEquals(
-                    "dark"
-                )
-            ) {
-                val iconStr = itemsCardsList[i].selectedImageURL.replace(
-                    "https://tap-assets.b-cdn.net/payment-options/v2/dark/",
-                    ""
-                )
-                if (iconStr.replace(".png", "").toLowerCase().contains(card.name.toLowerCase())) {
-                    tapCardInputView.setSingleCardInput(
-                        CardBrandSingle.fromCode(card.name), itemsCardsList[i].selectedImageURL
-                    )
-
-                }
-            } else {
-                println("itemsCardsList[i] light" + itemsCardsList[i].selectedImageURL)
-                val iconStr = itemsCardsList[i].selectedImageURL.replace(
-                    "https://tap-assets.b-cdn.net/payment-options/v2/light/",
-                    ""
-                )
-                if (iconStr.replace(".png", "").replace("_", "").toLowerCase()
-                        .contains(card.name.toLowerCase())
-                ) {
-                    tapCardInputView.setSingleCardInput(
-                        CardBrandSingle.fromCode(card.name), itemsCardsList[i].selectedImageURL
-                    )
-
-                }
-            }
 
         }
-    }
 
-    fun logicForImageOnCVV(card: CardBrand, cardCharSeq: String) {
+        fun logicTosetImageDynamic(card: CardBrand, cardCharSeq: String) {
+            for (i in itemsCardsList.indices) {
 
-        println("cardSchema is" + card.name)
-        //TODO 19MAR
-        for (i in itemsCardsList.indices) {
-
-            if (itemsCardsList[i].selectedImageURL != null && itemsCardsList[i].selectedImageURL.contentEquals(
-                    "dark"
-                )
-            ) {
-                val iconStr = itemsCardsList[i].selectedImageURL.replace(
-                    "https://tap-assets.b-cdn.net/payment-options/v2/dark/",
-                    ""
-                )
-
-                if (iconStr.replace(".png", "").replace("_", "").toLowerCase()
-                        .contains(card.name.toLowerCase())
+                if (itemsCardsList[i].selectedImageURL != null && itemsCardsList[i].selectedImageURL.contentEquals(
+                        "dark"
+                    )
                 ) {
-                    tapCardInputView.setCardBrandUrl(itemsCardsList[i].selectedImageURL)
+                    val iconStr = itemsCardsList[i].selectedImageURL.replace(
+                        "https://tap-assets.b-cdn.net/payment-options/v2/dark/",
+                        ""
+                    )
+                    if (iconStr.replace(".png", "").toLowerCase()
+                            .contains(card.name.toLowerCase())
+                    ) {
+                        tapCardInputView.setSingleCardInput(
+                            CardBrandSingle.fromCode(card.name), itemsCardsList[i].selectedImageURL
+                        )
 
+                    }
+                } else {
+                    println("itemsCardsList[i] light" + itemsCardsList[i].selectedImageURL)
+                    val iconStr = itemsCardsList[i].selectedImageURL.replace(
+                        "https://tap-assets.b-cdn.net/payment-options/v2/light/",
+                        ""
+                    )
+                    if (iconStr.replace(".png", "").replace("_", "").toLowerCase()
+                            .contains(card.name.toLowerCase())
+                    ) {
+                        tapCardInputView.setSingleCardInput(
+                            CardBrandSingle.fromCode(card.name), itemsCardsList[i].selectedImageURL
+                        )
+
+                    }
                 }
-            } else {
-                println("itemsCardsList[i] light" + itemsCardsList[i].selectedImageURL)
-                val iconStr = itemsCardsList[i].selectedImageURL.replace(
-                    "https://tap-assets.b-cdn.net/payment-options/v2/light/",
-                    ""
-                )
-                if (iconStr.replace(".png", "").replace("_", "").toLowerCase()
-                        .contains(card.name.toLowerCase())
+
+            }
+        }
+
+        fun logicForImageOnCVV(card: CardBrand, cardCharSeq: String) {
+
+            println("cardSchema is" + card.name)
+            //TODO 19MAR
+            for (i in itemsCardsList.indices) {
+
+                if (itemsCardsList[i].selectedImageURL != null && itemsCardsList[i].selectedImageURL.contentEquals(
+                        "dark"
+                    )
                 ) {
-                    tapCardInputView.setCardBrandUrl(itemsCardsList[i].selectedImageURL)
-                    saveLocalBinLookup = null
+                    val iconStr = itemsCardsList[i].selectedImageURL.replace(
+                        "https://tap-assets.b-cdn.net/payment-options/v2/dark/",
+                        ""
+                    )
+
+                    if (iconStr.replace(".png", "").replace("_", "").toLowerCase()
+                            .contains(card.name.toLowerCase())
+                    ) {
+                        tapCardInputView.setCardBrandUrl(itemsCardsList[i].selectedImageURL)
+
+                    }
+                } else {
+                    println("itemsCardsList[i] light" + itemsCardsList[i].selectedImageURL)
+                    val iconStr = itemsCardsList[i].selectedImageURL.replace(
+                        "https://tap-assets.b-cdn.net/payment-options/v2/light/",
+                        ""
+                    )
+                    if (iconStr.replace(".png", "").replace("_", "").toLowerCase()
+                            .contains(card.name.toLowerCase())
+                    ) {
+                        tapCardInputView.setCardBrandUrl(itemsCardsList[i].selectedImageURL)
+                        saveLocalBinLookup = null
+                    }
                 }
             }
         }
+
+
+        fun hideViewONScanNFC() {
+            intertabLayout.visibility = View.GONE
+            tabLayout.visibility = View.GONE
+            acceptedCardText.visibility = View.INVISIBLE
+            tapCardInputView.onTouchView()
+
+        }
+
+
     }
 
 
-    fun hideViewONScanNFC() {
-        intertabLayout.visibility = View.GONE
-        tabLayout.visibility = View.GONE
-        acceptedCardText.visibility = View.INVISIBLE
-        tapCardInputView.onTouchView()
-
-    }
-
-
-}
