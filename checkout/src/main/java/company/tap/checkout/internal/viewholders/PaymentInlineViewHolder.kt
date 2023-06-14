@@ -1115,7 +1115,7 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
                                 expiryDate?.let { it1 ->
                                     cvvNumber?.let { it2 ->
                                         cardBrandInString =  PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
-
+                                        //TODO: show the currency widget
                                         onPaymentCardComplete.onPayCardCompleteAction(
                                             true,
                                             paymentTyper,
@@ -1201,6 +1201,7 @@ outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
                                 if(isCVCLengthMax == true)
                                 cardNumber?.let {
                                     expiryDate?.let { it1 ->
+                                        //TODO: show the currency widget
                                         onPaymentCardComplete.onPayCardCompleteAction(
                                             true, PaymentType.CARD,
                                             it, it1, cvvNumber!!, cardHolderName, PaymentDataSource?.getBinLookupResponse()?.cardBrand?.toString() ,null
