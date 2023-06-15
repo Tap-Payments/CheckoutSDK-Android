@@ -2011,9 +2011,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
     }
 
+
     @RequiresApi(Build.VERSION_CODES.N)
-    override fun onDisabledChipSelected(paymentOption: PaymentOption, position: Int) {
-        println("onDisabledChipSelected"+paymentOption)
+    override fun onDisabledChipSelected(
+        paymentOption: PaymentOption, position: Int, isDisabledClicked: Boolean?
+    ) {
+        println("onDisabledChipSelected" + paymentOption)
         if (paymentOption.isPaymentOptionEnabled) {
             onCardSelectedAction(true, paymentOption)
             if (isPaymentOptionSelectedCurrencyAsPaymentDataSourceCurrency(paymentOption) && isSelectedCurrencyAsPaymentDataSourceCurrency().not()) {
@@ -2028,7 +2031,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             showCurrencyControlWidget(
                 paymentOption,
                 position,
-                cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget
+                cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget,
+                isDisabledClicked
             )
         }
 
@@ -2051,7 +2055,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private fun showCurrencyControlWidget(
         paymentOption: PaymentOption,
         position: Int? = null,
-        controlCurrencyPlace: TapCurrencyControlWidget
+        controlCurrencyPlace: TapCurrencyControlWidget,
+        isDisabledClicked: Boolean?=null
     ) {
         with(paymentOption) {
             val supportedCurrenciesRelatedToDisabledChip = mutableListOf<SupportedCurrencies>()
@@ -2102,6 +2107,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     totalSelectedAmount = getSelectedSupportedCurrency().amount,
                     selectedCurrencySymbol = getSelectedSupportedCurrency().symbol ?: "",
                     position = position,
+                    isDisabledClicked = isDisabledClicked
                 )
                 onCardSelectedAction(true, paymentOption)
 
@@ -2860,7 +2866,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         totalSelectedAmount: BigDecimal,
         selectedCurrencySymbol: String,
         position: Int? = null,
-        isChangeingCurrencyFromOutside: Boolean? = true
+        isChangeingCurrencyFromOutside: Boolean? = true,
+        isDisabledClicked: Boolean?=null
     ) {
 
         /**
@@ -2886,8 +2893,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         selectedTotalAmount = selectedAmount
 
 
-        Log.e("selectedCurrency",PaymentDataSource.getSelectedCurrency().toString())
-        Log.e("selectedCurrency original",PaymentDataSource.getCurrency()?.isoCode?.toUpperCase().toString())
+        Log.e("selectedCurrency", PaymentDataSource.getSelectedCurrency().toString())
+        Log.e(
+            "selectedCurrency original",
+            PaymentDataSource.getCurrency()?.isoCode?.toUpperCase().toString()
+        )
 
 
 
@@ -2930,10 +2940,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         adapter.resetSelection()
 
 
-        filterViewModels(selectedCurrency,position)
+        filterViewModels(selectedCurrency, position)
         filterPaymentChipsAccordingToCurrency(
             selectedCurrency,
             position = position,
+            isDisabledClicked
         )
     }
 
@@ -3604,7 +3615,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun filterViewModels(currency: String, position: Int?=null) {
+    fun filterViewModels(currency: String, position: Int? = null) {
         savedCardsBasedCurr = filterByCurrenciesAndSortList(paymentOptionsResponse.cards, currency)
 
         val cardPaymentOptions: java.util.ArrayList<PaymentOption> =
@@ -3621,10 +3632,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         val hasSavedCards: Boolean = savedCardsBasedCurr.size > 0
         if (hasSavedCards) {
-            adapter.updateAdapterDataSavedCard(savedCardsBasedCurr,position)
+            adapter.updateAdapterDataSavedCard(savedCardsBasedCurr, position)
         }
-
-
 
 
     }
@@ -3635,7 +3644,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 paymentOptionsResponse.paymentOptions, PaymentType.CARD, currency
             )
         cardPaymentOptionsDisabled.forEachIndexed { index, paymentOption ->
-            Log.e("disabledPaymentCards",paymentOption.displayName + ">>" + paymentOption.getSupportedCurrencies().toString())
+            Log.e(
+                "disabledPaymentCards",
+                paymentOption.displayName + ">>" + paymentOption.getSupportedCurrencies().toString()
+            )
         }
 
         return cardPaymentOptionsDisabled
@@ -3643,7 +3655,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun filterPaymentChipsAccordingToCurrency(
         currency: String,
-        position: Int? = null
+        position: Int? = null,
+        isDisabledClicked: Boolean?=null
     ) {
         allPaymentOptionsList = getListOfAllPaymentOptionsFilterdWithWebAndGooglePay()
         val enabledPaymentList = mutableListOf<PaymentOption>()
@@ -3659,7 +3672,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
         }
         if (position != null) {
-            adapter.updateThisSelected(position)
+            adapter.updateThisSelected(position,isDisabledClicked)
         } else {
             adapter.updateEnabledPaymentOptions(enabledPaymentList)
             adapter.updateDisabledPaymentOptions(disabledPaymentList)
@@ -4134,7 +4147,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     fun getAssetName(paymentOptionOb: PaymentOption?): String {
-      //  println("paymentOptionOb" + paymentOptionOb)
+        //  println("paymentOptionOb" + paymentOptionOb)
         var lang: String = "en"
         var theme: String = "light"
         if (CustomUtils.getCurrentLocale(context) != null) {

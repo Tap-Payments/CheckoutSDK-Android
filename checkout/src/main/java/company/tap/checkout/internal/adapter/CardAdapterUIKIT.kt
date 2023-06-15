@@ -68,18 +68,20 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateAdapterDataSavedCard(adapterSavedCard: List<SavedCard>, position: Int?=null) {
-       // this.savedCardsArrayList = adapterSavedCard
-        if (position!=null){
+    fun updateAdapterDataSavedCard(adapterSavedCard: List<SavedCard>, position: Int? = null) {
+        // this.savedCardsArrayList = adapterSavedCard
+        if (position != null) {
+            this.savedCardsArrayList = adapterSavedCard
+
             /**
              * needed to update saved cards along with notify item change
              */
-           // notifyItemChanged(position)
-            Log.e("positionIndex",position.toString())
-          //  notifyItemRangeChanged(this.enabledPaymentOptions.size,this.savedCardsArrayList.size)
+            // notifyItemChanged(position)
+            Log.e("positionIndex", position.toString())
+            //  notifyItemRangeChanged(this.enabledPaymentOptions.size,this.savedCardsArrayList.size)
             //notifyDataSetChanged()
-        }else{
-           this.savedCardsArrayList = adapterSavedCard
+        } else {
+            this.savedCardsArrayList = adapterSavedCard
             notifyDataSetChanged()
         }
 
@@ -93,7 +95,14 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         notifyDataSetChanged()
     }
 
-    fun updateThisSelected(position: Int) {
+    fun updateThisSelected(position: Int,isDisabledClicked:Boolean?=null) {
+        /**
+         * case position clicked was the disabledItem
+         */
+     //   if (position > enabledPaymentOptions.size)
+        if (isDisabledClicked == true)
+            selectedPosition = position.plus(enabledPaymentOptions.size).plus(savedCardsArrayList.size)
+        else
         selectedPosition = position
         notifyItemChanged(position)
     }
@@ -358,7 +367,10 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
             if (typeDisabled.isPaymentOptionEnabled) {
                 setUnSelectedCardTypePaymentOptionShadowAndBackground(holder)
             } else
-                setUnSelectedCardTypePaymentOptionShadowAndBackground(holder, isBackgroundDimmed = true)
+                setUnSelectedCardTypePaymentOptionShadowAndBackground(
+                    holder,
+                    isBackgroundDimmed = true
+                )
         }
 
 
@@ -408,13 +420,16 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
 
         holder.itemView.setOnClickListener {
             holder.isSingleClicked {
-                Log.e("postionIndex",position.toString())
-                Log.e("postionIndex binding",holder.bindingAdapterPosition.toString())
-                Log.e("postionIndex absol",holder.absoluteAdapterPosition.toString())
-                Log.e("postionIndex old",holder.oldPosition.toString())
 
+                Log.e(
+                    "disabledPaymentIndex",
+                    disabledPaymentOptions.indexOf(typeDisabled).toString()
+                )
                 selectedPosition = holder.bindingAdapterPosition
-                onCardSelectedActionListener.onDisabledChipSelected(typeDisabled, holder.absoluteAdapterPosition)
+                onCardSelectedActionListener.onDisabledChipSelected(
+                    typeDisabled,position.minus(savedCardsArrayList.size).minus(enabledPaymentOptions.size),
+                    isDisabledClicked = true
+                )
                 notifyDataSetChanged()
             }
 
@@ -439,13 +454,14 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         if (selectedPosition == position) {
             if (typeEnabled.isPaymentOptionEnabled) {
                 setSelectedCardTypeDisabledShadowAndBackground(holder)
-            }
-            else setSelectedCardTypeDisabledShadowAndBackground(holder, isBackgroundDimmed = true)
+            } else setSelectedCardTypeDisabledShadowAndBackground(holder, isBackgroundDimmed = true)
         } else {
             if (typeEnabled.isPaymentOptionEnabled) {
                 setUnSelectedCardTypePaymentOptionShadowAndBackground(holder)
-            }
-            else setUnSelectedCardTypePaymentOptionShadowAndBackground(holder, isBackgroundDimmed = true)
+            } else setUnSelectedCardTypePaymentOptionShadowAndBackground(
+                holder,
+                isBackgroundDimmed = true
+            )
         }
 
 

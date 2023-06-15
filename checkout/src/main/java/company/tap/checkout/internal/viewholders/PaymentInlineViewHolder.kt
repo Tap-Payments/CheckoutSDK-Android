@@ -1083,7 +1083,7 @@ class PaymentInlineViewHolder(
                     if (cardInputUIStatus == CardInputUIStatus.NormalCard) {
                         if (PaymentDataSource.getBinLookupResponse()?.scheme != null) {
 
-                            if (PaymentDataSource.getCurrency()?.isoCode?.toUpperCase().equals(SAUDI_CURRENCY)){
+                            if (isCurrencyOriginalRelatedToSaudiReal()){
                                 PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.let { it1 ->
                                     logicTosetImageDynamic(
                                         it1, s.toString()
