@@ -1022,6 +1022,7 @@ class PaymentInlineViewHolder(
                 // checkoutFragment.scrollView?.scrollTo(0,height)
                 tapInlineCardSwitch?.switchSaveCard?.isChecked = true
             } else {
+                dismsisCurrencyWidget()
                 tapAlertView?.fadeVisibility(View.GONE, 500)
             }
 
