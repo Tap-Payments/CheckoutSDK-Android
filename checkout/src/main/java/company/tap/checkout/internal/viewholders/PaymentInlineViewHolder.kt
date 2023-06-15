@@ -449,7 +449,38 @@ class PaymentInlineViewHolder(
         cvvNumber = null
         cardHolderName = null
         fullCardNumber = null
+
+        separator1?.visibility = View.GONE
+        if (PaymentDataSource.getBinLookupResponse() != null) {
+            PaymentDataSource.setBinLookupResponse(null)
+
+        }
+
+        tapInlineCardSwitch?.saveForOtherCheckBox?.isChecked = false
+        tapInlineCardSwitch?.switchSaveCard?.isChecked = false
+        contactDetailsView?.visibility = View.GONE
+        shippingDetailView?.visibility = View.GONE
+        closeButton?.visibility = View.GONE
+        tapCardInputView.setVisibilityOfHolderField(false)
+        tapCardInputView.holderNameEnabled = false
+        checkoutViewModel.incrementalCount = 0
+        allFieldsValid = false
+        tapAlertView?.fadeVisibility(View.GONE, 500)
+        expiryDatePrev = null
+        cvvNumberPrev = null
+        if (getPreTypedCardData() != null) {
+            getPreTypedCardData()?.cardNumber = null
+            getPreTypedCardData()?.cvc = null
+            getPreTypedCardData()?.cardholderName = null
+            getPreTypedCardData()?.expirationMonth = null
+            getPreTypedCardData()?.expirationYear = null
+        }
+        getPreTypedCardData()?.cvc
+        savedCardsModel = null
+        prevSetCardBrand = CardBrand.unknown
+
     }
+
 
 
     private fun setPrevTypedCard() {
