@@ -1961,8 +1961,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     } else if ((savedCardsModel as PaymentOption).paymentType == PaymentType.GOOGLE_PAY) {
                         showShrinkageForPaymentInline()
                         setPayButtonAction(PaymentType.GOOGLE_PAY, savedCardsModel)
-                    } else if ((savedCardsModel as PaymentOption).paymentType == PaymentType.CARD)
+                    } else if ((savedCardsModel as PaymentOption).paymentType == PaymentType.CARD) {
                         paymentInlineViewHolder.tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
+                        setPayButtonAction(PaymentType.CARD, savedCardsModel)
+                    }
                     context.applyOnDifferentThemes(onDarkTheme = {
                         paymentInlineViewHolder.tapCardInputView.setSingleCardInput(
                             CardBrandSingle.fromCode(savedCardsModel.brand),
@@ -1987,8 +1989,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
                     })
 
-                    setPayButtonAction(PaymentType.CARD, savedCardsModel)
-
                     /**
                      * needed to reset these setOnclick listener after refactoring
                      * the payment Inline :S :S to avaid multible onClickListener .
@@ -2012,6 +2012,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onDisabledChipSelected(paymentOption: PaymentOption, position: Int) {
+        println("onDisabledChipSelected"+paymentOption)
         if (paymentOption.isPaymentOptionEnabled) {
             onCardSelectedAction(true, paymentOption)
             if (isPaymentOptionSelectedCurrencyAsPaymentDataSourceCurrency(paymentOption) && isSelectedCurrencyAsPaymentDataSourceCurrency().not()) {
