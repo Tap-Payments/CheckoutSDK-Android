@@ -1044,8 +1044,8 @@ class PaymentInlineViewHolder(
 
                 if (s?.trim()?.length == 3 || s?.trim()?.length == 4) {
                     if (cardInputUIStatus == CardInputUIStatus.NormalCard) {
-                        if (PaymentDataSource?.getBinLookupResponse()?.scheme != null) {
-                            PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.let {
+                        if (PaymentDataSource.getBinLookupResponse()?.scheme != null) {
+                            PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.let {
                                 logicForImageOnCVV(
                                     it,
                                     s.toString()
@@ -1086,7 +1086,7 @@ class PaymentInlineViewHolder(
                         if (savedCardsModel == null) {
                             paymentTyper = PaymentType.CARD
                         } else paymentTyper = PaymentType.SavedCard
-                        println("paymentTyper   hhshhs" + paymentTyper)
+
 
                         if (!prevSetCardBrand?.name?.contains(CardBrand.unknown.name)!!)
                             fullCardNumber.toString().let {
@@ -1255,16 +1255,7 @@ class PaymentInlineViewHolder(
         })
     }
 
-    fun EditText.updateText(text: String) {
-        val focussed = hasFocus()
-        if (focussed) {
-            clearFocus()
-        }
-        setText(text)
-        if (focussed) {
-            requestFocus()
-        }
-    }
+
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun cardNumAfterTextChangeListener(charSequence: CharSequence?, textWatcher: TextWatcher) {
