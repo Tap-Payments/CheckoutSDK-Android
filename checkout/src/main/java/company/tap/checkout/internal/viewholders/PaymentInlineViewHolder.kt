@@ -159,11 +159,9 @@ class PaymentInlineViewHolder(
 
     init {
 
-        //    tabLayout.setTabLayoutInterface(this)
         tapMobileInputView = TapMobilePaymentView(context, null)
         tapMobileInputView.setTapPaymentShowHideClearImage(this)
         tapCardInputView = InlineCardInput2(context, null)
-        // tapAlertView = tapCardInputView.findViewById(R.id.alertView)
         nfcButton = tapCardInputView.findViewById(R.id.nfc_button)
         cardBrandView = tapCardInputView.findViewById(R.id.card_brand_view)
         scannerButton = tapCardInputView.findViewById(R.id.card_scanner_button)
@@ -214,22 +212,11 @@ class PaymentInlineViewHolder(
     @RequiresApi(Build.VERSION_CODES.N)
     override fun bindViewComponents() {
         initCardInput()
-        /**
-         * @TODO : waiting for backend to finish it
-         */
-        // initMobileInput()
-        // tapMobileInputViewWatcher()
         initializeCardForm()
         initializeIcons()
-        // initializeCardBrandView()
         initCustomerDetailView()
         tapCardInputView.setCardInputListener(this)
 
-        /**
-         * set separator background
-         */
-        //  view.separator?.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
-        //setSeparatorTheme()
 
 
     }
@@ -1320,7 +1307,10 @@ class PaymentInlineViewHolder(
 
                 val binLookupResponse: BINLookupResponse? = PaymentDataSource.getBinLookupResponse()
                 // println("binLookupResponse" + binLookupResponse)
-                //  if (charSequence.length > 4) checkIfCardTypeExistInList(card.cardBrand)
+                  if (charSequence.length > 4) checkIfCardTypeExistInList(card.cardBrand) /***This a business logic required dont remove**/
+
+                /**
+                 * This is business condition based on user selection / settings **/
                 if (PaymentDataSource.getCardType() != null && PaymentDataSource.getCardType() == CardType.ALL) {
 
                     if(charSequence.length ==8) // added length check to avoid flickering
@@ -1383,9 +1373,6 @@ class PaymentInlineViewHolder(
             isDisabledBrandSelected =
                     _disabledPaymentList?.any { it.brand.equals(_binLookupResponse?.cardBrand?.name, ignoreCase = true) }
 
-            println("isDisabledBrandSelected > " + isDisabledBrandSelected)
-            println("isDisabledBrandSelecteddd > " + _disabledPaymentList?.get(2)?.brand)
-            println("isDisabledBrandSelectedd > " + _binLookupResponse)
             if (itemsCardsList.isNotEmpty()) {
                 for (i in itemsCardsList.indices) {
                     //   println("binLookupResponse>>>"+binLookupResponse?.cardBrand?.name)
@@ -1421,11 +1408,8 @@ class PaymentInlineViewHolder(
                 tabLayout.selectTab(it1, false)
             }
             isDisabledBrandSelected = _disabledPaymentList?.any { it.brand?.replace("_","").equals(_binLookupResponse?.scheme?.cardBrand?.name, ignoreCase = true) }
-            println("isDisabledBrandSelected " + isDisabledBrandSelected)
             if (itemsCardsList.isNotEmpty()) {
                 for (i in itemsCardsList.indices) {
-                    // println("binLookupResponse/////"+binLookupResponse?.scheme?.cardBrand?.name)
-                    // println("selectedImageURL////"+itemsCardsList[i].selectedImageURL)
                     if (_binLookupResponse?.scheme?.cardBrand?.name?.toLowerCase()
                             ?.let { itemsCardsList[i].selectedImageURL?.contains(it) } == true
                     ) {
@@ -1443,11 +1427,11 @@ class PaymentInlineViewHolder(
                 }
             }
 
-//            tabLayout.setUnselectedAlphaLevel(0.5f)
+
 
         }
 
-        // PaymentDataSource.setBinLookupResponse(null)
+
     }
 
 
