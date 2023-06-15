@@ -1320,14 +1320,6 @@ class PaymentInlineViewHolder(
 
     fun dismsisCurrencyWidget() {
         checkoutViewModel.dismisControlWidget()
-        Log.e(
-            "cardBrand 1",
-            PaymentDataSource?.getBinLookupResponse()?.cardBrand?.toString().toString()
-        )
-        Log.e(
-            "cardBrand 2",
-            PaymentDataSource?.getBinLookupResponse()?.cardBrand?.rawValue.toString()
-        )
 
     }
 
@@ -1423,6 +1415,13 @@ class PaymentInlineViewHolder(
             controlScannerOptions()
             cardBrandDetection(charSequence.toString())
             if (card != null) checkValidationState(card, charSequence.toString(), textWatcher)
+        }
+
+        //Check needed to reset the image to default instead of the brand last typed
+        if (charSequence.toString().isEmpty()) {
+            tapCardInputView.setSingleCardInput(
+                CardBrandSingle.Unknown, null
+            )
         }
 
     }
