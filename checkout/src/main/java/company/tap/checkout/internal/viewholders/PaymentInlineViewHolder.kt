@@ -1062,7 +1062,7 @@ class PaymentInlineViewHolder(
                                 )
                         }
                         acceptedCardText.visibility = View.GONE
-                        tabLayout.fadeVisibility(View.GONE, 2000)
+                        tabLayout.visibility = View.GONE
                     } else logicForImageOnCVV(
                         CardValidator.validate(savedCardsModel?.firstSix).cardBrand,
                         s.toString()
@@ -1133,8 +1133,7 @@ class PaymentInlineViewHolder(
                                                     cardBrandInString,
                                                     savedCardsModel
                                                 )
-                                                tapInlineCardSwitch?.switchSaveCard?.isChecked =
-                                                    true
+                                                tapInlineCardSwitch?.switchSaveCard?.isChecked = true
                                                 tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
                                             }
                                         }
@@ -1825,6 +1824,7 @@ class PaymentInlineViewHolder(
                 onPaymentCardComplete.onPaymentCompletedShowingCurrencyWidget(
                     cardBrandInString.toString()
                 )
+                return
             } else {
                 onCurrencySupported.invoke()
             }
@@ -1832,9 +1832,11 @@ class PaymentInlineViewHolder(
 
         fun isCardEnterdShouldBeDisabledPaymentOptions(): Boolean {
             val isCardEnterdDisabledPaymentOption = checkoutViewModel.getDisabledCardPaymentList(
-                PaymentDataSource.getSelectedCurrency().toString()
+                PaymentDataSource.getCurrency()?.isoCode?.toUpperCase().toString()
             )
-                .any { it.brand == PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue }
+                .any {
+                    Log.e("list",it.brand.toString())
+                    it.brand == PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue }
             return isCardEnterdDisabledPaymentOption
         }
 

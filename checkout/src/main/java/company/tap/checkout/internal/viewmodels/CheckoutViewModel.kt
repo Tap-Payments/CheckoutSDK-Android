@@ -2878,9 +2878,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
 
 
+
         selectedAmount = CurrencyFormatter.currencyFormat(totalSelectedAmount.toString())
         selectedCurrency = currencySelected
         selectedTotalAmount = selectedAmount
+
+
+        Log.e("selectedCurrency",PaymentDataSource.getSelectedCurrency().toString())
+        Log.e("selectedCurrency original",PaymentDataSource.getCurrency()?.isoCode?.toUpperCase().toString())
 
 
 
@@ -3610,6 +3615,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             disabledCardPaymentOptions = getDisabledCardPaymentList(currency)
         )
 
+
         val hasSavedCards: Boolean = savedCardsBasedCurr.size > 0
         if (hasSavedCards) {
             adapter.updateAdapterDataSavedCard(savedCardsBasedCurr)
@@ -3622,6 +3628,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             filteredByPaymentTypeAndCurrencyAndSortedListDisabled(
                 paymentOptionsResponse.paymentOptions, PaymentType.CARD, currency
             )
+        cardPaymentOptionsDisabled.forEachIndexed { index, paymentOption ->
+            Log.e("disabledPaymentCards",paymentOption.displayName + ">>" + paymentOption.getSupportedCurrencies().toString())
+        }
+
         return cardPaymentOptionsDisabled
     }
 

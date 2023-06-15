@@ -72,5 +72,3 @@ class TapSpinnerAdapter(
         var imageView: ImageView? = null
     }
 }
-
-data class currncyData(var image: Drawable, var price: String)
