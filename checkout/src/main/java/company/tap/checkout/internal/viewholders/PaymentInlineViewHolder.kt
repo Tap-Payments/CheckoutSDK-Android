@@ -61,6 +61,7 @@ import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
 
 
+const val AMERICAN_EXPRESS_VALUE = "AMERICAN_EXPRESS"
 /**
  * This class needed to be refactored ASAP :/
  */
@@ -297,7 +298,7 @@ class PaymentInlineViewHolder(
             tapCardInputView.clear()
             closeButton?.visibility = View.GONE
             controlScannerOptions()
-            checkoutViewModel.dismisControlWidget()
+            dismsisCurrencyWidget()
             cardInputUIStatus = CardInputUIStatus.NormalCard
             /*tapCardInputView.setSingleCardInput(
                   CardBrandSingle.Unknown, null
@@ -1078,7 +1079,7 @@ class PaymentInlineViewHolder(
                  */
                 cvvNumber = s.toString()
 
-                if (isCVCLengthMax == true && tapCardInputView.isExpDateValid) {
+                if ((s?.trim()?.length == 3 && isCardBrandOfTypeAmericanExpress().not()) || s?.trim()?.length == 4 && tapCardInputView.isExpDateValid) {
                     if (!PaymentDataSource.getCardHolderNameShowHide()) {
                         var paymentTyper: PaymentType? = PaymentType.CARD
                         println("savedCardsModel   hhshhs" + savedCardsModel)
@@ -1237,6 +1238,7 @@ class PaymentInlineViewHolder(
                     cvvNumberPrev = s.toString()
                 } else {
 
+                    dismsisCurrencyWidget()
                     if (cardInputUIStatus == CardInputUIStatus.NormalCard)
                         onPaymentCardComplete.onPayCardSwitchAction(
                             false, PaymentType.CARD
@@ -1255,16 +1257,22 @@ class PaymentInlineViewHolder(
         })
     }
 
-    fun EditText.updateText(text: String) {
-        val focussed = hasFocus()
-        if (focussed) {
-            clearFocus()
-        }
-        setText(text)
-        if (focussed) {
-            requestFocus()
-        }
+
+    fun dismsisCurrencyWidget(){
+        checkoutViewModel.dismisControlWidget()
+        Log.e("cardBrand 1",
+            PaymentDataSource?.getBinLookupResponse()?.cardBrand?.toString().toString()
+        )
+        Log.e("cardBrand 2",
+            PaymentDataSource?.getBinLookupResponse()?.cardBrand?.rawValue.toString()
+        )
+
     }
+
+    fun isCardBrandOfTypeAmericanExpress(): Boolean {
+        return PaymentDataSource?.getBinLookupResponse()?.cardBrand?.rawValue.toString() == AMERICAN_EXPRESS_VALUE
+    }
+
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun cardNumAfterTextChangeListener(charSequence: CharSequence?, textWatcher: TextWatcher) {
