@@ -1964,30 +1964,31 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     } else if ((savedCardsModel as PaymentOption).paymentType == PaymentType.CARD) {
                         paymentInlineViewHolder.tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
                         setPayButtonAction(PaymentType.CARD, savedCardsModel)
+                        context.applyOnDifferentThemes(onDarkTheme = {
+                            paymentInlineViewHolder.tapCardInputView.setSingleCardInput(
+                                CardBrandSingle.fromCode(savedCardsModel.brand),
+                                savedCardsModel.logos?.dark?.currencyWidget?.png
+                            )
+                        }, onDarkColoredTheme = {
+                            paymentInlineViewHolder.tapCardInputView.setSingleCardInput(
+                                CardBrandSingle.fromCode(savedCardsModel.brand),
+                                savedCardsModel.logos?.dark_colored?.currencyWidget?.png
+                            )
+                        }, onLightTheme = {
+                            paymentInlineViewHolder.tapCardInputView.setSingleCardInput(
+                                CardBrandSingle.fromCode(savedCardsModel.brand),
+                                savedCardsModel.logos?.light?.currencyWidget?.png
+                            )
+                        }, onLightMonoTheme = {
+                            paymentInlineViewHolder.tapCardInputView.setSingleCardInput(
+                                CardBrandSingle.fromCode(savedCardsModel.brand),
+                                savedCardsModel.logos?.light_mono?.currencyWidget?.png
+                            )
+
+
+                        })
                     }
-                    context.applyOnDifferentThemes(onDarkTheme = {
-                        paymentInlineViewHolder.tapCardInputView.setSingleCardInput(
-                            CardBrandSingle.fromCode(savedCardsModel.brand),
-                            savedCardsModel.logos?.dark?.currencyWidget?.png
-                        )
-                    }, onDarkColoredTheme = {
-                        paymentInlineViewHolder.tapCardInputView.setSingleCardInput(
-                            CardBrandSingle.fromCode(savedCardsModel.brand),
-                            savedCardsModel.logos?.dark_colored?.currencyWidget?.png
-                        )
-                    }, onLightTheme = {
-                        paymentInlineViewHolder.tapCardInputView.setSingleCardInput(
-                            CardBrandSingle.fromCode(savedCardsModel.brand),
-                            savedCardsModel.logos?.light?.currencyWidget?.png
-                        )
-                    }, onLightMonoTheme = {
-                        paymentInlineViewHolder.tapCardInputView.setSingleCardInput(
-                            CardBrandSingle.fromCode(savedCardsModel.brand),
-                            savedCardsModel.logos?.light_mono?.currencyWidget?.png
-                        )
 
-
-                    })
 
                     /**
                      * needed to reset these setOnclick listener after refactoring

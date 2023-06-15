@@ -435,7 +435,6 @@ class InlineCardInput2 @JvmOverloads constructor(
         if (iconUrl != null) {
             cardBrandView.showBrandIconSingle(cardBrand, iconUrl, shouldShowErrorIcon)
         } else cardBrandView.showBrandIconSingle(cardBrand, shouldShowErrorIcon)
-        // cardBrandView.showBrandIconSingle(cardBrand, shouldShowErrorIcon)
     }
 
 

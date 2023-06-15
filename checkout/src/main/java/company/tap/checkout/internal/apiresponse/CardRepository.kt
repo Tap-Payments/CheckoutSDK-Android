@@ -573,6 +573,7 @@ class CardRepository : APIRequestCallback {
         } else if (requestCode == BIN_RETRIEVE_CODE) {
             response?.body().let {
                 binLookupResponse = Gson().fromJson(it, BINLookupResponse::class.java)
+                Log.e("binLookupResponse",binLookupResponse.toString())
                 if (::binLookupResponse.isInitialized && ::cardRepositoryContext.isInitialized &&  ::cardViewModel.isInitialized )
                     viewModel.setBinLookupData(
                         binLookupResponse,
