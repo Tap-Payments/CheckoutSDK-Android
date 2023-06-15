@@ -1826,7 +1826,6 @@ class PaymentInlineViewHolder(
 
 
         fun TapBaseViewHolder.doOnCurrencySupported(onCurrencySupported: () -> Unit) {
-
             if (isCardEnterdShouldBeDisabledPaymentOptions()) {
                 onPaymentCardComplete.onPaymentCompletedShowingCurrencyWidget(
                     cardBrandInString.toString()
@@ -1842,7 +1841,6 @@ class PaymentInlineViewHolder(
                 PaymentDataSource.getCurrency()?.isoCode?.toUpperCase().toString()
             )
                 .any {
-                    Log.e("list",it.brand.toString())
                     it.brand == PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue }
             return isCardEnterdDisabledPaymentOption
         }
@@ -1945,19 +1943,6 @@ class PaymentInlineViewHolder(
                 clearCardInputAction()
                 //  tapCardInputView.clear()
                 tabLayout.resetBehaviour()
-                /*CustomUtils.showDialog(
-                LocalizationManager.getValue(
-                    "alertUnsupportedCardTitle",
-                    "AlertBox"
-                ),
-                LocalizationManager.getValue("alertUnsupportedCardMessage", "AlertBox"),
-                context,
-                1,
-                baseLayoutManager,
-                null,
-                null,
-                true
-            )*/
                 CustomUtils.showDialog(
                     title = "alert",
                     messageString = "cardnot supported",
