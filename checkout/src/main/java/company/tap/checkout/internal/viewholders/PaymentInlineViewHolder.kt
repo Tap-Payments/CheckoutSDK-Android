@@ -912,10 +912,15 @@ class PaymentInlineViewHolder(
                     // do what ever you want
                     // Log.d("MainActivityTag", "Character deleted");
 
-                    tabLayout?.fadeVisibility(View.VISIBLE)
-                    intertabLayout?.fadeVisibility(View.VISIBLE)
-                    acceptedCardText?.fadeVisibility(View.VISIBLE)
+                    tabLayout?.fadeVisibility(View.GONE, 500)
+                    intertabLayout?.fadeVisibility(View.GONE, 500)
+                    acceptedCardText?.fadeVisibility(View.GONE, 500)
 
+                }
+                if (s?.length==0) {
+                    intertabLayout.visibility = View.VISIBLE
+                    tabLayout.visibility = View.VISIBLE
+                    acceptedCardText.visibility = View.VISIBLE
                 }
                 mPreviousCount = count;
 
@@ -1483,9 +1488,11 @@ class PaymentInlineViewHolder(
 
                 }
                 CardValidationState.incomplete -> {
-                    intertabLayout.visibility = View.VISIBLE
-                    tabLayout.visibility = View.VISIBLE
-                    acceptedCardText.visibility = View.VISIBLE
+                    if (charSequence.isEmpty()) {
+                        intertabLayout.visibility = View.VISIBLE
+                        tabLayout.visibility = View.VISIBLE
+                        acceptedCardText.visibility = View.VISIBLE
+                    }
                     cardNumValidation = false
                 }
                 CardValidationState.valid -> {
