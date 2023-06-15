@@ -68,9 +68,20 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateAdapterDataSavedCard(adapterSavedCard: List<SavedCard>) {
-        this.savedCardsArrayList = adapterSavedCard
-        notifyDataSetChanged()
+    fun updateAdapterDataSavedCard(adapterSavedCard: List<SavedCard>, position: Int?=null) {
+       // this.savedCardsArrayList = adapterSavedCard
+        if (position!=null){
+            /**
+             * needed to update saved cards along with notify item change
+             */
+           // notifyItemChanged(position)
+            Log.e("positionIndex",position.toString())
+          //  notifyItemRangeChanged(this.enabledPaymentOptions.size,this.savedCardsArrayList.size)
+            //notifyDataSetChanged()
+        }else{
+           this.savedCardsArrayList = adapterSavedCard
+            notifyDataSetChanged()
+        }
 
     }
 
@@ -154,8 +165,8 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
     }
 
     override fun getItemCount(): Int {
-        return savedCardsArrayList.size.plus(disabledPaymentOptions.size)
-            .plus(enabledPaymentOptions.size)
+        return enabledPaymentOptions.size.plus(savedCardsArrayList.size)
+            .plus(disabledPaymentOptions.size)
     }
 
     @SuppressLint("ResourceAsColor")
@@ -397,8 +408,13 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
 
         holder.itemView.setOnClickListener {
             holder.isSingleClicked {
-                selectedPosition = position
-                onCardSelectedActionListener.onDisabledChipSelected(typeDisabled, position)
+                Log.e("postionIndex",position.toString())
+                Log.e("postionIndex binding",holder.bindingAdapterPosition.toString())
+                Log.e("postionIndex absol",holder.absoluteAdapterPosition.toString())
+                Log.e("postionIndex old",holder.oldPosition.toString())
+
+                selectedPosition = holder.bindingAdapterPosition
+                onCardSelectedActionListener.onDisabledChipSelected(typeDisabled, holder.absoluteAdapterPosition)
                 notifyDataSetChanged()
             }
 

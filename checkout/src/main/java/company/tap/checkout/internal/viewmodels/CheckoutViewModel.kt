@@ -2928,11 +2928,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         adapter.resetSelection()
 
+
+        filterViewModels(selectedCurrency,position)
         filterPaymentChipsAccordingToCurrency(
             selectedCurrency,
             position = position,
         )
-        filterViewModels(selectedCurrency)
     }
 
     fun isUserCurrencySameAsCurrencyOfApplication(): Boolean? {
@@ -3602,7 +3603,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun filterViewModels(currency: String) {
+    fun filterViewModels(currency: String, position: Int?=null) {
         savedCardsBasedCurr = filterByCurrenciesAndSortList(paymentOptionsResponse.cards, currency)
 
         val cardPaymentOptions: java.util.ArrayList<PaymentOption> =
@@ -3619,8 +3620,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         val hasSavedCards: Boolean = savedCardsBasedCurr.size > 0
         if (hasSavedCards) {
-            adapter.updateAdapterDataSavedCard(savedCardsBasedCurr)
+            adapter.updateAdapterDataSavedCard(savedCardsBasedCurr,position)
         }
+
+
+
 
     }
 
