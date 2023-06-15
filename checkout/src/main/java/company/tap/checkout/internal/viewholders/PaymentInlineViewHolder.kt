@@ -389,10 +389,10 @@ class PaymentInlineViewHolder(
         }
         controlScannerOptions()
         tapInlineCardSwitch?.saveForOtherCheckBox?.isChecked = true
-        tapInlineCardSwitch?.switchSaveCard?.isChecked = true
+       // tapInlineCardSwitch?.switchSaveCard?.isChecked = true
         tapInlineCardSwitch?.visibility = View.GONE
         closeButton?.visibility = View.GONE
-        // tapCardInputView.setVisibilityOfHolderField(false)
+        // tapCardInputView.setVisibilityOfHolderField(false
         tapCardInputView.holderNameEnabled = false
         checkoutViewModel.incrementalCount = 0
     }
@@ -481,11 +481,11 @@ class PaymentInlineViewHolder(
             tapInlineCardSwitch?.visibility = View.VISIBLE
             tapInlineCardSwitch?.switchesLayout?.visibility = View.VISIBLE
             tapInlineCardSwitch?.switchSaveCard?.visibility = View.VISIBLE
-            tapInlineCardSwitch?.switchSaveCard?.isChecked = true
+          //  tapInlineCardSwitch?.switchSaveCard?.isChecked = true
             tapCardInputView.setVisibilityOfHolderField(true)
             tapCardInputView.holderNameEnabled = true
             separator1?.visibility = View.VISIBLE
-            tapInlineCardSwitch?.switchSaveCard?.isChecked = true
+          //  tapInlineCardSwitch?.switchSaveCard?.isChecked = true
 
         }
 
@@ -559,11 +559,11 @@ class PaymentInlineViewHolder(
             tapInlineCardSwitch?.visibility = View.VISIBLE
             tapInlineCardSwitch?.switchesLayout?.visibility = View.VISIBLE
             tapInlineCardSwitch?.switchSaveCard?.visibility = View.VISIBLE
-            tapInlineCardSwitch?.switchSaveCard?.isChecked = true
+          //  tapInlineCardSwitch?.switchSaveCard?.isChecked = true
             tapCardInputView.setVisibilityOfHolderField(true)
             tapCardInputView.holderNameEnabled = true
             separator1?.visibility = View.VISIBLE
-            tapInlineCardSwitch?.switchSaveCard?.isChecked = true
+         //   tapInlineCardSwitch?.switchSaveCard?.isChecked = true
 
         }
 
@@ -627,11 +627,11 @@ class PaymentInlineViewHolder(
             tapInlineCardSwitch?.visibility = View.VISIBLE
             tapInlineCardSwitch?.switchesLayout?.visibility = View.VISIBLE
             tapInlineCardSwitch?.switchSaveCard?.visibility = View.VISIBLE
-            tapInlineCardSwitch?.switchSaveCard?.isChecked = true
+          //  tapInlineCardSwitch?.switchSaveCard?.isChecked = true
             tapCardInputView.setVisibilityOfHolderField(true)
             tapCardInputView.holderNameEnabled = true
             separator1?.visibility = View.VISIBLE
-            tapInlineCardSwitch?.switchSaveCard?.isChecked = true
+           // tapInlineCardSwitch?.switchSaveCard?.isChecked = true
             cardHolderName = tapCard.cardHolder
 
         }
@@ -1020,7 +1020,7 @@ class PaymentInlineViewHolder(
                 // tapAlertView?.visibility = View.VISIBLE
                 lastFocusField = CardInputListener.FocusField.FOCUS_CVC
                 // checkoutFragment.scrollView?.scrollTo(0,height)
-                tapInlineCardSwitch?.switchSaveCard?.isChecked = true
+              //  tapInlineCardSwitch?.switchSaveCard?.isChecked = true
             } else {
                 tapAlertView?.fadeVisibility(View.GONE, 500)
             }
@@ -1104,7 +1104,7 @@ class PaymentInlineViewHolder(
                                             // it, it1, it2, null,prevSetCardBrand?.toString() , savedCardsModel
                                             it, it1, it2, null, cardBrandInString, savedCardsModel
                                         )
-                                        tapInlineCardSwitch?.switchSaveCard?.isChecked = true
+                                    //    tapInlineCardSwitch?.switchSaveCard?.isChecked = true
 
                                         tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
                                         Bugfender.d(
