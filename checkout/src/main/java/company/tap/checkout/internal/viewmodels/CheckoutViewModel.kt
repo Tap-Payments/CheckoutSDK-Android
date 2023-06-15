@@ -1490,6 +1490,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         /*** filtering based on base currency*/
         filterViewModels(currentCurrency)
+        filterPaymentChipsAccordingToCurrency(currentCurrency)
+
         touchHandlingForCardView()
     }
 
@@ -3608,7 +3610,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             disabledCardPaymentOptions = getDisabledCardPaymentList(currency)
         )
 
-        filterPaymentChipsAccordingToCurrency(currency)
         val hasSavedCards: Boolean = savedCardsBasedCurr.size > 0
         if (hasSavedCards) {
             adapter.updateAdapterDataSavedCard(savedCardsBasedCurr)
