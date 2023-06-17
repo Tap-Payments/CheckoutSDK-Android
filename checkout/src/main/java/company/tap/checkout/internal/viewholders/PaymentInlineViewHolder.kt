@@ -7,15 +7,13 @@ import android.graphics.Color
 import android.os.Build
 import android.text.Editable
 import android.text.TextWatcher
-import android.transition.Fade
-import android.transition.TransitionManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
-import androidx.core.widget.doAfterTextChanged
+import androidx.core.view.isVisible
 import com.bugfender.sdk.Bugfender
 import com.google.android.material.tabs.TabLayout
 import company.tap.cardinputwidget2.CardBrandSingle
@@ -916,10 +914,9 @@ class PaymentInlineViewHolder(
                 mPreviousLength = length;
 
 
-
-                if (s != null) {
-                    if (s.length >= 19) afterValidation()
-                }
+//                if (s != null) {
+//                    if (s.length >= 19) afterValidation()
+//                }
 
 
             }
@@ -1083,16 +1080,16 @@ class PaymentInlineViewHolder(
                     if (cardInputUIStatus == CardInputUIStatus.NormalCard) {
                         if (PaymentDataSource.getBinLookupResponse()?.scheme != null) {
 
-                            if (isCurrencyOriginalRelatedToSaudiReal()){
-                                PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.let { it1 ->
+                            if (PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue.toString() == MADA_SCHEME && isCurrencySelectedRelatedToSaudiReal().not()) {
+                                PaymentDataSource?.getBinLookupResponse()?.let { it1 ->
                                     logicTosetImageDynamic(
-                                        it1, s.toString()
+                                        it1.cardBrand, s.toString()
                                     )
                                 }
                             }else{
-                                PaymentDataSource?.getBinLookupResponse()?.cardBrand?.let { it1 ->
+                                PaymentDataSource?.getBinLookupResponse()?.scheme?.let { it1 ->
                                     logicTosetImageDynamic(
-                                        it1, s.toString()
+                                        it1.cardBrand, s.toString()
                                     )
                                 }
                             }
@@ -1165,7 +1162,8 @@ class PaymentInlineViewHolder(
                                         cvvNumber?.let { it2 ->
                                             cardBrandInString =
                                                 PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
-                                            if(cardBrandInString == MADA_SCHEME && isCurrencyOriginalRelatedToSaudiReal().not()){
+
+                                            doOnCurrencySupported { cardBrand ->
                                                 onPaymentCardComplete.onPayCardCompleteAction(
                                                     true,
                                                     paymentTyper,
@@ -1173,24 +1171,13 @@ class PaymentInlineViewHolder(
                                                     it1,
                                                     it2,
                                                     null,
-                                                    PaymentDataSource.getBinLookupResponse()?.cardBrand?.name,
+                                                    cardBrand ?: cardBrandInString,
                                                     savedCardsModel
                                                 )
-                                            }
-                                            doOnCurrencySupported {
-                                                onPaymentCardComplete.onPayCardCompleteAction(
-                                                    true,
-                                                    paymentTyper,
-                                                    it,
-                                                    it1,
-                                                    it2,
-                                                    null,
-                                                    cardBrandInString,
-                                                    savedCardsModel
-                                                )
-                                                tapInlineCardSwitch?.switchSaveCard?.isChecked =
-                                                    true
-                                                tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
+                                                if (tapCurrencyControlWidgetPaymentInline?.isVisible ==false){
+                                                    tapInlineCardSwitch?.switchSaveCard?.isChecked = true
+                                                    tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
+                                                }
                                             }
                                         }
                                     }
@@ -1314,8 +1301,8 @@ class PaymentInlineViewHolder(
     }
 
 
-    fun isCurrencyOriginalRelatedToSaudiReal(): Boolean {
-        return PaymentDataSource.getCurrency()?.isoCode?.toUpperCase()?.toString() == SAUDI_CURRENCY
+    fun isCurrencySelectedRelatedToSaudiReal(): Boolean {
+        return PaymentDataSource.getSelectedCurrency()?.toUpperCase()?.toString() == SAUDI_CURRENCY
     }
 
     fun dismsisCurrencyWidget() {
@@ -1432,7 +1419,7 @@ class PaymentInlineViewHolder(
     ) {
 
         if (_binLookupResponse?.cardBrand?.name.equals(
-                _binLookupResponse?.scheme?.name,
+                _binLookupResponse?.scheme?.name?.replace("_", ""),
                 ignoreCase = true
             )
         ) {
@@ -1490,24 +1477,10 @@ class PaymentInlineViewHolder(
                     .equals(_binLookupResponse?.scheme?.cardBrand?.name, ignoreCase = true)
             }
             if (itemsCardsList.isNotEmpty()) {
-                val selectedImage: SectionTabItem?
-                if (isCurrencyOriginalRelatedToSaudiReal()) {
-                    selectedImage = itemsCardsList.find {
-                        it.selectedImageURL.contains(
-                            _binLookupResponse?.scheme?.cardBrand?.name?.toLowerCase().toString()
-                        )
-                    }
-                } else {
-                    selectedImage = itemsCardsList.find {
-                        it.selectedImageURL.contains(
-                            _binLookupResponse?.cardBrand?.name?.toLowerCase().toString()
-                        )
-                    }
-                }
                 tapCardInputView.setSingleCardInput(
                     CardBrandSingle.fromCode(
                         _binLookupResponse?.cardBrand?.name.toString()
-                    ), selectedImage?.selectedImageURL
+                    ), checkMadaLogoForVisaOrMasterCard(_binLookupResponse!!)?.selectedImageURL
                 )
                 tabLayout?.visibility = View.GONE
                 tapAlertView?.fadeVisibility(View.GONE, 500)
@@ -1570,20 +1543,26 @@ class PaymentInlineViewHolder(
                     if (schema != null) {
                         schema?.cardBrand?.let {
                             tabLayout.selectTab(it, true)
-                            if (isCurrencyOriginalRelatedToSaudiReal()){
-                                PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.let { it1 ->
-                                    logicTosetImageDynamic(
-                                        it1, charSequence.toString()
-                                    )
-                                }
-                            }else{
-                                PaymentDataSource?.getBinLookupResponse()?.cardBrand?.let { it1 ->
-                                    logicTosetImageDynamic(
-                                        it1, charSequence.toString()
-                                    )
-                                }
+                            logicTosetImageDynamic(
+                                checkMadaLogoForVisaOrMasterCard(
+                                    PaymentDataSource.getBinLookupResponse()!!
+                                )?.type, charSequence.toString()
+                            )
 
-                            }
+//                            if (isCurrencyOriginalRelatedToSaudiReal()){
+//                                PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.let { it1 ->
+//                                    logicTosetImageDynamic(
+//                                        it1, charSequence.toString()
+//                                    )
+//                                }
+//                            }else{
+//                                PaymentDataSource?.getBinLookupResponse()?.cardBrand?.let { it1 ->
+//                                    logicTosetImageDynamic(
+//                                        it1, charSequence.toString()
+//                                    )
+//                                }
+//
+//                            }
 
                         }
                     } else {
@@ -1919,26 +1898,76 @@ class PaymentInlineViewHolder(
     }
 
 
-    fun TapBaseViewHolder.doOnCurrencySupported(onCurrencySupported: () -> Unit) {
+    fun TapBaseViewHolder.doOnCurrencySupported(onCurrencySupported: (cardBrand: String?) -> Unit) {
         if (isCardEnterdShouldBeDisabledPaymentOptions()) {
             onPaymentCardComplete.onPaymentCompletedShowingCurrencyWidget(
                 cardBrandInString.toString()
             )
-            return
+            /**
+             * case activate PayButton
+             */
+            if (cardBrandInString == MADA_SCHEME && isCurrencySelectedRelatedToSaudiReal().not()) {
+                onCurrencySupported.invoke(PaymentDataSource.getBinLookupResponse()?.cardBrand?.rawValue)
+            }
+
+        } else if (isCardEnterdEnabledPaymentOptionsAndHasMoreThanOneSupportedCurrency()) {
+            onPaymentCardComplete.onPaymentCompletedShowingCurrencyWidget(
+                cardBrandInString.toString()
+            )
+            onCurrencySupported.invoke(cardBrandInString)
         } else {
-            onCurrencySupported.invoke()
+            onCurrencySupported.invoke(cardBrandInString)
         }
     }
 
+    fun TapBaseViewHolder.checkMadaLogoForVisaOrMasterCard(
+        binLookupResponse: BINLookupResponse?): SectionTabItem? {
+        var selectedImage: SectionTabItem? = null
+        if (isCurrencySelectedRelatedToSaudiReal()) {
+            selectedImage = itemsCardsList.find {
+                /**
+                 * mada scheme cardBrand in case of SAUDi REAL
+                 */
+                it.selectedImageURL.contains(
+                    binLookupResponse?.scheme?.cardBrand?.name?.toLowerCase().toString()
+                )
+            }
+        } else {
+            /**
+             * visa , mastercard  brand  in case of SAUDI REAL
+             */
+            selectedImage = itemsCardsList.find {
+                it.selectedImageURL.contains(
+                    binLookupResponse?.cardBrand?.name?.toLowerCase().toString()
+                )
+            }
+        }
+        return selectedImage
+    }
+
     fun isCardEnterdShouldBeDisabledPaymentOptions(): Boolean {
+
         val isCardEnterdDisabledPaymentOption = checkoutViewModel.getDisabledCardPaymentList(
-            PaymentDataSource.getCurrency()?.isoCode?.toUpperCase().toString()
+            PaymentDataSource.getSelectedCurrency()?.toUpperCase().toString()
         )
             .any {
                 it.brand == PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
             }
         return isCardEnterdDisabledPaymentOption
     }
+
+    private fun isCardEnterdEnabledPaymentOptionsAndHasMoreThanOneSupportedCurrency(): Boolean {
+
+        val isCardEnterdHasMoreThanOneCurrency = checkoutViewModel.getEnabledCardPaymentList(
+            PaymentDataSource.getSelectedCurrency()?.toUpperCase().toString()
+        )
+            .any {
+                it.brand == PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue && it.getSupportedCurrencies().size > 1
+            }
+        return isCardEnterdHasMoreThanOneCurrency && (PaymentDataSource.getCurrency()?.isoCode?.toUpperCase() != PaymentDataSource.getSelectedCurrency()
+            ?.toUpperCase().toString())
+    }
+
 
     fun getCard(): CreateTokenCard? {
         val number: String? = fullCardNumber
@@ -2214,7 +2243,7 @@ class PaymentInlineViewHolder(
 
     }
 
-    fun logicTosetImageDynamic(card: CardBrand, cardCharSeq: String) {
+    fun logicTosetImageDynamic(card: CardBrand?, cardCharSeq: String) {
         for (i in itemsCardsList.indices) {
 
             if (itemsCardsList[i].selectedImageURL.contentEquals(
@@ -2226,10 +2255,10 @@ class PaymentInlineViewHolder(
                     ""
                 )
                 if (iconStr.replace(".png", "").toLowerCase()
-                        .contains(card.name.toLowerCase())
+                        .contains(card?.name?.toLowerCase().toString())
                 ) {
                     tapCardInputView.setSingleCardInput(
-                        CardBrandSingle.fromCode(card.name), itemsCardsList[i].selectedImageURL
+                        CardBrandSingle.fromCode(card?.name), itemsCardsList[i].selectedImageURL
                     )
 
                 }
@@ -2240,10 +2269,10 @@ class PaymentInlineViewHolder(
                     ""
                 )
                 if (iconStr.replace(".png", "").replace("_", "").toLowerCase()
-                        .contains(card.name.toLowerCase())
+                        .contains(card?.name?.toLowerCase().toString())
                 ) {
                     tapCardInputView.setSingleCardInput(
-                        CardBrandSingle.fromCode(card.name), itemsCardsList[i].selectedImageURL
+                        CardBrandSingle.fromCode(card?.name), itemsCardsList[i].selectedImageURL
                     )
 
                 }

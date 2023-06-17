@@ -2016,7 +2016,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     override fun onDisabledChipSelected(
         paymentOption: PaymentOption, position: Int, isDisabledClicked: Boolean?
     ) {
-        println("onDisabledChipSelected" + paymentOption)
+        dismisControlWidget()
         if (paymentOption.isPaymentOptionEnabled) {
             onCardSelectedAction(true, paymentOption)
             if (isPaymentOptionSelectedCurrencyAsPaymentDataSourceCurrency(paymentOption) && isSelectedCurrencyAsPaymentDataSourceCurrency().not()) {
@@ -3554,7 +3554,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         return list.filter { items ->
             items.paymentType == paymentType && items.getSupportedCurrencies()?.contains(
                 currencyFilter
-            ) == true
+            )
         } as ArrayList<PaymentOption>
     }
 
@@ -3618,14 +3618,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     fun filterViewModels(currency: String, position: Int? = null) {
         savedCardsBasedCurr = filterByCurrenciesAndSortList(paymentOptionsResponse.cards, currency)
 
-        val cardPaymentOptions: java.util.ArrayList<PaymentOption> =
-            filteredByPaymentTypeAndCurrencyAndSortedList(
-                paymentOptionsResponse.paymentOptions, PaymentType.CARD, currency
-            )
+
 
 
         logicToHandlePaymentDataType(
-            cardPaymentOptions = cardPaymentOptions,
+            cardPaymentOptions = getEnabledCardPaymentList(currency),
             disabledCardPaymentOptions = getDisabledCardPaymentList(currency)
         )
 
@@ -3652,6 +3649,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         return cardPaymentOptionsDisabled
     }
+
+    fun getEnabledCardPaymentList(currency: String): ArrayList<PaymentOption> {
+        val cardPaymentOptions: java.util.ArrayList<PaymentOption> =
+            filteredByPaymentTypeAndCurrencyAndSortedList(
+                paymentOptionsResponse.paymentOptions, PaymentType.CARD, currency
+            )
+
+        return cardPaymentOptions
+    }
+
 
     private fun filterPaymentChipsAccordingToCurrency(
         currency: String,
