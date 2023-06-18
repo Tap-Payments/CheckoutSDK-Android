@@ -13,6 +13,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
+import androidx.cardview.widget.CardView
 import androidx.core.view.isVisible
 import com.bugfender.sdk.Bugfender
 import com.google.android.material.tabs.TabLayout
@@ -107,6 +108,7 @@ class PaymentInlineViewHolder(
     private var tabPosition: Int? = null
     var tapAlertView: TapAlertView? = null
     var mainLinear: LinearLayout? = null
+    var inlineCardView: CardView? = null
 
     private var imageURL: String = ""
     private var selectedImageURL: String = ""
@@ -173,6 +175,7 @@ class PaymentInlineViewHolder(
         separator1 = tapCardInputView.findViewById(R.id.separator_1)
         tapAlertView = tapPaymentInput?.findViewById(R.id.alertView)
         mainLinear = tapPaymentInput?.findViewById(R.id.mainLinear)
+        inlineCardView = tapPaymentInput?.findViewById(R.id.inline_CardView)
         paymentInputContainer = view.findViewById(R.id.payment_input_layout)
         tapCardInputView.backArrow.visibility = View.GONE
         contactDetailsView = view.findViewById(R.id.contact_detailsView)
@@ -914,9 +917,10 @@ class PaymentInlineViewHolder(
                 mPreviousLength = length;
 
 
-//                if (s != null) {
-//                    if (s.length >= 19) afterValidation()
-//                }
+                //This was added for a purpose in regards to logic
+               if (s != null) {
+                    if (s.length >= 19) afterValidation()
+                }
 
 
             }

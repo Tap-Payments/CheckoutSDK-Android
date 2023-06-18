@@ -2168,6 +2168,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         dismisControlWidget()
         unActivateActionButton()
         paymentInlineViewHolder.clearTextInput()
+        // added to solve issue of switch disappearing after touch
+        paymentInlineViewHolder.mainLinear?.deepForEach {
+            isClickable = true
+        }
         CustomUtils.hideKeyboardFrom(context, paymentInlineViewHolder.view)
     }
 
