@@ -6,13 +6,10 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Typeface
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.*
 import androidx.cardview.widget.CardView
-import androidx.core.text.TextUtilsCompat
-import androidx.core.view.ViewCompat
 import com.google.android.material.shape.*
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibraryy.R
@@ -84,8 +81,13 @@ class TapCurrencyControlWidget : FrameLayout {
         dropDownIv.backgroundTintList =
             ColorStateList.valueOf(loadAppThemManagerFromPath(AppColorTheme.ControlCurrencyWidgetCurrencyDropDownTintColorOfIcon))
 
+        setSpinnerBackground()
+
+    }
+
+    fun setSpinnerBackground(isTriangleUp: Boolean = true) {
         val shapeDrawable =
-            MaterialShapeDrawable(createSpinnerBackgroundShapeWithTrianleAtTopEdge())
+            MaterialShapeDrawable(createSpinnerBackgroundShapeWithTrianleAtTopEdge(isTriangleUp))
         shapeDrawable.apply {
             strokeWidth = 1f
             strokeColor =
@@ -97,16 +99,21 @@ class TapCurrencyControlWidget : FrameLayout {
 
         spinner.setPopupBackgroundDrawable(shapeDrawable)
         spinner.dropDownHorizontalOffset = 35
-
-
     }
 
-    private fun createSpinnerBackgroundShapeWithTrianleAtTopEdge(): ShapeAppearanceModel {
-        return ShapeAppearanceModel()
-            .toBuilder()
-            .setAllCorners(CornerFamily.ROUNDED, 8f)
-            .setTopEdge(TriangleEdgeTreatment(10f, false))
-            .build()
+    private fun createSpinnerBackgroundShapeWithTrianleAtTopEdge(isTriangleEdgeDown: Boolean): ShapeAppearanceModel {
+        if (isTriangleEdgeDown)
+            return ShapeAppearanceModel()
+                .toBuilder()
+                .setAllCorners(CornerFamily.ROUNDED, 8f)
+                .setTopEdge(TriangleEdgeTreatment(10f, false))
+                .build()
+        else
+            return ShapeAppearanceModel()
+                .toBuilder()
+                .setAllCorners(CornerFamily.ROUNDED, 8f)
+                .setBottomEdge(TriangleEdgeTreatment(10f, false))
+                .build()
     }
 
     @SuppressLint("SetTextI18n")
@@ -156,10 +163,13 @@ class TapCurrencyControlWidget : FrameLayout {
             it.viewTreeObserver?.addOnWindowFocusChangeListener { hasFocus -> //This updates the arrow icon up/down depending on Spinner opening/closing
                 if (hasFocus) {
                     rotateImage(dropDownIv, 0f)
+
                 } else {
                     rotateImage(dropDownIv, -180F)
                 }
             }
+
+
         }
 
         if (displayNamePaymentOption.size <= 1) {
@@ -169,6 +179,8 @@ class TapCurrencyControlWidget : FrameLayout {
             spinner.isEnabled = true
             dropDownIv.visibility = View.VISIBLE
         }
+
+
     }
 
 

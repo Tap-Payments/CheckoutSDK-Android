@@ -39,6 +39,8 @@ class TapSpinnerAdapter(
         return rowview(convertView, position)
     }
 
+
+
     @SuppressLint("SetTextI18n")
     private fun rowview(convertView: View?, position: Int): View {
         val rowItem: SupportedCurrencies? = getItem(position)
