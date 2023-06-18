@@ -963,34 +963,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         paymentInlineViewHolder.resetPaymentCardView()
     }
 
-    private fun setActionNotGoPayOpenedNotItemsDisplayed() {
-        saveCardSwitchHolder?.let {
-            removeViews(
-                cardViewHolder,
-                paymentInlineViewHolder,
-                it,
-                itemsViewHolder
-            )
-        }
-
-        if (::webViewHolder.isInitialized) removeViews(webViewHolder)
-
-        saveCardSwitchHolder?.let {
-            addViews(
-                cardViewHolder,
-                paymentInlineViewHolder,
-                it
-            )
-        }
-
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.IDLE)
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isEnabled = true
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isClickable = true
-        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated = true
-        itemsViewHolder.view.mainCurrencyChip.chipsRecycler.adapter = currencyAdapter
-        frameLayout.visibility = GONE
-
-    }
 
     @RequiresApi(Build.VERSION_CODES.N)
     @SuppressLint("SetTextI18n")
@@ -1953,11 +1925,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     PaymentDataSource.setWebViewType(WebViewType.THREE_DS_WEBVIEW)
 
                     if ((savedCardsModel as PaymentOption).paymentType == PaymentType.WEB) {
-                        showShrinkageForPaymentInline()
                         PaymentDataSource.setWebViewType(WebViewType.REDIRECT)
                         setPayButtonAction(PaymentType.WEB, savedCardsModel)
                     } else if ((savedCardsModel as PaymentOption).paymentType == PaymentType.GOOGLE_PAY) {
-                        showShrinkageForPaymentInline()
                         setPayButtonAction(PaymentType.GOOGLE_PAY, savedCardsModel)
                     } else if ((savedCardsModel as PaymentOption).paymentType == PaymentType.CARD) {
                         paymentInlineViewHolder.tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
@@ -1990,14 +1960,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
                     /**
                      * needed to reset these setOnclick listener after refactoring
-                     * the payment Inline :S :S to avaid multible onClickListener .
+                     * the payment Inline :S :S to avaid multiple onClickListener .
                      */
-                    paymentInlineViewHolder.intertabLayout.getTabAt(0)?.view?.setOnClickListener {
-                        performResetToPaymentInline()
-                    }
-                    paymentInlineViewHolder.tabLayout.getChildAt(0).setOnClickListener {
-                        performResetToPaymentInline()
-                    }
+//                    paymentInlineViewHolder.intertabLayout.getTabAt(0)?.view?.setOnClickListener {
+//                        performResetToPaymentInline()
+//                    }
+//                    paymentInlineViewHolder.tabLayout.getChildAt(0).setOnClickListener {
+//                        performResetToPaymentInline()
+//                    }
                     paymentInlineViewHolder.mainLinear?.setOnTouchListener { view, motionEvent ->
                         performResetToPaymentInline()
                         return@setOnTouchListener true
@@ -2014,6 +1984,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     override fun onDisabledChipSelected(
         paymentOption: PaymentOption, position: Int, isDisabledClicked: Boolean?
     ) {
+        showShrinkageForPaymentInline()
         dismisControlWidget()
         if (paymentOption.isPaymentOptionEnabled) {
             onCardSelectedAction(true, paymentOption)
@@ -2069,8 +2040,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 supportedCurrenciesRelatedToDisabledChip.removeIf { it.currency == PaymentDataSource.getSelectedCurrency()?.toUpperCase().toString() }
             }
             controlCurrencyPlace.setSupportedCurrunciesForControlWidget(
-                supportedCurrenciesRelatedToDisabledChip
-            )
+                    supportedCurrenciesRelatedToDisabledChip
+                )
+            val locations = IntArray(2)
+
+            controlCurrencyPlace.getLocationOnScreen(locations)
+            val distance: Int = context.getDeviceSpecs().first.minus(locations.get(1))
+            Log.e("distance",distance.toString())
+
+
         }
         controlCurrencyPlace.visibility = View.VISIBLE
         controlCurrencyPlace.post(Runnable {
@@ -2162,16 +2140,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
     }
 
-    private fun resetViewsToNormal() {
+    private fun resetViewsToNormal(isClearInput:Boolean=false) {
         resetViewToPaymentInline()
         resetCardSelection()
         dismisControlWidget()
         unActivateActionButton()
-        paymentInlineViewHolder.clearTextInput()
         // added to solve issue of switch disappearing after touch
         paymentInlineViewHolder.mainLinear?.deepForEach {
             isClickable = true
         }
+        if (isClearInput==true) paymentInlineViewHolder.clearTextInput()
         CustomUtils.hideKeyboardFrom(context, paymentInlineViewHolder.view)
     }
 

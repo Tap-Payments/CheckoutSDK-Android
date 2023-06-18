@@ -1099,11 +1099,12 @@ class PaymentInlineViewHolder(
                             }
                         } else {
 
-                            if (fullCardNumber != null)
-                                logicForImageOnCVV(
-                                    CardValidator.validate(fullCardNumber).cardBrand,
-                                    s.toString()
-                                )
+//                            if (fullCardNumber != null)
+//                                logicForImageOnCVV(
+//                                    CardValidator.validate(fullCardNumber).cardBrand,
+//                                    s.toString()
+//                                )
+                            //}
                         }
                         acceptedCardText.visibility = View.GONE
                         tabLayout.visibility = View.GONE
