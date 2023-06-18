@@ -1678,8 +1678,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = INVISIBLE
             saveCardSwitchHolder?.view?.visibility = VISIBLE
         }
-//        if (::checkoutFragment.isInitialized)
-//            checkoutFragment.closeText.visibility = GONE
         println("chargeResponse are>>>>" + chargeResponse?.status)
         if (response.contains("failure") || response.contains("Cancelled Google Pay") && chargeResponse == null) {
 
@@ -2066,6 +2064,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         supportedCurrenciesRelatedToDisabledChip.add(supportedCurrencies)
                     }
                 }
+            }
+            if (supportedCurrenciesRelatedToDisabledChip.size >1){
+                supportedCurrenciesRelatedToDisabledChip.removeIf { it.currency == PaymentDataSource.getSelectedCurrency()?.toUpperCase().toString() }
             }
             controlCurrencyPlace.setSupportedCurrunciesForControlWidget(
                 supportedCurrenciesRelatedToDisabledChip
