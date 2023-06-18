@@ -43,7 +43,7 @@ import java.util.*
 class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, InlineViewCallback {
     val viewModel: CheckoutViewModel by viewModels()
     val cardViewModel: CardViewModel by viewModels()
-    lateinit var userRepository: UserRepository
+
     var checkOutActivity: CheckOutActivity? = null
     var hideAllView = false
     lateinit var status: ChargeStatus
@@ -72,8 +72,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         super.onViewCreated(view, savedInstanceState)
 
         cardViewModel.getContext(requireContext())
-           //  userRepository = UserRepository(requireContext(), viewModel)
-        //userRepository.getUserIpAddress()
         cardViewModel.processEvent(event = CardViewEvent.IpAddressEvent,viewModel= viewModel, context = context)
         initViews(view)
         isWebViewOpened = false
