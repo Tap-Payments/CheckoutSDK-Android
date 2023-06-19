@@ -1699,6 +1699,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         when (savedCardsModel) {
             is SavedCard -> {
+                Bugfender.d(
+                    CustomUtils.tagEvent,
+                    "Saved card selected :" + savedCardsModel.lastFour + "&" + savedCardsModel.id
+                )
                 /**
                  * Clear card input text auto focus
                  */
@@ -1712,6 +1716,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 cardViewHolder.view.cardInfoHeaderText.text =
                     LocalizationManager.getValue("savedCardSectionTitle", "TapCardInputKit")
                 isSavedCardSelected = true
+                Bugfender.d(
+                    CustomUtils.tagEvent,
+                    "Payment scheme selected: title :" + savedCardsModel.brand + "& ID :" + savedCardsModel.paymentOptionIdentifier
+                )
                 unActivateActionButton()
             }
             else -> {
