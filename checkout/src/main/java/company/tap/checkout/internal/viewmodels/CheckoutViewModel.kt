@@ -2118,10 +2118,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
         }
 
-
-
-
-
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.removeAllViewsInLayout()
 
 
@@ -2209,7 +2205,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 selectedPayOption = paymentOptionsResponse.paymentOptions[i]
             }
         }
-        // println("selectedPayOption>>"+selectedPayOption)
 
         return selectedPayOption
     }
@@ -2447,7 +2442,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         paymentType: PaymentType,
         cardBrandString: String?
     ) {
-        println("isCompleted???" + isCompleted)
         //todo add validations from api when cvv is valid the only  activate ActionButton
         if (isCompleted) {
             businessViewHolder.view?.headerView.constraint.visibility = VISIBLE
@@ -2455,7 +2449,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             saveCardSwitchHolder?.view?.mainSwitch?.switchSaveMobile?.visibility = GONE
             saveCardSwitchHolder?.setSwitchToggleData(paymentType)
             loyaltyViewHolder.view.loyaltyView?.constraintLayout?.visibility = VISIBLE
-            // loyatFlag = true
             /**
              * @TODO:  Will be enabled when coming from API directly
              */
@@ -2478,14 +2471,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         cvvNumber: String?, holderName: String?, cardBrandString: String?, savedCardsModel: Any?
 
     ) {
-        println("isCompleted aaa" + isCompleted)
-        println("cardBrandString aaa" + cardBrandString)
-        println("cardNumber aaa" + cardNumber)
-        println("cardInput status>>" + paymentInlineViewHolder.cardInputUIStatus)
-        println("paymentTypeEnum status>>" + paymentType)
-        println("savedCardsModel status>>" + savedCardsModel)
-
-
         if (isCompleted) {
             activateActionButton(cardBrandString = cardBrandString)
             CustomUtils.hideKeyboardFrom(context, paymentInlineViewHolder.view)
@@ -2521,9 +2506,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     override fun onClickNFC() {
 
         removeViews(
-            //businessViewHolder,
-            // amountViewHolder,
-            // cardViewHolder,
             paymentInlineViewHolder,
             saveCardSwitchHolder,
             otpViewHolder,
@@ -2531,17 +2513,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             goPayViewsHolder
         )
         frameLayout.visibility = VISIBLE
-        //  addViews(businessViewHolder, amountViewHolder)
 
         cardViewHolder.view.visibility = GONE
         fragmentManager
             .beginTransaction()
             .replace(R.id.fragment_container_nfc_lib, nfcFragment)
             .commit()
-        /* fragmentManager.beginTransaction().remove(InlineViewFragment()).replace(
-             R.id.fragment_container_nfc_lib,
-             nfcFragment
-         ).commit()*/
         isNFCOpened = true
         checkoutFragment.isNfcOpened = true
         amountViewHolder.changeGroupAction(false)
@@ -2555,11 +2532,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     // Override function to open card Scanner and scan the card.
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onClickCardScanner(scannerClicked: Boolean) {
-        //setSlideAnimation()
         removeViews(
-            //businessViewHolder,
-            // amountViewHolder,
-            //cardViewHolder,
             saveCardSwitchHolder,
             paymentInlineViewHolder,
             otpViewHolder,
@@ -2567,15 +2540,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             goPayViewsHolder
         )
         amountViewHolder.readyToScanVisibility(scannerClicked)
-        // addViews(businessViewHolder, amountViewHolder)
         inLineCardLayout.visibility = VISIBLE
         cardViewHolder.view.visibility = GONE
         FrameManager.getInstance().frameColor = Color.WHITE
-        // Use
-        //  val bottomSheet: FrameLayout? = bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet)
-        //  BottomSheetBehavior.from(bottomSheet as View).state = BottomSheetBehavior.STATE_EXPANDED
-        //   bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
-
         fragmentManager
             .beginTransaction()
             .replace(R.id.inline_container, inlineCamerFragment)
@@ -2652,22 +2619,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             itemAdapter.updateAdapterData(itemList)
 
         }
-
-
-
         selectedAmount = CurrencyFormatter.currencyFormat(totalSelectedAmount.toString())
         selectedCurrency = currencySelected
         selectedTotalAmount = selectedAmount
-
-
-        Log.e("selectedCurrency", PaymentDataSource.getSelectedCurrency().toString())
-        Log.e(
-            "selectedCurrency original",
-            PaymentDataSource.getCurrency()?.isoCode?.toUpperCase().toString()
-        )
-
-
-
         amountViewHolder.updateSelectedCurrency(
             displayItemsOpen,
             selectedAmount,
@@ -2701,12 +2655,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         if (isChangeingCurrencyFromOutside == true) {
             isUserCurrencySameAsCurrencyOfApplication()
         }
-
-
-
         adapter.resetSelection()
-
-
         filterViewModels(selectedCurrency, position)
         filterPaymentChipsAccordingToCurrency(
             selectedCurrency,
@@ -3669,10 +3618,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     fun handlePaymentSuccess(paymentData: PaymentData, selectedPaymentOption: PaymentOption) {
         removeViews(
-            //businessViewHolder,
             amountViewHolder,
             cardViewHolder,
-            // saveCardSwitchHolder,
             paymentInlineViewHolder,
             otpViewHolder,
             goPaySavedCardHolder,
