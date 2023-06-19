@@ -87,8 +87,6 @@ class BusinessViewHolder(context: Context, private val checkoutViewModel: Checko
                     view.headerView.paymentFor.visibility = View.GONE
                 }
                 view.headerView.businessIcon.visibility = View.VISIBLE
-                //   view.headerView.tapChipIcon.visibility= View.VISIBLE
-                //   view.headerView.showHideLoading(false)
                 view.headerView.constraint.visibility = View.VISIBLE
 
                 tapCloseIcon.setOnClickListener {

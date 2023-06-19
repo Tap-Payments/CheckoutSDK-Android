@@ -22,7 +22,6 @@ interface BaseLayoutManager {
     fun displayGoPayLogin()
     fun displayGoPay()
     fun controlCurrency(display: Boolean)
-    fun reOpenSDKState()
     fun displayOTPView(phoneNumber: PhoneNumber?, otpType:String, chargeResponse: Charge?=null)
     fun displayRedirect(url: String,authenticate: Charge?)
     fun displaySaveCardOptions()

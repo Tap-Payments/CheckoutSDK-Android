@@ -143,9 +143,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             webFrameLayout,
             inLineCardLayout,
             this,
-            requireActivity().intent,
             cardViewModel = cardViewModel, this,
-            headerLayout,
             topHeaderView
         )
 
@@ -190,9 +188,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             if (hideAllView) {
                 if (::status.isInitialized)
                     viewModel.showOnlyButtonView(
-                        status,
-                        checkOutActivity,
-                        this
+                        status
                     )
 
             } else {
@@ -206,7 +202,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             }
         } else {
             if (::status.isInitialized)
-                viewModel.showOnlyButtonView(status, checkOutActivity, this)
+                viewModel.showOnlyButtonView(status)
         }
 
         return enabledSections

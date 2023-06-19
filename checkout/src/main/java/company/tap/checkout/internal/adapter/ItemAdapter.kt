@@ -42,7 +42,6 @@ All rights reserved.
  **/
 class ItemAdapter(
     private var bottomSheetLayout: FrameLayout,
-    private var headerLayout: LinearLayout,
     private var sdkLayout: LinearLayout
 ) :
     RecyclerView.Adapter<ItemAdapter.ItemHolder>() {
