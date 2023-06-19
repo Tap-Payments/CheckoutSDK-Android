@@ -2040,20 +2040,6 @@ class PaymentInlineViewHolder(
     fun checkAllowedCardTypes(binLookupResponse: BINLookupResponse?) {
         if (binLookupResponse != null && PaymentDataSource?.getCardType().toString() != null) {
             if (PaymentDataSource.getCardType().toString() != binLookupResponse.cardType) {
-//                CustomUtils.showDialog(
-//                  /*  LocalizationManager.getValue(
-//                        "alertUnsupportedCardTitle",
-//                        "AlertBox"
-//                    ),*/
-//                    title = "Alert",
-//                   // LocalizationManager.getValue("alertUnsupportedCardMessage", "AlertBox"),
-//                    messageString = "Card Not supported",
-//                    context = context,
-//                    btnType = 1,
-//                    baseLayoutManager =  baseLayoutManager,
-//                    cardTypeDialog = true
-//                )
-
             }
         }
 

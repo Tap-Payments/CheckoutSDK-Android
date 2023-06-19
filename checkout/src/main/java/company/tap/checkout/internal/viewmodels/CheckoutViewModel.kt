@@ -1699,37 +1699,25 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         when (savedCardsModel) {
             is SavedCard -> {
-                Bugfender.d(
-                    CustomUtils.tagEvent,
-                    "Saved card selected :" + savedCardsModel.lastFour + "&" + savedCardsModel.id
-                )
                 /**
                  * Clear card input text auto focus
                  */
                 paymentInlineViewHolder.tapCardInputView.clear()
                 paymentInlineViewHolder.clearCardInputAction()
-
                 paymentInlineViewHolder.setDataForSavedCard(
                     savedCardsModel,
                     CardInputUIStatus.SavedCard
                 )
-
                 cardViewHolder.view.cardInfoHeaderText.visibility = VISIBLE
                 cardViewHolder.view.cardInfoHeaderText.text =
                     LocalizationManager.getValue("savedCardSectionTitle", "TapCardInputKit")
-
                 isSavedCardSelected = true
-                Bugfender.d(
-                    CustomUtils.tagEvent,
-                    "Payment scheme selected: title :" + savedCardsModel.brand + "& ID :" + savedCardsModel.paymentOptionIdentifier
-                )
                 unActivateActionButton()
             }
             else -> {
                 if (savedCardsModel != null) {
                     activateActionButton((savedCardsModel as PaymentOption))
                     PaymentDataSource.setWebViewType(WebViewType.THREE_DS_WEBVIEW)
-
                     if ((savedCardsModel as PaymentOption).paymentType == PaymentType.WEB) {
                         PaymentDataSource.setWebViewType(WebViewType.REDIRECT)
                         setPayButtonAction(PaymentType.WEB, savedCardsModel)
@@ -1758,8 +1746,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                                 CardBrandSingle.fromCode(savedCardsModel.brand),
                                 savedCardsModel.logos?.light_mono?.currencyWidget?.png
                             )
-
-
                         })
                     }
 
@@ -1958,20 +1944,23 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @SuppressLint("ClickableViewAccessibility")
     @RequiresApi(Build.VERSION_CODES.N)
     private fun showShrinkageForPaymentInline() {
-        paymentInlineViewHolder.mainLinear?.addShrinkAnimation(
-            xDirection = 0.9f,
-            yDirection = 0.9f,
-            isDimmed = true
-        )
-        cardViewHolder.cardInfoHeaderText.addShrinkAnimation(
-            xDirection = 0.9f,
-            yDirection = 1f,
-            isDimmed = true
-        )
-        paymentInlineViewHolder.tapCardInputView.hideCursor()
-        paymentInlineViewHolder.mainLinear?.deepForEach {
-            isClickable = false
+        with(paymentInlineViewHolder) {
+            mainLinear?.addShrinkAnimation(
+                xDirection = 0.9f,
+                yDirection = 0.9f,
+                isDimmed = true
+            )
+            cardViewHolder.cardInfoHeaderText.addShrinkAnimation(
+                xDirection = 0.9f,
+                yDirection = 1f,
+                isDimmed = true
+            )
+            tapCardInputView.hideCursor()
+            mainLinear?.deepForEach {
+                isClickable = false
+            }
         }
+
 
     }
 
@@ -2194,8 +2183,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         Glide.with(context)
             .load(
                 getAssetName(
-                    selectedPayOpt
-                ,context)
+                    selectedPayOpt, context
+                )
             ).fitCenter()
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .into(image!!)
@@ -2378,12 +2367,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             transitionAnimation = 500, changeHeight = {})
     }
 
-
-    fun removeVisibilityTapChipAmount() {
-        amountViewHolder.view.amount_section.tapChipPopup.fadeVisibility(View.GONE)
-    }
-
-
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onDeleteIconClicked(
         stopAnimation: Boolean,
@@ -2398,7 +2381,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         savedCardLongClickDelete()
         resetViewToPaymentInline()
         dismisControlWidget()
-        println("stopAnimation" + stopAnimation)
         this.cardId = cardId
         selectedViewToBeDeletedFromCardViewHolder = selectedViewToBeDeleted
         viewToBeBlurCardViewHolder = viewtoBeBlur
@@ -2864,7 +2846,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 }
 
             }
-            //  false
         }
 
     }
@@ -2885,9 +2866,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     ) {
         var extraFees: java.util.ArrayList<ExtraFee>? = null
         var paymentOption: PaymentOption? = null
-
-
-
         if (paymentTypeEnum == PaymentType.WEB) {
             savedCardsModel as PaymentOption
             extraFees = savedCardsModel.extraFees
@@ -2905,7 +2883,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
         val totalAmount: String
         if (selectedTotalAmount != null) {
-            println("selectedTotalAmount is" + selectedTotalAmount)
             if (selectedAmount.contains(",")) {
                 totalAmount = CurrencyFormatter.currencyFormat(
                     fee?.add(BigDecimal(selectedAmount.replace(",", "").toDouble())).toString()
@@ -2937,10 +2914,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 selectedCurrency
             )
         } else if (savedCardsModel != null) {
-
-            println("savedCardsModel after fees" + savedCardsModel)
-            println("savedCardsModel after fees" + paymentTypeEnum)
-
             if (paymentTypeEnum == PaymentType.CARD || paymentTypeEnum == PaymentType.SavedCard) {
                 if (paymentInlineViewHolder.cardInputUIStatus == CardInputUIStatus.SavedCard) {
                     savedCardsModel as SavedCard
@@ -2949,12 +2922,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         setDifferentPaymentsAction(PaymentType.SavedCard, savedCardsModel)
                     } else setDifferentPaymentsAction(PaymentType.SavedCard, savedCardsModel)
 
-                } else {
-                    //    savedCardsModel as PaymentOption
+                } else
                     setDifferentPaymentsAction(PaymentType.CARD, savedCardsModel)
-
-                }
-
             } else setDifferentPaymentsAction(paymentTypeEnum, savedCardsModel)
         } else setDifferentPaymentsAction(paymentTypeEnum, savedCardsModel)
     }
@@ -3065,14 +3034,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     private fun setAllSeparatorTheme() {
-
-        val borderColor: String = ThemeManager.getValue("poweredByTap.backgroundColor")
-        var borderOpacityVal: String? = null
-        var newBorderColor: String? = null
-        borderOpacityVal = borderColor.substring(borderColor.length - 2)
-        newBorderColor = "#" + borderOpacityVal + borderColor.substring(0, borderColor.length - 2)
-            .replace("#", "")
-
         /**
          * Set the stroke width from json itself for business header*/
         val separatorViewTheme = SeparatorViewTheme()
@@ -3085,7 +3046,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             amountViewHolder.view.amountView_separator.visibility = GONE
         } else amountViewHolder.view.amountView_separator.visibility = VISIBLE
         amountViewHolder.view.amountView_separator.setTheme(separatorViewTheme)
-        //  cardViewHolder.view.tapSeparatorViewLinear1.separator_1.setTheme(separatorViewTheme)
         goPaySavedCardHolder.view.tapSeparatorViewLinear.separator_.setTheme(separatorViewTheme)
         /**
          * set separator background
@@ -3101,16 +3061,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onRecognitionSuccess(card: TapCard?) {
-//to be added for unembossed cards
-        /* if (card != null) {
-             if (card.cardNumber != null && card.cardHolder != null && card.expirationDate != null) {
-                onReadSuccess(card)
-             }
-         }*/
-
         println("are you called here!!")
-
-
     }
 
     override fun onRecognitionFailure(error: String?) {
@@ -3125,7 +3076,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     .remove(fragmentManager?.findFragmentById(R.id.inline_container)!!)
                     .commit()
             }
-            // inlineCamerFragment.onDestroy()
             isInlineOpened = false
             checkoutFragment.isScannerOpened = false
             inLineCardLayout.visibility = GONE
@@ -3140,12 +3090,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     fun handleScanFailedResult(error: String?) {
-        println("handleScanFailedResult card is")
         removeInlineScanner()
-        //  removeViews(amountViewHolder, businessViewHolder)
         addViews(
-            // businessViewHolder,
-            //  amountViewHolder,
             cardViewHolder,
             paymentInlineViewHolder,
             saveCardSwitchHolder
@@ -3155,19 +3101,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun handleScanSuccessResult(card: TapCard) {
-
-        //  removeViews(amountViewHolder, businessViewHolder)
         addViews(
-            //   businessViewHolder,
-            //   amountViewHolder,
-            // cardViewHolder,
             paymentInlineViewHolder,
             saveCardSwitchHolder
         )
         callBinLookupApi(card.cardNumber?.trim()?.substring(0, 6))
 
-
-        Handler().postDelayed({
+        doAfterSpecificTime {
             val binLookupResponse: BINLookupResponse? = PaymentDataSource.getBinLookupResponse()
             if (PaymentDataSource.getCardType() != null && PaymentDataSource.getCardType() == CardType.ALL) {
                 setScannedCardDetails(card)
@@ -3179,10 +3119,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 }
 
             }
-        }, 1000)
-
-
-        // inlineCamerFragment.onDestroy()
+        }
         removeInlineScanner()
 
 
@@ -3190,16 +3127,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun setScannedCardDetails(card: TapCard) {
-
-
-        println("scanned card holder is${card.cardHolder}")
-        println("scanned card number is${card.cardNumber}")
-
-        /* paymentInlineViewHolder.tapCardInputView.setCardNumberMasked(
-             paymentInlineViewHolder.maskCardNumber(
-                 card.cardNumber
-             )
-         )*/
         paymentInlineViewHolder.hideViewONScanNFC()
         val dateParts: List<String>? = card.expirationDate?.split("/")
         val month = dateParts?.get(0)?.toInt()
@@ -3209,9 +3136,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 paymentInlineViewHolder.setCardScanData(card, month, year)
             }
         }
-
-        // paymentInlineViewHolder.tapCardInputView.setCardHolderName(card.cardHolder)
-
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -3329,11 +3253,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
         if (currencyFilter != null) {
-            this.getCurrenciesFilter<PaymentOption>(currencyFilter)?.let { filters.add(it) }
+            this.getCurrenciesFilter<PaymentOption>(currencyFilter).let { filters.add(it) }
         }
 
         return list.filter { items ->
-            items.paymentType == paymentType && items.getSupportedCurrencies()?.contains(
+            items.paymentType == paymentType && items.getSupportedCurrencies().contains(
                 currencyFilter
             )
         } as ArrayList<PaymentOption>
