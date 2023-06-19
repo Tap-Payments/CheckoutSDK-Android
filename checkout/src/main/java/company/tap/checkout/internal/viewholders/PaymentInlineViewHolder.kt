@@ -766,9 +766,8 @@ class PaymentInlineViewHolder(
                         cardNumber?.let {
                             expiryDate?.let { it1 ->
                                 if (PaymentDataSource.getBinLookupResponse() != null) {
-                                    cardBrandInString =
-                                        PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
-                                    doOnCurrencySupported {
+                                    cardBrandInString = PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
+                                    doOnCurrencySupported {cardBrand ->
                                         onPaymentCardComplete.onPayCardCompleteAction(
                                             true,
                                             PaymentType.CARD,
@@ -776,7 +775,7 @@ class PaymentInlineViewHolder(
                                             it1,
                                             cvvNumber,
                                             cardHolderName,
-                                            PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
+                                            cardBrand ?: cardBrandInString
                                         )
                                     }
                                 }
@@ -1553,21 +1552,6 @@ class PaymentInlineViewHolder(
                                     PaymentDataSource.getBinLookupResponse()!!
                                 )?.type, charSequence.toString()
                             )
-
-//                            if (isCurrencyOriginalRelatedToSaudiReal()){
-//                                PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.let { it1 ->
-//                                    logicTosetImageDynamic(
-//                                        it1, charSequence.toString()
-//                                    )
-//                                }
-//                            }else{
-//                                PaymentDataSource?.getBinLookupResponse()?.cardBrand?.let { it1 ->
-//                                    logicTosetImageDynamic(
-//                                        it1, charSequence.toString()
-//                                    )
-//                                }
-//
-//                            }
 
                         }
                     } else {
