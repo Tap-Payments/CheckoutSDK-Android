@@ -2040,6 +2040,21 @@ class PaymentInlineViewHolder(
     fun checkAllowedCardTypes(binLookupResponse: BINLookupResponse?) {
         if (binLookupResponse != null && PaymentDataSource?.getCardType().toString() != null) {
             if (PaymentDataSource.getCardType().toString() != binLookupResponse.cardType) {
+                //TODO we need this  was commented because we need localization to be updated by OSAMA Onfirebase to read them
+//                CustomUtils.showDialog(
+//                  /*  LocalizationManager.getValue(
+//                        "alertUnsupportedCardTitle",
+//                        "AlertBox"
+//                    ),*/
+//                    title = "Alert",
+//                   // LocalizationManager.getValue("alertUnsupportedCardMessage", "AlertBox"),
+//                    messageString = "Card Not supported",
+//                    context = context,
+//                    btnType = 1,
+//                    baseLayoutManager =  baseLayoutManager,
+//                    cardTypeDialog = true
+ //              )
+
             }
         }
 
