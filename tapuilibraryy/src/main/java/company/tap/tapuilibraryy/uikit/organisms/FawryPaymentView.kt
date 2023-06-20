@@ -59,7 +59,7 @@ class FawryPaymentView  (context: Context?, attrs: AttributeSet?) :
         payButton.setButtonDataSource(
             true,
             context?.let { LocalizationManager.getLocale(it).language },
-            LocalizationManager.getValue("close", "Common"),
+            LocalizationManager.getValue("close", "ActionButton"),
             Color.parseColor(ThemeManager.getValue("actionButton.Invalid.backgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
         )

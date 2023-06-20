@@ -60,7 +60,7 @@ class AsynchronousPaymentViewHolder(private val context: Context,private  val vi
             true, context?.let { LocalizationManager.getLocale(it).language },
             LocalizationManager.getValue(
                 "close",
-                "Common"
+                "ActionButton"
             ),
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.goLoginBackgroundColor")),
             Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
