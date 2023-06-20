@@ -132,6 +132,12 @@ class TapCurrencyControlWidget : FrameLayout {
                     TapFont.TajawalMedium
                 )
             )
+
+            confitmButton?.typeface = Typeface.createFromAsset(
+                context.assets, TapFont.tapFontType(
+                    TapFont.TajawalMedium
+                )
+            )
         }
 
 

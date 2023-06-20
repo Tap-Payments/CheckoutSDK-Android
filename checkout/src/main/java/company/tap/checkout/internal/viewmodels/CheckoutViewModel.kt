@@ -19,7 +19,6 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
-import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
 import androidx.annotation.RestrictTo
 import androidx.core.view.isVisible
@@ -27,11 +26,14 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearSmoothScroller
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.transition.*
 import cards.pay.paycardsrecognizer.sdk.FrameManager
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import com.bugfender.sdk.Bugfender
+import com.bugfender.sdk.v
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -46,10 +48,7 @@ import company.tap.cardinputwidget2.widget.CardInputListener
 import company.tap.cardscanner.*
 import company.tap.checkout.R
 import company.tap.checkout.internal.PaymentDataProvider
-import company.tap.checkout.internal.adapter.CardAdapterUIKIT
-import company.tap.checkout.internal.adapter.CurrencyTypeAdapter
-import company.tap.checkout.internal.adapter.GoPayCardAdapterUIKIT
-import company.tap.checkout.internal.adapter.ItemAdapter
+import company.tap.checkout.internal.adapter.*
 import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.api.models.*
@@ -71,7 +70,6 @@ import company.tap.checkout.internal.utils.AmountCalculator.calculateExtraFeesAm
 import company.tap.checkout.internal.viewholders.*
 import company.tap.checkout.internal.webview.WebFragment
 import company.tap.checkout.internal.webview.WebViewContract
-import company.tap.checkout.open.CheckOutActivity
 import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
@@ -85,7 +83,6 @@ import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibraryy.themekit.ThemeManager
 import company.tap.tapuilibraryy.themekit.theme.SeparatorViewTheme
 import company.tap.tapuilibraryy.uikit.AppColorTheme
-import company.tap.tapuilibraryy.uikit.animation.MorphingAnimation
 import company.tap.tapuilibraryy.uikit.atoms.TapCurrencyControlWidget
 import company.tap.tapuilibraryy.uikit.datasource.LoyaltyHeaderDataSource
 import company.tap.tapuilibraryy.uikit.enums.ActionButtonState
@@ -94,7 +91,6 @@ import company.tap.tapuilibraryy.uikit.fragment.NFCFragment
 import company.tap.tapuilibraryy.uikit.interfaces.TabAnimatedButtonListener
 import company.tap.tapuilibraryy.uikit.ktx.loadAppThemManagerFromPath
 import company.tap.tapuilibraryy.uikit.ktx.makeLinks
-import company.tap.tapuilibraryy.uikit.ktx.setTopBorders
 import company.tap.tapuilibraryy.uikit.utils.MetricsUtil
 import company.tap.tapuilibraryy.uikit.views.TabAnimatedActionButton
 import company.tap.tapuilibraryy.uikit.views.TapBrandView
@@ -107,8 +103,6 @@ import kotlinx.android.synthetic.main.itemviewholder_layout.view.*
 import kotlinx.android.synthetic.main.loyalty_view_layout.view.*
 import kotlinx.android.synthetic.main.otpview_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
-import mobi.foo.benefitinapp.data.Transaction
-import mobi.foo.benefitinapp.listener.CheckoutListener
 import org.json.JSONException
 import org.json.JSONObject
 import java.math.BigDecimal
@@ -3326,14 +3320,26 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
         }
         if (position != null) {
-            adapter.updateThisSelected(position, isDisabledClicked)
+            adapter.updateThisSelected(position, isDisabledClicked, onDoneNotificationOfItem = {pos->
+                scrollToCenterPosition(pos)
+
+            })
         } else {
             adapter.updateEnabledPaymentOptions(enabledPaymentList)
             adapter.updateDisabledPaymentOptions(disabledPaymentList)
         }
-
-
     }
+
+    private fun scrollToCenterPosition(position: Int) {
+        with(cardViewHolder.view.mainChipgroup.chipsRecycler) {
+            post {
+                val smoothController = getCenterSmoothController()
+                smoothController.targetPosition = position
+                layoutManager?.startSmoothScroll(smoothController)
+            }
+        }
+    }
+
 
     fun getListOfAllPaymentOptionsFilterdWithWebAndGooglePay(): ArrayList<PaymentOption> {
         val googlePaymentOptions: ArrayList<PaymentOption> = arrayListOf<PaymentOption>()
