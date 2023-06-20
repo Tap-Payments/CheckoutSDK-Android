@@ -62,14 +62,11 @@
             android:layout_width="wrap_content"
             android:background="@null"
             android:overlapAnchor="false"
-            android:minHeight="@dimen/_20sdp"
-            android:layout_marginStart="-10dp"
             android:spinnerMode="dropdown"
-            app:layout_constraintStart_toStartOf="@+id/currency_widget_logo"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="@dimen/_5sdp"
             android:dropDownWidth="@dimen/_150sdp"
-            android:dropDownHeight="@dimen/_20sdp"
             android:layout_height="@dimen/_18sdp"
              />
 

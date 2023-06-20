@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.MotionEvent
 import android.widget.TextView
 import androidx.core.text.TextUtilsCompat
+import androidx.core.text.isDigitsOnly
 import androidx.core.view.ViewCompat
 import company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
 import java.util.*
@@ -26,3 +27,13 @@ fun TapTextViewNew.onRightDrawableClicked(onClicked: (view: TextView) -> Unit) {
 }
 
 fun isLayoutRTL () = TextUtilsCompat.getLayoutDirectionFromLocale(Locale.getDefault()) == ViewCompat.LAYOUT_DIRECTION_RTL
+fun String.getColorWithoutOpacity (): String {
+    val ifLastColorDigits = this.takeLast(2).isDigitsOnly()
+    if (ifLastColorDigits) return this.dropLast(2).toString()
+    else return this
+}
+
+fun String.formatTo2DecimalPoints (): String {
+    return  format("%.3f", this).toDouble().toString()
+}
+

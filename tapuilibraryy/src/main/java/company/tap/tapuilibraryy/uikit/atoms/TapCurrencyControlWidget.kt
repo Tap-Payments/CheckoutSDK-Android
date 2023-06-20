@@ -78,8 +78,7 @@ class TapCurrencyControlWidget : FrameLayout {
                 TapFont.RobotoRegular
             )
         )
-        dropDownIv.backgroundTintList =
-            ColorStateList.valueOf(loadAppThemManagerFromPath(AppColorTheme.ControlCurrencyWidgetCurrencyDropDownTintColorOfIcon))
+        dropDownIv.backgroundTintList = ColorStateList.valueOf(loadAppThemManagerFromPath(AppColorTheme.ControlCurrencyWidgetCurrencyDropDownTintColorOfIcon))
 
         setSpinnerBackground()
 
@@ -89,16 +88,15 @@ class TapCurrencyControlWidget : FrameLayout {
         val shapeDrawable =
             MaterialShapeDrawable(createSpinnerBackgroundShapeWithTrianleAtTopEdge(isTriangleUp))
         shapeDrawable.apply {
-            strokeWidth = 1f
-            strokeColor =
-                ColorStateList.valueOf(resources.getColor(R.color.dropdown_stroke))
+            strokeWidth = 0.2f
+            strokeColor = ColorStateList.valueOf(resources.getColor(R.color.dropdown_stroke))
             this.fillColor =
                 ColorStateList.valueOf(loadAppThemManagerFromPath(AppColorTheme.ControlCurrencyWidgetBackground))
 
         }
 
         spinner.setPopupBackgroundDrawable(shapeDrawable)
-        spinner.dropDownHorizontalOffset = 35
+        spinner.dropDownHorizontalOffset =5
     }
 
     private fun createSpinnerBackgroundShapeWithTrianleAtTopEdge(isTriangleEdgeDown: Boolean): ShapeAppearanceModel {
@@ -144,13 +142,9 @@ class TapCurrencyControlWidget : FrameLayout {
     }
 
     fun setSupportedCurrunciesForControlWidget(displayNamePaymentOption: MutableList<SupportedCurrencies>) {
+
         spinner.let {
-            it.adapter = TapSpinnerAdapter(
-                this.context,
-                R.layout.custom_spinner,
-                R.id.tv_spinnervalue,
-                displayNamePaymentOption
-            )
+            it.adapter = CustomDropDownAdapter(context,displayNamePaymentOption)
 
             it.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
@@ -199,7 +193,3 @@ class TapCurrencyControlWidget : FrameLayout {
     }
 }
 
-data class TapCurrencyControlWidgetModel(
-    var logo: String,
-    var currencyWidgetDescription: String
-)

@@ -126,7 +126,7 @@ fun setTopBorders(
     shapeDrawable.elevation = 20f
 }
 
-fun loadAppThemManagerFromPath(pathValue: String) =  Color.parseColor(ThemeManager.getValue(pathValue))
+fun loadAppThemManagerFromPath(pathValue: String) =  Color.parseColor((ThemeManager.getValue(pathValue) as String))
 
 fun setBottomBorders(
     view: View,
