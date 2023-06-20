@@ -23,7 +23,6 @@
             tools:src="@drawable/paypal_logo"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
-
             android:layout_marginStart="@dimen/_8sdp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

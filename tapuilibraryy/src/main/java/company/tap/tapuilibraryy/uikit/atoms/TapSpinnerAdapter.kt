@@ -1,15 +1,10 @@
 package company.tap.tapuilibraryy.uikit.atoms
 
 import SupportedCurrencies
-import android.R.attr.left
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Typeface
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,15 +13,13 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.SimpleTarget
-import com.bumptech.glide.request.transition.Transition
 import company.tap.tapuilibraryy.R
 import company.tap.tapuilibraryy.fontskit.enums.TapFont
 import company.tap.tapuilibraryy.themekit.ThemeManager
 import company.tap.tapuilibraryy.uikit.AppColorTheme
 import company.tap.tapuilibraryy.uikit.formatTo2DecimalPoints
 import company.tap.tapuilibraryy.uikit.getColorWithoutOpacity
-import company.tap.tapuilibraryy.uikit.ktx.loadAppThemManagerFromPath
+import java.security.AccessController.getContext
 
 
 enum class SPINNER_VIEW_TYPE(var type: Int) {
@@ -42,7 +35,8 @@ class TapSpinnerAdapter(
 ) :
     ArrayAdapter<SupportedCurrencies?>(
         context, resouceId, textviewId,
-        list as List<SupportedCurrencies?>) {
+        list as List<SupportedCurrencies?>
+    ) {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         return headerView(convertView, position)
     }
@@ -85,7 +79,7 @@ class TapSpinnerAdapter(
         val rowItem: SupportedCurrencies? = getItem(position)
         val holder = viewHolder()
         var headerView = convertView
-        if(headerView == null) {
+        if (headerView == null) {
             val flater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             headerView = flater.inflate(R.layout.spinner_header, null, false)
             holder.txtTitle =
@@ -119,9 +113,14 @@ fun View.setMargins(left: Int, top: Int, right: Int, bottom: Int) {
 }
 
 
-class CustomDropDownAdapter(val context: Context, var dataSource: List<SupportedCurrencies>) : BaseAdapter() {
+class CustomDropDownAdapter(
+    val context: Context,
+    var dataSource: List<SupportedCurrencies>,
+) : BaseAdapter() {
+    private var hidingItemIndex: Int=0
 
-    private val inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+    private val inflater: LayoutInflater =
+        context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
     @SuppressLint("SetTextI18n")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
@@ -137,7 +136,7 @@ class CustomDropDownAdapter(val context: Context, var dataSource: List<Supported
             vh = view.tag as ItemHolder
         }
 
-        with(vh.label){
+        with(vh.label) {
             val colorToBeParsed =
                 (ThemeManager.getValue<String>(AppColorTheme.ControlCurrencyWidgetMessageColor)).getColorWithoutOpacity()
             setTextColor(Color.parseColor(colorToBeParsed))
@@ -146,17 +145,38 @@ class CustomDropDownAdapter(val context: Context, var dataSource: List<Supported
                     TapFont.RobotoRegular
                 )
             )
-            text = dataSource.get(position).currency.toString() + " " + dataSource.get(position).amount.toString()
-                .formatTo2DecimalPoints()
+            text =
+                dataSource.get(position).currency.toString() + " " + dataSource.get(position).amount.toString()
+                    .formatTo2DecimalPoints()
         }
 
-        Glide.with(context).load(dataSource.get(position).flag).into(vh.img)
+        Glide.with(context).load(dataSource[position].flag).into(vh.img)
 
         return view
     }
 
+    override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup?): View? {
+        var v: View? = null
+
+        if (position == hidingItemIndex) {
+            val tv = TextView(context)
+            tv.visibility = View.GONE
+            tv.height = 0
+            v = tv
+        } else {
+            v = super.getDropDownView(position, null, parent);
+
+        }
+        return v
+    }
+
     override fun getItem(position: Int): Any? {
         return dataSource[position]
+    }
+
+    fun hideItemPosition(position: Int) {
+        this.hidingItemIndex = position
+        notifyDataSetChanged()
     }
 
     override fun getCount(): Int {

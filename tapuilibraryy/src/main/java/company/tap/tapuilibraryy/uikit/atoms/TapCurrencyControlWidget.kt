@@ -78,7 +78,8 @@ class TapCurrencyControlWidget : FrameLayout {
                 TapFont.RobotoRegular
             )
         )
-        dropDownIv.backgroundTintList = ColorStateList.valueOf(loadAppThemManagerFromPath(AppColorTheme.ControlCurrencyWidgetCurrencyDropDownTintColorOfIcon))
+        dropDownIv.backgroundTintList =
+            ColorStateList.valueOf(loadAppThemManagerFromPath(AppColorTheme.ControlCurrencyWidgetCurrencyDropDownTintColorOfIcon))
 
         setSpinnerBackground()
 
@@ -96,7 +97,7 @@ class TapCurrencyControlWidget : FrameLayout {
         }
 
         spinner.setPopupBackgroundDrawable(shapeDrawable)
-        spinner.dropDownHorizontalOffset =5
+        spinner.dropDownHorizontalOffset = 20
     }
 
     private fun createSpinnerBackgroundShapeWithTrianleAtTopEdge(isTriangleEdgeDown: Boolean): ShapeAppearanceModel {
@@ -144,7 +145,8 @@ class TapCurrencyControlWidget : FrameLayout {
     fun setSupportedCurrunciesForControlWidget(displayNamePaymentOption: MutableList<SupportedCurrencies>) {
 
         spinner.let {
-            it.adapter = CustomDropDownAdapter(context,displayNamePaymentOption)
+            val customAdapter = CustomDropDownAdapter(context, displayNamePaymentOption)
+            it.adapter = customAdapter
 
             it.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
@@ -154,11 +156,12 @@ class TapCurrencyControlWidget : FrameLayout {
                     id: Long
                 ) {
                     selectedCurrency = parent.getItemAtPosition(position) as SupportedCurrencies
+                    customAdapter.hideItemPosition(position)
+
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
-
 
             it.viewTreeObserver?.addOnWindowFocusChangeListener { hasFocus -> //This updates the arrow icon up/down depending on Spinner opening/closing
                 if (hasFocus) {
