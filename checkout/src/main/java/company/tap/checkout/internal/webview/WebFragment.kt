@@ -61,6 +61,7 @@ class WebFragment(
     private var webViewUrl: String? = null
     private var chargeResponse: Charge? = null
     val progressBar by lazy { view?.findViewById<ProgressBar>(R.id.progressBar) }
+    val linear by lazy { view?.findViewById<LinearLayout>(R.id.linear) }
     private var displayMetrics: Int? = 0
     private var isFirstTimeLoadingInWeb = this.isFirstTimeLoading
 
@@ -120,8 +121,12 @@ class WebFragment(
         web_view.webViewClient =
             cardViewModel?.let { TapCustomWebViewClient(this, it, checkoutViewModel) }!!
         //  web_view.webViewClient = cardViewModel?.let { TapCustomWebViewClient2(this, it) }!!
-
-
+        web_view.layoutParams = context?.twoThirdHeightView()?.roundToInt()?.let {
+            FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                it
+            )
+        }
         webViewUrl?.let { web_view.loadUrl(it) }
 
         web_view.setOnKeyListener { _, keyCode, event ->
