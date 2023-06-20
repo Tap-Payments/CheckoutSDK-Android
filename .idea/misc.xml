@@ -39,6 +39,7 @@
         <entry key="checkout/src/main/res/drawable-xxhdpi/googlepay_button_overlay.xml" value="0.125" />
         <entry key="checkout/src/main/res/drawable-xxxhdpi/googlepay_button_background_shape_white.xml" value="0.144" />
         <entry key="checkout/src/main/res/drawable/border_unclick_cardinput.xml" value="0.1425" />
+        <entry key="checkout/src/main/res/drawable/border_unclick_white.xml" value="0.2115" />
         <entry key="checkout/src/main/res/drawable/layout_bg.xml" value="0.2445" />
         <entry key="checkout/src/main/res/drawable/loading_web_animation.xml" value="0.2145" />
         <entry key="checkout/src/main/res/drawable/window_background.xml" value="0.144" />
@@ -59,6 +60,7 @@
         <entry key="checkout/src/main/res/layout/googlepay_button_white.xml" value="0.13648648648648648" />
         <entry key="checkout/src/main/res/layout/item_benefit_pay.xml" value="0.11182432432432432" />
         <entry key="checkout/src/main/res/layout/item_currency_rows.xml" value="0.25" />
+        <entry key="checkout/src/main/res/layout/item_disabled.xml" value="0.1070945945945946" />
         <entry key="checkout/src/main/res/layout/item_googlepay.xml" value="0.7891360308672931" />
         <entry key="checkout/src/main/res/layout/item_googlepay_dark.xml" value="0.17398648648648649" />
         <entry key="checkout/src/main/res/layout/item_googlepay_light.xml" value="0.165" />

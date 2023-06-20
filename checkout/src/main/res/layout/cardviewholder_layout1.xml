@@ -32,8 +32,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_12sdp"
-            android:layout_marginTop="@dimen/_1sdp"
-            android:layout_marginBottom="@dimen/_4sdp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="@dimen/margin_basic_8dp"
+
             android:textAllCaps="true"
             android:textSize="@dimen/font_size_10sp"
             android:textColor="#9F9F9F"

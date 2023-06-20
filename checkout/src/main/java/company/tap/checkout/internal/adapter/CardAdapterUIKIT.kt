@@ -338,19 +338,56 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
     }
 
     private fun setSelectedCardTypeSavedShadowAndBackground(holder: RecyclerView.ViewHolder) {
-        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
+        /*if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
             holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.border_shadow_white)
         } else {
             holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.border_shadow)
+        }
+*/
+        with(holder.itemView.shakingArea) {
+            strokeWidth = strokeWidthForProject
+
+            if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
+                setStrokeColor(ColorStateList.valueOf(resources.getColor(R.color.white)))
+                setCardBackgroundColor(ColorStateList.valueOf(resources.getColor(R.color.black_color)))
+
+            } else {
+                setStrokeColor(ColorStateList.valueOf(resources.getColor(R.color.greencolor)))
+                setCardBackgroundColor(ColorStateList.valueOf(resources.getColor(R.color.white)))
+
+            }
+
         }
     }
 
 
     private fun setUnSelectedCardTypeSavedShadowAndBackground(holder: RecyclerView.ViewHolder) {
-        if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
+     /*   if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
             holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.border_unclick_black)
         } else {
             holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.border_unclick_white)
+        }*/
+
+
+        with(holder.itemView.shakingArea) {
+            strokeWidth = 0
+            if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
+                setCardBackgroundColor(
+                    ColorStateList.valueOf(
+                        context.resources.getColor(
+                            R.color.black_color
+                        )
+                    )
+                )
+            } else holder.itemView.shakingArea.apply {
+                setCardBackgroundColor(
+                    ColorStateList.valueOf(
+                        context.resources.getColor(
+                            R.color.white
+                        )
+                    )
+                )
+            }
         }
     }
 

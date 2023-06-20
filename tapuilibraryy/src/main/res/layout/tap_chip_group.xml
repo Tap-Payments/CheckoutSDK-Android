@@ -13,7 +13,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingTop="6dp"
-        android:layout_marginHorizontal="@dimen/_12sdp"
+        android:layout_marginHorizontal="@dimen/_14sdp"
+        android:layout_marginBottom="5dp"
 
         >
 
@@ -54,7 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
-        android:layout_marginHorizontal="@dimen/_12sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
         android:nestedScrollingEnabled="true"
         android:orientation="horizontal"
         android:layout_marginBottom="@dimen/_4sdp"
