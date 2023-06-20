@@ -69,19 +69,8 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateAdapterDataSavedCard(adapterSavedCard: List<SavedCard>, position: Int? = null) {
-        // this.savedCardsArrayList = adapterSavedCard
-        if (position != null) {
-            this.savedCardsArrayList = adapterSavedCard
-
-            /**
-             * needed to update saved cards along with notify item change
-             */
-            // notifyItemChanged(position)
-            Log.e("positionIndex", position.toString())
-            //  notifyItemRangeChanged(this.enabledPaymentOptions.size,this.savedCardsArrayList.size)
-            //notifyDataSetChanged()
-        } else {
-            this.savedCardsArrayList = adapterSavedCard
+        this.savedCardsArrayList = adapterSavedCard
+        if (position == null) {
             notifyDataSetChanged()
         }
 
@@ -95,16 +84,18 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         notifyDataSetChanged()
     }
 
-    fun updateThisSelected(position: Int,isDisabledClicked:Boolean?=null) {
+    fun updateThisSelected(position: Int, isDisabledClicked: Boolean? = null,onDoneNotificationOfItem:(position:Int)->Unit) {
         /**
          * case position clicked was the disabledItem
          */
-     //   if (position > enabledPaymentOptions.size)
+        //   if (position > enabledPaymentOptions.size)
         if (isDisabledClicked == true)
-            selectedPosition = position.plus(enabledPaymentOptions.size).plus(savedCardsArrayList.size)
+            selectedPosition =
+                position.plus(enabledPaymentOptions.size).plus(savedCardsArrayList.size)
         else
-        selectedPosition = position
+            selectedPosition = position
         notifyItemChanged(position)
+        onDoneNotificationOfItem(selectedPosition)
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -464,7 +455,8 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
                 )
                 selectedPosition = holder.bindingAdapterPosition
                 onCardSelectedActionListener.onDisabledChipSelected(
-                    typeDisabled,position.minus(savedCardsArrayList.size).minus(enabledPaymentOptions.size),
+                    typeDisabled,
+                    position.minus(savedCardsArrayList.size).minus(enabledPaymentOptions.size),
                     isDisabledClicked = true
                 )
                 notifyDataSetChanged()
