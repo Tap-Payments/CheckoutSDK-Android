@@ -1804,7 +1804,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             .toString() == PaymentDataSource.getCurrency()?.isoCode?.toUpperCase().toString()
 
     override fun onDeselectionOfItem() {
-        resetViewsToNormal()
+        resetViewsToNormal(isClearInput = true)
     }
 
 

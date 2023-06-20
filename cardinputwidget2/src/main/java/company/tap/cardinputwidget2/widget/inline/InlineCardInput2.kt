@@ -11,6 +11,7 @@ import android.os.Parcelable
 import android.text.*
 import android.util.AttributeSet
 import android.util.DisplayMetrics
+import android.util.Range
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -2116,6 +2117,9 @@ class InlineCardInput2 @JvmOverloads constructor(
             val DRAWABLE_BOTTOM = 3
             println("event>>>" + event.action)
             println("v is>>>" + v)
+            println("locale is>>>" + context?.let { LocalizationManager.getLocale(it).language})
+         //   println("drawable is>>>" + (holderNameEditText.compoundDrawables[DRAWABLE_LEFT].bounds.width()).minus(holderNameEditText.left))
+            println("drawable is>>>" + event.rawX)
             holderNameEditText.requestFocus()
             if (event.action == MotionEvent.ACTION_DOWN) {
                 holderNameEditText.requestFocus()
@@ -2132,8 +2136,8 @@ class InlineCardInput2 @JvmOverloads constructor(
 
                 } else {
                     if (holderNameEditText.compoundDrawables[DRAWABLE_LEFT] != null)
-                        if (event.rawX >= holderNameEditText.left - holderNameEditText.compoundDrawables[DRAWABLE_LEFT].bounds.width()
-                        ) {
+                        println("csfsdf"+ event.rawX.toInt().coerceIn(64,70))
+                        if (event.rawX <= 70) {
                             holderNameEditText.setText("")
                             holderNameEditText.setCompoundDrawables(null, null, null, null)
                             // your action here
