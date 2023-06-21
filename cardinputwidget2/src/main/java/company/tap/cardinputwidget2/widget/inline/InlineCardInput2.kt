@@ -2136,8 +2136,10 @@ class InlineCardInput2 @JvmOverloads constructor(
 
                 } else {
                     if (holderNameEditText.compoundDrawables[DRAWABLE_LEFT] != null)
-                        println("csfsdf"+ event.rawX.toInt().coerceIn(64,70))
-                        if (event.rawX <= 70) {
+                        /**
+                         * Workaround to listen touch changes 
+                        **/
+                        if (event.rawX <= 120) {
                             holderNameEditText.setText("")
                             holderNameEditText.setCompoundDrawables(null, null, null, null)
                             // your action here
