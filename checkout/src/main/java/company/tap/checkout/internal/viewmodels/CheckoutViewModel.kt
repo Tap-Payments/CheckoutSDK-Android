@@ -1834,7 +1834,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         }
 
-        if (controlCurrencyPlace.measuredHeight == 0) {
+        /**
+         * need to remove this magic number xD
+         */
+        if (controlCurrencyPlace.measuredHeight < 100) {
             controlCurrencyPlace.post(Runnable {
                 controlCurrencyPlace.measure(
                     MeasureSpec.UNSPECIFIED,
