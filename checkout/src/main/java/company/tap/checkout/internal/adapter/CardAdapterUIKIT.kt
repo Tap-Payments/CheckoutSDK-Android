@@ -335,7 +335,7 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
             holder.itemView.tapCardChip2.setBackgroundResource(R.drawable.border_shadow)
         }
 */
-        with(holder.itemView.shakingArea) {
+        with(holder.itemView.tapCardChip2) {
             strokeWidth = strokeWidthForProject
 
             if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
@@ -360,7 +360,7 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         }*/
 
 
-        with(holder.itemView.shakingArea) {
+        with(holder.itemView.tapCardChip2) {
             strokeWidth = 0
             if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
                 setCardBackgroundColor(
@@ -370,7 +370,7 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
                         )
                     )
                 )
-            } else holder.itemView.shakingArea.apply {
+            } else holder.itemView.tapCardChip2.apply {
                 setCardBackgroundColor(
                     ColorStateList.valueOf(
                         context.resources.getColor(
