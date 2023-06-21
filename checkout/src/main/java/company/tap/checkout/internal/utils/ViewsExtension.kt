@@ -497,7 +497,7 @@ fun View.slideView(
 
     val slideAnimator = ValueAnimator
         .ofInt(if (this.measuredHeight==newHeight) 0 else this.measuredHeight, newHeight)
-        .setDuration(800)
+        .setDuration(600)
 
     slideAnimator.addUpdateListener {
         this.layoutParams.height = it.animatedValue as Int

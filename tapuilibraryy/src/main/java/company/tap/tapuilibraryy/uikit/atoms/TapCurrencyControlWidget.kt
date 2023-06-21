@@ -17,7 +17,9 @@ import company.tap.tapuilibraryy.fontskit.enums.TapFont
 import company.tap.tapuilibraryy.uikit.AppColorTheme
 import company.tap.tapuilibraryy.uikit.isLayoutRTL
 import company.tap.tapuilibraryy.uikit.ktx.loadAppThemManagerFromPath
+import company.tap.tapuilibraryy.uikit.utils.MetricsUtil
 import java.util.*
+import kotlin.math.roundToInt
 
 
 class TapCurrencyControlWidget : FrameLayout {
@@ -97,7 +99,10 @@ class TapCurrencyControlWidget : FrameLayout {
         }
 
         spinner.setPopupBackgroundDrawable(shapeDrawable)
-        spinner.dropDownHorizontalOffset = 20
+        val margin = resources.getDimension(R.dimen._10sdp)
+
+        spinner.dropDownHorizontalOffset = MetricsUtil.convertDpToPixel(20f, context).toInt()
+
     }
 
     private fun createSpinnerBackgroundShapeWithTrianleAtTopEdge(isTriangleEdgeDown: Boolean): ShapeAppearanceModel {

@@ -75,7 +75,7 @@
             android:id="@+id/drop_down_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginStart="@dimen/_7sdp"
             app:layout_constraintStart_toEndOf="@id/currency_widget_spinner"
             app:layout_constraintTop_toTopOf="@id/currency_widget_spinner"
             app:layout_constraintBottom_toBottomOf="@id/currency_widget_spinner"
