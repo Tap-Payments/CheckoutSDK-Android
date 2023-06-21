@@ -252,13 +252,13 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
     ) {
 
         holder.itemView.setOnClickListener {
-            holder.isSingleClicked {
+            holder. isSingleClicked(doOnSingleClicked ={
                 if (!isShaking) {
                     onCardSelectedActionListener.onCardSelectedAction(true, card)
                     selectedPosition = position
                     onCardSelectedActionListener.removePaymentInlineShrinkageAndDimmed()
                 }
-            }
+            },clearInput = true)
 
         }
 
@@ -447,7 +447,7 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         }
 
         holder.itemView.setOnClickListener {
-            holder.isSingleClicked {
+            holder.isSingleClicked(doOnSingleClicked = {
 
                 Log.e(
                     "disabledPaymentIndex",
@@ -460,18 +460,18 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
                     isDisabledClicked = true
                 )
                 notifyDataSetChanged()
-            }
+            })
 
         }
 
 
     }
 
-    fun RecyclerView.ViewHolder.isSingleClicked(doOnSingleClicked: () -> Unit) {
+    fun RecyclerView.ViewHolder.isSingleClicked(doOnSingleClicked: () -> Unit,clearInput:Boolean=false) {
         if (selectedPosition == this.bindingAdapterPosition) {
             selectedPosition = RecyclerView.NO_POSITION;
             notifyDataSetChanged()
-            onCardSelectedActionListener.onDeselectionOfItem()
+            onCardSelectedActionListener.onDeselectionOfItem(clearInput)
             return
         }
         doOnSingleClicked.invoke()
@@ -539,12 +539,11 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         }
 
         holder.itemView.setOnClickListener {
-            holder.isSingleClicked {
+            holder.isSingleClicked(doOnSingleClicked = {
                 selectedPosition = position
                 onCardSelectedActionListener.onDisabledChipSelected(typeEnabled, position)
                 notifyDataSetChanged()
-            }
-
+            })
         }
 
 

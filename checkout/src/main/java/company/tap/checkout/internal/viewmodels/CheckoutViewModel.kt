@@ -1798,8 +1798,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         PaymentDataSource.getSelectedCurrency()?.toUpperCase()
             .toString() == PaymentDataSource.getCurrency()?.isoCode?.toUpperCase().toString()
 
-    override fun onDeselectionOfItem() {
-        resetViewsToNormal(isClearInput = true)
+    override fun onDeselectionOfItem(clearInput: Boolean) {
+        resetViewsToNormal(isClearInput = clearInput)
     }
 
 
@@ -1831,7 +1831,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
             controlCurrencyPlace.getLocationOnScreen(locations)
             val distance: Int = context.getDeviceSpecs().first.minus(locations.get(1))
-            Log.e("distance", distance.toString())
 
 
         }
@@ -1933,7 +1932,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         paymentInlineViewHolder.mainLinear?.deepForEach {
             isClickable = true
         }
-        if (isClearInput == true) paymentInlineViewHolder.clearTextInput()
+        if (isClearInput) paymentInlineViewHolder.clearTextInput()
         CustomUtils.hideKeyboardFrom(context, paymentInlineViewHolder.view)
     }
 
@@ -1941,14 +1940,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     private fun showShrinkageForPaymentInline() {
         with(paymentInlineViewHolder) {
-            addShrinkageAnimationForViews(mainLinear,cardViewHolder.cardInfoHeaderText, isDimmed = true)
+            addShrinkageAnimationForViews(
+                mainLinear,
+                cardViewHolder.cardInfoHeaderText,
+                isDimmed = true
+            )
             tapCardInputView.hideCursor()
             mainLinear?.deepForEach {
                 isClickable = false
             }
-//            tapCardInputView.cardFormHasFocus = false
-//            tapCardInputView.cardNumberEditText.isFocusableInTouchMode=false
-//            tapCardInputView.cardNumberEditText.isFocusable=false
         }
 
 
@@ -1957,9 +1957,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun resetViewToPaymentInline() {
-        with(paymentInlineViewHolder){
+        with(paymentInlineViewHolder) {
             tapCardInputView.showCursor()
-            addShrinkageAnimationForViews(mainLinear,cardViewHolder.cardInfoHeaderText, xDirection = 1f, yDirection = 1f)
+            addShrinkageAnimationForViews(
+                mainLinear,
+                cardViewHolder.cardInfoHeaderText,
+                xDirection = 1f,
+                yDirection = 1f
+            )
         }
     }
 
@@ -2426,7 +2431,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     ) {
         //todo add validations from api when cvv is valid the only  activate ActionButton
         if (isCompleted) {
-            businessViewHolder.view?.headerView.constraint.visibility = VISIBLE
+            businessViewHolder.view.headerView.constraint.visibility = VISIBLE
             saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
             saveCardSwitchHolder?.view?.mainSwitch?.switchSaveMobile?.visibility = GONE
             saveCardSwitchHolder?.setSwitchToggleData(paymentType)
@@ -3310,7 +3315,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         } else {
             adapter.updateEnabledPaymentOptions(enabledPaymentList)
             adapter.updateDisabledPaymentOptions(disabledPaymentList)
-            cardViewHolder.view.mainChipgroup.groupAction.isVisible = disabledPaymentList.isNotEmpty()
+            cardViewHolder.view.mainChipgroup.groupAction.isVisible =
+                disabledPaymentList.isNotEmpty()
 
         }
     }
