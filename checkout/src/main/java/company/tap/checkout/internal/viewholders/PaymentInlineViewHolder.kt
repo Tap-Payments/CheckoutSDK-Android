@@ -1784,7 +1784,8 @@ class PaymentInlineViewHolder(
 
     }
 
-
+/**
+ * Added to update the icons without sorting them ***/
     @RequiresApi(Build.VERSION_CODES.N)
     fun setDataWithOutSort(
         isDisabledClicked: Boolean? = null, currency: String, position: Int?
