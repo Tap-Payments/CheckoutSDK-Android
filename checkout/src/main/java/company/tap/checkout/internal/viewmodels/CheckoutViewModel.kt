@@ -451,7 +451,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         }
         newColorVal = Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
-
+        paymentInlineViewHolder.mainLinear?.setOnClickListener {
+            performResetToPaymentInline()
+        }
 
     }
 
@@ -1585,6 +1587,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         cardViewHolder?.cardInfoHeaderText.text =
             LocalizationManager.getValue("cardSectionTitleOr", "TapCardInputKit")
         unActivateActionButton()
+        removePaymentInlineShrinkageAndDimmed()
     }
 
     private fun removeViews(vararg viewHolders: TapBaseViewHolder?, onRemoveEnd: () -> Unit = {}) {
@@ -1752,14 +1755,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     }
 
 
-                    /**
-                     * needed to reset these setOnclick listener after refactoring
-                     * the payment Inline :S :S to avaid multiple onClickListener .
-                     */
-                    paymentInlineViewHolder.mainLinear?.setOnTouchListener { view, motionEvent ->
-                        performResetToPaymentInline()
-                        return@setOnTouchListener true
-                    }
                 } else
 
                     displayGoPayLogin()
@@ -1931,9 +1926,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     private fun resetViewsToNormal(isClearInput: Boolean = false) {
-        resetViewToPaymentInline()
+        removePaymentInlineShrinkageAndDimmed()
         resetCardSelection()
-        dismisControlWidget()
         unActivateActionButton()
         // added to solve issue of switch disappearing after touch
         paymentInlineViewHolder.mainLinear?.deepForEach {
@@ -1947,20 +1941,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     private fun showShrinkageForPaymentInline() {
         with(paymentInlineViewHolder) {
-            mainLinear?.addShrinkAnimation(
-                xDirection = 0.9f,
-                yDirection = 0.9f,
-                isDimmed = true
-            )
-            cardViewHolder.cardInfoHeaderText.addShrinkAnimation(
-                xDirection = 0.9f,
-                yDirection = 1f,
-                isDimmed = true
-            )
+            addShrinkageAnimationForViews(mainLinear,cardViewHolder.cardInfoHeaderText, isDimmed = true)
             tapCardInputView.hideCursor()
             mainLinear?.deepForEach {
                 isClickable = false
             }
+//            tapCardInputView.cardFormHasFocus = false
+//            tapCardInputView.cardNumberEditText.isFocusableInTouchMode=false
+//            tapCardInputView.cardNumberEditText.isFocusable=false
         }
 
 
@@ -1969,17 +1957,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun resetViewToPaymentInline() {
-        paymentInlineViewHolder.tapCardInputView.showCursor()
-        cardViewHolder.cardInfoHeaderText.addShrinkAnimation(
-            xDirection = 1f,
-            yDirection = 1f,
-            isDimmed = false
-        )
-        paymentInlineViewHolder.mainLinear?.addShrinkAnimation(
-            xDirection = 1f,
-            yDirection = 1f,
-            isDimmed = false
-        )
+        with(paymentInlineViewHolder){
+            tapCardInputView.showCursor()
+            addShrinkageAnimationForViews(mainLinear,cardViewHolder.cardInfoHeaderText, xDirection = 1f, yDirection = 1f)
+        }
     }
 
 
@@ -2376,8 +2357,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         position: Int
     ) {
         savedCardLongClickDelete()
-        resetViewToPaymentInline()
-        dismisControlWidget()
+        removePaymentInlineShrinkageAndDimmed()
         this.cardId = cardId
         selectedViewToBeDeletedFromCardViewHolder = selectedViewToBeDeleted
         viewToBeBlurCardViewHolder = viewtoBeBlur

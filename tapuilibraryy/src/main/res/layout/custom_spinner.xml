@@ -17,7 +17,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginVertical="@dimen/_10sdp"
         android:layout_marginStart="@dimen/_8sdp"
-        android:layout_marginEnd="@dimen/_5sdp"
         >
 
     <ImageView
