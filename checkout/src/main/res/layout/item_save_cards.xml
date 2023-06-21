@@ -9,8 +9,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_centerInParent="true"
     android:layoutDirection="locale"
+    app:rippleColor="@android:color/transparent"
     android:textDirection="locale"
-    android:layout_margin="1dp"
+    android:layout_margin="2.5dp"
     app:cardCornerRadius="8dp"
     app:cardElevation="1dp"
     android:id="@+id/shakingArea">
@@ -44,7 +45,7 @@
         app:rippleColor="@android:color/transparent"
         app:cardPreventCornerOverlap="false"
         app:cardCornerRadius="8dp"
-        app:cardElevation="1dp"
+        app:cardElevation="2dp"
         tools:background="@color/red_error"
         android:hardwareAccelerated="true"
         android:layout_gravity="center">

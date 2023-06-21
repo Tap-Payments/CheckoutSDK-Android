@@ -6,11 +6,12 @@
     android:layout_width="100dp"
     android:layout_height="40dp"
     android:clipToPadding="false"
-    android:layout_margin="1dp"
+    android:layout_margin="2.5dp"
     app:rippleColor="@android:color/transparent"
     app:cardPreventCornerOverlap="false"
     app:cardCornerRadius="8dp"
     app:cardElevation="1dp"
+
     >
 
     <ImageView
