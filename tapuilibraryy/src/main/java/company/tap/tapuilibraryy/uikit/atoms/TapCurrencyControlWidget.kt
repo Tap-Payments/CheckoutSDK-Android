@@ -104,13 +104,13 @@ class TapCurrencyControlWidget : FrameLayout {
         if (isTriangleEdgeDown)
             return ShapeAppearanceModel()
                 .toBuilder()
-                .setAllCorners(CornerFamily.ROUNDED, 8f)
+                .setAllCorners(CornerFamily.ROUNDED, 12f)
                 .setTopEdge(TriangleEdgeTreatment(10f, false))
                 .build()
         else
             return ShapeAppearanceModel()
                 .toBuilder()
-                .setAllCorners(CornerFamily.ROUNDED, 8f)
+                .setAllCorners(CornerFamily.ROUNDED, 12f)
                 .setBottomEdge(TriangleEdgeTreatment(10f, false))
                 .build()
     }
@@ -145,7 +145,7 @@ class TapCurrencyControlWidget : FrameLayout {
     fun setSupportedCurrunciesForControlWidget(displayNamePaymentOption: MutableList<SupportedCurrencies>) {
 
         spinner.let {
-            val customAdapter = CustomDropDownAdapter(context, displayNamePaymentOption)
+            val customAdapter = CustomDropDownAdapter(context, displayNamePaymentOption.take(4))
             it.adapter = customAdapter
 
             it.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {

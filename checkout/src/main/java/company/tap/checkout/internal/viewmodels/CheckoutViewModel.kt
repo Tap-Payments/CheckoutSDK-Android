@@ -3320,13 +3320,18 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
         }
         if (position != null) {
-            adapter.updateThisSelected(position, isDisabledClicked, onDoneNotificationOfItem = {pos->
-                scrollToCenterPosition(pos)
+            adapter.updateThisSelected(
+                position,
+                isDisabledClicked,
+                onDoneNotificationOfItem = { pos ->
+                    scrollToCenterPosition(pos)
 
-            })
+                })
         } else {
             adapter.updateEnabledPaymentOptions(enabledPaymentList)
             adapter.updateDisabledPaymentOptions(disabledPaymentList)
+            cardViewHolder.view.mainChipgroup.groupAction.isVisible = disabledPaymentList.isNotEmpty()
+
         }
     }
 
