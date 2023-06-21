@@ -417,18 +417,16 @@ class PaymentInlineViewHolder(
         switchCheckedState()
 
 
-        tapCardInputView.backArrow.setOnTouchListener(object : View.OnTouchListener {
-            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                checkoutViewModel.setTitleNormalCard()
-                if (getPreTypedCardData() != null) setPrevTypedCard()
-                else {
+        tapCardInputView.backArrow.setOnTouchListener { v, event ->
+            checkoutViewModel.setTitleNormalCard()
+            if (getPreTypedCardData() != null) setPrevTypedCard()
+            else {
 
-                    clearTextInput()
-                }
-
-                return false
+                clearTextInput()
             }
-        })
+
+            false
+        }
 
     }
 

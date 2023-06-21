@@ -16,24 +16,23 @@ import android.util.Log
 import android.view.View
 import android.view.View.*
 import android.view.ViewGroup
+import android.view.animation.TranslateAnimation
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.annotation.RestrictTo
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearSmoothScroller
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.transition.*
 import cards.pay.paycardsrecognizer.sdk.FrameManager
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import com.bugfender.sdk.Bugfender
-import com.bugfender.sdk.v
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -1768,7 +1767,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         paymentOption: PaymentOption, position: Int, isDisabledClicked: Boolean?
     ) {
         showShrinkageForPaymentInline()
-        dismisControlWidget()
+        dismissPaymentCurrency()
         if (paymentOption.isPaymentOptionEnabled) {
             onCardSelectedAction(true, paymentOption)
             if (isPaymentOptionSelectedCurrencyAsPaymentDataSourceCurrency(paymentOption) && isSelectedCurrencyAsPaymentDataSourceCurrency().not()) {
@@ -1834,16 +1833,20 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
         }
-        controlCurrencyPlace.visibility = View.VISIBLE
-        controlCurrencyPlace.post(Runnable {
-            controlCurrencyPlace.measure(
-                MeasureSpec.UNSPECIFIED,
-                MeasureSpec.UNSPECIFIED
-            )
-            val height: Int =
-                controlCurrencyPlace.measuredHeight
-            controlCurrencyPlace.slideView(height)
-        })
+
+        if (controlCurrencyPlace.measuredHeight == 0) {
+            controlCurrencyPlace.post(Runnable {
+                controlCurrencyPlace.measure(
+                    MeasureSpec.UNSPECIFIED,
+                    MeasureSpec.UNSPECIFIED
+                )
+                val height: Int = controlCurrencyPlace.measuredHeight
+                controlCurrencyPlace.slideView(height)
+                controlCurrencyPlace.visibility = View.VISIBLE
+
+            })
+        }
+
 
         with(controlCurrencyPlace) {
             setCurrencyWidgetDescription(
@@ -1882,11 +1885,20 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun dismisControlWidget() {
-        if (cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.isVisible) {
-            cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.slideView(0)
-        }
+        dismissPaymentCurrency()
+        dismissCardsCurrency()
+    }
+
+    fun dismissPaymentCurrency() {
         if (paymentInlineViewHolder.tapCurrencyControlWidgetPaymentInline?.isVisible == true) {
             paymentInlineViewHolder.tapCurrencyControlWidgetPaymentInline?.slideView(0)
+        }
+
+    }
+    fun dismissCardsCurrency() {
+        if (cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.isVisible) {
+            cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.slideView(0)
+
         }
 
     }
@@ -1928,10 +1940,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         removePaymentInlineShrinkageAndDimmed()
         resetCardSelection()
         unActivateActionButton()
-        // added to solve issue of switch disappearing after touch
-        paymentInlineViewHolder.mainLinear?.deepForEach {
-            isClickable = true
-        }
         if (isClearInput) paymentInlineViewHolder.clearTextInput()
         CustomUtils.hideKeyboardFrom(context, paymentInlineViewHolder.view)
     }
@@ -1946,9 +1954,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 isDimmed = true
             )
             tapCardInputView.hideCursor()
-            mainLinear?.deepForEach {
-                isClickable = false
-            }
+//            mainLinear?.deepForEach {
+//                isClickable = false
+//            }
         }
 
 
@@ -2478,6 +2486,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             paymentOptionsResponse.paymentOptions.filter { it.paymentType == PaymentType.CARD }
                 .find { it.brand == cardBrandString }
         if (paymentOption != null) {
+            dismissCardsCurrency()
             showCurrencyControlWidget(
                 paymentOption, null,
                 paymentInlineViewHolder.tapCurrencyControlWidgetPaymentInline!!
