@@ -450,7 +450,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         }
         newColorVal = Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor"))
-        paymentInlineViewHolder.mainLinear?.setOnClickListener {
+        paymentInlineViewHolder.inlineCardView?.setOnClickListener {
             performResetToPaymentInline()
         }
 
