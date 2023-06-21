@@ -161,6 +161,7 @@ class PaymentInlineViewHolder(
     var isDisabledBrandSelected: Boolean? = false
     var _enabledPaymentsList: MutableList<PaymentOption>? = ArrayList()
     var _disabledPaymentList: MutableList<PaymentOption>? = ArrayList()
+    var totalPaymentList: MutableList<PaymentOption>? = ArrayList()
 
     init {
 
@@ -1738,14 +1739,17 @@ class PaymentInlineViewHolder(
     @RequiresApi(Build.VERSION_CODES.N)
     fun setDataFromAPI(
         enabledPaymentsList: List<PaymentOption>,
-        disabledPaymentList: List<PaymentOption>
+        disabledPaymentList: List<PaymentOption>,isDisabledClicked: Boolean?=null
     ) {
-        println("enabledPaymentsList>>" + enabledPaymentsList)
-//        tabLayout.resetBehaviour()
+      //  Log.e("enabledPaymentsList>>" , enabledPaymentsList.toString())
+     //   Log.e("disabledPaymentList:",disabledPaymentList.toString())
+      //  println("isDisabledClicked>>"+isDisabledClicked)
+//    /   tabLayout.resetBehaviour()
 
         val itemsMobilesList = ArrayList<SectionTabItem>()
         val totalList: MutableList<PaymentOption> = ArrayList()
         itemsCardsList = ArrayList<SectionTabItem>()
+        totalPaymentList = ArrayList()
         intertabLayout.removeAllTabs()
         _enabledPaymentsList =
             enabledPaymentsList.sortedBy { it.orderBy } as MutableList<PaymentOption>
@@ -1770,12 +1774,91 @@ class PaymentInlineViewHolder(
         hideTabLayoutWhenOnlyOnePayment(itemsCardsList, itemsMobilesList)
         tabLayout.addSection(itemsCardsList)
 
+        totalPaymentList?.addAll(_enabledPaymentsList!!)
+        totalPaymentList?.addAll(_disabledPaymentList!!)
 
         if (itemsMobilesList.size != 0) tabLayout.addSection(itemsMobilesList)
 
 
     }
 
+/**
+ * Added to update the icons without sorting them ***/
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun setDataWithOutSort(
+        isDisabledClicked: Boolean? = null, currency: String, position: Int?
+    ) {
+        itemsCardsList = ArrayList<SectionTabItem>()
+        intertabLayout.removeAllTabs()
+        if(isDisabledClicked == true) {
+            for (i in 0 until totalPaymentList?.size!!) {
+                if (totalPaymentList!![i].getSupportedCurrencies().contains(currency)) {
+                    when (CustomUtils.getCurrentTheme()) {
+                        ThemeMode.dark.name -> {
+                            imageURL = totalPaymentList!![i].logos?.dark?.png?.toString().toString()
+                        }
+
+                        ThemeMode.dark_colored.name -> {
+                             imageURL = totalPaymentList!![i].logos?.dark_colored?.png?.toString().toString()
+                        }
+                        ThemeMode.light.name -> {
+                            imageURL = totalPaymentList!![i].logos?.light?.png?.toString().toString()
+                        }
+                        ThemeMode.light_mono.name -> {
+                            imageURL = totalPaymentList!![i].logos?.light_mono?.png?.toString().toString()
+                        }
+                    }
+                    paymentType = totalPaymentList!![i].paymentType
+                    cardBrandType = if (totalPaymentList!![i].brand == null) {
+                        "unknown"
+                    } else
+                        totalPaymentList!![i].brand.toString()
+
+
+
+
+                }else{
+                    when (CustomUtils.getCurrentTheme()) {
+                        ThemeMode.dark.name -> {
+                            imageURL = totalPaymentList!![i].logos?.dark?.disabled?.png?.toString().toString()
+                        }
+
+                        ThemeMode.dark_colored.name -> {
+
+                                imageURL = totalPaymentList!![i].logos?.dark_colored?.disabled?.png?.toString().toString()
+                        }
+                        ThemeMode.light.name -> {
+                            imageURL = totalPaymentList!![i].logos?.light?.disabled?.png?.toString().toString()
+                        }
+                        ThemeMode.light_mono.name -> {
+
+                                imageURL = totalPaymentList!![i].logos?.light_mono?.disabled?.png?.toString().toString()
+
+                        }
+                    }
+
+                    paymentType = totalPaymentList!![i].paymentType
+                    cardBrandType = if (totalPaymentList!![i].brand == null) {
+                        "unknown"
+                    } else
+                        totalPaymentList!![i].brand.toString()
+                }
+
+                    itemsCardsList.add(
+                        SectionTabItem(
+                            imageURL,
+                            imageURL,
+                            CardBrand.fromString(cardBrandType)
+                        )
+                    )
+            }
+
+            tabLayout.addSection(itemsCardsList)
+
+        }
+
+
+    }
     private fun hideTabLayoutWhenOnlyOnePayment(
         itemsCardsList: ArrayList<SectionTabItem>,
         itemsMobilesList: ArrayList<SectionTabItem>
@@ -1801,18 +1884,26 @@ class PaymentInlineViewHolder(
         for (i in enabledPaymentList.indices) {
             when (CustomUtils.getCurrentTheme()) {
                 ThemeMode.dark.name -> {
-                    imageURL = enabledPaymentList[i].logos?.dark?.png?.toString().toString()
+                    if (checkoutViewModel.isDisableOptionSelected)
+                    imageURL = enabledPaymentList[i].logos?.dark?.disabled?.png.toString().toString()
+                   else imageURL = enabledPaymentList[i].logos?.dark?.png?.toString().toString()
                 }
 
                 ThemeMode.dark_colored.name -> {
-                    imageURL = enabledPaymentList[i].logos?.dark_colored?.png?.toString().toString()
+                    if (checkoutViewModel.isDisableOptionSelected)
+                    imageURL = enabledPaymentList[i].logos?.dark_colored?.disabled?.png?.toString().toString()
+                    else imageURL = enabledPaymentList[i].logos?.dark_colored?.png?.toString().toString()
                 }
                 ThemeMode.light.name -> {
-                    imageURL = enabledPaymentList[i].logos?.light?.png?.toString().toString()
+                    if (checkoutViewModel.isDisableOptionSelected)
+                    imageURL = enabledPaymentList[i].logos?.light?.disabled?.png?.toString().toString()
+                   else imageURL = enabledPaymentList[i].logos?.light?.png?.toString().toString()
                     //  disabledImageURL = disabledPaymentList[0].logos?.light?.disabled?.png.toString()
                 }
                 ThemeMode.light_mono.name -> {
-                    imageURL = enabledPaymentList[i].logos?.light_mono?.png?.toString().toString()
+                    if (checkoutViewModel.isDisableOptionSelected)
+                    imageURL = enabledPaymentList[i].logos?.light_mono?.disabled?.png?.toString().toString()
+                   else imageURL = enabledPaymentList[i].logos?.light_mono?.png?.toString().toString()
                 }
             }
             // imageURL = imageURLApi[i].image.toString()
@@ -1837,23 +1928,25 @@ class PaymentInlineViewHolder(
             for (i in disabledPaymentList.indices) {
                 when (CustomUtils.getCurrentTheme()) {
                     ThemeMode.dark.name -> {
-                        imageURL =
-                            disabledPaymentList[i].logos?.dark?.disabled?.png?.toString().toString()
+                      //  if (checkoutViewModel.isDisableOptionSelected)
+                        imageURL = disabledPaymentList[i].logos?.dark?.disabled?.png?.toString().toString()
+                      //  else imageURL = disabledPaymentList[i].logos?.dark?.png?.toString().toString()
                     }
 
                     ThemeMode.dark_colored.name -> {
-                        imageURL =
-                            disabledPaymentList[i].logos?.dark_colored?.disabled?.png?.toString()
-                                .toString()
+                       // if (checkoutViewModel.isDisableOptionSelected)
+                        imageURL = disabledPaymentList[i].logos?.dark_colored?.disabled?.png?.toString().toString()
+                       //else  imageURL = disabledPaymentList[i].logos?.dark_colored?.png?.toString().toString()
                     }
                     ThemeMode.light.name -> {
-                        imageURL = disabledPaymentList[i].logos?.light?.disabled?.png?.toString()
-                            .toString()
+                       // if (checkoutViewModel.isDisableOptionSelected)
+                        imageURL = disabledPaymentList[i].logos?.light?.disabled?.png?.toString().toString()
+                      // else imageURL = disabledPaymentList[i].logos?.light?.png?.toString().toString()
                     }
                     ThemeMode.light_mono.name -> {
-                        imageURL =
-                            disabledPaymentList[i].logos?.light_mono?.disabled?.png?.toString()
-                                .toString()
+                      //  if (checkoutViewModel.isDisableOptionSelected)
+                        imageURL = disabledPaymentList[i].logos?.light_mono?.disabled?.png?.toString().toString()
+                     //  else imageURL = disabledPaymentList[i].logos?.light_mono?.png?.toString().toString()
                     }
                 }
                 // imageURL = imageURLApi[i].image.toString()

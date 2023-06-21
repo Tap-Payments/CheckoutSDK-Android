@@ -20,6 +20,7 @@ import android.view.animation.TranslateAnimation
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.annotation.RestrictTo
 import androidx.core.view.isGone
@@ -206,6 +207,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private var image: ImageView? = null
     var savedCardsBasedCurr: java.util.ArrayList<SavedCard> = java.util.ArrayList<SavedCard>()
     var incrementalCount: Int = 0
+    var isDisableOptionSelected: Boolean = false
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun initLayoutManager(
@@ -435,6 +437,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         amountViewHolder.view.amount_section.tapChipPopup.setOnClickListener {
             removePaymentInlineShrinkageAndDimmed()
+            isDisableOptionSelected = false
             amountViewHolder.view.amount_section.tapChipPopup.slideFromEndToStart()
             with(SharedPrefManager.getUserSupportedLocaleForTransactions(context)!!) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -1809,6 +1812,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         controlCurrencyPlace: TapCurrencyControlWidget,
         isDisabledClicked: Boolean? = null
     ) {
+
+
         with(paymentOption) {
             val supportedCurrenciesRelatedToDisabledChip = mutableListOf<SupportedCurrencies>()
             allCurrencies.value?.forEachIndexed { index, supportedCurrencies ->
@@ -1878,6 +1883,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     position = position,
                     isDisabledClicked = isDisabledClicked
                 )
+                if (isDisabledClicked != null) {
+                    isDisableOptionSelected = isDisabledClicked
+                }
                 onCardSelectedAction(true, paymentOption)
 
             }
@@ -1888,6 +1896,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun dismisControlWidget() {
+         isDisableOptionSelected = false
         dismissPaymentCurrency()
         dismissCardsCurrency()
     }
@@ -2577,7 +2586,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         selectedCurrencySymbol: String
     ) {
 
-
+    isDisableOptionSelected= false
         /**
          * need to be refactored to one function
          */
@@ -2602,7 +2611,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         isChangeingCurrencyFromOutside: Boolean? = true,
         isDisabledClicked: Boolean? = null
     ) {
-
         /**
          * need to be refactored
          */
@@ -2655,7 +2663,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             isUserCurrencySameAsCurrencyOfApplication()
         }
         adapter.resetSelection()
-        filterViewModels(selectedCurrency, position)
+        filterViewModels(selectedCurrency, position,isDisabledClicked= isDisabledClicked)
         filterPaymentChipsAccordingToCurrency(
             selectedCurrency,
             position = position,
@@ -3268,12 +3276,18 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun filterViewModels(currency: String, position: Int? = null) {
+    fun filterViewModels(currency: String, position: Int? = null , isDisabledClicked: Boolean?=null) {
         savedCardsBasedCurr = filterByCurrenciesAndSortList(paymentOptionsResponse.cards, currency)
-        logicToHandlePaymentDataType(
-            cardPaymentOptions = getEnabledCardPaymentList(currency),
-            disabledCardPaymentOptions = getDisabledCardPaymentList(currency)
-        )
+
+        if(isDisabledClicked==true){
+            paymentInlineViewHolder.setDataWithOutSort(isDisabledClicked , currency ,position)
+        }else {
+            logicToHandlePaymentDataType(
+                cardPaymentOptions = getEnabledCardPaymentList(currency),
+                disabledCardPaymentOptions = getDisabledCardPaymentList(currency),
+                isDisabledClicked = isDisabledClicked
+            )
+        }
         val hasSavedCards: Boolean = savedCardsBasedCurr.size > 0
         if (hasSavedCards) {
             adapter.updateAdapterDataSavedCard(savedCardsBasedCurr, position)
@@ -3367,7 +3381,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private fun logicToHandlePaymentDataType(
         webPaymentOptions: ArrayList<PaymentOption>? = null,
         cardPaymentOptions: ArrayList<PaymentOption>,
-        disabledCardPaymentOptions: ArrayList<PaymentOption>
+        disabledCardPaymentOptions: ArrayList<PaymentOption>, isDisabledClicked: Boolean?=null
 
     ) {
         cardViewHolder.view.mainChipgroup?.groupName?.visibility = VISIBLE
@@ -3379,7 +3393,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             saveCardSwitchHolder?.view?.cardSwitch?.showOnlyPayButton()
         } else if (PaymentDataSource.getPaymentDataType() != null && PaymentDataSource.getPaymentDataType() == "CARD") {
             adapter.updateAdapterData(ArrayList())
-            paymentInlineViewHolder.setDataFromAPI(cardPaymentOptions, disabledCardPaymentOptions)
+            paymentInlineViewHolder.setDataFromAPI(cardPaymentOptions, disabledCardPaymentOptions, isDisabledClicked)
             saveCardSwitchHolder?.view?.cardSwitch?.showOnlyPayButton()
         } else {
             /**
@@ -3389,7 +3403,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 adapter.updateAdapterData(ArrayList())
                 paymentInlineViewHolder.setDataFromAPI(
                     cardPaymentOptions,
-                    disabledCardPaymentOptions
+                    disabledCardPaymentOptions, isDisabledClicked
                 )
             } else {
                 if (webPaymentOptions != null) {
@@ -3398,7 +3412,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 if (cardPaymentOptions.isNotEmpty()) {
                     paymentInlineViewHolder.setDataFromAPI(
                         cardPaymentOptions,
-                        disabledCardPaymentOptions
+                        disabledCardPaymentOptions,isDisabledClicked
                     )
 
 
