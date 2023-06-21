@@ -12,7 +12,7 @@
     app:rippleColor="@android:color/transparent"
     android:textDirection="locale"
     android:layout_margin="2.5dp"
-    app:cardCornerRadius="8dp"
+    app:cardCornerRadius="8.5dp"
     app:cardElevation="1dp"
     android:id="@+id/shakingArea">
 
@@ -41,11 +41,11 @@
         android:layout_height="40dp"
         android:elevation="1dp"
         android:clipToPadding="false"
-
+        android:layout_margin="2.5dp"
         app:rippleColor="@android:color/transparent"
         app:cardPreventCornerOverlap="false"
         app:cardCornerRadius="8dp"
-        app:cardElevation="2dp"
+        app:cardElevation="1dp"
         tools:background="@color/red_error"
         android:hardwareAccelerated="true"
         android:layout_gravity="center">
