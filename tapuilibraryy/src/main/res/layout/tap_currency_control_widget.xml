@@ -65,7 +65,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="@dimen/_5sdp"
-            android:dropDownVerticalOffset="4dp"
+            android:dropDownVerticalOffset="3dp"
             android:dropDownWidth="@dimen/_150sdp"
             android:layout_height="@dimen/_18sdp"
              />
