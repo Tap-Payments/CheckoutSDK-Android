@@ -2480,6 +2480,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         cvvNumber: String?, holderName: String?, cardBrandString: String?, savedCardsModel: Any?
 
     ) {
+
         if (isCompleted) {
             activateActionButton(cardBrandString = cardBrandString)
             CustomUtils.hideKeyboardFrom(context, paymentInlineViewHolder.view)
@@ -2506,6 +2507,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 paymentInlineViewHolder.tapCurrencyControlWidgetPaymentInline!!
             )
         }
+        CustomUtils.hideKeyboardFrom(context, paymentInlineViewHolder.view)
+
     }
 
     override fun onPaymentCardIsLoyaltyCard(isLoyaltyCard: Boolean) {
