@@ -1140,14 +1140,14 @@ class PaymentInlineViewHolder(
                                     cvvNumber?.let { it2 ->
                                         if (savedCardsModel?.brand?.name == null) {
                                             cardBrandInString =
-                                                PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
+                                                PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
                                         } else {
                                             cardBrandInString = savedCardsModel?.brand?.name
                                         }
                                         onPaymentCardComplete.onPayCardCompleteAction(
                                             true, paymentTyper,
-                                            // it, it1, it2, null,prevSetCardBrand?.toString() , savedCardsModel
-                                            it, it1, it2, null, cardBrandInString, savedCardsModel
+                                          //  it, it1, it2, null,prevSetCardBrand?.toString() , savedCardsModel
+                                           it, it1, it2, null, cardBrandInString, savedCardsModel
                                         )
                                         //    tapInlineCardSwitch?.switchSaveCard?.isChecked = true
 
@@ -1697,6 +1697,7 @@ class PaymentInlineViewHolder(
 
         if (hasFocus) {
             tapAlertView?.fadeVisibility(View.GONE, 500)
+            checkoutViewModel.unActivateActionButton()
         } else {
             if (cvvNumber != null)
                 if (cvvNumber?.length!! < 3) {

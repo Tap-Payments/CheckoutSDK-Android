@@ -2018,8 +2018,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         println("cardBrandString before " + cardBrandString)
         println("paymentOptObject before " + paymentOptObject)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            logicTogetButtonStyle(paymentOptObject, payStringButton, cardBrandString)
+
+        if(cardBrandString==null && paymentOptObject == null) unActivateActionButton()
+        else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                logicTogetButtonStyle(paymentOptObject, payStringButton, cardBrandString)
+            }
         }
 
 
