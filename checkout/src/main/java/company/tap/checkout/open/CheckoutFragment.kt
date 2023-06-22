@@ -126,7 +126,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         bottomSheetLayout = bottomSheetDialog.findViewById(R.id.design_bottom_sheet)
         val topHeaderView: TapBrandView = view.findViewById(R.id.tab_brand_view)
         val inLineCardLayout: FrameLayout = view.findViewById(R.id.inline_container)
-        val headerLayout: LinearLayout = view.findViewById(R.id.headerLayout)
         val checkoutLayout: LinearLayout = view.findViewById(R.id.fragment_all)
         val frameLayoutForNFc: FrameLayout = view.findViewById(R.id.fragment_container_nfc_lib)
         val webFrameLayout: FrameLayout = view.findViewById(R.id.webFrameLayout)

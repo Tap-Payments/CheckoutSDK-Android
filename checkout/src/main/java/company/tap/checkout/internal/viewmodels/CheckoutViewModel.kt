@@ -1768,7 +1768,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onDisabledChipSelected(
-        paymentOption: PaymentOption, position: Int, isDisabledClicked: Boolean?
+        paymentOption: PaymentOption, position: Int?, isDisabledClicked: Boolean?
     ) {
         showShrinkageForPaymentInline()
         dismissPaymentCurrency()

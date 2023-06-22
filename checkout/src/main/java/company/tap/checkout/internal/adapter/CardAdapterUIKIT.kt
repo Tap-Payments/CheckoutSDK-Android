@@ -541,7 +541,7 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         holder.itemView.setOnClickListener {
             holder.isSingleClicked(doOnSingleClicked = {
                 selectedPosition = position
-                onCardSelectedActionListener.onDisabledChipSelected(typeEnabled, position)
+                onCardSelectedActionListener.onDisabledChipSelected(typeEnabled)
                 notifyDataSetChanged()
             })
         }

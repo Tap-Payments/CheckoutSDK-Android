@@ -15,7 +15,7 @@ All rights reserved.
 interface OnCardSelectedActionListener {
     fun onCardSelectedAction(isSelected:Boolean , savedCardsModel : Any?)
 
-    fun onDisabledChipSelected(paymentOption: PaymentOption, itemView: Int,isDisabledClicked:Boolean?=false)
+    fun onDisabledChipSelected(paymentOption: PaymentOption, itemView: Int?=null,isDisabledClicked:Boolean?=false)
 
     fun onDeselectionOfItem(clearInput:Boolean=false)
     fun onDeleteIconClicked(
