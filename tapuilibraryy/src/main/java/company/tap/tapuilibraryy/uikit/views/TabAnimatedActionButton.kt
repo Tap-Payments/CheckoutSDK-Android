@@ -294,7 +294,7 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
 
                     val params = LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
-                        100
+                        120
                     )
                     params.setMargins(60, 40, 60, 60)
                     params.gravity = Gravity.CENTER
@@ -306,7 +306,7 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
 
                     val params = LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
-                        80
+                        90
                     )
                     params.setMargins(50, 40, 50, 40)
                     params.gravity = Gravity.CENTER
@@ -318,7 +318,7 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
 
                     val params = LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
-                        130
+                        150
                     )
                     params.setMargins(40, 40, 40, 60)
                     params.gravity = Gravity.CENTER
@@ -446,14 +446,14 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
     }
 
     private fun startStateAnimation() {
-
+        println("displayMetrics"+displayMetrics)
         if (displayMetrics == DisplayMetrics.DENSITY_450 || displayMetrics == DisplayMetrics.DENSITY_420 || displayMetrics == DisplayMetrics.DENSITY_400 || displayMetrics == DisplayMetrics.DENSITY_440 || displayMetrics == DisplayMetrics.DENSITY_XXHIGH ) {
             animationDataSource =
                 AnimationDataSource(
                     fromHeight = height,
-                    toHeight = 70,
+                    toHeight = 78,
                     fromWidth = width,
-                    toWidth = 70 + 42,
+                    toWidth = 80 + 70,
                     fromCorners = dataSource?.cornerRadius,
                     toCorners = maxCorners,
                     fromColor = dataSource?.backgroundColor,
@@ -465,9 +465,9 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
             animationDataSource =
                 AnimationDataSource(
                     fromHeight = height,
-                    toHeight = 42,
+                    toHeight = 45,
                     fromWidth = width,
-                    toWidth = 42 + 42,
+                    toWidth = 45 + 45,
                     fromCorners = dataSource?.cornerRadius,
                     toCorners = maxCorners,
                     fromColor = dataSource?.backgroundColor,
@@ -479,7 +479,7 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
             animationDataSource =
                 AnimationDataSource(
                     fromHeight = height,
-                    toHeight = 100,
+                    toHeight = 102,
                     fromWidth = width,
                     toWidth = 100 + 42,
                     fromCorners = dataSource?.cornerRadius,
