@@ -84,6 +84,9 @@ class TapCurrencyControlWidget : FrameLayout {
             ColorStateList.valueOf(loadAppThemManagerFromPath(AppColorTheme.ControlCurrencyWidgetCurrencyDropDownTintColorOfIcon))
 
         setSpinnerBackground()
+        dropDownIv.setOnClickListener {
+            spinner.performClick()
+        }
 
     }
 
@@ -99,8 +102,6 @@ class TapCurrencyControlWidget : FrameLayout {
         }
 
         spinner.setPopupBackgroundDrawable(shapeDrawable)
-        val margin = resources.getDimension(R.dimen._10sdp)
-
         spinner.dropDownHorizontalOffset = MetricsUtil.convertDpToPixel(20f, context).toInt()
 
     }
@@ -179,6 +180,7 @@ class TapCurrencyControlWidget : FrameLayout {
 
 
         }
+
 
         if (displayNamePaymentOption.size <= 1) {
             spinner.isEnabled = false
