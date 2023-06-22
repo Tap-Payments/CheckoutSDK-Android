@@ -1177,10 +1177,6 @@ class PaymentInlineViewHolder(
                                                     cardBrand ?: cardBrandInString,
                                                     savedCardsModel
                                                 )
-                                                if (tapCurrencyControlWidgetPaymentInline?.isVisible ==false){
-                                                    tapInlineCardSwitch?.switchSaveCard?.isChecked = true
-                                                    tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
-                                                }
                                             }
                                         }
                                     }
@@ -1997,6 +1993,8 @@ class PaymentInlineViewHolder(
             onCurrencySupported.invoke(cardBrandInString)
         } else {
             onCurrencySupported.invoke(cardBrandInString)
+            tapInlineCardSwitch?.switchSaveCard?.isChecked = true
+            tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
         }
     }
 
