@@ -17,6 +17,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.view.isVisible
 import com.bugfender.sdk.Bugfender
 import com.google.android.material.tabs.TabLayout
+import company.tap.cardinputwidget2.Card
 import company.tap.cardinputwidget2.CardBrandSingle
 import company.tap.cardinputwidget2.CardInputUIStatus
 import company.tap.cardinputwidget2.views.CardBrandView
@@ -1163,8 +1164,7 @@ class PaymentInlineViewHolder(
                                 cardNumber.toString().let {
                                     expiryDate?.let { it1 ->
                                         cvvNumber?.let { it2 ->
-                                            cardBrandInString =
-                                                PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
+                                            cardBrandInString = PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
 
                                             doOnCurrencySupported { cardBrand ->
                                                 onPaymentCardComplete.onPayCardCompleteAction(
@@ -1222,6 +1222,7 @@ class PaymentInlineViewHolder(
                                         true, PaymentType.SavedCard, savedCardsModel?.brand?.name
                                     )
                                 // if(isCVCLengthMax == true) //check
+                                if(isCVCLengthMax == true &&  savedCardsModel?.brand?.name.equals(CardBrand.americanExpress.name) ){ //check
                                 cardNumber?.let {
                                     expiryDate?.let { it1 ->
                                         cardBrandInString = savedCardsModel?.brand?.name
@@ -1236,6 +1237,24 @@ class PaymentInlineViewHolder(
                                             savedCardsModel?.brand?.name,
                                             savedCardsModel
                                         )
+                                    }
+                                }
+                                }else if(!savedCardsModel?.brand?.name.equals(CardBrand.americanExpress.name)) {
+                                    cardNumber?.let {
+                                        expiryDate?.let { it1 ->
+                                            cardBrandInString = savedCardsModel?.brand?.name
+
+                                            onPaymentCardComplete.onPayCardCompleteAction(
+                                                true,
+                                                PaymentType.SavedCard,
+                                                it,
+                                                it1,
+                                                cvvNumber!!,
+                                                cardHolderName,
+                                                savedCardsModel?.brand?.name,
+                                                savedCardsModel
+                                            )
+                                        }
                                     }
                                 }
                             } else {
@@ -1260,7 +1279,7 @@ class PaymentInlineViewHolder(
                                                 it1,
                                                 cvvNumber!!,
                                                 cardHolderName,
-                                                PaymentDataSource?.getBinLookupResponse()?.cardBrand?.toString(),
+                                                PaymentDataSource.getBinLookupResponse()?.cardBrand?.toString(),
                                                 null
                                             )
                                         }
