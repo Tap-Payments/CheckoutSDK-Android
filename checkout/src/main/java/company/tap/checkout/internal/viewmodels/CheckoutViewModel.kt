@@ -103,6 +103,7 @@ import kotlinx.android.synthetic.main.itemviewholder_layout.view.*
 import kotlinx.android.synthetic.main.loyalty_view_layout.view.*
 import kotlinx.android.synthetic.main.otpview_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
+import okhttp3.internal.notifyAll
 import org.json.JSONException
 import org.json.JSONObject
 import java.math.BigDecimal
@@ -1883,11 +1884,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     totalSelectedAmount = getSelectedSupportedCurrency().amount,
                     selectedCurrencySymbol = getSelectedSupportedCurrency().symbol ?: "",
                     position = position,
-                    isDisabledClicked = isDisabledClicked
+                    isDisabledClicked = isDisabledClicked,
+                    isNotifyWithoutPosition = controlCurrencyPlace == paymentInlineViewHolder.tapCurrencyControlWidgetPaymentInline
                 )
                 if (isDisabledClicked != null) {
                     isDisableOptionSelected = isDisabledClicked
                 }
+
                 onCardSelectedAction(true, paymentOption)
 
             }
@@ -1934,6 +1937,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         this.savedCardsModel
                     )
                 } else {
+                    Log.e("binResponse",PaymentDataSource.getBinLookupResponse()?.cardBrand?.rawValue.toString())
+                    PaymentDataSource.getBinLookupResponse()?.toString()
+                        ?.let { Log.e("binResponse", it) }
+
                     onPayCardCompleteAction(
                         true,
                         PaymentType.CARD,
@@ -2504,7 +2511,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             dismissCardsCurrency()
             showCurrencyControlWidget(
                 paymentOption, null,
-                paymentInlineViewHolder.tapCurrencyControlWidgetPaymentInline!!
+                paymentInlineViewHolder.tapCurrencyControlWidgetPaymentInline!!,
             )
         }
         CustomUtils.hideKeyboardFrom(context, paymentInlineViewHolder.view)
@@ -2614,7 +2621,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         selectedCurrencySymbol: String,
         position: Int? = null,
         isChangeingCurrencyFromOutside: Boolean? = true,
-        isDisabledClicked: Boolean? = null
+        isDisabledClicked: Boolean? = null,
+        isNotifyWithoutPosition:Boolean ?= false
     ) {
         /**
          * need to be refactored
@@ -2672,7 +2680,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         filterPaymentChipsAccordingToCurrency(
             selectedCurrency,
             position = position,
-            isDisabledClicked
+            isDisabledClicked,
+            isNotifyWithoutPosition = isNotifyWithoutPosition
         )
     }
 
@@ -3320,7 +3329,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private fun filterPaymentChipsAccordingToCurrency(
         currency: String,
         position: Int? = null,
-        isDisabledClicked: Boolean? = null
+        isDisabledClicked: Boolean? = null,
+        isNotifyWithoutPosition:Boolean?=false
     ) {
         allPaymentOptionsList = getListOfAllPaymentOptionsFilterdWithWebAndGooglePay()
         val enabledPaymentList = mutableListOf<PaymentOption>()
@@ -3343,6 +3353,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     scrollToCenterPosition(pos)
 
                 })
+        } else if (isNotifyWithoutPosition==true){
+            adapter.notifyItemRangeChanged(0,1)
         } else {
             adapter.updateEnabledPaymentOptions(enabledPaymentList)
             adapter.updateDisabledPaymentOptions(disabledPaymentList)

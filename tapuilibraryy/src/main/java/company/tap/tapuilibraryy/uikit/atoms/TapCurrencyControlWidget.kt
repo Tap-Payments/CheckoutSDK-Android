@@ -2,10 +2,13 @@ package company.tap.tapuilibraryy.uikit.atoms
 
 import SupportedCurrencies
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Typeface
 import android.util.AttributeSet
+import android.util.DisplayMetrics
+import android.util.Log
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.*
@@ -15,6 +18,7 @@ import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibraryy.R
 import company.tap.tapuilibraryy.fontskit.enums.TapFont
 import company.tap.tapuilibraryy.uikit.AppColorTheme
+import company.tap.tapuilibraryy.uikit.doOnChangeOfResolutionDensities
 import company.tap.tapuilibraryy.uikit.isLayoutRTL
 import company.tap.tapuilibraryy.uikit.ktx.loadAppThemManagerFromPath
 import company.tap.tapuilibraryy.uikit.utils.MetricsUtil
@@ -102,7 +106,17 @@ class TapCurrencyControlWidget : FrameLayout {
         }
 
         spinner.setPopupBackgroundDrawable(shapeDrawable)
-        spinner.dropDownHorizontalOffset = MetricsUtil.convertDpToPixel(20f, context).toInt()
+        var dropOffsetAccordingToScreenSize = 0f
+        context.doOnChangeOfResolutionDensities(onLowDensity = {
+            dropOffsetAccordingToScreenSize = resources.getDimension(R.dimen._14sdp)
+        }, onMediumDensity = {
+            dropOffsetAccordingToScreenSize = resources.getDimension(R.dimen._18sdp)
+        }, onHighDensity = {
+            dropOffsetAccordingToScreenSize = resources.getDimension(R.dimen._20sdp)
+
+        })
+
+        spinner.dropDownHorizontalOffset = dropOffsetAccordingToScreenSize.toInt()
 
     }
 
@@ -147,6 +161,7 @@ class TapCurrencyControlWidget : FrameLayout {
 
 
     }
+
 
     fun setSupportedCurrunciesForControlWidget(displayNamePaymentOption: MutableList<SupportedCurrencies>) {
 

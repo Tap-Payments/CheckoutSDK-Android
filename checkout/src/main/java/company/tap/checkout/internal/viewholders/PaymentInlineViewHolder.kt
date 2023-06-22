@@ -758,7 +758,7 @@ class PaymentInlineViewHolder(
 
             override fun afterTextChanged(s: Editable?) {
 
-               // println("PaymentDataSource?.getBinLookupResponse()" + PaymentDataSource?.getBinLookupResponse())
+                // println("PaymentDataSource?.getBinLookupResponse()" + PaymentDataSource?.getBinLookupResponse())
                 println("cardHolderName>>" + cardHolderName)
                 //On Details complete
                 if (s.toString().length > 3) {
@@ -766,8 +766,9 @@ class PaymentInlineViewHolder(
                         cardNumber?.let {
                             expiryDate?.let { it1 ->
                                 if (PaymentDataSource.getBinLookupResponse() != null) {
-                                    cardBrandInString = PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
-                                    doOnCurrencySupported {cardBrand ->
+                                    cardBrandInString =
+                                        PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
+                                    doOnCurrencySupported { cardBrand ->
                                         onPaymentCardComplete.onPayCardCompleteAction(
                                             true,
                                             PaymentType.CARD,
@@ -917,7 +918,7 @@ class PaymentInlineViewHolder(
 
 
                 //This was added for a purpose in regards to logic
-               if (s != null) {
+                if (s != null) {
                     if (s.length >= 19) afterValidation()
                 }
 
@@ -1089,7 +1090,7 @@ class PaymentInlineViewHolder(
                                         it1.cardBrand, s.toString()
                                     )
                                 }
-                            }else{
+                            } else {
                                 PaymentDataSource?.getBinLookupResponse()?.scheme?.let { it1 ->
                                     logicTosetImageDynamic(
                                         it1.cardBrand, s.toString()
@@ -1498,9 +1499,9 @@ class PaymentInlineViewHolder(
                 tapCardInputView.setSingleCardInput(
                     CardBrandSingle.fromCode(
                         _binLookupResponse?.cardBrand?.name.toString()
-                    ), checkMadaLogoForVisaOrMasterCard(_binLookupResponse!!)?.selectedImageURL
+                    ), checkMadaLogoForVisaOrMasterCard(binLookupResponse = _binLookupResponse)?.selectedImageURL
                 )
-                tabLayout?.visibility = View.GONE
+                tabLayout.visibility = View.GONE
                 tapAlertView?.fadeVisibility(View.GONE, 500)
             }
 
@@ -1561,15 +1562,14 @@ class PaymentInlineViewHolder(
                     if (schema != null) {
                         schema?.cardBrand?.let {
                             tabLayout.selectTab(it, true)
-                            logicTosetImageDynamic(
-                                checkMadaLogoForVisaOrMasterCard(
-                                    PaymentDataSource.getBinLookupResponse()!!
-                                )?.type, charSequence.toString()
-                            )
+//                            logicTosetImageDynamic(
+//                                checkMadaLogoForVisaOrMasterCard(cardBrand = it)?.type,
+//                                charSequence.toString()
+//                            )
 
                         }
                     } else {
-                        logicTosetImageDynamic(card.cardBrand, charSequence.toString())
+                    //    logicTosetImageDynamic(card.cardBrand, charSequence.toString())
                         tabLayout.selectTab(card.cardBrand, true)
                     }
 
@@ -1754,11 +1754,11 @@ class PaymentInlineViewHolder(
     @RequiresApi(Build.VERSION_CODES.N)
     fun setDataFromAPI(
         enabledPaymentsList: List<PaymentOption>,
-        disabledPaymentList: List<PaymentOption>,isDisabledClicked: Boolean?=null
+        disabledPaymentList: List<PaymentOption>, isDisabledClicked: Boolean? = null
     ) {
-      //  Log.e("enabledPaymentsList>>" , enabledPaymentsList.toString())
-     //   Log.e("disabledPaymentList:",disabledPaymentList.toString())
-      //  println("isDisabledClicked>>"+isDisabledClicked)
+        //  Log.e("enabledPaymentsList>>" , enabledPaymentsList.toString())
+        //   Log.e("disabledPaymentList:",disabledPaymentList.toString())
+        //  println("isDisabledClicked>>"+isDisabledClicked)
 //    /   tabLayout.resetBehaviour()
 
         val itemsMobilesList = ArrayList<SectionTabItem>()
@@ -1797,15 +1797,15 @@ class PaymentInlineViewHolder(
 
     }
 
-/**
- * Added to update the icons without sorting them ***/
+    /**
+     * Added to update the icons without sorting them ***/
     @RequiresApi(Build.VERSION_CODES.N)
     fun setDataWithOutSort(
         isDisabledClicked: Boolean? = null, currency: String, position: Int?
     ) {
         itemsCardsList = ArrayList<SectionTabItem>()
         intertabLayout.removeAllTabs()
-        if(isDisabledClicked == true) {
+        if (isDisabledClicked == true) {
             for (i in 0 until totalPaymentList?.size!!) {
                 if (totalPaymentList!![i].getSupportedCurrencies().contains(currency)) {
                     when (CustomUtils.getCurrentTheme()) {
@@ -1814,13 +1814,16 @@ class PaymentInlineViewHolder(
                         }
 
                         ThemeMode.dark_colored.name -> {
-                             imageURL = totalPaymentList!![i].logos?.dark_colored?.png?.toString().toString()
+                            imageURL = totalPaymentList!![i].logos?.dark_colored?.png?.toString()
+                                .toString()
                         }
                         ThemeMode.light.name -> {
-                            imageURL = totalPaymentList!![i].logos?.light?.png?.toString().toString()
+                            imageURL =
+                                totalPaymentList!![i].logos?.light?.png?.toString().toString()
                         }
                         ThemeMode.light_mono.name -> {
-                            imageURL = totalPaymentList!![i].logos?.light_mono?.png?.toString().toString()
+                            imageURL =
+                                totalPaymentList!![i].logos?.light_mono?.png?.toString().toString()
                         }
                     }
                     paymentType = totalPaymentList!![i].paymentType
@@ -1830,24 +1833,28 @@ class PaymentInlineViewHolder(
                         totalPaymentList!![i].brand.toString()
 
 
-
-
-                }else{
+                } else {
                     when (CustomUtils.getCurrentTheme()) {
                         ThemeMode.dark.name -> {
-                            imageURL = totalPaymentList!![i].logos?.dark?.disabled?.png?.toString().toString()
+                            imageURL = totalPaymentList!![i].logos?.dark?.disabled?.png?.toString()
+                                .toString()
                         }
 
                         ThemeMode.dark_colored.name -> {
 
-                                imageURL = totalPaymentList!![i].logos?.dark_colored?.disabled?.png?.toString().toString()
+                            imageURL =
+                                totalPaymentList!![i].logos?.dark_colored?.disabled?.png?.toString()
+                                    .toString()
                         }
                         ThemeMode.light.name -> {
-                            imageURL = totalPaymentList!![i].logos?.light?.disabled?.png?.toString().toString()
+                            imageURL = totalPaymentList!![i].logos?.light?.disabled?.png?.toString()
+                                .toString()
                         }
                         ThemeMode.light_mono.name -> {
 
-                                imageURL = totalPaymentList!![i].logos?.light_mono?.disabled?.png?.toString().toString()
+                            imageURL =
+                                totalPaymentList!![i].logos?.light_mono?.disabled?.png?.toString()
+                                    .toString()
 
                         }
                     }
@@ -1859,13 +1866,13 @@ class PaymentInlineViewHolder(
                         totalPaymentList!![i].brand.toString()
                 }
 
-                    itemsCardsList.add(
-                        SectionTabItem(
-                            imageURL,
-                            imageURL,
-                            CardBrand.fromString(cardBrandType)
-                        )
+                itemsCardsList.add(
+                    SectionTabItem(
+                        imageURL,
+                        imageURL,
+                        CardBrand.fromString(cardBrandType)
                     )
+                )
             }
 
             tabLayout.addSection(itemsCardsList)
@@ -1874,6 +1881,7 @@ class PaymentInlineViewHolder(
 
 
     }
+
     private fun hideTabLayoutWhenOnlyOnePayment(
         itemsCardsList: ArrayList<SectionTabItem>,
         itemsMobilesList: ArrayList<SectionTabItem>
@@ -1900,25 +1908,33 @@ class PaymentInlineViewHolder(
             when (CustomUtils.getCurrentTheme()) {
                 ThemeMode.dark.name -> {
                     if (checkoutViewModel.isDisableOptionSelected)
-                    imageURL = enabledPaymentList[i].logos?.dark?.disabled?.png.toString().toString()
-                   else imageURL = enabledPaymentList[i].logos?.dark?.png?.toString().toString()
+                        imageURL =
+                            enabledPaymentList[i].logos?.dark?.disabled?.png.toString().toString()
+                    else imageURL = enabledPaymentList[i].logos?.dark?.png?.toString().toString()
                 }
 
                 ThemeMode.dark_colored.name -> {
                     if (checkoutViewModel.isDisableOptionSelected)
-                    imageURL = enabledPaymentList[i].logos?.dark_colored?.disabled?.png?.toString().toString()
-                    else imageURL = enabledPaymentList[i].logos?.dark_colored?.png?.toString().toString()
+                        imageURL =
+                            enabledPaymentList[i].logos?.dark_colored?.disabled?.png?.toString()
+                                .toString()
+                    else imageURL =
+                        enabledPaymentList[i].logos?.dark_colored?.png?.toString().toString()
                 }
                 ThemeMode.light.name -> {
                     if (checkoutViewModel.isDisableOptionSelected)
-                    imageURL = enabledPaymentList[i].logos?.light?.disabled?.png?.toString().toString()
-                   else imageURL = enabledPaymentList[i].logos?.light?.png?.toString().toString()
+                        imageURL =
+                            enabledPaymentList[i].logos?.light?.disabled?.png?.toString().toString()
+                    else imageURL = enabledPaymentList[i].logos?.light?.png?.toString().toString()
                     //  disabledImageURL = disabledPaymentList[0].logos?.light?.disabled?.png.toString()
                 }
                 ThemeMode.light_mono.name -> {
                     if (checkoutViewModel.isDisableOptionSelected)
-                    imageURL = enabledPaymentList[i].logos?.light_mono?.disabled?.png?.toString().toString()
-                   else imageURL = enabledPaymentList[i].logos?.light_mono?.png?.toString().toString()
+                        imageURL =
+                            enabledPaymentList[i].logos?.light_mono?.disabled?.png?.toString()
+                                .toString()
+                    else imageURL =
+                        enabledPaymentList[i].logos?.light_mono?.png?.toString().toString()
                 }
             }
             // imageURL = imageURLApi[i].image.toString()
@@ -1943,25 +1959,31 @@ class PaymentInlineViewHolder(
             for (i in disabledPaymentList.indices) {
                 when (CustomUtils.getCurrentTheme()) {
                     ThemeMode.dark.name -> {
-                      //  if (checkoutViewModel.isDisableOptionSelected)
-                        imageURL = disabledPaymentList[i].logos?.dark?.disabled?.png?.toString().toString()
-                      //  else imageURL = disabledPaymentList[i].logos?.dark?.png?.toString().toString()
+                        //  if (checkoutViewModel.isDisableOptionSelected)
+                        imageURL =
+                            disabledPaymentList[i].logos?.dark?.disabled?.png?.toString().toString()
+                        //  else imageURL = disabledPaymentList[i].logos?.dark?.png?.toString().toString()
                     }
 
                     ThemeMode.dark_colored.name -> {
-                       // if (checkoutViewModel.isDisableOptionSelected)
-                        imageURL = disabledPaymentList[i].logos?.dark_colored?.disabled?.png?.toString().toString()
-                       //else  imageURL = disabledPaymentList[i].logos?.dark_colored?.png?.toString().toString()
+                        // if (checkoutViewModel.isDisableOptionSelected)
+                        imageURL =
+                            disabledPaymentList[i].logos?.dark_colored?.disabled?.png?.toString()
+                                .toString()
+                        //else  imageURL = disabledPaymentList[i].logos?.dark_colored?.png?.toString().toString()
                     }
                     ThemeMode.light.name -> {
-                       // if (checkoutViewModel.isDisableOptionSelected)
-                        imageURL = disabledPaymentList[i].logos?.light?.disabled?.png?.toString().toString()
-                      // else imageURL = disabledPaymentList[i].logos?.light?.png?.toString().toString()
+                        // if (checkoutViewModel.isDisableOptionSelected)
+                        imageURL = disabledPaymentList[i].logos?.light?.disabled?.png?.toString()
+                            .toString()
+                        // else imageURL = disabledPaymentList[i].logos?.light?.png?.toString().toString()
                     }
                     ThemeMode.light_mono.name -> {
-                      //  if (checkoutViewModel.isDisableOptionSelected)
-                        imageURL = disabledPaymentList[i].logos?.light_mono?.disabled?.png?.toString().toString()
-                     //  else imageURL = disabledPaymentList[i].logos?.light_mono?.png?.toString().toString()
+                        //  if (checkoutViewModel.isDisableOptionSelected)
+                        imageURL =
+                            disabledPaymentList[i].logos?.light_mono?.disabled?.png?.toString()
+                                .toString()
+                        //  else imageURL = disabledPaymentList[i].logos?.light_mono?.png?.toString().toString()
                     }
                 }
                 // imageURL = imageURLApi[i].image.toString()
@@ -2003,6 +2025,7 @@ class PaymentInlineViewHolder(
              */
             if (cardBrandInString == MADA_SCHEME && isCurrencySelectedRelatedToSaudiReal().not()) {
                 onCurrencySupported.invoke(PaymentDataSource.getBinLookupResponse()?.cardBrand?.rawValue)
+                cardBrandInString = PaymentDataSource.getBinLookupResponse()?.cardBrand?.rawValue
             }
 
         } else if (isCardEnterdEnabledPaymentOptionsAndHasMoreThanOneSupportedCurrency()) {
@@ -2018,8 +2041,12 @@ class PaymentInlineViewHolder(
     }
 
     fun TapBaseViewHolder.checkMadaLogoForVisaOrMasterCard(
-        binLookupResponse: BINLookupResponse?): SectionTabItem? {
+        binLookupResponse: BINLookupResponse? = null,
+        cardBrand: CardBrand? = null
+
+    ): SectionTabItem? {
         var selectedImage: SectionTabItem? = null
+
         if (isCurrencySelectedRelatedToSaudiReal()) {
             selectedImage = itemsCardsList.find {
                 /**
@@ -2038,6 +2065,14 @@ class PaymentInlineViewHolder(
                     binLookupResponse?.cardBrand?.name?.toLowerCase().toString()
                 )
             }
+        }
+        if (cardBrand != null) {
+            selectedImage = itemsCardsList.find {
+                it.selectedImageURL.contains(
+                    cardBrand.name.toLowerCase().toString()
+                )
+            }
+
         }
         return selectedImage
     }
@@ -2145,7 +2180,7 @@ class PaymentInlineViewHolder(
 //                    btnType = 1,
 //                    baseLayoutManager =  baseLayoutManager,
 //                    cardTypeDialog = true
- //              )
+                //              )
 
             }
         }
