@@ -1949,7 +1949,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         expiryDate,
                         cvvNumber!!,
                         cardHolderName,
-                        cardBrandInString,
+                        if (cardBrandInString == MADA_SCHEME && isCurrencySelectedRelatedToSaudiReal().not()) PaymentDataSource.getBinLookupResponse()?.cardBrand?.name else cardBrandInString,
                         this.savedCardsModel
                     )
                 }
