@@ -757,7 +757,7 @@ class PaymentInlineViewHolder(
 
             override fun afterTextChanged(s: Editable?) {
 
-                println("PaymentDataSource?.getBinLookupResponse()" + PaymentDataSource?.getBinLookupResponse())
+               // println("PaymentDataSource?.getBinLookupResponse()" + PaymentDataSource?.getBinLookupResponse())
                 println("cardHolderName>>" + cardHolderName)
                 //On Details complete
                 if (s.toString().length > 3) {
