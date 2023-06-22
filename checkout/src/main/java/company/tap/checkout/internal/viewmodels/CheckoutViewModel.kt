@@ -1789,6 +1789,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 isDisabledClicked
             )
         }
+        CustomUtils.hideKeyboardFrom(context, paymentInlineViewHolder.view)
+
 
     }
 
