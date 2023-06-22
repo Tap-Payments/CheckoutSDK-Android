@@ -1884,7 +1884,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     totalSelectedAmount = getSelectedSupportedCurrency().amount,
                     selectedCurrencySymbol = getSelectedSupportedCurrency().symbol ?: "",
                     position = position,
-                    isDisabledClicked = isDisabledClicked,
+                    isDisabledClicked = true,
                     isNotifyWithoutPosition = controlCurrencyPlace == paymentInlineViewHolder.tapCurrencyControlWidgetPaymentInline
                 )
                 if (isDisabledClicked != null) {
@@ -3360,7 +3360,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 })
         } else if (isNotifyWithoutPosition==true){
             adapter.notifyItemRangeChanged(0,1)
-            paymentInlineViewHolder.setDataWithOutSort(true , currency ,position)
 
         } else {
             adapter.updateEnabledPaymentOptions(enabledPaymentList)
