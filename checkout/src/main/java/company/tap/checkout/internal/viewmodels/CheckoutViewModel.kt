@@ -1923,7 +1923,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     private fun performResetToPaymentInline() {
         resetViewsToNormal()
-        if (paymentInlineViewHolder.cvvNumber?.length == 3) {
+        if (paymentInlineViewHolder.cvvNumber?.length == 3 ||paymentInlineViewHolder.cvvNumber?.length == 4 ) {
             with(paymentInlineViewHolder) {
                 if (this.savedCardsModel != null) {
                     onPayCardCompleteAction(
@@ -1940,6 +1940,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     Log.e("binResponse",PaymentDataSource.getBinLookupResponse()?.cardBrand?.rawValue.toString())
                     PaymentDataSource.getBinLookupResponse()?.toString()
                         ?.let { Log.e("binResponse", it) }
+                    Log.e("cardBrandinString",cardBrandInString.toString())
 
                     onPayCardCompleteAction(
                         true,
@@ -3355,6 +3356,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 })
         } else if (isNotifyWithoutPosition==true){
             adapter.notifyItemRangeChanged(0,1)
+            paymentInlineViewHolder.setDataWithOutSort(true , currency ,position)
+
         } else {
             adapter.updateEnabledPaymentOptions(enabledPaymentList)
             adapter.updateDisabledPaymentOptions(disabledPaymentList)

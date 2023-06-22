@@ -314,7 +314,7 @@ class PaymentInlineViewHolder(
             separator1?.visibility = View.GONE
             // resetCardBrandIcon()
             if (PaymentDataSource.getBinLookupResponse() != null) {
-                PaymentDataSource.setBinLookupResponse(null)
+             //   PaymentDataSource.setBinLookupResponse(null)
 
             }
 
@@ -391,7 +391,7 @@ class PaymentInlineViewHolder(
         )
         tabLayout.resetBehaviour()
         if (PaymentDataSource.getBinLookupResponse() != null) {
-            PaymentDataSource.setBinLookupResponse(null)
+          //  PaymentDataSource.setBinLookupResponse(null)
         }
         controlScannerOptions()
         tapInlineCardSwitch?.saveForOtherCheckBox?.isChecked = true
@@ -456,7 +456,7 @@ class PaymentInlineViewHolder(
 
         separator1?.visibility = View.GONE
         if (PaymentDataSource.getBinLookupResponse() != null) {
-            PaymentDataSource.setBinLookupResponse(null)
+         //   PaymentDataSource.setBinLookupResponse(null)
 
         }
 
@@ -1090,6 +1090,7 @@ class PaymentInlineViewHolder(
                                         it1.cardBrand, s.toString()
                                     )
                                 }
+
                             } else {
                                 PaymentDataSource?.getBinLookupResponse()?.scheme?.let { it1 ->
                                     logicTosetImageDynamic(
@@ -1223,24 +1224,27 @@ class PaymentInlineViewHolder(
                                         true, PaymentType.SavedCard, savedCardsModel?.brand?.name
                                     )
                                 // if(isCVCLengthMax == true) //check
-                                if(isCVCLengthMax == true &&  savedCardsModel?.brand?.name.equals(CardBrand.americanExpress.name) ){ //check
-                                cardNumber?.let {
-                                    expiryDate?.let { it1 ->
-                                        cardBrandInString = savedCardsModel?.brand?.name
+                                if (isCVCLengthMax == true && savedCardsModel?.brand?.name.equals(
+                                        CardBrand.americanExpress.name
+                                    )
+                                ) { //check
+                                    cardNumber?.let {
+                                        expiryDate?.let { it1 ->
+                                            cardBrandInString = savedCardsModel?.brand?.name
 
-                                        onPaymentCardComplete.onPayCardCompleteAction(
-                                            true,
-                                            PaymentType.SavedCard,
-                                            it,
-                                            it1,
-                                            cvvNumber!!,
-                                            cardHolderName,
-                                            savedCardsModel?.brand?.name,
-                                            savedCardsModel
-                                        )
+                                            onPaymentCardComplete.onPayCardCompleteAction(
+                                                true,
+                                                PaymentType.SavedCard,
+                                                it,
+                                                it1,
+                                                cvvNumber!!,
+                                                cardHolderName,
+                                                savedCardsModel?.brand?.name,
+                                                savedCardsModel
+                                            )
+                                        }
                                     }
-                                }
-                                }else if(!savedCardsModel?.brand?.name.equals(CardBrand.americanExpress.name)) {
+                                } else if (!savedCardsModel?.brand?.name.equals(CardBrand.americanExpress.name)) {
                                     cardNumber?.let {
                                         expiryDate?.let { it1 ->
                                             cardBrandInString = savedCardsModel?.brand?.name
@@ -1356,7 +1360,7 @@ class PaymentInlineViewHolder(
 
             } else {
                 tabLayout.resetBehaviour()
-                PaymentDataSource.setBinLookupResponse(null)
+              //  PaymentDataSource.setBinLookupResponse(null)
             }
         }
         charSequence?.let {
@@ -1499,7 +1503,8 @@ class PaymentInlineViewHolder(
                 tapCardInputView.setSingleCardInput(
                     CardBrandSingle.fromCode(
                         _binLookupResponse?.cardBrand?.name.toString()
-                    ), checkMadaLogoForVisaOrMasterCard(binLookupResponse = _binLookupResponse)?.selectedImageURL
+                    ),
+                    checkMadaLogoForVisaOrMasterCard(binLookupResponse = _binLookupResponse)?.selectedImageURL
                 )
                 tabLayout.visibility = View.GONE
                 tapAlertView?.fadeVisibility(View.GONE, 500)
@@ -1540,11 +1545,11 @@ class PaymentInlineViewHolder(
                 CardValidationState.invalid -> {
                     println("cardBrand val" + card.cardBrand)
                     if (card.cardBrand != null)
-                        tapCardInputView.setSingleCardInput(
-                            CardBrandSingle.Unknown, null
-                        )
+//                        tapCardInputView.setSingleCardInput(
+//                            CardBrandSingle.Unknown, null
+//                        )
                     // tabLayout.selectTab(card.cardBrand, false)
-                    tapAlertView?.fadeVisibility(View.VISIBLE, 1000)
+                        tapAlertView?.fadeVisibility(View.VISIBLE, 1000)
                     tapAlertView?.alertMessage?.text =
                         (LocalizationManager.getValue("Error", "Hints", "wrongCardNumber"))
                     cardNumValidation = false
@@ -1569,7 +1574,7 @@ class PaymentInlineViewHolder(
 
                         }
                     } else {
-                    //    logicTosetImageDynamic(card.cardBrand, charSequence.toString())
+                        //    logicTosetImageDynamic(card.cardBrand, charSequence.toString())
                         tabLayout.selectTab(card.cardBrand, true)
                     }
 
@@ -2025,7 +2030,6 @@ class PaymentInlineViewHolder(
              */
             if (cardBrandInString == MADA_SCHEME && isCurrencySelectedRelatedToSaudiReal().not()) {
                 onCurrencySupported.invoke(PaymentDataSource.getBinLookupResponse()?.cardBrand?.rawValue)
-                cardBrandInString = PaymentDataSource.getBinLookupResponse()?.cardBrand?.rawValue
             }
 
         } else if (isCardEnterdEnabledPaymentOptionsAndHasMoreThanOneSupportedCurrency()) {
@@ -2334,7 +2338,7 @@ class PaymentInlineViewHolder(
         separator1?.visibility = View.GONE
         // resetCardBrandIcon()
         if (PaymentDataSource.getBinLookupResponse() != null) {
-            PaymentDataSource.setBinLookupResponse(null)
+        //    PaymentDataSource.setBinLookupResponse(null)
 
         }
         if (getPreTypedCardData()?.cardholderName != null) {
@@ -2393,6 +2397,7 @@ class PaymentInlineViewHolder(
                     tapCardInputView.setSingleCardInput(
                         CardBrandSingle.fromCode(card?.name), itemsCardsList[i].selectedImageURL
                     )
+                    itemsCardsList[i].type.rawValue
 
                 }
             } else {
