@@ -425,6 +425,9 @@ class PaymentInlineViewHolder(
             else {
 
                 clearTextInput()
+                if (PaymentDataSource.getBinLookupResponse() != null) {
+                      PaymentDataSource.setBinLookupResponse(null)
+                }
             }
 
             false
