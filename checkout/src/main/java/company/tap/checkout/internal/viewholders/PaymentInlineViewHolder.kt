@@ -391,7 +391,7 @@ class PaymentInlineViewHolder(
         )
         tabLayout.resetBehaviour()
         if (PaymentDataSource.getBinLookupResponse() != null) {
-          //  PaymentDataSource.setBinLookupResponse(null)
+         //   PaymentDataSource.setBinLookupResponse(null)
         }
         controlScannerOptions()
         tapInlineCardSwitch?.saveForOtherCheckBox?.isChecked = true
@@ -425,9 +425,6 @@ class PaymentInlineViewHolder(
             else {
 
                 clearTextInput()
-                if (PaymentDataSource.getBinLookupResponse() != null) {
-                      PaymentDataSource.setBinLookupResponse(null)
-                }
             }
 
             false
@@ -1086,6 +1083,7 @@ class PaymentInlineViewHolder(
                 if (s?.trim()?.length == 3 || s?.trim()?.length == 4) {
                     if (cardInputUIStatus == CardInputUIStatus.NormalCard) {
                         if (PaymentDataSource.getBinLookupResponse()?.scheme != null) {
+                            Log.e("binResponse",PaymentDataSource.getBinLookupResponse().toString())
 
                             if (PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue.toString() == MADA_SCHEME && isCurrencySelectedRelatedToSaudiReal().not()) {
                                 PaymentDataSource?.getBinLookupResponse()?.let { it1 ->
@@ -1095,7 +1093,13 @@ class PaymentInlineViewHolder(
                                 }
 
                             } else {
-                                Log.e("binResponse",PaymentDataSource.getBinLookupResponse().toString())
+                                if (PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue.toString() == MADA_SCHEME && isCurrencySelectedRelatedToSaudiReal()){
+                                    PaymentDataSource?.getBinLookupResponse()?.let { it1 ->
+                                        logicTosetImageDynamic(
+                                            it1.scheme.cardBrand, s.toString()
+                                        )
+                                    }
+                                }else
                                 PaymentDataSource?.getBinLookupResponse()?.let { it1 ->
                                     logicTosetImageDynamic(
                                         it1.cardBrand, s.toString()
@@ -1364,7 +1368,7 @@ class PaymentInlineViewHolder(
 
             } else {
                 tabLayout.resetBehaviour()
-              //  PaymentDataSource.setBinLookupResponse(null)
+                //PaymentDataSource.setBinLookupResponse(null)
             }
         }
         charSequence?.let {
@@ -2343,7 +2347,7 @@ class PaymentInlineViewHolder(
         separator1?.visibility = View.GONE
         // resetCardBrandIcon()
         if (PaymentDataSource.getBinLookupResponse() != null) {
-        //    PaymentDataSource.setBinLookupResponse(null)
+       //    PaymentDataSource.setBinLookupResponse(null)
 
         }
         if (getPreTypedCardData()?.cardholderName != null) {

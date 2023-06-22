@@ -64,8 +64,8 @@ class CardBrandView @JvmOverloads constructor(
         } else {
             println("brand val"+brand)
             println("iconUrl val"+iconUrl)
-           if(iconUrl!=null)   Glide.with(context).load(iconUrl) .diskCacheStrategy(DiskCacheStrategy.NONE)
-               .skipMemoryCache(true).into(iconView)
+           if(iconUrl!=null)
+               //Glide.with(context).load(iconUrl) .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(iconView)
           else if (animationApplied) {
                 animationApplied = false
                 animateImageChange(brand.icon)
