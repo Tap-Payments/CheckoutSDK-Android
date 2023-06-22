@@ -2414,6 +2414,8 @@ class PaymentInlineViewHolder(
                     tapCardInputView.setSingleCardInput(
                         CardBrandSingle.fromCode(card?.name), itemsCardsList[i].selectedImageURL
                     )
+                    Log.e("cardBrand Image",card?.name.toString())
+                    Log.e("cardBrand Image ",itemsCardsList[i].selectedImageURL)
 
                 }
             }
