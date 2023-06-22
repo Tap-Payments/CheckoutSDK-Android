@@ -1092,7 +1092,8 @@ class PaymentInlineViewHolder(
                                 }
 
                             } else {
-                                PaymentDataSource?.getBinLookupResponse()?.scheme?.let { it1 ->
+                                Log.e("binResponse",PaymentDataSource.getBinLookupResponse().toString())
+                                PaymentDataSource?.getBinLookupResponse()?.let { it1 ->
                                     logicTosetImageDynamic(
                                         it1.cardBrand, s.toString()
                                     )
