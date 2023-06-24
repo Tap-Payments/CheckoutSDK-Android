@@ -30,10 +30,7 @@ import androidx.fragment.app.DialogFragment
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.apiresponse.CardViewModel
-import company.tap.checkout.internal.utils.CustomUtils
-import company.tap.checkout.internal.utils.getDeviceSpecs
-import company.tap.checkout.internal.utils.showToast
-import company.tap.checkout.internal.utils.twoThirdHeightView
+import company.tap.checkout.internal.utils.*
 import company.tap.checkout.internal.viewholders.SwitchViewHolder
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.controller.SDKSession.contextSDK
@@ -121,7 +118,7 @@ class WebFragment(
         web_view.webViewClient =
             cardViewModel?.let { TapCustomWebViewClient(this, it, checkoutViewModel) }!!
         //  web_view.webViewClient = cardViewModel?.let { TapCustomWebViewClient2(this, it) }!!
-        web_view.layoutParams = context?.twoThirdHeightView()?.roundToInt()?.let {
+        web_view.layoutParams = context?.twoThirdHeightViewWeb()?.roundToInt()?.let {
             FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,
                 it

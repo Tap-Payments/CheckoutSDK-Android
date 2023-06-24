@@ -316,6 +316,9 @@ fun View.isRTL() = ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRE
 fun Context.twoThirdHeightView(): Double {
     return getDeviceSpecs().first.times(2.15) / 3
 }
+fun Context.twoThirdHeightViewWeb(): Double {
+    return getDeviceSpecs().first.times(2.5) / 3
+}
 
 @SuppressLint("SetJavaScriptEnabled")
 fun WebView.applyConfigurationForWebView(

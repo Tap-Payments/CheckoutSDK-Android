@@ -993,6 +993,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 // checkoutFragment.closeText.visibility = View.VISIBLE
                 doAfterSpecificTime {
                     removeViews(
+                        businessViewHolder,
                         paymentInlineViewHolder,
                         otpViewHolder,
                         goPaySavedCardHolder,
