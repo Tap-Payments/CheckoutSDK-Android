@@ -1299,7 +1299,7 @@ class PaymentInlineViewHolder(
                                     }
                             }
                             tapAlertView?.fadeVisibility(View.GONE, 500)
-                            CustomUtils.hideKeyboardFrom(context, view)
+                          
                             Bugfender.d(
                                 CustomUtils.tagEvent,
                                 "Finished valid raw card data for:" + PaymentType.CARD
