@@ -91,7 +91,7 @@ class PaymentInlineViewHolder(
     }
 
 
-    val paymentInputContainer: LinearLayout
+   lateinit var paymentInputContainer: LinearLayout
 
 
     var selectedType = PaymentTypeEnum.card
@@ -102,8 +102,8 @@ class PaymentInlineViewHolder(
     var savedCardsModel: SavedCard? = null
 
 
-    var tapCardInputView: InlineCardInput2
-    internal var tapMobileInputView: TapMobilePaymentView
+   lateinit var tapCardInputView: InlineCardInput2
+    lateinit var   tapMobileInputView: TapMobilePaymentView
     private var linearLayoutPay: LinearLayout? = null
     private var tapSeparatorViewLinear: LinearLayout? = null
     private var tabPosition: Int? = null
@@ -142,8 +142,8 @@ class PaymentInlineViewHolder(
     var saveForOtherCheckBox: CheckBox? = null
     var nfcButton: ImageView? = null
     var scannerButton: ImageView? = null
-    var touchLayer: View
-    var outerFrame: LinearLayout
+    lateinit var touchLayer: View
+    lateinit var outerFrame: LinearLayout
 
     var cardBrandView: CardBrandView? = null
     var closeButton: ImageView? = null
@@ -166,6 +166,31 @@ class PaymentInlineViewHolder(
 
     init {
 
+        initializeViews()
+        secondaryLayout?.visibility = View.GONE
+        tapInlineCardSwitch?.setSwitchDataSource(
+            TapSwitchDataSource(
+                switchSaveMerchantCheckout = LocalizationManager.getValue(
+                    "cardSaveLabel",
+                    "TapCardInputKit"
+                )
+
+            )
+        )
+        tabLayout.fadeVisibility(View.VISIBLE)
+        constraintt = view.findViewById(R.id.constraintt)
+        constraintt.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
+        acceptedCardText = view.findViewById(R.id.acceptedCardText)
+
+
+        acceptedCardText.text = LocalizationManager.getValue("weSupport", "TapCardInputKit")
+        saveForOtherCheckBox?.text =
+            LocalizationManager.getValue("cardSaveForTapLabel", "TapCardInputKit")
+        bindViewComponents()
+
+    }
+
+    private fun initializeViews() {
         tapMobileInputView = TapMobilePaymentView(context, null)
         tapMobileInputView.setTapPaymentShowHideClearImage(this)
         tapCardInputView = InlineCardInput2(context, null)
@@ -186,34 +211,11 @@ class PaymentInlineViewHolder(
         tapInlineCardSwitch = tapPaymentInput?.findViewById(R.id.switch_Inline_card)
         tapInlineCardSwitch?.brandingLayout?.visibility = View.GONE
         tapPaymentInput?.separator?.visibility = View.GONE
-        touchLayer = tapCardInputView?.findViewById(R.id.touch_layer_inside)
-        outerFrame = tapCardInputView?.findViewById(R.id.linear_payout)
+        touchLayer = tapCardInputView.findViewById(R.id.touch_layer_inside)
+        outerFrame = tapCardInputView.findViewById(R.id.linear_payout)
         secondaryLayout = tapCardInputView.findViewById(R.id.secondary_Layout)
         textViewPowered = tapCardInputView.findViewById(R.id.textViewPowered)
         saveForOtherCheckBox = tapCardInputView.findViewById(R.id.saveForOtherCheckBox)
-        secondaryLayout?.visibility = View.GONE
-        tapInlineCardSwitch?.setSwitchDataSource(
-            TapSwitchDataSource(
-                switchSaveMerchantCheckout = LocalizationManager.getValue(
-                    "cardSaveLabel",
-                    "TapCardInputKit"
-                )
-
-            )
-        )
-        tabLayout?.fadeVisibility(View.VISIBLE)
-
-        constraintt = view.findViewById(R.id.constraintt)
-        constraintt.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
-        acceptedCardText = view.findViewById(R.id.acceptedCardText)
-
-
-        acceptedCardText.text = LocalizationManager.getValue("weSupport", "TapCardInputKit")
-        saveForOtherCheckBox?.text =
-            LocalizationManager.getValue("cardSaveForTapLabel", "TapCardInputKit")
-        //cardBrandView?.iconView?.setImageResource(iconViewRes1)
-        bindViewComponents()
-
     }
 
 
@@ -929,11 +931,12 @@ class PaymentInlineViewHolder(
 
             @RequiresApi(Build.VERSION_CODES.N)
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                println("cardInputUIStatus>>" + cardInputUIStatus)
+                println("mPreviousCount>>" + mPreviousCount)
                 println("start>>" + start)
                 println("before>>" + before)
                 println("count>>" + count)
 
+                // Needed for hide
                 if (mPreviousCount > count) {
                     // delete character action have done
                     // do what ever you want
@@ -1379,12 +1382,10 @@ class PaymentInlineViewHolder(
                 tapAlertView?.fadeVisibility(View.GONE, 500)
             }
             if (card?.cardBrand != null) {
-
                 tabLayout.selectTab(
                     card.cardBrand,
                     card.validationState == CardValidationState.valid
                 )
-
 
                 println("card brand value is>>>" + card.cardBrand)
 
@@ -1396,7 +1397,6 @@ class PaymentInlineViewHolder(
                 /**
                  * This is business condition based on user selection / settings **/
                 if (PaymentDataSource.getCardType() != null && PaymentDataSource.getCardType() == CardType.ALL) {
-
                     if (charSequence.length == 8) // added length check to avoid flickering
                         doAfterSpecificTime(time = 1400L) { //delay added as response from api needs time
                             setTabLayoutBasedOnApiResponse(
@@ -1535,8 +1535,8 @@ class PaymentInlineViewHolder(
     private fun callCardBinNumberApi(s: CharSequence, textWatcher: TextWatcher) {
         if (s.trim().toString().replace(" ", "").length == BIN_NUMBER_LENGTH) {
             cardViewModel.processEvent(
-                CardViewEvent.RetreiveBinLookupEvent,
-                CheckoutViewModel(), null, s.trim().toString().replace(" ", ""), null, null
+                event = CardViewEvent.RetreiveBinLookupEvent,
+                viewModel =CheckoutViewModel(), binValue= s.trim().toString().replace(" ", "")
             )
 
         }
@@ -2226,8 +2226,8 @@ class PaymentInlineViewHolder(
             //  tapCardInputView.clear()
             tabLayout.resetBehaviour()
             CustomUtils.showDialog(
-                title = "alert",
-                messageString = "cardnot supported",
+                title = "Alert",
+                messageString = "Card not supported",
                 context = context,
                 btnType = 1,
                 baseLayoutManager = baseLayoutManager,
@@ -2238,11 +2238,7 @@ class PaymentInlineViewHolder(
     }
 
 
-    fun maskCardNumber(cardInput: String): String {
-        val maskLen: Int = cardInput.length - 4
-        if (maskLen <= 0) return cardInput // Nothing to mask
-        return (cardInput).replaceRange(0, maskLen, "•••• ")
-    }
+
 
     private fun maskCardNumber2(cardInput: String): String {
         val maskLen: Int = cardInput.length - 4
@@ -2433,8 +2429,7 @@ class PaymentInlineViewHolder(
                     tapCardInputView.setSingleCardInput(
                         CardBrandSingle.fromCode(card?.name), itemsCardsList[i].selectedImageURL
                     )
-                    Log.e("cardBrand Image",card?.name.toString())
-                    Log.e("cardBrand Image ",itemsCardsList[i].selectedImageURL)
+
 
                 }
             }

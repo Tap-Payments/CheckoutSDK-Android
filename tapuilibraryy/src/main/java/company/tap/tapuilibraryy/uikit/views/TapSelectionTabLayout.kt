@@ -526,9 +526,6 @@ class TapSelectionTabLayout(context: Context?, attrs: AttributeSet?) :
                         .into(it1)
                     val colorMatrix = ColorMatrix()
                     colorMatrix.setSaturation(0.0f)
-                    val filter = ColorMatrixColorFilter(colorMatrix)
-                    //  it1.colorFilter = filter
-                    val greyFilter = PorterDuffColorFilter(Color.DKGRAY, PorterDuff.Mode.SRC_ATOP)
                     it1.setColorFilter(null)
 
                 }
@@ -540,17 +537,9 @@ class TapSelectionTabLayout(context: Context?, attrs: AttributeSet?) :
                     it.unSelectedImage.toUri(),
                     it.imageView
                 )
-                /*   .init()
-                   .with(context)
-                   .load(it.unSelectedImage.toUri(), it.imageView)*/
 
                 val colorMatrix = ColorMatrix()
                 colorMatrix.setSaturation(0.0f)
-                val filter = ColorMatrixColorFilter(colorMatrix)
-                //  it.imageView?.colorFilter = filter
-                // val paint = Paint()
-                //  val colorFilter = PorterDuffColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP)
-                //  paint.colorFilter = colorFilter
                 it.imageView?.setLayerPaint(null)
 
             }
@@ -570,19 +559,10 @@ class TapSelectionTabLayout(context: Context?, attrs: AttributeSet?) :
                     it.selectedImageURL.toUri(),
                     it.imageView
                 )
-                /*.init()
-                .with(context)
-                .load(it.selectedImageURL.toUri(), it.imageView)*/
+
+
+                it.indicator?.visibility = View.INVISIBLE
             }
-
-            // .into(it1)
-
-            /*  GlideToVectorYou
-                  .init()
-                  .with(context)
-                  .load(it.selectedImageURL.toUri(), it1)*/
-
-            it.indicator?.visibility = View.INVISIBLE
         }
     }
 
