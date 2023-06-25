@@ -543,7 +543,8 @@ class PaymentInlineViewHolder(
         savedCardsModel = null
         if (getPreTypedCardData() != null && getPreTypedCardData()?.cvc != null) {
             tapAlertView?.fadeVisibility(View.GONE, 2000)
-            tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
+         //   tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
+            checkForTapInlineCardSwitchOpeningAccordingToCurrencyWidget()
             onCvcComplete()
             checkoutViewModel.isSavedCardSelected = false
         }
@@ -738,7 +739,8 @@ class PaymentInlineViewHolder(
                         if (isCardEnterdShouldBeDisabledPaymentOptions()) {
                             tapInlineCardSwitch?.cardviewSwitch?.visibility = (View.GONE)
                         } else {
-                            tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
+                         //   checkForTapInlineCardSwitchOpeningAccordingToCurrencyWidget()
+                        //    tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
                         }
                         contactDetailsView?.visibility = View.GONE //temp visible to gone
                         shippingDetailView?.visibility = View.GONE //temp visible to gone
@@ -751,7 +753,7 @@ class PaymentInlineViewHolder(
                 } else {
                     contactDetailsView?.visibility = View.GONE
                     shippingDetailView?.visibility = View.GONE
-                    tapCurrencyControlWidgetPaymentInline?.fadeVisibility(View.GONE)
+                    tapCurrencyControlWidgetPaymentInline?.slideView(0)
                     tapInlineCardSwitch?.fadeVisibility(View.GONE, 2000)
                 }
             }
@@ -974,7 +976,8 @@ class PaymentInlineViewHolder(
                 tapCardInputView.setVisibilityOfHolderField(PaymentDataSource.getCardHolderNameShowHide())
                 tapCardInputView.holderNameEnabled = true
                 //  tapInlineCardSwitch?.visibility = View.VISIBLE
-                tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
+                checkForTapInlineCardSwitchOpeningAccordingToCurrencyWidget()
+             //   tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
             }
 
         }
@@ -1160,8 +1163,8 @@ class PaymentInlineViewHolder(
                                            it, it1, it2, null, cardBrandInString, savedCardsModel
                                         )
                                         //    tapInlineCardSwitch?.switchSaveCard?.isChecked = true
-
-                                        tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
+                                        checkForTapInlineCardSwitchOpeningAccordingToCurrencyWidget()
+                                 //       tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
                                         Bugfender.d(
                                             CustomUtils.tagEvent,
                                             "Finished valid raw card data for:" + PaymentType.CARD
@@ -1207,7 +1210,8 @@ class PaymentInlineViewHolder(
                                 ) {
                                     tapCardInputView.setCardHolderName(PaymentDataSource.getDefaultCardHolderName())
                                     //  tapInlineCardSwitch?.visibility = View.VISIBLE
-                                    tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
+                                    checkForTapInlineCardSwitchOpeningAccordingToCurrencyWidget()
+                                   // tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
                                     // tapCardInputView.separatorcard2.visibility = View.VISIBLE
                                 }
                             }
@@ -2049,6 +2053,13 @@ class PaymentInlineViewHolder(
         } else {
             onCurrencySupported.invoke(cardBrandInString)
             tapInlineCardSwitch?.switchSaveCard?.isChecked = true
+            tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
+        }
+    }
+    fun checkForTapInlineCardSwitchOpeningAccordingToCurrencyWidget(){
+        if (tapCurrencyControlWidgetPaymentInline?.isVisible == true) {
+            tapInlineCardSwitch?.fadeVisibility(View.GONE)
+        }else{
             tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
         }
     }
