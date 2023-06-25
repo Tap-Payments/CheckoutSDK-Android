@@ -709,10 +709,6 @@ class PaymentInlineViewHolder(
         }
     }
 
-    fun setCardBrandViewIcon() {
-        cardBrandView?.iconView?.setImageResource(R.drawable.card_icon_dark)
-
-    }
 
     private fun cardHolderNameWatcher() {
         tapCardInputView.setCardHolderHint(
@@ -2424,7 +2420,7 @@ class PaymentInlineViewHolder(
                     tapCardInputView.setSingleCardInput(
                         CardBrandSingle.fromCode(card?.name), itemsCardsList[i].selectedImageURL
                     )
-                    itemsCardsList[i].type.rawValue
+                    //itemsCardsList[i].type.rawValue
 
                 }
             } else {
