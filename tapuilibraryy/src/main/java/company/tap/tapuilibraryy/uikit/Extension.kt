@@ -44,10 +44,10 @@ fun String.getColorWithoutOpacity(): String {
 }
 
 fun String.formatTo2DecimalPoints(): String {
-    return  try {
-        this.replace(",","").toDouble().toString().format("%.2f", this)
-    }catch (e:Exception){
-        Log.e("error",this.toString())
+    return try {
+        this.replace(",", "").toDouble().toString().format("%.2f", this)
+    } catch (e: Exception) {
+        Log.e("error", this.toString())
         "0"
     }
 
