@@ -2220,7 +2220,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
 
         image?.layoutParams = params
-        image?.setPadding(8)
+        image?.setPadding(context.resources.getDimension(R.dimen._3sdp).roundToInt())
 
         Glide.with(context)
             .load(
