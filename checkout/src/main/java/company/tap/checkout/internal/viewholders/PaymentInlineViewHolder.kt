@@ -797,19 +797,6 @@ class PaymentInlineViewHolder(
 
 
     private fun switchCheckedState() {
-        /* tapCardInputView.setSwitchSaveCardListener { buttonView, isChecked ->
-             if (isChecked) {
-                 secondaryLayout?.visibility = View.VISIBLE
-             } else secondaryLayout?.visibility = View.GONE
-
-
-             tapCardInputView.switchCardEnabled = isChecked
-
-         }*/
-        /* if(tapInlineCardSwitch?.switchSaveCard?.isChecked == true && tapInlineCardSwitch?.saveForOtherCheckBox?.isChecked == true){
-             contactDetailsView?.visibility = View.VISIBLE
-         }*/
-
         tapInlineCardSwitch?.switchSaveCard?.setOnCheckedChangeListener { buttonView, isChecked ->
             secondaryLayout?.visibility = View.GONE
             tapAlertView?.fadeVisibility(View.GONE, 500)
@@ -1743,10 +1730,9 @@ class PaymentInlineViewHolder(
     override fun onFocusChange(focusField: String) {
         lastFocusField = focusField
 
-        println("lastFocusField>>>>" + lastFocusField)
-        if (focusField == "focus_cardholder" && cardHolderName.isNullOrEmpty()) CustomUtils.showKeyboard(
-            context
-        )
+        println("focusField>>>>" + focusField)
+        if (focusField == "focus_cardholder" && cardHolderName.isNullOrEmpty())
+            CustomUtils.showKeyboard(context)
 
 
     }
