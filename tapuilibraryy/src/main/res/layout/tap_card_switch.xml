@@ -98,7 +98,7 @@
     <company.tap.tapuilibraryy.uikit.views.TabAnimatedActionButton
         android:id="@+id/payButton"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_35sdp"
+        android:layout_height="@dimen/_36sdp"
         android:layout_marginTop="30dp"
         android:visibility="visible"
         android:layout_gravity="center"

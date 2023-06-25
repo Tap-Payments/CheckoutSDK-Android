@@ -2049,12 +2049,14 @@ class PaymentInlineViewHolder(
             if (cardBrandInString == MADA_SCHEME && isCurrencySelectedRelatedToSaudiReal().not()) {
                 onCurrencySupported.invoke(PaymentDataSource.getBinLookupResponse()?.cardBrand?.rawValue)
             }
+            tapInlineCardSwitch?.visibility = View.GONE
 
         } else if (isCardEnterdEnabledPaymentOptionsAndHasMoreThanOneSupportedCurrency()) {
             onPaymentCardComplete.onPaymentCompletedShowingCurrencyWidget(
                 cardBrandInString.toString()
             )
             onCurrencySupported.invoke(cardBrandInString)
+            tapInlineCardSwitch?.visibility = View.GONE
         } else {
             onCurrencySupported.invoke(cardBrandInString)
             tapInlineCardSwitch?.switchSaveCard?.isChecked = true
@@ -2405,7 +2407,7 @@ class PaymentInlineViewHolder(
 
     }
 
-    fun logicTosetImageDynamic(card: CardBrand?, cardCharSeq: String) {
+    fun logicTosetImageDynamic(card: CardBrand?, cardCharSeq: String?=null) {
         for (i in itemsCardsList.indices) {
 
             if (itemsCardsList[i].selectedImageURL.contentEquals(

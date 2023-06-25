@@ -25,6 +25,7 @@ import androidx.annotation.RequiresApi
 import androidx.annotation.RestrictTo
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.core.view.setPadding
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -36,6 +37,7 @@ import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import com.bugfender.sdk.Bugfender
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.android.gms.wallet.PaymentData
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -108,6 +110,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.math.BigDecimal
 import java.util.*
+import kotlin.math.roundToInt
 import kotlin.properties.Delegates
 
 
@@ -785,8 +788,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         itemAdapter.resetViewToInitialValue()
 
     }
-
-
 
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -1762,6 +1763,19 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         })
                     }
 
+                    if (PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue.toString() == MADA_SCHEME && paymentInlineViewHolder.isCurrencySelectedRelatedToSaudiReal()){
+                        PaymentDataSource?.getBinLookupResponse()?.let { it1 ->
+                            paymentInlineViewHolder.logicTosetImageDynamic(
+                                it1.scheme.cardBrand
+                            )
+                        }
+                    }else
+                        PaymentDataSource?.getBinLookupResponse()?.let { it1 ->
+                           paymentInlineViewHolder.logicTosetImageDynamic(
+                                it1.cardBrand
+                            )
+                        }
+
 
                 } else
 
@@ -1906,7 +1920,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun dismisControlWidget() {
-         isDisableOptionSelected = false
+        isDisableOptionSelected = false
         dismissPaymentCurrency()
         dismissCardsCurrency()
     }
@@ -1917,6 +1931,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
 
     }
+
     fun dismissCardsCurrency() {
         if (cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.isVisible) {
             cardViewHolder.view.mainChipgroup.tapCurrencyControlWidget.slideView(0)
@@ -1928,7 +1943,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     private fun performResetToPaymentInline() {
         resetViewsToNormal()
-        if (paymentInlineViewHolder.cvvNumber?.length == 3 ||paymentInlineViewHolder.cvvNumber?.length == 4 ) {
+        if (paymentInlineViewHolder.cvvNumber?.length == 3 || paymentInlineViewHolder.cvvNumber?.length == 4) {
             with(paymentInlineViewHolder) {
                 if (this.savedCardsModel != null) {
                     onPayCardCompleteAction(
@@ -1942,10 +1957,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         this.savedCardsModel
                     )
                 } else {
-                    Log.e("binResponse",PaymentDataSource.getBinLookupResponse()?.cardBrand?.rawValue.toString())
+                    Log.e(
+                        "binResponse",
+                        PaymentDataSource.getBinLookupResponse()?.cardBrand?.rawValue.toString()
+                    )
                     PaymentDataSource.getBinLookupResponse()?.toString()
                         ?.let { Log.e("binResponse", it) }
-                    Log.e("cardBrandinString",cardBrandInString.toString())
+                    Log.e("cardBrandinString", cardBrandInString.toString())
                     paymentInlineViewHolder.doPay(PaymentType.CARD)
 
 //                    onPayCardCompleteAction(
@@ -2033,7 +2051,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         println("cardBrandString before " + cardBrandString)
         println("paymentOptObject before " + paymentOptObject)
 
-        if(cardBrandString==null && paymentOptObject == null) unActivateActionButton()
+        if (cardBrandString == null && paymentOptObject == null) unActivateActionButton()
         else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 logicTogetButtonStyle(paymentOptObject, payStringButton, cardBrandString)
@@ -2169,7 +2187,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         image = ImageView(context)
         val params = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.MATCH_PARENT
+            LinearLayout.LayoutParams.MATCH_PARENT,
         )
         /**
          *work around condition for small logo of knet , set margins according to design figma*/
@@ -2204,13 +2222,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
 
         image?.layoutParams = params
+        image?.setPadding(8)
+
         Glide.with(context)
             .load(
                 getAssetName(
                     selectedPayOpt, context
                 )
-            ).fitCenter()
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            )
+            .fitCenter()
             .into(image!!)
 
 
@@ -2609,7 +2629,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         selectedCurrencySymbol: String
     ) {
 
-    isDisableOptionSelected= false
+        isDisableOptionSelected = false
         /**
          * need to be refactored to one function
          */
@@ -2633,7 +2653,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         position: Int? = null,
         isChangeingCurrencyFromOutside: Boolean? = true,
         isDisabledClicked: Boolean? = null,
-        isNotifyWithoutPosition:Boolean ?= false
+        isNotifyWithoutPosition: Boolean? = false
     ) {
         /**
          * need to be refactored
@@ -2687,7 +2707,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             isUserCurrencySameAsCurrencyOfApplication()
         }
         adapter.resetSelection()
-        filterViewModels(selectedCurrency, position,isDisabledClicked= isDisabledClicked)
+        filterViewModels(selectedCurrency, position, isDisabledClicked = isDisabledClicked)
         filterPaymentChipsAccordingToCurrency(
             selectedCurrency,
             position = position,
@@ -3301,12 +3321,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun filterViewModels(currency: String, position: Int? = null , isDisabledClicked: Boolean?=null) {
+    fun filterViewModels(
+        currency: String,
+        position: Int? = null,
+        isDisabledClicked: Boolean? = null
+    ) {
         savedCardsBasedCurr = filterByCurrenciesAndSortList(paymentOptionsResponse.cards, currency)
 
-        if(isDisabledClicked==true){
-            paymentInlineViewHolder.setDataWithOutSort(isDisabledClicked , currency ,position)
-        }else {
+        if (isDisabledClicked == true) {
+            paymentInlineViewHolder.setDataWithOutSort(isDisabledClicked, currency, position)
+        } else {
             logicToHandlePaymentDataType(
                 cardPaymentOptions = getEnabledCardPaymentList(currency),
                 disabledCardPaymentOptions = getDisabledCardPaymentList(currency),
@@ -3341,7 +3365,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         currency: String,
         position: Int? = null,
         isDisabledClicked: Boolean? = null,
-        isNotifyWithoutPosition:Boolean?=false
+        isNotifyWithoutPosition: Boolean? = false
     ) {
         allPaymentOptionsList = getListOfAllPaymentOptionsFilterdWithWebAndGooglePay()
         val enabledPaymentList = mutableListOf<PaymentOption>()
@@ -3364,8 +3388,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     scrollToCenterPosition(pos)
 
                 })
-        } else if (isNotifyWithoutPosition==true){
-            adapter.notifyItemRangeChanged(0,1)
+        } else if (isNotifyWithoutPosition == true) {
+            adapter.notifyItemRangeChanged(0, 1)
 
         } else {
             adapter.updateEnabledPaymentOptions(enabledPaymentList)
@@ -3410,7 +3434,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private fun logicToHandlePaymentDataType(
         webPaymentOptions: ArrayList<PaymentOption>? = null,
         cardPaymentOptions: ArrayList<PaymentOption>,
-        disabledCardPaymentOptions: ArrayList<PaymentOption>, isDisabledClicked: Boolean?=null
+        disabledCardPaymentOptions: ArrayList<PaymentOption>, isDisabledClicked: Boolean? = null
 
     ) {
         cardViewHolder.view.mainChipgroup?.groupName?.visibility = VISIBLE
@@ -3422,7 +3446,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             saveCardSwitchHolder?.view?.cardSwitch?.showOnlyPayButton()
         } else if (PaymentDataSource.getPaymentDataType() != null && PaymentDataSource.getPaymentDataType() == "CARD") {
             adapter.updateAdapterData(ArrayList())
-            paymentInlineViewHolder.setDataFromAPI(cardPaymentOptions, disabledCardPaymentOptions, isDisabledClicked)
+            paymentInlineViewHolder.setDataFromAPI(
+                cardPaymentOptions,
+                disabledCardPaymentOptions,
+                isDisabledClicked
+            )
             saveCardSwitchHolder?.view?.cardSwitch?.showOnlyPayButton()
         } else {
             /**
@@ -3441,7 +3469,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 if (cardPaymentOptions.isNotEmpty()) {
                     paymentInlineViewHolder.setDataFromAPI(
                         cardPaymentOptions,
-                        disabledCardPaymentOptions,isDisabledClicked
+                        disabledCardPaymentOptions, isDisabledClicked
                     )
 
 

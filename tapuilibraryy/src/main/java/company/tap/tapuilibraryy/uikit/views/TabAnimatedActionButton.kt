@@ -449,7 +449,7 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
 
     @SuppressLint("ResourceType")
     private fun startStateAnimation() {
-        val dimens = resources.getDimension(R.dimen._35sdp).roundToInt()
+        val dimens = resources.getDimension(R.dimen._36sdp).roundToInt()
 
         if (displayMetrics == DisplayMetrics.DENSITY_450 || displayMetrics == DisplayMetrics.DENSITY_420 || displayMetrics == DisplayMetrics.DENSITY_400 || displayMetrics == DisplayMetrics.DENSITY_440 || displayMetrics == DisplayMetrics.DENSITY_XXHIGH ) {
             animationDataSource =
