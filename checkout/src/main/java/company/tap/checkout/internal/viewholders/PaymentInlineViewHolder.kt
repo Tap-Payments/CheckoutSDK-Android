@@ -433,7 +433,6 @@ class PaymentInlineViewHolder(
     }
 
     fun clearTextInput() {
-        tabLayout.resetBehaviour()
         cardInputUIStatus = CardInputUIStatus.NormalCard
         tabLayout.resetBehaviour()
         tabLayout.getChildAt(0).minimumHeight = 2
@@ -442,7 +441,6 @@ class PaymentInlineViewHolder(
         controlScannerOptions()
         tapInlineCardSwitch?.visibility = View.GONE
         tapAlertView?.fadeVisibility(View.GONE, 500)
-        checkoutViewModel.resetCardSelection()
         checkoutViewModel.isSavedCardSelected = false
         tabLayout.fadeVisibility(View.VISIBLE)
         intertabLayout.fadeVisibility(View.VISIBLE)
