@@ -2000,9 +2000,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 isDimmed = true
             )
             tapCardInputView.hideCursor()
-//            mainLinear?.deepForEach {
-//                isClickable = false
-//            }
         }
 
 
