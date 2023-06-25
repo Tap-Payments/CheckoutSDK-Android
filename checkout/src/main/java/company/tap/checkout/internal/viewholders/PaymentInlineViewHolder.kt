@@ -1174,26 +1174,7 @@ class PaymentInlineViewHolder(
                                 }
                             } else {
                             if (isCVCLengthMax == true)
-                                cardNumber.toString().let {
-                                    expiryDate?.let { it1 ->
-                                        cvvNumber?.let { it2 ->
-                                            cardBrandInString = PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
-
-                                            doOnCurrencySupported { cardBrand ->
-                                                onPaymentCardComplete.onPayCardCompleteAction(
-                                                    true,
-                                                    paymentTyper,
-                                                    it,
-                                                    it1,
-                                                    it2,
-                                                    null,
-                                                    cardBrand ?: cardBrandInString,
-                                                    savedCardsModel
-                                                )
-                                            }
-                                        }
-                                    }
-                                }
+                                doPay(paymentTyper)
                         }
                         allFieldsValid = true
 
@@ -1333,6 +1314,30 @@ class PaymentInlineViewHolder(
 
             }
         })
+    }
+
+     fun doPay(paymentTyper: PaymentType) {
+        cardNumber.toString().let {
+            expiryDate?.let { it1 ->
+                cvvNumber?.let { it2 ->
+                    cardBrandInString =
+                        PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
+
+                    doOnCurrencySupported { cardBrand ->
+                        onPaymentCardComplete.onPayCardCompleteAction(
+                            true,
+                            paymentTyper,
+                            it,
+                            it1,
+                            it2,
+                            null,
+                            cardBrand ?: cardBrandInString,
+                            savedCardsModel
+                        )
+                    }
+                }
+            }
+        }
     }
 
 

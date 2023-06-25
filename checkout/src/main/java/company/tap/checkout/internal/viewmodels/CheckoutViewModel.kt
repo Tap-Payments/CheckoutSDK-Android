@@ -1946,17 +1946,18 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     PaymentDataSource.getBinLookupResponse()?.toString()
                         ?.let { Log.e("binResponse", it) }
                     Log.e("cardBrandinString",cardBrandInString.toString())
+                    paymentInlineViewHolder.doPay(PaymentType.CARD)
 
-                    onPayCardCompleteAction(
-                        true,
-                        PaymentType.CARD,
-                        cardNumber,
-                        expiryDate,
-                        cvvNumber!!,
-                        cardHolderName,
-                         cardBrandInString,
-                        this.savedCardsModel
-                    )
+//                    onPayCardCompleteAction(
+//                        true,
+//                        PaymentType.CARD,
+//                        cardNumber,
+//                        expiryDate,
+//                        cvvNumber!!,
+//                        cardHolderName,
+//                         cardBrandInString,
+//                        this.savedCardsModel
+//                    )
                 }
 
             }

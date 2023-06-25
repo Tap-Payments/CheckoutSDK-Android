@@ -38,9 +38,9 @@
         android:orientation="vertical">
 
         <company.tap.tapuilibraryy.uikit.views.TabAnimatedActionButton
-            android:id="@+id/payButton"
+            android:id="@+id/payButton_main"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="@dimen/_35sdp"
             android:layout_marginTop="22dp"
             android:visibility="visible"
             android:layout_gravity="center"

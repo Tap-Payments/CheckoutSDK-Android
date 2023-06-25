@@ -1,5 +1,6 @@
 package company.tap.tapuilibraryy.uikit.views
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -31,6 +32,7 @@ import company.tap.tapuilibraryy.uikit.interfaces.TabAnimatedButtonListener
 import company.tap.tapuilibraryy.uikit.interfaces.TapActionButtonInterface
 import company.tap.tapuilibraryy.uikit.ktx.setImage
 import company.tap.tapuilibraryy.uikit.utils.MetricsUtil
+import kotlin.math.roundToInt
 
 
 /**
@@ -294,7 +296,7 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
 
                     val params = LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
-                        120
+                        100
                     )
                     params.setMargins(60, 40, 60, 60)
                     params.gravity = Gravity.CENTER
@@ -306,7 +308,7 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
 
                     val params = LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
-                        90
+                        80
                     )
                     params.setMargins(50, 40, 50, 40)
                     params.gravity = Gravity.CENTER
@@ -318,7 +320,7 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
 
                     val params = LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
-                        150
+                        130
                     )
                     params.setMargins(40, 40, 40, 60)
                     params.gravity = Gravity.CENTER
@@ -445,15 +447,17 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
         return image
     }
 
+    @SuppressLint("ResourceType")
     private fun startStateAnimation() {
-        println("displayMetrics"+displayMetrics)
+        val dimens = resources.getDimension(R.dimen._35sdp).roundToInt()
+
         if (displayMetrics == DisplayMetrics.DENSITY_450 || displayMetrics == DisplayMetrics.DENSITY_420 || displayMetrics == DisplayMetrics.DENSITY_400 || displayMetrics == DisplayMetrics.DENSITY_440 || displayMetrics == DisplayMetrics.DENSITY_XXHIGH ) {
             animationDataSource =
                 AnimationDataSource(
                     fromHeight = height,
-                    toHeight = 78,
+                    toHeight = dimens,
                     fromWidth = width,
-                    toWidth = 80 + 70,
+                    toWidth = dimens,
                     fromCorners = dataSource?.cornerRadius,
                     toCorners = maxCorners,
                     fromColor = dataSource?.backgroundColor,
@@ -465,9 +469,9 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
             animationDataSource =
                 AnimationDataSource(
                     fromHeight = height,
-                    toHeight = 45,
+                    toHeight = dimens.toInt(),
                     fromWidth = width,
-                    toWidth = 45 + 45,
+                    toWidth = dimens.toInt(),
                     fromCorners = dataSource?.cornerRadius,
                     toCorners = maxCorners,
                     fromColor = dataSource?.backgroundColor,
@@ -479,9 +483,9 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
             animationDataSource =
                 AnimationDataSource(
                     fromHeight = height,
-                    toHeight = 102,
+                    toHeight = dimens,
                     fromWidth = width,
-                    toWidth = 100 + 42,
+                    toWidth = dimens ,
                     fromCorners = dataSource?.cornerRadius,
                     toCorners = maxCorners,
                     fromColor = dataSource?.backgroundColor,
