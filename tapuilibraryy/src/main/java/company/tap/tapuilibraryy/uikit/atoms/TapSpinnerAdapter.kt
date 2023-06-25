@@ -146,7 +146,8 @@ class CustomDropDownAdapter(
                 )
             )
             text =
-                dataSource.get(position).currency.toString() + " " + dataSource[position].amount.toDouble().formatTo2DecimalPoints()
+                dataSource.get(position).currency.toString() + " " + dataSource[position].amount.toString()
+                    .formatTo2DecimalPoints()
         }
 
         Glide.with(context).load(dataSource[position].flag).into(vh.img)

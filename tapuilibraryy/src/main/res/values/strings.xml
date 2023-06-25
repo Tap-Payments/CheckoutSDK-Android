@@ -14,7 +14,7 @@
 
     <string name="msg_dismiss">dismiss</string>
     <string name="gopay">goPay</string>
-    <string name="item_price">%1$s %2$s</string>
+    <string name="item_price">%s %s</string>
 
 
     <string-array name="countries_list">

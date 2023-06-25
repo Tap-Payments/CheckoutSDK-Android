@@ -43,8 +43,14 @@ fun String.getColorWithoutOpacity(): String {
     else return this
 }
 
-fun Double.formatTo2DecimalPoints(): String {
-    return String.format("%.2f", this)
+fun String.formatTo2DecimalPoints(): String {
+    return  try {
+        this.replace(",","").toDouble().toString().format("%.2f", this)
+    }catch (e:Exception){
+        Log.e("error",this.toString())
+        "0"
+    }
+
 }
 
 fun Context.doOnChangeOfResolutionDensities(
