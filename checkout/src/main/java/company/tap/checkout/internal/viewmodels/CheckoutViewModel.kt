@@ -440,6 +440,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         logicForLoyaltyProgram()
 
         amountViewHolder.view.amount_section.tapChipPopup.setOnClickListener {
+            paymentInlineViewHolder.clearTextInput()
             removePaymentInlineShrinkageAndDimmed()
             isDisableOptionSelected = false
             amountViewHolder.view.amount_section.tapChipPopup.slideFromEndToStart()
