@@ -87,6 +87,7 @@ import company.tap.tapuilibraryy.themekit.theme.SeparatorViewTheme
 import company.tap.tapuilibraryy.uikit.AppColorTheme
 import company.tap.tapuilibraryy.uikit.atoms.TapCurrencyControlWidget
 import company.tap.tapuilibraryy.uikit.datasource.LoyaltyHeaderDataSource
+import company.tap.tapuilibraryy.uikit.doOnChangeOfResolutionDensities
 import company.tap.tapuilibraryy.uikit.enums.ActionButtonState
 import company.tap.tapuilibraryy.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibraryy.uikit.fragment.NFCFragment
@@ -2220,7 +2221,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
 
         image?.layoutParams = params
-        image?.setPadding(8)
+
+        context.doOnChangeOfResolutionDensities(onLowDensity = {
+            image?.setPadding(context.resources.getDimension(R.dimen._3sdp).roundToInt())
+        }, onMediumDensity = {
+            image?.setPadding(context.resources.getDimension(R.dimen._3sdp).roundToInt())
+        }, onHighDensity = {
+            image?.setPadding(context.resources.getDimension(R.dimen._8sdp).roundToInt())
+        })
+
+
 
         Glide.with(context)
             .load(

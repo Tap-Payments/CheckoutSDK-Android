@@ -292,11 +292,13 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
                 removeView(getImageView(loaderSuccessGif, 0) {})
                 removeView(getImageView(loaderErrorGif, 0) {})
                 addChildView(getTextView(LocalizationManager.getLocale(context).language))
+                val dimens = resources.getDimension(R.dimen._36sdp).roundToInt()
+
                 if (displayMetrics == DisplayMetrics.DENSITY_450 || displayMetrics == DisplayMetrics.DENSITY_420 || displayMetrics == DisplayMetrics.DENSITY_400 || displayMetrics == DisplayMetrics.DENSITY_440 || displayMetrics == DisplayMetrics.DENSITY_XXHIGH ) {
 
                     val params = LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
-                        100
+                        dimens
                     )
                     params.setMargins(60, 40, 60, 60)
                     params.gravity = Gravity.CENTER
@@ -308,7 +310,7 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
 
                     val params = LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
-                        80
+                        dimens
                     )
                     params.setMargins(50, 40, 50, 40)
                     params.gravity = Gravity.CENTER
@@ -320,7 +322,7 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
 
                     val params = LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
-                        130
+                        dimens
                     )
                     params.setMargins(40, 40, 40, 60)
                     params.gravity = Gravity.CENTER
@@ -330,6 +332,7 @@ class TabAnimatedActionButton : CardView, MorphingAnimation.OnAnimationEndListen
 
                 }
                 morphingAnimation.setAnimationEndListener(this)
+                init()
                 this.isClickable = true
                 this.isEnabled = true
             }

@@ -87,7 +87,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                 if (cacheUserLocalCurrency()) {
                    powerdByTapAnimationFinished.observe(this@CheckoutFragment) {
                         if (it == true) {
-                            doAfterSpecificTime {
+                            doAfterSpecificTime (500){
                                addTitlePaymentAndFlag()
                                 isUserCurrencySameAsCurrencyOfApplication.observe(
                                     this@CheckoutFragment
@@ -147,7 +147,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         )
 
         topHeaderView.visibility = View.GONE
-        doAfterSpecificTime(50) {
+//        doAfterSpecificTime(50) {
             topHeaderView.startPoweredByAnimation(
                 delayTime = Constants.PoweredByLayoutAnimationDelay,
                 topHeaderView.poweredByImage, onAnimationEnd =
@@ -157,7 +157,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                     }
                 }
             )
-        }
+      //  }
 
 
     }
