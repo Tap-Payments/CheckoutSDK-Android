@@ -290,25 +290,25 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
         holder.itemView.textViewCardDetails.text = maskCardNumber(
             card.firstSix + card.lastFour
         )
-        if (isShaking) {
-            Log.d("isShaking", isShaking.toString())
-            val animShake: Animation =
-                AnimationUtils.loadAnimation(holder.itemView.context, R.anim.shake)
-            holder.itemView.startAnimation(animShake)
-            animShake.setAnimationListener(object : Animation.AnimationListener {
-                override fun onAnimationStart(p0: Animation?) {
-                }
-
-                override fun onAnimationEnd(p0: Animation?) {
-                    holder.itemView.setHasTransientState(false)
-                }
-
-                override fun onAnimationRepeat(p0: Animation?) {
-                }
-
-            })
-            holder.itemView.deleteImageViewSaved?.visibility = View.VISIBLE
-        } else holder.itemView.deleteImageViewSaved?.visibility = View.INVISIBLE
+//        if (isShaking) {
+//            Log.d("isShaking", isShaking.toString())
+//            val animShake: Animation =
+//                AnimationUtils.loadAnimation(holder.itemView.context, R.anim.shake)
+//            holder.itemView.startAnimation(animShake)
+//            animShake.setAnimationListener(object : Animation.AnimationListener {
+//                override fun onAnimationStart(p0: Animation?) {
+//                }
+//
+//                override fun onAnimationEnd(p0: Animation?) {
+//                    holder.itemView.setHasTransientState(false)
+//                }
+//
+//                override fun onAnimationRepeat(p0: Animation?) {
+//                }
+//
+//            })
+//            holder.itemView.deleteImageViewSaved?.visibility = View.VISIBLE
+//        } else holder.itemView.deleteImageViewSaved?.visibility = View.INVISIBLE
 
         val saveCardTextViewTheme = TextViewTheme()
         saveCardTextViewTheme.textColor =
@@ -323,8 +323,8 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
 
 
     private fun setSavedCardShakingAnimation(holder: RecyclerView.ViewHolder) {
-        deleteImageView = holder.itemView.deleteImageViewSaved
-        holder.itemView.deleteImageViewSaved.setImageResource(deleteIcon)
+        //deleteImageView = holder.itemView.deleteImageViewSaved
+      //  holder.itemView.deleteImageViewSaved.setImageResource(deleteIcon)
 
     }
 
