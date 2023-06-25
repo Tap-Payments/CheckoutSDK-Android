@@ -39,6 +39,7 @@ import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.lifecycle.MutableLiveData
+import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.AutoTransition
 import com.bumptech.glide.Glide
 import company.tap.checkout.R
@@ -648,6 +649,10 @@ fun MutableList<View>.disableViews() {
         view.isActivated = false
 
     }
+}
+
+fun RecyclerView.scrollToFirstPosition() = this.post {
+    apply { scrollToPosition(0) }
 }
 
 fun MutableList<View>.enableViews() {

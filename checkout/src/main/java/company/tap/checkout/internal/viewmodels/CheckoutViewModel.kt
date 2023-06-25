@@ -780,9 +780,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             setActionGoPayOpenedItemsDisplayed()
         }
 
+        cardViewHolder.view.mainChipgroup.chipsRecycler.scrollToFirstPosition()
+
         itemAdapter.resetViewToInitialValue()
 
     }
+
+
 
 
     @RequiresApi(Build.VERSION_CODES.N)
