@@ -1170,6 +1170,7 @@ class PaymentInlineViewHolder(
                                 if (isCardBrandOfTypeAmericanExpress() && s.trim().length ==3){
                                     return
                                 }
+
                                 tapCardInputView.holderNameEnabled = true
                                 tapCardInputView.setVisibilityOfHolderField(PaymentDataSource.getCardHolderNameShowHide())
                                 onFocusChange(CardInputListener.FocusField.FOCUS_HOLDERNAME)
