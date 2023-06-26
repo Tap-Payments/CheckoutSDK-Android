@@ -1970,8 +1970,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         PaymentDataSource.getBinLookupResponse()?.cardBrand?.rawValue.toString()
                     )
                     PaymentDataSource.getBinLookupResponse()?.toString()
-                        ?.let { Log.e("binResponse", it) }
-                    Log.e("cardBrandinString", cardBrandInString.toString())
+                        ?.let { //Log.e("binResponse", it)
+                             }
+                   // Log.e("cardBrandinString", cardBrandInString.toString())
                     paymentInlineViewHolder.doPay(PaymentType.CARD)
 
 //                    onPayCardCompleteAction(

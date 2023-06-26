@@ -97,7 +97,7 @@ class PaymentInlineViewHolder(
     var selectedType = PaymentTypeEnum.card
     private var shouldShowScannerOptions = true
     private var lastFocusField = CardInputListener.FocusField.FOCUS_CARD
-    private var lastCardInput = ""
+
     private var cardScannerBtn: ImageView? = null
     var savedCardsModel: SavedCard? = null
 
@@ -1381,7 +1381,7 @@ class PaymentInlineViewHolder(
 
                 println("card brand value is>>>" + card.cardBrand)
 
-                val binLookupResponse: BINLookupResponse? = PaymentDataSource.getBinLookupResponse()
+                val _binLookupResponse: BINLookupResponse? = PaymentDataSource.getBinLookupResponse()
                 // println("binLookupResponse" + binLookupResponse)
                 if (charSequence.length > 4) checkIfCardTypeExistInList(card.cardBrand)
                 /***This a business logic required dont remove**/
@@ -1398,7 +1398,7 @@ class PaymentInlineViewHolder(
 
                         }
                 } else {
-                    checkAllowedCardTypes(binLookupResponse)
+                    checkAllowedCardTypes(_binLookupResponse)
                     if (charSequence.length == 8)// added length check to avoid flickering
                         doAfterSpecificTime(time = 1400L) { //delay added as response from api needs time
                             setTabLayoutBasedOnApiResponse(
@@ -1409,7 +1409,7 @@ class PaymentInlineViewHolder(
                         }
                 }
             }
-            println("charSequence.le" + charSequence.length)
+           // println("charSequence.le" + charSequence.length)
             if (charSequence.length == 19) {
                 fullCardNumber = charSequence.toString()
             }
@@ -1423,7 +1423,6 @@ class PaymentInlineViewHolder(
 
 
 
-            lastCardInput = it.toString()
             shouldShowScannerOptions = it.isEmpty()
             controlScannerOptions()
             cardBrandDetection(charSequence.toString())
@@ -1608,14 +1607,13 @@ class PaymentInlineViewHolder(
     }
 
     // Logic to show the switches when card details are valid
-    private fun cardBrandDetection(cardTyped: String) {
+   private fun cardBrandDetection(cardTyped: String) {
         if (cardTyped.isEmpty()) {
             tapAlertView?.fadeVisibility(View.GONE, 500)
         }
         val card = CardValidator.validate(cardTyped)
-        // checkValidationState(card.cardBrand)
+
         if (card.cardBrand != null) {
-            println("card brand: ${card.validationState}")
             nfcButton?.visibility = View.GONE
             cardScannerBtn?.visibility = View.GONE
         }
@@ -1671,12 +1669,6 @@ class PaymentInlineViewHolder(
         // checkForFocus()
     }
 
-    private fun checkForFocus() {
-        shouldShowScannerOptions =
-            lastFocusField == CardInputListener.FocusField.FOCUS_CARD
-                    && lastCardInput.isEmpty()
-        controlScannerOptions()
-    }
 
     override fun onCardComplete() {
         if (view.layoutDirection == View.LAYOUT_DIRECTION_RTL) {
@@ -1739,6 +1731,10 @@ class PaymentInlineViewHolder(
         lastFocusField = focusField
 
         println("focusField>>>>" + focusField)
+
+        if(allFieldsValid == true){
+            tapAlertView?.visibility = View.GONE
+        }
         if (focusField == "focus_cardholder" && cardHolderName.isNullOrEmpty())
             CustomUtils.showKeyboard(context)
 
