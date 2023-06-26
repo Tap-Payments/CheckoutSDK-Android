@@ -36,6 +36,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/black_color"
         android:gravity="start"
+        android:textDirection="locale"
         android:layout_marginStart="@dimen/_4sdp"
         tools:text="test"
         android:textSize="13sp"

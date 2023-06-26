@@ -1121,7 +1121,7 @@ class PaymentInlineViewHolder(
                  */
                 cvvNumber = s.toString()
 
-                if ((s?.trim()?.length == 3 && isCardBrandOfTypeAmericanExpress().not()) || s?.trim()?.length == 4 && tapCardInputView.isExpDateValid) {
+                if ((s?.trim()?.length == 3 ) || s?.trim()?.length == 4 && tapCardInputView.isExpDateValid) {
                     if (!PaymentDataSource.getCardHolderNameShowHide()) {
                         var paymentTyper: PaymentType? = PaymentType.CARD
                         println("savedCardsModel   hhshhs" + savedCardsModel)

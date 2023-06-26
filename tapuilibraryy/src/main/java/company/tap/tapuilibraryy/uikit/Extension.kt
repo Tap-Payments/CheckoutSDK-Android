@@ -65,7 +65,10 @@ fun Context.doOnChangeOfResolutionDensities(
 
     if (displayMetrics == DisplayMetrics.DENSITY_260 || displayMetrics == DisplayMetrics.DENSITY_280 || displayMetrics == DisplayMetrics.DENSITY_300 || displayMetrics == DisplayMetrics.DENSITY_XHIGH || displayMetrics == DisplayMetrics.DENSITY_340 || displayMetrics == DisplayMetrics.DENSITY_360) {
         onLowDensity.invoke()
-    } else if (displayMetrics == DisplayMetrics.DENSITY_400 || displayMetrics == DisplayMetrics.DENSITY_420 || displayMetrics == DisplayMetrics.DENSITY_440) {
+    } else if (displayMetrics == DisplayMetrics.DENSITY_400 ||
+        displayMetrics == DisplayMetrics.DENSITY_420 ||
+        displayMetrics == DisplayMetrics.DENSITY_440 ||
+        displayMetrics == DisplayMetrics.DENSITY_XXHIGH) {
         onMediumDensity.invoke()
     } else {
         onHighDensity.invoke()
