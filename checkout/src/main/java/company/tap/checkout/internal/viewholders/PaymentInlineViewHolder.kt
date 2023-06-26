@@ -411,7 +411,11 @@ class PaymentInlineViewHolder(
         resetCardBrandIcon()
         tapInlineCardSwitch?.visibility = View.GONE
         tapPaymentInput?.separator?.visibility = View.GONE
-
+        // Added to hide the alert if all fields are valid
+        outerFrame.setOnTouchListener { v, event ->
+           if(allFieldsValid == true) tapAlertView?.visibility = View.GONE
+            return@setOnTouchListener true
+        }
         addViewsToPaymentViewContainer()
         tapCardInputView.clearFocus()
         cardNumberWatcher()
