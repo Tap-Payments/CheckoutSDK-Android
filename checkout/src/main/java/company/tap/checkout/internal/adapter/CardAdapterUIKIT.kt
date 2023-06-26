@@ -252,12 +252,13 @@ class CardAdapterUIKIT(private val onCardSelectedActionListener: OnCardSelectedA
     ) {
 
         holder.itemView.setOnClickListener {
-            holder. isSingleClicked(doOnSingleClicked ={
+            holder.isSingleClicked(doOnSingleClicked ={
                 if (!isShaking) {
                     onCardSelectedActionListener.onCardSelectedAction(true, card)
                     selectedPosition = position
                     onCardSelectedActionListener.removePaymentInlineShrinkageAndDimmed()
                 }
+                notifyDataSetChanged()
             },clearInput = true)
 
         }
