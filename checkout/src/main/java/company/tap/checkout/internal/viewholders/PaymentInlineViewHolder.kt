@@ -1347,8 +1347,7 @@ class PaymentInlineViewHolder(
         // var card:DefinedCardBrand?=null
         // if(tapCardInputView.fullCardNumber!=null)
         //  card  = CardValidator.validate(tapCardInputView.fullCardNumber)
-        println("charSequence is"+charSequence)
-        println("charSequence length is"+charSequence.toString().trim().length)
+      
         if (charSequence != null) {
             baseLayoutManager.resetViewHolder()
 
