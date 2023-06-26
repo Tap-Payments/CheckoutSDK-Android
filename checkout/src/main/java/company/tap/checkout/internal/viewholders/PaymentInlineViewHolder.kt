@@ -1728,6 +1728,10 @@ class PaymentInlineViewHolder(
         lastFocusField = focusField
 
         println("focusField>>>>" + focusField)
+
+        if(allFieldsValid == true){
+            tapAlertView?.visibility = View.GONE
+        }
         if (focusField == "focus_cardholder" && cardHolderName.isNullOrEmpty())
             CustomUtils.showKeyboard(context)
 
