@@ -911,17 +911,17 @@ class PaymentInlineViewHolder(
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                checkoutViewModel.resetViewHolder()
+                //checkoutViewModel.resetViewHolder()
 
 
             }
 
             @RequiresApi(Build.VERSION_CODES.N)
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                println("mPreviousCount>>" + mPreviousCount)
-                println("start>>" + start)
-                println("before>>" + before)
-                println("count>>" + count)
+               // println("cardInputUIStatus>>" + cardInputUIStatus)
+              //  println("start>>" + start)
+              //  println("before>>" + before)
+              //  println("count>>" + count)
 
                 // Needed for hide
                 if (mPreviousCount > count) {
@@ -939,10 +939,10 @@ class PaymentInlineViewHolder(
                     tabLayout.visibility = View.VISIBLE
                     acceptedCardText.visibility = View.VISIBLE
                 }
-                mPreviousCount = count;
+                mPreviousCount = count
 
 
-                if (cardInputUIStatus != CardInputUIStatus.SavedCard) {
+                if (cardInputUIStatus == CardInputUIStatus.NormalCard) {
                     onCardTextChange(s)
                     cardNumAfterTextChangeListener(s.toString().trim(), this)
 
@@ -1157,8 +1157,10 @@ class PaymentInlineViewHolder(
                                     }
                                 }
                             } else {
-                            if (isCVCLengthMax == true)
+                            if (isCVCLengthMax == true && paymentTyper == PaymentType.CARD){
                                 doPay(paymentTyper)
+
+                            }
                         }
                         allFieldsValid = true
 
@@ -1340,12 +1342,13 @@ class PaymentInlineViewHolder(
 
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun cardNumAfterTextChangeListener(charSequence: CharSequence?, textWatcher: TextWatcher) {
+    fun cardNumAfterTextChangeListener(charSequence: String?, textWatcher: TextWatcher) {
         val card = CardValidator.validate(charSequence.toString())
         // var card:DefinedCardBrand?=null
         // if(tapCardInputView.fullCardNumber!=null)
         //  card  = CardValidator.validate(tapCardInputView.fullCardNumber)
-
+        println("charSequence is"+charSequence)
+        println("charSequence length is"+charSequence.toString().trim().length)
         if (charSequence != null) {
             baseLayoutManager.resetViewHolder()
 
@@ -1356,8 +1359,8 @@ class PaymentInlineViewHolder(
 
             }
 
-            if (charSequence.length > 2) {
-                callCardBinNumberApi(charSequence, textWatcher)
+            if (charSequence.toString().replace(" ","").length == 6) {
+                callCardBinNumberApi(charSequence.toString().replace(" ",""), textWatcher)
 
             } else {
                 tabLayout.resetBehaviour()
@@ -1520,7 +1523,7 @@ class PaymentInlineViewHolder(
      */
     @RequiresApi(Build.VERSION_CODES.N)
     private fun callCardBinNumberApi(s: CharSequence, textWatcher: TextWatcher) {
-        if (s.trim().toString().replace(" ", "").length == BIN_NUMBER_LENGTH) {
+        if (s.trim().toString().length == BIN_NUMBER_LENGTH) {
             cardViewModel.processEvent(
                 event = CardViewEvent.RetreiveBinLookupEvent,
                 viewModel =CheckoutViewModel(), binValue= s.trim().toString().replace(" ", "")
@@ -1528,7 +1531,10 @@ class PaymentInlineViewHolder(
 
         }
         tapCardInputView.removeCardNumberTextWatcher(textWatcher)
-        tapCardInputView.setCardNumberTextWatcher(textWatcher)
+        doAfterSpecificTime(time = 500L) {
+            tapCardInputView.setCardNumberTextWatcher(textWatcher)
+        }
+
     }
 
 
