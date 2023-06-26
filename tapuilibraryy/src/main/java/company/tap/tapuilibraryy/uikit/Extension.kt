@@ -3,7 +3,6 @@ package company.tap.tapuilibraryy.uikit
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.icu.number.Precision
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.MotionEvent
@@ -11,10 +10,10 @@ import android.widget.TextView
 import androidx.core.text.TextUtilsCompat
 import androidx.core.text.isDigitsOnly
 import androidx.core.view.ViewCompat
-import company.tap.tapuilibraryy.R
 import company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
 import java.math.RoundingMode
 import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 import java.util.*
 
 
@@ -45,7 +44,8 @@ fun String.getColorWithoutOpacity(): String {
 
 fun String.formatTo2DecimalPoints(): String {
     return try {
-        val df = DecimalFormat("#,###,##0.00")
+        val symbols = DecimalFormatSymbols(Locale.US)
+        val df = DecimalFormat("#,###,##0.00",symbols)
         df.roundingMode = RoundingMode.DOWN
        return df.format(this.replace(",", "").toDouble())
     } catch (e: Exception) {
