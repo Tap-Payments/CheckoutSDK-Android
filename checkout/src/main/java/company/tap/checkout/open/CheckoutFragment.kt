@@ -10,16 +10,17 @@ import android.os.Bundle
 import android.view.*
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.viewModels
 import cards.pay.paycardsrecognizer.sdk.Card
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.apiresponse.CardViewEvent
 import company.tap.checkout.internal.apiresponse.CardViewModel
-import company.tap.checkout.internal.apiresponse.UserRepository
 import company.tap.checkout.internal.cache.SharedPrefManager
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.utils.*
@@ -76,6 +77,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         initViews(view)
         isWebViewOpened = false
         sessionDelegate?.sessionHasStarted()
+
 
 
         viewModel.localCurrencyReturned.observe(this, androidx.lifecycle.Observer {
@@ -147,17 +149,28 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         )
 
         topHeaderView.visibility = View.GONE
-//        doAfterSpecificTime(50) {
-            topHeaderView.startPoweredByAnimation(
-                delayTime = Constants.PoweredByLayoutAnimationDelay,
-                topHeaderView.poweredByImage, onAnimationEnd =
-                {
-                    if (viewModel.isItemsAreOpend.value == false) {
-                        poweredByTapAnimationEnds()
+        bottomSheetDialog.behavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+
+
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when(newState){
+                    BottomSheetBehavior.STATE_EXPANDED->{
+                        topHeaderView.startPoweredByAnimation(
+                            delayTime = Constants.PoweredByLayoutAnimationDelay,
+                            topHeaderView.poweredByImage, onAnimationEnd =
+                            {
+                                if (viewModel.isItemsAreOpend.value == false) {
+                                    poweredByTapAnimationEnds()
+                                }
+                            }
+                        )
                     }
                 }
-            )
-      //  }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            }
+        })
 
 
     }
