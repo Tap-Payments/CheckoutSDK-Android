@@ -13,7 +13,7 @@ All rights reserved.
  **/
 
 interface OnCardSelectedActionListener {
-    fun onCardSelectedAction(isSelected:Boolean , savedCardsModel : Any?)
+    fun onCardSelectedAction(isSelected:Boolean , savedCardsModel : Any?,isChangeBrandIcon:Boolean?=false)
 
     fun onDisabledChipSelected(paymentOption: PaymentOption, itemView: Int?=null,isDisabledClicked:Boolean?=false)
 

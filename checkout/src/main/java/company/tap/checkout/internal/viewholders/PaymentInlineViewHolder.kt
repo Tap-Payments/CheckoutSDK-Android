@@ -1171,8 +1171,10 @@ class PaymentInlineViewHolder(
                                     }
                                 }
                             } else {
-                            if (isCVCLengthMax == true)
+                            if (isCVCLengthMax == true && paymentTyper == PaymentType.CARD){
                                 doPay(paymentTyper)
+
+                            }
                         }
                         allFieldsValid = true
 

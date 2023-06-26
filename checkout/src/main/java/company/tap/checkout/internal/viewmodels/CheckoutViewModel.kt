@@ -1701,7 +1701,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @SuppressLint("ClickableViewAccessibility")
     @RequiresApi(Build.VERSION_CODES.N)
-    override fun onCardSelectedAction(isSelected: Boolean, savedCardsModel: Any?) {
+    override fun onCardSelectedAction(
+        isSelected: Boolean,
+        savedCardsModel: Any?,
+        isChangeBrandIcon: Boolean?
+    ) {
         dismisControlWidget()
         unActivateActionButton()
 
@@ -1763,20 +1767,22 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                                 savedCardsModel.logos?.light_mono?.currencyWidget?.png
                             )
                         })
-                    }
 
-                    if (PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue.toString() == MADA_SCHEME && paymentInlineViewHolder.isCurrencySelectedRelatedToSaudiReal()){
-                        PaymentDataSource?.getBinLookupResponse()?.let { it1 ->
-                            paymentInlineViewHolder.logicTosetImageDynamic(
-                                it1.scheme.cardBrand
-                            )
-                        }
-                    }else
-                        PaymentDataSource?.getBinLookupResponse()?.let { it1 ->
-                           paymentInlineViewHolder.logicTosetImageDynamic(
-                                it1.cardBrand
-                            )
-                        }
+                    }
+                    if (isChangeBrandIcon == true) {
+                        if (PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue.toString() == MADA_SCHEME && paymentInlineViewHolder.isCurrencySelectedRelatedToSaudiReal()) {
+                            PaymentDataSource?.getBinLookupResponse()?.let { it1 ->
+                                paymentInlineViewHolder.logicTosetImageDynamic(
+                                    it1.scheme.cardBrand
+                                )
+                            }
+                        } else
+                            PaymentDataSource?.getBinLookupResponse()?.let { it1 ->
+                                paymentInlineViewHolder.logicTosetImageDynamic(
+                                    it1.cardBrand
+                                )
+                            }
+                    }
 
 
                 } else
@@ -1912,7 +1918,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     isDisableOptionSelected = isDisabledClicked
                 }
 
-                onCardSelectedAction(true, paymentOption)
+                onCardSelectedAction(true, paymentOption,isChangeBrandIcon = true)
 
             }
         }
