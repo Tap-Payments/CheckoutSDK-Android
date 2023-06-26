@@ -922,10 +922,6 @@ class PaymentInlineViewHolder(
 
             @RequiresApi(Build.VERSION_CODES.N)
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-               // println("cardInputUIStatus>>" + cardInputUIStatus)
-              //  println("start>>" + start)
-              //  println("before>>" + before)
-              //  println("count>>" + count)
 
                 // Needed for hide
                 if (mPreviousCount > count) {
@@ -1352,10 +1348,7 @@ class PaymentInlineViewHolder(
     @RequiresApi(Build.VERSION_CODES.N)
     fun cardNumAfterTextChangeListener(charSequence: String?, textWatcher: TextWatcher) {
         val card = CardValidator.validate(charSequence.toString())
-        // var card:DefinedCardBrand?=null
-        // if(tapCardInputView.fullCardNumber!=null)
-        //  card  = CardValidator.validate(tapCardInputView.fullCardNumber)
-      
+
         if (charSequence != null) {
             baseLayoutManager.resetViewHolder()
 
@@ -1392,7 +1385,7 @@ class PaymentInlineViewHolder(
                 /***This a business logic required dont remove**/
 
                 /**
-                 * This is business condition based on user selection / settings **/
+                 * This is business condition based on user selection / settings  allowed cardtype all **/
                 if (PaymentDataSource.getCardType() != null && PaymentDataSource.getCardType() == CardType.ALL) {
                     if (charSequence.length == 8) // added length check to avoid flickering
                         doAfterSpecificTime(time = 1400L) { //delay added as response from api needs time
@@ -1431,6 +1424,7 @@ class PaymentInlineViewHolder(
             shouldShowScannerOptions = it.isEmpty()
             controlScannerOptions()
             cardBrandDetection(charSequence.toString())
+            /**Responsible for brand detection from validator kit locale **/
             if (card != null) checkValidationState(card, charSequence.toString(), textWatcher)
         }
 
@@ -1611,7 +1605,7 @@ class PaymentInlineViewHolder(
             }
     }
 
-    // Logic to show the switches when card details are valid
+    // Logic to show the buttons when card details are valid
    private fun cardBrandDetection(cardTyped: String) {
         if (cardTyped.isEmpty()) {
             tapAlertView?.fadeVisibility(View.GONE, 500)
