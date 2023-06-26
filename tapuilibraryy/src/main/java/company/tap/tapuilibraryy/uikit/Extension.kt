@@ -45,7 +45,9 @@ fun String.getColorWithoutOpacity(): String {
 
 fun String.formatTo2DecimalPoints(): String {
     return try {
-        this.replace(",", "").toDouble().toString().format("%.2f", this)
+        val df = DecimalFormat("#,###,##0.00")
+        df.roundingMode = RoundingMode.DOWN
+       return df.format(this.replace(",", "").toDouble())
     } catch (e: Exception) {
         Log.e("error", this.toString())
         "0"
