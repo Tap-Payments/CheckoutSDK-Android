@@ -2228,14 +2228,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
 
         image?.layoutParams = params
-
-        context.doOnChangeOfResolutionDensities(onLowDensity = {
-            image?.setPadding(context.resources.getDimension(R.dimen._3sdp).roundToInt())
-        }, onMediumDensity = {
-            image?.setPadding(context.resources.getDimension(R.dimen._3sdp).roundToInt())
-        }, onHighDensity = {
-            image?.setPadding(context.resources.getDimension(R.dimen._8sdp).roundToInt())
-        })
+        image?.setPadding(context.resources.getDimension(R.dimen._3sdp).roundToInt())
 
 
 
