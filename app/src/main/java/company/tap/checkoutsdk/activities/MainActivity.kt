@@ -884,9 +884,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         val dialogBuilder = AlertDialog.Builder(this)
         dialogBuilder.setTitle(title)
             .setMessage(message)
-            .setPositiveButton("OK", null).setOnCancelListener {
-
-            }
+            .setPositiveButton("OK", null)
             .create()
             .show()
 

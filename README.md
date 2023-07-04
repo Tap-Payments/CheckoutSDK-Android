@@ -20,17 +20,16 @@ Your customers can scale globally by offering all popular payment methods across
 2. [Installation with jitpack](#installation_with_jitpack)
 
 3. [PRE SDK Setup](#setup)
-    1. [CheckoutSDK Class Properties](#setup_checkoutsdk_class_properties)
-4. [Usage](#usage)
-    1. [Configure SDK with Required Data](#configure_sdk_with_required_data)
-    2. [Configure SDK Look and Feel](#configure_sdk_look_and_feel)
-    3. [Configure SDK Session](#configure_sdk_Session)
-    4. [Configure SDK Transaction Mode](#configure_sdk_transaction_mode)
-    5. [Use Tap PayButton](#init_pay_button)
-    6. [List Saved Cards](#list_saved_cards)
-    6. [Open SDK Interfaces](#sdk_open_interfaces)
-    7. [Open SDK ENUMs](#sdk_open_enums)
-    8. [Open SDK Models](#sdk_open_models)
+    1. [Important Information](#setup_important_information)
+   
+4. [SDK SETUP](#sdk_setup)
+    1. [Configure SDK Session](#configure_sdk_Session)
+    2. [Configure SDK Transaction Mode](#configure_sdk_transaction_mode)
+    3. [Use Tap PayButton](#init_pay_button)
+    4. [List Saved Cards](#list_saved_cards)
+    5. [Open SDK Interfaces](#sdk_open_interfaces)
+    6. [Open SDK ENUMs](#sdk_open_enums)
+    7. [Open SDK Models](#sdk_open_models)
 5. [SDKSession Delegate](#sdk_delegate)
     1. [Payment Success Callback](#payment_success_callback)
     2. [Payment Failure Callback](#payment_failure_callback)
@@ -93,41 +92,9 @@ In order to be able to use the SDK, you have to create a Tap account first. Once
    1. This will be used to perform actual transactions in our production environment. Will be required for you before releasing your application.
 3. Your tap merchant id.
    1. This will be used as an identifier for the app entity under your Tap account. As you can have multiple apps/websites integrated with Tap under your same Tap account.
+   
 
-<a name="setup_gosellsdk_class_properties"></a>
-## checkOutSDK Class Properties
-First of all, `checkOutSDK` should be set up. To set it up, add the following lines of code somewhere in your project and make sure they will be called before any usage of `checkOutSDK`.
-
-Below is the list of properties in checkOutSDK class you can manipulate. Make sure you do the setup before any usage of the SDK.
-
-<a name="setup_checkoutsdk_class_properties_secret_key"></a>
-### Secret Key and Application ID
-
-To set it up, add the following line of code somewhere in your project and make sure it will be called before any usage of `checkOutSDK`, otherwise an exception will be thrown. **Required**.
-
-*Java:*
-```java
- TapCheckOutSDK().init(this,"pk_test_kXXXXXXXXXXXXXXXXXXXXXXXX","sk_live_XXXXXXXXXXXXXXXXXXXXXXXX","app_id");
-```
-*Kotlin:*
-```kotlin
-    TapCheckOutSDK().init(this, "pk_test_kXXXXXXXXXXXXXXXXXXXXXXXX", "sk_live_XXXXXXXXXXXXXXXXXXXXXXXX", "app_id")
- ```    
-1. **`authToken`** - to authorize your requests.//  key (format: "pk_XXXXXXXXXXXXXXXXXXXXXXXX")
-2. **`app_id`** - replace it using your application ID "Application main package".
-
-Don't forget to import the class at the beginning of the file:
-
-*Java:*
-
-```java
-import company.tap.checkout.TapCheckOutSDK;
-```
-*Kotlin:*
-
-```kotlin
-import company.tap.checkout.TapCheckOutSDK
-```
+<a name="setup_important_information"></a>
 ## Important Information
 
 ### Supported languages
@@ -159,9 +126,71 @@ import company.tap.checkout.TapCheckOutSDK
 1. Authourize
    1. To be used when you want to hold the amount from your customer.
 
-<a name="usage"></a>
-#Usage
+<a name="sdk_setup"></a>
+# SDK SETUP
 ---
+### Global variables setup
+These variables to be set before starting the `Checkout SDK`. This will define important parameters for configuring and theming the `Checkout SDK` itself. Please note, missing to configure these will end up in using default values or the `Checkout SDK` will throw an error as it cannot start.
+
+1. The required localisation.
+   1. By this you define which language you want the `Checkout SDK` appears with.
+   2. Now we do support: `en` & `ar`.
+   3. Default value if not set is : `en`.
+      ```kotlin
+       LocalizationManager.setLocale(this, Locale("en"))
+      ```
+   4. If you wish to have your custom locale it can be added as below:
+    ```kotlin
+         LocalizationManager.loadTapLocale(resources, R.raw.defaulttaplocalisation)
+      ```
+2. The required Tap keys.
+   1. By this, you define your Tap keys so the sdk can identify you as a merchant.
+   1. These are required.
+   1. How to set it:    
+      To set it up, add the following line of code somewhere in your project and make sure it will be called before any usage of `checkOutSDK`, otherwise an exception will be thrown. **Required**.
+      
+```kotlin
+        /**
+         * Required step.
+         * Configure SDK with your Secret API key and App Bundle name registered with tap company.
+         */
+        private fun initializeSDK(){
+       TapCheckOutSDK().init(this, "pk_kXXXXXXXXXXXXXXXXXXXXXXXX", "pk_XXXXXXXXXXXXXXXXXXXXXXXX", "app_id")  // to be replaced by merchant, you can contact tap support team to get you credentials
+        }
+```
+1. **`authToken`** - to authorize your requests.// Secret key (format: "pk_XXXXXXXXXXXXXXXXXXXXXXXX")
+2. **`app_id`** - replace it using your application ID "Application main package".
+
+Don't forget to import the class at the beginning of the file:
+
+*Java:*
+
+```java
+import company.tap.checkout.TapCheckOutSDK;
+```
+*Kotlin:*
+```koltin
+import company.tap.checkout.TapCheckOutSDK
+```
+
+3. Optional theme variables:
+   1. Display mono variant when showing the Light mode theme
+      1. If not passed default value is `false`
+      2. How to set it : `TapCheckout.displayMonoLight = false`
+   2. Display colorized variant when showing the Dark mode theme
+      1. If not passed default value is `false`
+      2. How to set it : `TapCheckout.displayColoredDark = false`
+   3. If you wish to setup your custom theme , you can do it as below :
+*Kotlin:*
+```kotlin
+ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "lighttheme")
+```
+or
+```kotlin
+ ThemeManager.loadTapTheme(this, urlString)
+```
+   
+      
 <a name="configure_sdk_with_required_data"></a>
 ### Configure SDK With Required Data
 
@@ -171,25 +200,7 @@ import company.tap.checkout.TapCheckOutSDK
          /**
          * Integrating the SDK
          */
-         
-         
-          /**
-         * Required step.
-         * Configure SDK with your choice of language preferences from the given list.
-         */
-         initializeLanguage()
-        
-         /**
-         * Required step.
-         * Configure SDK with your choice of theme preferences from the given list -dark or light.
-         */
-        initializeTheme()
 
-        /**
-         * Required step.
-         * Configure SDK with your choice of language preferences from the given list.
-         */   
-            initializeSDK()
             
          /**
          * Required step.
@@ -205,48 +216,8 @@ import company.tap.checkout.TapCheckOutSDK
 ```
 Below is the list of properties in checkOutSDK class you can manipulate. Make sure you do the setup before any usage of the SDK.
 
-<a name="setup_checkoutsdk_class_properties_secret_key"></a>
-### Configure SDK Secret Key and Application ID and SDK Language
 
-To set it up, add the following line of code somewhere in your project and make sure it will be called before any usage of `checkOutSDK`, otherwise an exception will be thrown. **Required**.
 
-*Kotlin:*
-```kotlin
-        /**
-         * Required step.
-         * Configure SDK with your Secret API key and App Bundle name registered with tap company.
-         */
-        private fun initializeSDK(){
-   TapCheckOutSDK().init(this, "sk_test_kXXXXXXXXXXXXXXXXXXXXXXXX", "sk_live_XXXXXXXXXXXXXXXXXXXXXXXX", "app_id")  // to be replaced by merchant, you can contact tap support team to get you credentials
-        }
-```
-1. **`authToken`** - to authorize your requests.// Secret key (format: "sk_XXXXXXXXXXXXXXXXXXXXXXXX")
-2. **`app_id`** - replace it using your application ID "Application main package".
-
-Don't forget to import the class at the beginning of the file:
-
-*Java:*
-
-```java
-import company.tap.checkout.TapCheckOutSDK;
-```
-*Kotlin:*
-
-```koltin
-import company.tap.checkout.TapCheckOutSDK
-```
-<a name="configure_sdk_look_and_feel"></a>
-### Configure SDK Look and Feel
-To customize the SDK look and feel you must use **ThemeManager**  as following:
-
-*Kotlin:*
-```kotlin
-ThemeManager.loadTapTheme(resources, R.raw.defaultlighttheme, "lighttheme")
-```
-or
-```kotlin
- ThemeManager.loadTapTheme(this, urlString)
-```
 <a name="configure_sdk_Session"></a>
 ## Configure SDK Session
 **SDKSession** is the main interface for checkOutSDK library from you application, so you can use it to start SDK with pay button or without pay button.
