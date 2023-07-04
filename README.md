@@ -33,7 +33,7 @@ Your customers can scale globally by offering all popular payment methods across
     5. [Open SDK Interfaces](#sdk_open_interfaces)
     6. [Open SDK ENUMs](#sdk_open_enums)
     7. [Open SDK Models](#sdk_open_models)
-5. [SDKSession Delegate](#sdk_delegate)
+5. [CheckOut Delegate](#sdk_delegate)
     1. [Payment Success Callback](#payment_success_callback)
     2. [Payment Failure Callback](#payment_failure_callback)
     3. [Authorization Success Callback](#authorization_success_callback)
@@ -277,7 +277,7 @@ Below is the list of properties in checkOutSDK class you can manipulate. Make su
     </tr>
     <tr>
 	 <td> setTransactionMode  </td>
-	 <td> SDK offers different transaction modes such as [ TransactionMode.PURCHASE - TransactionMode.AUTHORIZE_CAPTURE - TransactionMode.SAVE_CARD - TransactionMode.TOKENIZE_CARD]   </td>
+	 <td> SDK offers different transaction modes such as [ TransactionMode.PURCHASE - TransactionMode.AUTHORIZE_CAPTURE]   </td>
     </tr>
     <tr>
 	 <td> setCustomer </td>
@@ -483,7 +483,7 @@ If you included Tap Pay Button then configure it first, if not then ignore this 
           * Include pay button in merchant page
           */
             private fun initActionButton() {
-        payButton.setButtonDataSource(
+            payButton.setButtonDataSource(
                 true,
                 this.let { LocalizationManager.getLocale(it).language },
                 LocalizationManager.getValue("pay", "ActionButton"),
@@ -1590,7 +1590,7 @@ class CardsList(
 }
 ````
 <a name="sdk_delegate"></a>
-## SDKSession Delegate
+## CheckOut Delegate
 
 **CheckOutDelegate** is an interface which you may want to implement to receive payment/authorization/card saving status updates and update your user interface accordingly when payment window closes.
 Below are listed down all available callbacks:
