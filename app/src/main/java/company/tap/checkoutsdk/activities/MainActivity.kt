@@ -21,6 +21,7 @@ import android.view.*
 import android.view.View.OnTouchListener
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
@@ -749,25 +750,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         println("asyncPaymentStarted>>>>>" + charge.id)
     }
 
-/*    @RequiresApi(Build.VERSION_CODES.N)
-   override fun getStatusSDK(response :String ? ,charge: Charge?) {
-     *//*  if(charge==null) {
 
-           payButton.changeButtonState(ActionButtonState.RESET)
-           SessionManager.setActiveSession(false)
-           payButton.setButtonDataSource(
-               true,
-               this.let { LocalizationManager.getLocale(it).language },
-               LocalizationManager.getValue("pay", "ActionButton"),
-               Color.parseColor(ThemeManager.getValue("actionButton.Valid.paymentBackgroundColor")),
-               Color.parseColor(ThemeManager.getValue("actionButton.Valid.titleLabelColor"))
-           )
-           payButton.setOnClickListener {
-               payButton.changeButtonState(ActionButtonState.LOADING)
-               SDKSession.startSDK(supportFragmentManager, this, this)
-           }
-       }*//*
-   }*/
 
     override fun onResume() {
         super.onResume()
@@ -896,6 +879,18 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         return true
     }
 
+
+    fun dialogAlertBuilder( title :String ,message :String){
+        val dialogBuilder = AlertDialog.Builder(this)
+        dialogBuilder.setTitle(title)
+            .setMessage(message)
+            .setPositiveButton("OK", null).setOnCancelListener {
+
+            }
+            .create()
+            .show()
+
+    }
 
 }
 
