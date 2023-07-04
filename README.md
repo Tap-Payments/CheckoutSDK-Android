@@ -158,7 +158,7 @@ These variables to be set before starting the `Checkout SDK`. This will define i
          * Configure SDK with your Secret API key and App Bundle name registered with tap company.
          */
         private fun initializeSDK(){
-       TapCheckOutSDK().init(this, "pk_kXXXXXXXXXXXXXXXXXXXXXXXX", "pk_XXXXXXXXXXXXXXXXXXXXXXXX", "app_id")  // to be replaced by merchant, you can contact tap support team to get you credentials
+       TapCheckOutSDK.init(this, "pk_kXXXXXXXXXXXXXXXXXXXXXXXX", "pk_XXXXXXXXXXXXXXXXXXXXXXXX", "app_id")  // to be replaced by merchant, you can contact tap support team to get you credentials
         }
 ```
 1. **`authToken`** - to authorize your requests.// Secret key (format: "pk_XXXXXXXXXXXXXXXXXXXXXXXX")
@@ -204,8 +204,7 @@ or
          * Integrating the SDK
          */
 
-            
-         /**
+        /**
          * Required step.
          * Configure SDK Session with all required data.
          */

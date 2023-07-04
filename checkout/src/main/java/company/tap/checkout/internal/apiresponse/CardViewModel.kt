@@ -153,7 +153,7 @@ class CardViewModel : ViewModel() {
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun listAllCards(viewModel: CheckoutViewModel, customerId: String?) {
-        repository?.listAllCards(viewModel, customerId)
+        repository.listAllCards(viewModel, customerId)
     }
 
 
@@ -161,10 +161,10 @@ class CardViewModel : ViewModel() {
     private fun createChargeRequest(
         viewModel: CheckoutViewModel,
         selectedPaymentOption: PaymentOption?,
-        cardtoken: String?,
+        cardToken: String?,
         saveCardValue: Boolean?
     ) {
-        repository.createChargeRequest(viewModel, selectedPaymentOption, cardtoken,saveCardValue)
+        repository.createChargeRequest(viewModel, selectedPaymentOption, cardToken,saveCardValue)
 
     }
 

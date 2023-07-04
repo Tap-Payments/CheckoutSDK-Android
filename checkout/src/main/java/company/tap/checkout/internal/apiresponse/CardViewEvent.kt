@@ -9,12 +9,10 @@ Copyright (c) 2020    Tap Payments.
 All rights reserved.
  **/
 sealed class CardViewEvent {
-    object InitEvent : CardViewEvent()
-    object ConfigEvent : CardViewEvent()
     object IpAddressEvent : CardViewEvent()
     object CurrencyEvent : CardViewEvent()
+    object InitEvent : CardViewEvent()
     object ChargeEvent :CardViewEvent()
-    object PaymentEvent :CardViewEvent()
     object RetreiveChargeEvent :CardViewEvent()
     object RetreiveBinLookupEvent :CardViewEvent()
     object CreateTokenEvent :CardViewEvent()
