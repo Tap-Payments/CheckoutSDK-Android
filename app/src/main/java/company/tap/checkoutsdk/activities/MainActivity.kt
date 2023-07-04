@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import company.tap.checkout.TapCheckOutSDK
 import company.tap.checkout.internal.api.enums.AmountModificatorType
@@ -193,8 +194,11 @@ class MainActivity : AppCompatActivity(), CheckOutDelegate {
         /** Configures the theme manager by setting the provided custom theme file names
         - Parameter customTheme: Please pass the tap checkout theme object with the names of your custom theme files if needed. If not set, the normal and default TAP theme will be used
          */
+        if(themeName.toString() == "light_mono") TapCheckOutSDK.displayMonoLight = true
 
-        ThemeManager.currentThemeName = themeName.toString()
+        if(themeName.toString() == "dark_colored") TapCheckOutSDK.displayColoredDark = true
+
+     //   ThemeManager.currentThemeName = themeName.toString()
 
 
     }
@@ -224,7 +228,7 @@ class MainActivity : AppCompatActivity(), CheckOutDelegate {
     }
 
     private fun initializeSDK() {
-        TapCheckOutSDK().init(
+        TapCheckOutSDK.init(
             this,
             // settingsManager?.getString("key_test_name", "sk_test_kovrMB0mupFJXfNZWx6Etg5y"),
             settingsManager?.getString("key_test_name", "pk_test_Vlk842B1EA7tDN5QbrfGjYzh"),
@@ -569,7 +573,7 @@ class MainActivity : AppCompatActivity(), CheckOutDelegate {
         println("Payment Failed : " + charge?.description)
         println("Payment Failed : " + charge?.response?.message)
         //  Toast.makeText(this,"checkoutChargeFailed"+charge?.response?.message, Toast.LENGTH_SHORT).show()
-
+      //  dialogAlertBuilder("Checkout Charge Failed","Payment Failed status>>>"+charge?.status)
 
     }
 
@@ -870,10 +874,14 @@ class MainActivity : AppCompatActivity(), CheckOutDelegate {
 
 
     fun dialogAlertBuilder( title :String ,message :String){
-        val dialogBuilder = AlertDialog.Builder(this)
-        dialogBuilder.setTitle(title)
+        val dialogBuilder = MaterialAlertDialogBuilder(this)
+             dialogBuilder.setTitle(title)
             .setMessage(message)
-            .setPositiveButton("OK", null)
+            .setPositiveButton("OK") { dialogInterface, which ->
+                run {
+                    dialogInterface.dismiss()
+                }
+            }
             .create()
             .show()
 

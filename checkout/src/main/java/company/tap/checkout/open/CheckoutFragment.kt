@@ -16,6 +16,7 @@ import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import company.tap.checkout.R
+import company.tap.checkout.TapCheckOutSDK
 import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.apiresponse.CardViewEvent
 import company.tap.checkout.internal.apiresponse.CardViewModel
@@ -269,6 +270,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     private fun resetSessionAndThemeManager() {
         ThemeManager.currentTheme = ""
         ThemeManager.currentThemeName = ""
+        TapCheckOutSDK.displayMonoLight = false
+        TapCheckOutSDK.displayColoredDark = false
         checkOutDelegate?.sessionCancelled()
         LocalizationManager.currentLocalized = JSONObject()
         bottomSheetDialog.dismiss()

@@ -11,6 +11,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentManager
 import com.google.gson.Gson
 import com.google.gson.JsonElement
+import company.tap.checkout.TapCheckOutSDK
 import company.tap.checkout.internal.PaymentDataProvider
 import company.tap.checkout.internal.api.enums.*
 import company.tap.checkout.internal.api.models.*
@@ -455,7 +456,7 @@ class CardRepository : APIRequestCallback {
             if (response?.body() != null) {
                 response.body().let {
 
-                    if (response?.body() != null) {
+                    if (response.body() != null) {
                         response.body().let {
                             initResponseModel = Gson().fromJson(it, InitResponseModel::class.java)
                             paymentOptionsResponse = initResponseModel?.paymentOptionsResponse
@@ -479,6 +480,8 @@ class CardRepository : APIRequestCallback {
                                         ThemeManager.currentThemeName.ifEmpty {
                                             ThemeManager.currentThemeName = ThemeMode.dark.name
                                         }
+                                        if(TapCheckOutSDK.displayColoredDark) ThemeManager.currentThemeName = ThemeMode.dark_colored.name
+
                                         ThemeManager.loadTapTheme(
                                             cardRepositoryContext,
                                             assetsModel?.theme?.darkUrl.toString(),
@@ -489,6 +492,9 @@ class CardRepository : APIRequestCallback {
                                         ThemeManager.currentThemeName.ifEmpty {
                                             ThemeManager.currentThemeName = ThemeMode.light.name
                                         }
+
+                                        if(TapCheckOutSDK.displayMonoLight) ThemeManager.currentThemeName = ThemeMode.light_mono.name
+
                                         ThemeManager.loadTapTheme(
                                             cardRepositoryContext,
                                             assetsModel?.theme?.lightUrl.toString(),
@@ -1283,12 +1289,6 @@ class CardRepository : APIRequestCallback {
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun getUserIpAddress(_context: Context, _viewModel: CheckoutViewModel){
-       /* NetworkApp.initNetwork(
-            _context,
-            "token",
-            "app",
-            ApiService.BASE_URL_IP,
-            "android-checkout-sdk",true,"string",_context as AppCompatActivity)*/
         this.viewModel =_viewModel
         this.cardRepositoryContext =_context
         NetworkController.getInstance().processRequest(
