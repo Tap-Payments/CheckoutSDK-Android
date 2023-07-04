@@ -13,8 +13,6 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.preference.PreferenceManager
-import android.telephony.TelephonyManager
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
@@ -35,7 +33,7 @@ import company.tap.checkout.open.CheckoutFragment
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.checkout.open.enums.Category
 import company.tap.checkout.open.enums.SdkMode
-import company.tap.checkout.open.interfaces.SessionDelegate
+import company.tap.checkout.open.interfaces.CheckOutDelegate
 import company.tap.checkout.open.models.*
 import company.tap.checkout.open.models.Receipt
 import company.tap.checkoutsdk.R
@@ -50,7 +48,7 @@ import java.math.BigDecimal
 import java.util.*
 
 
-class MainActivity : AppCompatActivity(), SessionDelegate {
+class MainActivity : AppCompatActivity(), CheckOutDelegate {
     private var settingsManager: SettingsManager? = null
     var sdkSession: SDKSession = SDKSession
     lateinit var payButton: TabAnimatedActionButton
@@ -76,13 +74,9 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
         settingsManager?.setPref(this)
         //Loading the theme and localization files prior to loading the view to avoid crashes
         checkAndroidVersion()
-        //initializeLanguage()
 
-        // ThemeManager.loadTapTheme(this, urlStrLight,"lighttheme")
+
         initializeSDK()
-        // initializeTheme()
-
-        //displayMertrc()
 
         if (settingsManager?.getString("sdk_locale", "default").equals("custom")) {
             initializeLanguage()
@@ -120,6 +114,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
     }
 
     private fun displayMertrc() {
+        //Temp added to get screen sizes not needed later
         val displaymetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(displaymetrics)
         val ht = displaymetrics.heightPixels
@@ -513,12 +508,6 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
             resources.getColor(R.color.colorText)
         )
 
-        /* payButton.setOnClickListener {
-             println("payButton clickccc"+payButton)
-            //  payButton.clearAnimation()
-             sdkSession.setButtonView(payButton, this, supportFragmentManager, this)
-
-         }*/
         payButton.setOnTouchListener(OnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_DOWN) {
                 println("payButton clickccc" + payButton)
@@ -531,7 +520,7 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
 
     }
 
-    override fun paymentSucceed(charge: Charge) {
+    override fun checkoutChargeCaptured(charge: Charge) {
         println("Payment Succeeded : charge status : " + charge.status)
         println("Payment Succeeded : description : " + charge.description)
         println("Payment Succeeded : message : " + charge.response.message)
@@ -571,20 +560,20 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
             println("Payment Succeeded : expiry type :" + charge.expiry?.type)
             println("Payment Succeeded : expiry period :" + charge.expiry?.period)
         }
-        // Toast.makeText(this,"paymentSucceed"+charge.id, Toast.LENGTH_SHORT).show()
+        // Toast.makeText(this,"checkoutChargeCaptured"+charge.id, Toast.LENGTH_SHORT).show()
 
     }
 
-    override fun paymentFailed(charge: Charge?) {
+    override fun checkoutChargeFailed(charge: Charge?) {
         println("Payment Failed : " + charge?.status)
         println("Payment Failed : " + charge?.description)
         println("Payment Failed : " + charge?.response?.message)
-        //  Toast.makeText(this,"paymentFailed"+charge?.response?.message, Toast.LENGTH_SHORT).show()
+        //  Toast.makeText(this,"checkoutChargeFailed"+charge?.response?.message, Toast.LENGTH_SHORT).show()
 
 
     }
 
-    override fun authorizationSucceed(authorize: Authorize) {
+    override fun checkoutAuthorizeCaptured(authorize: Authorize) {
         println("Authorize Succeeded : " + authorize.status)
         println("Authorize Succeeded : " + authorize.response.message)
 
@@ -615,16 +604,16 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
             println("Payment Authorized Succeeded : expiry type :" + authorize.expiry?.type)
             println("Payment Authorized Succeeded : expiry period :" + authorize.expiry?.period)
         }
-        Toast.makeText(this, "authorizationSucceed" + authorize.id, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "checkoutAuthorizeCaptured" + authorize.id, Toast.LENGTH_SHORT).show()
 
 
     }
 
-    override fun authorizationFailed(authorize: Authorize?) {
+    override fun checkoutAuthorizeFailed(authorize: Authorize?) {
         println("Authorize Failed : " + authorize?.status)
         println("Authorize Failed : " + authorize?.description)
         println("Authorize Failed : " + authorize?.response?.message)
-        //  Toast.makeText(this, "authorizationFailed"+authorize?.response?.message, Toast.LENGTH_SHORT).show()
+        //  Toast.makeText(this, "checkoutAuthorizeFailed"+authorize?.response?.message, Toast.LENGTH_SHORT).show()
 
 
     }
@@ -667,9 +656,9 @@ class MainActivity : AppCompatActivity(), SessionDelegate {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    override fun sdkError(goSellError: GoSellError?) {
-        println("sdkError>>>>>" + goSellError?.errorBody)
-//       Toast.makeText(this, "sdkError>>" +goSellError?.reasonString, Toast.LENGTH_LONG).show()
+    override fun checkoutSdkError(goSellError: GoSellError?) {
+        println("checkoutSdkError>>>>>" + goSellError?.errorBody)
+//       Toast.makeText(this, "checkoutSdkError>>" +goSellError?.reasonString, Toast.LENGTH_LONG).show()
         payButton?.setOnClickListener {
             sdkSession.setButtonView(payButton, this, supportFragmentManager, this)
         }

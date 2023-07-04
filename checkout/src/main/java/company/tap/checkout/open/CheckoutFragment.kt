@@ -4,13 +4,11 @@ package company.tap.checkout.open
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
-import android.graphics.*
 import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.viewModels
 import cards.pay.paycardsrecognizer.sdk.Card
@@ -27,7 +25,7 @@ import company.tap.checkout.internal.utils.*
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.internal.webview.WebFragment.Companion.isWebViewOpened
 import company.tap.checkout.open.controller.SDKSession
-import company.tap.checkout.open.controller.SDKSession.sessionDelegate
+import company.tap.checkout.open.controller.SDKSession.checkOutDelegate
 import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.taplocalizationkit.LocalizationManager
@@ -36,7 +34,6 @@ import company.tap.tapuilibraryy.uikit.enums.ActionButtonState
 import company.tap.tapuilibraryy.uikit.interfaces.TapBottomDialogInterface
 import company.tap.tapuilibraryy.uikit.views.TapBottomSheetDialog
 import company.tap.tapuilibraryy.uikit.views.TapBrandView
-import kotlinx.android.synthetic.main.fragment_checkouttaps.*
 import org.json.JSONObject
 import java.util.*
 
@@ -76,7 +73,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         cardViewModel.processEvent(event = CardViewEvent.IpAddressEvent,viewModel= viewModel, context = context)
         initViews(view)
         isWebViewOpened = false
-        sessionDelegate?.sessionHasStarted()
+        checkOutDelegate?.sessionHasStarted()
 
 
 
@@ -272,7 +269,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     private fun resetSessionAndThemeManager() {
         ThemeManager.currentTheme = ""
         ThemeManager.currentThemeName = ""
-        sessionDelegate?.sessionCancelled()
+        checkOutDelegate?.sessionCancelled()
         LocalizationManager.currentLocalized = JSONObject()
         bottomSheetDialog.dismiss()
     }

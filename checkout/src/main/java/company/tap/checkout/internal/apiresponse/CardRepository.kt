@@ -1,7 +1,6 @@
 package company.tap.checkout.internal.apiresponse
 
 import SupportedCurrencies
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -9,7 +8,6 @@ import android.os.Build
 import android.os.Handler
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import com.google.gson.Gson
 import com.google.gson.JsonElement
@@ -26,7 +24,6 @@ import company.tap.checkout.internal.enums.ThemeMode
 import company.tap.checkout.internal.interfaces.IPaymentDataProvider
 import company.tap.checkout.internal.utils.AmountCalculator
 import company.tap.checkout.internal.utils.CustomUtils
-import company.tap.checkout.internal.utils.showToast
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.CheckOutActivity
 import company.tap.checkout.open.controller.SDKSession
@@ -530,7 +527,7 @@ class CardRepository : APIRequestCallback {
                         }
 
                     } else {
-                        sdkSession.sessionDelegate?.sessionFailedToStart()
+                        sdkSession.checkOutDelegate?.sessionFailedToStart()
                     }
 
                     if (tabAnimatedActionButton != null) {
@@ -544,7 +541,7 @@ class CardRepository : APIRequestCallback {
                 }
 
             } else {
-                sdkSession.sessionDelegate?.sessionFailedToStart()
+                sdkSession.checkOutDelegate?.sessionFailedToStart()
                 tabAnimatedActionButton?.changeButtonState(ActionButtonState.RESET)
             }
 
@@ -677,7 +674,7 @@ class CardRepository : APIRequestCallback {
             response?.body().let {
                 authorizeActionResponse = Gson().fromJson(it, Authorize::class.java)
                 println("authorizeActionResponse ret value is>>>>" + authorizeActionResponse.status.name)
-                sdkSession.getListener()?.authorizationSucceed(authorizeActionResponse)
+                sdkSession.getListener()?.checkoutAuthorizeCaptured(authorizeActionResponse)
                 handleAuthorizeResponse(authorizeActionResponse)
             }
         } else if (requestCode == CREATE_SAVE_EXISTING_CODE) {
@@ -735,7 +732,7 @@ class CardRepository : APIRequestCallback {
                 contextSDK?.startActivity(intent)
                 //   println("fragments" + supportFragmentManager.fragments)
 
-                SDKSession.sessionDelegate?.sessionIsStarting()
+                SDKSession.checkOutDelegate?.sessionIsStarting()
                 SessionManager.setActiveSession(false)
                 resultObservable.onNext(viewState)
             }, 4000)
@@ -799,7 +796,7 @@ class CardRepository : APIRequestCallback {
                 }
                 ChargeStatus.CAPTURED -> {
                     if (chargeResponse is Authorize) handleAuthorizeResponse(chargeResponse as Authorize)
-                    SDKSession.getListener()?.paymentSucceed(chargeResponse)
+                    SDKSession.getListener()?.checkoutChargeCaptured(chargeResponse)
                     SDKSession.sessionActive = false
                     viewModel.handleSuccessFailureResponseButton(
                         "success",
@@ -811,7 +808,7 @@ class CardRepository : APIRequestCallback {
 
                 }
                 ChargeStatus.AUTHORIZED -> {
-                    SDKSession.getListener()?.authorizationSucceed(chargeResponse as Authorize)
+                    SDKSession.getListener()?.checkoutAuthorizeCaptured(chargeResponse as Authorize)
                 }
                 ChargeStatus.FAILED -> {
                     //  println("FAILED caleld")
@@ -820,7 +817,7 @@ class CardRepository : APIRequestCallback {
                         chargeResponse.authenticate,
                         chargeResponse, tabAnimatedActionButton, contextSDK
                     )
-                    SDKSession.getListener()?.paymentFailed(chargeResponse)
+                    SDKSession.getListener()?.checkoutChargeFailed(chargeResponse)
 
                     SDKSession.sessionActive = false
                     //  viewModel.redirectLoadingFinished(false, chargeResponse, contextSDK)
@@ -834,7 +831,7 @@ class CardRepository : APIRequestCallback {
                         chargeResponse,
                         tabAnimatedActionButton, contextSDK
                     )
-                    SDKSession.getListener()?.paymentFailed(
+                    SDKSession.getListener()?.checkoutChargeFailed(
                         chargeResponse
                     )
                     //  viewModel.redirectLoadingFinished(true,chargeResponse, contextSDK)
@@ -842,9 +839,9 @@ class CardRepository : APIRequestCallback {
                 }
 
                 ChargeStatus.RESTRICTED -> SDKSession.getListener()
-                    ?.paymentFailed(chargeResponse)
-                ChargeStatus.UNKNOWN -> SDKSession.getListener()?.paymentFailed(chargeResponse)
-                ChargeStatus.TIMEDOUT -> SDKSession.getListener()?.paymentFailed(chargeResponse)
+                    ?.checkoutChargeFailed(chargeResponse)
+                ChargeStatus.UNKNOWN -> SDKSession.getListener()?.checkoutChargeFailed(chargeResponse)
+                ChargeStatus.TIMEDOUT -> SDKSession.getListener()?.checkoutChargeFailed(chargeResponse)
                 ChargeStatus.IN_PROGRESS -> {
                     if (chargeResponse.transaction != null && chargeResponse.transaction.asynchronous) {
                         viewModel?.displayAsynchronousPaymentView(chargeResponse)
@@ -877,7 +874,7 @@ class CardRepository : APIRequestCallback {
                 }
             }
             ChargeStatus.CAPTURED, ChargeStatus.AUTHORIZED -> try {
-                SDKSession.getListener()?.authorizationSucceed(authorize)
+                SDKSession.getListener()?.checkoutAuthorizeCaptured(authorize)
                 viewModel.handleSuccessFailureResponseButton(
                     "success",
                     authorize.authenticate,
@@ -889,14 +886,14 @@ class CardRepository : APIRequestCallback {
             } catch (e: java.lang.Exception) {
                 Log.d(
                     "cardRepository",
-                    " Error while calling delegate method authorizationSucceed(authorize)" + e
+                    " Error while calling delegate method checkoutAuthorizeCaptured(authorize)" + e
                 )
                 // closePaymentActivity()
             }
             ChargeStatus.FAILED, ChargeStatus.ABANDONED, ChargeStatus.CANCELLED, ChargeStatus.DECLINED, ChargeStatus.RESTRICTED ->
                 try {
                     //    closePaymentActivity()
-                    SDKSession.getListener()?.authorizationFailed(authorize)
+                    SDKSession.getListener()?.checkoutAuthorizeFailed(authorize)
                     viewModel.handleSuccessFailureResponseButton(
                         "failure",
                         authorize.authenticate,
@@ -907,7 +904,7 @@ class CardRepository : APIRequestCallback {
                 } catch (e: java.lang.Exception) {
                     Log.d(
                         "cardRepository",
-                        "Error while calling delegate method authorizationFailed(authorize)"
+                        "Error while calling delegate method checkoutAuthorizeFailed(authorize)"
                     )
 
                 }
@@ -973,7 +970,7 @@ class CardRepository : APIRequestCallback {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onFailure(requestCode: Int, errorDetails: GoSellError?) {
         if (requestCode == CONFIG_CODE || requestCode == CHARGE_REQ_CODE || requestCode == INIT_CODE || requestCode == CHARGE_RETRIEVE_CODE) {
-            sdkSession.getListener()?.sdkError(errorDetails)
+            sdkSession.getListener()?.checkoutSdkError(errorDetails)
             SDKSession.sessionActive = false
           //  cardRepositoryContext?.showToast("Handle Fail")
 
@@ -1250,15 +1247,15 @@ class CardRepository : APIRequestCallback {
                     contextSDK
                 )
 
-                sdkSession.getListener()?.paymentSucceed(charge)
+                sdkSession.getListener()?.checkoutChargeCaptured(charge)
 
 
-                //  SDKSession().getListener()?.paymentSucceed(charge)
+                //  SDKSession().getListener()?.checkoutChargeCaptured(charge)
             } catch (e: Exception) {
                 Log.e(TAG, "fireWebPaymentCallBack: ", e)
                 Log.d(
                     "cardrepo",
-                    " Error while calling fireWebPaymentCallBack >>> method paymentSucceed(charge)"
+                    " Error while calling fireWebPaymentCallBack >>> method checkoutChargeCaptured(charge)"
                 )
                 //closePaymentActivity()
             }
@@ -1272,11 +1269,11 @@ class CardRepository : APIRequestCallback {
                     contextSDK
                 )
 
-                SDKSession.getListener()?.paymentFailed(charge)
+                SDKSession.getListener()?.checkoutChargeFailed(charge)
             } catch (e: Exception) {
                 Log.d(
                     "cardrepo",
-                    " Error while calling fireWebPaymentCallBack >>> method paymentFailed(charge)"
+                    " Error while calling fireWebPaymentCallBack >>> method checkoutChargeFailed(charge)"
                 )
                 // closePaymentActivity()
             }

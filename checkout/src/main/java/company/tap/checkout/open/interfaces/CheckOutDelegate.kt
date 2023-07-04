@@ -14,12 +14,12 @@ import company.tap.tapnetworkkit.exception.GoSellError
 Copyright (c) 2021    Tap Payments.
 All rights reserved.
  **/
-interface SessionDelegate {
-    fun paymentSucceed(charge: Charge)
-    fun paymentFailed(charge: Charge?)
+interface CheckOutDelegate {
+    fun checkoutChargeCaptured(charge: Charge)
+    fun checkoutChargeFailed(charge: Charge?)
 
-    fun authorizationSucceed(authorize: Authorize)
-    fun authorizationFailed(authorize: Authorize?)
+    fun checkoutAuthorizeCaptured(authorize: Authorize)
+    fun checkoutAuthorizeFailed(authorize: Authorize?)
 
 
     fun cardSaved(charge: Charge)
@@ -29,7 +29,7 @@ interface SessionDelegate {
 
     fun savedCardsList(cardsList: CardsList)
 
-    fun sdkError(goSellError: GoSellError?)
+    fun checkoutSdkError(goSellError: GoSellError?)
 
     fun sessionIsStarting()
     fun sessionHasStarted()
@@ -48,6 +48,6 @@ interface SessionDelegate {
 
     fun  asyncPaymentStarted(charge:Charge)
 
-  //  fun getStatusSDK(response :String ? ,charge: Charge?)
+
 
     }

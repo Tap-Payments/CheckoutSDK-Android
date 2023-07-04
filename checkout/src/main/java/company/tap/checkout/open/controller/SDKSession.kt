@@ -27,7 +27,7 @@ import company.tap.checkout.open.enums.SdkIdentifier
 import company.tap.checkout.open.enums.SdkMode
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.checkout.open.interfaces.PluginSessionDelegate
-import company.tap.checkout.open.interfaces.SessionDelegate
+import company.tap.checkout.open.interfaces.CheckOutDelegate
 import company.tap.checkout.open.models.*
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapnetworkkit.exception.GoSellError
@@ -53,7 +53,7 @@ object  SDKSession : APIRequestCallback {
     var activity: Activity? = null
    var supportFragmentManager: FragmentManager ?=null
     @JvmField
-    var sessionDelegate: SessionDelegate? = null
+    var checkOutDelegate: CheckOutDelegate? = null
 
     @JvmField
     var tabAnimatedActionButton: TabAnimatedActionButton? = null
@@ -96,9 +96,9 @@ object  SDKSession : APIRequestCallback {
 
     }
 
-    fun addSessionDelegate(_sessionDelegate: SessionDelegate) {
-        //println("addSessionDelegate sdk ${_sessionDelegate}")
-        this.sessionDelegate = _sessionDelegate
+    fun addSessionDelegate(_checkOutDelegate: CheckOutDelegate) {
+        //println("addSessionDelegate sdk ${_checkOutDelegate}")
+        this.checkOutDelegate = _checkOutDelegate
 
 
     }
@@ -109,8 +109,8 @@ object  SDKSession : APIRequestCallback {
 
     }
 
-    fun getListener(): SessionDelegate? {
-        return sessionDelegate
+    fun getListener(): CheckOutDelegate? {
+        return checkOutDelegate
     }
 
     fun getPluginListener(): PluginSessionDelegate? {
@@ -128,7 +128,7 @@ object  SDKSession : APIRequestCallback {
         println("is session enabled ${SessionManager.isSessionEnabled()}")
         if (SessionManager.isSessionEnabled()) {
            // println("Session already active!!!")
-            sessionDelegate?.sessionFailedToStart()
+            checkOutDelegate?.sessionFailedToStart()
             return
         }
         this.contextSDK = context
@@ -408,7 +408,7 @@ object  SDKSession : APIRequestCallback {
             }
 
             if (PaymentDataSource?.getTransactionMode() == null) {
-                sessionDelegate?.invalidTransactionMode()
+                checkOutDelegate?.invalidTransactionMode()
                 tabAnimatedActionButton?.changeButtonState(ActionButtonState.ERROR)
                 tabAnimatedActionButton?.isEnabled= true
                // return@setOnClickListener

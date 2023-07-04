@@ -247,7 +247,7 @@ Below is the list of properties in checkOutSDK class you can manipulate. Make su
    <tr>
 
    <tr>
-	<td> sessionDelegate  </td>
+	<td> checkOutDelegate  </td>
 	<td> Activity </td>
 	<td> Activity. it is used to notify Merchant application with all SDK Events </td>
    <tr>
@@ -262,7 +262,7 @@ Below is the list of properties in checkOutSDK class you can manipulate. Make su
     <th colspan=1>Type</th>
     <tr>
 	 <td> addSessionDelegate  </td>
-	 <td> pass your activity that implements SessionDelegate interface . you have to override all methods available through this interface </td>
+	 <td> pass your activity that implements CheckOutDelegate interface . you have to override all methods available through this interface </td>
     </tr>
     <tr>
 	 <td> instantiatePaymentDataSource  </td>
@@ -464,6 +464,7 @@ Below is the list of properties in checkOutSDK class you can manipulate. Make su
   **Configure SDK Transaction Mode**
   
   You have to choose only one Mode of the following modes:
+  PURCHASE , AUTHORIZE_CAPTURE
   
    **Note:-**
      - In case of using PayButton, then don't call  sdkSession.startSDK(fragmentManager,this,this) because the SDK will start when user clicks the tap pay button.
@@ -624,40 +625,38 @@ The following table describes its structure and specifies which fields are requi
 ## SDK Open Interfaces
  SDK open Interfaces available for implementation through Merchant Project:
 
-1. SessionDelegate
+1. CheckOutDelegate
+
 ```kotlin
-fun paymentSucceed(charge: Charge)
-    fun paymentFailed(charge: Charge?)
 
-    fun authorizationSucceed(authorize: Authorize)
-    fun authorizationFailed(authorize: Authorize?)
+    fun checkoutChargeCaptured(charge: Charge)
+    fun checkoutChargeFailed(charge: Charge?)
+
+    fun checkoutAuthorizeCaptured(authorize: Authorize)
+     fun checkoutAuthorizeFailed(authorize: Authorize?)
 
 
-    fun cardSaved(charge: Charge)
-    fun cardSavingFailed(charge: Charge)
+     fun cardSaved(charge: Charge)
+     fun cardSavingFailed(charge: Charge)
 
-    fun cardTokenizedSuccessfully(token: Token)
+     fun cardTokenizedSuccessfully(token: Token , saveCard:Boolean)
 
-    fun savedCardsList(cardsList: CardsList)
+     fun savedCardsList(cardsList: CardsList)
 
-    fun sdkError(goSellError: GoSellError?)
+     fun checkoutSdkError(goSellError: GoSellError?)
 
-    fun sessionIsStarting()
-    fun sessionHasStarted()
-    fun sessionCancelled()
-    fun sessionFailedToStart()
+     fun sessionIsStarting()
+     fun sessionHasStarted()
+     fun sessionCancelled()
+     fun sessionFailedToStart()
 
-    fun invalidCardDetails()
+     fun invalidCardDetails()
+     fun backendUnknownError(message: GoSellError?)
+     fun invalidTransactionMode()
+     fun invalidCustomerID()
+     fun userEnabledSaveCardOption(saveCardEnabled: Boolean)
+     fun  asyncPaymentStarted(charge:Charge)
 
-    fun backendUnknownError(message: GoSellError?)
-
-    fun invalidTransactionMode()
-
-    fun invalidCustomerID()
-
-    fun userEnabledSaveCardOption(saveCardEnabled: Boolean)
-
-    fun getStatusSDK(response :String ? ,charge: Charge?)
 ```
 2. PaymentDataSource
 ```kotlin
@@ -812,9 +811,7 @@ SDK open Enums available for implementation through Merchant Project:
 ```kotlin
 enum class TransactionMode {
     PURCHASE,
-    AUTHORIZE_CAPTURE,
-    SAVE_CARD,
-    TOKENIZE_CARD
+    AUTHORIZE_CAPTURE
 
 }
 ```
@@ -1592,32 +1589,32 @@ class CardsList(
 <a name="sdk_delegate"></a>
 ## SDKSession Delegate
 
-**SessionDelegate** is an interface which you may want to implement to receive payment/authorization/card saving status updates and update your user interface accordingly when payment window closes.
+**CheckOutDelegate** is an interface which you may want to implement to receive payment/authorization/card saving status updates and update your user interface accordingly when payment window closes.
 Below are listed down all available callbacks:
 
 <a name="payment_success_callback"></a>
-### Payment Success Callback
+### checkout Success Callback
 
 Notifies the receiver that payment has succeed.
 
 #### Declaration
 *Kotlin:*
 ```kotlin
-- fun paymentSucceed(charge: Charge)
+- fun checkoutChargeCaptured(charge: Charge)
 ```
 #### Arguments
 
 **charge**: Successful charge object.
 
 <a name="payment_failure_callback"></a>
-### Payment Failure Callback
+### checkout Failure Callback
 
 Notifies the receiver that payment has failed.
 #### Declaration
 
 *Kotlin:*
 ```kotlin
-- fun paymentFailed(charge: Charge?) 
+- fun checkoutChargeFailed(charge: Charge?) 
 ```
 
 #### Arguments
@@ -1633,7 +1630,7 @@ Notifies the receiver that authorization has succeed.
 *Kotlin:*
 
 ```kotlin
--  fun authorizationSucceed(authorize: Authorize)
+-  fun checkoutAuthorizeCaptured(authorize: Authorize)
 ```
 
 #### Arguments
@@ -1650,7 +1647,7 @@ Notifies the receiver that authorization has failed.
 *Kotlin:*
 
 ```kotlin
-- fun authorizationFailed(authorize: Authorize?)
+- fun checkoutAuthorizeFailed(authorize: Authorize?)
 ```
 
 #### Arguments
@@ -1734,7 +1731,7 @@ Notifies the receiver if any other error occurred.
 *Kotlin:*
 
 ```kotlin
-- fun sdkError(goSellError: GoSellError?)
+- fun checkoutSdkError(goSellError: GoSellError?)
 ```
 
 #### Arguments
