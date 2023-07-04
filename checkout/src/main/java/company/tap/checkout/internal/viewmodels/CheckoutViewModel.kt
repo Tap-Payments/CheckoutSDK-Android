@@ -16,14 +16,11 @@ import android.util.Log
 import android.view.View
 import android.view.View.*
 import android.view.ViewGroup
-import android.view.animation.TranslateAnimation
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.annotation.RestrictTo
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.view.setPadding
 import androidx.fragment.app.FragmentManager
@@ -36,8 +33,6 @@ import cards.pay.paycardsrecognizer.sdk.FrameManager
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import com.bugfender.sdk.Bugfender
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.android.gms.wallet.PaymentData
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -87,7 +82,6 @@ import company.tap.tapuilibraryy.themekit.theme.SeparatorViewTheme
 import company.tap.tapuilibraryy.uikit.AppColorTheme
 import company.tap.tapuilibraryy.uikit.atoms.TapCurrencyControlWidget
 import company.tap.tapuilibraryy.uikit.datasource.LoyaltyHeaderDataSource
-import company.tap.tapuilibraryy.uikit.doOnChangeOfResolutionDensities
 import company.tap.tapuilibraryy.uikit.enums.ActionButtonState
 import company.tap.tapuilibraryy.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibraryy.uikit.fragment.NFCFragment
@@ -96,7 +90,6 @@ import company.tap.tapuilibraryy.uikit.ktx.loadAppThemManagerFromPath
 import company.tap.tapuilibraryy.uikit.ktx.makeLinks
 import company.tap.tapuilibraryy.uikit.utils.MetricsUtil
 import company.tap.tapuilibraryy.uikit.views.TabAnimatedActionButton
-import company.tap.tapuilibraryy.uikit.views.TapBrandView
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.businessview_layout.view.*
 import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
@@ -106,7 +99,6 @@ import kotlinx.android.synthetic.main.itemviewholder_layout.view.*
 import kotlinx.android.synthetic.main.loyalty_view_layout.view.*
 import kotlinx.android.synthetic.main.otpview_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
-import okhttp3.internal.notifyAll
 import org.json.JSONException
 import org.json.JSONObject
 import java.math.BigDecimal
@@ -147,7 +139,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private lateinit var title: String
     private lateinit var paymentInlineViewHolder: PaymentInlineViewHolder
     private lateinit var goPaySavedCardHolder: GoPaySavedCardHolder
-    private lateinit var businessViewHolder: BusinessViewHolder
+    private lateinit var businessViewHolderViewModel: BusinessViewHolderViewModel
     private lateinit var amountViewHolder: AmountViewHolder
     private lateinit var currencyAdapter: CurrencyTypeAdapter
     private lateinit var goPayAdapter: GoPayCardAdapterUIKIT
@@ -180,7 +172,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private lateinit var frameLayout: FrameLayout
     private lateinit var inLineCardLayout: FrameLayout
     private lateinit var sdkLayout: LinearLayout
-    private lateinit var topHeaderView: TapBrandView
     private lateinit var checkoutFragment: CheckoutFragment
     private lateinit var itemList: List<ItemsModel>
     private lateinit var unModifiedItemList: List<ItemsModel>
@@ -225,7 +216,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         inLineCardLayout: FrameLayout,
         inlineViewCallback: InlineViewCallback, cardViewModel: CardViewModel,
         checkoutFragment: CheckoutFragment,
-        topHeaderView: TapBrandView?,
+        businessViewHolderViewModel: BusinessViewHolderViewModel,
     ) {
         this.context = context
         this.fragmentManager = fragmentManager
@@ -237,9 +228,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         this.inlineViewCallback = inlineViewCallback
         this.cardViewModel = cardViewModel
         this.checkoutFragment = checkoutFragment
-        if (topHeaderView != null) {
-            this.topHeaderView = topHeaderView
-        }
+        this.businessViewHolderViewModel = businessViewHolderViewModel
 
         initializeScanner(this)
         initViewHolders()
@@ -277,7 +266,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             addViews(loyaltyViewHolder,saveCardSwitchHolder)*/
             removeAllViews()
             addViews(
-                businessViewHolder,
+                businessViewHolderViewModel.getBusinessViewHolder(),
                 amountViewHolder,
                 cardViewHolder,
                 paymentInlineViewHolder,
@@ -306,7 +295,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 PaymentTypeEnum.SAVEDCARD -> confirmOTPCode(otpViewHolder.otpView.otpViewInput1.text.toString())
                 else -> {
                     removeViews(
-                        businessViewHolder,
+                        businessViewHolderViewModel.getBusinessViewHolder(),
                         amountViewHolder,
                         paymentInlineViewHolder,
                         cardViewHolder,
@@ -314,7 +303,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         otpViewHolder
                     )
                     addViews(
-                        businessViewHolder,
+                        businessViewHolderViewModel.getBusinessViewHolder(),
                         amountViewHolder,
                         cardViewHolder,
                         paymentInlineViewHolder,
@@ -399,7 +388,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun initViewHolders() {
-        businessViewHolder = BusinessViewHolder(context, this)
+        //   businessViewHolder = BusinessViewHolder(context, this)
+        // var businessViewHolderViewModel :BusinessViewHolderViewModel =  BusinessViewHolderViewModel(context)
+
         amountViewHolder = AmountViewHolder(context, this, this)
         tabAnimatedActionButtonViewHolder = TabAnimatedActionButtonViewHolder(context)
         cardViewHolder = CardViewHolder(context, this)
@@ -508,7 +499,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
             TransactionMode.TOKENIZE_CARD -> {
                 addViews(
-                    businessViewHolder,
+                    businessViewHolderViewModel.getBusinessViewHolder(),
                     paymentInlineViewHolder,
                     saveCardSwitchHolder
                 )
@@ -516,7 +507,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             }
             TransactionMode.SAVE_CARD -> {
                 addViews(
-                    businessViewHolder,
+                    businessViewHolderViewModel.getBusinessViewHolder(),
                     paymentInlineViewHolder,
                     saveCardSwitchHolder
                 )
@@ -526,7 +517,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
                 if (PaymentDataSource.getPaymentDataType() == "WEB") {
                     addViews(
-                        businessViewHolder,
+                        businessViewHolderViewModel.getBusinessViewHolder(),
                         amountViewHolder,
                         cardViewHolder,
                         saveCardSwitchHolder
@@ -535,7 +526,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 } else if (PaymentDataSource.getPaymentDataType() == "CARD") {
 
                     addViews(
-                        businessViewHolder,
+                        businessViewHolderViewModel.getBusinessViewHolder(),
                         amountViewHolder,
                         cardViewHolder,
                         paymentInlineViewHolder, saveCardSwitchHolder
@@ -545,7 +536,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 //Checkimg to be removed once loyalty enabled form api level onluy else will be there
                     if (SDKSession.enableLoyalty == true) {
                         addViews(
-                            businessViewHolder,
+                            businessViewHolderViewModel.getBusinessViewHolder(),
                             amountViewHolder,
                             cardViewHolder,
                             paymentInlineViewHolder,
@@ -554,7 +545,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         )
                     } else {
                         addViews(
-                            businessViewHolder,
+                            businessViewHolderViewModel.getBusinessViewHolder(),
                             amountViewHolder,
                             cardViewHolder,
                             paymentInlineViewHolder,
@@ -598,14 +589,18 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     override fun displayGoPayLogin() {
         saveCardSwitchHolder?.let {
             removeViews(
-                businessViewHolder, amountViewHolder,
+                businessViewHolderViewModel.getBusinessViewHolder(), amountViewHolder,
                 cardViewHolder, paymentInlineViewHolder,
                 it, otpViewHolder,
                 goPayViewsHolder
             )
         }
 
-        addViews(businessViewHolder, amountViewHolder, goPayViewsHolder)
+        addViews(
+            businessViewHolderViewModel.getBusinessViewHolder(),
+            amountViewHolder,
+            goPayViewsHolder
+        )
         if (goPayViewsHolder.goPayopened) {
             goPayViewsHolder.goPayLoginInput.inputType = GoPayLoginMethod.PHONE
             goPayViewsHolder.goPayLoginInput.visibility = VISIBLE
@@ -621,7 +616,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         saveCardSwitchHolder?.let {
             removeViews(
-                businessViewHolder,
+                businessViewHolderViewModel.getBusinessViewHolder(),
                 amountViewHolder,
                 goPayViewsHolder,
                 cardViewHolder,
@@ -633,7 +628,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         saveCardSwitchHolder?.let {
             addViews(
-                businessViewHolder,
+                businessViewHolderViewModel.getBusinessViewHolder(),
                 amountViewHolder,
                 goPaySavedCardHolder,
                 cardViewHolder,
@@ -943,7 +938,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private fun displayOtpTelecoms(phoneNumber: PhoneNumber?) {
         otpTypeString = PaymentTypeEnum.telecom
         removeViews(
-            businessViewHolder,
+            businessViewHolderViewModel.getBusinessViewHolder(),
             amountViewHolder,
             paymentInlineViewHolder,
             cardViewHolder,
@@ -951,7 +946,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             otpViewHolder
         )
         addViews(
-            businessViewHolder,
+            businessViewHolderViewModel.getBusinessViewHolder(),
             amountViewHolder,
             cardViewHolder,
             paymentInlineViewHolder,
@@ -1000,7 +995,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 // checkoutFragment.closeText.visibility = View.VISIBLE
                 doAfterSpecificTime {
                     removeViews(
-                        businessViewHolder,
+                        businessViewHolderViewModel.getBusinessViewHolder(),
                         paymentInlineViewHolder,
                         otpViewHolder,
                         goPaySavedCardHolder,
@@ -1111,8 +1106,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         if (paymentOptionsResponse != null) {
             this.paymentOptionsResponse = paymentOptionsResponse
         }
-        if (::businessViewHolder.isInitialized && PaymentDataSource.getTransactionMode() != TransactionMode.TOKENIZE_CARD) {
-            businessViewHolder.setDataFromAPI(
+        if (PaymentDataSource.getTransactionMode() != TransactionMode.TOKENIZE_CARD) {
+            businessViewHolderViewModel.getBusinessViewHolder().setDataFromAPI(
                 merchantData?.logo,
                 merchantData?.name
             )
@@ -1318,7 +1313,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
             true
         }
-        businessViewHolder.view.setOnTouchListener { v, _ ->
+        businessViewHolderViewModel.getBusinessViewHolder().view.setOnTouchListener { v, _ ->
             CustomUtils.hideKeyboardFrom(context, paymentInlineViewHolder.view)
             paymentInlineViewHolder.resetView = true
             paymentInlineViewHolder.resetTouchView()
@@ -1452,7 +1447,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         if (::otpViewHolder.isInitialized)
             if (otpViewHolder.otpView.isVisible) {
                 removeViews(
-                    businessViewHolder,
+                    businessViewHolderViewModel.getBusinessViewHolder(),
                     amountViewHolder,
                     cardViewHolder,
                     paymentInlineViewHolder,
@@ -1918,7 +1913,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     isDisableOptionSelected = isDisabledClicked
                 }
 
-                onCardSelectedAction(true, paymentOption,isChangeBrandIcon = true)
+                onCardSelectedAction(true, paymentOption, isChangeBrandIcon = true)
 
             }
         }
@@ -1971,8 +1966,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     )
                     PaymentDataSource.getBinLookupResponse()?.toString()
                         ?.let { //Log.e("binResponse", it)
-                             }
-                   // Log.e("cardBrandinString", cardBrandInString.toString())
+                        }
+                    // Log.e("cardBrandinString", cardBrandInString.toString())
                     paymentInlineViewHolder.doPay(PaymentType.CARD)
 
 //                    onPayCardCompleteAction(
@@ -2499,7 +2494,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     ) {
         //todo add validations from api when cvv is valid the only  activate ActionButton
         if (isCompleted) {
-            businessViewHolder.view.headerView.constraint.visibility = VISIBLE
+            businessViewHolderViewModel.getBusinessViewHolder().view.headerView.constraint.visibility =
+                VISIBLE
             saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
             saveCardSwitchHolder?.view?.mainSwitch?.switchSaveMobile?.visibility = GONE
             saveCardSwitchHolder?.setSwitchToggleData(paymentType)
@@ -2745,14 +2741,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         println("redirect val" + charge?.response)
         println("gatewayResponse val" + charge?.gatewayResponse)
 
-        businessViewHolder = contextSDK?.let { BusinessViewHolder(it, this) }!!
-        removeViews(businessViewHolder)
+        // businessViewHolder = contextSDK?.let { BusinessViewHolder(it, this) }!!
+        removeViews(businessViewHolderViewModel.getBusinessViewHolder())
 
 
 
         if (::amountViewHolder.isInitialized && ::cardViewHolder.isInitialized && ::cardViewHolder.isInitialized && ::paymentInlineViewHolder.isInitialized)
             removeViews(
-                businessViewHolder,
+                businessViewHolderViewModel.getBusinessViewHolder(),
                 amountViewHolder,
                 cardViewHolder,
                 paymentInlineViewHolder
@@ -3025,11 +3021,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     private fun removeAllViews() {
-        if (::businessViewHolder.isInitialized && ::amountViewHolder.isInitialized && ::cardViewHolder.isInitialized && ::paymentInlineViewHolder.isInitialized &&
+        if (::amountViewHolder.isInitialized && ::cardViewHolder.isInitialized && ::paymentInlineViewHolder.isInitialized &&
             ::goPayViewsHolder.isInitialized && ::otpViewHolder.isInitialized
         )
             removeViews(
-                businessViewHolder,
+                businessViewHolderViewModel.getBusinessViewHolder(),
                 amountViewHolder,
                 cardViewHolder,
                 paymentInlineViewHolder,
@@ -3049,7 +3045,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         separatorViewTheme.strokeColor =
             Color.parseColor(ThemeManager.getValue("tapSeparationLine.backgroundColor"))
         separatorViewTheme.strokeHeight = ThemeManager.getValue("tapSeparationLine.height")
-        businessViewHolder.view.topSeparatorLinear.topSeparator.setTheme(separatorViewTheme)
+        businessViewHolderViewModel.getBusinessViewHolder().view.topSeparatorLinear.topSeparator.setTheme(
+            separatorViewTheme
+        )
 
         if (ThemeManager.currentTheme.isNotEmpty() && ThemeManager.currentTheme.contains("dark")) {
             amountViewHolder.view.amountView_separator.visibility = GONE
@@ -3059,7 +3057,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         /**
          * set separator background
          */
-        businessViewHolder.view.topSeparatorLinear.setBackgroundColor(
+        businessViewHolderViewModel.getBusinessViewHolder().view.topSeparatorLinear.setBackgroundColor(
             (Color.parseColor(
                 ThemeManager.getValue(
                     "merchantHeaderView.backgroundColor"

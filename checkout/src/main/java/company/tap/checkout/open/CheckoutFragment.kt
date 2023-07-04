@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.view.*
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.viewModels
 import cards.pay.paycardsrecognizer.sdk.Card
@@ -24,6 +23,7 @@ import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.cache.SharedPrefManager
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.utils.*
+import company.tap.checkout.internal.viewmodels.BusinessViewHolderViewModel
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.internal.webview.WebFragment.Companion.isWebViewOpened
 import company.tap.checkout.open.controller.SDKSession
@@ -44,6 +44,7 @@ import java.util.*
 class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, InlineViewCallback {
     val viewModel: CheckoutViewModel by viewModels()
     val cardViewModel: CardViewModel by viewModels()
+    val businessViewHolderViewModel : BusinessViewHolderViewModel by viewModels()
 
     var checkOutActivity: CheckOutActivity? = null
     var hideAllView = false
@@ -73,6 +74,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         super.onViewCreated(view, savedInstanceState)
 
         cardViewModel.getContext(requireContext())
+        businessViewHolderViewModel.setContext(requireContext())
         cardViewModel.processEvent(event = CardViewEvent.IpAddressEvent,viewModel= viewModel, context = context)
         initViews(view)
         isWebViewOpened = false
@@ -144,8 +146,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             webFrameLayout,
             inLineCardLayout,
             this,
-            cardViewModel = cardViewModel, this,
-            topHeaderView
+            cardViewModel = cardViewModel, this,businessViewHolderViewModel
+
         )
 
         topHeaderView.visibility = View.GONE

@@ -18,87 +18,101 @@ import java.util.*
 Copyright (c) 2021    Tap Payments.
 All rights reserved.
  **/
-internal class PaymentDataProvider:IPaymentDataProvider {
-    private  var externalDataSource: PaymentDataSource = PaymentDataSource
+internal class PaymentDataProvider : IPaymentDataProvider {
+    private var externalDataSource: PaymentDataSource = PaymentDataSource
     override fun getTransactionCurrency(): AmountedCurrency? {
-        return getExternalDataSource()?.getCurrency()?.isoCode?.let { getExternalDataSource().getCurrency()?.isoCode?.let { it1 -> getExternalDataSource().getAmount()?.let { it2 -> AmountedCurrency(
-            it,
-            it1,
-            it2
-        ) } } }
+        return getExternalDataSource()?.getCurrency()?.isoCode?.let {
+            getExternalDataSource().getCurrency()?.isoCode?.let { it1 ->
+                getExternalDataSource().getAmount()?.let { it2 ->
+                    AmountedCurrency(
+                        it,
+                        it1,
+                        it2
+                    )
+                }
+            }
+        }
 
     }
 
     override fun getSelectedCurrency(): AmountedCurrency? {
 
 
-     //   return AmountedCurrency("kwd","kwd",BigDecimal.valueOf(222))
-        return if(getExternalDataSource().getSelectedCurrency()!=null){
+        //   return AmountedCurrency("kwd","kwd",BigDecimal.valueOf(222))
+        return if (getExternalDataSource().getSelectedCurrency() != null) {
             PaymentDataSource.getSelectedAmount()?.let {
-                AmountedCurrency(PaymentDataSource.getSelectedCurrency().toString(),PaymentDataSource.getSelectedCurrency().toString(),
+                AmountedCurrency(
+                    PaymentDataSource.getSelectedCurrency().toString(),
+                    PaymentDataSource.getSelectedCurrency().toString(),
                     it
                 )
             }
 
 
-        }else{
-            getExternalDataSource().getCurrency()?.isoCode?.let { getExternalDataSource().getCurrency()?.isoCode?.let { it1 -> getExternalDataSource().getAmount()?.let { it2 -> AmountedCurrency(
-                it,
-                it1,
-                it2
-            ) } } }
+        } else {
+            getExternalDataSource().getCurrency()?.isoCode?.let {
+                getExternalDataSource().getCurrency()?.isoCode?.let { it1 ->
+                    getExternalDataSource().getAmount()?.let { it2 ->
+                        AmountedCurrency(
+                            it,
+                            it1,
+                            it2
+                        )
+                    }
+                }
+            }
 
         }
     }
 
     override fun getSupportedCurrencies(): ArrayList<SupportedCurrencies>? {
-       // return getPaymentOptionsDataManager().getPaymentOptionsResponse().getSupportedCurrencies()
-       // return PaymentOptionsResponse.supportedCurrencies
+        // return getPaymentOptionsDataManager().getPaymentOptionsResponse().getSupportedCurrencies()
+        // return PaymentOptionsResponse.supportedCurrencies
         return PaymentDataSource?.getPaymentOptionsResponse()?.supportedCurrencies
     }
 
     override fun getPaymentOptionsOrderID(): String? {
-      //return getPaymentOptionsDataManager().getPaymentOptionsResponse().getOrderID()
+        //return getPaymentOptionsDataManager().getPaymentOptionsResponse().getOrderID()
         return if (PaymentDataSource.getPaymentOptionsResponse()?.orderID?.getId() == null
         ) {
             ""
-        } else  PaymentDataSource.getPaymentOptionsResponse()?.orderID?.getId()
+        } else PaymentDataSource.getPaymentOptionsResponse()?.orderID?.getId()
     }
 
     override fun getPostURL(): String? {
-            return getExternalDataSource().getPostURL()
+        return getExternalDataSource().getPostURL()
 
     }
 
     override fun getCustomer(): TapCustomer {
 
-            return getExternalDataSource().getCustomer()
+        return getExternalDataSource().getCustomer()
 
 
     }
 
     override fun getPaymentDescription(): String? {
 
-            return getExternalDataSource().getPaymentDescription()
+        return getExternalDataSource().getPaymentDescription()
 
     }
 
     override fun getPaymentMetadata(): HashMap<String, String>? {
 
-            return getExternalDataSource().getPaymentMetadata()
+        return getExternalDataSource().getPaymentMetadata()
 
     }
 
     override fun getPaymentReference(): Reference? {
 
-            return getExternalDataSource().getPaymentReference()
+        return getExternalDataSource().getPaymentReference()
 
 
     }
 
     override fun getPaymentStatementDescriptor(): String? {
 
-            return getExternalDataSource().getPaymentStatementDescriptor()
+        return getExternalDataSource().getPaymentStatementDescriptor()
 
     }
 
@@ -113,52 +127,51 @@ internal class PaymentDataProvider:IPaymentDataProvider {
 
     override fun getReceiptSettings(): Receipt? {
 
-            return getExternalDataSource()?.getReceiptSettings()
+        return getExternalDataSource()?.getReceiptSettings()
 
     }
 
     override fun getTransactionMode(): TransactionMode {
-if(getExternalDataSource().getTransactionMode()!=null)
+        if (getExternalDataSource().getTransactionMode() != null)
             return getExternalDataSource().getTransactionMode()
-else return TransactionMode.PURCHASE
+        else return TransactionMode.PURCHASE
 
 
     }
 
     override fun getAuthorizeAction(): AuthorizeAction? {
-           var authorizeAction: AuthorizeAction? = getExternalDataSource().getAuthorizeAction()
+        var authorizeAction: AuthorizeAction? = getExternalDataSource().getAuthorizeAction()
         println("authorizeAction>>>" + authorizeAction)
-      if (authorizeAction == null) {
-           return AuthorizeAction(AuthorizeActionType.VOID, 168)
-      }
-      else
-        return authorizeAction
+        if (authorizeAction == null) {
+            return AuthorizeAction(AuthorizeActionType.VOID, 168)
+        } else
+            return authorizeAction
     }
 
     override fun getDestination(): Destinations? {
 
-            return getExternalDataSource().getDestination()
+        return getExternalDataSource().getDestination()
 
     }
 
     override fun getMerchant(): Merchant? {
 
-            return getExternalDataSource().getMerchant()
+        return getExternalDataSource().getMerchant()
 
     }
 
     override fun getCardIssuer(): CardIssuer? {
-            return  getExternalDataSource().getCardIssuer()
+        return getExternalDataSource().getCardIssuer()
 
     }
 
     override fun getTopUp(): TopUp? {
-            return  getExternalDataSource().getTopup()
+        return getExternalDataSource().getTopup()
 
     }
 
-    override fun getWebViewType(): WebViewType?{
-        return  getExternalDataSource().getWebViewType()
+    override fun getWebViewType(): WebViewType? {
+        return getExternalDataSource().getWebViewType()
     }
 
 
@@ -168,7 +181,7 @@ else return TransactionMode.PURCHASE
      *
      * @return the external data source
      */
-    fun getExternalDataSource(): PaymentDataSource{
+    fun getExternalDataSource(): PaymentDataSource {
         return this.externalDataSource
     }
 

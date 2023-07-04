@@ -26,7 +26,7 @@ import kotlinx.android.synthetic.main.businessview_layout.view.*
  * Copyright © 2020 Tap Payments. All rights reserved.
  *
  */
-class BusinessViewHolder(context: Context, private val checkoutViewModel: CheckoutViewModel) :
+class BusinessViewHolder(context: Context, private val checkoutViewModel: CheckoutViewModel?=null) :
     TapBaseViewHolder {
 
 
@@ -90,7 +90,7 @@ class BusinessViewHolder(context: Context, private val checkoutViewModel: Checko
                 view.headerView.constraint.visibility = View.VISIBLE
 
                 tapCloseIcon.setOnClickListener {
-                    checkoutViewModel.dismissBottomSheet()
+                    checkoutViewModel?.dismissBottomSheet()
                 }
 
             }
