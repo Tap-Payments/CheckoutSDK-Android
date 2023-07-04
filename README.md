@@ -13,7 +13,7 @@ Your customers can scale globally by offering all popular payment methods across
 ![](https://files.readme.io/4dc0d3e-payment-methods-tap-transparent.png)
 
 **Look at it!**
-[<img src="https://ibb.co/XsyPXL9" width="200">](https://github.com/Tap-Payments/CheckoutSDK-Android/blob/f753f195a6fe901bef7995ecb35c619262ae4285/dark.mov) <img width="100" /> [<img src="https://ibb.co/wQhTYpN" width="200">](https://tap-assets.b-cdn.net/light.mov)
+[<img src="https://i.ibb.co/MV8HnSb/Screen-Shot-2023-07-04-at-1-57-11-PM.png" width="200">](https://github.com/Tap-Payments/CheckoutSDK-Android/blob/f753f195a6fe901bef7995ecb35c619262ae4285/dark.mov) <img width="100" /> [<img src="https://i.ibb.co/8xgJXPD/Screen-Shot-2023-07-04-at-2-00-13-PM.png" width="200">](https://tap-assets.b-cdn.net/light.mov)
 
 
 # Table of Contents
