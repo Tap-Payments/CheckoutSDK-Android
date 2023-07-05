@@ -30,8 +30,7 @@ class BusinessViewHolder(context: Context, private val checkoutViewModel: Checko
     TapBaseViewHolder {
 
 
-    override val view: View =
-        LayoutInflater.from(context).inflate(R.layout.businessview_layout, null)
+    override val view: View = LayoutInflater.from(context).inflate(R.layout.businessview_layout, null)
 
     override val type = SectionType.BUSINESS
 
@@ -65,7 +64,9 @@ class BusinessViewHolder(context: Context, private val checkoutViewModel: Checko
 
         view.headerView.tapChipIcon.setMargins(if (view.headerView.tapChipIcon.isRTL()) 0 else 20, 0, if (view.headerView.tapChipIcon.isRTL()) 20 else 20, 0)
 
-
+        tapCloseIcon.setOnClickListener {
+            checkoutViewModel?.dismissBottomSheet()
+        }
 
         setTopBorders(
             view.headerView.tapCloseIcon,
@@ -76,10 +77,8 @@ class BusinessViewHolder(context: Context, private val checkoutViewModel: Checko
             Color.parseColor(ThemeManager.getValue("merchantHeaderView.backgroundColor"))
         )//
         if (PaymentDataSource.getTransactionMode() == TransactionMode.SAVE_CARD || PaymentDataSource.getTransactionMode() == TransactionMode.TOKENIZE_CARD) {
-
             view.headerView.setHeaderDataSource(HeaderDataSource("Enter Card Details", null, null))
             view.headerView.businessIcon.visibility = View.VISIBLE
-            //view.headerView.tapChipIcon.visibility= View.GONE
         } else
             if (merchantName != null) {
                 view.headerView.setHeaderDataSource(getHeaderDataSourceFromAPI())
@@ -89,11 +88,10 @@ class BusinessViewHolder(context: Context, private val checkoutViewModel: Checko
                 view.headerView.businessIcon.visibility = View.VISIBLE
                 view.headerView.constraint.visibility = View.VISIBLE
 
-                tapCloseIcon.setOnClickListener {
-                    checkoutViewModel?.dismissBottomSheet()
-                }
+
 
             }
+
 
     }
 

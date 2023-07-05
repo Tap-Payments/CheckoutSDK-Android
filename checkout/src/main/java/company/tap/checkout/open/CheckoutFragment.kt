@@ -44,7 +44,7 @@ import java.util.*
 class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, InlineViewCallback {
     val viewModel: CheckoutViewModel by viewModels()
     val cardViewModel: CardViewModel by viewModels()
-    val businessViewHolderViewModel : BusinessViewHolderViewModel by viewModels()
+    lateinit var businessViewHolderViewModel: BusinessViewHolderViewModel
 
     var checkOutActivity: CheckOutActivity? = null
     var hideAllView = false
@@ -72,10 +72,13 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        businessViewHolderViewModel = BusinessViewHolderViewModel(requireContext())
         cardViewModel.getContext(requireContext())
-        businessViewHolderViewModel.setContext(requireContext())
-        cardViewModel.processEvent(event = CardViewEvent.IpAddressEvent,viewModel= viewModel, context = context)
+        cardViewModel.processEvent(
+            event = CardViewEvent.IpAddressEvent,
+            viewModel = viewModel,
+            context = context
+        )
         initViews(view)
         isWebViewOpened = false
         sessionDelegate?.sessionHasStarted()
@@ -86,13 +89,13 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             with(viewModel) {
                 /**
                  * check if data cached and different currency present
-                 * should put : @for check !isUserCurrencySameToMainCurrency()
+                 *
                  */
                 if (cacheUserLocalCurrency()) {
-                   powerdByTapAnimationFinished.observe(this@CheckoutFragment) {
+                    powerdByTapAnimationFinished.observe(this@CheckoutFragment) {
                         if (it == true) {
-                            doAfterSpecificTime (500){
-                               addTitlePaymentAndFlag()
+                            doAfterSpecificTime(500) {
+                                addTitlePaymentAndFlag()
                                 isUserCurrencySameAsCurrencyOfApplication.observe(
                                     this@CheckoutFragment
                                 ) {
@@ -146,17 +149,18 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             webFrameLayout,
             inLineCardLayout,
             this,
-            cardViewModel = cardViewModel, this,businessViewHolderViewModel
+            cardViewModel = cardViewModel, this, businessViewHolderViewModel
 
         )
 
         topHeaderView.visibility = View.GONE
-        bottomSheetDialog.behavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+        bottomSheetDialog.behavior.setBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
 
 
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-                when(newState){
-                    BottomSheetBehavior.STATE_EXPANDED->{
+                when (newState) {
+                    BottomSheetBehavior.STATE_EXPANDED -> {
                         topHeaderView.startPoweredByAnimation(
                             delayTime = Constants.PoweredByLayoutAnimationDelay,
                             topHeaderView.poweredByImage, onAnimationEnd =
