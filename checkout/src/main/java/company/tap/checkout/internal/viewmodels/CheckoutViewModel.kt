@@ -694,7 +694,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
         removeInlineScanner()
         removeNFCViewFragment()
-        adapter.resetSelection()
 
 
     }

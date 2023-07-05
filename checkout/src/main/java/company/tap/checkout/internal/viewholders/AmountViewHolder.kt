@@ -210,7 +210,7 @@ class AmountViewHolder(
 
     @SuppressLint("ClickableViewAccessibility")
     fun setOnItemsClickListener() {
-        view.amount_section.tapChipAmount.setOnTouchListener { v, event ->
+        view.amount_section.constraint.setOnTouchListener { v, event ->
             baseLayoutManager?.controlCurrency(isOpenedList)
 
             false
