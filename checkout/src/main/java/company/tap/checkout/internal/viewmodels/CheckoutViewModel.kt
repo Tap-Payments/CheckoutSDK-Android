@@ -694,6 +694,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
         removeInlineScanner()
         removeNFCViewFragment()
+        adapter.resetSelection()
 
 
     }
@@ -2648,7 +2649,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             selectedCurrencySymbol = selectedCurrencySymbol ?: "",
             isChangeingCurrencyFromOutside = false
         )
-        adapter.resetSelection()
     }
 
 
