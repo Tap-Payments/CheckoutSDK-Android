@@ -23,7 +23,9 @@ import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.cache.SharedPrefManager
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.utils.*
-import company.tap.checkout.internal.viewmodels.BusinessViewHolderViewModel
+import company.tap.checkout.internal.viewholders.BusinessViewHolder
+import company.tap.checkout.internal.viewholders.PaymentInlineViewHolder
+import company.tap.checkout.internal.viewholders.TapBaseViewHolder
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.internal.webview.WebFragment.Companion.isWebViewOpened
 import company.tap.checkout.open.controller.SDKSession
@@ -44,8 +46,8 @@ import java.util.*
 class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, InlineViewCallback {
     val viewModel: CheckoutViewModel by viewModels()
     val cardViewModel: CardViewModel by viewModels()
-    lateinit var businessViewHolderViewModel: BusinessViewHolderViewModel
-
+    lateinit var businessViewHolder: BusinessViewHolder
+    lateinit var  checkoutLayout: LinearLayout
     var checkOutActivity: CheckOutActivity? = null
     var hideAllView = false
     lateinit var status: ChargeStatus
@@ -72,7 +74,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        businessViewHolderViewModel = BusinessViewHolderViewModel(requireContext())
+        businessViewHolder = BusinessViewHolder(requireContext())
         cardViewModel.getContext(requireContext())
         cardViewModel.processEvent(
             event = CardViewEvent.IpAddressEvent,
@@ -114,6 +116,10 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
         })
 
+        viewModel.removeViewHolders.observe(this, androidx.lifecycle.Observer {
+            removeViews(it)
+        })
+
 
 
         enableSections()
@@ -133,7 +139,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         bottomSheetLayout = bottomSheetDialog.findViewById(R.id.design_bottom_sheet)
         val topHeaderView: TapBrandView = view.findViewById(R.id.tab_brand_view)
         val inLineCardLayout: FrameLayout = view.findViewById(R.id.inline_container)
-        val checkoutLayout: LinearLayout = view.findViewById(R.id.fragment_all)
+        checkoutLayout = view.findViewById(R.id.fragment_all)
         val frameLayoutForNFc: FrameLayout = view.findViewById(R.id.fragment_container_nfc_lib)
         val webFrameLayout: FrameLayout = view.findViewById(R.id.webFrameLayout)
 
@@ -149,7 +155,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             webFrameLayout,
             inLineCardLayout,
             this,
-            cardViewModel = cardViewModel, this, businessViewHolderViewModel
+            cardViewModel = cardViewModel, this, businessViewHolder
 
         )
 
@@ -287,6 +293,20 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     override fun onDestroy() {
         super.onDestroy()
         resetTabAnimatedButton()
+    }
+
+
+    private fun removeViews(viewHolders: MutableList<TapBaseViewHolder>, onRemoveEnd: () -> Unit = {}) {
+        viewHolders.forEach {
+            if (::checkoutLayout.isInitialized) {
+                if (it is PaymentInlineViewHolder) {
+                //    removePaymentInlineShrinkageAndDimmed()
+                }
+                checkoutLayout.removeView(it?.view)
+               // provideBackgroundtoBsLayout()
+                onRemoveEnd.invoke()
+            }
+        }
     }
 
 
