@@ -120,6 +120,9 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             removeViews(it)
         })
 
+        viewModel.addViewHolders.observe(this, androidx.lifecycle.Observer {
+            addViews(it)
+        })
 
 
         enableSections()
@@ -303,10 +306,26 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                 //    removePaymentInlineShrinkageAndDimmed()
                 }
                 checkoutLayout.removeView(it?.view)
-               // provideBackgroundtoBsLayout()
                 onRemoveEnd.invoke()
             }
         }
+    }
+
+
+    private fun addViews(
+        viewHolders: MutableList<TapBaseViewHolder>,
+        afterAddingViews: () -> Unit = {}
+    ) {
+
+            viewHolders.forEach {
+                if (::checkoutLayout.isInitialized) {
+                    checkoutLayout.removeView(it?.view)
+                  //  provideBackgroundtoBsLayout()
+                    checkoutLayout.addView(it?.view)
+                }
+            }
+            afterAddingViews.invoke()
+
     }
 
 
