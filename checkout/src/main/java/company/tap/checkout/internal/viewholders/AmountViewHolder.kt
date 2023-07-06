@@ -35,7 +35,7 @@ import kotlinx.android.synthetic.main.amountview_layout.view.*
 class AmountViewHolder(
     private val context: Context,
     private val baseLayoutManager: BaseLayoutManager? = null,
-    private var checkoutViewModel: CheckoutViewModel
+    private var checkoutViewModel: CheckoutViewModel?=null
 ) :
     TapBaseViewHolder,
     AmountInterface {
@@ -179,7 +179,7 @@ class AmountViewHolder(
                     view.amount_section.context
                 )?.currency
             ){
-                checkoutViewModel.addDataToAmountView()
+                checkoutViewModel?.addDataToAmountView()
                 view.amount_section?.tapChipPopup?.fadeVisibility(View.VISIBLE)
             }
 

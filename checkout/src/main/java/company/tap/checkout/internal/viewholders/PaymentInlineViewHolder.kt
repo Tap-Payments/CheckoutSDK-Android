@@ -69,14 +69,13 @@ const val MADA_SCHEME = "MADA"
 /**
  * This class needed to be refactored ASAP :/
  */
-@RequiresApi(Build.VERSION_CODES.N)
 class PaymentInlineViewHolder(
     private val context: Context,
-    private val checkoutViewModel: CheckoutViewModel,
-    private val onPaymentCardComplete: PaymentCardComplete,
-    private val switchViewHolder: SwitchViewHolder?,
-    private val baseLayoutManager: BaseLayoutManager,
-    private val cardViewModel: CardViewModel,
+    private val checkoutViewModel: CheckoutViewModel?=null,
+    private val onPaymentCardComplete: PaymentCardComplete?=null,
+    private val switchViewHolder: SwitchViewHolder?=null,
+    private val baseLayoutManager: BaseLayoutManager?=null,
+    private val cardViewModel: CardViewModel?=null,
 ) : TapBaseViewHolder,
     TapSelectionTabLayoutInterface, CardInputListener, TapPaymentShowHideClearImage {
     override val view: View =
@@ -295,10 +294,10 @@ class PaymentInlineViewHolder(
     private fun initializeIcons() {
 
         nfcButton?.setOnClickListener {
-            checkoutViewModel.onClickNFC()
+            checkoutViewModel?.onClickNFC()
         }
         scannerButton?.setOnClickListener {
-            checkoutViewModel.onClickCardScanner(true)
+            checkoutViewModel?.onClickCardScanner(true)
         }
         controlScannerOptions()
         closeButton?.setOnClickListener {
@@ -328,7 +327,7 @@ class PaymentInlineViewHolder(
             closeButton?.visibility = View.GONE
             tapCardInputView.setVisibilityOfHolderField(false)
             tapCardInputView.holderNameEnabled = false
-            checkoutViewModel.incrementalCount = 0
+            checkoutViewModel?.incrementalCount = 0
             tabLayout.fadeVisibility(View.VISIBLE)
             intertabLayout.fadeVisibility(View.VISIBLE)
             acceptedCardText.fadeVisibility(View.VISIBLE)
@@ -402,7 +401,7 @@ class PaymentInlineViewHolder(
         closeButton?.visibility = View.GONE
         // tapCardInputView.setVisibilityOfHolderField(false
         tapCardInputView.holderNameEnabled = false
-        checkoutViewModel.incrementalCount = 0
+        checkoutViewModel?.incrementalCount = 0
     }
 
 
@@ -427,7 +426,7 @@ class PaymentInlineViewHolder(
 
 
         tapCardInputView.backArrow.setOnTouchListener { v, event ->
-            checkoutViewModel.setTitleNormalCard()
+            checkoutViewModel?.setTitleNormalCard()
             if (getPreTypedCardData() != null) setPrevTypedCard()
             else {
 
@@ -448,12 +447,12 @@ class PaymentInlineViewHolder(
         controlScannerOptions()
         tapInlineCardSwitch?.visibility = View.GONE
         tapAlertView?.fadeVisibility(View.GONE, 500)
-        checkoutViewModel.isSavedCardSelected = false
+        checkoutViewModel?.isSavedCardSelected = false
         tabLayout.fadeVisibility(View.VISIBLE)
         intertabLayout.fadeVisibility(View.VISIBLE)
         acceptedCardText.fadeVisibility(View.VISIBLE)
-        checkoutViewModel.dismisControlWidget()
-        checkoutViewModel.resetViewHolder()
+        checkoutViewModel?.dismisControlWidget()
+        checkoutViewModel?.resetViewHolder()
         expiryDate = null
         cvvNumber = null
         cardHolderName = null
@@ -472,7 +471,7 @@ class PaymentInlineViewHolder(
         closeButton?.visibility = View.GONE
         tapCardInputView.setVisibilityOfHolderField(false)
         tapCardInputView.holderNameEnabled = false
-        checkoutViewModel.incrementalCount = 0
+        checkoutViewModel?.incrementalCount = 0
         allFieldsValid = false
         tapAlertView?.fadeVisibility(View.GONE, 500)
         expiryDatePrev = null
@@ -551,7 +550,7 @@ class PaymentInlineViewHolder(
          //   tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
             checkForTapInlineCardSwitchOpeningAccordingToCurrencyWidget()
             onCvcComplete()
-            checkoutViewModel.isSavedCardSelected = false
+            checkoutViewModel?.isSavedCardSelected = false
         }
         //Added for opening as soon as cvv focus
         else CustomUtils.showKeyboard(context)
@@ -772,7 +771,7 @@ class PaymentInlineViewHolder(
                                     cardBrandInString =
                                         PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
                                     doOnCurrencySupported { cardBrand ->
-                                        onPaymentCardComplete.onPayCardCompleteAction(
+                                        onPaymentCardComplete?.onPayCardCompleteAction(
                                             true,
                                             PaymentType.CARD,
                                             it,
@@ -886,7 +885,7 @@ class PaymentInlineViewHolder(
                 "TapCardInputKit"
             )
         )
-        if (tapCardInputView.cardFormHasFocus) checkoutViewModel.resetViewHolder()
+        if (tapCardInputView.cardFormHasFocus) checkoutViewModel?.resetViewHolder()
         tapCardInputView.setCardNumberTextWatcher(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
 
@@ -993,7 +992,7 @@ class PaymentInlineViewHolder(
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (!tapCardInputView.isExpDateValid) {
-                    checkoutViewModel.unActivateActionButton()
+                    checkoutViewModel?.unActivateActionButton()
                     tapInlineCardSwitch?.visibility = View.GONE
                 }
 
@@ -1036,7 +1035,7 @@ class PaymentInlineViewHolder(
 
                         }
                     } else {
-                        checkoutViewModel.unActivateActionButton()
+                        checkoutViewModel?.unActivateActionButton()
                         tapInlineCardSwitch?.visibility = View.GONE
                         // tapAlertView?.fadeVisibility(View.GONE, 500)
                     }
@@ -1142,7 +1141,7 @@ class PaymentInlineViewHolder(
                                         } else {
                                             cardBrandInString = savedCardsModel?.brand?.name
                                         }
-                                        onPaymentCardComplete.onPayCardCompleteAction(
+                                        onPaymentCardComplete?.onPayCardCompleteAction(
                                             true, paymentTyper,
                                           //  it, it1, it2, null,prevSetCardBrand?.toString() , savedCardsModel
                                            it, it1, it2, null, cardBrandInString, savedCardsModel
@@ -1204,7 +1203,7 @@ class PaymentInlineViewHolder(
                         if (s?.trim()?.length == 3 || s?.trim()?.length == 4) {
                             if (savedCardsModel != null) {
                                 if (isCVCLengthMax == true)
-                                    onPaymentCardComplete.onPayCardSwitchAction(
+                                    onPaymentCardComplete?.onPayCardSwitchAction(
                                         true, PaymentType.SavedCard, savedCardsModel?.brand?.name
                                     )
                                 // if(isCVCLengthMax == true) //check
@@ -1216,7 +1215,7 @@ class PaymentInlineViewHolder(
                                         expiryDate?.let { it1 ->
                                             cardBrandInString = savedCardsModel?.brand?.name
 
-                                            onPaymentCardComplete.onPayCardCompleteAction(
+                                            onPaymentCardComplete?.onPayCardCompleteAction(
                                                 true,
                                                 PaymentType.SavedCard,
                                                 it,
@@ -1233,7 +1232,7 @@ class PaymentInlineViewHolder(
                                         expiryDate?.let { it1 ->
                                             cardBrandInString = savedCardsModel?.brand?.name
 
-                                            onPaymentCardComplete.onPayCardCompleteAction(
+                                            onPaymentCardComplete?.onPayCardCompleteAction(
                                                 true,
                                                 PaymentType.SavedCard,
                                                 it,
@@ -1250,7 +1249,7 @@ class PaymentInlineViewHolder(
                                 cardBrandInString =
                                     PaymentDataSource?.getBinLookupResponse()?.cardBrand?.toString()
                                 if (isCVCLengthMax == true)
-                                    onPaymentCardComplete.onPayCardSwitchAction(
+                                    onPaymentCardComplete?.onPayCardSwitchAction(
                                         true,
                                         PaymentType.CARD,
                                         PaymentDataSource?.getBinLookupResponse()?.cardBrand?.toString()
@@ -1261,7 +1260,7 @@ class PaymentInlineViewHolder(
                                             //TODO: show the currency widget
 //                                        onPaymentCardComplete.onPaymentCompletedShowingCurrencyWidget(PaymentDataSource?.getBinLookupResponse()?.cardBrand?.toString().toString()
 //                                        )
-                                            onPaymentCardComplete.onPayCardCompleteAction(
+                                            onPaymentCardComplete?.onPayCardCompleteAction(
                                                 true,
                                                 PaymentType.CARD,
                                                 it,
@@ -1290,10 +1289,10 @@ class PaymentInlineViewHolder(
 
                     dismsisCurrencyWidget()
                     if (cardInputUIStatus == CardInputUIStatus.NormalCard)
-                        onPaymentCardComplete.onPayCardSwitchAction(
+                        onPaymentCardComplete?.onPayCardSwitchAction(
                             false, PaymentType.CARD
                         ) else {
-                        onPaymentCardComplete.onPayCardSwitchAction(
+                        onPaymentCardComplete?.onPayCardSwitchAction(
                             false, PaymentType.SavedCard
                         )
 
@@ -1315,7 +1314,7 @@ class PaymentInlineViewHolder(
                         PaymentDataSource?.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
 
                     doOnCurrencySupported { cardBrand ->
-                        onPaymentCardComplete.onPayCardCompleteAction(
+                        onPaymentCardComplete?.onPayCardCompleteAction(
                             true,
                             paymentTyper,
                             it,
@@ -1337,7 +1336,7 @@ class PaymentInlineViewHolder(
     }
 
     fun dismsisCurrencyWidget() {
-        checkoutViewModel.dismisControlWidget()
+        checkoutViewModel?.dismisControlWidget()
 
     }
 
@@ -1351,7 +1350,7 @@ class PaymentInlineViewHolder(
         val card = CardValidator.validate(charSequence.toString())
 
         if (charSequence != null) {
-            baseLayoutManager.resetViewHolder()
+            baseLayoutManager?.resetViewHolder()
 
 
             if (charSequence.length <= 2) {
@@ -1525,7 +1524,7 @@ class PaymentInlineViewHolder(
     @RequiresApi(Build.VERSION_CODES.N)
     private fun callCardBinNumberApi(s: CharSequence, textWatcher: TextWatcher) {
         if (s.trim().toString().length == BIN_NUMBER_LENGTH) {
-            cardViewModel.processEvent(
+            cardViewModel?.processEvent(
                 event = CardViewEvent.RetreiveBinLookupEvent,
                 viewModel =CheckoutViewModel(), binValue= s.trim().toString().replace(" ", "")
             )
@@ -1679,7 +1678,7 @@ class PaymentInlineViewHolder(
     }
 
     override fun onCvcComplete() {
-        checkoutViewModel.onPayCardCompleteAction(
+        checkoutViewModel?.onPayCardCompleteAction(
             true,
             PaymentType.CARD,
             fullCardNumber,
@@ -1693,14 +1692,14 @@ class PaymentInlineViewHolder(
 
     override fun cardFormHasFocus(hasFocus: Boolean) {
 
-        checkoutViewModel.resetViewHolder()
+        checkoutViewModel?.resetViewHolder()
     }
 
     override fun cvvFieldHasFocus(hasFocus: Boolean) {
 
         if (hasFocus) {
             tapAlertView?.fadeVisibility(View.GONE, 500)
-            checkoutViewModel.unActivateActionButton()
+            checkoutViewModel?.unActivateActionButton()
         } else {
             if (cvvNumber != null)
                 if (cvvNumber?.length!! < 3) {
@@ -1914,14 +1913,14 @@ class PaymentInlineViewHolder(
         for (i in enabledPaymentList.indices) {
             when (CustomUtils.getCurrentTheme()) {
                 ThemeMode.dark.name -> {
-                    if (checkoutViewModel.isDisableOptionSelected)
+                    if (checkoutViewModel?.isDisableOptionSelected == true)
                         imageURL =
                             enabledPaymentList[i].logos?.dark?.disabled?.png.toString().toString()
                     else imageURL = enabledPaymentList[i].logos?.dark?.png?.toString().toString()
                 }
 
                 ThemeMode.dark_colored.name -> {
-                    if (checkoutViewModel.isDisableOptionSelected)
+                    if (checkoutViewModel?.isDisableOptionSelected == true)
                         imageURL =
                             enabledPaymentList[i].logos?.dark_colored?.disabled?.png?.toString()
                                 .toString()
@@ -1929,14 +1928,14 @@ class PaymentInlineViewHolder(
                         enabledPaymentList[i].logos?.dark_colored?.png?.toString().toString()
                 }
                 ThemeMode.light.name -> {
-                    if (checkoutViewModel.isDisableOptionSelected)
+                    if (checkoutViewModel?.isDisableOptionSelected == true)
                         imageURL =
                             enabledPaymentList[i].logos?.light?.disabled?.png?.toString().toString()
                     else imageURL = enabledPaymentList[i].logos?.light?.png?.toString().toString()
                     //  disabledImageURL = disabledPaymentList[0].logos?.light?.disabled?.png.toString()
                 }
                 ThemeMode.light_mono.name -> {
-                    if (checkoutViewModel.isDisableOptionSelected)
+                    if (checkoutViewModel?.isDisableOptionSelected == true)
                         imageURL =
                             enabledPaymentList[i].logos?.light_mono?.disabled?.png?.toString()
                                 .toString()
@@ -2024,7 +2023,7 @@ class PaymentInlineViewHolder(
 
     fun TapBaseViewHolder.doOnCurrencySupported(onCurrencySupported: (cardBrand: String?) -> Unit) {
         if (isCardEnterdShouldBeDisabledPaymentOptions()) {
-            onPaymentCardComplete.onPaymentCompletedShowingCurrencyWidget(
+            onPaymentCardComplete?.onPaymentCompletedShowingCurrencyWidget(
                 cardBrandInString.toString()
             )
             /**
@@ -2036,7 +2035,7 @@ class PaymentInlineViewHolder(
             tapInlineCardSwitch?.visibility = View.GONE
 
         } else if (isCardEnterdEnabledPaymentOptionsAndHasMoreThanOneSupportedCurrency()) {
-            onPaymentCardComplete.onPaymentCompletedShowingCurrencyWidget(
+            onPaymentCardComplete?.onPaymentCompletedShowingCurrencyWidget(
                 cardBrandInString.toString()
             )
             onCurrencySupported.invoke(cardBrandInString)
@@ -2094,24 +2093,24 @@ class PaymentInlineViewHolder(
 
     fun isCardEnterdShouldBeDisabledPaymentOptions(): Boolean {
 
-        val isCardEnterdDisabledPaymentOption = checkoutViewModel.getDisabledCardPaymentList(
+        val isCardEnterdDisabledPaymentOption = checkoutViewModel?.getDisabledCardPaymentList(
             PaymentDataSource.getSelectedCurrency()?.toUpperCase().toString()
         )
-            .any {
+            ?.any {
                 it.brand == PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
             }
-        return isCardEnterdDisabledPaymentOption
+        return isCardEnterdDisabledPaymentOption == true
     }
 
     private fun isCardEnterdEnabledPaymentOptionsAndHasMoreThanOneSupportedCurrency(): Boolean {
 
-        val isCardEnterdHasMoreThanOneCurrency = checkoutViewModel.getEnabledCardPaymentList(
+        val isCardEnterdHasMoreThanOneCurrency = checkoutViewModel?.getEnabledCardPaymentList(
             PaymentDataSource.getSelectedCurrency()?.toUpperCase().toString()
         )
-            .any {
+            ?.any {
                 it.brand == PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue && it.getSupportedCurrencies().size > 1
             }
-        return isCardEnterdHasMoreThanOneCurrency && (PaymentDataSource.getCurrency()?.isoCode?.toUpperCase() != PaymentDataSource.getSelectedCurrency()
+        return isCardEnterdHasMoreThanOneCurrency == true && (PaymentDataSource.getCurrency()?.isoCode?.toUpperCase() != PaymentDataSource.getSelectedCurrency()
             ?.toUpperCase().toString())
     }
 
@@ -2336,7 +2335,7 @@ class PaymentInlineViewHolder(
         closeButton?.visibility = View.GONE
         controlScannerOptions()
         cardInputUIStatus = CardInputUIStatus.NormalCard
-        checkoutViewModel.setTitleNormalCard()
+        checkoutViewModel?.setTitleNormalCard()
         /*tapCardInputView.setSingleCardInput(
           CardBrandSingle.Unknown, null
       )*/
@@ -2374,7 +2373,7 @@ class PaymentInlineViewHolder(
         closeButton?.visibility = View.GONE
         // tapCardInputView.setVisibilityOfHolderField(false)
         tapCardInputView.holderNameEnabled = false
-        checkoutViewModel.incrementalCount = 0
+        checkoutViewModel?.incrementalCount = 0
         //  tabLayout.visibility =View.VISIBLE
         //   intertabLayout.visibility =View.VISIBLE
         allFieldsValid = false

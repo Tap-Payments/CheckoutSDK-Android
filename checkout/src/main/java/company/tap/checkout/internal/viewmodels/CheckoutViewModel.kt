@@ -57,10 +57,8 @@ import company.tap.checkout.internal.apiresponse.CardViewEvent
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.cache.SharedPrefManager
 import company.tap.checkout.internal.cache.UserSupportedLocaleForTransactions
-import company.tap.checkout.internal.enums.PaymentTypeEnum
-import company.tap.checkout.internal.enums.SectionType
-import company.tap.checkout.internal.enums.ThemeMode
-import company.tap.checkout.internal.enums.WebViewType
+import company.tap.checkout.internal.enums.*
+import company.tap.checkout.internal.factory.ViewTypeShowerImplementation
 import company.tap.checkout.internal.interfaces.*
 import company.tap.checkout.internal.utils.*
 import company.tap.checkout.internal.utils.AmountCalculator.calculateExtraFeesAmount
@@ -117,6 +115,8 @@ import kotlin.properties.Delegates
 open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedActionListener,
     PaymentCardComplete, onCardNFCCallListener, OnCurrencyChangedActionListener, WebViewContract,
     TapTextRecognitionCallBack, TapScannerCallback {
+
+    lateinit var viewTypeShowerImplementation: ViewTypeShowerImplementation
     private var savedCardList: MutableList<SavedCard>? = mutableListOf()
     private var arrayListSavedCardSize = ArrayList<SavedCard>()
     private var allPaymentOptionsList = arrayListOf<PaymentOption>()
@@ -311,7 +311,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         amountViewHolder,
                         cardViewHolder,
                         paymentInlineViewHolder,
-                        saveCardSwitchHolder  as TapBaseViewHolder
+                        saveCardSwitchHolder as TapBaseViewHolder
                     )
                     saveCardSwitchHolder?.view?.mainSwitch?.switchSaveMobile?.visibility =
                         GONE
@@ -392,11 +392,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun initViewHolders() {
+        viewTypeShowerImplementation = ViewTypeShowerImplementation(context)
+
         amountViewHolder = AmountViewHolder(context, this, this)
         tabAnimatedActionButtonViewHolder = TabAnimatedActionButtonViewHolder(context)
         cardViewHolder = CardViewHolder(context, this)
         goPaySavedCardHolder = GoPaySavedCardHolder(context, this, this)
-        saveCardSwitchHolder = SwitchViewHolder(context, this)
+        saveCardSwitchHolder = SwitchViewHolder(context)
         loyaltyViewHolder = LoyaltyViewHolder(context, this, this)
         paymentInlineViewHolder = PaymentInlineViewHolder(
             context, this,
@@ -499,58 +501,67 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         when (PaymentDataSource.getTransactionMode()) {
 
             TransactionMode.TOKENIZE_CARD -> {
-                addViews(
-                    businessViewHolderViewModel,
-                    paymentInlineViewHolder,
-                    saveCardSwitchHolder  as TapBaseViewHolder
-                )
+                viewTypeShowerImplementation.createViewsFromType(ViewsType.TOKENIZE_CARD)
+//                addViews(
+//                    businessViewHolderViewModel,
+//                    paymentInlineViewHolder,
+//                    saveCardSwitchHolder as TapBaseViewHolder
+//                )
 
             }
             TransactionMode.SAVE_CARD -> {
-                addViews(
-                    businessViewHolderViewModel,
-                    paymentInlineViewHolder,
-                    saveCardSwitchHolder  as TapBaseViewHolder
-                )
+                viewTypeShowerImplementation.createViewsFromType(ViewsType.SAVED_CARD)
+
+//                addViews(
+//                    businessViewHolderViewModel,
+//                    paymentInlineViewHolder,
+//                    saveCardSwitchHolder as TapBaseViewHolder
+//                )
             }
             else -> {
 
 
                 if (PaymentDataSource.getPaymentDataType() == "WEB") {
-                    addViews(
-                        businessViewHolderViewModel,
-                        amountViewHolder,
-                        cardViewHolder,
-                        saveCardSwitchHolder  as TapBaseViewHolder
-                    )
-                    cardViewHolder.cardInfoHeaderText?.visibility = GONE
+                    viewTypeShowerImplementation.createViewsFromType(ViewsType.WEB_PAYMENT_DATA)
+//
+//                    addViews(
+//                        businessViewHolderViewModel,
+//                        amountViewHolder,
+//                        cardViewHolder,
+//                        saveCardSwitchHolder as TapBaseViewHolder
+//                    )
+//                    cardViewHolder.cardInfoHeaderText?.visibility = GONE
                 } else if (PaymentDataSource.getPaymentDataType() == "CARD") {
-
-                    addViews(
-                        businessViewHolderViewModel,
-                        amountViewHolder,
-                        cardViewHolder,
-                        paymentInlineViewHolder, saveCardSwitchHolder  as TapBaseViewHolder
-                    )
-                    cardViewHolder.cardInfoHeaderText.visibility = VISIBLE
+                    viewTypeShowerImplementation.createViewsFromType(ViewsType.CARD_PAYMENT_DATA)
+//
+//
+//                    addViews(
+//                        businessViewHolderViewModel,
+//                        amountViewHolder,
+//                        cardViewHolder,
+//                        paymentInlineViewHolder, saveCardSwitchHolder as TapBaseViewHolder
+//                    )
+//                    cardViewHolder.cardInfoHeaderText.visibility = VISIBLE
                 } else
                 //Checkimg to be removed once loyalty enabled form api level onluy else will be there
                     if (SDKSession.enableLoyalty == true) {
-                        addViews(
-                            businessViewHolderViewModel,
-                            amountViewHolder,
-                            cardViewHolder,
-                            paymentInlineViewHolder,
-                            loyaltyViewHolder,
-                            saveCardSwitchHolder  as TapBaseViewHolder
-                        )
+                        viewTypeShowerImplementation.createViewsFromType(ViewsType.LOYALITY)
+//
+//                        addViews(
+//                            businessViewHolderViewModel,
+//                            amountViewHolder,
+//                            cardViewHolder,
+//                            paymentInlineViewHolder,
+//                            loyaltyViewHolder,
+//                            saveCardSwitchHolder as TapBaseViewHolder
+//                        )
                     } else {
                         addViews(
                             businessViewHolderViewModel,
                             amountViewHolder,
                             cardViewHolder,
                             paymentInlineViewHolder,
-                            saveCardSwitchHolder  as TapBaseViewHolder
+                            saveCardSwitchHolder as TapBaseViewHolder
                         )
                     }
 
@@ -802,7 +813,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         addViews(
             cardViewHolder,
             paymentInlineViewHolder,
-            saveCardSwitchHolder  as TapBaseViewHolder
+            saveCardSwitchHolder as TapBaseViewHolder
         )
 
 
@@ -950,7 +961,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             amountViewHolder,
             cardViewHolder,
             paymentInlineViewHolder,
-            saveCardSwitchHolder  as TapBaseViewHolder,
+            saveCardSwitchHolder as TapBaseViewHolder,
             otpViewHolder
         )
         saveCardSwitchHolder?.view?.mainSwitch?.switchSaveMobile?.visibility = GONE
@@ -1599,7 +1610,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
 
-    private fun addViews(
+    fun addViews(
         vararg viewHolders: TapBaseViewHolder,
         afterAddingViews: () -> Unit = {}
     ) {
@@ -2717,7 +2728,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
 
-        if (::amountViewHolder.isInitialized && ::cardViewHolder.isInitialized && ::cardViewHolder.isInitialized && ::paymentInlineViewHolder.isInitialized){
+        if (::amountViewHolder.isInitialized && ::cardViewHolder.isInitialized && ::cardViewHolder.isInitialized && ::paymentInlineViewHolder.isInitialized) {
             removeViews(
                 businessViewHolderViewModel,
                 amountViewHolder,
@@ -3077,7 +3088,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         addViews(
             cardViewHolder,
             paymentInlineViewHolder,
-            saveCardSwitchHolder  as TapBaseViewHolder
+            saveCardSwitchHolder as TapBaseViewHolder
         )
 
     }
@@ -3086,7 +3097,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     fun handleScanSuccessResult(card: TapCard) {
         addViews(
             paymentInlineViewHolder,
-            saveCardSwitchHolder  as TapBaseViewHolder
+            saveCardSwitchHolder as TapBaseViewHolder
         )
         callBinLookupApi(card.cardNumber?.trim()?.substring(0, 6))
 
@@ -3133,13 +3144,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     fun handleNFCScannedResult(emvCard: TapEmvCard) {
         println("emvCard>>" + emvCard)
-           removeViews(amountViewHolder, businessViewHolderViewModel)
+        removeViews(amountViewHolder, businessViewHolderViewModel)
         addViews(
             //   businessViewHolder,
             //   amountViewHolder,
             // cardViewHolder,
             paymentInlineViewHolder,
-            saveCardSwitchHolder  as TapBaseViewHolder
+            saveCardSwitchHolder as TapBaseViewHolder
         )
         callBinLookupApi(emvCard.cardNumber?.substring(0, 6))
 
@@ -3594,7 +3605,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         status: ChargeStatus,
     ) {
         removeAllViews()
-        addViews(saveCardSwitchHolder  as TapBaseViewHolder)
+        addViews(saveCardSwitchHolder as TapBaseViewHolder)
         val payString: String = LocalizationManager.getValue("pay", "ActionButton")
         val nowString: String = LocalizationManager.getValue("now", "ActionButton")
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(

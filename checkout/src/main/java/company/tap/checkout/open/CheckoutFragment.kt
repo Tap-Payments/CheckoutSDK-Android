@@ -22,6 +22,7 @@ import company.tap.checkout.internal.apiresponse.CardViewEvent
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.cache.SharedPrefManager
 import company.tap.checkout.internal.enums.SectionType
+
 import company.tap.checkout.internal.utils.*
 import company.tap.checkout.internal.viewholders.BusinessViewHolder
 import company.tap.checkout.internal.viewholders.PaymentInlineViewHolder
@@ -299,7 +300,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     }
 
 
-    private fun removeViews(viewHolders: MutableList<TapBaseViewHolder>, onRemoveEnd: () -> Unit = {}) {
+
+     fun removeViews(viewHolders: MutableList<TapBaseViewHolder>, onRemoveEnd: () -> Unit = {}) {
         viewHolders.forEach {
             if (::checkoutLayout.isInitialized) {
                 if (it is PaymentInlineViewHolder) {
@@ -312,7 +314,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     }
 
 
-    private fun addViews(
+     fun addViews(
         viewHolders: MutableList<TapBaseViewHolder>,
         afterAddingViews: () -> Unit = {}
     ) {
@@ -331,3 +333,22 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
 }
 
+
+
+//class ViewTypeShowerImplementation : ViewTypeShowerFactory {
+//    var checkoutFragment = CheckoutViewModel()
+//    override fun createViewsFromType(viewType: ViewsType): Void {
+//        when(viewType){
+//            ViewsType.LOYALITY ->{   checkoutFragment.addViewHolders(
+//                mutableListOf(checkoutFragment)
+////                paymentInlineViewHolder,
+////                saveCardSwitchHolder  as TapBaseViewHolder
+//            )}
+//            ViewsType.TOKENIZE_CARD -> TODO()
+//            ViewsType.SAVED_CARD -> TODO()
+//            ViewsType.WEB_PAYMENT_DATA -> TODO()
+//            ViewsType.CARD_PAYMENT_DATA -> TODO()
+//        }
+//    }
+//
+//}

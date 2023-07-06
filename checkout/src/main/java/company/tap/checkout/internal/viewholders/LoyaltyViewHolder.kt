@@ -25,8 +25,8 @@ import company.tap.tapuilibraryy.uikit.ktx.makeLinks
 import company.tap.tapuilibraryy.uikit.organisms.TapLoyaltyView
 import java.math.BigDecimal
 
-class LoyaltyViewHolder(private val context: Context, checkoutViewModel: CheckoutViewModel,
-                        private val onPaymentCardComplete: PaymentCardComplete,) : TapBaseViewHolder  {
+class LoyaltyViewHolder(private val context: Context, checkoutViewModel: CheckoutViewModel?=null,
+                        private val onPaymentCardComplete: PaymentCardComplete?=null) : TapBaseViewHolder  {
 
     override val view: View = LayoutInflater.from(context).inflate(R.layout.loyalty_view_layout, null)
 
@@ -185,7 +185,7 @@ class LoyaltyViewHolder(private val context: Context, checkoutViewModel: Checkou
                         reCalculateAmount(initialBalance?.toBigDecimal(),s.toString().replace(".","").toBigDecimal())
                     }
 
-                    onPaymentCardComplete.onPaymentCardIsLoyaltyCard(true)
+                    onPaymentCardComplete?.onPaymentCardIsLoyaltyCard(true)
                 }
                 }
         })
