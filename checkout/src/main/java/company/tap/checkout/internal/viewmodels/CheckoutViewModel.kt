@@ -2104,9 +2104,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     if (bgArrayList?.size == 2) {
                         startColor = bgArrayList.get(0).replace("0x", "#")
                         endColor = bgArrayList.get(1).replace("0x", "#")
+                if(CustomUtils.getCurrentLocale(context).contains("ar")){
+                    intColorArray =
+                        intArrayOf(Color.parseColor(endColor), Color.parseColor(startColor))
+                }else intColorArray = intArrayOf(Color.parseColor(startColor), Color.parseColor(endColor))
 
-                        intColorArray =
-                            intArrayOf(Color.parseColor(startColor), Color.parseColor(endColor))
                         colorBackGround = "0"
 
                     } else if (bgArrayList?.size == 3) {
@@ -2114,12 +2116,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
                         middleColor = bgArrayList[1].replace("0x", "#")
                         endColor = bgArrayList[0].replace("0x", "#")
-
-                        intColorArray = intArrayOf(
-                            Color.parseColor(startColor),
-                            Color.parseColor(middleColor),
-                            Color.parseColor(endColor)
-                        )
+                        if(CustomUtils.getCurrentLocale(context).contains("ar")){
+                            intColorArray = intArrayOf(
+                                Color.parseColor(endColor),
+                                Color.parseColor(middleColor),
+                                Color.parseColor(startColor)
+                            )
+                        }else intColorArray = intArrayOf(Color.parseColor(startColor), Color.parseColor(middleColor), Color.parseColor(endColor))
                         colorBackGround = "0"
 
                     }
@@ -2136,9 +2139,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     if (bgArrayList?.size == 2) {
                         startColor = bgArrayList.get(0).replace("0x", "#")
                         endColor = bgArrayList.get(1).replace("0x", "#")
+                        if(CustomUtils.getCurrentLocale(context).contains("ar")){
+                            intColorArray =
+                                intArrayOf(Color.parseColor(endColor), Color.parseColor(startColor))
+                        }else intColorArray = intArrayOf(Color.parseColor(startColor), Color.parseColor(endColor))
 
-                        intColorArray =
-                            intArrayOf(Color.parseColor(startColor), Color.parseColor(endColor))
                         colorBackGround = "0"
 
                     } else if (bgArrayList?.size == 3) {
@@ -2146,12 +2151,15 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
                         middleColor = bgArrayList[1].replace("0x", "#")
                         endColor = bgArrayList[0].replace("0x", "#")
+                        if(CustomUtils.getCurrentLocale(context).contains("ar")){
+                            intColorArray = intArrayOf(
+                                Color.parseColor(endColor),
+                                Color.parseColor(middleColor),
+                                Color.parseColor(startColor)
+                            )
+                        }else intColorArray = intArrayOf(Color.parseColor(startColor), Color.parseColor(middleColor), Color.parseColor(endColor))
 
-                        intColorArray = intArrayOf(
-                            Color.parseColor(startColor),
-                            Color.parseColor(middleColor),
-                            Color.parseColor(endColor)
-                        )
+
                         colorBackGround = "0"
 
                     }
