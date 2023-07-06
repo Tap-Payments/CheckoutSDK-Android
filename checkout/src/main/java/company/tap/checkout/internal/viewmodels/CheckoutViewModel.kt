@@ -274,7 +274,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 cardViewHolder,
                 paymentInlineViewHolder,
                 loyaltyViewHolder,
-                saveCardSwitchHolder
+                saveCardSwitchHolder as TapBaseViewHolder
             )
             loyaltyViewHolder.view.loyaltyView.constraintLayout?.visibility = VISIBLE
 
@@ -297,28 +297,21 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     goPayViewsHolder.onOtpButtonConfirmationClick(otpViewHolder.otpView.otpViewInput1.text.toString())
                 PaymentTypeEnum.SAVEDCARD -> confirmOTPCode(otpViewHolder.otpView.otpViewInput1.text.toString())
                 else -> {
-                    removeViewHolders.value = mutableListOf(
+
+                    removeViews(
                         businessViewHolderViewModel,
                         amountViewHolder,
                         paymentInlineViewHolder,
                         cardViewHolder,
-                        otpViewHolder,
-                        saveCardSwitchHolder as TapBaseViewHolder
+                        saveCardSwitchHolder as TapBaseViewHolder,
+                        otpViewHolder
                     )
-//                    removeViews(
-//                        businessViewHolderViewModel.getBusinessViewHolder(),
-//                        amountViewHolder,
-//                        paymentInlineViewHolder,
-//                        cardViewHolder,
-//                        saveCardSwitchHolder,
-//                        otpViewHolder
-//                    )
                     addViews(
                         businessViewHolderViewModel,
                         amountViewHolder,
                         cardViewHolder,
                         paymentInlineViewHolder,
-                        saveCardSwitchHolder
+                        saveCardSwitchHolder  as TapBaseViewHolder
                     )
                     saveCardSwitchHolder?.view?.mainSwitch?.switchSaveMobile?.visibility =
                         GONE
@@ -512,7 +505,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 addViews(
                     businessViewHolderViewModel,
                     paymentInlineViewHolder,
-                    saveCardSwitchHolder
+                    saveCardSwitchHolder  as TapBaseViewHolder
                 )
 
             }
@@ -520,7 +513,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 addViews(
                     businessViewHolderViewModel,
                     paymentInlineViewHolder,
-                    saveCardSwitchHolder
+                    saveCardSwitchHolder  as TapBaseViewHolder
                 )
             }
             else -> {
@@ -531,7 +524,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         businessViewHolderViewModel,
                         amountViewHolder,
                         cardViewHolder,
-                        saveCardSwitchHolder
+                        saveCardSwitchHolder  as TapBaseViewHolder
                     )
                     cardViewHolder.cardInfoHeaderText?.visibility = GONE
                 } else if (PaymentDataSource.getPaymentDataType() == "CARD") {
@@ -540,7 +533,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         businessViewHolderViewModel,
                         amountViewHolder,
                         cardViewHolder,
-                        paymentInlineViewHolder, saveCardSwitchHolder
+                        paymentInlineViewHolder, saveCardSwitchHolder  as TapBaseViewHolder
                     )
                     cardViewHolder.cardInfoHeaderText.visibility = VISIBLE
                 } else
@@ -552,7 +545,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                             cardViewHolder,
                             paymentInlineViewHolder,
                             loyaltyViewHolder,
-                            saveCardSwitchHolder
+                            saveCardSwitchHolder  as TapBaseViewHolder
                         )
                     } else {
                         addViews(
@@ -560,7 +553,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                             amountViewHolder,
                             cardViewHolder,
                             paymentInlineViewHolder,
-                            saveCardSwitchHolder
+                            saveCardSwitchHolder  as TapBaseViewHolder
                         )
                     }
 
@@ -599,18 +592,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     override fun displayGoPayLogin() {
         saveCardSwitchHolder?.let {
-            removeViewHolders.value = mutableListOf(
+            removeViews(
                 businessViewHolderViewModel, amountViewHolder,
                 cardViewHolder, paymentInlineViewHolder,
                 it, otpViewHolder,
                 goPayViewsHolder
             )
-//            removeViews(
-//                businessViewHolderViewModel, amountViewHolder,
-//                cardViewHolder, paymentInlineViewHolder,
-//                it, otpViewHolder,
-//                goPayViewsHolder
-//            )
         }
 
         addViews(
@@ -632,7 +619,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     override fun displayGoPay() {
 
         saveCardSwitchHolder?.let {
-            removeViewHolders.value = mutableListOf(
+            removeViews(
                 businessViewHolderViewModel,
                 amountViewHolder,
                 goPayViewsHolder,
@@ -641,15 +628,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 it,
                 otpViewHolder
             )
-//            removeViews(
-//                businessViewHolderViewModel,
-//                amountViewHolder,
-//                goPayViewsHolder,
-//                cardViewHolder,
-//                paymentInlineViewHolder,
-//                it,
-//                otpViewHolder
-//            )
         }
 
         saveCardSwitchHolder?.let {
@@ -691,8 +669,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         }
         if (otpViewHolder.otpView.isVisible) {
-            removeViewHolders.value = mutableListOf(otpViewHolder)
-          //  removeViews(otpViewHolder)
+            removeViews(otpViewHolder)
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.RESET)
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isClickable = true
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.stateListAnimator = null
@@ -712,10 +689,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.isActivated = false
         }
         if (PaymentDataSource.getPaymentDataType() != null && PaymentDataSource.getPaymentDataType() == "WEB") {
-            removeViewHolders.value = mutableListOf(
-                paymentInlineViewHolder,
-            )
-          //  removeViews(paymentInlineViewHolder)
+            removeViews(paymentInlineViewHolder)
         }
         removeInlineScanner()
         removeNFCViewFragment()
@@ -792,19 +766,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     private fun showViewsRelatedToCurrencyAndItems() {
-        removeViewHolders.value = mutableListOf(
-            goPayViewsHolder,
-            paymentInlineViewHolder,
+        removeViews(
             cardViewHolder,
+            paymentInlineViewHolder,
             otpViewHolder,
             saveCardSwitchHolder as TapBaseViewHolder
         )
-//        removeViews(
-//            cardViewHolder,
-//            paymentInlineViewHolder,
-//            otpViewHolder,
-//            saveCardSwitchHolder
-//        )
         addViews(
             itemsViewHolder
         )
@@ -825,31 +792,20 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun setActionGoPayOpenedItemsDisplayed() {
-
-        removeViewHolders.value = mutableListOf(
-            goPayViewsHolder,
-            paymentInlineViewHolder,
+        removeViews(
             cardViewHolder,
+            paymentInlineViewHolder,
+            goPayViewsHolder,
             otpViewHolder,
             itemsViewHolder
         )
-//        removeViews(
-//            cardViewHolder,
-//            paymentInlineViewHolder,
-//            goPayViewsHolder,
-//            otpViewHolder,
-//            itemsViewHolder
-//        )
         if (::webViewHolder.isInitialized) {
-            removeViewHolders.value = mutableListOf(
-             webViewHolder
-            )
-        //    removeViews(webViewHolder)
+            removeViews(webViewHolder)
         }
         addViews(
             cardViewHolder,
             paymentInlineViewHolder,
-            saveCardSwitchHolder
+            saveCardSwitchHolder  as TapBaseViewHolder
         )
 
 
@@ -896,14 +852,10 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun displayOtpGoPay(phoneNumber: PhoneNumber?) {
         // otpTypeString = PaymentTypeEnum.GOPAY //temporray
-        removeViewHolders.value = mutableListOf(
+        removeViews(
             cardViewHolder,
             paymentInlineViewHolder, saveCardSwitchHolder as TapBaseViewHolder, amountViewHolder
         )
-//        removeViews(
-//            cardViewHolder,
-//            paymentInlineViewHolder, saveCardSwitchHolder, amountViewHolder
-//        )
         addViews(amountViewHolder, otpViewHolder)
 
         otpViewHolder.otpView.visibility = VISIBLE
@@ -917,10 +869,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     private fun displayOtpCharge(phoneNumber: PhoneNumber?, chargeResponse: Charge?) {
         println("mmmmmmmm" + amountViewHolder?.originalAmount)
-//        removeViews(
-//            paymentInlineViewHolder, otpViewHolder
-//        )
-        removeViewHolders.value = mutableListOf(
+        removeViews(
             paymentInlineViewHolder, otpViewHolder
         )
 
@@ -939,10 +888,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             )
         )
         doAfterSpecificTime(time = 700L) {
-            removeViewHolders.value = mutableListOf(
-               cardViewHolder
-            )
-           // removeViews(cardViewHolder)
+
+            removeViews(cardViewHolder)
             addViews(otpViewHolder)
             otpViewHolder.otpView.visibility = VISIBLE
 
@@ -993,15 +940,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun displayOtpTelecoms(phoneNumber: PhoneNumber?) {
         otpTypeString = PaymentTypeEnum.telecom
-//        removeViews(
-//            businessViewHolderViewModel,
-//            amountViewHolder,
-//            paymentInlineViewHolder,
-//            cardViewHolder,
-//            saveCardSwitchHolder,
-//            otpViewHolder
-//        )
-        removeViewHolders.value = mutableListOf(
+        removeViews(
             businessViewHolderViewModel,
             amountViewHolder,
             paymentInlineViewHolder,
@@ -1014,7 +953,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             amountViewHolder,
             cardViewHolder,
             paymentInlineViewHolder,
-            saveCardSwitchHolder,
+            saveCardSwitchHolder  as TapBaseViewHolder,
             otpViewHolder
         )
         saveCardSwitchHolder?.view?.mainSwitch?.switchSaveMobile?.visibility = GONE
@@ -1045,18 +984,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         println("redirectURL before display>>" + url)
         if (::redirectURL.isInitialized && ::fragmentManager.isInitialized) {
             if (otpViewHolder.otpView.isVisible) {
-                removeViewHolders.value = mutableListOf(
+                removeViews(
                     // businessViewHolder,
                     cardViewHolder,
                     paymentInlineViewHolder,
                     otpViewHolder
                 )
-//                removeViews(
-//                    // businessViewHolder,
-//                    cardViewHolder,
-//                    paymentInlineViewHolder,
-//                    otpViewHolder
-//                )
             }
             // setSlideAnimation()
             if (PaymentDataSource?.getWebViewType() != null && PaymentDataSource.getWebViewType() == WebViewType.REDIRECT) {
@@ -1064,7 +997,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 //Stopped showing closetext as requested
                 // checkoutFragment.closeText.visibility = View.VISIBLE
                 doAfterSpecificTime {
-                    removeViewHolders.value = mutableListOf(
+                    removeViews(
                         businessViewHolderViewModel,
                         paymentInlineViewHolder,
                         otpViewHolder,
@@ -1075,17 +1008,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         paymentInlineViewHolder,
                         tabAnimatedActionButtonViewHolder as TapBaseViewHolder
                     )
-//                    removeViews(
-//                        businessViewHolderViewModel,
-//                        paymentInlineViewHolder,
-//                        otpViewHolder,
-//                        goPaySavedCardHolder,
-//                        goPayViewsHolder,
-//                        amountViewHolder,
-//                        cardViewHolder,
-//                        paymentInlineViewHolder,
-//                        tabAnimatedActionButtonViewHolder
-//                    )
 
                 }
 
@@ -1128,16 +1050,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     paymentInlineViewHolder,
                     cardViewHolder
                 )
-                removeViewHolders.value = mutableListOf(
+                removeViews(
                     otpViewHolder,
                     goPaySavedCardHolder,
                     goPayViewsHolder
                 )
-//                removeViews(
-//                    otpViewHolder,
-//                    goPaySavedCardHolder,
-//                    goPayViewsHolder
-//                )
 
                 addViews(webViewHolder)
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
@@ -1453,12 +1370,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
             } else {
-                // println("else block is calle are")
-                removeViewHolders.value = mutableListOf(
-                    goPaySavedCardHolder,
 
-                )
-              //  removeViews(goPaySavedCardHolder)
+                removeViews(goPaySavedCardHolder)
                 //  adapter.updateAdapterDataSavedCard(savedCardList.value as List<SavedCard>)
                 goPayViewsHolder.goPayopened = false
                 adapter.goPayOpenedfromMain(true)
@@ -1536,20 +1449,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         if (::otpViewHolder.isInitialized)
             if (otpViewHolder.otpView.isVisible) {
-                removeViewHolders.value = mutableListOf(
+                removeViews(
                     businessViewHolderViewModel,
                     amountViewHolder,
                     cardViewHolder,
                     paymentInlineViewHolder,
                     otpViewHolder
                 )
-//                removeViews(
-//                    businessViewHolderViewModel,
-//                    amountViewHolder,
-//                    cardViewHolder,
-//                    paymentInlineViewHolder,
-//                    otpViewHolder
-//                )
             }
         if (saveCardSwitchHolder != null) {
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = INVISIBLE
@@ -1666,20 +1572,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     override fun displayAsynchronousPaymentView(chargeResponse: Charge) {
         if (chargeResponse != null) {
             saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
-
-            removeViewHolders.value = mutableListOf(
+            removeViews(
                 amountViewHolder,
                 cardViewHolder,
                 paymentInlineViewHolder,
                 saveCardSwitchHolder as TapBaseViewHolder
             )
-//            removeViews(
-//                // businessViewHolder,
-//                amountViewHolder,
-//                cardViewHolder,
-//                paymentInlineViewHolder,
-//                saveCardSwitchHolder
-//            )
             /*  businessViewHolder.setDataFromAPI(
                   selectedPaymentOption.image,
                   selectedPaymentOption.brand?.name
@@ -1699,45 +1597,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         removePaymentInlineShrinkageAndDimmed()
     }
 
-    private fun removeViews(vararg viewHolders: TapBaseViewHolder?, onRemoveEnd: () -> Unit = {}) {
-        animateBS(
-            fromView = bottomSheetLayout,
-            toView = sdkLayout,
-            transitionAnimation = 100L,
-            changeHeight = {
-                viewHolders.forEach {
-                    if (::sdkLayout.isInitialized) {
-                        if (it is PaymentInlineViewHolder) {
-                            removePaymentInlineShrinkageAndDimmed()
-                        }
-                        sdkLayout.removeView(it?.view)
-                        provideBackgroundtoBsLayout()
-                        onRemoveEnd.invoke()
-                    }
-                }
-
-            })
+    private fun removeViews(vararg viewHolders: TapBaseViewHolder, onRemoveEnd: () -> Unit = {}) {
+        removeViewHolders.value = viewHolders.toMutableList()
     }
 
 
     private fun addViews(
-        vararg viewHolders: TapBaseViewHolder?,
+        vararg viewHolders: TapBaseViewHolder,
         afterAddingViews: () -> Unit = {}
     ) {
-
-        animateBS(fromView = bottomSheetLayout, toView = sdkLayout, changeHeight = {
-            viewHolders.forEach {
-                if (::sdkLayout.isInitialized) {
-                    sdkLayout.removeView(it?.view)
-                    provideBackgroundtoBsLayout()
-                    sdkLayout.addView(it?.view)
-
-
-                }
-            }
-            afterAddingViews.invoke()
-        })
-
+        addViewHolders.value = viewHolders.toMutableList()
     }
 
 
@@ -2663,14 +2532,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     // Override function to open NFC fragment and scan the card via NFC.
     override fun onClickNFC() {
 
-//        removeViews(
-//            paymentInlineViewHolder,
-//            saveCardSwitchHolder,
-//            otpViewHolder,
-//            goPaySavedCardHolder,
-//            goPayViewsHolder
-//        )
-        removeViewHolders.value = mutableListOf(
+        removeViews(
             paymentInlineViewHolder,
             saveCardSwitchHolder as TapBaseViewHolder,
             otpViewHolder,
@@ -2697,20 +2559,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     // Override function to open card Scanner and scan the card.
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onClickCardScanner(scannerClicked: Boolean) {
-//        removeViews(
-//            saveCardSwitchHolder,
-//            paymentInlineViewHolder,
-//            otpViewHolder,
-//            goPaySavedCardHolder,
-//            goPayViewsHolder
-//        )
-        removeViewHolders.value = mutableListOf(
+        removeViews(
             saveCardSwitchHolder as TapBaseViewHolder,
             paymentInlineViewHolder,
             otpViewHolder,
             goPaySavedCardHolder,
             goPayViewsHolder
         )
+
         amountViewHolder.readyToScanVisibility(scannerClicked)
         inLineCardLayout.visibility = VISIBLE
         cardViewHolder.view.visibility = GONE
@@ -2859,27 +2715,20 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         println("gatewayResponse val" + charge?.gatewayResponse)
 
         // businessViewHolder = contextSDK?.let { BusinessViewHolder(it, this) }!!
-       // removeViews(businessViewHolderViewModel)
-        removeViewHolders.value = mutableListOf(
-            businessViewHolderViewModel
-        )
+        removeViews(businessViewHolderViewModel)
+
 
 
 
         if (::amountViewHolder.isInitialized && ::cardViewHolder.isInitialized && ::cardViewHolder.isInitialized && ::paymentInlineViewHolder.isInitialized){
-            removeViewHolders.value = mutableListOf(
+            removeViews(
                 businessViewHolderViewModel,
                 amountViewHolder,
                 cardViewHolder,
                 paymentInlineViewHolder
             )
         }
-//            removeViews(
-//                businessViewHolderViewModel,
-//                amountViewHolder,
-//                cardViewHolder,
-//                paymentInlineViewHolder
-//            )
+
     }
 
     override fun resultObtained(done: Boolean, contextSDK: Context?) {
@@ -3151,7 +3000,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         if (::amountViewHolder.isInitialized && ::cardViewHolder.isInitialized && ::paymentInlineViewHolder.isInitialized &&
             ::goPayViewsHolder.isInitialized && ::otpViewHolder.isInitialized
         )
-            removeViewHolders.value = mutableListOf(
+
+            removeViews(
                 businessViewHolderViewModel,
                 amountViewHolder,
                 cardViewHolder,
@@ -3161,23 +3011,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 otpViewHolder,
                 tabAnimatedActionButtonViewHolder as TapBaseViewHolder
             )
-//            removeViews(
-//                businessViewHolderViewModel,
-//                amountViewHolder,
-//                cardViewHolder,
-//                paymentInlineViewHolder,
-//                saveCardSwitchHolder,
-//                goPayViewsHolder,
-//                otpViewHolder,
-//                tabAnimatedActionButtonViewHolder
-//            )
 
         if (::webViewHolder.isInitialized) {
-           // removeViews(webViewHolder)
-            removeViewHolders.value = mutableListOf(
-               webViewHolder
-            )
-
+            removeViews(webViewHolder)
         }
     }
 
@@ -3244,7 +3080,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         addViews(
             cardViewHolder,
             paymentInlineViewHolder,
-            saveCardSwitchHolder
+            saveCardSwitchHolder  as TapBaseViewHolder
         )
 
     }
@@ -3253,7 +3089,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     fun handleScanSuccessResult(card: TapCard) {
         addViews(
             paymentInlineViewHolder,
-            saveCardSwitchHolder
+            saveCardSwitchHolder  as TapBaseViewHolder
         )
         callBinLookupApi(card.cardNumber?.trim()?.substring(0, 6))
 
@@ -3300,13 +3136,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     @RequiresApi(Build.VERSION_CODES.N)
     fun handleNFCScannedResult(emvCard: TapEmvCard) {
         println("emvCard>>" + emvCard)
-        //   removeViews(amountViewHolder, businessViewHolder)
+           removeViews(amountViewHolder, businessViewHolderViewModel)
         addViews(
             //   businessViewHolder,
             //   amountViewHolder,
             // cardViewHolder,
             paymentInlineViewHolder,
-            saveCardSwitchHolder
+            saveCardSwitchHolder  as TapBaseViewHolder
         )
         callBinLookupApi(emvCard.cardNumber?.substring(0, 6))
 
@@ -3624,10 +3460,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
                 } else {
                     saveCardSwitchHolder?.mainTextSave?.visibility = GONE
-                    removeViewHolders.value = mutableListOf(
-                        paymentInlineViewHolder,
-                    )
-                   // removeViews(paymentInlineViewHolder)
+                    removeViews(paymentInlineViewHolder)
                 }
 
             }
@@ -3764,7 +3597,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         status: ChargeStatus,
     ) {
         removeAllViews()
-        addViews(saveCardSwitchHolder)
+        addViews(saveCardSwitchHolder  as TapBaseViewHolder)
         val payString: String = LocalizationManager.getValue("pay", "ActionButton")
         val nowString: String = LocalizationManager.getValue("now", "ActionButton")
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.setButtonDataSource(
@@ -3857,7 +3690,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
      * **/
     @RequiresApi(Build.VERSION_CODES.N)
     fun handlePaymentSuccess(paymentData: PaymentData, selectedPaymentOption: PaymentOption) {
-        removeViewHolders.value = mutableListOf(
+        removeViews(
             amountViewHolder,
             cardViewHolder,
             paymentInlineViewHolder,
@@ -3865,14 +3698,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             goPaySavedCardHolder,
             goPayViewsHolder
         )
-//        removeViews(
-//            amountViewHolder,
-//            cardViewHolder,
-//            paymentInlineViewHolder,
-//            otpViewHolder,
-//            goPaySavedCardHolder,
-//            goPayViewsHolder
-//        )
         saveCardSwitchHolder?.view?.cardSwitch?.switchesLayout?.visibility = GONE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = VISIBLE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(ActionButtonState.LOADING)
