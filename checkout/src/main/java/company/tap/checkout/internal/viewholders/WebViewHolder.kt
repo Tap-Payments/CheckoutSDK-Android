@@ -88,8 +88,9 @@ class WebViewHolder(
     @RequiresApi(Build.VERSION_CODES.N)
     @SuppressLint("SetJavaScriptEnabled")
     private fun setUpWebView() {
-        web_view.webViewClient =
-            cardViewModel.let { TapCustomWebViewClient(this, it, checkoutViewModel) }
+        web_view.webViewClient = cardViewModel.let { TapCustomWebViewClient(this, it, checkoutViewModel) }
+        checkoutViewModel.isWebViewHolderFor3dsOpened.value = true
+
         web_view.applyConfigurationForWebView(
             url = redirectURL,
             onProgressWebViewFinishedLoading = {
@@ -103,7 +104,6 @@ class WebViewHolder(
                         context.twoThirdHeightView().roundToInt()
                     )
                     showViewsRelatedToWebView()
-                    checkoutViewModel.isWebViewHolderFor3dsOpened.value = true
 
                 }
 
