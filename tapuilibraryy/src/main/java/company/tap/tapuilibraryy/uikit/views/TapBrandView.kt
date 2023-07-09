@@ -3,10 +3,12 @@ package company.tap.tapuilibraryy.uikit.views
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.cardview.widget.CardView
+import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibraryy.themekit.ThemeManager
 import company.tap.tapuilibraryy.R
 
@@ -17,6 +19,7 @@ class TapBrandView : LinearLayout {
     val outerConstraint by lazy { findViewById<CardView>(R.id.outerConstraint) }
     val constraint by lazy { findViewById<CardView>(R.id.outerConstraint_header) }
     val backButtonLinearLayout by lazy { findViewById<LinearLayout>(R.id.back_btn_linear) }
+    val imageBack by lazy { findViewById<ImageView>(R.id.image_back) }
 
     @DrawableRes
     val logoIcon: Int =
@@ -60,6 +63,9 @@ class TapBrandView : LinearLayout {
     init {
         inflate(context, R.layout.tap_brandview, this)
         poweredByImage.setImageResource(logoIcon)
+        if (LocalizationManager.getLocale(context).language  == "ar"){
+            imageBack.rotation = 180f
+        }
     }
 
 

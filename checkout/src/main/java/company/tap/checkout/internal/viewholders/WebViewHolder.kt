@@ -11,6 +11,7 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
+import com.fasterxml.jackson.annotation.ObjectIdGenerators.StringIdGenerator
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.apiresponse.CardViewModel
@@ -34,10 +35,10 @@ import kotlin.math.roundToInt
 @SuppressLint("UseCompatLoadingForDrawables")
 class WebViewHolder(
     val context: Context,
-    val redirectURL: String,
+    var redirectURL: String?=null,
     val webViewContract: WebViewContract,
     val cardViewModel: CardViewModel,
-    val authenticate: Charge?,
+    var authenticate: Charge?=null,
     val checkoutViewModel: CheckoutViewModel,
     val bottomSheetLayout: FrameLayout,
     val sdkLayout: LinearLayout,
@@ -62,6 +63,11 @@ class WebViewHolder(
             LocalizationManager.getValue("GatewayHeader", "HorizontalHeaders", "webViewTitle")
         webViewTextTitle.text = webViewTitleText
         setUpWebView()
+    }
+
+    fun setUrlAndCharge(url:String?,authenticateCharge:Charge?){
+        this.authenticate = authenticateCharge
+        this.redirectURL = url
     }
 
     override fun bindViewComponents() {
@@ -92,7 +98,7 @@ class WebViewHolder(
         checkoutViewModel.isWebViewHolderFor3dsOpened.value = true
 
         web_view.applyConfigurationForWebView(
-            url = redirectURL,
+            url = redirectURL.toString(),
             onProgressWebViewFinishedLoading = {
                 mutableListOf(
                     paymentInlineViewHolder.view,
@@ -112,7 +118,9 @@ class WebViewHolder(
 
 
     }
-
+    fun destroyWebView(){
+        web_view.destroy()
+    }
     private fun showViewsRelatedToWebView() {
 
         animateBS(

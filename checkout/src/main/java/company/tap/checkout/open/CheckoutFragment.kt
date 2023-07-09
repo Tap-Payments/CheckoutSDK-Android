@@ -121,10 +121,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             })
 
         topHeaderView.backButtonLinearLayout.setOnClickListener {
-
-            viewModel.removeWebViewHolder()
             viewModel.resetViewsAlreadyDismissed()
-            viewModel.isWebViewHolderFor3dsOpened.value = false
 
         }
 

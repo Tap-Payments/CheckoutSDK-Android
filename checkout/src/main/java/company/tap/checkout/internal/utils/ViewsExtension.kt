@@ -35,6 +35,7 @@ import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.core.os.postDelayed
 import androidx.core.view.ViewCompat
+import androidx.core.view.children
 import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
@@ -196,7 +197,12 @@ fun Context.applyOnDifferentThemes(
 }
 
 
-fun addShrinkageAnimationForViews(vararg views: View?,xDirection: Float=0.95f, yDirection: Float=1f, isDimmed: Boolean = false){
+fun addShrinkageAnimationForViews(
+    vararg views: View?,
+    xDirection: Float = 0.95f,
+    yDirection: Float = 1f,
+    isDimmed: Boolean = false
+) {
     views.forEach {
         it?.animate()?.scaleX(xDirection)?.scaleY(yDirection)?.setDuration(600)?.start();
         if (isDimmed) {
@@ -317,6 +323,7 @@ fun View.isRTL() = ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRE
 fun Context.twoThirdHeightView(): Double {
     return getDeviceSpecs().first.times(2.15) / 3
 }
+
 fun Context.twoThirdHeightViewWeb(): Double {
     return getDeviceSpecs().first.times(2.5) / 3
 }
@@ -499,7 +506,7 @@ fun View.slideView(
 ) {
 
     val slideAnimator = ValueAnimator
-        .ofInt(if (this.measuredHeight==newHeight) 0 else this.measuredHeight, newHeight)
+        .ofInt(if (this.measuredHeight == newHeight) 0 else this.measuredHeight, newHeight)
         .setDuration(600)
 
     slideAnimator.addUpdateListener {
@@ -566,7 +573,12 @@ fun View.applyBluryToView(
     Blurry.with(context).radius(radiusNeeded).sampling(sampling).animate(animationDuration)
         .onto(this as ViewGroup).apply {
             when (showOriginalView) {
-                true -> this@applyBluryToView.getChildAt(0).visibility = View.VISIBLE
+                true -> {
+                    this@applyBluryToView.getChildAt(0).visibility = View.VISIBLE
+                    this@applyBluryToView.children.forEachIndexed { index, view ->
+                        if (index != 0) this@applyBluryToView.removeView(view)
+                    }
+                }
                 false -> this@applyBluryToView.getChildAt(0).visibility = View.GONE
             }
 

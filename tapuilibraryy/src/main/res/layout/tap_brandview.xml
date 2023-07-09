@@ -52,6 +52,9 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/back_btn"
                 android:layout_gravity="center"
+                android:layoutDirection="ltr"
+                android:id="@+id/image_back"
+                android:textDirection="ltr"
                 />
 
             <TextView

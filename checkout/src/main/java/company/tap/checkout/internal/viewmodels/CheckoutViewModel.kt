@@ -412,6 +412,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         itemsViewHolder = ItemsViewHolder(context, this)
 
+
         otpViewHolder = OTPViewHolder(context)
         otpViewHolder.otpView.visibility = GONE
         otpViewHolder.otpView.requestFocus()
@@ -1049,10 +1050,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     paymentInlineViewHolder,
                     cardViewHolder
                 )
+                webViewHolder.setUrlAndCharge(url = url, authenticateCharge = authenticate)
                 removeViews(
                     otpViewHolder,
                     goPaySavedCardHolder,
-                    goPayViewsHolder
+                    goPayViewsHolder,
+                    webViewHolder
                 )
 
                 addViews(webViewHolder)
@@ -1620,11 +1623,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     fun removeWebViewHolder() {
-        removeViews(webViewHolder)
+        if (::webViewHolder.isInitialized) {
+            removeViews(webViewHolder)
+
+        }
 
     }
 
     fun resetViewsAlreadyDismissed() {
+        webViewHolder.destroyWebView()
+        removeViews(webViewHolder)
         businessViewHolder.view.visibility = View.VISIBLE
         cardViewHolder.view.visibility = View.VISIBLE
         amountViewHolder.view.visibility = View.VISIBLE
@@ -1647,8 +1655,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         paymentInlineViewHolder.resetPaymentCardView()
         paymentInlineViewHolder.view.visibility = View.VISIBLE
 
-
-        // bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
 
     }
 
