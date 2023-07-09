@@ -31,7 +31,7 @@ import kotlinx.android.synthetic.main.itemviewholder_layout.view.*
  *
  */
 @SuppressLint("ClickableViewAccessibility")
-class ItemsViewHolder(private val context: Context, private val onCurrencyChangedActionListener: OnCurrencyChangedActionListener) :
+class ItemsViewHolder(private val context: Context) :
     TapBaseViewHolder {
     override val view = LayoutInflater.from(context).inflate(
         R.layout.itemviewholder_layout,

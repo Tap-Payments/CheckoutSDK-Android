@@ -408,7 +408,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             cardViewModel
         )
 
-        itemsViewHolder = ItemsViewHolder(context, this)
+        itemsViewHolder = ItemsViewHolder(context)
 
         otpViewHolder = OTPViewHolder(context)
         otpViewHolder.otpView.visibility = GONE
@@ -556,13 +556,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 //                            saveCardSwitchHolder as TapBaseViewHolder
 //                        )
                     } else {
-                        addViews(
-                            businessViewHolderViewModel,
-                            amountViewHolder,
-                            cardViewHolder,
-                            paymentInlineViewHolder,
-                            saveCardSwitchHolder as TapBaseViewHolder
-                        )
+//                        addViews(
+//                            businessViewHolderViewModel,
+//                            amountViewHolder,
+//                            cardViewHolder,
+//                            paymentInlineViewHolder,
+//                            saveCardSwitchHolder as TapBaseViewHolder
+//                        )
                     }
 
 
@@ -599,20 +599,21 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     override fun displayGoPayLogin() {
-        saveCardSwitchHolder?.let {
-            removeViews(
-                businessViewHolderViewModel, amountViewHolder,
-                cardViewHolder, paymentInlineViewHolder,
-                it, otpViewHolder,
-                goPayViewsHolder
-            )
-        }
-
-        addViews(
-            businessViewHolderViewModel,
-            amountViewHolder,
-            goPayViewsHolder
-        )
+        viewTypeShowerImplementation.createViewsFromType(ViewsType.DisplayGoPayLogin)
+//        saveCardSwitchHolder?.let {
+//            removeViews(
+//                businessViewHolderViewModel, amountViewHolder,
+//                cardViewHolder, paymentInlineViewHolder,
+//                it, otpViewHolder,
+//                goPayViewsHolder
+//            )
+//        }
+//
+//        addViews(
+//            businessViewHolderViewModel,
+//            amountViewHolder,
+//            goPayViewsHolder
+//        )
         if (goPayViewsHolder.goPayopened) {
             goPayViewsHolder.goPayLoginInput.inputType = GoPayLoginMethod.PHONE
             goPayViewsHolder.goPayLoginInput.visibility = VISIBLE
@@ -625,29 +626,30 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
 
     override fun displayGoPay() {
+        viewTypeShowerImplementation.createViewsFromType(ViewsType.DisplayGoPay)
 
-        saveCardSwitchHolder?.let {
-            removeViews(
-                businessViewHolderViewModel,
-                amountViewHolder,
-                goPayViewsHolder,
-                cardViewHolder,
-                paymentInlineViewHolder,
-                it,
-                otpViewHolder
-            )
-        }
-
-        saveCardSwitchHolder?.let {
-            addViews(
-                businessViewHolderViewModel,
-                amountViewHolder,
-                goPaySavedCardHolder,
-                cardViewHolder,
-                paymentInlineViewHolder,
-                it
-            )
-        }
+//        saveCardSwitchHolder?.let {
+//            removeViews(
+//                businessViewHolderViewModel,
+//                amountViewHolder,
+//                goPayViewsHolder,
+//                cardViewHolder,
+//                paymentInlineViewHolder,
+//                it,
+//                otpViewHolder
+//            )
+//        }
+//
+//        saveCardSwitchHolder?.let {
+//            addViews(
+//                businessViewHolderViewModel,
+//                amountViewHolder,
+//                goPaySavedCardHolder,
+//                cardViewHolder,
+//                paymentInlineViewHolder,
+//                it
+//            )
+//        }
 
         cardViewHolder.view.mainChipgroup.groupAction.visibility = View.INVISIBLE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = VISIBLE
@@ -800,21 +802,22 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun setActionGoPayOpenedItemsDisplayed() {
-        removeViews(
-            cardViewHolder,
-            paymentInlineViewHolder,
-            goPayViewsHolder,
-            otpViewHolder,
-            itemsViewHolder
-        )
+        viewTypeShowerImplementation.createViewsFromType(ViewsType.SetActionGoPayOpenedItemsDisplayed)
+//        removeViews(
+//            cardViewHolder,
+//            paymentInlineViewHolder,
+//            goPayViewsHolder,
+//            otpViewHolder,
+//            itemsViewHolder
+//        )
         if (::webViewHolder.isInitialized) {
             removeViews(webViewHolder)
         }
-        addViews(
-            cardViewHolder,
-            paymentInlineViewHolder,
-            saveCardSwitchHolder as TapBaseViewHolder
-        )
+//        addViews(
+//            cardViewHolder,
+//            paymentInlineViewHolder,
+//            saveCardSwitchHolder as TapBaseViewHolder
+//        )
 
 
         paymentInlineViewHolder.resetPaymentCardView()
@@ -860,11 +863,13 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun displayOtpGoPay(phoneNumber: PhoneNumber?) {
         // otpTypeString = PaymentTypeEnum.GOPAY //temporray
-        removeViews(
-            cardViewHolder,
-            paymentInlineViewHolder, saveCardSwitchHolder as TapBaseViewHolder, amountViewHolder
-        )
-        addViews(amountViewHolder, otpViewHolder)
+//        removeViews(
+//            cardViewHolder,
+//            paymentInlineViewHolder, saveCardSwitchHolder as TapBaseViewHolder, amountViewHolder
+//        )
+//        addViews(amountViewHolder, otpViewHolder)
+
+        viewTypeShowerImplementation.createViewsFromType(ViewsType.DisplayGoPay)
 
         otpViewHolder.otpView.visibility = VISIBLE
         setOtpPhoneNumber(phoneNumber)
@@ -897,8 +902,9 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
         doAfterSpecificTime(time = 700L) {
 
-            removeViews(cardViewHolder)
-            addViews(otpViewHolder)
+//            removeViews(cardViewHolder)
+//            addViews(otpViewHolder)
+            viewTypeShowerImplementation.createViewsFromType(ViewsType.DisplayOtpCharge)
             otpViewHolder.otpView.visibility = VISIBLE
 
         }
@@ -948,22 +954,23 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun displayOtpTelecoms(phoneNumber: PhoneNumber?) {
         otpTypeString = PaymentTypeEnum.telecom
-        removeViews(
-            businessViewHolderViewModel,
-            amountViewHolder,
-            paymentInlineViewHolder,
-            cardViewHolder,
-            saveCardSwitchHolder as TapBaseViewHolder,
-            otpViewHolder
-        )
-        addViews(
-            businessViewHolderViewModel,
-            amountViewHolder,
-            cardViewHolder,
-            paymentInlineViewHolder,
-            saveCardSwitchHolder as TapBaseViewHolder,
-            otpViewHolder
-        )
+        viewTypeShowerImplementation.createViewsFromType(ViewsType.DisplayOtpTelecoms)
+//        removeViews(
+//            businessViewHolderViewModel,
+//            amountViewHolder,
+//            paymentInlineViewHolder,
+//            cardViewHolder,
+//            saveCardSwitchHolder as TapBaseViewHolder,
+//            otpViewHolder
+//        )
+//        addViews(
+//            businessViewHolderViewModel,
+//            amountViewHolder,
+//            cardViewHolder,
+//            paymentInlineViewHolder,
+//            saveCardSwitchHolder as TapBaseViewHolder,
+//            otpViewHolder
+//        )
         saveCardSwitchHolder?.view?.mainSwitch?.switchSaveMobile?.visibility = GONE
         saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = GONE
         saveCardSwitchHolder?.view?.mainSwitch?.switchSaveMobile?.setOnCheckedChangeListener { buttonView, isChecked ->

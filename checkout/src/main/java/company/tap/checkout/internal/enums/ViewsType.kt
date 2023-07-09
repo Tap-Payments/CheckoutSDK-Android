@@ -5,5 +5,12 @@ enum class ViewsType {
     SAVED_CARD,
     WEB_PAYMENT_DATA,
     CARD_PAYMENT_DATA,
-    LOYALITY
+    LOYALITY,
+    DisplayGoPayLogin,
+    DisplayGoPay,
+    CurrenciesWithItems,
+    SetActionGoPayOpenedItemsDisplayed,
+    DisplayOtpGoPay,
+    DisplayOtpCharge,
+    DisplayOtpTelecoms
 }

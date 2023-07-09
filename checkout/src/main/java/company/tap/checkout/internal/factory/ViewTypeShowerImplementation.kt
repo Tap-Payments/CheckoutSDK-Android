@@ -3,7 +3,6 @@ package company.tap.checkout.internal.factory
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
 import company.tap.checkout.internal.api.models.PaymentOption
 import company.tap.checkout.internal.api.models.SavedCard
 import company.tap.checkout.internal.enums.ViewsType
@@ -11,7 +10,6 @@ import company.tap.checkout.internal.enums.ViewsType.*
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
 import company.tap.checkout.internal.viewholders.*
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
-import company.tap.checkout.open.CheckoutFragment
 
 class ViewTypeShowerImplementation(context: Context) : ViewTypeShowerFactory,
     OnCardSelectedActionListener {
@@ -19,10 +17,15 @@ class ViewTypeShowerImplementation(context: Context) : ViewTypeShowerFactory,
 
     var businessViewHolderViewModel: BusinessViewHolder = BusinessViewHolder(context)
     var amountViewHolder = AmountViewHolder(context)
-    var cardViewHolder = CardViewHolder(context,this )
+    var cardViewHolder = CardViewHolder(context, this)
     var saveCardSwitchHolder = SwitchViewHolder(context)
     var loyaltyViewHolder = LoyaltyViewHolder(context)
     var paymentInlineViewHolder = PaymentInlineViewHolder(context)
+    var goPayViewsHolder = GoPayViewsHolder(context)
+    var otpViewHolder = OTPViewHolder(context)
+    var goPaySavedCardHolder = GoPaySavedCardHolder(context, this)
+    var itemsViewHolder = ItemsViewHolder(context)
+
 
     override fun createViewsFromType(viewType: ViewsType) {
         when (viewType) {
@@ -33,21 +36,21 @@ class ViewTypeShowerImplementation(context: Context) : ViewTypeShowerFactory,
                     cardViewHolder,
                     paymentInlineViewHolder,
                     loyaltyViewHolder,
-                    saveCardSwitchHolder  as TapBaseViewHolder
+                    saveCardSwitchHolder as TapBaseViewHolder
                 )
             }
             TOKENIZE_CARD -> {
                 addViews(
                     businessViewHolderViewModel,
                     paymentInlineViewHolder,
-                    saveCardSwitchHolder  as TapBaseViewHolder
+                    saveCardSwitchHolder as TapBaseViewHolder
                 )
             }
             SAVED_CARD -> {
                 addViews(
                     businessViewHolderViewModel,
                     paymentInlineViewHolder,
-                    saveCardSwitchHolder  as TapBaseViewHolder
+                    saveCardSwitchHolder as TapBaseViewHolder
                 )
             }
             WEB_PAYMENT_DATA -> {
@@ -55,7 +58,7 @@ class ViewTypeShowerImplementation(context: Context) : ViewTypeShowerFactory,
                     businessViewHolderViewModel,
                     amountViewHolder,
                     cardViewHolder,
-                    saveCardSwitchHolder  as TapBaseViewHolder
+                    saveCardSwitchHolder as TapBaseViewHolder
                 )
                 cardViewHolder.cardInfoHeaderText.visibility = View.GONE
             }
@@ -64,9 +67,94 @@ class ViewTypeShowerImplementation(context: Context) : ViewTypeShowerFactory,
                     businessViewHolderViewModel,
                     amountViewHolder,
                     cardViewHolder,
-                    paymentInlineViewHolder, saveCardSwitchHolder  as TapBaseViewHolder
+                    paymentInlineViewHolder, saveCardSwitchHolder as TapBaseViewHolder
                 )
                 cardViewHolder.cardInfoHeaderText.visibility = View.VISIBLE
+            }
+            DisplayGoPayLogin -> {
+                removeViews(
+                    businessViewHolderViewModel, amountViewHolder,
+                    cardViewHolder, paymentInlineViewHolder,
+                    saveCardSwitchHolder, otpViewHolder,
+                    goPayViewsHolder
+                )
+
+                addViews(
+                    businessViewHolderViewModel,
+                    amountViewHolder,
+                    goPayViewsHolder
+                )
+            }
+            DisplayGoPay -> {
+
+                removeViews(
+                    businessViewHolderViewModel,
+                    amountViewHolder,
+                    goPayViewsHolder,
+                    cardViewHolder,
+                    paymentInlineViewHolder,
+                    saveCardSwitchHolder,
+                    otpViewHolder
+                )
+
+                addViews(
+                    businessViewHolderViewModel,
+                    amountViewHolder,
+                    goPaySavedCardHolder,
+                    cardViewHolder,
+                    paymentInlineViewHolder,
+                    saveCardSwitchHolder
+                )
+            }
+            CurrenciesWithItems -> {
+
+            }
+            SetActionGoPayOpenedItemsDisplayed -> {
+                removeViews(
+                    cardViewHolder,
+                    paymentInlineViewHolder,
+                    goPayViewsHolder,
+                    otpViewHolder,
+                    itemsViewHolder
+                )
+//                if (::webViewHolder.isInitialized) {
+//                    removeViews(webViewHolder)
+//                }
+                addViews(
+                    cardViewHolder,
+                    paymentInlineViewHolder,
+                    saveCardSwitchHolder as TapBaseViewHolder
+                )
+
+            }
+            DisplayOtpGoPay -> {
+                removeViews(
+                    cardViewHolder,
+                    paymentInlineViewHolder, saveCardSwitchHolder as TapBaseViewHolder, amountViewHolder
+                )
+                addViews(amountViewHolder, otpViewHolder)
+            }
+            DisplayOtpCharge -> {
+                removeViews(cardViewHolder)
+                addViews(otpViewHolder)
+            }
+            DisplayOtpTelecoms -> {
+                removeViews(
+                    businessViewHolderViewModel,
+                    amountViewHolder,
+                    paymentInlineViewHolder,
+                    cardViewHolder,
+                    saveCardSwitchHolder as TapBaseViewHolder,
+                    otpViewHolder
+                )
+                addViews(
+                    businessViewHolderViewModel,
+                    amountViewHolder,
+                    cardViewHolder,
+                    paymentInlineViewHolder,
+                    saveCardSwitchHolder as TapBaseViewHolder,
+                    otpViewHolder
+                )
             }
         }
     }
@@ -88,7 +176,6 @@ class ViewTypeShowerImplementation(context: Context) : ViewTypeShowerFactory,
         savedCardsModel: Any?,
         isChangeBrandIcon: Boolean?
     ) {
-        TODO("Not yet implemented")
     }
 
     override fun onDisabledChipSelected(
@@ -96,11 +183,9 @@ class ViewTypeShowerImplementation(context: Context) : ViewTypeShowerFactory,
         itemView: Int?,
         isDisabledClicked: Boolean?
     ) {
-        TODO("Not yet implemented")
     }
 
     override fun onDeselectionOfItem(clearInput: Boolean) {
-        TODO("Not yet implemented")
     }
 
     override fun onDeleteIconClicked(
@@ -113,15 +198,12 @@ class ViewTypeShowerImplementation(context: Context) : ViewTypeShowerFactory,
         viewToBeBlurr: View,
         position: Int
     ) {
-        TODO("Not yet implemented")
     }
 
     override fun onGoPayLogoutClicked(isClicked: Boolean) {
-        TODO("Not yet implemented")
     }
 
     override fun removePaymentInlineShrinkageAndDimmed() {
-        TODO("Not yet implemented")
     }
 }
 
