@@ -18,6 +18,7 @@ import android.os.Looper
 import android.transition.Fade
 import android.transition.Transition
 import android.transition.TransitionManager
+import android.transition.Visibility
 import android.util.DisplayMetrics
 import android.util.Log
 import android.util.TypedValue
@@ -534,6 +535,16 @@ fun animateBS(
     changeHeight()
     androidx.transition.TransitionManager.endTransitions(fromView)
     onTransitionEnd.invoke()
+}
+fun View.isVisibileWithAnimation(isVisible:Boolean){
+    when(isVisible){
+        true ->{
+            doAfterSpecificTime(time = 2000L) {
+                fadeVisibility(View.VISIBLE)
+            }
+        }
+        false ->this.isVisible = false
+    }
 }
 
 fun MutableList<View>.addFadeInAnimationToViews(durationTime: Long = 500L) {

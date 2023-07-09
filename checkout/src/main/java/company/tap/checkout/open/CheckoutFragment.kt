@@ -117,7 +117,7 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         viewModel.isWebViewHolderFor3dsOpened.observe(
             this,
             androidx.lifecycle.Observer { isWebViewHolderOpend ->
-                topHeaderView.backButtonLinearLayout.isVisible = isWebViewHolderOpend
+                topHeaderView.backButtonLinearLayout.isVisibileWithAnimation(isWebViewHolderOpend)
             })
 
         topHeaderView.backButtonLinearLayout.setOnClickListener {

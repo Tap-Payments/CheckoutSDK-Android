@@ -1422,6 +1422,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         contextSDK: Context?
     ) {
 
+        isWebViewHolderFor3dsOpened.value = false
         SessionManager.setActiveSession(false)
         println("response val>>" + response)
         println("tabAnimatedActionButton val>>" + tabAnimatedActionButton)
