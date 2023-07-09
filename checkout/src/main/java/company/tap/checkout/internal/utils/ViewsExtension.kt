@@ -539,7 +539,7 @@ fun animateBS(
 fun View.isVisibileWithAnimation(isVisible:Boolean){
     when(isVisible){
         true ->{
-            doAfterSpecificTime(time = 2500L) {
+            doAfterSpecificTime(time = 3000L) {
                 fadeVisibility(View.VISIBLE)
             }
         }
