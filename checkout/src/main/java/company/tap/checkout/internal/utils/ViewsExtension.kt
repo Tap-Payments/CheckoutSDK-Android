@@ -9,7 +9,6 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
-import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.drawable.*
 import android.graphics.drawable.shapes.RoundRectShape
@@ -46,7 +45,6 @@ import com.bumptech.glide.Glide
 import company.tap.checkout.R
 import company.tap.checkout.internal.cache.SharedPrefManager
 import company.tap.checkout.internal.enums.ThemeMode
-import company.tap.checkout.internal.viewholders.TapBaseViewHolder
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.tapuilibraryy.themekit.ThemeManager
 import company.tap.tapuilibraryy.uikit.AppColorTheme
@@ -570,15 +568,15 @@ fun View.applyBluryToView(
     animationDuration: Int = 1000,
     showOriginalView: Boolean = false
 ) {
+
+    (this as ViewGroup).children.forEachIndexed { index, view ->
+        if (index != 0) removeView(view)
+    }
+
     Blurry.with(context).radius(radiusNeeded).sampling(sampling).animate(animationDuration)
         .onto(this as ViewGroup).apply {
             when (showOriginalView) {
-                true -> {
-                    this@applyBluryToView.getChildAt(0).visibility = View.VISIBLE
-                    this@applyBluryToView.children.forEachIndexed { index, view ->
-                        if (index != 0) this@applyBluryToView.removeView(view)
-                    }
-                }
+                true -> this@applyBluryToView.getChildAt(0).visibility = View.VISIBLE
                 false -> this@applyBluryToView.getChildAt(0).visibility = View.GONE
             }
 
