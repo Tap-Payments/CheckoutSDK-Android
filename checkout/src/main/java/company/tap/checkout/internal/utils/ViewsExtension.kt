@@ -479,7 +479,6 @@ fun MutableList<View>.addFadeOutAnimationToViews(
 
             override fun onAnimationEnd(p0: Animation?) {
                 view.visibility = View.GONE
-                view.setBackgroundColor(Color.WHITE)
                 headerLayout?.removeView(view)
                 onAnimationEnd.invoke()
 

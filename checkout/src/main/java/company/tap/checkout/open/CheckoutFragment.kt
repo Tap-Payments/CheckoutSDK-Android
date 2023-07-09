@@ -10,6 +10,7 @@ import android.view.*
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import cards.pay.paycardsrecognizer.sdk.Card
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
@@ -47,6 +48,8 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     var hideAllView = false
     lateinit var status: ChargeStatus
     private var _resetFragment: Boolean = true
+    lateinit var topHeaderView: TapBrandView
+    lateinit var checkoutLayout: LinearLayout
 
     @JvmField
     var isNfcOpened: Boolean = false
@@ -71,7 +74,11 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         super.onViewCreated(view, savedInstanceState)
 
         cardViewModel.getContext(requireContext())
-        cardViewModel.processEvent(event = CardViewEvent.IpAddressEvent,viewModel= viewModel, context = context)
+        cardViewModel.processEvent(
+            event = CardViewEvent.IpAddressEvent,
+            viewModel = viewModel,
+            context = context
+        )
         initViews(view)
         isWebViewOpened = false
         checkOutDelegate?.sessionHasStarted()
@@ -85,10 +92,10 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
                  * should put : @for check !isUserCurrencySameToMainCurrency()
                  */
                 if (cacheUserLocalCurrency()) {
-                   powerdByTapAnimationFinished.observe(this@CheckoutFragment) {
+                    powerdByTapAnimationFinished.observe(this@CheckoutFragment) {
                         if (it == true) {
-                            doAfterSpecificTime (500){
-                               addTitlePaymentAndFlag()
+                            doAfterSpecificTime(500) {
+                                addTitlePaymentAndFlag()
                                 isUserCurrencySameAsCurrencyOfApplication.observe(
                                     this@CheckoutFragment
                                 ) {
@@ -107,6 +114,19 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
 
         })
 
+        viewModel.isWebViewHolderFor3dsOpened.observe(
+            this,
+            androidx.lifecycle.Observer { isWebViewHolderOpend ->
+                topHeaderView.backButtonLinearLayout.isVisible = isWebViewHolderOpend
+            })
+
+        topHeaderView.backButtonLinearLayout.setOnClickListener {
+
+            viewModel.removeWebViewHolder()
+            viewModel.resetViewsAlreadyDismissed()
+            viewModel.isWebViewHolderFor3dsOpened.value = false
+
+        }
 
 
         enableSections()
@@ -124,9 +144,9 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
     @RequiresApi(Build.VERSION_CODES.N)
     private fun initViews(view: View) {
         bottomSheetLayout = bottomSheetDialog.findViewById(R.id.design_bottom_sheet)
-        val topHeaderView: TapBrandView = view.findViewById(R.id.tab_brand_view)
+        topHeaderView = view.findViewById(R.id.tab_brand_view)
         val inLineCardLayout: FrameLayout = view.findViewById(R.id.inline_container)
-        val checkoutLayout: LinearLayout = view.findViewById(R.id.fragment_all)
+        checkoutLayout = view.findViewById(R.id.fragment_all)
         val frameLayoutForNFc: FrameLayout = view.findViewById(R.id.fragment_container_nfc_lib)
         val webFrameLayout: FrameLayout = view.findViewById(R.id.webFrameLayout)
 
@@ -147,12 +167,13 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         )
 
         topHeaderView.visibility = View.GONE
-        bottomSheetDialog.behavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+        bottomSheetDialog.behavior.setBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
 
 
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-                when(newState){
-                    BottomSheetBehavior.STATE_EXPANDED->{
+                when (newState) {
+                    BottomSheetBehavior.STATE_EXPANDED -> {
                         topHeaderView.startPoweredByAnimation(
                             delayTime = Constants.PoweredByLayoutAnimationDelay,
                             topHeaderView.poweredByImage, onAnimationEnd =

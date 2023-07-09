@@ -13,5 +13,6 @@
     <string name="linkDescText">Please visit a Fawry Cash Location using the link below to complete your payment.</string>
 
     <string name="payText">إدفع</string>
+    <string name="back">الرجوع</string>
 
 </resources>

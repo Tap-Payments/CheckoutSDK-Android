@@ -30,7 +30,6 @@ import kotlinx.android.synthetic.main.switch_layout.view.*
 import kotlin.math.roundToInt
 
 
-
 @RequiresApi(Build.VERSION_CODES.N)
 @SuppressLint("UseCompatLoadingForDrawables")
 class WebViewHolder(
@@ -104,6 +103,8 @@ class WebViewHolder(
                         context.twoThirdHeightView().roundToInt()
                     )
                     showViewsRelatedToWebView()
+                    checkoutViewModel.isWebViewHolderFor3dsOpened.value = true
+
                 }
 
 
@@ -114,11 +115,15 @@ class WebViewHolder(
 
     private fun showViewsRelatedToWebView() {
 
-        animateBS(fromView = bottomSheetLayout, toView = sdkLayout, transitionAnimation = 1000L, changeHeight = {
-            topLinear.visibility = View.VISIBLE
-            web_view.visibility = View.VISIBLE
-            webCardview.visibility = View.VISIBLE
-        })
+        animateBS(
+            fromView = bottomSheetLayout,
+            toView = sdkLayout,
+            transitionAnimation = 1000L,
+            changeHeight = {
+                topLinear.visibility = View.VISIBLE
+                web_view.visibility = View.VISIBLE
+                webCardview.visibility = View.VISIBLE
+            })
 
     }
 
