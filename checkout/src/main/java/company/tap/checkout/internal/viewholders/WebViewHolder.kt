@@ -35,10 +35,10 @@ import kotlin.math.roundToInt
 @SuppressLint("UseCompatLoadingForDrawables")
 class WebViewHolder(
     val context: Context,
-    var redirectURL: String?=null,
+    var redirectURL: String,
     val webViewContract: WebViewContract,
     val cardViewModel: CardViewModel,
-    var authenticate: Charge?=null,
+    var authenticate: Charge?,
     val checkoutViewModel: CheckoutViewModel,
     val bottomSheetLayout: FrameLayout,
     val sdkLayout: LinearLayout,
@@ -65,10 +65,6 @@ class WebViewHolder(
         setUpWebView()
     }
 
-    fun setUrlAndCharge(url:String?,authenticateCharge:Charge?){
-        this.authenticate = authenticateCharge
-        this.redirectURL = url
-    }
 
     override fun bindViewComponents() {
 
@@ -98,7 +94,7 @@ class WebViewHolder(
         checkoutViewModel.isWebViewHolderFor3dsOpened.value = true
 
         web_view.applyConfigurationForWebView(
-            url = redirectURL.toString(),
+            url = redirectURL,
             onProgressWebViewFinishedLoading = {
                 mutableListOf(
                     paymentInlineViewHolder.view,
@@ -119,8 +115,12 @@ class WebViewHolder(
 
     }
     fun destroyWebView(){
+        web_view.removeAllViews()
         web_view.destroy()
+        web_view.loadUrl("")
+
     }
+
     private fun showViewsRelatedToWebView() {
 
         animateBS(

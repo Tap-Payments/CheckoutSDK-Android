@@ -1050,7 +1050,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     paymentInlineViewHolder,
                     cardViewHolder
                 )
-                webViewHolder.setUrlAndCharge(url = url, authenticateCharge = authenticate)
                 removeViews(
                     otpViewHolder,
                     goPaySavedCardHolder,
@@ -1631,8 +1630,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     }
 
     fun resetViewsAlreadyDismissed() {
-        webViewHolder.destroyWebView()
         removeViews(webViewHolder)
+        webViewHolder.destroyWebView()
         businessViewHolder.view.visibility = View.VISIBLE
         cardViewHolder.view.visibility = View.VISIBLE
         amountViewHolder.view.visibility = View.VISIBLE

@@ -743,7 +743,7 @@ class CardRepository : APIRequestCallback {
                 resultObservable.onNext(viewState)
             }, 4000)
         }
-        if (::chargeResponse.isInitialized && chargeResponse != null) {
+        if (::chargeResponse.isInitialized && chargeResponse != null && requestCode == CHARGE_REQ_CODE) {
             if (::viewModel.isInitialized && chargeResponse.status != ChargeStatus.IN_PROGRESS && chargeResponse.status != ChargeStatus.CANCELLED) {
                 chargeResponse?.transaction?.url?.let {
                     viewModel.displayRedirect(
