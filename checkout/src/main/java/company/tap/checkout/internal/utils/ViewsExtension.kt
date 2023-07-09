@@ -9,7 +9,6 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
-import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.drawable.*
 import android.graphics.drawable.shapes.RoundRectShape
@@ -19,6 +18,7 @@ import android.os.Looper
 import android.transition.Fade
 import android.transition.Transition
 import android.transition.TransitionManager
+import android.transition.Visibility
 import android.util.DisplayMetrics
 import android.util.Log
 import android.util.TypedValue
@@ -35,6 +35,7 @@ import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.core.os.postDelayed
 import androidx.core.view.ViewCompat
+import androidx.core.view.children
 import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
@@ -45,7 +46,6 @@ import com.bumptech.glide.Glide
 import company.tap.checkout.R
 import company.tap.checkout.internal.cache.SharedPrefManager
 import company.tap.checkout.internal.enums.ThemeMode
-import company.tap.checkout.internal.viewholders.TapBaseViewHolder
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.tapuilibraryy.themekit.ThemeManager
 import company.tap.tapuilibraryy.uikit.AppColorTheme
@@ -196,7 +196,12 @@ fun Context.applyOnDifferentThemes(
 }
 
 
-fun addShrinkageAnimationForViews(vararg views: View?,xDirection: Float=0.95f, yDirection: Float=1f, isDimmed: Boolean = false){
+fun addShrinkageAnimationForViews(
+    vararg views: View?,
+    xDirection: Float = 0.95f,
+    yDirection: Float = 1f,
+    isDimmed: Boolean = false
+) {
     views.forEach {
         it?.animate()?.scaleX(xDirection)?.scaleY(yDirection)?.setDuration(600)?.start();
         if (isDimmed) {
@@ -317,6 +322,7 @@ fun View.isRTL() = ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRE
 fun Context.twoThirdHeightView(): Double {
     return getDeviceSpecs().first.times(2.15) / 3
 }
+
 fun Context.twoThirdHeightViewWeb(): Double {
     return getDeviceSpecs().first.times(2.5) / 3
 }
@@ -479,7 +485,6 @@ fun MutableList<View>.addFadeOutAnimationToViews(
 
             override fun onAnimationEnd(p0: Animation?) {
                 view.visibility = View.GONE
-                view.setBackgroundColor(Color.WHITE)
                 headerLayout?.removeView(view)
                 onAnimationEnd.invoke()
 
@@ -500,7 +505,7 @@ fun View.slideView(
 ) {
 
     val slideAnimator = ValueAnimator
-        .ofInt(if (this.measuredHeight==newHeight) 0 else this.measuredHeight, newHeight)
+        .ofInt(if (this.measuredHeight == newHeight) 0 else this.measuredHeight, newHeight)
         .setDuration(600)
 
     slideAnimator.addUpdateListener {
@@ -530,6 +535,16 @@ fun animateBS(
     changeHeight()
     androidx.transition.TransitionManager.endTransitions(fromView)
     onTransitionEnd.invoke()
+}
+fun View.isVisibileWithAnimation(isVisible:Boolean){
+    when(isVisible){
+        true ->{
+            doAfterSpecificTime(time = 3000L) {
+                fadeVisibility(View.VISIBLE)
+            }
+        }
+        false ->fadeVisibility(View.GONE)
+    }
 }
 
 fun MutableList<View>.addFadeInAnimationToViews(durationTime: Long = 500L) {
@@ -564,6 +579,11 @@ fun View.applyBluryToView(
     animationDuration: Int = 1000,
     showOriginalView: Boolean = false
 ) {
+
+    (this as ViewGroup).children.forEachIndexed { index, view ->
+        if (index != 0) removeView(view)
+    }
+
     Blurry.with(context).radius(radiusNeeded).sampling(sampling).animate(animationDuration)
         .onto(this as ViewGroup).apply {
             when (showOriginalView) {

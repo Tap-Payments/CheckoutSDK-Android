@@ -16,14 +16,11 @@ import android.util.Log
 import android.view.View
 import android.view.View.*
 import android.view.ViewGroup
-import android.view.animation.TranslateAnimation
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.annotation.RestrictTo
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.view.setPadding
 import androidx.fragment.app.FragmentManager
@@ -36,8 +33,6 @@ import cards.pay.paycardsrecognizer.sdk.FrameManager
 import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import com.bugfender.sdk.Bugfender
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.android.gms.wallet.PaymentData
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -87,7 +82,6 @@ import company.tap.tapuilibraryy.themekit.theme.SeparatorViewTheme
 import company.tap.tapuilibraryy.uikit.AppColorTheme
 import company.tap.tapuilibraryy.uikit.atoms.TapCurrencyControlWidget
 import company.tap.tapuilibraryy.uikit.datasource.LoyaltyHeaderDataSource
-import company.tap.tapuilibraryy.uikit.doOnChangeOfResolutionDensities
 import company.tap.tapuilibraryy.uikit.enums.ActionButtonState
 import company.tap.tapuilibraryy.uikit.enums.GoPayLoginMethod
 import company.tap.tapuilibraryy.uikit.fragment.NFCFragment
@@ -106,7 +100,6 @@ import kotlinx.android.synthetic.main.itemviewholder_layout.view.*
 import kotlinx.android.synthetic.main.loyalty_view_layout.view.*
 import kotlinx.android.synthetic.main.otpview_layout.view.*
 import kotlinx.android.synthetic.main.switch_layout.view.*
-import okhttp3.internal.notifyAll
 import org.json.JSONException
 import org.json.JSONObject
 import java.math.BigDecimal
@@ -140,6 +133,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     val powerdByTapAnimationFinished = MutableLiveData<Boolean>()
     val isItemsAreOpend = MutableLiveData<Boolean>()
     val isUserCurrencySameAsCurrencyOfApplication = MutableLiveData<Boolean>()
+    val isWebViewHolderFor3dsOpened = MutableLiveData<Boolean>()
+
     private var deleteCard: Boolean = false
     private var displayItemsOpen: Boolean = false
     private var displayOtpIsOpen: Boolean = false
@@ -269,6 +264,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         powerdByTapAnimationFinished.value = false
         isItemsAreOpend.value = false
         isUserCurrencySameAsCurrencyOfApplication.value = false
+        isWebViewHolderFor3dsOpened.value = false
     }
 
     private fun initLoyaltyView() {
@@ -415,6 +411,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
 
         itemsViewHolder = ItemsViewHolder(context, this)
+
 
         otpViewHolder = OTPViewHolder(context)
         otpViewHolder.otpView.visibility = GONE
@@ -1039,6 +1036,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
             } else if (PaymentDataSource?.getWebViewType() != null && PaymentDataSource.getWebViewType() == WebViewType.THREE_DS_WEBVIEW) {
 
+
                 webViewHolder = WebViewHolder(
                     context,
                     url,
@@ -1055,7 +1053,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 removeViews(
                     otpViewHolder,
                     goPaySavedCardHolder,
-                    goPayViewsHolder
+                    goPayViewsHolder,
+                    webViewHolder
                 )
 
                 addViews(webViewHolder)
@@ -1064,6 +1063,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 )
                 saveCardSwitchHolder?.view?.cardSwitch?.payButton?.visibility = VISIBLE
                 saveCardSwitchHolder?.view?.cardSwitch?.tapLogoImage?.visibility = GONE
+
 
             }
         }
@@ -1422,6 +1422,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         contextSDK: Context?
     ) {
 
+        isWebViewHolderFor3dsOpened.value = false
         SessionManager.setActiveSession(false)
         println("response val>>" + response)
         println("tabAnimatedActionButton val>>" + tabAnimatedActionButton)
@@ -1601,7 +1602,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         removePaymentInlineShrinkageAndDimmed()
     }
 
-    private fun removeViews(vararg viewHolders: TapBaseViewHolder?, onRemoveEnd: () -> Unit = {}) {
+    fun removeViews(vararg viewHolders: TapBaseViewHolder?, onRemoveEnd: () -> Unit = {}) {
         animateBS(
             fromView = bottomSheetLayout,
             toView = sdkLayout,
@@ -1619,6 +1620,42 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 }
 
             })
+    }
+
+    fun removeWebViewHolder() {
+        if (::webViewHolder.isInitialized) {
+            removeViews(webViewHolder)
+
+        }
+
+    }
+
+    fun resetViewsAlreadyDismissed() {
+        removeViews(webViewHolder)
+        webViewHolder.destroyWebView()
+        businessViewHolder.view.visibility = View.VISIBLE
+        cardViewHolder.view.visibility = View.VISIBLE
+        amountViewHolder.view.visibility = View.VISIBLE
+        with(cardViewHolder.view.mainChipgroup) {
+            val viewsToFadeOut = mutableListOf<View>(chipsRecycler, groupAction, groupName)
+            cardViewHolder.view.cardInfoHeaderText?.let { viewsToFadeOut.add(it) }
+            viewsToFadeOut.forEachIndexed { index, view ->
+                view.visibility = View.VISIBLE
+            }
+
+        }
+
+        saveCardSwitchHolder?.view?.visibility = View.VISIBLE
+        saveCardSwitchHolder?.view?.cardSwitch?.payButton?.changeButtonState(
+            ActionButtonState.RESET
+        )
+        unActivateActionButton()
+        paymentInlineViewHolder.paymentInputContainer.applyBluryToView(showOriginalView = true)
+        paymentInlineViewHolder.clearTextInput()
+        paymentInlineViewHolder.resetPaymentCardView()
+        paymentInlineViewHolder.view.visibility = View.VISIBLE
+
+
     }
 
 
@@ -1918,7 +1955,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     isDisableOptionSelected = isDisabledClicked
                 }
 
-                onCardSelectedAction(true, paymentOption,isChangeBrandIcon = true)
+                onCardSelectedAction(true, paymentOption, isChangeBrandIcon = true)
 
             }
         }
@@ -1971,8 +2008,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     )
                     PaymentDataSource.getBinLookupResponse()?.toString()
                         ?.let { //Log.e("binResponse", it)
-                             }
-                   // Log.e("cardBrandinString", cardBrandInString.toString())
+                        }
+                    // Log.e("cardBrandinString", cardBrandInString.toString())
                     paymentInlineViewHolder.doPay(PaymentType.CARD)
 
 //                    onPayCardCompleteAction(
@@ -2377,6 +2414,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                         groupAction,
                         groupName,
                     )
+                    adapter.resetSelection()
                     if (paymentInlineViewHolder.cardInputUIStatus == CardInputUIStatus.NormalCard) {
                         viewsToFadeOut.add(amountViewHolder.view)
                     }
@@ -2993,6 +3031,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 with(cardViewHolder.view.mainChipgroup) {
                     val viewsToFadeOut = mutableListOf<View>(chipsRecycler, groupAction, groupName)
                     cardViewHolder.view.cardInfoHeaderText?.let { viewsToFadeOut.add(it) }
+                    adapter.resetSelection()
                     viewsToFadeOut.add(amountViewHolder.view)
                     paymentInlineViewHolder.paymentInputContainer.applyBluryToView()
 
@@ -3031,7 +3070,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         )
     }
 
-    private fun removeAllViews() {
+    fun removeAllViews() {
         if (::businessViewHolder.isInitialized && ::amountViewHolder.isInitialized && ::cardViewHolder.isInitialized && ::paymentInlineViewHolder.isInitialized &&
             ::goPayViewsHolder.isInitialized && ::otpViewHolder.isInitialized
         )

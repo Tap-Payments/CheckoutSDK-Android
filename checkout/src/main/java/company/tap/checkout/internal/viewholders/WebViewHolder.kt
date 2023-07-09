@@ -11,6 +11,7 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
+import com.fasterxml.jackson.annotation.ObjectIdGenerators.StringIdGenerator
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.models.Charge
 import company.tap.checkout.internal.apiresponse.CardViewModel
@@ -30,15 +31,14 @@ import kotlinx.android.synthetic.main.switch_layout.view.*
 import kotlin.math.roundToInt
 
 
-
 @RequiresApi(Build.VERSION_CODES.N)
 @SuppressLint("UseCompatLoadingForDrawables")
 class WebViewHolder(
     val context: Context,
-    val redirectURL: String,
+    var redirectURL: String,
     val webViewContract: WebViewContract,
     val cardViewModel: CardViewModel,
-    val authenticate: Charge?,
+    var authenticate: Charge?,
     val checkoutViewModel: CheckoutViewModel,
     val bottomSheetLayout: FrameLayout,
     val sdkLayout: LinearLayout,
@@ -65,6 +65,7 @@ class WebViewHolder(
         setUpWebView()
     }
 
+
     override fun bindViewComponents() {
 
     }
@@ -89,8 +90,9 @@ class WebViewHolder(
     @RequiresApi(Build.VERSION_CODES.N)
     @SuppressLint("SetJavaScriptEnabled")
     private fun setUpWebView() {
-        web_view.webViewClient =
-            cardViewModel.let { TapCustomWebViewClient(this, it, checkoutViewModel) }
+        web_view.webViewClient = cardViewModel.let { TapCustomWebViewClient(this, it, checkoutViewModel) }
+        checkoutViewModel.isWebViewHolderFor3dsOpened.value = true
+
         web_view.applyConfigurationForWebView(
             url = redirectURL,
             onProgressWebViewFinishedLoading = {
@@ -104,6 +106,7 @@ class WebViewHolder(
                         context.twoThirdHeightView().roundToInt()
                     )
                     showViewsRelatedToWebView()
+
                 }
 
 
@@ -111,14 +114,24 @@ class WebViewHolder(
 
 
     }
+    fun destroyWebView(){
+        web_view.removeAllViews()
+        web_view.destroy()
+        web_view.loadUrl("")
+
+    }
 
     private fun showViewsRelatedToWebView() {
 
-        animateBS(fromView = bottomSheetLayout, toView = sdkLayout, transitionAnimation = 1000L, changeHeight = {
-            topLinear.visibility = View.VISIBLE
-            web_view.visibility = View.VISIBLE
-            webCardview.visibility = View.VISIBLE
-        })
+        animateBS(
+            fromView = bottomSheetLayout,
+            toView = sdkLayout,
+            transitionAnimation = 1000L,
+            changeHeight = {
+                topLinear.visibility = View.VISIBLE
+                web_view.visibility = View.VISIBLE
+                webCardview.visibility = View.VISIBLE
+            })
 
     }
 
