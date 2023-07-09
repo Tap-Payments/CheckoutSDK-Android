@@ -4,6 +4,9 @@ object AppColorTheme {
 
     const val PoweredByTapBackgroundColor = "poweredByTap.backgroundColor"
     const val PoweredByTapBlurColor = "poweredByTap.blurColor"
+    const val PoweredByTapBackButtonLabelColor = "poweredByTap.backButton.labelColor"
+    const val PoweredByTapBackButtonIconColor = "poweredByTap.backButton.arrowColor"
+
     const val MerchantHeaderViewColor = "merchantHeaderView.backgroundColor"
     const val GlobalValuesColor = "GlobalValues.Colors.whiteTwo"
     const val ActionButtonBackgroundColor = "actionButton.Valid.paymentBackgroundColor"
@@ -23,7 +26,6 @@ object AppColorTheme {
     const val ControlCurrencyWidgetAmountLabelFont="CurrencyWidget.amountLabel.font"
     const val ControlCurrencyWidgetCurrencyDropDownLabelColor="CurrencyWidget.currencyDropDown.labelColor"
     const val ControlCurrencyWidgetCurrencyDropDownTintColorOfIcon="CurrencyWidget.currencyDropDown.arrowDownTint"
-
     const val ControlCurrencyWidgetMessageColor="CurrencyWidget.messageLabel.color"
 
 

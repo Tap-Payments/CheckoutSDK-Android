@@ -1,16 +1,21 @@
 package company.tap.tapuilibraryy.uikit.views
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.*
 import android.util.AttributeSet
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.cardview.widget.CardView
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibraryy.themekit.ThemeManager
 import company.tap.tapuilibraryy.R
+import company.tap.tapuilibraryy.fontskit.enums.TapFont
+import company.tap.tapuilibraryy.uikit.AppColorTheme
+import company.tap.tapuilibraryy.uikit.ktx.loadAppThemManagerFromPath
 
 
 class TapBrandView : LinearLayout {
@@ -20,6 +25,7 @@ class TapBrandView : LinearLayout {
     val constraint by lazy { findViewById<CardView>(R.id.outerConstraint_header) }
     val backButtonLinearLayout by lazy { findViewById<LinearLayout>(R.id.back_btn_linear) }
     val imageBack by lazy { findViewById<ImageView>(R.id.image_back) }
+    val backTitle by lazy { findViewById<TextView>(R.id.back_title) }
 
     @DrawableRes
     val logoIcon: Int =
@@ -63,8 +69,27 @@ class TapBrandView : LinearLayout {
     init {
         inflate(context, R.layout.tap_brandview, this)
         poweredByImage.setImageResource(logoIcon)
-        if (LocalizationManager.getLocale(context).language  == "ar"){
+        backTitle.text = LocalizationManager.getValue("back", "Common")
+
+        backTitle.setTextColor(loadAppThemManagerFromPath(AppColorTheme.PoweredByTapBackButtonLabelColor))
+        imageBack.backgroundTintList =
+            ColorStateList.valueOf(loadAppThemManagerFromPath(AppColorTheme.PoweredByTapBackButtonIconColor))
+
+
+
+        if (LocalizationManager.getLocale(context).language == "ar") {
             imageBack.rotation = 180f
+            backTitle?.typeface = Typeface.createFromAsset(
+                context?.assets, TapFont.tapFontType(
+                    TapFont.TajawalMedium
+                )
+            )
+        }else{
+            backTitle?.typeface = Typeface.createFromAsset(
+                context?.assets, TapFont.tapFontType(
+                    TapFont.RobotoRegular
+                )
+            )
         }
     }
 
