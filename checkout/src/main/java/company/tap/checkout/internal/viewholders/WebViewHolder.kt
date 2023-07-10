@@ -52,7 +52,7 @@ class WebViewHolder(
     val webViewTextTitle by lazy { view.findViewById<TapTextViewNew>(R.id.webView_Header) }
     val webViewLinear by lazy { view.findViewById<LinearLayout>(R.id.webViewLinear) }
     val topLinear by lazy { view.findViewById<LinearLayout>(R.id.topLinear1) }
-    val webCardview by lazy { view.findViewById<CardView>(R.id.webCardview) }
+  //  val webCardview by lazy { view.findViewById<CardView>(R.id.webCardview) }
 
     init {
         webViewLinear?.setBackgroundColor(loadAppThemManagerFromPath(AppColorTheme.GlobalValuesColor))
@@ -128,9 +128,9 @@ class WebViewHolder(
             toView = sdkLayout,
             transitionAnimation = 1000L,
             changeHeight = {
-                topLinear.visibility = View.VISIBLE
+              //  topLinear.visibility = View.VISIBLE
                 web_view.visibility = View.VISIBLE
-                webCardview.visibility = View.VISIBLE
+        //        webCardview.visibility = View.VISIBLE
             })
 
     }
