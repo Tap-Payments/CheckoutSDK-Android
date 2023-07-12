@@ -117,6 +117,7 @@ class WebViewHolder(
     fun destroyWebView(){
         web_view.removeAllViews()
         web_view.destroy()
+
         web_view.loadUrl("")
 
     }
