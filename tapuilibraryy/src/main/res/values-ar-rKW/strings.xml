@@ -14,5 +14,8 @@
 
     <string name="payText">إدفع</string>
     <string name="back">الرجوع</string>
+    <string name="points">نقاط</string>
+    <string name="points_abrv">نقط</string>
+
 
 </resources>

@@ -38,8 +38,11 @@ fun isLayoutRTL() =
 
 fun String.getColorWithoutOpacity(): String {
     val ifLastColorDigits = this.takeLast(2).isDigitsOnly()
-    if (ifLastColorDigits) return this.dropLast(2).toString()
-    else return this.dropLast(2)
+    val ifLastColorDigit = this.takeLast(1).isDigitsOnly()
+
+    if (ifLastColorDigits || ifLastColorDigit) return this.dropLast(2).toString()
+
+    else return this
 }
 
 fun String.formatTo2DecimalPoints(): String {

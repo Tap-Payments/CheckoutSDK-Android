@@ -16,6 +16,8 @@
     <string name="gopay">goPay</string>
     <string name="item_price">%s %s</string>
     <string name="back">Back</string>
+    <string name="points">Points</string>
+    <string name="points_abrv">Pts</string>
 
 
     <string-array name="countries_list">
