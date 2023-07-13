@@ -18,8 +18,9 @@
 
         <ImageView
             android:id="@+id/img_loyality"
-            android:layout_width="@dimen/_21sdp"
-            android:layout_height="@dimen/_23sdp"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:padding="@dimen/_1sdp"
             android:layout_marginStart="@dimen/_10sdp"
             android:src="@drawable/adcb"
             app:layout_constraintStart_toStartOf="parent"
@@ -95,6 +96,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
+            android:id="@+id/touch_points_data_group"
             app:constraint_referenced_ids="redemption_card,txt_remaining_amount_to_pay,txt_remaining_touch_points" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

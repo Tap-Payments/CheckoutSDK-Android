@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Typeface
-import android.text.method.LinkMovementMethod
 import android.util.AttributeSet
+import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -16,12 +16,10 @@ import company.tap.tapuilibraryy.themekit.ThemeManager
 import company.tap.tapuilibraryy.themekit.theme.SwitchTheme
 import company.tap.tapuilibraryy.uikit.atoms.*
 import company.tap.tapuilibraryy.uikit.datasource.LoyaltyHeaderDataSource
-import company.tap.tapuilibraryy.uikit.ktx.setBorderedView
-import company.tap.tapuilibraryy.uikit.views.TapAlertView
 import company.tap.tapuilibraryy.uikit.views.TextDrawable
 import company.tap.tapuilibraryy.R
 import company.tap.tapuilibraryy.fontskit.enums.TapFont
-import company.tap.tapuilibraryy.uikit.atoms.TapImageView
+
 
 class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
     LinearLayout(context, attrs) {
@@ -47,6 +45,7 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
     val imageLoyality by lazy { findViewById<ImageView>(R.id.img_loyality) }
     val txtLoyalityTitle by lazy { findViewById<TextView>(R.id.txt_loyality_title) }
     val txtBalanceTitle by lazy { findViewById<TextView>(R.id.txt_balance) }
+    val touchPointsDataGroup by lazy { findViewById<androidx.constraintlayout.widget.Group>(R.id.touch_points_data_group) }
 
     val txtRemainingAmountToPay by lazy { findViewById<TextView>(R.id.txt_remaining_amount_to_pay) }
     val txtRemainingTouchPoints by lazy { findViewById<TextView>(R.id.txt_remaining_touch_points) }
@@ -99,7 +98,7 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
                 "TapLoyaltySection",
                 subcomponentName = "redeem"
             )
-            append(" ADCB Touch Points")
+            append(": ADCB Touch Points")
             setTextColor(Color.parseColor(ThemeManager.getValue("loyaltyView.headerView.titleTextColor")))
             textSize = ThemeManager.getFontSize("loyaltyView.headerView.titleFont").toFloat()
             if (LocalizationManager.getLocale(context).language == "ar") {
@@ -122,7 +121,7 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
                 "TapLoyaltySection",
                 subcomponentName = "balance"
             )
-            append(" AED 520")
+            append(": AED 520")
             setTextColor(Color.parseColor(ThemeManager.getValue("loyaltyView.headerView.subTitleTextColor")))
             textSize = ThemeManager.getFontSize("loyaltyView.headerView.titleFont").toFloat()
             typeface = Typeface.createFromAsset(
@@ -181,10 +180,13 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
     }
 
     fun switchTheme() {
+
         if (switchLoyalty?.isChecked == true) {
+            touchPointsDataGroup.visibility = View.VISIBLE
             enableSwitchTheme()
 
         } else {
+            touchPointsDataGroup.visibility = View.GONE
             disableSwitchTheme()
         }
 
@@ -195,7 +197,7 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
         switchEnableTheme.thumbTint =
             Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor"))
         switchEnableTheme.trackTint =
-            Color.parseColor(ThemeManager.getValue("TapSwitchView.goPay.SwitchOnColor"))
+            Color.parseColor(ThemeManager.getValue("inlineCard.saveCardOption.switchOnThumbColor"))
         switchLoyalty.setTheme(switchEnableTheme)
     }
 
