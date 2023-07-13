@@ -57,18 +57,52 @@
             android:id="@+id/redemption_card"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_10sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/img_loyality"
             app:layout_constraintTop_toBottomOf="@id/img_loyality">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:weightSum="3"
+                android:paddingHorizontal="@dimen/_4sdp"
+                android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/_5sdp"
+                android:paddingVertical="@dimen/_8sdp"
+                android:layout_weight="1"
+                android:id="@+id/tv_redemption_amount"
                 android:text="Redemption Amount" />
 
+
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.3"
+                android:layout_gravity="center|end"
+                android:gravity="end"
+
+                android:textAlignment="textEnd"
+                android:id="@+id/tv_total_redemption_points"
+                android:text="(1000 Pts) "
+
+                />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
+                    android:layout_gravity="center|end"
+                    android:textAlignment="center"
+                    android:id="@+id/tv_total_amount"
+                    android:text="AED 100.00"
+
+                    />
+            </LinearLayout>
 
         </androidx.cardview.widget.CardView>
 
@@ -95,7 +129,7 @@
         <androidx.constraintlayout.widget.Group
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:visibility="visible"
             android:id="@+id/touch_points_data_group"
             app:constraint_referenced_ids="redemption_card,txt_remaining_amount_to_pay,txt_remaining_touch_points" />
     </androidx.constraintlayout.widget.ConstraintLayout>

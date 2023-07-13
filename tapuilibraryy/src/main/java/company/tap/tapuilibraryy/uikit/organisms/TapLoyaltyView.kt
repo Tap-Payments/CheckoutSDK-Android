@@ -1,7 +1,6 @@
 package company.tap.tapuilibraryy.uikit.organisms
 
 import android.content.Context
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Typeface
 import android.util.AttributeSet
@@ -19,6 +18,7 @@ import company.tap.tapuilibraryy.uikit.datasource.LoyaltyHeaderDataSource
 import company.tap.tapuilibraryy.uikit.views.TextDrawable
 import company.tap.tapuilibraryy.R
 import company.tap.tapuilibraryy.fontskit.enums.TapFont
+import company.tap.tapuilibraryy.uikit.getColorWithoutOpacity
 
 
 class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
@@ -42,14 +42,30 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
 
 
     val cardView by lazy { findViewById<CardView>(R.id.card_touch_point) }
+
+    /**
+     * heeader
+     */
     val imageLoyality by lazy { findViewById<ImageView>(R.id.img_loyality) }
     val txtLoyalityTitle by lazy { findViewById<TextView>(R.id.txt_loyality_title) }
     val txtBalanceTitle by lazy { findViewById<TextView>(R.id.txt_balance) }
+    val switchLoyalty by lazy { findViewById<TapSwitch>(R.id.tap_switch) }
     val touchPointsDataGroup by lazy { findViewById<androidx.constraintlayout.widget.Group>(R.id.touch_points_data_group) }
 
+    /**
+     * amount view
+     */
+
+    val redemptionCard by lazy { findViewById<CardView>(R.id.redemption_card) }
+    val textStaticAmount by lazy { findViewById<TextView>(R.id.tv_redemption_amount) }
+    val textRedemptionPoints by lazy { findViewById<TextView>(R.id.tv_total_redemption_points) }
+    val textTotalAmount by lazy { findViewById<TextView>(R.id.tv_total_amount) }
+
+    /**
+     * footer
+     */
     val txtRemainingAmountToPay by lazy { findViewById<TextView>(R.id.txt_remaining_amount_to_pay) }
     val txtRemainingTouchPoints by lazy { findViewById<TextView>(R.id.txt_remaining_touch_points) }
-    val switchLoyalty by lazy { findViewById<TapSwitch>(R.id.tap_switch) }
 
 
     private var loyaltyHeaderDataSource: LoyaltyHeaderDataSource? = null
@@ -86,7 +102,11 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
     fun setLayoutTheme() {
         cardView.apply {
             setCardBackgroundColor(Color.parseColor(ThemeManager.getValue("loyaltyView.cardView.backgroundColor")))
-            radius = 8f
+            radius = 10f
+        }
+        redemptionCard.apply {
+            setCardBackgroundColor(Color.parseColor(ThemeManager.getValue("loyaltyView.cardView.backgroundColor")))
+            radius = 10f
         }
     }
 
@@ -144,9 +164,115 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
             }
         }
 
+        txtRemainingTouchPoints.apply {
+            text = LocalizationManager.getValue(
+                "footerView",
+                "TapLoyaltySection",
+                subcomponentName = "points"
+            )
+            append(": 4,200 Points (AED 420.00)")
+            setTextColor(Color.parseColor(ThemeManager.getValue<String?>("loyaltyView.footerView.pointsTextColor").toString().getColorWithoutOpacity()))
+            textSize = ThemeManager.getFontSize("loyaltyView.footerView.pointsFont").toFloat()
+            if (LocalizationManager.getLocale(context).language == "ar") {
+                typeface = Typeface.createFromAsset(
+                    context.assets, TapFont.tapFontType(
+                        TapFont.TajawalMedium
+                    )
+                )
+            } else {
+                typeface = Typeface.createFromAsset(
+                    context.assets, TapFont.tapFontType(
+                        TapFont.RobotoRegular
+                    )
+                )
+            }
+            alpha = 0.5f
+        }
 
-        switchLoyalty.thumbTintList =
-            ColorStateList.valueOf(Color.parseColor(ThemeManager.getValue("TapSwitchView.merchant.SwitchOnColor")))
+        txtRemainingAmountToPay.apply {
+            text = LocalizationManager.getValue(
+                "footerView",
+                "TapLoyaltySection",
+                subcomponentName = "amount"
+            )
+            append(": AED 0.00")
+            setTextColor(Color.parseColor(ThemeManager.getValue<String?>("loyaltyView.footerView.amountTextColor").toString().getColorWithoutOpacity()))
+            textSize = ThemeManager.getFontSize("loyaltyView.footerView.amountFont").toFloat()
+            if (LocalizationManager.getLocale(context).language == "ar") {
+                typeface = Typeface.createFromAsset(
+                    context.assets, TapFont.tapFontType(
+                        TapFont.TajawalMedium
+                    )
+                )
+            } else {
+                typeface = Typeface.createFromAsset(
+                    context.assets, TapFont.tapFontType(
+                        TapFont.RobotoRegular
+                    )
+                )
+            }
+            alpha = 0.9f
+
+        }
+        textStaticAmount.apply {
+            text = LocalizationManager.getValue(
+                "amountView",
+                "TapLoyaltySection",
+                subcomponentName = "title"
+            )
+            setTextColor(Color.parseColor(ThemeManager.getValue("loyaltyView.amountView.titleTextColor")))
+            textSize = ThemeManager.getFontSize("loyaltyView.amountView.titleFont").toFloat()
+            if (LocalizationManager.getLocale(context).language == "ar") {
+                typeface = Typeface.createFromAsset(
+                    context.assets, TapFont.tapFontType(
+                        TapFont.TajawalMedium
+                    )
+                )
+            } else {
+                typeface = Typeface.createFromAsset(
+                    context.assets, TapFont.tapFontType(
+                        TapFont.RobotoRegular
+                    )
+                )
+            }
+        }
+         textRedemptionPoints.apply {
+             text = "(1000 Pts)"
+             setTextColor(Color.parseColor(ThemeManager.getValue("loyaltyView.amountView.pointsTextColor")))
+             textSize = ThemeManager.getFontSize("loyaltyView.amountView.pointsFont").toFloat()
+             if (LocalizationManager.getLocale(context).language == "ar") {
+                 typeface = Typeface.createFromAsset(
+                     context.assets, TapFont.tapFontType(
+                         TapFont.TajawalMedium
+                     )
+                 )
+             } else {
+                 typeface = Typeface.createFromAsset(
+                     context.assets, TapFont.tapFontType(
+                         TapFont.RobotoRegular
+                     )
+                 )
+             }
+         }
+         textTotalAmount.apply {
+             text = "AED 100.00"
+             setTextColor(Color.parseColor(ThemeManager.getValue("loyaltyView.amountView.amountTextColor")))
+             textSize = ThemeManager.getFontSize("loyaltyView.amountView.amountFont").toFloat()
+             if (LocalizationManager.getLocale(context).language == "ar") {
+                 typeface = Typeface.createFromAsset(
+                     context.assets, TapFont.tapFontType(
+                         TapFont.TajawalMedium
+                     )
+                 )
+             } else {
+                 typeface = Typeface.createFromAsset(
+                     context.assets, TapFont.tapFontType(
+                         TapFont.RobotoRegular
+                     )
+                 )
+             }
+         }
+
 
 
 //        textViewClickable.setTextColor(Color.parseColor(ThemeManager.getValue("loyaltyView.headerView.subTitleTextColor")))
