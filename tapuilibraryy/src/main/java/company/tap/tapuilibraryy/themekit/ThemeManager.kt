@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.Resources
 import android.util.Log
 import android.widget.Toast
+import androidx.core.text.isDigitsOnly
 import com.koushikdutta.ion.Ion
 import org.json.JSONException
 import org.json.JSONObject
@@ -112,7 +113,7 @@ object ThemeManager {
 
     fun getFontSize(path: String): Double {
         var fontSize: Double
-        var fontValue = getValue(path) as String
+        var fontValue = (getValue(path) as Any).toString()
         fontSize = fontValue.split(",")[1].toDouble()
         return fontSize
     }

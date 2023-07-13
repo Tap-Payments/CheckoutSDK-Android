@@ -94,6 +94,8 @@
         android:layout_marginBottom="@dimen/_10sdp"
         android:id="@+id/tap_currency_widget_payment_inline"
         />
+
+
     <company.tap.tapuilibraryy.uikit.views.TapSelectionTabLayout
         android:id="@+id/sections_tablayout"
         android:layout_width="wrap_content"

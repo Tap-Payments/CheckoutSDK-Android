@@ -19,34 +19,34 @@ All rights reserved.
  **/
 data class PaymentOptionsResponse(
     @SerializedName("id") @Expose
-    @NonNull  var id: String,
+    @NonNull var id: String,
 
     @SerializedName("order")
     @Expose
-    @NonNull  val orderID: OrderId,
+    @NonNull val orderID: OrderId,
 
     @SerializedName("object")
     @Expose
-    @NonNull  val `object`: String,
+    @NonNull val `object`: String,
 
     @SerializedName("payment_methods")
     @Expose
-    @NonNull  var paymentOptions: ArrayList<PaymentOption>,
+    @NonNull var paymentOptions: ArrayList<PaymentOption>,
 
     @SerializedName("currency")
     @Expose
-    @NonNull  val currency: String,
+    @NonNull val currency: String,
 
     @SerializedName("supported_currencies")
     @Expose
-    @NonNull  val supportedCurrencies: ArrayList<SupportedCurrencies>,
+    @NonNull val supportedCurrencies: ArrayList<SupportedCurrencies>,
 
     @SerializedName("cards")
     @Expose
-    @NonNull  val cards: ArrayList<SavedCard>,
+    val cards: ArrayList<SavedCard>? = null,
 
     @SerializedName("settlement_currency")
     @Expose
-    @Nullable  val settlement_currency: String? = null,
+    @Nullable val settlement_currency: String? = null,
 
-) : BaseResponse
+    ) : BaseResponse

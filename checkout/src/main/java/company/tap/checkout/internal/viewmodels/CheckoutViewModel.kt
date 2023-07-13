@@ -280,10 +280,12 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 loyaltyViewHolder,
                 saveCardSwitchHolder
             )
-            loyaltyViewHolder.view.loyaltyView.constraintLayout?.visibility = VISIBLE
+         //   loyaltyViewHolder.view.loyaltyView.constraintLayout?.visibility = VISIBLE
 
-        } else
-            loyaltyViewHolder.view.loyaltyView.constraintLayout?.visibility = GONE
+        } else{
+
+        }
+          //  loyaltyViewHolder.view.loyaltyView.constraintLayout?.visibility = GONE
     }
 
     private fun initializeScanner(checkoutViewModel: CheckoutViewModel) {
@@ -2141,10 +2143,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     if (bgArrayList?.size == 2) {
                         startColor = bgArrayList.get(0).replace("0x", "#")
                         endColor = bgArrayList.get(1).replace("0x", "#")
-                if(CustomUtils.getCurrentLocale(context).contains("ar")){
-                    intColorArray =
-                        intArrayOf(Color.parseColor(endColor), Color.parseColor(startColor))
-                }else intColorArray = intArrayOf(Color.parseColor(startColor), Color.parseColor(endColor))
+                        if (CustomUtils.getCurrentLocale(context).contains("ar")) {
+                            intColorArray =
+                                intArrayOf(Color.parseColor(endColor), Color.parseColor(startColor))
+                        } else intColorArray =
+                            intArrayOf(Color.parseColor(startColor), Color.parseColor(endColor))
 
                         colorBackGround = "0"
 
@@ -2153,13 +2156,17 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
                         middleColor = bgArrayList[1].replace("0x", "#")
                         endColor = bgArrayList[0].replace("0x", "#")
-                        if(CustomUtils.getCurrentLocale(context).contains("ar")){
+                        if (CustomUtils.getCurrentLocale(context).contains("ar")) {
                             intColorArray = intArrayOf(
                                 Color.parseColor(endColor),
                                 Color.parseColor(middleColor),
                                 Color.parseColor(startColor)
                             )
-                        }else intColorArray = intArrayOf(Color.parseColor(startColor), Color.parseColor(middleColor), Color.parseColor(endColor))
+                        } else intColorArray = intArrayOf(
+                            Color.parseColor(startColor),
+                            Color.parseColor(middleColor),
+                            Color.parseColor(endColor)
+                        )
                         colorBackGround = "0"
 
                     }
@@ -2176,10 +2183,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                     if (bgArrayList?.size == 2) {
                         startColor = bgArrayList.get(0).replace("0x", "#")
                         endColor = bgArrayList.get(1).replace("0x", "#")
-                        if(CustomUtils.getCurrentLocale(context).contains("ar")){
+                        if (CustomUtils.getCurrentLocale(context).contains("ar")) {
                             intColorArray =
                                 intArrayOf(Color.parseColor(endColor), Color.parseColor(startColor))
-                        }else intColorArray = intArrayOf(Color.parseColor(startColor), Color.parseColor(endColor))
+                        } else intColorArray =
+                            intArrayOf(Color.parseColor(startColor), Color.parseColor(endColor))
 
                         colorBackGround = "0"
 
@@ -2188,13 +2196,17 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
                         middleColor = bgArrayList[1].replace("0x", "#")
                         endColor = bgArrayList[0].replace("0x", "#")
-                        if(CustomUtils.getCurrentLocale(context).contains("ar")){
+                        if (CustomUtils.getCurrentLocale(context).contains("ar")) {
                             intColorArray = intArrayOf(
                                 Color.parseColor(endColor),
                                 Color.parseColor(middleColor),
                                 Color.parseColor(startColor)
                             )
-                        }else intColorArray = intArrayOf(Color.parseColor(startColor), Color.parseColor(middleColor), Color.parseColor(endColor))
+                        } else intColorArray = intArrayOf(
+                            Color.parseColor(startColor),
+                            Color.parseColor(middleColor),
+                            Color.parseColor(endColor)
+                        )
 
 
                         colorBackGround = "0"
@@ -2549,7 +2561,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
             saveCardSwitchHolder?.view?.mainSwitch?.visibility = GONE
             saveCardSwitchHolder?.view?.mainSwitch?.switchSaveMobile?.visibility = GONE
             saveCardSwitchHolder?.setSwitchToggleData(paymentType)
-            loyaltyViewHolder.view.loyaltyView?.constraintLayout?.visibility = VISIBLE
+          //  loyaltyViewHolder.view.loyaltyView?.constraintLayout?.visibility = VISIBLE
             /**
              * @TODO:  Will be enabled when coming from API directly
              */
@@ -3360,14 +3372,14 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         }
     }
 
-    private fun <E> filterByCurrenciesAndSortList(
-        list: ArrayList<E>,
+    private fun filterByCurrenciesAndSortList(
+        list: ArrayList<SavedCard>,
         currency: String
-    ): ArrayList<SavedCard> where E : CurrenciesSupport?, E : Comparable<E>? {
+    ): ArrayList<SavedCard>  {
         /**
          * Stopped generic for now to work the functionality**/
         return list.filter { items ->
-            items?.getSupportedCurrencies()?.contains(
+            items.getSupportedCurrencies()?.contains(
                 currency
             ) == true
         } as ArrayList<SavedCard>
@@ -3380,7 +3392,8 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         position: Int? = null,
         isDisabledClicked: Boolean? = null
     ) {
-        savedCardsBasedCurr = filterByCurrenciesAndSortList(paymentOptionsResponse.cards, currency)
+        if (paymentOptionsResponse.cards?.isNotEmpty() == true)
+            savedCardsBasedCurr = filterByCurrenciesAndSortList(paymentOptionsResponse.cards!!, currency)
 
         if (isDisabledClicked == true) {
             paymentInlineViewHolder.setDataWithOutSort(isDisabledClicked, currency, position)
@@ -3826,16 +3839,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     private fun logicForLoyaltyProgram() {
 
-        loyaltyViewHolder.loyaltyView.switchLoyalty?.setOnCheckedChangeListener { buttonView, isChecked ->
-            loyaltyViewHolder.loyaltyView.switchTheme()
-            if (isChecked) {
-                loyaltyViewHolder.loyaltyView.linearLayout2?.visibility = VISIBLE
-                loyaltyViewHolder.loyaltyView.linearLayout3?.visibility = VISIBLE
-            } else {
-                loyaltyViewHolder.loyaltyView.linearLayout2?.visibility = GONE
-                loyaltyViewHolder.loyaltyView.linearLayout3?.visibility = GONE
-            }
-        }
+//        loyaltyViewHolder.loyaltyView.switchLoyalty?.setOnCheckedChangeListener { buttonView, isChecked ->
+//            loyaltyViewHolder.loyaltyView.switchTheme()
+//            if (isChecked) {
+//                loyaltyViewHolder.loyaltyView.linearLayout2?.visibility = VISIBLE
+//                loyaltyViewHolder.loyaltyView.linearLayout3?.visibility = VISIBLE
+//            } else {
+//                loyaltyViewHolder.loyaltyView.linearLayout2?.visibility = GONE
+//                loyaltyViewHolder.loyaltyView.linearLayout3?.visibility = GONE
+//            }
+//        }
 
         loyaltyViewHolder.loyaltyView.setLoyaltyHeaderDataSource(
             LoyaltyHeaderDataSource(
@@ -3843,16 +3856,16 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 "https://is4-ssl.mzstatic.com/image/thumb/Purple112/v4/05/33/67/05336718-a6f6-8ca1-1ea0-0644f5071ce9/AppIcon-0-0-1x_U007emarketing-0-0-0-5-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/1200x600wa.png"
             )
         )
-
-        loyaltyViewHolder.loyaltyView.textViewClickable?.makeLinks(
-            Pair("(T&C)", View.OnClickListener {
-                val url = "https://www.adcb.com/en/tools-resources/adcb-privacy-policy/"
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse(url)
-                context.startActivity(intent)
-
-            })
-        )
+//
+//        loyaltyViewHolder.loyaltyView.textViewClickable?.makeLinks(
+//            Pair("(T&C)", View.OnClickListener {
+//                val url = "https://www.adcb.com/en/tools-resources/adcb-privacy-policy/"
+//                val intent = Intent(Intent.ACTION_VIEW)
+//                intent.data = Uri.parse(url)
+//                context.startActivity(intent)
+//
+//            })
+//        )
     }
 
 
