@@ -2,15 +2,19 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/_5sdp"
+    android:layout_marginStart="@dimen/_5sdp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="25dp"
-        android:text="AED | "
+        android:text="@string/aed"
+        android:textAlignment="textEnd"
         android:gravity="center"
         android:id="@+id/tv_currency"
         app:layout_constraintEnd_toStartOf="@id/ed_amount_"
+        android:layout_marginEnd="@dimen/_1sdp"
         app:layout_constraintTop_toTopOf="parent"
         />
 

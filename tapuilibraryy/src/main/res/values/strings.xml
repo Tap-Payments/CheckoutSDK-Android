@@ -18,6 +18,7 @@
     <string name="back">Back</string>
     <string name="points">Points</string>
     <string name="points_abrv">Pts</string>
+    <string name="aed">AED | </string>
 
 
     <string-array name="countries_list">

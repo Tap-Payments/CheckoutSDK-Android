@@ -24,6 +24,7 @@ import company.tap.tapuilibraryy.themekit.theme.SwitchTheme
 import company.tap.tapuilibraryy.uikit.atoms.*
 import company.tap.tapuilibraryy.uikit.datasource.LoyaltyHeaderDataSource
 import company.tap.tapuilibraryy.uikit.getColorWithoutOpacity
+import company.tap.tapuilibraryy.uikit.ktx.loadAppThemManagerFromPath
 import company.tap.tapuilibraryy.uikit.views.CustomEditText
 import company.tap.tapuilibraryy.uikit.views.TextDrawable
 
@@ -117,28 +118,29 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
         }
         redemptionCard.apply {
             setCardBackgroundColor(Color.parseColor(ThemeManager.getValue("loyaltyView.cardView.backgroundColor")))
+            strokeWidth = 0
             radius = 10f
-            strokeWidth = 2
-            setStrokeColor(ColorStateList.valueOf(resources.getColor(R.color.white)))
         }
         redemptionCard.setOnClickListener {
             editTextAmount.requestFocus()
         }
 
         editTextAmount.setOnFocusChangeListener { view, isFocused ->
-            if (isFocused){
+            if (isFocused) {
                 redemptionCard.apply {
+                    setStrokeColor(ColorStateList.valueOf(loadAppThemManagerFromPath("loyaltyView.amountView.focusedShadow.color")))
                     strokeWidth = 2
-                    setStrokeColor(ColorStateList.valueOf(resources.getColor(R.color.buttoncheckBox)))
+
                 }
-                Toast.makeText(editTextAmount.context, "focused", Toast.LENGTH_SHORT).show()
                 textRedemptionPoints.visibility = View.GONE
                 textTotalAmount.visibility = View.GONE
                 customEditText.visibility = View.VISIBLE
 
-            }else{
+            } else {
                 redemptionCard.apply {
-                    strokeWidth =0
+                    setStrokeColor(ColorStateList.valueOf(loadAppThemManagerFromPath("loyaltyView.amountView.unfocusedShadow.color")))
+                    strokeWidth = 0
+
                 }
                 editTextAmount.setText("")
                 textRedemptionPoints.visibility = View.VISIBLE

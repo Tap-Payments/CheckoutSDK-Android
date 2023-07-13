@@ -16,6 +16,7 @@
     <string name="back">الرجوع</string>
     <string name="points">نقاط</string>
     <string name="points_abrv">نقط</string>
+    <string name="aed"> | AED</string>
 
 
 </resources>
