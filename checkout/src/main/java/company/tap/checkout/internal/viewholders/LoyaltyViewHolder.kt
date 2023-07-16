@@ -1,36 +1,31 @@
 package company.tap.checkout.internal.viewholders
 
 import android.content.Context
-import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.net.Uri
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.EditText
+import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.core.widget.doOnTextChanged
-import com.google.android.material.card.MaterialCardView
+import androidx.constraintlayout.widget.Group
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.models.LoyaltySupportedCurrency
 import company.tap.checkout.internal.api.models.TapLoyaltyModel
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.PaymentCardComplete
+import company.tap.checkout.internal.utils.CustomUtils
+import company.tap.checkout.internal.utils.prepareViewToSlide
+import company.tap.checkout.internal.utils.showToast
+import company.tap.checkout.internal.utils.slideView
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
-import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapuilibraryy.themekit.ThemeManager
-import company.tap.tapuilibraryy.uikit.atoms.TapSwitch
-import company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
-import company.tap.tapuilibraryy.uikit.atoms.TextInputEditText
+import company.tap.tapuilibraryy.uikit.AppColorTheme
 import company.tap.tapuilibraryy.uikit.datasource.LoyaltyHeaderDataSource
 import company.tap.tapuilibraryy.uikit.ktx.loadAppThemManagerFromPath
-import company.tap.tapuilibraryy.uikit.ktx.makeLinks
 import company.tap.tapuilibraryy.uikit.organisms.TapLoyaltyView
 import java.math.BigDecimal
+
 
 class LoyaltyViewHolder(
     private val context: Context, checkoutViewModel: CheckoutViewModel,
@@ -47,15 +42,8 @@ class LoyaltyViewHolder(
 //    lateinit var textViewClickable: TapTextViewNew
 //    lateinit var switchLoyalty: TapSwitch
 //    lateinit var textViewSubTitle: TapTextViewNew
-    val editTextAmount: EditText by lazy { loyaltyView.editTextAmount }
-    val redemptionCard by lazy { loyaltyView.redemptionCard }
-    val textRedemptionPoints by lazy { loyaltyView.textRedemptionPoints }
-    val textTotalAmount by lazy { loyaltyView.textTotalAmount }
-    val errorTextView by lazy { loyaltyView.errorTextView }
 
-    lateinit var textViewRemainPoints: TapTextViewNew
-    lateinit var textViewRemainAmount: TapTextViewNew
-    lateinit var textViewTouchPoints: TapTextViewNew
+
     lateinit var constraintt: LinearLayout
 
     private var bankName: String? = null
@@ -146,21 +134,22 @@ class LoyaltyViewHolder(
         /**
          * Logic for switchLoyalty switch
          * **/
-        loyaltyView.switchLoyalty?.setOnCheckedChangeListener { buttonView, isChecked ->
-            loyaltyView.switchTheme()
+        with(loyaltyView) {
+            switchLoyalty?.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (isChecked) {
+                    touchPointsDataGroup.visibility = View.VISIBLE
+                    enableSwitchTheme()
 
-            if (isChecked) {
-//                loyaltyView.linearLayout2?.visibility = View.VISIBLE
-//                loyaltyView.linearLayout3?.visibility = View.VISIBLE
-
-            } else {
-
-//                loyaltyView.linearLayout2?.visibility = View.GONE
-//                loyaltyView.linearLayout3?.visibility = View.GONE
+                } else {
+                    touchPointsDataGroup.visibility = View.GONE
+                    disableSwitchTheme()
+                }
 
             }
         }
     }
+
+    fun Group.getReferencedViews() = referencedIds.map { rootView.findViewById<View>(it) }
 
 
     /**
@@ -183,48 +172,69 @@ class LoyaltyViewHolder(
     }
 
     private fun amountEditTextWatcher() {
-        redemptionCard.setOnClickListener {
-            with(editTextAmount) {
-                isFocusable = true
-                isClickable = true
-                isFocusableInTouchMode = true
-                isEnabled = true
-                requestFocus()
-            }
-        }
-        editTextAmount.setOnFocusChangeListener { view, isFocused ->
-            if (isFocused) {
-                redemptionCard.apply {
-                    setStrokeColor(ColorStateList.valueOf(loadAppThemManagerFromPath("loyaltyView.amountView.focusedShadow.color")))
-                    strokeWidth = 2
-
-                }
-                editTextAmount.setText("")
-                textRedemptionPoints.visibility = View.INVISIBLE
-                textTotalAmount.append(" | ")
-
-            } else {
-                redemptionCard.apply {
-                    setStrokeColor(ColorStateList.valueOf(loadAppThemManagerFromPath("loyaltyView.amountView.unfocusedShadow.color")))
-                    strokeWidth = 0
-                }
-                editTextAmount.setText("100")
-                textRedemptionPoints.visibility = View.VISIBLE
-                textTotalAmount.text =
-                    context.resources.getString(company.tap.tapuilibraryy.R.string.aed)
-
-            }
-        }
-        editTextAmount.doOnTextChanged { text, start, before, count ->
-            if (text?.isNotEmpty() == true) {
-                Log.e("data", text.toString())
-                when (text.toString().toInt() > 100) {
-                    true -> errorTextView.visibility = View.VISIBLE
-                    false -> errorTextView.visibility = View.GONE
+        with(loyaltyView) {
+            redemptionCard.setOnClickListener {
+                with(loyaltyView.editTextAmount) {
+                    isFocusable = true
+                    isClickable = true
+                    isFocusableInTouchMode = true
+                    isEnabled = true
+                    requestFocus()
                 }
             }
+            editTextAmount.setOnFocusChangeListener { view, isFocused ->
+                if (isFocused) {
+                    redemptionCard.apply {
+                        setStrokeColor(
+                            ColorStateList.valueOf(
+                                loadAppThemManagerFromPath(
+                                    AppColorTheme.LoyalityWidgetFocusedShadow
+                                )
+                            )
+                        )
+                        strokeWidth = 2
 
+                    }
+                    editTextAmount.setText("")
+                    textRedemptionPoints.visibility = View.INVISIBLE
+                    textCurrency.append(" | ")
+                    CustomUtils.showKeyboard(context)
+
+                } else {
+                    redemptionCard.apply {
+                        setStrokeColor(
+                            ColorStateList.valueOf(
+                                loadAppThemManagerFromPath(
+                                    AppColorTheme.LoyalityWidgetUnFocusedShadow
+                                )
+                            )
+                        )
+                        strokeWidth = 0
+                    }
+                    textRedemptionPoints.visibility = View.VISIBLE
+                    textCurrency.text =
+                        context.resources.getString(company.tap.tapuilibraryy.R.string.aed)
+
+                }
+            }
+
+
+            editTextAmount.setOnEditorActionListener { v, actionId, event ->
+                if (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER || actionId == EditorInfo.IME_ACTION_DONE) {
+                    editTextAmount.clearFocus()
+
+                    when (editTextAmount.text.toString()
+                        .isNotEmpty() && editTextAmount.text.toString()
+                        .toInt() > 100) {
+                        true -> showErrorView()
+                        false -> dismissErrorView()
+                    }
+                }
+                false
+            }
         }
+
+
 //        editTextAmount.addTextChangedListener(object : TextWatcher {
 //            override fun onTextChanged(
 //                s: CharSequence, start: Int, before: Int,
@@ -271,58 +281,72 @@ class LoyaltyViewHolder(
 //        })
     }
 
-    private fun reCalculateAmount(previousBalance: BigDecimal?, amountTypedInText: BigDecimal) {
-        // println("previousBalance>>"+previousBalance)
-        //  println("newBalance>>"+newBalance)
-        if (previousBalance != null) {
-            newBalance = previousBalance.minus(amountTypedInText)
-
-
-            if (newBalance!!.toInt() >= 0 && newBalance!!.toInt() <= previousBalance.toInt()) {
-                textViewRemainAmount.text =
-                    remainingAmountText + " : " + arrayListLoyal?.get(1).currency + " " + newBalance
-            } else {
-//                loyaltyView.loyaltyAlertView?.visibility = View.VISIBLE
-//                loyaltyView.loyaltyAlertView?.alertMessage?.text =
-//                    alertMessage + " " + arrayListLoyal?.get(1).currency + "20.00"
-
-                textViewRemainAmount.text =
-                    remainingAmountText + " : " + arrayListLoyal?.get(1).currency + "  " + initialBalance
-            }
-
-
+    private fun showErrorView() {
+        with(loyaltyView) {
+            errorTextView.prepareViewToSlide()
+            changeColorOfTextsInErrorView()
         }
-
     }
 
-    private fun reCalculateTouchPoints(previousTouchPoints: Int?, reflectedTouchPoints: Int) {
-        //  println("previousTouchPoints>>"+previousTouchPoints)
-        //   println("newTouchPoints>>"+newTouchPoints)
-        if (previousTouchPoints != null) {
-            newTouchPoints = previousTouchPoints - reflectedTouchPoints
-
-            if (newTouchPoints!! < 0 && newTouchPoints!! < tapLoyaltyModel?.transactionsCount?.replace(
-                    ",",
-                    ""
-                )?.toInt()!!
-            ) {
-//                loyaltyView.loyaltyAlertView?.visibility = View.VISIBLE
-//                loyaltyView.loyaltyAlertView?.alertMessage?.text = "Insufficent Touchpoints"
-
-            }
-
-            if (newBalance!!.toInt() >= 0 && newBalance!!.toInt() <= newTouchPoints!!) {
-                textViewRemainPoints.text =
-                    remainingPointsText + " " + tapLoyaltyModel?.loyaltyPointsName + " : " + newTouchPoints
-            } else {
-                //  loyaltyView.loyaltyAlertView?.visibility = View.VISIBLE
-                textViewRemainAmount.text =
-                    remainingPointsText + " " + tapLoyaltyModel?.loyaltyPointsName + " : " + initialTouchPoints
-            }
-
-
+    private fun dismissErrorView() {
+        with(loyaltyView) {
+            errorTextView.slideView(0)
+            changeColorOfTextsInNormalView()
         }
-
     }
+
+//    private fun reCalculateAmount(previousBalance: BigDecimal?, amountTypedInText: BigDecimal) {
+//        // println("previousBalance>>"+previousBalance)
+//        //  println("newBalance>>"+newBalance)
+//        if (previousBalance != null) {
+//            newBalance = previousBalance.minus(amountTypedInText)
+//
+//
+//            if (newBalance!!.toInt() >= 0 && newBalance!!.toInt() <= previousBalance.toInt()) {
+//                textViewRemainAmount.text =
+//                    remainingAmountText + " : " + arrayListLoyal?.get(1).currency + " " + newBalance
+//            } else {
+////                loyaltyView.loyaltyAlertView?.visibility = View.VISIBLE
+////                loyaltyView.loyaltyAlertView?.alertMessage?.text =
+////                    alertMessage + " " + arrayListLoyal?.get(1).currency + "20.00"
+//
+//                textViewRemainAmount.text =
+//                    remainingAmountText + " : " + arrayListLoyal?.get(1).currency + "  " + initialBalance
+//            }
+//
+//
+//        }
+//
+//    }
+//
+//    private fun reCalculateTouchPoints(previousTouchPoints: Int?, reflectedTouchPoints: Int) {
+//        //  println("previousTouchPoints>>"+previousTouchPoints)
+//        //   println("newTouchPoints>>"+newTouchPoints)
+//        if (previousTouchPoints != null) {
+//            newTouchPoints = previousTouchPoints - reflectedTouchPoints
+//
+//            if (newTouchPoints!! < 0 && newTouchPoints!! < tapLoyaltyModel?.transactionsCount?.replace(
+//                    ",",
+//                    ""
+//                )?.toInt()!!
+//            ) {
+////                loyaltyView.loyaltyAlertView?.visibility = View.VISIBLE
+////                loyaltyView.loyaltyAlertView?.alertMessage?.text = "Insufficent Touchpoints"
+//
+//            }
+//
+//            if (newBalance!!.toInt() >= 0 && newBalance!!.toInt() <= newTouchPoints!!) {
+//                textViewRemainPoints.text =
+//                    remainingPointsText + " " + tapLoyaltyModel?.loyaltyPointsName + " : " + newTouchPoints
+//            } else {
+//                //  loyaltyView.loyaltyAlertView?.visibility = View.VISIBLE
+//                textViewRemainAmount.text =
+//                    remainingPointsText + " " + tapLoyaltyModel?.loyaltyPointsName + " : " + initialTouchPoints
+//            }
+//
+//
+//        }
+//
+//    }
 }
 

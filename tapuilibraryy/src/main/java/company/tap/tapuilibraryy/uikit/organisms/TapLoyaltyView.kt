@@ -6,15 +6,12 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.util.AttributeSet
-import android.util.Log
-import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextClock
 import android.widget.TextView
-import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.Group
 import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
 import company.tap.taplocalizationkit.LocalizationManager
@@ -23,11 +20,30 @@ import company.tap.tapuilibraryy.fontskit.enums.TapFont
 import company.tap.tapuilibraryy.themekit.ThemeManager
 import company.tap.tapuilibraryy.themekit.theme.SwitchTheme
 import company.tap.tapuilibraryy.uikit.AppColorTheme
-import company.tap.tapuilibraryy.uikit.atoms.*
+import company.tap.tapuilibraryy.uikit.AppColorTheme.LoyalityWidgetAmountPlaceHolderColor
+import company.tap.tapuilibraryy.uikit.AppColorTheme.LoyalityWidgetAmountViewAmountTextColor
+import company.tap.tapuilibraryy.uikit.AppColorTheme.LoyalityWidgetAmountViewAmountTextFont
+import company.tap.tapuilibraryy.uikit.AppColorTheme.LoyalityWidgetAmountViewTitleTextColor
+import company.tap.tapuilibraryy.uikit.AppColorTheme.LoyalityWidgetAmountViewTitleTextFont
+import company.tap.tapuilibraryy.uikit.AppColorTheme.LoyalityWidgetAmountViewPointsFont
+import company.tap.tapuilibraryy.uikit.AppColorTheme.LoyalityWidgetAmountViewPointsTextColor
+import company.tap.tapuilibraryy.uikit.AppColorTheme.LoyalityWidgetCardViewBackgroundColor
+import company.tap.tapuilibraryy.uikit.AppColorTheme.LoyalityWidgetCardViewRadius
+import company.tap.tapuilibraryy.uikit.AppColorTheme.LoyalityWidgetFooterViewPointsFont
+import company.tap.tapuilibraryy.uikit.AppColorTheme.LoyalityWidgetFooterViewPointsTextColor
+import company.tap.tapuilibraryy.uikit.AppColorTheme.LoyalityWidgetHeaderFont
+import company.tap.tapuilibraryy.uikit.AppColorTheme.LoyalityWidgetHeaderSubtitle
+import company.tap.tapuilibraryy.uikit.AppColorTheme.LoyalityWidgetHeaderTitleTextColor
+import company.tap.tapuilibraryy.uikit.AppColorTheme.LoyalityWidgetInvalidAmountBackgroundColor
+import company.tap.tapuilibraryy.uikit.AppColorTheme.LoyalityWidgetInvalidAmountFont
+import company.tap.tapuilibraryy.uikit.AppColorTheme.LoyalityWidgetInvalidAmountTextColor
+import company.tap.tapuilibraryy.uikit.AppColorTheme.LoyalityWidgetSwitchTintColor
+import company.tap.tapuilibraryy.uikit.AppColorTheme.LoyalityWidgetTapSwitchBackgroundColor
+import company.tap.tapuilibraryy.uikit.AppColorTheme.LoyalityWidgetTapSwitchTintColor
+import company.tap.tapuilibraryy.uikit.atoms.TapSwitch
 import company.tap.tapuilibraryy.uikit.datasource.LoyaltyHeaderDataSource
 import company.tap.tapuilibraryy.uikit.getColorWithoutOpacity
 import company.tap.tapuilibraryy.uikit.ktx.loadAppThemManagerFromPath
-import company.tap.tapuilibraryy.uikit.views.CustomEditText
 import company.tap.tapuilibraryy.uikit.views.TextDrawable
 
 
@@ -54,13 +70,13 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
     val cardView by lazy { findViewById<CardView>(R.id.card_touch_point) }
 
     /**
-     * heeader
+     * header
      */
     val imageLoyality by lazy { findViewById<ImageView>(R.id.img_loyality) }
     val txtLoyalityTitle by lazy { findViewById<TextView>(R.id.txt_loyality_title) }
     val txtBalanceTitle by lazy { findViewById<TextView>(R.id.txt_balance) }
     val switchLoyalty by lazy { findViewById<TapSwitch>(R.id.tap_switch) }
-    val touchPointsDataGroup by lazy { findViewById<androidx.constraintlayout.widget.Group>(R.id.touch_points_data_group) }
+    val touchPointsDataGroup by lazy { findViewById<Group>(R.id.touch_points_data_group) }
     val txtTermsAndConditions by lazy { findViewById<TextView>(R.id.txt_terms_conditions) }
 
     /**
@@ -70,7 +86,7 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
     val redemptionCard by lazy { findViewById<MaterialCardView>(R.id.redemption_card) }
     val textStaticAmount by lazy { findViewById<TextView>(R.id.tv_redemption_amount) }
     val textRedemptionPoints by lazy { findViewById<TextView>(R.id.tv_total_redemption_points) }
-    val textTotalAmount by lazy { findViewById<TextView>(R.id.tv_total_amount) }
+    val textCurrency by lazy { findViewById<TextView>(R.id.tv_total_amount) }
     val editTextAmount by lazy { findViewById<EditText>(R.id.ed_amount) }
     val errorTextView by lazy { findViewById<TextView>(R.id.tv_error) }
 
@@ -104,25 +120,20 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
 //            Color.parseColor(ThemeManager.getValue("loyaltyView.cardView.backgroundColor"))//shadow color
 //        )
         setLayoutTheme()
-
         textViewsThemeIng()
-
-        switchTheme()
 
 
     }
 
     fun setLayoutTheme() {
-        //customEditText.visibility = View.GONE
-
         cardView.apply {
-            setCardBackgroundColor(Color.parseColor(ThemeManager.getValue("loyaltyView.cardView.backgroundColor")))
-            radius = 10f
+            setCardBackgroundColor(loadAppThemManagerFromPath(LoyalityWidgetCardViewBackgroundColor))
+            radius = ThemeManager.getValue(LoyalityWidgetCardViewRadius)
         }
         redemptionCard.apply {
-            setCardBackgroundColor(Color.parseColor(ThemeManager.getValue("loyaltyView.cardView.backgroundColor")))
+            setCardBackgroundColor(loadAppThemManagerFromPath(LoyalityWidgetCardViewBackgroundColor))
             strokeWidth = 0
-            radius = 10f
+            radius = ThemeManager.getValue(LoyalityWidgetCardViewRadius)
         }
 
 
@@ -136,9 +147,9 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
                 "TapLoyaltySection",
                 subcomponentName = "tc"
             )
-            setTextColor(loadAppThemManagerFromPath(AppColorTheme.LoyalityWidgetSwitchTintColor))
+            setTextColor(loadAppThemManagerFromPath(LoyalityWidgetSwitchTintColor))
             paintFlags = this.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-            textSize = ThemeManager.getFontSize(AppColorTheme.LoyalityWidgetHeaderFont).toFloat()
+            textSize = ThemeManager.getFontSize(LoyalityWidgetHeaderFont).toFloat()
             applyFontAccordingToLocalization(this)
 
         }
@@ -149,8 +160,8 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
                 subcomponentName = "redeem"
             )
             append(": ADCB Touch Points")
-            setTextColor(Color.parseColor(ThemeManager.getValue("loyaltyView.headerView.titleTextColor")))
-            textSize = ThemeManager.getFontSize("loyaltyView.headerView.titleFont").toFloat()
+            setTextColor(loadAppThemManagerFromPath(LoyalityWidgetHeaderTitleTextColor))
+            textSize = ThemeManager.getFontSize(AppColorTheme.LoyalityWidgetHeaderFont).toFloat()
             applyFontAccordingToLocalization(this)
 
         }
@@ -160,18 +171,12 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
                 "TapLoyaltySection",
                 subcomponentName = "balance"
             )
-            append(": AED 520")
-            setTextColor(Color.parseColor(ThemeManager.getValue("loyaltyView.headerView.subTitleTextColor")))
-            textSize = ThemeManager.getFontSize("loyaltyView.headerView.titleFont").toFloat()
-            typeface = Typeface.createFromAsset(
-                context.assets, TapFont.tapFontType(
-                    TapFont.RobotoRegular
-                )
-            )
+            append(" : AED 520")
+            setTextColor(loadAppThemManagerFromPath(LoyalityWidgetHeaderSubtitle))
+            textSize = ThemeManager.getFontSize(LoyalityWidgetHeaderFont).toFloat()
             applyFontAccordingToLocalization(this)
 
         }
-
         txtRemainingTouchPoints.apply {
             text = LocalizationManager.getValue(
                 "footerView",
@@ -181,16 +186,15 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
             append(": 4,200 ${resources.getString(R.string.points)} (AED 420.00)")
             setTextColor(
                 Color.parseColor(
-                    ThemeManager.getValue<String?>("loyaltyView.footerView.pointsTextColor")
+                    ThemeManager.getValue<String?>(LoyalityWidgetFooterViewPointsTextColor)
                         .toString().getColorWithoutOpacity()
                 )
             )
-            textSize = ThemeManager.getFontSize("loyaltyView.footerView.pointsFont").toFloat()
+            textSize = ThemeManager.getFontSize(LoyalityWidgetFooterViewPointsFont).toFloat()
             applyFontAccordingToLocalization(this)
 
             alpha = 0.5f
         }
-
         txtRemainingAmountToPay.apply {
             text = LocalizationManager.getValue(
                 "footerView",
@@ -216,68 +220,77 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
                 "TapLoyaltySection",
                 subcomponentName = "title"
             )
-            setTextColor(Color.parseColor(ThemeManager.getValue("loyaltyView.amountView.titleTextColor")))
-            textSize = ThemeManager.getFontSize("loyaltyView.amountView.titleFont").toFloat()
+            textSize = ThemeManager.getFontSize(LoyalityWidgetAmountViewTitleTextFont)
+                .toFloat()
             applyFontAccordingToLocalization(this)
 
         }
         editTextAmount.apply {
-            textSize = ThemeManager.getFontSize("loyaltyView.amountView.amountFont").toFloat()
-            setHintTextColor(ColorStateList.valueOf(Color.parseColor(ThemeManager.getValue("loyaltyView.amountView.amountPlaceHolderColor"))))
-            setTextColor(Color.parseColor(ThemeManager.getValue("loyaltyView.amountView.amountTextColor")))
+            textSize =
+                ThemeManager.getFontSize(LoyalityWidgetAmountViewAmountTextFont)
+                    .toFloat()
+            setHintTextColor(
+                ColorStateList.valueOf(
+                    loadAppThemManagerFromPath(
+                        LoyalityWidgetAmountPlaceHolderColor
+                    )
+                )
+            )
             applyFontAccordingToLocalization(this)
 
         }
         textRedemptionPoints.apply {
             text = "(1000 ${resources.getString(R.string.points_abrv)})"
-            setTextColor(Color.parseColor(ThemeManager.getValue("loyaltyView.amountView.pointsTextColor")))
-            textSize = ThemeManager.getFontSize("loyaltyView.amountView.pointsFont").toFloat()
+            setTextColor(loadAppThemManagerFromPath(LoyalityWidgetAmountViewPointsTextColor))
+            textSize = ThemeManager.getFontSize(LoyalityWidgetAmountViewPointsFont).toFloat()
             applyFontAccordingToLocalization(this)
 
         }
-        textTotalAmount.apply {
-            setTextColor(Color.parseColor(ThemeManager.getValue("loyaltyView.amountView.amountTextColor")))
-            textSize = ThemeManager.getFontSize("loyaltyView.amountView.amountFont").toFloat()
+        textCurrency.apply {
+            textSize = ThemeManager.getFontSize(LoyalityWidgetAmountViewAmountTextFont).toFloat()
             applyFontAccordingToLocalization(this)
         }
 
         errorTextView.apply {
-            setBackgroundColor(loadAppThemManagerFromPath((AppColorTheme.LoyalityWidgetInvalidAmountBackgroundColor).getColorWithoutOpacity()))
-            setTextColor(loadAppThemManagerFromPath(AppColorTheme.LoyalityWidgetInvalidAmountTextColor))
-            textSize =
-                ThemeManager.getFontSize(AppColorTheme.LoyalityWidgetInvalidAmountFont).toFloat()
+            setBackgroundColor(    Color.parseColor(
+                ThemeManager.getValue<String?>(LoyalityWidgetInvalidAmountBackgroundColor)
+                    .toString().getColorWithoutOpacity()
+            ))
+            background.alpha =60
+            setTextColor(loadAppThemManagerFromPath(LoyalityWidgetInvalidAmountTextColor))
+            textSize = ThemeManager.getFontSize(LoyalityWidgetInvalidAmountFont).toFloat()
 
         }
+        changeColorOfTextsInNormalView()
 
+    }
 
-//        textViewClickable.setTextColor(Color.parseColor(ThemeManager.getValue("loyaltyView.headerView.subTitleTextColor")))
-//        textViewClickable.textSize =
-//            ThemeManager.getFontSize("loyaltyView.headerView.subTitleFont").toFloat()
-//
-//        editTextAmount.setTextColor(Color.parseColor(ThemeManager.getValue("loyaltyView.amountView.amountTextColor")))
-//        textViewCurrency.setTextColor(Color.parseColor(ThemeManager.getValue("loyaltyView.amountView.amountTextColor")))
-//        editTextAmount.textSize =
-//            ThemeManager.getFontSize("loyaltyView.amountView.amountFont").toFloat()
-//
-//        textViewSubTitle.setTextColor(Color.parseColor(ThemeManager.getValue("loyaltyView.amountView.titleTextColor")))
-//        textViewSubTitle.textSize =
-//            ThemeManager.getFontSize("loyaltyView.amountView.titleFont").toFloat()
-//
-//        textViewCurrency.setTextColor(Color.parseColor(ThemeManager.getValue("loyaltyView.amountView.currencyTextColor")))
-//        textViewCurrency.textSize =
-//            ThemeManager.getFontSize("loyaltyView.amountView.currencyFont").toFloat()
-//
-//        textViewTouchPoints.setTextColor(Color.parseColor(ThemeManager.getValue("loyaltyView.amountView.pointsTextColor")))
-//        textViewTouchPoints.textSize =
-//            ThemeManager.getFontSize("loyaltyView.amountView.pointsFont").toFloat()
-//
-//        textViewRemainPoints.setTextColor(Color.parseColor(ThemeManager.getValue("loyaltyView.footerView.pointsTextColor")))
-//        textViewRemainPoints.textSize =
-//            ThemeManager.getFontSize("loyaltyView.footerView.pointsFont").toFloat()
-//
-//        textViewRemainAmount.setTextColor(Color.parseColor(ThemeManager.getValue("loyaltyView.footerView.amountTextColor")))
-//        textViewRemainAmount.textSize =
-//            ThemeManager.getFontSize("loyaltyView.footerView.amountFont").toFloat()
+    fun changeColorOfTextsInErrorView() {
+        textStaticAmount.apply {
+            setTextColor(loadAppThemManagerFromPath(LoyalityWidgetInvalidAmountTextColor))
+        }
+        textCurrency.apply {
+            setTextColor(loadAppThemManagerFromPath(LoyalityWidgetInvalidAmountTextColor))
+        }
+        editTextAmount.apply {
+            setTextColor(loadAppThemManagerFromPath(LoyalityWidgetInvalidAmountTextColor))
+            setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.error_msg_icon, 0);
+
+        }
+    }
+
+    fun changeColorOfTextsInNormalView() {
+        textStaticAmount.apply {
+            setTextColor(loadAppThemManagerFromPath(LoyalityWidgetAmountViewTitleTextColor))
+        }
+        textCurrency.apply {
+            setTextColor(loadAppThemManagerFromPath(LoyalityWidgetAmountViewAmountTextColor))
+        }
+        editTextAmount.apply {
+            setTextColor(loadAppThemManagerFromPath(LoyalityWidgetAmountViewAmountTextColor))
+            setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+
+        }
     }
 
     private fun TextView?.applyFontAccordingToLocalization(textView: TextView) {
@@ -298,45 +311,22 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
         }
     }
 
-    fun switchTheme() {
-
-        if (switchLoyalty?.isChecked == true) {
-            touchPointsDataGroup.visibility = View.VISIBLE
-            enableSwitchTheme()
-
-        } else {
-            touchPointsDataGroup.visibility = View.GONE
-            disableSwitchTheme()
-        }
-
-    }
-
-    private fun enableSwitchTheme() {
+    fun enableSwitchTheme() {
         val switchEnableTheme = SwitchTheme()
         switchEnableTheme.thumbTint =
-            Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor"))
-        switchEnableTheme.trackTint =
-            Color.parseColor(ThemeManager.getValue("loyaltyView.headerView.switchOnTintColor"))
+            loadAppThemManagerFromPath(LoyalityWidgetTapSwitchBackgroundColor)
+        switchEnableTheme.trackTint = loadAppThemManagerFromPath(LoyalityWidgetTapSwitchTintColor)
         switchLoyalty.setTheme(switchEnableTheme)
     }
 
-    private fun disableSwitchTheme() {
-        Log.e(
-            "switchColor",
-            ThemeManager.getValue<String>("TapSwitchView.main.backgroundColor").toString()
-        )
+    fun disableSwitchTheme() {
         val switchDisableTheme = SwitchTheme()
         switchDisableTheme.thumbTint =
-            Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor"))
+            loadAppThemManagerFromPath(LoyalityWidgetTapSwitchBackgroundColor)
         switchDisableTheme.trackTint =
-            Color.parseColor(ThemeManager.getValue("TapSwitchView.main.backgroundColor"))
+            loadAppThemManagerFromPath(LoyalityWidgetTapSwitchBackgroundColor)
         switchLoyalty.setTheme(switchDisableTheme)
     }
-
-//    fun setLinkClickable() {
-//        textViewClickable.movementMethod = LinkMovementMethod.getInstance()
-//    }
-
 
     /**
      * @param loyaltyHeaderDataSource is set via the consumer app for bankName,

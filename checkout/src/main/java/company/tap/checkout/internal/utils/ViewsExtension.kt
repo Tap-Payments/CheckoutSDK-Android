@@ -519,6 +519,19 @@ fun View.slideView(
     animationSet.play(slideAnimator);
     animationSet.start()
 }
+fun View.prepareViewToSlide() {
+    doAfterSpecificTime(500L) {
+        this.post(Runnable {
+            this.measure(
+                View.MeasureSpec.UNSPECIFIED,
+                View.MeasureSpec.UNSPECIFIED
+            )
+            val height: Int = this.measuredHeight
+            this.slideView(height)
+            this.visibility = View.VISIBLE
+        })
+    }
+}
 
 fun animateBS(
     changeHeight: () -> Unit,
