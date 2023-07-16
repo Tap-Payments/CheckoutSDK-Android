@@ -1,8 +1,10 @@
 package company.tap.checkout.internal.viewholders
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.os.Build
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +24,7 @@ import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.tapuilibraryy.themekit.ThemeManager
 import company.tap.tapuilibraryy.uikit.AppColorTheme
 import company.tap.tapuilibraryy.uikit.datasource.LoyaltyHeaderDataSource
+import company.tap.tapuilibraryy.uikit.doOnLanguageChange
 import company.tap.tapuilibraryy.uikit.ktx.loadAppThemManagerFromPath
 import company.tap.tapuilibraryy.uikit.organisms.TapLoyaltyView
 import java.math.BigDecimal
@@ -171,6 +174,7 @@ class LoyaltyViewHolder(
         setData()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun amountEditTextWatcher() {
         with(loyaltyView) {
             redemptionCard.setOnClickListener {
@@ -185,6 +189,11 @@ class LoyaltyViewHolder(
             editTextAmount.setOnFocusChangeListener { view, isFocused ->
                 if (isFocused) {
                     redemptionCard.apply {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                            outlineSpotShadowColor =
+                                loadAppThemManagerFromPath(AppColorTheme.LoyalityWidgetFocusedShadow)
+                            cardElevation = 10f
+                        }
                         setStrokeColor(
                             ColorStateList.valueOf(
                                 loadAppThemManagerFromPath(
@@ -192,16 +201,27 @@ class LoyaltyViewHolder(
                                 )
                             )
                         )
-                        strokeWidth = 2
+                        strokeWidth = 1
+
 
                     }
                     editTextAmount.setText("")
                     textRedemptionPoints.visibility = View.INVISIBLE
-                    textCurrency.append(" | ")
+                    context.doOnLanguageChange(doOnArabic = {
+                        textCurrency.text = " | " + resources.getString(R.string.aed)
+                    }, doOnEnGlish = {
+                        textCurrency.append(" | ")
+                    })
                     CustomUtils.showKeyboard(context)
 
                 } else {
                     redemptionCard.apply {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                            cardElevation = 10f
+                            elevation=10f
+                            outlineSpotShadowColor =
+                                loadAppThemManagerFromPath(AppColorTheme.LoyalityWidgetUnFocusedShadow)
+                        }
                         setStrokeColor(
                             ColorStateList.valueOf(
                                 loadAppThemManagerFromPath(
@@ -209,8 +229,9 @@ class LoyaltyViewHolder(
                                 )
                             )
                         )
-                        strokeWidth = 0
+                        strokeWidth = 1
                     }
+
                     textRedemptionPoints.visibility = View.VISIBLE
                     textCurrency.text =
                         context.resources.getString(company.tap.tapuilibraryy.R.string.aed)

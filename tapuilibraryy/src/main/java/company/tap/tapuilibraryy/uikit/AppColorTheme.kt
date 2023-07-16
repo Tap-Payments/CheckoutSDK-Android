@@ -40,7 +40,7 @@ object AppColorTheme {
     const val LoyalityWidgetHeaderTitleTextColor="loyaltyView.headerView.titleTextColor"
     const val LoyalityWidgetInvalidAmountFont = "loyaltyView.amountView.invalidAmount.hintFont"
     const val LoyalityWidgetFocusedShadow = "loyaltyView.amountView.focusedShadow.color"
-    const val LoyalityWidgetUnFocusedShadow = "loyaltyView.amountView.focusedShadow.color"
+    const val LoyalityWidgetUnFocusedShadow = "loyaltyView.amountView.unfocusedShadow.color"
     const val LoyalityWidgetAmountViewTitleTextColor = "loyaltyView.amountView.titleTextColor"
     const val LoyalityWidgetAmountViewTitleTextFont = "loyaltyView.amountView.titleFont"
     const val LoyalityWidgetAmountViewAmountTextFont = "loyaltyView.amountView.amountFont"

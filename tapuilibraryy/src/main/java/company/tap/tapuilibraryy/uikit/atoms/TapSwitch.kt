@@ -3,6 +3,7 @@ package company.tap.tapuilibraryy.uikit.atoms
 import android.content.Context
 import android.content.res.ColorStateList
 import android.util.AttributeSet
+import android.util.Log
 import androidx.appcompat.widget.SwitchCompat
 import company.tap.tapuilibraryy.themekit.theme.SwitchTheme
 import company.tap.tapuilibraryy.uikit.interfaces.TapView
@@ -31,6 +32,7 @@ open class TapSwitch(context: Context, attributeSet: AttributeSet) :
      * @param theme Theme to consume in the wrapper, a value of null resets the theme to the default
      */
     override fun setTheme(theme: SwitchTheme) {
+        Log.e("themeTapSwitch",theme.toString())
         theme.backgroundColor?.let { setBackgroundColor(it) }
         theme.textColor?.let { setTextColor(it) }
         theme.textSize?.let { textSize = it.toFloat() }

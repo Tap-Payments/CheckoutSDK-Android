@@ -42,6 +42,7 @@ import company.tap.tapuilibraryy.uikit.AppColorTheme.LoyalityWidgetTapSwitchBack
 import company.tap.tapuilibraryy.uikit.AppColorTheme.LoyalityWidgetTapSwitchTintColor
 import company.tap.tapuilibraryy.uikit.atoms.TapSwitch
 import company.tap.tapuilibraryy.uikit.datasource.LoyaltyHeaderDataSource
+import company.tap.tapuilibraryy.uikit.doOnLanguageChange
 import company.tap.tapuilibraryy.uikit.getColorWithoutOpacity
 import company.tap.tapuilibraryy.uikit.ktx.loadAppThemManagerFromPath
 import company.tap.tapuilibraryy.uikit.views.TextDrawable
@@ -252,11 +253,13 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
         }
 
         errorTextView.apply {
-            setBackgroundColor(    Color.parseColor(
-                ThemeManager.getValue<String?>(LoyalityWidgetInvalidAmountBackgroundColor)
-                    .toString().getColorWithoutOpacity()
-            ))
-            background.alpha =60
+            setBackgroundColor(
+                Color.parseColor(
+                    ThemeManager.getValue<String?>(LoyalityWidgetInvalidAmountBackgroundColor)
+                        .toString().getColorWithoutOpacity()
+                )
+            )
+            background.alpha = 60
             setTextColor(loadAppThemManagerFromPath(LoyalityWidgetInvalidAmountTextColor))
             textSize = ThemeManager.getFontSize(LoyalityWidgetInvalidAmountFont).toFloat()
 
@@ -274,7 +277,11 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
         }
         editTextAmount.apply {
             setTextColor(loadAppThemManagerFromPath(LoyalityWidgetInvalidAmountTextColor))
-            setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.error_msg_icon, 0);
+            context.doOnLanguageChange(doOnArabic = {
+                setCompoundDrawablesWithIntrinsicBounds(R.drawable.error_msg_icon, 0, 0, 0);
+            }, doOnEnGlish = {
+                setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.error_msg_icon, 0);
+            })
 
         }
     }
@@ -295,19 +302,19 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
 
     private fun TextView?.applyFontAccordingToLocalization(textView: TextView) {
         with(textView) {
-            if (LocalizationManager.getLocale(context).language == "ar") {
+            context.doOnLanguageChange(doOnArabic = {
                 typeface = Typeface.createFromAsset(
                     context.assets, TapFont.tapFontType(
                         TapFont.TajawalMedium
                     )
                 )
-            } else {
+            }, doOnEnGlish = {
                 typeface = Typeface.createFromAsset(
                     context.assets, TapFont.tapFontType(
                         TapFont.RobotoRegular
                     )
                 )
-            }
+            })
         }
     }
 
