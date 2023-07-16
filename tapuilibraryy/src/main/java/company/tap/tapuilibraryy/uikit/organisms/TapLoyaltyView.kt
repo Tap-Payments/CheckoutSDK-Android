@@ -20,6 +20,7 @@ import company.tap.tapuilibraryy.fontskit.enums.TapFont
 import company.tap.tapuilibraryy.themekit.ThemeManager
 import company.tap.tapuilibraryy.themekit.theme.SwitchTheme
 import company.tap.tapuilibraryy.uikit.AppColorTheme
+import company.tap.tapuilibraryy.uikit.AppColorTheme.GlobalValuesColorWhite30
 import company.tap.tapuilibraryy.uikit.AppColorTheme.LoyalityWidgetAmountPlaceHolderColor
 import company.tap.tapuilibraryy.uikit.AppColorTheme.LoyalityWidgetAmountViewAmountTextColor
 import company.tap.tapuilibraryy.uikit.AppColorTheme.LoyalityWidgetAmountViewAmountTextFont
@@ -328,8 +329,13 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
 
     fun disableSwitchTheme() {
         val switchDisableTheme = SwitchTheme()
-        switchDisableTheme.thumbTint =
-            loadAppThemManagerFromPath(LoyalityWidgetTapSwitchBackgroundColor)
+//        switchDisableTheme.thumbTint =
+//            loadAppThemManagerFromPath(LoyalityWidgetTapSwitchBackgroundColor)
+
+        switchDisableTheme.thumbTint = Color.parseColor(
+            ThemeManager.getValue<String?>(GlobalValuesColorWhite30)
+                .toString().dropLast(2)
+        )
         switchDisableTheme.trackTint =
             loadAppThemManagerFromPath(LoyalityWidgetTapSwitchBackgroundColor)
         switchLoyalty.setTheme(switchDisableTheme)

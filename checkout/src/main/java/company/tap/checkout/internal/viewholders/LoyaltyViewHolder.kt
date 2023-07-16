@@ -25,6 +25,7 @@ import company.tap.tapuilibraryy.themekit.ThemeManager
 import company.tap.tapuilibraryy.uikit.AppColorTheme
 import company.tap.tapuilibraryy.uikit.datasource.LoyaltyHeaderDataSource
 import company.tap.tapuilibraryy.uikit.doOnLanguageChange
+import company.tap.tapuilibraryy.uikit.getColorWithoutOpacity
 import company.tap.tapuilibraryy.uikit.ktx.loadAppThemManagerFromPath
 import company.tap.tapuilibraryy.uikit.organisms.TapLoyaltyView
 import java.math.BigDecimal
@@ -219,8 +220,10 @@ class LoyaltyViewHolder(
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                             cardElevation = 10f
                             elevation=10f
-                            outlineSpotShadowColor =
-                                loadAppThemManagerFromPath(AppColorTheme.LoyalityWidgetUnFocusedShadow)
+                            outlineSpotShadowColor =  Color.parseColor(
+                                ThemeManager.getValue<String?>(AppColorTheme.LoyalityWidgetUnFocusedShadow)
+                                    .toString().getColorWithoutOpacity()
+                            )
                         }
                         setStrokeColor(
                             ColorStateList.valueOf(

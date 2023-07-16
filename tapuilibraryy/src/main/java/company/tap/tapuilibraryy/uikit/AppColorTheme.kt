@@ -7,6 +7,8 @@ object AppColorTheme {
 
     const val MerchantHeaderViewColor = "merchantHeaderView.backgroundColor"
     const val GlobalValuesColor = "GlobalValues.Colors.whiteTwo"
+    const val GlobalValuesColorWhite30 = "GlobalValues.Colors.white30"
+
     const val ControlCurrencyWidgetBackground = "CurrencyWidget.background.color"
     const val ControlCurrencyWidgetColorTintOfStroke = "CurrencyWidget.currencyDropDown.arrowDownTint"
 

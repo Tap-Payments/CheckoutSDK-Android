@@ -63,8 +63,6 @@
             android:id="@+id/tap_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:shadowRadius="20"
-            android:shadowDy="30"
             app:layout_constraintBottom_toBottomOf="@id/img_loyality"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
