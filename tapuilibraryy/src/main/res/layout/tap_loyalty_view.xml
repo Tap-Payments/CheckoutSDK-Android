@@ -79,6 +79,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="end"
                 android:orientation="horizontal"
                 android:paddingHorizontal="@dimen/_4sdp"
@@ -124,6 +129,17 @@
 
                     />
 
+            </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/error_text_message"
+                    android:id="@+id/tv_error"
+                    android:drawablePadding="@dimen/_2sdp"
+                    android:drawableStart="@drawable/error_msg_icon"
+                    android:padding="@dimen/_5sdp"
+                    />
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>

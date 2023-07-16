@@ -11,6 +11,7 @@
     <string name="orderCodeText">Order Code.</string>
     <string name="codeExpireText">Code Expires on.</string>
     <string name="linkDescText">Please visit a Fawry Cash Location using the link below to complete your payment.</string>
+    <string name="error_text_message">مطلوب 20 درهم كحد أدنى (200 نقاط)</string>
 
     <string name="payText">إدفع</string>
     <string name="back">الرجوع</string>

@@ -29,4 +29,14 @@ object AppColorTheme {
     const val ControlCurrencyWidgetMessageColor="CurrencyWidget.messageLabel.color"
 
 
+    /**
+     * loyality
+     */
+    const val LoyalityWidgetInvalidAmountBackgroundColor = "loyaltyView.amountView.invalidAmount.hintBackgroundColor"
+    const val LoyalityWidgetInvalidAmountTextColor = "loyaltyView.amountView.invalidAmount.tintColor"
+    const val LoyalityWidgetSwitchTintColor="loyaltyView.headerView.switchOnTintColor"
+    const val LoyalityWidgetHeaderFont = "loyaltyView.headerView.titleFont"
+    const val LoyalityWidgetInvalidAmountFont = "loyaltyView.amountView.invalidAmount.hintFont"
+
+
 }

@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextClock
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
@@ -21,6 +22,7 @@ import company.tap.tapuilibraryy.R
 import company.tap.tapuilibraryy.fontskit.enums.TapFont
 import company.tap.tapuilibraryy.themekit.ThemeManager
 import company.tap.tapuilibraryy.themekit.theme.SwitchTheme
+import company.tap.tapuilibraryy.uikit.AppColorTheme
 import company.tap.tapuilibraryy.uikit.atoms.*
 import company.tap.tapuilibraryy.uikit.datasource.LoyaltyHeaderDataSource
 import company.tap.tapuilibraryy.uikit.getColorWithoutOpacity
@@ -71,6 +73,7 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
     val textTotalAmount by lazy { findViewById<TextView>(R.id.tv_total_amount) }
     val customEditText by lazy { findViewById<CustomEditText>(R.id.custom_edit_text) }
     val editTextAmount by lazy { findViewById<CustomEditText>(R.id.custom_edit_text).editTextAmount }
+    val errorTextView by lazy { findViewById<TextView>(R.id.tv_error) }
 
     /**
      * footer
@@ -159,22 +162,11 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
                 "TapLoyaltySection",
                 subcomponentName = "tc"
             )
-            setTextColor(Color.parseColor(ThemeManager.getValue("loyaltyView.headerView.switchOnTintColor")))
+            setTextColor(loadAppThemManagerFromPath(AppColorTheme.LoyalityWidgetSwitchTintColor))
             paintFlags = this.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-            textSize = ThemeManager.getFontSize("loyaltyView.headerView.titleFont").toFloat()
-            if (LocalizationManager.getLocale(context).language == "ar") {
-                typeface = Typeface.createFromAsset(
-                    context.assets, TapFont.tapFontType(
-                        TapFont.TajawalMedium
-                    )
-                )
-            } else {
-                typeface = Typeface.createFromAsset(
-                    context.assets, TapFont.tapFontType(
-                        TapFont.RobotoRegular
-                    )
-                )
-            }
+            textSize = ThemeManager.getFontSize(AppColorTheme.LoyalityWidgetHeaderFont).toFloat()
+            applyFontAccordingToLocalization(this)
+
         }
         txtLoyalityTitle.apply {
             text = LocalizationManager.getValue(
@@ -185,19 +177,8 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
             append(": ADCB Touch Points")
             setTextColor(Color.parseColor(ThemeManager.getValue("loyaltyView.headerView.titleTextColor")))
             textSize = ThemeManager.getFontSize("loyaltyView.headerView.titleFont").toFloat()
-            if (LocalizationManager.getLocale(context).language == "ar") {
-                typeface = Typeface.createFromAsset(
-                    context.assets, TapFont.tapFontType(
-                        TapFont.TajawalMedium
-                    )
-                )
-            } else {
-                typeface = Typeface.createFromAsset(
-                    context.assets, TapFont.tapFontType(
-                        TapFont.RobotoRegular
-                    )
-                )
-            }
+            applyFontAccordingToLocalization(this)
+
         }
         txtBalanceTitle.apply {
             text = LocalizationManager.getValue(
@@ -213,19 +194,8 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
                     TapFont.RobotoRegular
                 )
             )
-            if (LocalizationManager.getLocale(context).language == "ar") {
-                typeface = Typeface.createFromAsset(
-                    context.assets, TapFont.tapFontType(
-                        TapFont.TajawalMedium
-                    )
-                )
-            } else {
-                typeface = Typeface.createFromAsset(
-                    context.assets, TapFont.tapFontType(
-                        TapFont.RobotoRegular
-                    )
-                )
-            }
+            applyFontAccordingToLocalization(this)
+
         }
 
         txtRemainingTouchPoints.apply {
@@ -242,19 +212,8 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
                 )
             )
             textSize = ThemeManager.getFontSize("loyaltyView.footerView.pointsFont").toFloat()
-            if (LocalizationManager.getLocale(context).language == "ar") {
-                typeface = Typeface.createFromAsset(
-                    context.assets, TapFont.tapFontType(
-                        TapFont.TajawalMedium
-                    )
-                )
-            } else {
-                typeface = Typeface.createFromAsset(
-                    context.assets, TapFont.tapFontType(
-                        TapFont.RobotoRegular
-                    )
-                )
-            }
+            applyFontAccordingToLocalization(this)
+
             alpha = 0.5f
         }
 
@@ -272,19 +231,8 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
                 )
             )
             textSize = ThemeManager.getFontSize("loyaltyView.footerView.amountFont").toFloat()
-            if (LocalizationManager.getLocale(context).language == "ar") {
-                typeface = Typeface.createFromAsset(
-                    context.assets, TapFont.tapFontType(
-                        TapFont.TajawalMedium
-                    )
-                )
-            } else {
-                typeface = Typeface.createFromAsset(
-                    context.assets, TapFont.tapFontType(
-                        TapFont.RobotoRegular
-                    )
-                )
-            }
+            applyFontAccordingToLocalization(this)
+
             alpha = 0.9f
 
         }
@@ -296,55 +244,29 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
             )
             setTextColor(Color.parseColor(ThemeManager.getValue("loyaltyView.amountView.titleTextColor")))
             textSize = ThemeManager.getFontSize("loyaltyView.amountView.titleFont").toFloat()
-            if (LocalizationManager.getLocale(context).language == "ar") {
-                typeface = Typeface.createFromAsset(
-                    context.assets, TapFont.tapFontType(
-                        TapFont.TajawalMedium
-                    )
-                )
-            } else {
-                typeface = Typeface.createFromAsset(
-                    context.assets, TapFont.tapFontType(
-                        TapFont.RobotoRegular
-                    )
-                )
-            }
+            applyFontAccordingToLocalization(this)
+
         }
         textRedemptionPoints.apply {
             text = "(1000 ${resources.getString(R.string.points_abrv)})"
             setTextColor(Color.parseColor(ThemeManager.getValue("loyaltyView.amountView.pointsTextColor")))
             textSize = ThemeManager.getFontSize("loyaltyView.amountView.pointsFont").toFloat()
-            if (LocalizationManager.getLocale(context).language == "ar") {
-                typeface = Typeface.createFromAsset(
-                    context.assets, TapFont.tapFontType(
-                        TapFont.TajawalMedium
-                    )
-                )
-            } else {
-                typeface = Typeface.createFromAsset(
-                    context.assets, TapFont.tapFontType(
-                        TapFont.RobotoRegular
-                    )
-                )
-            }
+            applyFontAccordingToLocalization(this)
+
         }
         textTotalAmount.apply {
             text = "AED 100.00"
             setTextColor(Color.parseColor(ThemeManager.getValue("loyaltyView.amountView.amountTextColor")))
             textSize = ThemeManager.getFontSize("loyaltyView.amountView.amountFont").toFloat()
-            if (LocalizationManager.getLocale(context).language == "ar") {
-                typeface = Typeface.createFromAsset(
-                    context.assets, TapFont.tapFontType(
-                        TapFont.TajawalMedium
-                    )
-                )
-            } else {
-                typeface = Typeface.createFromAsset(
-                    context.assets, TapFont.tapFontType(
-                        TapFont.RobotoRegular
-                    )
-                )
-            }
+            applyFontAccordingToLocalization(this)
+        }
+
+        errorTextView.apply {
+            setBackgroundColor(loadAppThemManagerFromPath((AppColorTheme.LoyalityWidgetInvalidAmountBackgroundColor).getColorWithoutOpacity()))
+            setTextColor(loadAppThemManagerFromPath(AppColorTheme.LoyalityWidgetInvalidAmountTextColor))
+            textSize =
+                ThemeManager.getFontSize(AppColorTheme.LoyalityWidgetInvalidAmountFont).toFloat()
+
         }
 
 
@@ -376,6 +298,24 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
 //        textViewRemainAmount.setTextColor(Color.parseColor(ThemeManager.getValue("loyaltyView.footerView.amountTextColor")))
 //        textViewRemainAmount.textSize =
 //            ThemeManager.getFontSize("loyaltyView.footerView.amountFont").toFloat()
+    }
+
+    private fun TextView?.applyFontAccordingToLocalization(textView: TextView) {
+        with(textView) {
+            if (LocalizationManager.getLocale(context).language == "ar") {
+                typeface = Typeface.createFromAsset(
+                    context.assets, TapFont.tapFontType(
+                        TapFont.TajawalMedium
+                    )
+                )
+            } else {
+                typeface = Typeface.createFromAsset(
+                    context.assets, TapFont.tapFontType(
+                        TapFont.RobotoRegular
+                    )
+                )
+            }
+        }
     }
 
     fun switchTheme() {
