@@ -2,13 +2,19 @@ package company.tap.checkout.internal.viewholders
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.net.Uri
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.core.widget.doOnTextChanged
+import com.google.android.material.card.MaterialCardView
 import company.tap.checkout.R
 import company.tap.checkout.internal.api.models.LoyaltySupportedCurrency
 import company.tap.checkout.internal.api.models.TapLoyaltyModel
@@ -21,6 +27,7 @@ import company.tap.tapuilibraryy.uikit.atoms.TapSwitch
 import company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
 import company.tap.tapuilibraryy.uikit.atoms.TextInputEditText
 import company.tap.tapuilibraryy.uikit.datasource.LoyaltyHeaderDataSource
+import company.tap.tapuilibraryy.uikit.ktx.loadAppThemManagerFromPath
 import company.tap.tapuilibraryy.uikit.ktx.makeLinks
 import company.tap.tapuilibraryy.uikit.organisms.TapLoyaltyView
 import java.math.BigDecimal
@@ -36,11 +43,16 @@ class LoyaltyViewHolder(
     override val type = SectionType.LOYALTY
     var loyaltyView: TapLoyaltyView = view.findViewById(R.id.loyaltyView)
 
-    lateinit var textViewTitle: TapTextViewNew
-    lateinit var textViewClickable: TapTextViewNew
-    lateinit var switchLoyalty: TapSwitch
-    lateinit var textViewSubTitle: TapTextViewNew
-    lateinit var editTextAmount: TextInputEditText
+    //    lateinit var textViewTitle: TapTextViewNew
+//    lateinit var textViewClickable: TapTextViewNew
+//    lateinit var switchLoyalty: TapSwitch
+//    lateinit var textViewSubTitle: TapTextViewNew
+    val editTextAmount: EditText by lazy { loyaltyView.editTextAmount }
+    val redemptionCard by lazy { loyaltyView.redemptionCard }
+    val textRedemptionPoints by lazy { loyaltyView.textRedemptionPoints }
+    val textTotalAmount by lazy { loyaltyView.textTotalAmount }
+    val errorTextView by lazy { loyaltyView.errorTextView }
+
     lateinit var textViewRemainPoints: TapTextViewNew
     lateinit var textViewRemainAmount: TapTextViewNew
     lateinit var textViewTouchPoints: TapTextViewNew
@@ -78,7 +90,7 @@ class LoyaltyViewHolder(
         constraintt.setBackgroundColor(Color.parseColor(ThemeManager.getValue("horizontalList.backgroundColor")))
 
         configureSwitch()
-       // amountEditTextWatcher()
+        amountEditTextWatcher()
 
     }
 
@@ -171,51 +183,92 @@ class LoyaltyViewHolder(
     }
 
     private fun amountEditTextWatcher() {
+        redemptionCard.setOnClickListener {
+            with(editTextAmount) {
+                isFocusable = true
+                isClickable = true
+                isFocusableInTouchMode = true
+                isEnabled = true
+                requestFocus()
+            }
+        }
+        editTextAmount.setOnFocusChangeListener { view, isFocused ->
+            if (isFocused) {
+                redemptionCard.apply {
+                    setStrokeColor(ColorStateList.valueOf(loadAppThemManagerFromPath("loyaltyView.amountView.focusedShadow.color")))
+                    strokeWidth = 2
 
-        editTextAmount.addTextChangedListener(object : TextWatcher {
-            override fun onTextChanged(
-                s: CharSequence, start: Int, before: Int,
-                count: Int
-            ) {
-                if (s != "") {
-                    //do your work here
+                }
+                editTextAmount.setText("")
+                textRedemptionPoints.visibility = View.INVISIBLE
+                textTotalAmount.append(" | ")
+
+            } else {
+                redemptionCard.apply {
+                    setStrokeColor(ColorStateList.valueOf(loadAppThemManagerFromPath("loyaltyView.amountView.unfocusedShadow.color")))
+                    strokeWidth = 0
+                }
+                editTextAmount.setText("100")
+                textRedemptionPoints.visibility = View.VISIBLE
+                textTotalAmount.text =
+                    context.resources.getString(company.tap.tapuilibraryy.R.string.aed)
+
+            }
+        }
+        editTextAmount.doOnTextChanged { text, start, before, count ->
+            if (text?.isNotEmpty() == true) {
+                Log.e("data", text.toString())
+                when (text.toString().toInt() > 100) {
+                    true -> errorTextView.visibility = View.VISIBLE
+                    false -> errorTextView.visibility = View.GONE
                 }
             }
 
-            override fun beforeTextChanged(
-                s: CharSequence, start: Int, count: Int,
-                after: Int
-            ) {
-
-            }
-
-            override fun afterTextChanged(s: Editable) {
-                if (s.toString().isNullOrEmpty()) {
-//                    loyaltyView.loyaltyAlertView?.visibility = View.VISIBLE
-//                    loyaltyView.loyaltyAlertView?.alertMessage?.text =
-//                        alertMessage + " " + arrayListLoyal?.get(1).currency + "20.00"
-
-                    textViewTouchPoints.text = "= " + "0 " + tapLoyaltyModel?.loyaltyPointsName
-                } else {
-                    val touchPoints: BigDecimal =
-                        s.toString().toBigDecimal().times(BigDecimal.valueOf(20))
-                    textViewTouchPoints.text =
-                        "= " + touchPoints + " " + tapLoyaltyModel?.loyaltyPointsName
-               //     loyaltyView.loyaltyAlertView?.visibility = View.GONE
-                    reCalculateTouchPoints(initialTouchPoints, touchPoints.toInt())
-                }
-                if (!s.isNullOrEmpty()) {
-                    if (s.contains(".")) {
-                        reCalculateAmount(
-                            initialBalance?.toBigDecimal(),
-                            s.toString().replace(".", "").toBigDecimal()
-                        )
-                    }
-
-                    onPaymentCardComplete.onPaymentCardIsLoyaltyCard(true)
-                }
-            }
-        })
+        }
+//        editTextAmount.addTextChangedListener(object : TextWatcher {
+//            override fun onTextChanged(
+//                s: CharSequence, start: Int, before: Int,
+//                count: Int
+//            ) {
+//                if (s != "") {
+//                    //do your work here
+//                }
+//            }
+//
+//            override fun beforeTextChanged(
+//                s: CharSequence, start: Int, count: Int,
+//                after: Int
+//            ) {
+//
+//            }
+//
+//            override fun afterTextChanged(s: Editable) {
+//                if (s.toString().isNullOrEmpty()) {
+////                    loyaltyView.loyaltyAlertView?.visibility = View.VISIBLE
+////                    loyaltyView.loyaltyAlertView?.alertMessage?.text =
+////                        alertMessage + " " + arrayListLoyal?.get(1).currency + "20.00"
+//
+//                    textViewTouchPoints.text = "= " + "0 " + tapLoyaltyModel?.loyaltyPointsName
+//                } else {
+//                    val touchPoints: BigDecimal =
+//                        s.toString().toBigDecimal().times(BigDecimal.valueOf(20))
+//                    textViewTouchPoints.text =
+//                        "= " + touchPoints + " " + tapLoyaltyModel?.loyaltyPointsName
+//                    //     loyaltyView.loyaltyAlertView?.visibility = View.GONE
+//                    reCalculateTouchPoints(initialTouchPoints, touchPoints.toInt())
+//                }
+//                if (!s.isNullOrEmpty()) {
+//                    if (s.contains(".")) {
+//                        reCalculateAmount(
+//                            initialBalance?.toBigDecimal(),
+//                            s.toString().replace(".", "").toBigDecimal()
+//                        )
+//                    }
+//
+//                    onPaymentCardComplete.onPaymentCardIsLoyaltyCard(true)
+//                }
+//            }
+//        })
     }
 
     private fun reCalculateAmount(previousBalance: BigDecimal?, amountTypedInText: BigDecimal) {

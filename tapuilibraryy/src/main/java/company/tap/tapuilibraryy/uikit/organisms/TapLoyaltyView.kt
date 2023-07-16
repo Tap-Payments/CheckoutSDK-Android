@@ -71,8 +71,7 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
     val textStaticAmount by lazy { findViewById<TextView>(R.id.tv_redemption_amount) }
     val textRedemptionPoints by lazy { findViewById<TextView>(R.id.tv_total_redemption_points) }
     val textTotalAmount by lazy { findViewById<TextView>(R.id.tv_total_amount) }
-    val customEditText by lazy { findViewById<CustomEditText>(R.id.custom_edit_text) }
-    val editTextAmount by lazy { findViewById<CustomEditText>(R.id.custom_edit_text).editTextAmount }
+    val editTextAmount by lazy { findViewById<EditText>(R.id.ed_amount) }
     val errorTextView by lazy { findViewById<TextView>(R.id.tv_error) }
 
     /**
@@ -114,7 +113,8 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
     }
 
     fun setLayoutTheme() {
-        customEditText.visibility = View.GONE
+        //customEditText.visibility = View.GONE
+
         cardView.apply {
             setCardBackgroundColor(Color.parseColor(ThemeManager.getValue("loyaltyView.cardView.backgroundColor")))
             radius = 10f
@@ -124,34 +124,8 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
             strokeWidth = 0
             radius = 10f
         }
-        redemptionCard.setOnClickListener {
-            editTextAmount.requestFocus()
-        }
 
-        editTextAmount.setOnFocusChangeListener { view, isFocused ->
-            if (isFocused) {
-                redemptionCard.apply {
-                    setStrokeColor(ColorStateList.valueOf(loadAppThemManagerFromPath("loyaltyView.amountView.focusedShadow.color")))
-                    strokeWidth = 2
 
-                }
-                textRedemptionPoints.visibility = View.GONE
-                textTotalAmount.visibility = View.GONE
-                customEditText.visibility = View.VISIBLE
-
-            } else {
-                redemptionCard.apply {
-                    setStrokeColor(ColorStateList.valueOf(loadAppThemManagerFromPath("loyaltyView.amountView.unfocusedShadow.color")))
-                    strokeWidth = 0
-
-                }
-                editTextAmount.setText("")
-                textRedemptionPoints.visibility = View.VISIBLE
-                textTotalAmount.visibility = View.VISIBLE
-                customEditText.visibility = View.GONE
-
-            }
-        }
     }
 
 
@@ -247,6 +221,13 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
             applyFontAccordingToLocalization(this)
 
         }
+        editTextAmount.apply {
+            textSize = ThemeManager.getFontSize("loyaltyView.amountView.amountFont").toFloat()
+            setHintTextColor(ColorStateList.valueOf(Color.parseColor(ThemeManager.getValue("loyaltyView.amountView.amountPlaceHolderColor"))))
+            setTextColor(Color.parseColor(ThemeManager.getValue("loyaltyView.amountView.amountTextColor")))
+            applyFontAccordingToLocalization(this)
+
+        }
         textRedemptionPoints.apply {
             text = "(1000 ${resources.getString(R.string.points_abrv)})"
             setTextColor(Color.parseColor(ThemeManager.getValue("loyaltyView.amountView.pointsTextColor")))
@@ -255,7 +236,6 @@ class TapLoyaltyView(context: Context?, attrs: AttributeSet?) :
 
         }
         textTotalAmount.apply {
-            text = "AED 100.00"
             setTextColor(Color.parseColor(ThemeManager.getValue("loyaltyView.amountView.amountTextColor")))
             textSize = ThemeManager.getFontSize("loyaltyView.amountView.amountFont").toFloat()
             applyFontAccordingToLocalization(this)

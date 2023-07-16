@@ -18,7 +18,7 @@
     <string name="back">Back</string>
     <string name="points">Points</string>
     <string name="points_abrv">Pts</string>
-    <string name="aed">AED | </string>
+    <string name="aed">AED </string>
     <string name="error_text_message">A minimum of AED 20.00 (200 Pts) is required</string>
 
 
