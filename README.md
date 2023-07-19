@@ -70,7 +70,7 @@ To use the SDK the following requirements must be met:
 ---
 [JitPack](https://jitpack.io/) is a novel package repository for JVM and Android projects. It builds Git projects on demand and provides you with ready-to-use artifacts (jar, aar).
 
-To integrate goSellSDK into your project add it in your **root** `build.gradle` at the end of repositories:
+To integrate checkoutSDk into your project add it in your **root** `build.gradle` at the end of repositories:
 ```java
 	allprojects {
 		repositories {
