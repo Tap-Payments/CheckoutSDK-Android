@@ -75,15 +75,40 @@ To integrate goSellSDK into your project add it in your **root** `build.gradle` 
 	allprojects {
 		repositories {
 			...
+                        jcenter()
 			maven { url 'https://jitpack.io' }
 		}
-	}
+	} 
+   
+}
+
 ```
+   or in new dependencies : 
+```
+      dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositories {
+        google()
+        mavenCentral()
+        jcenter()
+        maven { url 'https://www.jitpack.io' }
+
+
+    }
+```
+
 Step 2. Add the dependency
 ```java
 	dependencies {
 	        implementation 'com.github.Tap-Payments:CheckoutSDK-Android:Tag'
 	}
+```
+Step 3. in gradle.properties
+```
+      android.useAndroidX=true
+      kotlin.code.style=official
+      android.nonTransitiveRClass=true
+      android.enableJetifier=true
 ```
 <a name="setup"></a>
 # PRE SDK SETUP
