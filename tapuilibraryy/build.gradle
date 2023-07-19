@@ -88,7 +88,7 @@ dependencies {
     implementation("io.coil-kt:coil-svg:1.2.0")
     // implementation 'com.github.corouteam:GlideToVectorYou:v2.0.0'
     implementation 'com.github.2coffees1team:GlideToVectorYou:v2.0.0'
-    implementation 'com.tomergoldst.android:tooltips:1.0.10'
+//    implementation 'com.tomergoldst.android:tooltips:1.0.10'
     implementation("com.github.skydoves:balloon:1.4.7") {
         exclude group: "androidx.appcompat"
         exclude group: "androidx.fragment"
