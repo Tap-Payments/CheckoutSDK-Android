@@ -1,7 +1,17 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'maven-publish'
 
+afterEvaluate{
+    publishing{
+        publications{
+            release(MavenPublication){
+                from components.release
+            }
+        }
+    }
+}
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
