@@ -4,8 +4,8 @@
 
 [![Platform](https://img.shields.io/badge/platform-Android-inactive.svg?style=flat)](https://github.com/Tap-Payments/CheckoutSDK-Android/)
 [![Documentation](https://img.shields.io/badge/documentation-100%25-bright%20green.svg)](https://github.com/Tap-Payments/CheckoutSDK-Android/)
-[![SDK Version](https://img.shields.io/badge/minSdkVersion-21-blue.svg)](https://stuff.mit.edu/afs/sipb/project/android/docs/reference/packages.html)
-[![SDK Version](https://img.shields.io/badge/targetSdkVersion-30-informational.svg)](https://stuff.mit.edu/afs/sipb/project/android/docs/reference/packages.html)
+[![SDK Version](https://img.shields.io/badge/minSdkVersion-22-blue.svg)](https://stuff.mit.edu/afs/sipb/project/android/docs/reference/packages.html)
+[![SDK Version](https://img.shields.io/badge/targetSdkVersion-31-informational.svg)](https://stuff.mit.edu/afs/sipb/project/android/docs/reference/packages.html)
 
 **Access all local, regional, & global payment methods**
 
