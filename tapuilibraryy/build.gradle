@@ -5,15 +5,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'maven-publish'
 
-afterEvaluate{
-    publishing{
-        publications{
-            release(MavenPublication){
-                from components.release
-            }
-        }
-    }
-}
+
 android {
     compileSdkVersion 32
 
@@ -108,3 +100,12 @@ dependencies {
 
 }
 
+afterEvaluate{
+    publishing{
+        publications{
+            release(MavenPublication){
+                from components.release
+            }
+        }
+    }
+}

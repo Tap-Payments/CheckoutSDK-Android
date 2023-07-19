@@ -3,15 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'maven-publish'
 
-afterEvaluate{
-    publishing{
-        publications{
-            release(MavenPublication){
-                from components.release
-            }
-        }
-    }
-}
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
@@ -62,6 +54,15 @@ android {
         implementation 'com.tomergoldst.android:tooltips:1.0.10'
         implementation project(":tapuilibraryy")
 
+    }
+}
+afterEvaluate{
+    publishing{
+        publications{
+            release(MavenPublication){
+                from components.release
+            }
+        }
     }
 }
 
