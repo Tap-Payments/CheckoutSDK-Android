@@ -6,12 +6,12 @@ apply plugin: 'maven-publish'
 
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 33
     buildToolsVersion "29.0.3"
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
 
@@ -26,17 +26,19 @@ android {
         }
     }
 
-    viewBinding {
-        enabled = true
+    buildFeatures{
 
-        compileOptions {
-            sourceCompatibility JavaVersion.VERSION_1_8
-            targetCompatibility JavaVersion.VERSION_1_8
-        }
+        viewBinding true // for view binding
 
-        kotlinOptions {
-            jvmTarget = "1.8"
-        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 
     dependencies {
