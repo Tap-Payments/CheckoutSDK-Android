@@ -162,5 +162,8 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.1'
     //implementation 'com.github.Tap-Payments:TapCardValidator-Android:2.1.11'
 
+    implementation project(":tapuilibraryy")
+    implementation project(":cardinputwidget2")
+
 
 }
