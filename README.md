@@ -61,7 +61,8 @@ To use the SDK the following requirements must be met:
 1. **Android Studio 3.4** or newer
 2. **Android SDK Tools 29** or newer
 3. **Android Platform Version: API 29: Android 10  revision 6** or later
-4. **Android targetSdkVersion: 29
+4. **Android targetSdkVersion: 31
+5. **Android minSdkVersion: 22
 
 <a name="installation_with_jitpack"></a>
 ### Installation with JitPack
