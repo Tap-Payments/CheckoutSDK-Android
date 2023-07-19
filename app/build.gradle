@@ -19,8 +19,8 @@ android {
         consumerProguardFiles 'proguard-rules.pro'
     }
     configurations.all {
-        exclude group:"com.github.Tap-Payments:TapUIKit-Android:1.1.1.358.228", module: "geronimo-servlet_2.5_spec"
-        exclude group:"ch.qos.logback", module:"logback-core"
+        exclude group: "com.github.Tap-Payments:TapUIKit-Android:1.1.1.358.228", module: "geronimo-servlet_2.5_spec"
+        exclude group: "ch.qos.logback", module: "logback-core"
     }
     signingConfigs {
         release {
@@ -67,7 +67,7 @@ dependencies {
 
     implementation 'com.koushikdutta.ion:ion:3.1.0'
 
-   // implementation 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.36.214'
+    // implementation 'com.github.Tap-Payments:TapCardInputKit-Android:0.1.0.36.214'
     implementation 'company.tap:PayCards-Tap-Android:0.1.6.4'
     api 'company.tap:PayCards-Tap-Android:0.1.6.4'
 

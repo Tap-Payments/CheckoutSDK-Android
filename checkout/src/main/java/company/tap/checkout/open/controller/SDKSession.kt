@@ -14,7 +14,6 @@ import androidx.fragment.app.FragmentManager
 import com.google.gson.JsonElement
 import company.tap.checkout.internal.PaymentDataProvider
 import company.tap.checkout.internal.api.enums.ChargeStatus
-import company.tap.checkout.open.models.Merchant
 import company.tap.checkout.internal.apiresponse.CardViewEvent
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.utils.CustomUtils
@@ -26,14 +25,14 @@ import company.tap.checkout.open.enums.CardType
 import company.tap.checkout.open.enums.SdkIdentifier
 import company.tap.checkout.open.enums.SdkMode
 import company.tap.checkout.open.enums.TransactionMode
-import company.tap.checkout.open.interfaces.PluginSessionDelegate
 import company.tap.checkout.open.interfaces.CheckOutDelegate
+import company.tap.checkout.open.interfaces.PluginSessionDelegate
 import company.tap.checkout.open.models.*
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapnetworkkit.exception.GoSellError
 import company.tap.tapnetworkkit.interfaces.APIRequestCallback
-import company.tap.tapuilibraryy.uikit.enums.ActionButtonState
 import company.tap.tapuilibraryy.themekit.ThemeManager
+import company.tap.tapuilibraryy.uikit.enums.ActionButtonState
 import company.tap.tapuilibraryy.uikit.views.TabAnimatedActionButton
 import kotlinx.android.synthetic.main.action_button_animation.view.*
 import retrofit2.Response

@@ -1,6 +1,7 @@
 package company.tap.checkout.open.interfaces
 
 
+import androidx.annotation.RestrictTo
 import company.tap.checkout.internal.api.enums.ChargeStatus
 import company.tap.checkout.internal.api.models.Authorize
 import company.tap.checkout.internal.api.models.Charge
@@ -10,11 +11,12 @@ import company.tap.tapnetworkkit.exception.GoSellError
 
 /**
  * Created by AhlaamK on 7/5/21.
-
 Copyright (c) 2021    Tap Payments.
 All rights reserved.
  **/
+@RestrictTo(RestrictTo.Scope.LIBRARY)
 interface CheckOutDelegate {
+
     fun checkoutChargeCaptured(charge: Charge)
     fun checkoutChargeFailed(charge: Charge?)
 
