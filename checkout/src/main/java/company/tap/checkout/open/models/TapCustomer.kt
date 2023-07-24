@@ -21,7 +21,7 @@ class TapCustomer(
      *
      * @return the identifier
      */
-    @field:Expose @field:SerializedName("id") val identifier: String?,
+    @field:Expose @field:SerializedName("id") var identifier: String?,
     /**
      * Gets first name.
      *

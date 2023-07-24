@@ -29,8 +29,7 @@ import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.transition.*
-import cards.pay.paycardsrecognizer.sdk.FrameManager
-import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
+
 import com.bugfender.sdk.Bugfender
 import com.bumptech.glide.Glide
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -189,7 +188,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private var isInlineOpened = false
     var isNFCOpened = false
     private var textRecognitionML: TapTextRecognitionML? = null
-    private lateinit var inlineViewCallback: InlineViewCallback
+//    private lateinit var inlineViewCallback: InlineViewCallback
     lateinit var paymentOptionsResponse: PaymentOptionsResponse
     lateinit var redirectURL: String
     lateinit var cardId: String
@@ -218,7 +217,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         frameLayout: FrameLayout,
         webFrameLayout: FrameLayout,
         inLineCardLayout: FrameLayout,
-        inlineViewCallback: InlineViewCallback, cardViewModel: CardViewModel,
+        cardViewModel: CardViewModel,
         checkoutFragment: CheckoutFragment,
         topHeaderView: TapBrandView?,
     ) {
@@ -229,7 +228,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         this.webFrameLayout = webFrameLayout
         this.bottomSheetDialog = bottomSheetDialog
         this.inLineCardLayout = inLineCardLayout
-        this.inlineViewCallback = inlineViewCallback
         this.cardViewModel = cardViewModel
         this.checkoutFragment = checkoutFragment
         if (topHeaderView != null) {
@@ -2659,11 +2657,11 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         amountViewHolder.readyToScanVisibility(scannerClicked)
         inLineCardLayout.visibility = VISIBLE
         cardViewHolder.view.visibility = GONE
-        FrameManager.getInstance().frameColor = Color.WHITE
-        fragmentManager
-            .beginTransaction()
-            .replace(R.id.inline_container, inlineCamerFragment)
-            .commit()
+//        FrameManager.getInstance().frameColor = Color.WHITE
+   //     fragmentManager
+//            .beginTransaction()
+//            .replace(R.id.inline_container, inlineCamerFragment)
+//            .commit()
 
         isInlineOpened = true
         checkoutFragment.isScannerOpened = true

@@ -274,7 +274,10 @@ class MainActivity : AppCompatActivity(), CheckOutDelegate {
 
         // Using static CustomerBuilder method available inside TAP TapCustomer Class you can populate TAP TapCustomer object and pass it to SDK
         // sdkSession.setCustomer(setCustomer()) //** Required **
-        settingsManager?.getCustomer()?.let { sdkSession.setCustomer(it) } //** Required **
+        settingsManager?.getCustomer()?.apply {
+            this.identifier="test"
+            Log.e("customer is ",this.toString())
+        }.let { it?.let { it1 -> sdkSession.setCustomer(it1) } } //** Required **
 
 
         // Set Total Amount. The Total amount will be recalculated according to provided Taxes and Shipping

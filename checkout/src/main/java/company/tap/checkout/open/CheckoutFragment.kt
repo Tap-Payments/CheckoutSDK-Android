@@ -13,10 +13,9 @@ import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import cards.pay.paycardsrecognizer.sdk.Card
-import cards.pay.paycardsrecognizer.sdk.ui.InlineViewCallback
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import company.tap.cardinputwidget2.Card
 import company.tap.checkout.R
 import company.tap.checkout.TapCheckOutSDK
 import company.tap.checkout.internal.api.enums.ChargeStatus
@@ -41,7 +40,7 @@ import org.json.JSONObject
 import java.util.*
 
 
-class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, InlineViewCallback {
+class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface {
     val viewModel: CheckoutViewModel by viewModels()
     val cardViewModel: CardViewModel by viewModels()
 
@@ -160,7 +159,6 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
             frameLayoutForNFc,
             webFrameLayout,
             inLineCardLayout,
-            this,
             cardViewModel = cardViewModel, this,
             topHeaderView
         )
@@ -238,19 +236,12 @@ class CheckoutFragment : TapBottomSheetDialog(), TapBottomDialogInterface, Inlin
         return enabledSections
     }
 
-    override fun onScanCardFailed(e: Exception?) {
-    }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
         (dialog as BottomSheetDialog).behavior.isFitToContents = true
         return dialog
     }
 
-
-    @RequiresApi(Build.VERSION_CODES.N)
-    override fun onScanCardFinished(card: Card?, cardImage: ByteArray?) {
-    }
 
 
     override fun onDetach() {
