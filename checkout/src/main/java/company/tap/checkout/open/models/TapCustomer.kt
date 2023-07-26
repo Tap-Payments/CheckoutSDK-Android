@@ -26,9 +26,9 @@ class TapCustomer(
      *
      * @return the first name
      */
-    @SerialName("first_name") var firstName: String?,
-    @SerialName("middle_name") var middleName: String?,
-    @SerialName("last_name") var lastName: String?,
+    @SerialName("first_name") var first_name: String?,
+    @SerialName("middle_name") var middle_name: String?,
+    @SerialName("last_name") var last_name: String?,
     @SerialName("email") var email: String?,
     @SerialName("phone") var phone: PhoneNumber?,
     @SerialName("metadata") var metaData: String?,
@@ -38,23 +38,15 @@ class TapCustomer(
 ) {
 
 
-    /**
-     * Gets Address.
-     *
-     * @return the Address
-     */
-    fun getLocale(): String? {
-        return locale
-    }
 
 
     override fun toString(): String {
         return """TapCustomer {
         id =  '$identifier'
         email =  '$email'
-        first_name =  '$firstName'
-        middle_name =  '$middleName'
-        last_name =  '$lastName'
+        first_name =  '$first_name'
+        middle_name =  '$middle_name'
+        last_name =  '$last_name'
         phone  country code =  '${phone?.countryCode}'
         phone number =  '${phone?.number}'
         metadata =  '$metaData'
@@ -183,9 +175,9 @@ class TapCustomer(
 
     //  Constructor is private to prevent access from client app, it must be through inner Builder class only
     init {
-        firstName = firstName
-        this.middleName = middleName
-        this.lastName = lastName
+        this.first_name = first_name
+        this.middle_name = middle_name
+        this.last_name = last_name
         this.email = email
         this.phone = phone
         this.metaData = metaData

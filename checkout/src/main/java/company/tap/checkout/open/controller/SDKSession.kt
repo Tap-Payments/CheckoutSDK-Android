@@ -453,6 +453,7 @@ object  SDKSession : APIRequestCallback {
                 )
             }
             ErrorTypes.INTERNET_AVAILABLE -> startPayment(supportFragmentManager)
+            else -> {}
         }
     }
     private fun isInternetConnectionAvailable(): ErrorTypes? {

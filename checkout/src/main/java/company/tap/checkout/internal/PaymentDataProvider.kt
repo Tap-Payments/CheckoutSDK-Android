@@ -122,7 +122,7 @@ internal class PaymentDataProvider : IPaymentDataProvider {
          * instead always send value configured by the Merchant.
          */
 
-        return PaymentDataSource?.getRequires3DSecure()
+        return PaymentDataSource?.getRequires3DSecure() == true
     }
 
     override fun getReceiptSettings(): Receipt? {

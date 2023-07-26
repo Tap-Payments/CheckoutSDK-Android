@@ -34,6 +34,7 @@ object AmountCalculator {
 
                 }
                 AmountModificatorType.FIXED -> result = result.add(tax.amount.getValue())
+                else -> {}
             }
         }
         return result
@@ -145,11 +146,11 @@ object AmountCalculator {
                          * Applying Min and Max values based on the calculated extra fees.
                          */
                         //  if (fee.minimum_fee != null && fee.minimum_fee != 0.00 || fee.maximum_fee != null && fee.maximum_fee != 0.00) {
-                        if (increase?.toDouble()!! > fee.minimum_fee && increase?.toDouble() < fee.maximum_fee) {
+                        if (increase?.toDouble()!! > fee.minimum_fee && increase?.toDouble()!! < fee.maximum_fee) {
                             increase = increase
-                        } else if (increase?.toDouble() < fee.minimum_fee && fee.minimum_fee != 0.0) {
+                        } else if (increase?.toDouble()!! < fee.minimum_fee && fee.minimum_fee != 0.0) {
                             increase = BigDecimal.valueOf(fee.minimum_fee)
-                        } else if (increase?.toDouble() > fee.maximum_fee && fee.maximum_fee != 0.0) {
+                        } else if (increase?.toDouble()!! > fee.maximum_fee && fee.maximum_fee != 0.0) {
                             increase = BigDecimal.valueOf(fee.maximum_fee)
                         } else if (increase.toDouble() > 0) {
                             increase = increase
@@ -160,6 +161,7 @@ object AmountCalculator {
 
                     }
 
+                    else -> {}
                 }
 
 
@@ -258,6 +260,7 @@ object AmountCalculator {
                     result = result.add(tax.getAmount().getValue())
                 }
                 AmountModificatorType.FIXED -> result = result.add(tax.getAmount().getValue())
+                else -> {}
             }
         }
         return result
@@ -285,6 +288,7 @@ object AmountCalculator {
                     result = result.add(tax.amount.getValue())
                 }
                 AmountModificatorType.FIXED -> result = result.add(tax.amount.getValue())
+                else -> {}
             }
         }
         return result

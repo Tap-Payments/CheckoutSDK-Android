@@ -91,8 +91,7 @@ class PaymentInlineViewHolder(
     }
 
 
-
-   lateinit var paymentInputContainer: LinearLayout
+    lateinit var paymentInputContainer: LinearLayout
 
 
     var selectedType = PaymentTypeEnum.card
@@ -103,8 +102,8 @@ class PaymentInlineViewHolder(
     var savedCardsModel: SavedCard? = null
 
 
-   lateinit var tapCardInputView: InlineCardInput2
-    lateinit var   tapMobileInputView: TapMobilePaymentView
+    lateinit var tapCardInputView: InlineCardInput2
+    lateinit var tapMobileInputView: TapMobilePaymentView
     private var linearLayoutPay: LinearLayout? = null
     private var tapSeparatorViewLinear: LinearLayout? = null
     private var tabPosition: Int? = null
@@ -317,7 +316,7 @@ class PaymentInlineViewHolder(
             separator1?.visibility = View.GONE
             // resetCardBrandIcon()
             if (PaymentDataSource.getBinLookupResponse() != null) {
-             //   PaymentDataSource.setBinLookupResponse(null)
+                //   PaymentDataSource.setBinLookupResponse(null)
 
             }
 
@@ -377,11 +376,9 @@ class PaymentInlineViewHolder(
         )
 
 
-//        switchViewHolder11?.view?.cardSwitch?.switchesLayout?.visibility = View.VISIBLE
         switchViewHolder?.view?.mainSwitch?.mainSwitchLinear?.visibility = View.VISIBLE
         tapAlertView?.fadeVisibility(View.GONE, 500)
         switchViewHolder?.view?.cardSwitch?.payButton?.isActivated = false
-//        switchViewHolder11?.view?.cardSwitch?.showOnlyPayButton()
         switchViewHolder?.bindViewComponents()
         val payString: String = LocalizationManager.getValue("pay", "ActionButton")
         val nowString: String = LocalizationManager.getValue("pay", "ActionButton")
@@ -394,7 +391,7 @@ class PaymentInlineViewHolder(
         )
         tabLayout.resetBehaviour()
         if (PaymentDataSource.getBinLookupResponse() != null) {
-         //   PaymentDataSource.setBinLookupResponse(null)
+            //   PaymentDataSource.setBinLookupResponse(null)
         }
         controlScannerOptions()
         tapInlineCardSwitch?.saveForOtherCheckBox?.isChecked = true
@@ -413,11 +410,11 @@ class PaymentInlineViewHolder(
         tapInlineCardSwitch?.visibility = View.GONE
         tapPaymentInput?.separator?.visibility = View.GONE
         // Added to hide the alert if all fields are valid
-       /* outerFrame.setOnTouchListener { v, event ->
-           if(allFieldsValid == true) tapAlertView?.visibility = View.GONE
+        /* outerFrame.setOnTouchListener { v, event ->
+            if(allFieldsValid == true) tapAlertView?.visibility = View.GONE
 
-            return@setOnTouchListener true
-        }*/
+             return@setOnTouchListener true
+         }*/
         addViewsToPaymentViewContainer()
         tapCardInputView.clearFocus()
         cardNumberWatcher()
@@ -462,7 +459,7 @@ class PaymentInlineViewHolder(
 
         separator1?.visibility = View.GONE
         if (PaymentDataSource.getBinLookupResponse() != null) {
-         //   PaymentDataSource.setBinLookupResponse(null)
+            //   PaymentDataSource.setBinLookupResponse(null)
 
         }
 
@@ -549,7 +546,7 @@ class PaymentInlineViewHolder(
         savedCardsModel = null
         if (getPreTypedCardData() != null && getPreTypedCardData()?.cvc != null) {
             tapAlertView?.fadeVisibility(View.GONE, 2000)
-         //   tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
+            //   tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
             checkForTapInlineCardSwitchOpeningAccordingToCurrencyWidget()
             onCvcComplete()
             checkoutViewModel.isSavedCardSelected = false
@@ -741,8 +738,8 @@ class PaymentInlineViewHolder(
                         if (isCardEnterdShouldBeDisabledPaymentOptions()) {
                             tapInlineCardSwitch?.cardviewSwitch?.visibility = (View.GONE)
                         } else {
-                         //   checkForTapInlineCardSwitchOpeningAccordingToCurrencyWidget()
-                        //    tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
+                            //   checkForTapInlineCardSwitchOpeningAccordingToCurrencyWidget()
+                            //    tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
                         }
                         contactDetailsView?.visibility = View.GONE //temp visible to gone
                         shippingDetailView?.visibility = View.GONE //temp visible to gone
@@ -963,7 +960,7 @@ class PaymentInlineViewHolder(
                 tapCardInputView.holderNameEnabled = true
                 //  tapInlineCardSwitch?.visibility = View.VISIBLE
                 checkForTapInlineCardSwitchOpeningAccordingToCurrencyWidget()
-             //   tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
+                //   tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
             }
 
         }
@@ -1072,7 +1069,10 @@ class PaymentInlineViewHolder(
                 if (s?.trim()?.length == 3 || s?.trim()?.length == 4) {
                     if (cardInputUIStatus == CardInputUIStatus.NormalCard) {
                         if (PaymentDataSource.getBinLookupResponse()?.scheme != null) {
-                            Log.e("binResponse",PaymentDataSource.getBinLookupResponse().toString())
+                            Log.e(
+                                "binResponse",
+                                PaymentDataSource.getBinLookupResponse().toString()
+                            )
 
                             if (PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue.toString() == MADA_SCHEME && isCurrencySelectedRelatedToSaudiReal().not()) {
                                 PaymentDataSource?.getBinLookupResponse()?.let { it1 ->
@@ -1082,18 +1082,18 @@ class PaymentInlineViewHolder(
                                 }
 
                             } else {
-                                if (PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue.toString() == MADA_SCHEME && isCurrencySelectedRelatedToSaudiReal()){
+                                if (PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue.toString() == MADA_SCHEME && isCurrencySelectedRelatedToSaudiReal()) {
                                     PaymentDataSource?.getBinLookupResponse()?.let { it1 ->
                                         logicTosetImageDynamic(
                                             it1.scheme.cardBrand, s.toString()
                                         )
                                     }
-                                }else
-                                PaymentDataSource?.getBinLookupResponse()?.let { it1 ->
-                                    logicTosetImageDynamic(
-                                        it1.cardBrand, s.toString()
-                                    )
-                                }
+                                } else
+                                    PaymentDataSource?.getBinLookupResponse()?.let { it1 ->
+                                        logicTosetImageDynamic(
+                                            it1.cardBrand, s.toString()
+                                        )
+                                    }
                             }
                         } else {
 
@@ -1123,7 +1123,7 @@ class PaymentInlineViewHolder(
                  */
                 cvvNumber = s.toString()
 
-                if ((s?.trim()?.length == 3 ) || s?.trim()?.length == 4 && tapCardInputView.isExpDateValid) {
+                if ((s?.trim()?.length == 3) || s?.trim()?.length == 4 && tapCardInputView.isExpDateValid) {
                     if (!PaymentDataSource.getCardHolderNameShowHide()) {
                         var paymentTyper: PaymentType? = PaymentType.CARD
                         println("savedCardsModel   hhshhs" + savedCardsModel)
@@ -1145,12 +1145,12 @@ class PaymentInlineViewHolder(
                                         }
                                         onPaymentCardComplete.onPayCardCompleteAction(
                                             true, paymentTyper,
-                                          //  it, it1, it2, null,prevSetCardBrand?.toString() , savedCardsModel
-                                           it, it1, it2, null, cardBrandInString, savedCardsModel
+                                            //  it, it1, it2, null,prevSetCardBrand?.toString() , savedCardsModel
+                                            it, it1, it2, null, cardBrandInString, savedCardsModel
                                         )
                                         //    tapInlineCardSwitch?.switchSaveCard?.isChecked = true
                                         checkForTapInlineCardSwitchOpeningAccordingToCurrencyWidget()
-                                 //       tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
+                                        //       tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
                                         Bugfender.d(
                                             CustomUtils.tagEvent,
                                             "Finished valid raw card data for:" + PaymentType.CARD
@@ -1159,7 +1159,7 @@ class PaymentInlineViewHolder(
                                     }
                                 }
                             } else {
-                            if (isCVCLengthMax == true && paymentTyper == PaymentType.CARD){
+                            if (isCVCLengthMax == true && paymentTyper == PaymentType.CARD) {
                                 doPay(paymentTyper)
 
                             }
@@ -1169,7 +1169,7 @@ class PaymentInlineViewHolder(
                     } else {
                         if (cardInputUIStatus != null && cardInputUIStatus == CardInputUIStatus.NormalCard) {
                             if (PaymentDataSource.getCardHolderNameShowHide()) {
-                                if (isCardBrandOfTypeAmericanExpress() && s.trim().length ==3){
+                                if (isCardBrandOfTypeAmericanExpress() && s.trim().length == 3) {
                                     return
                                 }
 
@@ -1184,7 +1184,7 @@ class PaymentInlineViewHolder(
                                     tapCardInputView.setCardHolderName(PaymentDataSource.getDefaultCardHolderName())
                                     //  tapInlineCardSwitch?.visibility = View.VISIBLE
                                     checkForTapInlineCardSwitchOpeningAccordingToCurrencyWidget()
-                                   // tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
+                                    // tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
                                     // tapCardInputView.separatorcard2.visibility = View.VISIBLE
                                 }
                             }
@@ -1276,7 +1276,7 @@ class PaymentInlineViewHolder(
                                     }
                             }
                             tapAlertView?.fadeVisibility(View.GONE, 500)
-                          
+
                             Bugfender.d(
                                 CustomUtils.tagEvent,
                                 "Finished valid raw card data for:" + PaymentType.CARD
@@ -1308,7 +1308,7 @@ class PaymentInlineViewHolder(
         })
     }
 
-     fun doPay(paymentTyper: PaymentType) {
+    fun doPay(paymentTyper: PaymentType) {
         cardNumber.toString().let {
             expiryDate?.let { it1 ->
                 cvvNumber?.let { it2 ->
@@ -1361,8 +1361,8 @@ class PaymentInlineViewHolder(
 
             }
 
-            if (charSequence.toString().replace(" ","").length == 6) {
-                callCardBinNumberApi(charSequence.toString().replace(" ",""), textWatcher)
+            if (charSequence.toString().replace(" ", "").length == 6) {
+                callCardBinNumberApi(charSequence.toString().replace(" ", ""), textWatcher)
 
             } else {
                 tabLayout.resetBehaviour()
@@ -1381,7 +1381,8 @@ class PaymentInlineViewHolder(
 
                 println("card brand value is>>>" + card.cardBrand)
 
-                val _binLookupResponse: BINLookupResponse? = PaymentDataSource.getBinLookupResponse()
+                val _binLookupResponse: BINLookupResponse? =
+                    PaymentDataSource.getBinLookupResponse()
                 // println("binLookupResponse" + binLookupResponse)
                 if (charSequence.length > 4) checkIfCardTypeExistInList(card.cardBrand)
                 /***This a business logic required dont remove**/
@@ -1409,7 +1410,7 @@ class PaymentInlineViewHolder(
                         }
                 }
             }
-           // println("charSequence.le" + charSequence.length)
+            // println("charSequence.le" + charSequence.length)
             if (charSequence.length == 19) {
                 fullCardNumber = charSequence.toString()
             }
@@ -1528,7 +1529,7 @@ class PaymentInlineViewHolder(
         if (s.trim().toString().length == BIN_NUMBER_LENGTH) {
             cardViewModel.processEvent(
                 event = CardViewEvent.RetreiveBinLookupEvent,
-                viewModel =CheckoutViewModel(), binValue= s.trim().toString().replace(" ", "")
+                viewModel = CheckoutViewModel(), binValue = s.trim().toString().replace(" ", "")
             )
 
         }
@@ -1608,7 +1609,7 @@ class PaymentInlineViewHolder(
     }
 
     // Logic to show the buttons when card details are valid
-   private fun cardBrandDetection(cardTyped: String) {
+    private fun cardBrandDetection(cardTyped: String) {
         if (cardTyped.isEmpty()) {
             tapAlertView?.fadeVisibility(View.GONE, 500)
         }
@@ -1733,7 +1734,7 @@ class PaymentInlineViewHolder(
 
         println("focusField>>>>" + focusField)
 
-        if(allFieldsValid == true){
+        if (allFieldsValid == true) {
             tapAlertView?.visibility = View.GONE
         }
         if (focusField == "focus_cardholder" && cardHolderName.isNullOrEmpty())
@@ -2048,10 +2049,11 @@ class PaymentInlineViewHolder(
             tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
         }
     }
-    fun checkForTapInlineCardSwitchOpeningAccordingToCurrencyWidget(){
+
+    fun checkForTapInlineCardSwitchOpeningAccordingToCurrencyWidget() {
         if (tapCurrencyControlWidgetPaymentInline?.isVisible == true) {
             tapInlineCardSwitch?.fadeVisibility(View.GONE)
-        }else{
+        } else {
             tapInlineCardSwitch?.fadeVisibility(View.VISIBLE)
         }
     }
@@ -2229,8 +2231,6 @@ class PaymentInlineViewHolder(
     }
 
 
-
-
     private fun maskCardNumber2(cardInput: String): String {
         val maskLen: Int = cardInput.length - 4
         if (maskLen <= 0) return cardInput // Nothing to mask
@@ -2346,7 +2346,7 @@ class PaymentInlineViewHolder(
         separator1?.visibility = View.GONE
         // resetCardBrandIcon()
         if (PaymentDataSource.getBinLookupResponse() != null) {
-       //    PaymentDataSource.setBinLookupResponse(null)
+            //    PaymentDataSource.setBinLookupResponse(null)
 
         }
         if (getPreTypedCardData()?.cardholderName != null) {
@@ -2388,7 +2388,7 @@ class PaymentInlineViewHolder(
 
     }
 
-    fun logicTosetImageDynamic(card: CardBrand?, cardCharSeq: String?=null) {
+    fun logicTosetImageDynamic(card: CardBrand?, cardCharSeq: String? = null) {
         for (i in itemsCardsList.indices) {
 
             if (itemsCardsList[i].selectedImageURL.contentEquals(

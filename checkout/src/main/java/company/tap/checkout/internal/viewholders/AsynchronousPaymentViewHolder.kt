@@ -76,8 +76,8 @@ class AsynchronousPaymentViewHolder(private val context: Context,private  val vi
     }
 
     fun setDataFromAPI(chargeResponse: Charge){
-           phoneNumber = chargeResponse.customer?.getPhone()?.number.toString()
-           phoneCode = chargeResponse.customer?.getPhone()?.countryCode.toString()
+           phoneNumber = chargeResponse.customer?.phone?.number.toString()
+           phoneCode = chargeResponse.customer?.phone?.countryCode.toString()
             emailId = chargeResponse.customer.email.toString()
 
         val created: Long =

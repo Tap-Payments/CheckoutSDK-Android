@@ -188,7 +188,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
     private var isInlineOpened = false
     var isNFCOpened = false
     private var textRecognitionML: TapTextRecognitionML? = null
-//    private lateinit var inlineViewCallback: InlineViewCallback
     lateinit var paymentOptionsResponse: PaymentOptionsResponse
     lateinit var redirectURL: String
     lateinit var cardId: String
@@ -880,7 +879,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         otpViewHolder?.otpView?.startCounter()
         amountViewHolder?.view?.amountView_separator?.visibility = View.GONE
         //Replaced blur with below
-        otpViewHolder?.otpView?.otpLinearLayout.setBackgroundColor(
+        otpViewHolder?.otpView?.otpLinearLayout?.setBackgroundColor(
             Color.parseColor(
                 ThemeManager.getValue(
                     "amountSectionView.backgroundColor"
@@ -1596,7 +1595,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
     override fun resetViewHolder() {
         adapter.resetSelection()
-        cardViewHolder?.cardInfoHeaderText.text =
+        cardViewHolder?.cardInfoHeaderText?.text =
             LocalizationManager.getValue("cardSectionTitleOr", "TapCardInputKit")
         unActivateActionButton()
         removePaymentInlineShrinkageAndDimmed()
@@ -2657,11 +2656,6 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
         amountViewHolder.readyToScanVisibility(scannerClicked)
         inLineCardLayout.visibility = VISIBLE
         cardViewHolder.view.visibility = GONE
-//        FrameManager.getInstance().frameColor = Color.WHITE
-   //     fragmentManager
-//            .beginTransaction()
-//            .replace(R.id.inline_container, inlineCamerFragment)
-//            .commit()
 
         isInlineOpened = true
         checkoutFragment.isScannerOpened = true
@@ -2909,6 +2903,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
                 }
 
+                else -> {}
             }
         }
 
@@ -3356,7 +3351,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
 
         return list.filter { items ->
             items.paymentType == paymentType && !items.getSupportedCurrencies()
-                ?.contains(currencyFilter)
+                ?.contains(currencyFilter)!!
         } as ArrayList<PaymentOption>
     }
 

@@ -59,6 +59,7 @@ class MorphingAnimation(private val animatedView: View) {
                             )
                         )
                 }
+                else -> {}
             }
         }
 
@@ -125,6 +126,7 @@ class MorphingAnimation(private val animatedView: View) {
                             )
                         )
                 }
+                else -> {}
             }
         }
 

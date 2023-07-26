@@ -388,7 +388,7 @@ object PaymentDataSource :PaymentDataSource {
     }
 
     override fun getCustomer(): TapCustomer {
-        Bugfender.setDeviceString( "Customer","Customer ID :"+ tapCustomer.identifier+" | Customer name : "+ tapCustomer.firstName+"| Customer email :" + tapCustomer.email+"| Customer phone :"+ tapCustomer.getPhone()?.number)
+        Bugfender.setDeviceString( "Customer","Customer ID :"+ tapCustomer.identifier+" | Customer name : "+ tapCustomer.first_name+"| Customer email :" + tapCustomer.email+"| Customer phone :"+ tapCustomer.phone?.number)
          return tapCustomer
     }
 

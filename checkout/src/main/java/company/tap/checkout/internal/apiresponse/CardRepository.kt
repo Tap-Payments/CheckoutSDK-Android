@@ -787,7 +787,7 @@ class CardRepository : APIRequestCallback {
                                     );
                                     PaymentDataSource.setChargeOrAuthorize(chargeResponse)
                                     viewModel.displayOTPView(
-                                        chargeResponse?.customer?.getPhone(),
+                                        chargeResponse?.customer?.phone,
                                         PaymentTypeEnum.SAVEDCARD.toString(),
                                         chargeResponse
                                     )
@@ -853,6 +853,7 @@ class CardRepository : APIRequestCallback {
                         viewModel?.displayAsynchronousPaymentView(chargeResponse)
                     }
                 }
+                else -> {}
             }
     }
 
@@ -871,7 +872,7 @@ class CardRepository : APIRequestCallback {
                         AuthenticationType.OTP -> {
                             // PaymentDataManager.getInstance().setChargeOrAuthorize(authorize as Authorize?)
                             viewModel.displayOTPView(
-                                authorize.customer.getPhone(),
+                                authorize.customer.phone,
                                 PaymentTypeEnum.SAVEDCARD.toString(),
                                 authorize as Authorize
                             )
@@ -914,6 +915,7 @@ class CardRepository : APIRequestCallback {
                     )
 
                 }
+            else -> {}
         }
     }
 
@@ -970,6 +972,7 @@ class CardRepository : APIRequestCallback {
                 )
 
             }
+            else -> {}
         }
     }
 
@@ -1107,7 +1110,7 @@ class CardRepository : APIRequestCallback {
             } else if (paymentOption.threeDS == "Y") {
                 require3DSecure = true
             } else if (paymentOption.threeDS == "U") {
-                require3DSecure = provider?.getRequires3DSecure()
+                require3DSecure = provider?.getRequires3DSecure() == true
             }
         }
 
@@ -1168,7 +1171,7 @@ class CardRepository : APIRequestCallback {
                         CreateAuthorizeRequest(
                             merchant,
                             it1,
-                            transactionCurrency?.currency,
+                            transactionCurrency?.currency.toString(),
                             BigDecimal(selectedTotalAmount),
                             amountedCurrency?.currency.toString(),
                             customer,
@@ -1236,6 +1239,7 @@ class CardRepository : APIRequestCallback {
                 )
 
             }
+            else -> {}
         }
     }
 
@@ -1283,6 +1287,7 @@ class CardRepository : APIRequestCallback {
                 )
                 // closePaymentActivity()
             }
+            else -> {}
         }
     }
 

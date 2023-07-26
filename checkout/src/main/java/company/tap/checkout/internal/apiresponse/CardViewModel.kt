@@ -148,6 +148,7 @@ class CardViewModel : ViewModel() {
                     )
                 }
             }
+            else -> {}
         }
     }
 
