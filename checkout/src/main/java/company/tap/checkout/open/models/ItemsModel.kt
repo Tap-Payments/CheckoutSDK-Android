@@ -25,7 +25,7 @@ data class ItemsModel(
 
     @field:Expose
     @field:SerializedName("currency")
-    val currency: String?,
+    val currency: String? = "KWD",
 
     @field:Expose
     @field:SerializedName("quantity")

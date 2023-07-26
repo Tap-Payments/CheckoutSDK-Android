@@ -70,7 +70,7 @@ open class PaymentOptionsRequest(
 
     @SerializedName("payment_type")
     @Expose
-    private val payment_type: String = payment_type
+    private val payment_type: String = "ALL"
 
     @SerializedName("topup")
     @Expose

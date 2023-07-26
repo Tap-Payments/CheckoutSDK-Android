@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.github.dcendents.android-maven'
-//apply plugin: 'maven-publish'
+apply plugin: 'org.jetbrains.kotlin.plugin.serialization'
 
 android {
     compileSdkVersion 31
@@ -170,6 +170,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.1'
     //implementation 'com.github.Tap-Payments:TapCardValidator-Android:2.1.11'
     implementation 'com.intuit.sdp:sdp-android:1.1.0'
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
 
 
 

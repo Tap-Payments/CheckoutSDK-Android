@@ -12,7 +12,7 @@ All rights reserved.
  **/
 
 /**
- * The type Tax.
+ * The type Tax. ad
  */
 data class Tax(
     @SerializedName("name") var name: String,

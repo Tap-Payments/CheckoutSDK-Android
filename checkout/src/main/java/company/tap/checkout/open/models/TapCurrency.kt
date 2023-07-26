@@ -2,6 +2,7 @@ package company.tap.checkout.open.models
 
 import company.tap.checkout.internal.utils.LocaleCurrencies
 import company.tap.checkout.open.exceptions.CurrencyException
+import kotlinx.serialization.SerialName
 
 /**
  * Created by AhlaamK on 6/13/21.
@@ -12,13 +13,13 @@ All rights reserved.
 /**
  * The type Tap currency.
  */
-class TapCurrency(isoCode: String) {
+@kotlinx.serialization.Serializable
+class TapCurrency(@SerialName("isocode") var isoCode: String) {
     /**
      * Gets iso code.
      *
      * @return the iso code
      */
-    val isoCode: String
 
     /**
      * Instantiates a new Tap currency.

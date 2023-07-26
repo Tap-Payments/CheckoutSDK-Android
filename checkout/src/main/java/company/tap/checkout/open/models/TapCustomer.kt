@@ -1,9 +1,7 @@
 package company.tap.checkout.open.models
 
-import com.google.gson.annotations.Expose
-import com.google.gson.annotations.SerializedName
 import company.tap.checkout.internal.api.models.PhoneNumber
-import java.io.Serializable
+import kotlinx.serialization.SerialName
 
 /**
  * Created by AhlaamK on 6/13/21.
@@ -15,90 +13,30 @@ All rights reserved.
 /**
  * The type TapCustomer.
  */
+@kotlinx.serialization.Serializable
 class TapCustomer(
     /**
      * Gets identifier.
      *
      * @return the identifier
      */
-    @field:Expose @field:SerializedName("id") var identifier: String?,
+    @SerialName("id") var identifier: String?,
     /**
      * Gets first name.
      *
      * @return the first name
      */
-    @field:Expose @field:SerializedName("first_name") var firstName: String?,
-    middleName: String?,
-    lastName: String?,
-    email: String?,
-    phone: PhoneNumber?,
-    metaData: String?,
-    @SerializedName("nationality") @Expose
-    private var nationality: String? = null, @SerializedName("address") @Expose
-    private var address: AddressModel? = null,
-    @SerializedName("locale") @Expose
-    private var locale: String? = null
-) :
-    Serializable {
+    @SerialName("first_name") var firstName: String?,
+    @SerialName("middle_name") var middleName: String?,
+    @SerialName("last_name") var lastName: String?,
+    @SerialName("email") var email: String?,
+    @SerialName("phone") var phone: PhoneNumber?,
+    @SerialName("metadata") var metaData: String?,
+    @SerialName("nationality") var nationality: String? = null,
+    @SerialName("address") var address: AddressModel? = null,
+    @SerialName("locale") var locale: String? = null
+) {
 
-    /**
-     * Gets middle name.
-     *
-     * @return the middle name
-     */
-    @SerializedName("middle_name")
-    @Expose
-    val middleName: String?
-
-    /**
-     * Gets last name.
-     *
-     * @return the last name
-     */
-    @SerializedName("last_name")
-    @Expose
-    val lastName: String?
-
-    /**
-     * Gets email.
-     *
-     * @return the email
-     */
-    @SerializedName("email")
-    @Expose
-    val email: String?
-
-    @SerializedName("phone")
-    @Expose
-    private val phone: PhoneNumber?
-    /**
-     * Gets meta data.
-     *
-     * @return the meta data
-     */
-    /**
-     * The Meta data.
-     */
-    @SerializedName("metadata")
-    var metaData: String?
-
-    /**
-     * Gets phone.
-     *
-     * @return the phone
-     */
-    fun getPhone(): PhoneNumber? {
-        return phone
-    }
-
-    /**
-     * Gets Address.
-     *
-     * @return the Address
-     */
-    fun getAddress(): AddressModel? {
-        return address
-    }
 
     /**
      * Gets Address.
@@ -238,7 +176,7 @@ class TapCustomer(
         fun build(): TapCustomer {
             return TapCustomer(
                 nestedIdentifier, nestedFirstName, nestedMiddleName, nestedLastName,
-                nestedEmail, nestedPhone, nestedMetaData,nestedNationality,nestedAddress
+                nestedEmail, nestedPhone, nestedMetaData, nestedNationality, nestedAddress
             )
         }
     } ////////////////////////// ############################ End of Builder Region ########################### ///////////////////////
