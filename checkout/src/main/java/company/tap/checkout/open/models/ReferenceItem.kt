@@ -2,20 +2,24 @@ package company.tap.checkout.open.models
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
 import java.io.Serializable
 
+@kotlinx.serialization.Serializable
 data class ReferenceItem
-    (@SerializedName("SKU") @Expose var SKU: String? = null,
+    (
+    @SerialName("SKU") @Expose var SKU: String? = null,
 
-     @SerializedName("GTIN") @Expose var GTIN: String? = null): Serializable{
+    @SerialName("GTIN") @Expose var GTIN: String? = null
+) : Serializable {
 
-        init {
+    init {
 
-                this.SKU = SKU
-                this.GTIN = GTIN
-
-        }
+        this.SKU = SKU
+        this.GTIN = GTIN
 
     }
+
+}
 
 

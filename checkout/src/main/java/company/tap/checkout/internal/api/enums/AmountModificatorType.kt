@@ -8,12 +8,14 @@ import com.google.gson.annotations.SerializedName
 Copyright (c) 2021    Tap Payments.
 All rights reserved.
  **/
-enum class AmountModificatorType (val amountModificatorType:String){
+@kotlinx.serialization.Serializable
+enum class AmountModificatorType(val amountModificatorType: String) {
     /**
      * Percentage amount modificator type.
      */
     @SerializedName("P")
     PERCENTAGE("P"),
+
     /**
      * Fixed amount modificator type.
      */

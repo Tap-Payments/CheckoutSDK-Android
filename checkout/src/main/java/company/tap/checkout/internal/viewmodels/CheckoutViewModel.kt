@@ -2132,7 +2132,7 @@ open class CheckoutViewModel : ViewModel(), BaseLayoutManager, OnCardSelectedAct
                 bgArrayList =
                     selectedPayOpt?.buttonStyle?.background?.darkColorModel?.backgroundColors
 
-                if (bgArrayList?.size == 1) {
+                if (bgArrayList?.size == 1) {un
                     colorBackGround = bgArrayList[0]
                     intColorArray = null
                 } else {

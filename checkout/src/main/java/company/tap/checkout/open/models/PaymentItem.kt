@@ -1,8 +1,6 @@
 package company.tap.checkout.open.models
 
 import androidx.annotation.Nullable
-import com.google.gson.annotations.Expose
-import com.google.gson.annotations.SerializedName
 import company.tap.checkout.internal.api.enums.AmountModificatorType
 import company.tap.checkout.internal.api.models.AmountModificator
 import company.tap.checkout.internal.api.models.Quantity
@@ -90,7 +88,7 @@ data class PaymentItem(var name: String,
             BigDecimal.ZERO
         } else when (getDiscount()!!.getType()) {
             AmountModificatorType.PERCENTAGE -> getPlainAmount()?.multiply(getDiscount()!!.getNormalizedValue())
-            AmountModificatorType.FIXED -> getDiscount()?.getValue()
+            AmountModificatorType.FIXED -> getDiscount()?.value()
             else -> BigDecimal.ZERO
         }
     }

@@ -3,6 +3,7 @@ package company.tap.checkout.open.models
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import company.tap.checkout.internal.api.models.Response
+import kotlinx.serialization.SerialName
 import java.io.Serializable
 import java.math.BigDecimal
 
@@ -94,10 +95,11 @@ data class TopupPost(
     val url: String? = null
 ) : Serializable
 
+@kotlinx.serialization.Serializable
 data class MetaData(
-    @SerializedName("udf1") @Expose
+    @SerialName("udf1") @Expose
     private var udf1: String? = null,
-    @SerializedName("udf2")
+    @SerialName("udf2")
     @Expose
     private var udf2: String? = null
 ) : Serializable

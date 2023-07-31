@@ -1022,8 +1022,7 @@ class PaymentInlineViewHolder(
                     expiryDatePrev = s.toString()
                     if (tapCardInputView.isExpDateValid) {
                         tapAlertView?.fadeVisibility(View.VISIBLE)
-                        val alertMessage: String =
-                            LocalizationManager.getValue("Warning", "Hints", "missingCVV")
+                        val alertMessage: String = LocalizationManager.getValue("Warning", "Hints", "missingCVV")
                         cardBrandInString =
                             PaymentDataSource.getBinLookupResponse()?.scheme?.cardBrand?.rawValue
                         Log.e("card", cardBrandInString.toString())

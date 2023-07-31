@@ -6,9 +6,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkoutsdk.R
-import company.tap.checkoutsdk.adapters.CustomerAdapter
 import company.tap.checkoutsdk.adapters.ItemsAdapter
-import company.tap.checkoutsdk.viewmodels.CustomerViewModel
 import company.tap.checkoutsdk.viewmodels.PaymentItemViewModel
 
 /**
@@ -35,7 +33,7 @@ class ItemsViewHolder(itemView: View, listener: ItemsAdapter.OnClickListenerInte
         quantity.text = "Quantity :"+viewModel.getitemQuantity().toString()
         amountPerunit.text = "Amount per unit :"+viewModel.getPricePUnit().toString()
         totalAmount.text = "Total Price :"+viewModel.getitemTotalPrice().toString()
-        discountAmount.text = viewModel.getAmountType()?.getValue().toString()
+        discountAmount.text = viewModel.getAmountType()?.value().toString()
     }
 
     init {

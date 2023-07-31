@@ -31,13 +31,11 @@ class TapCustomer(
     @SerialName("last_name") var last_name: String?,
     @SerialName("email") var email: String?,
     @SerialName("phone") var phone: PhoneNumber?,
-    @SerialName("metadata") var metaData: String?,
+    @SerialName("meta_data") var metaData: MetaData? = null,
     @SerialName("nationality") var nationality: String? = null,
     @SerialName("address") var address: AddressModel? = null,
     @SerialName("locale") var locale: String? = null
 ) {
-
-
 
 
     override fun toString(): String {
@@ -68,7 +66,7 @@ class TapCustomer(
         private var nestedLastName: String? = null
         private var nestedEmail: String? = null
         private var nestedPhone: PhoneNumber? = null
-        private var nestedMetaData: String? = null
+        private var nestedMetaData: MetaData? = null
         private var nestedNationality: String? = null
         private var nestedAddress: AddressModel? = null
 
@@ -133,7 +131,7 @@ class TapCustomer(
          * @param innerMetadata the inner metadata
          * @return the customer builder
          */
-        fun metadata(innerMetadata: String?): CustomerBuilder {
+        fun metadata(innerMetadata: MetaData?): CustomerBuilder {
             nestedMetaData = innerMetadata
             return this
         }

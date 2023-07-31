@@ -4,88 +4,91 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import company.tap.checkout.internal.api.enums.AmountModificatorType
 import company.tap.checkout.internal.api.models.AmountModificator
-import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.Category
+import kotlinx.serialization.SerialName
 import java.io.Serializable
 import java.math.BigDecimal
 
+@kotlinx.serialization.Serializable
 data class ItemsModel(
     @field:Expose
-    @field:SerializedName("product_id")
-    val productId: String?,
+    @SerialName("product_id")
+    val product_id: String?,
 
     @field:Expose
-    @field:SerializedName(
-        "name")
+    @SerialName("name")
     val name: String? = null,
 
     @field:Expose
-    @field:SerializedName("amount")
-    var amount: BigDecimal? = null,
+    @SerialName("amount")
+    var amount: Double? = null,
 
     @field:Expose
-    @field:SerializedName("currency")
+    @SerialName("currency")
     val currency: String? = "KWD",
 
     @field:Expose
-    @field:SerializedName("quantity")
-    val quantity: BigDecimal? = null,
+    @SerialName("quantity")
+    val quantity: Double? = null,
 
-    @SerializedName("category")
+    @SerialName("category")
     @Expose
     private var category: Category?,
 
-    @SerializedName("discount")
+    @SerialName("discount")
     @Expose val discount: AmountModificator?,
 
-    @SerializedName("vendor")
+    @SerialName("vendor")
     @Expose
     private val vendor: Vendor?,
 
-    @SerializedName("fulfillment_service")
+    @SerialName("fulfillment_service")
     @Expose
     val fulfillmentService: String?,
 
-    @SerializedName("requires_shipping")
+    @SerialName("requires_shipping")
     @Expose
     val isRequireShipping: Boolean? = false,
 
-    @SerializedName("item_code")
+    @SerialName("item_code")
     @Expose
     val itemCode: String?,
 
-    @SerializedName("account_code")
+    @SerialName("account_code")
     @Expose
     val accountCode: String?,
 
-    @SerializedName("description")
+    @SerialName("description")
     @Expose
     val description: String?,
 
-    @SerializedName("image")
+    @SerialName("image")
     @Expose
     val image: String?,
 
-    @SerializedName("reference")
+    @SerialName("reference")
     @Expose
     private val reference: ReferenceItem?,
 
-    @SerializedName("dimensions")
+    @SerialName("dimensions")
     @Expose
     val dimensions: ItemDimensions?,
 
-    @SerializedName("tags")
+    @SerialName("tags")
     @Expose
     val tags: String?,
 
-    @SerializedName("meta_data")
+    @SerialName("meta_data")
     @Expose
     val metaData: MetaData?,
 
+    @SerialName("isExpandedItem")
+    @Expose
     var isExpandedItem: Boolean = false,
-
-    var totalAmount :BigDecimal? = null
-) : Serializable {
+    @SerialName("total_amount")
+    @Expose
+    var totalAmount: Double? = null
+) {
 
 
     fun getCategory(): Category? {
@@ -110,12 +113,12 @@ data class ItemsModel(
      *
      * @return the plain amount
      */
-    fun getPlainAmount(): BigDecimal? {
+    fun getPlainAmount(): Double? {
         println("  #### getPlainAmount : " + amount)
         println("  #### quantity : " + quantity)
         assert(amount != null)
-        totalAmount = amount!!.multiply(quantity)
-        return totalAmount
+        totalAmount = (amount?.toBigDecimal()?.multiply(quantity?.toBigDecimal() ?: BigDecimal.ONE))?.toDouble()
+        return totalAmount?.toDouble()
     }
 
     /**
@@ -126,13 +129,13 @@ data class ItemsModel(
     fun getDiscountAmount(): BigDecimal? {
         return if (getDiscount() == null) {
             BigDecimal.ZERO
-        } else when (getDiscount()!!.getType()) {
-            AmountModificatorType.PERCENTAGE -> getPlainAmount()?.multiply(
+        } else when (getDiscount()!!.type) {
+            AmountModificatorType.PERCENTAGE -> getPlainAmount()?.toBigDecimal()?.multiply(
                 getDiscount()!!.getNormalizedValue()
             )
-            AmountModificatorType.FIXED -> getDiscount()!!.getValue()
+            AmountModificatorType.FIXED -> getDiscount()?.value
             else -> BigDecimal.ZERO
-        }
+        } as BigDecimal?
     }
 
 

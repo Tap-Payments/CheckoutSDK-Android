@@ -33,7 +33,7 @@ object AmountCalculator {
                     result = result.add(amount.multiply(tax.amount.getNormalizedValue()))
 
                 }
-                AmountModificatorType.FIXED -> result = result.add(tax.amount.getValue())
+                AmountModificatorType.FIXED -> result = result.add(tax.amount.value())
                 else -> {}
             }
         }
@@ -94,7 +94,7 @@ object AmountCalculator {
             for (fee in fees) {
                 var increase: BigDecimal? = BigDecimal.ZERO
 
-                when (fee.getType()) {
+                when (fee.type) {
                     AmountModificatorType.FIXED -> {
                         val amountedCurrency: SupportedCurrencies? = fee?.currency?.let {
                             AmountCalculator.getAmountedCurrency(
@@ -110,7 +110,7 @@ object AmountCalculator {
                                     currency?.currency
                                 )
                             ) {
-                                return fee.getValue()
+                                return fee.value()
                             } else {
                                 /***
                                  * Based on JS Lib Condition for extra fees calculation changed.
@@ -123,7 +123,7 @@ object AmountCalculator {
                                     currency?.amount,
                                     MathContext.DECIMAL64
                                 )
-                             return  fee.getValue()?.multiply(rate)
+                             return  fee.value()?.multiply(rate)
                             }
                         break
                     }
@@ -133,7 +133,7 @@ object AmountCalculator {
                          */
                         increase = (currency?.amount?.divide(
                             BigDecimal.valueOf(1).subtract(
-                                fee.getValue()?.divide(
+                                fee.value()?.divide(
                                     BigDecimal.valueOf(
                                         100
                                     )
@@ -257,9 +257,9 @@ object AmountCalculator {
             when (tax?.getAmount()?.getType()) {
                 AmountModificatorType.PERCENTAGE -> {
                     result = result.add(amount.multiply(tax.getAmount().getNormalizedValue()))
-                    result = result.add(tax.getAmount().getValue())
+                    result = result.add(tax.getAmount().value())
                 }
-                AmountModificatorType.FIXED -> result = result.add(tax.getAmount().getValue())
+                AmountModificatorType.FIXED -> result = result.add(tax.getAmount().value())
                 else -> {}
             }
         }
@@ -285,9 +285,9 @@ object AmountCalculator {
             when (tax.amount.getType()) {
                 AmountModificatorType.PERCENTAGE -> {
                     result = result.add(amount.multiply(tax.amount.getNormalizedValue()))
-                    result = result.add(tax.amount.getValue())
+                    result = result.add(tax.amount.value())
                 }
-                AmountModificatorType.FIXED -> result = result.add(tax.amount.getValue())
+                AmountModificatorType.FIXED -> result = result.add(tax.amount.value())
                 else -> {}
             }
         }

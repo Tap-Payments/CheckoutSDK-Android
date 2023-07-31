@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView
 import company.tap.checkout.internal.api.enums.AmountModificatorType
 import company.tap.checkout.internal.utils.CurrencyFormatter
 import company.tap.checkout.internal.utils.animateBS
-import company.tap.checkout.internal.utils.showToast
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.models.ItemsModel
 import company.tap.taplocalizationkit.LocalizationManager
@@ -28,7 +27,6 @@ import company.tap.tapuilibraryy.fontskit.enums.TapFont
 import company.tap.tapuilibraryy.themekit.ThemeManager
 import company.tap.tapuilibraryy.themekit.theme.SeparatorViewTheme
 import company.tap.tapuilibraryy.themekit.theme.TextViewTheme
-import company.tap.tapuilibraryy.uikit.atoms.TapImageView
 import company.tap.tapuilibraryy.uikit.atoms.TapSeparatorView
 import company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
 import company.tap.tapuilibraryy.uikit.datasource.ItemViewDataSource
@@ -239,7 +237,7 @@ class ItemAdapter(
         } else
             for (i in adapterContentItems.indices) {
                 itemName?.text = adapterContentItems[position].name
-                if (adapterContentItems[position].discount?.amnttype?.name == AmountModificatorType.PERCENTAGE.name) {
+                if (adapterContentItems[position].discount?.type?.name == AmountModificatorType.PERCENTAGE.name) {
                     //   discount?.visibility = View.VISIBLE
                     //  discount?.text = adapterContentItems[i].discount.toString()
                     //    discount?.text = LocalizationManager.getValue("Discount", "ItemList")
