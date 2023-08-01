@@ -1,5 +1,6 @@
 package company.tap.checkout.internal.api.models
 
+import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
@@ -45,6 +46,9 @@ All rights reserved.
         val _sensitiveCardData =
                 SensitiveCardData(cardNumber, expirationYear, expirationMonth, cvc, cardholderName)
         val cryptedDataJson = Gson().toJson(_sensitiveCardData)
+        Log.e("sensitiveData", cryptedDataJson.toString())
+        Log.e("sensitiveData EncryptionKey", PaymentDataSource.getMerchantData()?.encryptionKey.toString())
+
         this.sensitiveCardData = PaymentDataSource.getMerchantData()?.encryptionKey?.let {
             CryptoUtil.encryptJsonString(
                     cryptedDataJson,
