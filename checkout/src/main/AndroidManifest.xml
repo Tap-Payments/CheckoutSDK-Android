@@ -5,24 +5,24 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.NFC"/>
+    <uses-permission android:name="android.permission.NFC" />
     <uses-permission
         android:name="android.permission.ACCESS_WIFI_STATE"
         android:windowSoftInputMode="stateHidden|adjustResize" />
 
-    <application
-        android:name=".internal.utils.App"
-        >
 
-        <activity android:name=".open.CheckOutActivity"
-            android:exported="true"
-            android:windowSoftInputMode="adjustResize"
-            android:supportsRtl="true"
-            android:screenOrientation="portrait"
+    <application>
+
+        <activity
+            android:name=".open.CheckOutActivity"
+            android:anyDensity="false"
             android:configChanges="orientation|keyboardHidden"
-            android:anyDensity = "false"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:supportsRtl="true"
             android:theme="@style/TransparentCompat"
-          >
+            android:windowSoftInputMode="adjustResize">
+
             <intent-filter>
                 <action android:name="android.nfc.action.TECH_DISCOVERED" />
                 <action android:name="android.nfc.action.TAG_DISCOVERED" />
