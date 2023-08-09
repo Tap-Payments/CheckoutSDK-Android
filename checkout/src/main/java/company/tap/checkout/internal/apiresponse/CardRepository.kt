@@ -44,9 +44,9 @@ import company.tap.tapnetworkkit.controller.NetworkController
 import company.tap.tapnetworkkit.enums.TapMethodType
 import company.tap.tapnetworkkit.exception.GoSellError
 import company.tap.tapnetworkkit.interfaces.APIRequestCallback
-import company.tap.tapuilibraryy.themekit.ThemeManager
-import company.tap.tapuilibraryy.uikit.enums.ActionButtonState
-import company.tap.tapuilibraryy.uikit.views.TapBottomSheetDialog.Companion.TAG
+import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.enums.ActionButtonState
+import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog.Companion.TAG
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.subjects.BehaviorSubject
 import retrofit2.Response
@@ -1089,7 +1089,7 @@ class CardRepository : APIRequestCallback {
         var require3DSecure: Boolean = provider
             .getRequires3DSecure() // this.dataSource.getRequires3DSecure() || this.chargeRequires3DSecure();
         val receipt: Receipt? = provider.getReceiptSettings()
-        val destinations: Destinations? = provider.getDestination()
+        val destinations: List<Destinations>? = provider.getDestination()
         val merchant: Merchant? = provider.getMerchant()
         val cardIssuer: CardIssuer? = provider.getCardIssuer()
         val topUp: TopUp? = provider.getTopUp()

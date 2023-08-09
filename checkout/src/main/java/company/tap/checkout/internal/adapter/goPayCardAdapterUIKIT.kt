@@ -20,9 +20,9 @@ import company.tap.checkout.internal.apiresponse.testmodels.Chip1
 import company.tap.checkout.internal.apiresponse.testmodels.GoPaySavedCards
 
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
-import company.tap.tapuilibraryy.themekit.ThemeManager
-import company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
-import company.tap.tapuilibraryy.uikit.ktx.setBorderedView
+import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.atoms.TapTextViewNew
+import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import kotlinx.android.synthetic.main.item_gopay_signout.view.*
 import kotlinx.android.synthetic.main.item_knet.view.*
 import kotlinx.android.synthetic.main.item_save_cards.view.*

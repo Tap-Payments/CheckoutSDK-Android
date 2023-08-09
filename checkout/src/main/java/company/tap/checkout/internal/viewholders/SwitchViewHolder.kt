@@ -11,11 +11,11 @@ import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.nfcreader.open.utils.TapNfcUtils
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibraryy.themekit.ThemeManager
-import company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
-import company.tap.tapuilibraryy.uikit.datasource.TapSwitchDataSource
-import company.tap.tapuilibraryy.uikit.ktx.setBorderedView
-import company.tap.tapuilibraryy.uikit.ktx.setBottomBorders
+import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.atoms.TapTextViewNew
+import company.tap.tapuilibrary.uikit.datasource.TapSwitchDataSource
+import company.tap.tapuilibrary.uikit.ktx.setBorderedView
+import company.tap.tapuilibrary.uikit.ktx.setBottomBorders
 import kotlinx.android.synthetic.main.switch_layout.view.*
 
 /**

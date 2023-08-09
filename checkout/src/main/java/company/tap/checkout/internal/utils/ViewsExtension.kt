@@ -47,9 +47,9 @@ import company.tap.checkout.R
 import company.tap.checkout.internal.cache.SharedPrefManager
 import company.tap.checkout.internal.enums.ThemeMode
 import company.tap.checkout.open.data_managers.PaymentDataSource
-import company.tap.tapuilibraryy.themekit.ThemeManager
-import company.tap.tapuilibraryy.uikit.AppColorTheme
-import company.tap.tapuilibraryy.uikit.ktx.loadAppThemManagerFromPath
+import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.AppColorTheme
+import company.tap.tapuilibrary.uikit.ktx.loadAppThemManagerFromPath
 import jp.wasabeef.blurry.Blurry
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*

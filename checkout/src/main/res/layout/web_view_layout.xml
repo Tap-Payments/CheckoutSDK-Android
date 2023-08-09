@@ -21,7 +21,7 @@
         android:layoutDirection="locale"
         android:paddingTop="@dimen/margin_basic_10dp">
 
-        <company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
+        <company.tap.tapuilibrary.uikit.atoms.TapTextViewNew
             android:id="@+id/webView_Header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

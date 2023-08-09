@@ -23,8 +23,8 @@ import company.tap.checkout.internal.api.models.SavedCard
 import company.tap.checkout.internal.enums.ThemeMode
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
 import company.tap.checkout.internal.utils.CustomUtils
-import company.tap.tapuilibraryy.themekit.ThemeManager
-import company.tap.tapuilibraryy.themekit.theme.TextViewTheme
+import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.themekit.theme.TextViewTheme
 import kotlinx.android.synthetic.main.item_benefit_pay.view.*
 import kotlinx.android.synthetic.main.item_disabled.view.*
 import kotlinx.android.synthetic.main.item_googlepay.view.*

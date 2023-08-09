@@ -17,13 +17,13 @@ import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.checkout.internal.utils.*
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibraryy.themekit.ThemeManager
-import company.tap.tapuilibraryy.themekit.theme.TextViewTheme
-import company.tap.tapuilibraryy.uikit.atoms.TapChip
-import company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
-import company.tap.tapuilibraryy.uikit.datasource.AmountViewDataSource
-import company.tap.tapuilibraryy.uikit.ktx.setBorderedView
-import company.tap.tapuilibraryy.uikit.utils.MetricsUtil
+import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.themekit.theme.TextViewTheme
+import company.tap.tapuilibrary.uikit.atoms.TapChip
+import company.tap.tapuilibrary.uikit.atoms.TapTextViewNew
+import company.tap.tapuilibrary.uikit.datasource.AmountViewDataSource
+import company.tap.tapuilibrary.uikit.ktx.setBorderedView
+import company.tap.tapuilibrary.uikit.utils.MetricsUtil
 import kotlinx.android.synthetic.main.amountview_layout.view.*
 
 

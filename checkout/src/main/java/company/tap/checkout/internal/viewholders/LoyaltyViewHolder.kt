@@ -21,13 +21,13 @@ import company.tap.checkout.internal.utils.prepareViewToSlide
 import company.tap.checkout.internal.utils.showToast
 import company.tap.checkout.internal.utils.slideView
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
-import company.tap.tapuilibraryy.themekit.ThemeManager
-import company.tap.tapuilibraryy.uikit.AppColorTheme
-import company.tap.tapuilibraryy.uikit.datasource.LoyaltyHeaderDataSource
-import company.tap.tapuilibraryy.uikit.doOnLanguageChange
-import company.tap.tapuilibraryy.uikit.getColorWithoutOpacity
-import company.tap.tapuilibraryy.uikit.ktx.loadAppThemManagerFromPath
-import company.tap.tapuilibraryy.uikit.organisms.TapLoyaltyView
+import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.AppColorTheme
+import company.tap.tapuilibrary.uikit.datasource.LoyaltyHeaderDataSource
+import company.tap.tapuilibrary.uikit.doOnLanguageChange
+import company.tap.tapuilibrary.uikit.getColorWithoutOpacity
+import company.tap.tapuilibrary.uikit.ktx.loadAppThemManagerFromPath
+import company.tap.tapuilibrary.uikit.organisms.TapLoyaltyView
 import java.math.BigDecimal
 
 
@@ -237,7 +237,7 @@ class LoyaltyViewHolder(
 
                     textRedemptionPoints.visibility = View.VISIBLE
                     textCurrency.text =
-                        context.resources.getString(company.tap.tapuilibraryy.R.string.aed)
+                        context.resources.getString(company.tap.tapuilibrary.R.string.aed)
 
                 }
             }

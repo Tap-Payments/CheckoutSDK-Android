@@ -64,7 +64,7 @@ interface PaymentDataSource {
     /**
      * Shipping list. Optional. Note: specifying shipping will affect total payment amount. @return the shipping
      */
-    fun getShipping(): ArrayList<Shipping>?
+    fun getShipping(): Shipping?
 
     /**
      * Tap will post to this URL after transaction finishes. Optional. @return the post url
@@ -115,7 +115,7 @@ interface PaymentDataSource {
     /**
      * The Destination array contains list of Merchant desired destinations accounts to receive money from payment transactions
      */
-    fun getDestination(): Destinations?
+    fun getDestination(): List<Destinations>?
 
     fun getMerchant(): Merchant?
     fun getPaymentDataType(): String?

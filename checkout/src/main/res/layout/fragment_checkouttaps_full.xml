@@ -67,7 +67,7 @@
         android:layout_height="match_parent" />
 
 
-    <company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
+    <company.tap.tapuilibrary.uikit.atoms.TapTextViewNew
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:id="@+id/closeText"
@@ -78,7 +78,7 @@
         android:layout_alignParentEnd="true"
         android:layout_gravity="end"/>
 
-    <company.tap.tapuilibraryy.uikit.atoms.TapImageView
+    <company.tap.tapuilibrary.uikit.atoms.TapImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:id="@+id/closeImage"

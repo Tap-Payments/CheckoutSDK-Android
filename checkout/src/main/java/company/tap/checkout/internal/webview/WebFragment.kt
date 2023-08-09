@@ -35,9 +35,9 @@ import company.tap.checkout.internal.viewholders.SwitchViewHolder
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.controller.SDKSession.contextSDK
 import company.tap.checkout.open.data_managers.PaymentDataSource
-import company.tap.tapuilibraryy.themekit.ThemeManager
-import company.tap.tapuilibraryy.uikit.ktx.setBorderedView
-import company.tap.tapuilibraryy.uikit.ktx.setTopBorders
+import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.ktx.setBorderedView
+import company.tap.tapuilibrary.uikit.ktx.setTopBorders
 import kotlinx.android.synthetic.main.fragment_web.*
 import kotlinx.android.synthetic.main.fragment_web.web_view
 import kotlinx.android.synthetic.main.switch_layout.view.*

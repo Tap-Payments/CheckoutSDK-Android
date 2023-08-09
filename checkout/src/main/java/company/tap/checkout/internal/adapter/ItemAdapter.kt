@@ -23,17 +23,17 @@ import company.tap.checkout.internal.utils.showToast
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.models.ItemsModel
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibraryy.R
-import company.tap.tapuilibraryy.fontskit.enums.TapFont
-import company.tap.tapuilibraryy.themekit.ThemeManager
-import company.tap.tapuilibraryy.themekit.theme.SeparatorViewTheme
-import company.tap.tapuilibraryy.themekit.theme.TextViewTheme
-import company.tap.tapuilibraryy.uikit.atoms.TapImageView
-import company.tap.tapuilibraryy.uikit.atoms.TapSeparatorView
-import company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
-import company.tap.tapuilibraryy.uikit.datasource.ItemViewDataSource
-import company.tap.tapuilibraryy.uikit.ktx.setBorderedView
-import company.tap.tapuilibraryy.uikit.views.TapItemListView
+import company.tap.tapuilibrary.R
+import company.tap.tapuilibrary.fontskit.enums.TapFont
+import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.themekit.theme.SeparatorViewTheme
+import company.tap.tapuilibrary.themekit.theme.TextViewTheme
+import company.tap.tapuilibrary.uikit.atoms.TapImageView
+import company.tap.tapuilibrary.uikit.atoms.TapSeparatorView
+import company.tap.tapuilibrary.uikit.atoms.TapTextViewNew
+import company.tap.tapuilibrary.uikit.datasource.ItemViewDataSource
+import company.tap.tapuilibrary.uikit.ktx.setBorderedView
+import company.tap.tapuilibrary.uikit.views.TapItemListView
 
 
 /**

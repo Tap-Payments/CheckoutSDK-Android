@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 >
 
-                <company.tap.tapuilibraryy.uikit.views.TapBrandView
+                <company.tap.tapuilibrary.uikit.views.TapBrandView
                     android:id="@+id/tab_brand_view"
                     android:layout_width="match_parent"
                     app:layout_constraintStart_toStartOf="parent"

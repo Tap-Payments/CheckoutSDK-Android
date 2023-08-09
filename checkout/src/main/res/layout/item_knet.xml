@@ -10,7 +10,7 @@
 
 
 
-    <company.tap.tapuilibraryy.uikit.atoms.TapImageView
+    <company.tap.tapuilibrary.uikit.atoms.TapImageView
         android:id="@+id/imageView_knet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:textDirection="locale"
+    android:layoutDirection="locale"
+    android:id="@+id/cardShipping_mainLL">
+
+    <company.tap.tapuilibrary.uikit.atoms.TapTextViewNew
+        android:id="@+id/cardShipping_Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_basic_10dp"
+        android:textAllCaps="true"
+        android:textDirection="locale"
+        android:layoutDirection="locale"
+        tools:text="Shipping"/>
+
+    <androidx.cardview.widget.CardView
+        android:layout_margin="@dimen/margin_basic_10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/margin_basic_15dp"
+        app:cardElevation="0dp"
+
+        android:elevation="@dimen/margin_basic_10dp">
+        <LinearLayout
+            android:id="@+id/mainShipLL"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <company.tap.tapuilibrary.uikit.atoms.TapEditText
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:hint="Flat or Building Name"
+                android:imeOptions="actionNext"
+                android:background="@null"
+                android:layout_margin="8dp"
+                android:textDirection="locale"
+                android:layoutDirection="locale"
+                android:id="@+id/flat_EditText"/>
+            <company.tap.tapuilibrary.uikit.atoms.TapSeparatorView
+                android:id="@+id/shippingSeparator0"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+
+                android:background="@color/view_color" />
+            <company.tap.tapuilibrary.uikit.atoms.TapEditText
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:hint="Additional Line"
+                android:imeOptions="actionNext"
+                android:background="@null"
+                android:textDirection="locale"
+                android:layoutDirection="locale"
+                android:layout_margin="8dp"
+                android:id="@+id/additionalLine_EditText"/>
+            <company.tap.tapuilibrary.uikit.atoms.TapSeparatorView
+                android:id="@+id/shippingSeparator1"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+
+                android:background="@color/view_color" />
+            <company.tap.tapuilibrary.uikit.atoms.TapEditText
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:hint="City"
+                android:imeOptions="actionNext"
+                android:background="@null"
+                android:layout_margin="8dp"
+                android:textDirection="locale"
+                android:layoutDirection="locale"
+                android:id="@+id/cityName_EditText"/>
+            <company.tap.tapuilibrary.uikit.atoms.TapSeparatorView
+                android:id="@+id/shippingSeparator2"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:background="@color/view_color" />
+        <LinearLayout
+            android:id="@+id/mobilePaymentMainLinear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            android:orientation="horizontal"
+            android:textDirection="locale"
+            android:layoutDirection="locale"
+            android:paddingStart="@dimen/margin_basic_16dp">
+
+
+            <com.hbb20.CountryCodePicker
+                android:id="@+id/shipping_countryCodePicker"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusable="true"
+                app:ccp_showArrow="false"
+                android:layout_marginStart="@dimen/margin_basic_6dp"
+                android:layout_marginEnd="@dimen/margin_basic_6dp"
+                app:ccp_textGravity="LEFT"
+                android:textDirection="ltr"
+                app:ccp_showPhoneCode="false"
+
+                app:ccp_defaultPhoneCode="965"
+                app:ccp_contentColor="@color/gray"
+                android:fontFamily="sans-serif-light"
+                android:visibility="visible"
+                app:ccp_textSize="@dimen/font_size_17sp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                app:ccpDialog_showCloseIcon="true"
+                app:ccpDialog_showNameCode="false"
+                app:ccp_customMasterCountries="KW,QA,BH,SA,UAE,JO"
+                app:ccpDialog_textColor="@color/gray"
+                app:ccp_hintExampleNumber="false"
+                app:ccp_showFlag="true"
+                app:ccp_showNameCode="true"/>
+            <company.tap.tapuilibrary.uikit.atoms.TapImageView
+                android:id="@+id/mobileImage"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginStart="-45dp"
+                android:src="@drawable/ic_arrow_down"
+                android:visibility="visible" />
+
+        </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

@@ -20,9 +20,9 @@ All rights reserved.
 open class PaymentOptionsRequest(
     transactionMode: TransactionMode?,
     amount: BigDecimal?,
-    shipping: ArrayList<Shipping>?,
+    shipping: Shipping?,
     taxes: ArrayList<Tax>?,
-    destinations:Destinations?,
+    destinations:List<Destinations>?,
     currency: String?,
     customer: String?,
     merchant_id: String?,
@@ -41,7 +41,7 @@ open class PaymentOptionsRequest(
 
     @SerializedName("shipping")
     @Expose
-    private val shipping: ArrayList<Shipping>? = shipping
+    private val shipping: Shipping? = shipping
 
     @SerializedName("taxes")
     @Expose
@@ -50,7 +50,7 @@ open class PaymentOptionsRequest(
 
     @SerializedName("destinations")
     @Expose
-    private val destinations: Destinations? = destinations
+    private val destinations: List<Destinations>? = destinations
 
     @SerializedName("customer")
     @Expose

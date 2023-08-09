@@ -135,7 +135,7 @@ else return TransactionMode.PURCHASE
         return authorizeAction
     }
 
-    override fun getDestination(): Destinations? {
+    override fun getDestination(): List<Destinations>? {
 
             return getExternalDataSource().getDestination()
 

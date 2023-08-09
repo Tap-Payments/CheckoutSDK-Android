@@ -23,6 +23,7 @@ import company.tap.checkout.open.models.Reference
 import company.tap.checkout.open.models.TopUp
 
 import java.util.*
+import kotlin.collections.List
 
 /**
  * Created by AhlaamK on 7/5/21.
@@ -133,7 +134,7 @@ interface IPaymentDataProvider {
     /**
      * get Destination
      */
-    fun getDestination(): Destinations?
+    fun getDestination(): List<Destinations>?
 
     /**
      * get Merchant

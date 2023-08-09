@@ -29,7 +29,7 @@ import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.nfcreader.open.reader.TapEmvCard
 import company.tap.nfcreader.open.reader.TapNfcCardReader
 import company.tap.tapnetworkkit.interfaces.APILoggInterface
-import company.tap.tapuilibraryy.uikit.models.DialogConfigurations
+import company.tap.tapuilibrary.uikit.models.DialogConfigurations
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables

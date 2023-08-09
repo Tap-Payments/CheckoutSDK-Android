@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <company.tap.tapuilibraryy.uikit.atoms.TapImageView
+        <company.tap.tapuilibrary.uikit.atoms.TapImageView
             android:id="@+id/imageView_currency"
             android:layout_width="28dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -30,7 +30,7 @@
             android:layout_marginStart="15dp"
             />
 
-        <company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
+        <company.tap.tapuilibrary.uikit.atoms.TapTextViewNew
             android:id="@+id/textView_currency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

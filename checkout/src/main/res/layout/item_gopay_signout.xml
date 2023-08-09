@@ -22,7 +22,7 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <company.tap.tapuilibraryy.uikit.atoms.TapImageView
+        <company.tap.tapuilibrary.uikit.atoms.TapImageView
             android:id="@+id/imageView_signOut"
             android:layout_width="18dp"
             android:layout_height="18dp"

@@ -7,7 +7,7 @@
     android:layoutDirection="locale"
     android:animateLayoutChanges="true"
     android:orientation="vertical">
-    <company.tap.tapuilibraryy.uikit.atoms.TapChipGroup
+    <company.tap.tapuilibrary.uikit.atoms.TapChipGroup
         android:id="@+id/mainChipgroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,13 +20,13 @@
 
         >
 
-        <company.tap.tapuilibraryy.uikit.atoms.TapSeparatorView
+        <company.tap.tapuilibrary.uikit.atoms.TapSeparatorView
             android:id="@+id/separator_1"
             android:layout_width="wrap_content"
             android:layout_height="1dp"
             android:visibility="gone"
             android:background="@color/separator_color" />
-        <company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
+        <company.tap.tapuilibrary.uikit.atoms.TapTextViewNew
             android:textDirection="locale"
             android:id="@+id/cardInfoHeaderText"
             android:layout_width="match_parent"

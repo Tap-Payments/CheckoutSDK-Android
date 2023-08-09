@@ -30,11 +30,11 @@ import company.tap.checkout.open.controller.SDKSession.checkOutDelegate
 import company.tap.checkout.open.controller.SDKSession.tabAnimatedActionButton
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibraryy.themekit.ThemeManager
-import company.tap.tapuilibraryy.uikit.enums.ActionButtonState
-import company.tap.tapuilibraryy.uikit.interfaces.TapBottomDialogInterface
-import company.tap.tapuilibraryy.uikit.views.TapBottomSheetDialog
-import company.tap.tapuilibraryy.uikit.views.TapBrandView
+import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.enums.ActionButtonState
+import company.tap.tapuilibrary.uikit.interfaces.TapBottomDialogInterface
+import company.tap.tapuilibrary.uikit.views.TapBottomSheetDialog
+import company.tap.tapuilibrary.uikit.views.TapBrandView
 import org.json.JSONObject
 import java.util.*
 

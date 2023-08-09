@@ -13,9 +13,9 @@ import company.tap.checkout.R
 import company.tap.checkout.internal.api.enums.PaymentType
 import company.tap.checkout.internal.interfaces.BaseLayoutManager
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibraryy.themekit.ThemeManager
-import company.tap.tapuilibraryy.uikit.AppColorTheme
-import company.tap.tapuilibraryy.uikit.ktx.loadAppThemManagerFromPath
+import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.AppColorTheme
+import company.tap.tapuilibrary.uikit.ktx.loadAppThemManagerFromPath
 
 
 /**
@@ -48,8 +48,11 @@ object CustomUtils {
             .setSubtitle(messageString)
             .setBoldPositiveLabel(false)
             .setCancelable(false)
-            .setBackgroundColor(loadAppThemManagerFromPath(AppColorTheme.GlobalValuesColor))
-            .setTextColor(getColor())
+        /**
+         * passed if used library modification of iosDialog
+         */
+//            .setBackgroundColor(loadAppThemManagerFromPath(AppColorTheme.GlobalValuesColor))
+//            .setTextColor(getColor())
 
 
 

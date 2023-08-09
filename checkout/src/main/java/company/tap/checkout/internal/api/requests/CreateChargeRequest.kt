@@ -53,7 +53,7 @@ open class CreateChargeRequest(
     statementDescriptor: String?,
     threeDSecure: Boolean,
     receipt: Receipt?,
-    destinations: Destinations?,
+    destinations: List<Destinations>?,
     topUp: TopUp?
 ) {
     @SerializedName("merchant")
@@ -130,7 +130,7 @@ open class CreateChargeRequest(
 
     @SerializedName("destinations")
     @Expose
-    private val destinations: Destinations?
+    private val destinations: List<Destinations>?
 
     @SerializedName("topup")
     @Expose

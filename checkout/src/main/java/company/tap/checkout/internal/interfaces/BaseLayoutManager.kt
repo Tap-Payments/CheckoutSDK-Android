@@ -10,7 +10,7 @@ import company.tap.checkout.internal.api.models.PhoneNumber
 import company.tap.checkout.internal.api.responses.*
 import company.tap.checkout.internal.apiresponse.CardViewModel
 import company.tap.checkout.internal.enums.SectionType
-import company.tap.tapuilibraryy.uikit.views.TabAnimatedActionButton
+import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
 
 /**
  *

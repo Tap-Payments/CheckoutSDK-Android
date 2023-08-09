@@ -8,8 +8,8 @@ import android.view.View
 import company.tap.checkout.R
 import company.tap.checkout.internal.enums.SectionType
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibraryy.themekit.ThemeManager
-import company.tap.tapuilibraryy.uikit.views.TabAnimatedActionButton
+import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
 
 /**
 Copyright (c) 2020    Tap Payments.

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:parentTag="LinearLayout"
+    tools:orientation="vertical"
+    >
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+       >
+        <company.tap.cardinputwidget.widget.inline.InlineCardInput
+            android:id="@+id/inlineCardInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        tools:parentTag="LinearLayout"
+        android:layout_marginLeft="-400dp"
+        android:layout_marginTop="40dp"
+        tools:orientation="vertical">
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/holder_name_text_input_layout1"
+        style="@style/Tap.CardInputWidget.TextInputLayout"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/acc_label_holder_name"
+        android:labelFor="@id/holder_name_edit_text"
+        android:visibility="gone"
+        app:hintEnabled="false"
+        tools:ignore="UnusedAttribute">
+
+        <company.tap.cardinputwidget.views.HolderNameEditText
+            android:id="@+id/holder_name_edit_text1"
+            style="@style/Tap.CardInputWidget.EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:enabled="true"
+            android:fontFamily="sans-serif-light"
+            android:imeOptions="actionDone"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+
+</merge>

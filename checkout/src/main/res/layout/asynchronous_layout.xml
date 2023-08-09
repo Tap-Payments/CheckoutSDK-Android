@@ -8,7 +8,7 @@
     android:layoutDirection="locale"
     android:background="@color/chip_background"
     android:orientation="vertical">
-<company.tap.tapuilibraryy.uikit.organisms.FawryPaymentView
+<company.tap.tapuilibrary.uikit.organisms.FawryPaymentView
 
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -18,5 +18,5 @@
 
 
 
-</company.tap.tapuilibraryy.uikit.organisms.FawryPaymentView>
+</company.tap.tapuilibrary.uikit.organisms.FawryPaymentView>
 </LinearLayout>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="@dimen/margin_basic_65dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="15dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <company.tap.tapuilibrary.uikit.views.TapSelectionTabLayout
+            android:id="@+id/sections_tablayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content"
+
+        android:id="@+id/tabLinear"
+        android:background="@color/header_gray"
+        android:orientation="horizontal"
+        android:weightSum="5">
+
+        <LinearLayout
+            android:id="@+id/payment_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_gravity="start"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp" />
+
+        <LinearLayout
+            android:id="@+id/linear_paylayout"
+            android:layout_width="wrap_content"
+
+            android:layout_marginTop="2dp"
+
+            android:layout_alignRight="@+id/payment_input_layout"
+            android:layout_alignParentRight="true"
+
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/clear_text"
+                android:layout_width="44dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_basic_16dp"
+                android:src="@drawable/ic_close"
+                android:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/card_scanner_button"
+                android:layout_width="44dp"
+                android:layout_height="match_parent"
+                android:padding="10dp"
+                android:visibility="visible"
+                android:src="@drawable/scan_light" />
+
+            <ImageView
+                android:id="@+id/nfc_button"
+                android:layout_width="44dp"
+                android:layout_height="match_parent"
+                android:padding="10dp"
+                android:layout_marginEnd="@dimen/margin_basic_16dp"
+                android:visibility="gone"
+                android:src="@drawable/nfc_button_select" />
+
+        </LinearLayout>
+        <company.tap.tapuilibrary.uikit.atoms.TapSeparatorView
+            android:layout_below="@+id/linear_paylayout"
+            android:layout_marginTop="@dimen/margin_basic_10dp"
+            android:id="@+id/separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/switches_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="20dp"
+            android:orientation="vertical"
+            android:layout_below="@+id/separator"
+            android:visibility="visible">
+
+            <company.tap.tapuilibrary.uikit.atoms.TapSwitch
+                android:id="@+id/switch_merchant_checkout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:fontFamily="sans-serif-light"
+                android:letterSpacing="-0.02"
+                android:textColor="#4b4847"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                android:layout_margin="@dimen/margin_basic_16dp"
+                android:theme="@style/SwitchSecondary"
+                app:switchPadding="90dp"
+                tools:text="Save for [merchant_name] Checkouts" />
+
+            <company.tap.tapuilibrary.uikit.atoms.TapSeparatorView
+                android:id="@+id/switch_separator"
+                android:layout_width="match_parent"
+                android:layout_height="0.6dp"
+                android:layout_marginStart="@dimen/margin_basic_13dp"
+                android:layout_marginEnd="21dp"
+                android:background="@color/white" />
+
+            <company.tap.tapuilibrary.uikit.atoms.TapSwitch
+                android:id="@+id/switch_gopay_checkout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_basic_16dp"
+                android:layout_marginTop="@dimen/margin_basic_16dp"
+                android:layout_marginEnd="@dimen/margin_basic_16dp"
+                android:fontFamily="sans-serif-light"
+                android:letterSpacing="-0.02"
+                android:textColor="#4b4847"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                android:checked="true"
+                android:theme="@style/SwitchSecondary"
+                tools:text="Save for goPay Checkouts" />
+
+            <company.tap.tapuilibrary.uikit.atoms.TapTextViewNew
+                android:id="@+id/save_goPay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_basic_16dp"
+                android:layout_marginEnd="100dp"
+                android:fontFamily="sans-serif-light"
+                android:letterSpacing="-0.01"
+                android:lineSpacingExtra="1sp"
+                android:textColor="#a7a7a7"
+                android:textSize="10sp"
+                android:textStyle="normal"
+                app:switchPadding="40dp"
+                tools:text="By enabling goPay, your mobile number will be saved with Tap Payments to get faster and more secure checkouts in multiple apps and websites." />
+
+
+
+
+
+            <company.tap.tapuilibrary.uikit.atoms.TapTextViewNew
+                android:id="@+id/alert_gopay_signup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_basic_16dp"
+                android:layout_marginTop="@dimen/margin_basic_10dp"
+                android:layout_marginBottom="@dimen/margin_basic_16dp"
+                android:layout_marginEnd="@dimen/margin_basic_16dp"
+                android:fontFamily="sans-serif-light"
+                android:textColor="#4b4847"
+                android:textSize="12sp"
+                android:textStyle="normal"
+                tools:text="Please check your email or SMS’s in order to complete the goPay Checkout signup process." />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+</LinearLayout>
+</androidx.cardview.widget.CardView>

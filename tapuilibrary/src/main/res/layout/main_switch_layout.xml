@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/CustomCardViewStyle"
+    android:id="@+id/tapMainSwitchLinear"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="-15dp"
+    android:layoutDirection="locale"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/card"
+        android:background="@drawable/corner_radius_bottom">
+        <company.tap.tapuilibrary.uikit.atoms.TapChip
+            style="@style/CustomCardViewStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/mainSwitchChip"
+            android:orientation="vertical"
+            android:visibility="visible"
+            android:elevation="0dp"
+            tools:cardBackgroundColor="@color/chip_background">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/mainSwitchLinear"
+                android:orientation="horizontal"
+                android:paddingTop="16dp"
+                android:paddingBottom="@dimen/margin_basic_20dp"
+                android:weightSum="0.5">
+
+                <company.tap.tapuilibrary.uikit.atoms.TapTextViewNew
+                    android:id="@+id/mainTextSave"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:layout_marginTop="@dimen/margin_basic_10dp"
+                    android:layout_marginBottom="@dimen/margin_basic_10dp"
+                    android:layout_weight="0.3"
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="#a7a7a7"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    tools:text="For faster and easier checkout,save your mobile number." />
+
+                <company.tap.tapuilibrary.uikit.atoms.TapSwitch
+                    android:id="@+id/switchSaveMobile"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_basic_10dp"
+                    android:layout_marginEnd="@dimen/margin_basic_16dp"
+                    android:layout_marginBottom="@dimen/margin_basic_10dp"
+                    android:layout_weight="0.2"
+                    android:checked="false"
+                    android:theme="@style/SwitchPrimary"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </company.tap.tapuilibrary.uikit.atoms.TapChip>
+
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

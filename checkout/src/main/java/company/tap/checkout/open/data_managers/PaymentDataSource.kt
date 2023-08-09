@@ -20,6 +20,7 @@ import company.tap.checkout.open.models.Shipping
 import company.tap.checkout.open.models.Tax
 import java.math.BigDecimal
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by AhlaamK on 10/5/20.
@@ -28,7 +29,7 @@ Copyright (c) 2020    Tap Payments.
 All rights reserved.
  **/
 
-object PaymentDataSource :PaymentDataSource {
+object PaymentDataSource : PaymentDataSource {
     /////////////////////////////////    Props Area  //////////////////////////////////////////////
     private var currency: TapCurrency? = null
     private lateinit var tapCustomer: TapCustomer
@@ -36,7 +37,7 @@ object PaymentDataSource :PaymentDataSource {
     private var items: ArrayList<ItemsModel>? = null
     private lateinit var transactionMode: TransactionMode
     private var taxes: ArrayList<Tax>? = null
-    private var shipping: ArrayList<Shipping>? = null
+    private var shipping: Shipping? = null
     private var postURL: String? = null
     private var paymentDescription: String? = null
     private var paymentType: String? = null
@@ -46,8 +47,8 @@ object PaymentDataSource :PaymentDataSource {
     private var requires3DSecure = false
     private var allowUserToSaveCard = true
     private var receiptSettings: Receipt? = null
-    private  var authorizeAction: AuthorizeAction?=null
-    private var destination: Destinations? = null
+    private var authorizeAction: AuthorizeAction? = null
+    private var destination: List<Destinations>? = null
     private var merchant: Merchant? = null
     private var webViewType: WebViewType? = null
 
@@ -76,7 +77,7 @@ object PaymentDataSource :PaymentDataSource {
     private var chargeOrAuthorize: Charge? = null
     private var sdkMode: SdkMode = SdkMode.SAND_BOX
     private var sdkLocale: Locale = Locale("en")
-    private var cardPaymentOption: ArrayList<PaymentOption> ?= null
+    private var cardPaymentOption: ArrayList<PaymentOption>? = null
     private var tokenConfig: String? = null
     private var authKeys: String? = null
     private var merchantData: MerchantData? = null
@@ -93,6 +94,7 @@ object PaymentDataSource :PaymentDataSource {
     fun setTransactionCurrency(tapCurrency: TapCurrency) {
         currency = tapCurrency
     }
+
     /**
      * Set Initilaize keys currency.
      *
@@ -101,6 +103,7 @@ object PaymentDataSource :PaymentDataSource {
     fun setInitializeKeys(authKeys: String?) {
         this.authKeys = authKeys
     }
+
     /**
      * Set tapCustomer.
      *
@@ -149,10 +152,10 @@ object PaymentDataSource :PaymentDataSource {
     /**
      * Set shipping.
      *
-     * @param shippingList the shipping list
+     * @param shipping the shipping list
      */
-    fun setShipping(shippingList: ArrayList<Shipping>?) {
-        shipping = shippingList
+    fun setShipping(shipping: Shipping?) {
+        this.shipping = shipping
     }
 
     /**
@@ -256,7 +259,7 @@ object PaymentDataSource :PaymentDataSource {
      * set Destination
      * @return
      */
-    fun setDestination(destination: Destinations?) {
+    fun setDestination(destination: List<Destinations>?) {
         this.destination = destination
     }
 
@@ -292,14 +295,16 @@ object PaymentDataSource :PaymentDataSource {
     fun showHideCardHolderName(showHideCardHolderName: Boolean) {
         this.showHideCardHolderName = showHideCardHolderName
     }
-        fun setSelectedCurrency(selectedCurrency: String , selectedCurrencySymbol: String?){
-        this.selectedCurrency =selectedCurrency
-        this.selectedCurrencySymbol =selectedCurrencySymbol
+
+    fun setSelectedCurrency(selectedCurrency: String, selectedCurrencySymbol: String?) {
+        this.selectedCurrency = selectedCurrency
+        this.selectedCurrencySymbol = selectedCurrencySymbol
     }
 
-    fun setSelectedAmount(selectedAmount: BigDecimal){
-        this.selectedAmount =selectedAmount
+    fun setSelectedAmount(selectedAmount: BigDecimal) {
+        this.selectedAmount = selectedAmount
     }
+
     /**
      * Set tokenConfig
      *
@@ -308,6 +313,7 @@ object PaymentDataSource :PaymentDataSource {
     fun setTokenConfig(_tokenConfig: String?) {
         this.tokenConfig = _tokenConfig
     }
+
     fun setWebViewType(webViewType: WebViewType) {
         this.webViewType = webViewType
     }
@@ -329,12 +335,13 @@ object PaymentDataSource :PaymentDataSource {
     fun setChargeOrAuthorize(charge: Charge) {
         this.chargeOrAuthorize = charge
     }
+
     /**
      * Set sdkSettings.
      *
      * @param sdkSettings the sdkSettings
      */
-    fun setPaymentOptionsResponse(paymentOptionsResponse:PaymentOptionsResponse?) {
+    fun setPaymentOptionsResponse(paymentOptionsResponse: PaymentOptionsResponse?) {
         this.paymentOptionsResponse = paymentOptionsResponse
     }
 
@@ -347,25 +354,26 @@ object PaymentDataSource :PaymentDataSource {
         this.initResponseModel = initResponseModel
     }
 
-    fun setBinLookupResponse(binLookupResponse: BINLookupResponse?){
+    fun setBinLookupResponse(binLookupResponse: BINLookupResponse?) {
         this.binLookupResponse = binLookupResponse
     }
 
-    fun setSDKMode(sdkMode: SdkMode){
+    fun setSDKMode(sdkMode: SdkMode) {
         this.sdkMode = sdkMode
     }
 
-    fun setSDKLanguage(locale: Locale){
+    fun setSDKLanguage(locale: Locale) {
         this.sdkLocale = locale
     }
+
     /**
      * Set Order.
      *
      * @param orderObject the orderObject
      */
     fun setOrder(orderObject: OrderObject) {
-       // println("orderObject>>>"+orderObject.toString())
-       this.orderObject = orderObject
+        // println("orderObject>>>"+orderObject.toString())
+        this.orderObject = orderObject
     }
 
 
@@ -377,8 +385,9 @@ object PaymentDataSource :PaymentDataSource {
     fun setOrderItems(orderItems: ArrayList<ItemsModel>) {
         this.orderItems = orderItems
     }
+
     fun setGoogleCardPay(googleCardPaymentOptions: ArrayList<PaymentOption>?) {
-       this. googleCardPaymentOptions = googleCardPaymentOptions
+        this.googleCardPaymentOptions = googleCardPaymentOptions
     }
 /////<<<<<<<<<<<<<<<<<<<<<<<<<,Getters Area >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>/////////////////
 
@@ -388,14 +397,17 @@ object PaymentDataSource :PaymentDataSource {
     }
 
     override fun getCustomer(): TapCustomer {
-        Bugfender.setDeviceString( "Customer","Customer ID :"+ tapCustomer.identifier+" | Customer name : "+ tapCustomer.firstName+"| Customer email :" + tapCustomer.email+"| Customer phone :"+ tapCustomer.getPhone()?.number)
-         return tapCustomer
+        Bugfender.setDeviceString(
+            "Customer",
+            "Customer ID :" + tapCustomer.identifier + " | Customer name : " + tapCustomer.firstName + "| Customer email :" + tapCustomer.email + "| Customer phone :" + tapCustomer.getPhone()?.number
+        )
+        return tapCustomer
     }
 
     override fun getAmount(): BigDecimal? {
-        if(amount==null){
+        if (amount == null) {
             return BigDecimal.ONE
-        }else return amount
+        } else return amount
     }
 
     override fun getItems(): ArrayList<ItemsModel>? {
@@ -406,28 +418,28 @@ object PaymentDataSource :PaymentDataSource {
         return transactionMode
     }
 
-    override fun getTaxes(): ArrayList<Tax>?{
+    override fun getTaxes(): ArrayList<Tax>? {
         return taxes ?: ArrayList()
     }
 
-    override fun getShipping(): ArrayList<Shipping> ?{
-        return shipping ?: ArrayList()
+    override fun getShipping(): Shipping? {
+        return shipping ?: null
     }
 
     override fun getPostURL(): String? {
-       return postURL
+        return postURL
     }
 
     override fun getPaymentDescription(): String? {
-       return paymentDescription
+        return paymentDescription
     }
 
     override fun getPaymentMetadata(): HashMap<String, String> {
-       return paymentMetadata
+        return paymentMetadata
     }
 
     override fun getPaymentReference(): Reference? {
-       return paymentReference
+        return paymentReference
     }
 
     override fun getPaymentStatementDescriptor(): String? {
@@ -435,15 +447,15 @@ object PaymentDataSource :PaymentDataSource {
     }
 
     override fun getAllowedToSaveCard(): Boolean {
-       return allowUserToSaveCard
+        return allowUserToSaveCard
     }
 
     override fun getRequires3DSecure(): Boolean {
-       return requires3DSecure
+        return requires3DSecure
     }
 
     override fun getReceiptSettings(): Receipt? {
-       return receiptSettings
+        return receiptSettings
     }
 
     override fun getAuthorizeAction(): AuthorizeAction? {
@@ -451,7 +463,7 @@ object PaymentDataSource :PaymentDataSource {
         //return null
     }
 
-    override fun getDestination(): Destinations? {
+    override fun getDestination(): List<Destinations>? {
         return destination
     }
 
@@ -460,19 +472,19 @@ object PaymentDataSource :PaymentDataSource {
     }
 
     override fun getPaymentDataType(): String? {
-       return paymentType
+        return paymentType
     }
 
     override fun getCardType(): CardType? {
-       return cardType
+        return cardType
     }
 
     override fun getDefaultCardHolderName(): String? {
-       return defaultCardHolderName
+        return defaultCardHolderName
     }
 
     override fun getEnableEditCardHolderName(): Boolean {
-       return  enableEditCardHolderName
+        return enableEditCardHolderName
     }
 
     override fun getCardIssuer(): CardIssuer? {
@@ -480,15 +492,15 @@ object PaymentDataSource :PaymentDataSource {
     }
 
     override fun getTopup(): TopUp? {
-       return topup
+        return topup
     }
 
     override fun getSelectedCurrency(): String? {
-       return selectedCurrency
+        return selectedCurrency
     }
 
     override fun getSelectedAmount(): BigDecimal? {
-     return selectedAmount
+        return selectedAmount
     }
 
     override fun getPaymentOptionsResponse(): PaymentOptionsResponse? {
@@ -500,20 +512,20 @@ object PaymentDataSource :PaymentDataSource {
     }
 
 
-
     override fun getBinLookupResponse(): BINLookupResponse? {
-       return binLookupResponse
+        return binLookupResponse
     }
 
     override fun getSDKMode(): SdkMode {
-       return sdkMode
+        return sdkMode
     }
- override fun getSDKLocale(): Locale {
-       return sdkLocale
+
+    override fun getSDKLocale(): Locale {
+        return sdkLocale
     }
 
     override fun getSelectedCurrencySymbol(): String? {
-       return selectedCurrencySymbol
+        return selectedCurrencySymbol
     }
 
     override fun getWebViewType(): WebViewType? {
@@ -521,23 +533,23 @@ object PaymentDataSource :PaymentDataSource {
     }
 
     override fun getCardHolderNameShowHide(): Boolean {
-       return showHideCardHolderName
+        return showHideCardHolderName
     }
 
-    override fun getChargeOrAuthorize(): Charge ?{
-       return chargeOrAuthorize
+    override fun getChargeOrAuthorize(): Charge? {
+        return chargeOrAuthorize
     }
 
     override fun getAvailablePaymentOptionsCardBrands(): ArrayList<PaymentOption>? {
-    return cardPaymentOption
+        return cardPaymentOption
     }
 
     override fun getTokenConfig(): String? {
-       return  tokenConfig
+        return tokenConfig
     }
 
     override fun getAuthKeys(): String? {
-       return authKeys
+        return authKeys
     }
 
     override fun getInitOptionsResponse(): InitResponseModel? {
@@ -545,7 +557,7 @@ object PaymentDataSource :PaymentDataSource {
     }
 
     override fun getGooglePaymentOptions(): ArrayList<PaymentOption>? {
-       return googleCardPaymentOptions
+        return googleCardPaymentOptions
     }
 
     override fun getOrderItems(): ArrayList<ItemsModel>? {
@@ -554,6 +566,6 @@ object PaymentDataSource :PaymentDataSource {
     }
 
     override fun getOrderObject(): OrderObject? {
-      return orderObject
+        return orderObject
     }
 }

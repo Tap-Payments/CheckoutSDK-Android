@@ -9,7 +9,6 @@ import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.SdkMode
 import company.tap.checkout.open.exceptions.ErrorReport
 import company.tap.tapnetworkkit.connection.NetworkApp
-import company.tap.tapuilibraryy.themekit.ThemeManager
 import java.util.*
 
 

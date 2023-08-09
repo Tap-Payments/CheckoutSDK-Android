@@ -17,10 +17,10 @@ import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.interfaces.OnCardSelectedActionListener
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibraryy.fontskit.enums.TapFont
-import company.tap.tapuilibraryy.themekit.ThemeManager
-import company.tap.tapuilibraryy.themekit.theme.TextViewTheme
-import company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
+import company.tap.tapuilibrary.fontskit.enums.TapFont
+import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.themekit.theme.TextViewTheme
+import company.tap.tapuilibrary.uikit.atoms.TapTextViewNew
 import kotlinx.android.synthetic.main.cardviewholder_layout1.view.*
 
 

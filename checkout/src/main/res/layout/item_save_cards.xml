@@ -63,7 +63,7 @@
             android:textDirection="locale"
             >
 
-            <company.tap.tapuilibraryy.uikit.atoms.TapImageView
+            <company.tap.tapuilibrary.uikit.atoms.TapImageView
                 android:id="@+id/imageView_amex"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
@@ -79,7 +79,7 @@ android:layout_marginEnd="@dimen/margin_basic_10dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />
 
-            <company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
+            <company.tap.tapuilibrary.uikit.atoms.TapTextViewNew
                 android:id="@+id/textViewCardDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

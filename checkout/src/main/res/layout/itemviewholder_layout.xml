@@ -5,16 +5,16 @@
     android:layout_height="match_parent"
     android:layoutDirection="locale"
     android:orientation="vertical">
-    <company.tap.tapuilibraryy.uikit.atoms.TapChipGroup
+    <company.tap.tapuilibrary.uikit.atoms.TapChipGroup
         android:id="@+id/mainCurrencyChip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/chip_background"
         android:orientation="horizontal">
 
-    </company.tap.tapuilibraryy.uikit.atoms.TapChipGroup>
+    </company.tap.tapuilibrary.uikit.atoms.TapChipGroup>
 
-    <company.tap.tapuilibraryy.uikit.atoms.TapSeparatorView
+    <company.tap.tapuilibrary.uikit.atoms.TapSeparatorView
         android:id="@+id/item_Separator"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"

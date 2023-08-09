@@ -14,8 +14,8 @@ import company.tap.checkout.internal.enums.SectionType
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.controller.SDKSession
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibraryy.themekit.ThemeManager
-import company.tap.tapuilibraryy.uikit.organisms.FawryPaymentView
+import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.organisms.FawryPaymentView
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*

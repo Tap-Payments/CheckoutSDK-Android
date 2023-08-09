@@ -11,7 +11,7 @@
 
 
 
-    <company.tap.tapuilibraryy.uikit.organisms.TapPaymentInput
+    <company.tap.tapuilibrary.uikit.organisms.TapPaymentInput
         android:id="@+id/tap_payment_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,13 +20,13 @@
         android:layout_marginTop="-5dp"
         android:layoutDirection="locale" />
 
-    <company.tap.tapuilibraryy.uikit.views.TapContactDetailsView
+    <company.tap.tapuilibrary.uikit.views.TapContactDetailsView
         android:id="@+id/contact_detailsView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"/>
 
-    <company.tap.tapuilibraryy.uikit.views.TapShippingDetailView
+    <company.tap.tapuilibrary.uikit.views.TapShippingDetailView
         android:id="@+id/ship_detailsView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

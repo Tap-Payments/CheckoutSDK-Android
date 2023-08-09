@@ -19,11 +19,11 @@ import company.tap.checkout.internal.enums.ThemeMode
 import company.tap.checkout.internal.interfaces.OnCurrencyChangedActionListener
 import company.tap.checkout.internal.utils.CustomUtils
 import company.tap.checkout.internal.viewmodels.CheckoutViewModel
-import company.tap.tapuilibraryy.themekit.ThemeManager
-import company.tap.tapuilibraryy.themekit.theme.TextViewTheme
-import company.tap.tapuilibraryy.uikit.atoms.TapImageView
-import company.tap.tapuilibraryy.uikit.atoms.TapTextViewNew
-import company.tap.tapuilibraryy.uikit.ktx.setBorderedView
+import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.themekit.theme.TextViewTheme
+import company.tap.tapuilibrary.uikit.atoms.TapImageView
+import company.tap.tapuilibrary.uikit.atoms.TapTextViewNew
+import company.tap.tapuilibrary.uikit.ktx.setBorderedView
 import kotlinx.android.synthetic.main.item_currency_rows.view.*
 import java.math.BigDecimal
 

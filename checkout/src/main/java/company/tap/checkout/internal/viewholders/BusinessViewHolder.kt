@@ -13,11 +13,11 @@ import company.tap.checkout.internal.viewmodels.CheckoutViewModel
 import company.tap.checkout.open.data_managers.PaymentDataSource
 import company.tap.checkout.open.enums.TransactionMode
 import company.tap.taplocalizationkit.LocalizationManager
-import company.tap.tapuilibraryy.themekit.ThemeManager
-import company.tap.tapuilibraryy.themekit.theme.ImageViewTheme
-import company.tap.tapuilibraryy.uikit.atoms.TapImageView
-import company.tap.tapuilibraryy.uikit.datasource.HeaderDataSource
-import company.tap.tapuilibraryy.uikit.ktx.setTopBorders
+import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.themekit.theme.ImageViewTheme
+import company.tap.tapuilibrary.uikit.atoms.TapImageView
+import company.tap.tapuilibrary.uikit.datasource.HeaderDataSource
+import company.tap.tapuilibrary.uikit.ktx.setTopBorders
 import kotlinx.android.synthetic.main.businessview_layout.view.*
 
 

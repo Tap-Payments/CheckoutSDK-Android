@@ -15,6 +15,7 @@ import company.tap.checkout.internal.api.models.Order
 import company.tap.checkout.internal.api.models.SourceRequest
 import company.tap.checkout.internal.api.models.TrackingURL
 import java.util.*
+import kotlin.collections.List
 
 /**
  * Created by AhlaamK on 7/26/21.
@@ -42,7 +43,7 @@ class CreateAuthorizeRequest(
     threeDSecure: Boolean,
     receipt: Receipt?,
     authorizeAction: AuthorizeAction,
-    destinations: Destinations?,
+    destinations: List<Destinations>?,
     topUp: TopUp?
 ) : CreateChargeRequest(
     merchant,

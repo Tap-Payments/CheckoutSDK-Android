@@ -31,9 +31,9 @@ import company.tap.checkout.open.models.*
 import company.tap.taplocalizationkit.LocalizationManager
 import company.tap.tapnetworkkit.exception.GoSellError
 import company.tap.tapnetworkkit.interfaces.APIRequestCallback
-import company.tap.tapuilibraryy.themekit.ThemeManager
-import company.tap.tapuilibraryy.uikit.enums.ActionButtonState
-import company.tap.tapuilibraryy.uikit.views.TabAnimatedActionButton
+import company.tap.tapuilibrary.themekit.ThemeManager
+import company.tap.tapuilibrary.uikit.enums.ActionButtonState
+import company.tap.tapuilibrary.uikit.views.TabAnimatedActionButton
 import kotlinx.android.synthetic.main.action_button_animation.view.*
 import retrofit2.Response
 import java.math.BigDecimal
@@ -209,7 +209,7 @@ object  SDKSession : APIRequestCallback {
      *
      * @param shipping the shipping
      */
-    fun setShipping(shipping: ArrayList<Shipping>?) {
+    fun setShipping(shipping: Shipping?) {
         paymentDataSource?.setShipping(shipping)
     }
 
@@ -300,7 +300,7 @@ object  SDKSession : APIRequestCallback {
     /**
      * set Destination
      */
-    fun setDestination(destination: Destinations?) {
+    fun setDestination(destination: List<Destinations>?) {
         paymentDataSource?.setDestination(destination)
     }
 

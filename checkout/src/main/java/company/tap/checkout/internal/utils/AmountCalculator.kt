@@ -50,7 +50,7 @@ object AmountCalculator {
     open fun calculateTotalAmountOf(
         items: List<PaymentItem>?,
         taxes: java.util.ArrayList<Tax>?,
-        shippings: java.util.ArrayList<Shipping>?
+        shippings: Shipping?
     ): BigDecimal? {
         var itemsPlainAmount = BigDecimal.ZERO
         var itemsDiscountAmount = BigDecimal.ZERO
@@ -65,9 +65,9 @@ object AmountCalculator {
         val discountedAmount = itemsPlainAmount.subtract(itemsDiscountAmount)
         var shippingAmount = BigDecimal.ZERO
         if (shippings != null) {
-            for (shipping in shippings) {
-                shippingAmount = shippingAmount.add(shipping.amount)
-            }
+         //   for (shipping in shippings) {
+             //   shippingAmount = shippingAmount.add(shipping.amount)
+           // }
         }
         val taxesAmount = calculateTaxesOn(discountedAmount.add(shippingAmount), taxes)
         val totalTaxesAmount = itemsTaxesAmount.add(taxesAmount)

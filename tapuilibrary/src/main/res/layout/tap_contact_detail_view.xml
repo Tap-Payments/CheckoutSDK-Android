@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:textDirection="locale"
+    android:layoutDirection="locale"
+    android:id="@+id/cardDet_mainLL">
+
+    <company.tap.tapuilibrary.uikit.atoms.TapTextViewNew
+        android:id="@+id/cardDetails_Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAllCaps="true"
+        android:textColor="#9F9F9F"
+        android:layout_margin="@dimen/margin_basic_10dp"
+        android:textDirection="locale"
+        tools:text="Contact Details"/>
+
+    <company.tap.tapuilibrary.uikit.atoms.TapChip
+        android:id="@+id/mainContactCardView"
+        android:layout_margin="@dimen/margin_basic_10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/margin_basic_15dp"
+        app:cardElevation="0dp"
+        android:elevation="@dimen/margin_basic_10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/field_LinearLayout"
+          >
+
+            <company.tap.tapuilibrary.uikit.atoms.TapEditText
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:hint="Email"
+                android:imeOptions="actionNext"
+                android:background="@null"
+                android:layout_margin="8dp"
+                android:textDirection="locale"
+                android:inputType="textEmailAddress"
+                android:id="@+id/emailId_EditText"/>
+            <company.tap.tapuilibrary.uikit.atoms.TapSeparatorView
+                android:id="@+id/contactSeparator"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+
+                android:background="@color/view_color" />
+
+            <LinearLayout
+                android:id="@+id/mobilePaymentMainLinear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="true"
+                android:orientation="horizontal"
+                android:textDirection="locale"
+                android:layoutDirection="locale"
+                android:paddingStart="@dimen/margin_basic_16dp">
+
+                <company.tap.tapuilibrary.uikit.atoms.TapImageView
+                    android:id="@+id/mobileImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginEnd="@dimen/margin_basic_10dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_add"
+                    android:visibility="visible" />
+
+
+                <com.hbb20.CountryCodePicker
+                    android:id="@+id/contact_countryCodePicker"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:ccp_showArrow="false"
+                    android:layout_marginStart="@dimen/margin_basic_6dp"
+                    android:layout_marginEnd="@dimen/margin_basic_6dp"
+                    app:ccp_textGravity="LEFT"
+                    android:textDirection="ltr"
+                    android:paddingLeft="-17dp"
+                    app:ccp_defaultPhoneCode="965"
+                    app:ccp_contentColor="@color/gray"
+                    android:fontFamily="sans-serif-light"
+                    android:visibility="visible"
+                    app:ccp_textSize="@dimen/font_size_17sp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    app:ccpDialog_showCloseIcon="true"
+                    app:ccpDialog_showNameCode="false"
+                    app:ccp_customMasterCountries="KW,QA,BH,SA,UAE"
+                    app:ccpDialog_textColor="@color/gray"
+                    app:ccp_hintExampleNumber="true"
+                    app:ccp_showFlag="false"
+                    app:ccp_showNameCode="false"/>
+
+
+                <company.tap.tapuilibrary.uikit.atoms.TapEditText
+                    android:id="@+id/contact_mobileNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="sans-serif-light"
+                    android:layout_marginStart="4dp"
+                    android:hint="00000000"
+                    android:windowSoftInputMode="adjustPan"
+                    android:inputType="phone"
+                    android:textCursorDrawable="@drawable/cursor_drawable"
+                    android:lineHeight="0.5dp"
+                    android:maxLength="10"
+                    android:textSize="@dimen/font_size_17sp"
+                    android:background="@null"
+                    tools:background="@null" />
+
+
+            </LinearLayout>
+        </LinearLayout>
+    </company.tap.tapuilibrary.uikit.atoms.TapChip>
+
+</LinearLayout>
