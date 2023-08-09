@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/checkout" />
+            <option value="$PROJECT_DIR$/iosdialog" />
           </set>
         </option>
       </GradleProjectSettings>

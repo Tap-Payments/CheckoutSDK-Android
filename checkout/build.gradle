@@ -163,8 +163,8 @@ dependencies {
 
 
 
-    //  implementation project(":iosdialog")
-    implementation 'com.gdacciaro:iosdialog:1.0.3'
+      implementation project(":iosdialog")
+    //implementation 'com.gdacciaro:iosdialog:1.0.3'
 
     // api project(":cardinputwidget")
     api 'com.github.Tap-Payments:TapCardInputKit-Android:1.0.0'
