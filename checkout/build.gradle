@@ -173,7 +173,7 @@ dependencies {
     api 'com.github.Tap-Payments:TapUIKit-Android:2.0.0'
 
     // api project(":tapnetworkkit")
-    api 'com.github.Tap-Payments:TapNetwrok-Android:0.2.2.25'
+    api 'com.github.Tap-Payments:TapNetwrok-Android:0.2.2.29'
 
 }
 //afterEvaluate {
