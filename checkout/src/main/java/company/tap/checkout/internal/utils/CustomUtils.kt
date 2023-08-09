@@ -48,11 +48,8 @@ object CustomUtils {
             .setSubtitle(messageString)
             .setBoldPositiveLabel(false)
             .setCancelable(false)
-        /**
-         * passed if used library modification of iosDialog
-         */
-//            .setBackgroundColor(loadAppThemManagerFromPath(AppColorTheme.GlobalValuesColor))
-//            .setTextColor(getColor())
+            .setBackgroundColor(loadAppThemManagerFromPath(AppColorTheme.GlobalValuesColor))
+            .setTextColor(getColor())
 
 
 

@@ -13,10 +13,10 @@ All rights reserved.
  **/
 
 /**
-* The type Shipping.
-*/
+ * The type Shipping.
+ */
 data class Shipping(
     @SerializedName("name") private var name: String,
-    @SerializedName("description") @Nullable val description: String,
+    @SerializedName("description") val description: String,
     @SerializedName("amount") val amount: BigDecimal
 )
